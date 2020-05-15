@@ -1,0 +1,23 @@
+{
+  "name": "upselling-admin",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/admin#readme",
+  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "NODE_ENV=production next build",
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint 'src/**/*.js'",
+    "server": "next start -p $(dotenv -p ADMIN_APP_PORT)",
+    "start": "next dev -p $(dotenv -p ADMIN_APP_PORT)"
+  }
+}

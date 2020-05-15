@@ -1,0 +1,26 @@
+{
+  "name": "@neatowebsolutions/upselling-react-components",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-components#readme",
+  "license": "UNLICENSED",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "dependencies": {},
+  "peerDependencies": {
+    "prop-types": "^15.7.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "styled-components": "^5.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "NODE_ENV=production webpack -p",
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint 'src/**/*.js'",
+    "start": "webpack --watch"
+  }
+}

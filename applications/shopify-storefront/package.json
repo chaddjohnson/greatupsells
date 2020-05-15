@@ -1,0 +1,27 @@
+{
+  "name": "upselling-shopify-storefront",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-storefront#readme",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "dependencies": {
+    "@neatowebsolutions/upselling-react-components": "^0.1.0"
+  },
+  "devDependencies": {
+    "css-loader": "^3.5.3",
+    "file-loader": "^6.0.0",
+    "style-loader": "^1.2.1",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack -p",
+    "lintfix": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint 'src/**/*.js'",
+    "start": "webpack-dev-server"
+  }
+}

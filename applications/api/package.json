@@ -1,0 +1,26 @@
+{
+  "name": "upselling-api",
+  "version": "0.1.0",
+  "scripts": {
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint src/**/*.js",
+    "start": "node --preserve-symlinks --inspect=0.0.0.0:9229 `which serverless` offline start --tunnel=true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/api#readme",
+  "dependencies": {
+    "@neatowebsolutions/logger": "^1.0.1",
+    "@neatowebsolutions/upselling-models": "^0.1.0",
+    "apollo-server-lambda": "^2.13.1",
+    "graphql-tools": "^5.0.0",
+    "graphql-type-json": "^0.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "shopify-token": "^4.0.0"
+  },
+  "devDependencies": {}
+}

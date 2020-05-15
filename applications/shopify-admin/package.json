@@ -1,0 +1,40 @@
+{
+  "name": "upselling-shopify-admin",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin#readme",
+  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "dependencies": {
+    "@neatowebsolutions/upselling-models": "^0.1.0",
+    "@neatowebsolutions/upselling-react-components": "^0.1.0",
+    "@shopify/app-bridge": "^1.21.4",
+    "@shopify/app-bridge-react": "^1.21.4",
+    "@shopify/koa-shopify-auth": "^3.1.61",
+    "@shopify/polaris": "^4.22.0",
+    "@shopify/react-form": "^0.6.2",
+    "@shopify/react-shopify-app-route-propagator": "^3.0.8",
+    "colr": "^1.2.2",
+    "js-cookie": "^2.2.1",
+    "koa": "^2.11.0",
+    "koa-connect": "^2.0.1",
+    "koa-helmet": "^5.2.0",
+    "koa-session": "^6.0.0",
+    "raf": "^3.4.1",
+    "react-scroll-to-component": "^1.0.2",
+    "react-visibility-sensor": "^5.1.1",
+    "serverless-http": "^2.4.1",
+    "tween": "^0.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "NODE_ENV=production next build",
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint 'src/**/*.js'",
+    "server": "NODE_ENV=production node --preserve-symlinks server",
+    "start": "node --preserve-symlinks --inspect=0.0.0.0:9230 server"
+  }
+}

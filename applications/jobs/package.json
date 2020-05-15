@@ -1,0 +1,21 @@
+{
+  "name": "upselling-jobs",
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "eslint src/**/*.js",
+    "lintfix": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "migrate": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/jobs#readme",
+  "dependencies": {
+    "@neatowebsolutions/upselling-models": "^0.1.0",
+    "is-lambda": "^1.0.1"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,49 @@
+const logger = require('@neatowebsolutions/logger');
+
+module.exports = async (shop) => {
+  try {
+    if (!shop.plan.chargeId) {
+      return;
+    }
+
+    const shopifyApiClient = shop.getShopifyApiClient();
+    const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
+      shop.plan.chargeId
+    );
+
+    // Cancel the plan if it was activated and not canceled.
+    if (
+      recurringChargeData &&
+      recurringChargeData.activated_on &&
+      !recurringChargeData.cancelled_on
+    ) {
+      logger.info(
+        `Cancelling recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`
+      );
+
+      try {
+        await shopifyApiClient.recurringApplicationCharge.delete(
+          shop.plan.chargeId
+        );
+
+        logger.info(
+          `Cancelled recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`
+        );
+      } catch (error) {
+        logger.error(
+          `Error cancelling existing recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`,
+          error
+        );
+      }
+    }
+
+    shop.plan.canceledAt = Date.now();
+
+    await shop.save();
+  } catch (error) {
+    logger.warn(
+      `Error retrieving recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`,
+      error
+    );
+  }
+};

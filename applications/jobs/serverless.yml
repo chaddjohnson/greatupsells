@@ -1,0 +1,54 @@
+service: upselling-jobs
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: 'us-east-1'
+  versionFunctions: false
+  logRetentionInDays: 14
+  environment:
+    APP_SLUG: upselling
+    SHOPIFY_APP_API_KEY: ${env:SHOPIFY_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-app/api-key}
+    SHOPIFY_APP_URL: ${env:SHOPIFY_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-app/url}
+    API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
+    CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
+    SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
+    MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+
+functions:
+  activateAndDeactivateShops:
+    handler: src/shops/activateAndDeactivateShops.handler
+    events:
+      - schedule: rate(1 day)
+  calculateStats:
+    handler: src/reporting/calculateStats.handler
+    events:
+      - schedule: cron(1 5,6 * * *)
+  fixShopWebhooks:
+    handler: src/shops/fixShopWebhooks.handler
+    events:
+      - schedule: rate(1 day)
+  removeCopiedProducts:
+    handler: src/products/removeCopiedProducts.handler
+    events:
+      - schedule: rate(1 day)
+  updateShopPlans:
+    handler: src/shops/updateShopPlans.handler
+    events:
+      - schedule: rate(1 day)
+
+plugins:
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    path: .env
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map

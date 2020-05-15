@@ -1,0 +1,88 @@
+service: upselling-api
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  endpointType: REGIONAL
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  environment:
+    APP_SLUG: upselling
+    SHOPIFY_APP_API_KEY: ${env:SHOPIFY_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-app/api-key}
+    SHOPIFY_APP_API_SECRET_KEY: ${env:SHOPIFY_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-app/api-secret-key~true}
+    SHOPIFY_APP_URL: ${env:SHOPIFY_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-app/url}
+    API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
+    CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
+    SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
+    MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+
+functions:
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+  graphql:
+    handler: src/routes/graphql.handler
+    events:
+      - http:
+          path: /graphql
+          method: ANY
+          cors: true
+  authShopifyToken:
+    handler: src/routes/auth/shopify/token.handler
+    events:
+      - http:
+          path: /auth/shopify/token
+          method: get
+
+plugins:
+  - serverless-domain-manager
+  - serverless-offline
+  - serverless-ngrok-tunnel
+  - serverless-dotenv-plugin
+
+custom:
+  customDomain:
+    domainName: ${ssm:/upselling/${self:provider.stage}/api/endpoint/${self:provider.region}}
+    basePath: ''
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+  dotenv:
+    path: .env
+  serverless-offline:
+    port: ${env:API_PORT}
+  ngrokTunnel:
+    tunnels:
+      - port: ${env:API_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:API_TUNNEL_SUBDOMAIN}
+      - port: ${env:SHOPIFY_APP_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:SHOPIFY_APP_SUBDOMAIN}
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map

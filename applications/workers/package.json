@@ -1,0 +1,20 @@
+{
+  "name": "upselling-workers",
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "eslint src/**/*.js",
+    "lintfix": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "start": "node --preserve-symlinks `which serverless` offline start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/workers#readme",
+  "license": "UNLICENSED",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "dependencies": {
+    "@neatowebsolutions/upselling-models": "^0.1.0"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@neatowebsolutions/upselling-models",
+  "version": "0.1.0",
+  "description": "Upselling data models.",
+  "main": "src/index.js",
+  "scripts": {
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "lint": "eslint src/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+  },
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/models#readme",
+  "license": "UNLICENSED",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "dependencies": {
+    "@neatowebsolutions/logger": "^1.0.1"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@chaddjohnson/mongodb-client-lambda": "1.x",
+    "mongoose": "4.x || 5.x"
+  }
+}
