@@ -242,7 +242,7 @@ const OfferPopup = (props) => {
           )}
         </ModalFooter>
       </ModalContainer>
-      {renderTo && <Mask onClick={onClick}></Mask>}
+      {renderTo && <Mask onClick={onClick} />}
     </Modal>
   );
 };

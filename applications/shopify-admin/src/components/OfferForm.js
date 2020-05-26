@@ -1,4 +1,11 @@
-import { useContext, useState, useEffect, useRef, useMemo } from 'react';
+import {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import {
@@ -282,38 +289,47 @@ const OfferForm = (props) => {
   const offer = useMemo(() => getValues(fields), [fields]);
 
   // Work around focus issues.
-  const handleBlur = (fieldName) => (event) => {
-    const field = fields[fieldName];
+  const handleBlur = useCallback(
+    (fieldName) => (event) => {
+      const field = fields[fieldName];
 
-    if (event && event.target && field) {
-      setTimeout(() => field.onBlur(event), 0);
-    }
-  };
+      if (event && event.target && field) {
+        setTimeout(() => field.onBlur(event), 0);
+      }
+    },
+    [fields]
+  );
 
-  const handleActionButtonBehaviorChange = (behavior) => {
-    actionButtonBehavior.onChange(behavior);
+  const handleActionButtonBehaviorChange = useCallback(
+    (behavior) => {
+      actionButtonBehavior.onChange(behavior);
 
-    if (behavior === 'CART') {
-      actionButtonText.onChange('Add to cart');
-    } else if (behavior === 'CHECKOUT') {
-      actionButtonText.onChange('Checkout');
-    } else {
-      actionButtonText.onChange('Continue shopping');
-    }
-  };
+      if (behavior === 'CART') {
+        actionButtonText.onChange('Add to cart');
+      } else if (behavior === 'CHECKOUT') {
+        actionButtonText.onChange('Checkout');
+      } else {
+        actionButtonText.onChange('Continue shopping');
+      }
+    },
+    [actionButtonBehavior, actionButtonText]
+  );
 
-  const handleStartAtChange = (value) => {
-    startAt.onChange(value);
+  const handleStartAtChange = useCallback(
+    (value) => {
+      startAt.onChange(value);
 
-    if (
-      showEndDate &&
-      offer.endAt &&
-      value &&
-      new Date(offer.endAt) < new Date(value)
-    ) {
-      endAt.onChange(value);
-    }
-  };
+      if (
+        showEndDate &&
+        offer.endAt &&
+        value &&
+        new Date(offer.endAt) < new Date(value)
+      ) {
+        endAt.onChange(value);
+      }
+    },
+    [endAt, offer.endAt, showEndDate, startAt]
+  );
 
   // Handle Contextual Save Bar behavior.
   useEffect(

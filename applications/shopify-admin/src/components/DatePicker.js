@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import {
@@ -10,7 +10,6 @@ import {
 import { CalendarMajorMonotone } from '@shopify/polaris-icons';
 
 const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
-
 const toIsoStartOfDay = (date) => date && moment(date).startOf('day').toDate();
 
 const DatePicker = (props) => {
@@ -24,22 +23,28 @@ const DatePicker = (props) => {
   const disableDatesBefore =
     props.disableDatesBefore && toIsoStartOfDay(props.disableDatesBefore);
 
-  const handleTextChange = (newText) => {
-    const isValid =
-      newText.match(/^\d{4}-\d{2}-\d{2}$/) && !!new Date(newText).getTime();
+  const handleTextChange = useCallback(
+    (newText) => {
+      const isValid =
+        newText.match(/^\d{4}-\d{2}-\d{2}$/) && !!new Date(newText).getTime();
 
-    setText(newText);
+      setText(newText);
 
-    if (isValid) {
-      onChange(newText);
-    }
-  };
+      if (isValid) {
+        onChange(newText);
+      }
+    },
+    [onChange]
+  );
 
-  const handleChange = ({ start: date }) => {
-    setText(toIsoDate(date));
-    setPopoverShown(false);
-    onChange(toIsoStartOfDay(date));
-  };
+  const handleChange = useCallback(
+    ({ start: date }) => {
+      setText(toIsoDate(date));
+      setPopoverShown(false);
+      onChange(toIsoStartOfDay(date));
+    },
+    [onChange]
+  );
 
   // Update state values when selected prop changes.
   useEffect(() => {

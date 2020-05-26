@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
@@ -29,27 +29,33 @@ const DateTimePicker = (props) => {
   const [date, setDate] = useState(value);
   const [time, setTime] = useState(moment(value).format('hh:mm A'));
 
-  const handleDateChange = (newDate) => {
-    const newValue = new Date(`${toIsoDate(newDate)} ${time}`);
-    const isValid = !Number.isNaN(newValue);
+  const handleDateChange = useCallback(
+    (newDate) => {
+      const newValue = new Date(`${toIsoDate(newDate)} ${time}`);
+      const isValid = !Number.isNaN(newValue);
 
-    setDate(newDate);
+      setDate(newDate);
 
-    if (isValid) {
-      onChange(newValue);
-    }
-  };
+      if (isValid) {
+        onChange(newValue);
+      }
+    },
+    [onChange, time]
+  );
 
-  const handleTimeChange = (newTime) => {
-    const newValue = new Date(`${toIsoDate(date)} ${newTime}`);
-    const isValid = !Number.isNaN(newValue);
+  const handleTimeChange = useCallback(
+    (newTime) => {
+      const newValue = new Date(`${toIsoDate(date)} ${newTime}`);
+      const isValid = !Number.isNaN(newValue);
 
-    setTime(newTime);
+      setTime(newTime);
 
-    if (isValid) {
-      onChange(newValue);
-    }
-  };
+      if (isValid) {
+        onChange(newValue);
+      }
+    },
+    [date, onChange]
+  );
 
   return (
     <Wrapper>

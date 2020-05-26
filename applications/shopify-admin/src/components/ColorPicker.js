@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Popover,
@@ -9,8 +9,6 @@ import {
 } from '@shopify/polaris';
 import Colr from 'colr';
 import styled from 'styled-components';
-// import { ColorPreview, PopoverWrapper, ColorPickerWrapper, ActivatorWrapper } from './components';
-// import { hexToHsb, hsbToHex, validateHexValue, sanitizeHexValue } from './utilities';
 
 const hexToHsb = (hex) => {
   if (!hex) {
@@ -103,42 +101,53 @@ const ColorPicker = (props) => {
   const [hexValue, setHexValue] = useState(sanitizedValue);
   const [lastValidHexValue, setLastValidHexValue] = useState(sanitizedValue);
 
-  const togglePopover = () => setActive(!active);
+  const togglePopover = useCallback(() => {
+    setActive(!active);
+  }, [active]);
 
-  const handleHsbChange = (newValue) => {
-    const newHexValue = hsbToHex(newValue);
+  const handleHsbChange = useCallback(
+    (newValue) => {
+      const newHexValue = hsbToHex(newValue);
 
-    setValue(newValue);
-    setHexValue(newHexValue);
+      setValue(newValue);
+      setHexValue(newHexValue);
 
-    onChange(newHexValue);
-  };
+      onChange(newHexValue);
+    },
+    [onChange]
+  );
 
-  const handleHexChange = (newHexValue) => {
-    const sanitizedNewHexValue = sanitizeHexValue(newHexValue);
-    const isValid = validateHexValue(sanitizedNewHexValue);
+  const handleHexChange = useCallback(
+    (newHexValue) => {
+      const sanitizedNewHexValue = sanitizeHexValue(newHexValue);
+      const isValid = validateHexValue(sanitizedNewHexValue);
 
-    setHexValue(sanitizedNewHexValue);
+      setHexValue(sanitizedNewHexValue);
 
-    if (isValid) {
-      onChange(sanitizedNewHexValue);
-    }
-  };
+      if (isValid) {
+        onChange(sanitizedNewHexValue);
+      }
+    },
+    [onChange]
+  );
 
-  const handleHexBlur = () => {
+  const handleHexBlur = useCallback(() => {
     const isValid = validateHexValue(hexValue);
 
     if (!isValid) {
       setHexValue(lastValidHexValue);
     }
-  };
+  }, [hexValue, lastValidHexValue]);
 
-  const handleHexKeyPress = (event) => {
-    if (event.keyCode === 13) {
-      handleHexChange(event.target.value);
-      togglePopover();
-    }
-  };
+  const handleHexKeyPress = useCallback(
+    (event) => {
+      if (event.keyCode === 13) {
+        handleHexChange(event.target.value);
+        togglePopover();
+      }
+    },
+    [handleHexChange, togglePopover]
+  );
 
   // Update state value when props value changes.
   useEffect(() => {
@@ -153,7 +162,7 @@ const ColorPicker = (props) => {
         <ColorPreview
           onClick={togglePopover}
           style={{ backgroundColor: hexValue }}
-        ></ColorPreview>
+        />
       </Tooltip>
       <PopoverWrapper>
         <Popover

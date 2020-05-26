@@ -31,22 +31,20 @@ const toFormattedTime = (date) => {
 
 const buildTimeOptions = () =>
   flatten(
-    times(24).map((_, index) => {
-      return [
-        {
-          value: `${index.toString().padStart(2, '0')}:00`,
-          label: `${(index % 12 > 0 ? index % 12 : 12)
-            .toString()
-            .padStart(2, '0')}:00 ${index < 12 ? 'AM' : 'PM'}`
-        },
-        {
-          value: `${index.toString().padStart(2, '0')}:30`,
-          label: `${(index % 12 > 0 ? index % 12 : 12)
-            .toString()
-            .padStart(2, '0')}:30 ${index < 12 ? 'AM' : 'PM'}`
-        }
-      ];
-    })
+    times(24).map((_, index) => [
+      {
+        value: `${index.toString().padStart(2, '0')}:00`,
+        label: `${(index % 12 > 0 ? index % 12 : 12)
+          .toString()
+          .padStart(2, '0')}:00 ${index < 12 ? 'AM' : 'PM'}`
+      },
+      {
+        value: `${index.toString().padStart(2, '0')}:30`,
+        label: `${(index % 12 > 0 ? index % 12 : 12)
+          .toString()
+          .padStart(2, '0')}:30 ${index < 12 ? 'AM' : 'PM'}`
+      }
+    ])
   );
 
 const TimePicker = (props) => {
@@ -80,7 +78,7 @@ const TimePicker = (props) => {
     [timeOptions]
   );
 
-  const handleTextBlur = () => {
+  const handleTextBlur = useCallback(() => {
     const sanitizedValue = sanitizeValue(value);
     const isValid = validateValue(sanitizedValue);
 
@@ -91,7 +89,7 @@ const TimePicker = (props) => {
       // The value is invalid, so revert to the last valid value.
       setValue(lastValidValue);
     }
-  };
+  }, [lastValidValue, onChange, value]);
 
   const handleAutocompleteSelect = useCallback(
     (selected) => {
