@@ -1,6 +1,6 @@
 {
   "name": "upselling-shopify-admin",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neatowebsolutions/upselling.git"
@@ -9,8 +9,8 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin#readme",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
-    "@neatowebsolutions/upselling-models": "^0.1.0",
-    "@neatowebsolutions/upselling-react-components": "^0.1.0",
+    "@neatowebsolutions/upselling-models": "^0.0.0",
+    "@neatowebsolutions/upselling-react-components": "^0.0.0",
     "@shopify/app-bridge": "^1.21.4",
     "@shopify/app-bridge-react": "^1.21.4",
     "@shopify/koa-shopify-auth": "^3.1.61",

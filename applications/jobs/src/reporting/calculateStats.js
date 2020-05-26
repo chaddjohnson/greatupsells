@@ -11,14 +11,8 @@ module.exports.handler = async (event, context) => {
     await cleanTmp();
 
     const Stat = await models.get('Stat');
-    const date = moment()
-      .utc()
-      .format('YYYY-MM-DDT23:59:59Z');
-    const currentHour = parseInt(
-      moment()
-        .tz('America/Chicago')
-        .format('HH')
-    );
+    const date = moment().utc().format('YYYY-MM-DDT23:59:59Z');
+    const currentHour = parseInt(moment().tz('America/Chicago').format('HH'));
 
     // Account for daylight savings by only running at midnight US Central time.
     if (currentHour !== 0) {

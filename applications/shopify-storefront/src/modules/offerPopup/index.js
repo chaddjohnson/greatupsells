@@ -25,7 +25,7 @@ const offer = {
     actionButtonBackgroundColor: '#91BD49',
     actionButtonTextColor: '#FFFFFF',
     cancelButtonTextColor: '#999999',
-    popupBackgroundColor: '#FFFFFF',
+    popupBackgroundColor: '#FFFFFF'
   },
   enableProductLinks: true,
   hideOutOfStockProducts: true,
@@ -37,14 +37,14 @@ const offer = {
   limitQuantitySelection: false,
   upsellProductsQuantity: 1,
   enableTimer: false,
-  startAt: new Date(),
+  startAt: new Date()
   // ...
 };
 
 const offerProduct = {
   title: 'Example Product',
   price: 14.99,
-  salePrice: 12.99,
+  salePrice: 12.99
   // ...
 };
 

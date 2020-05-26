@@ -7,12 +7,12 @@ const Koa = require('koa');
 const connect = require('koa-connect');
 const session = require('koa-session');
 const helmet = require('koa-helmet');
-const proxy = require('http-proxy-middleware');
 const next = require('next');
 const serverless = require('serverless-http');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const {
   default: createShopifyAuth,
-  verifyRequest,
+  verifyRequest
 } = require('@shopify/koa-shopify-auth');
 
 dotenvExpand(dotenv.config({ path: '.env' }));
@@ -27,7 +27,7 @@ const handle = app.getRequestHandler();
 const {
   SHOPIFY_APP_API_KEY,
   SHOPIFY_APP_API_SECRET_KEY,
-  SHOPIFY_APP_STOREFRONT_PORT,
+  SHOPIFY_APP_STOREFRONT_PORT
 } = process.env;
 
 const createServer = () => {
@@ -40,9 +40,9 @@ const createServer = () => {
   if (dev) {
     server.use(
       connect(
-        proxy('/storefront.js', {
+        createProxyMiddleware('/storefront.js', {
           target: `http://localhost:${SHOPIFY_APP_STOREFRONT_PORT}`,
-          changeOrigin: true,
+          changeOrigin: true
         })
       )
     );
@@ -60,7 +60,7 @@ const createServer = () => {
         'read_orders',
         'write_products',
         'read_script_tags',
-        'write_script_tags',
+        'write_script_tags'
       ],
       afterAuth(ctx) {
         const { shop: shopDomain, accessToken } = ctx.session;
@@ -73,10 +73,10 @@ const createServer = () => {
         ctx.cookies.set('shopOrigin', shopDomain, {
           httpOnly: false,
           sameSite: 'None',
-          secure: ctx.protocol === 'https',
+          secure: ctx.protocol === 'https'
         });
         ctx.redirect('/');
-      },
+      }
     })
   );
   server.use(verifyRequest());
@@ -84,7 +84,6 @@ const createServer = () => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
-    return;
   });
 
   return server;

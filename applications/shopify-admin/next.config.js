@@ -3,7 +3,7 @@ const dotenvExpand = require('dotenv-expand');
 const withSass = require('@zeit/next-sass');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-dotenvExpand(dotenv.config({ path: '.env' }));
+dotenvExpand(dotenv.config({ path: '../../.env' }));
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -12,7 +12,7 @@ const {
   SHOPIFY_APP_API_KEY,
   SHOPIFY_APP_NAME,
   API_URL,
-  CONTACT_EMAIL,
+  CONTACT_EMAIL
 } = process.env;
 
 module.exports = withSass({
@@ -21,7 +21,7 @@ module.exports = withSass({
       config.module.rules.push({
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'eslint-loader',
+        use: 'eslint-loader'
       });
     }
 
@@ -35,11 +35,12 @@ module.exports = withSass({
           compressionOptions: { level: 11 },
           threshold: 10240,
           minRatio: 0.8,
-          deleteOriginalAssets: false,
+          deleteOriginalAssets: false
         })
       );
     }
 
+    // Necessary to use symlinked packages (Lerna creates symlinks in node_modules).
     config.resolve.symlinks = false;
 
     return config;
@@ -54,21 +55,24 @@ module.exports = withSass({
     // Ignore all node modules except those here.
     config.watchOptions.ignored = [
       ...config.watchOptions.ignored,
-      /node_modules([\\]+|\/)+(?!@neatowebsolutions\/upselling-react-components)/,
-      /\@neatowebsolutions\/upselling-react-components([\\]+|\/)node_modules/,
+      /node_modules\/(?!@neatowebsolutions\/.+)/,
+      /\@neatowebsolutions\/.+\/node_modules/
     ];
 
     return config;
   },
 
+  // SSR instead of SSG is used as OAuth is handled within this app.
   target: 'serverless',
-  assetPrefix: SHOPIFY_APP_URL,
+
+  // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
+  assetPrefix: dev ? '' : SHOPIFY_APP_URL,
 
   env: {
     SHOPIFY_APP_URL,
     SHOPIFY_APP_API_KEY,
     SHOPIFY_APP_NAME,
     API_URL,
-    CONTACT_EMAIL,
-  },
+    CONTACT_EMAIL
+  }
 });

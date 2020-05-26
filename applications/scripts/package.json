@@ -1,9 +1,9 @@
 {
   "name": "upselling-scripts",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "scripts": {
     "lint": "eslint src/**/*.js",
-    "lintfix": "find src -type f -iname '*.js' -exec eslint --fix {} +",
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "migrate": ""
   },
   "repository": {
@@ -14,7 +14,7 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/scripts#readme",
   "dependencies": {
-    "@neatowebsolutions/upselling-models": "^0.1.0"
+    "@neatowebsolutions/upselling-models": "^0.0.0"
   },
   "devDependencies": {}
 }

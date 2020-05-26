@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
-import shortid from 'shortid';
 import { Heading, TextStyle, List } from '@shopify/polaris';
 
 const SummaryList = styled.div`
@@ -44,8 +43,8 @@ const OfferSummary = (props) => {
       <Heading element="h3">{offer.name}</Heading>
       {items.length > 0 && (
         <SummaryList>
-          {items.map((item) => (
-            <List.Item key={shortid.generate()}>{item}</List.Item>
+          {items.map((item, index) => (
+            <List.Item key={index}>{item}</List.Item>
           ))}
         </SummaryList>
       )}

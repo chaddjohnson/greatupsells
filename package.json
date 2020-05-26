@@ -8,8 +8,8 @@
   "scripts": {
     "prestart": "yarn install",
     "postinstall": "lerna bootstrap --force-local && yarn build",
-    "build": "lerna exec 'yarn build' --scope @neatowebsolutions/upselling-react-components",
-    "start": "dotenv -- lerna run start --parallel"
+    "build": "dotenv -- lerna exec 'yarn build' --scope @neatowebsolutions/upselling-react-components",
+    "start": "dotenv -- lerna exec 'yarn start' --parallel --scope @neatowebsolutions/upselling-react-components --scope upselling-api --scope upselling-shopify-admin --scope upselling-shopify-storefront"
   },
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
@@ -27,7 +27,7 @@
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
     "mongoose": "^5.9.14",
-    "next": "^9.4.0",
+    "next": "^9.4.2",
     "node-sass": "^4.14.1",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",

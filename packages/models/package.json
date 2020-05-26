@@ -1,6 +1,6 @@
 {
   "name": "@neatowebsolutions/upselling-models",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Upselling data models.",
   "main": "src/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@neatowebsolutions/logger": "^1.0.1"
+    "@neatowebsolutions/logger": "^0.0.0"
   },
   "devDependencies": {},
   "peerDependencies": {

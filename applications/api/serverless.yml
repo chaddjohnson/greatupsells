@@ -64,9 +64,10 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
   dotenv:
-    path: .env
+    path: ../../.env
+    logging: false
   serverless-offline:
-    port: ${env:API_PORT}
+    httpPort: ${env:API_PORT}
   ngrokTunnel:
     tunnels:
       - port: ${env:API_PORT}

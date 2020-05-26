@@ -1,10 +1,9 @@
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
-const webpack = require('webpack');
 const withCss = require('@zeit/next-css');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-dotenvExpand(dotenv.config({ path: '.env' }));
+dotenvExpand(dotenv.config({ path: '../../.env' }));
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -16,11 +15,9 @@ module.exports = withCss({
       config.module.rules.push({
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'eslint-loader',
+        use: 'eslint-loader'
       });
     }
-
-    config.plugins.push(new webpack.EnvironmentPlugin(['API_URL']));
 
     // Enable compression in production. Use Brotli which is superior to gzip.
     if (!dev) {
@@ -32,7 +29,7 @@ module.exports = withCss({
           compressionOptions: { level: 11 },
           threshold: 10240,
           minRatio: 0.8,
-          deleteOriginalAssets: false,
+          deleteOriginalAssets: false
         })
       );
     }
@@ -44,20 +41,38 @@ module.exports = withCss({
         options: {
           limit: 100000,
           name: '[name].[ext]',
-          esModule: false,
-        },
-      },
+          esModule: false
+        }
+      }
     });
 
+    // Necessary to use symlinked packages (Lerna creates symlinks in node_modules).
     config.resolve.symlinks = false;
 
     return config;
   },
 
+  webpackDevMiddleware: (config) => {
+    // Don't ignore all node modules.
+    config.watchOptions.ignored = config.watchOptions.ignored.filter(
+      (ignore) => !ignore.toString().includes('node_modules')
+    );
+
+    // Ignore all node modules except those here.
+    config.watchOptions.ignored = [
+      ...config.watchOptions.ignored,
+      /node_modules\/(?!@neatowebsolutions\/.+)/,
+      /\@neatowebsolutions\/.+\/node_modules/
+    ];
+
+    return config;
+  },
+
+  // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
+  assetPrefix: dev ? '' : ADMIN_APP_URL,
+
   // Generate page/index.html instead of page.html.
   exportTrailingSlash: true,
 
-  assetPrefix: ADMIN_APP_URL,
-
-  env: { API_URL },
+  env: { API_URL }
 });

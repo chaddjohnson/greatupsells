@@ -255,16 +255,12 @@ const OfferForm = (props) => {
     },
     onSubmit: async (formValues) => {
       // contextualSaveBar.set({ saveAction: { loading: true } });
-      console.log(formValues);
       setSubmitted(true);
 
       try {
         // TODO: Handle update.
         // await createOffer({ variables: { input: offer } });
       } catch (error) {
-        console.log('FAILED');
-        console.error(error);
-
         return { status: 'fail', errors: error };
       }
 
@@ -496,8 +492,7 @@ const OfferForm = (props) => {
                 prefix={<Icon source={SearchMinor} />}
                 connectedRight={
                   <Button onClick={() => setTriggerProductPickerOpen(true)}>
-                    {' '}
-                    Browse{' '}
+                    Browse
                   </Button>
                 }
                 onChange={() => setTriggerProductPickerOpen(true)}
@@ -515,8 +510,7 @@ const OfferForm = (props) => {
                 prefix={<Icon source={SearchMinor} />}
                 connectedRight={
                   <Button onClick={() => setTriggerCollectionPickerOpen(true)}>
-                    {' '}
-                    Browse{' '}
+                    Browse
                   </Button>
                 }
                 onChange={() => setTriggerCollectionPickerOpen(true)}
@@ -793,6 +787,7 @@ const OfferForm = (props) => {
                     <OfferPopupSummaryContainer
                       ref={offerPopupSummaryContainer}
                     />
+                    {/* eslint-disable indent */}
                     {offerPopupSummaryContainer &&
                       offerPopupSummaryContainer.current && (
                         <OfferPopup
@@ -805,6 +800,7 @@ const OfferForm = (props) => {
                           }
                         />
                       )}
+                    {/* eslint-enable indent */}
                   </Card.Section>
                 </div>
               </Card>

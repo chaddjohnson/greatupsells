@@ -44,7 +44,7 @@ plugins:
 
 custom:
   dotenv:
-    path: .env
+    path: ../../.env
 
 package:
   exclude:
