@@ -8,5 +8,10 @@ module.exports = async (shop) => {
   // Record when the uninstall occurred.
   shop.uninstalledAt = Date.now();
 
+  // Mark the shop's plan as canceled (Shopify cancels plans automatically on uninstall).
+  if (!shop.plan.grandfatheredAt && shop.plan.level === 'premium') {
+    shop.plan.canceledAt = Date.now();
+  }
+
   await shop.save();
 };

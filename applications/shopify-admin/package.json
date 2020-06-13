@@ -34,7 +34,7 @@
     "build": "NODE_ENV=production next build",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
-    "server": "NODE_ENV=production node --preserve-symlinks server",
-    "start": "node --preserve-symlinks --inspect=0.0.0.0:9230 server"
+    "server": "NODE_ENV=production node server",
+    "start": "node --inspect=0.0.0.0:9230 server"
   }
 }

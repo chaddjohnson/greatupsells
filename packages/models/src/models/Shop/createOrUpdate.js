@@ -1,8 +1,8 @@
 const logger = require('@neatowebsolutions/logger');
 
 const createShop = async (shopDomain, accessToken) => {
-  const models = require('../..');
-  const Shop = await models.get('ShopifyShop');
+  const models = require('..');
+  const Shop = await models.get('Shop');
   const shop = new Shop({ domain: shopDomain, accessToken });
   const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyShopData = await shopifyApiClient.shop.get();
@@ -31,10 +31,10 @@ const createShop = async (shopDomain, accessToken) => {
 };
 
 const createOrUpdateShop = async (shopDomain, accessToken) => {
-  const models = require('../..');
+  const models = require('..');
 
   try {
-    const Shop = await models.get('ShopifyShop');
+    const Shop = await models.get('Shop');
     let shop = await Shop.findByDomain(shopDomain);
 
     if (!shop) {

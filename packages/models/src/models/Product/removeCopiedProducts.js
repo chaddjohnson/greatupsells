@@ -1,8 +1,8 @@
 const moment = require('moment-timezone');
 
 module.exports = async () => {
-  const models = require('../..');
-  const ShopifyProduct = await models.get('ShopifyProduct');
+  const models = require('..');
+  const Product = await models.get('Product');
 
   const criteria = {
     'shopifyProductData.product_type': 'upsellcrosssell',
@@ -11,7 +11,7 @@ module.exports = async () => {
     }
   };
 
-  const cursor = ShopifyProduct.find(criteria).cursor({ batchSize: 50 });
+  const cursor = Product.find(criteria).cursor({ batchSize: 50 });
 
   await cursor.eachAsync(async (product) => {
     const { shop, platformShopId } = product;

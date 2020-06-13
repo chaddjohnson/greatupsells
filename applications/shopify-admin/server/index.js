@@ -1,5 +1,3 @@
-require('isomorphic-fetch');
-
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 const getenv = require('getenv');
@@ -66,7 +64,7 @@ const createServer = () => {
         const { shop: shopDomain, accessToken } = ctx.session;
 
         (async () => {
-          const Shop = await models.get('ShopifyShop');
+          const Shop = await models.get('Shop');
           await Shop.createOrUpdate(shopDomain, accessToken);
         })();
 
@@ -91,8 +89,8 @@ const createServer = () => {
 
 if (dev) {
   app.prepare().then(() => {
-    // eslint-disable-next-line no-console
     createServer().listen(port, () =>
+      // eslint-disable-next-line no-console
       console.info(`Running at http://localhost:${port}`)
     );
   });

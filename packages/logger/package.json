@@ -8,6 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "format": "eslint --fix index.js",
     "lint": "eslint index.js"
   },
   "license": "UNLICENSED",

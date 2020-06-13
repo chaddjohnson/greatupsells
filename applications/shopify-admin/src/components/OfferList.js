@@ -3,21 +3,27 @@ import { Layout, Card, DataTable, EmptyState, Link } from '@shopify/polaris';
 export default () => {
   const rows = [
     [
-      <Link url="/offers/first-offer">First Offer</Link>,
+      <Link key={0} url="/offers/first-offer">
+        First Offer
+      </Link>,
       '$875.00',
       124689,
       140,
       '$122,500.00'
     ],
     [
-      <Link url="/offers/second-offer">Second Offer</Link>,
+      <Link key={1} url="/offers/second-offer">
+        Second Offer
+      </Link>,
       '$230.00',
       124533,
       83,
       '$19,090.00'
     ],
     [
-      <Link url="/offers/third-offer">Thirdd Offer</Link>,
+      <Link key={3} url="/offers/third-offer">
+        Thirdd Offer
+      </Link>,
       '$445.00',
       124518,
       32,

@@ -5,6 +5,9 @@ const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
 const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 const findByShopId = require('./findByShopId');
+const copy = require('./copy');
+const removeCopiedProducts = require('./removeCopiedProducts');
+const preValidateHook = require('./preValidateHook');
 
 let Product = null;
 
@@ -12,7 +15,8 @@ const schema = new mongoose.Schema({
   platformShopId: { type: String, required: true },
   platformProductId: { type: String, required: true },
   shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
-  title: { type: String, required: true }
+  title: { type: String, required: true },
+  shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true }
 });
 
 schema.statics.findByShopId = function (shopId) {
@@ -20,11 +24,11 @@ schema.statics.findByShopId = function (shopId) {
 };
 
 schema.statics.removeCopiedProducts = function () {
-  throw new Error('removeCopiedProducts() is not implemented');
+  return removeCopiedProducts(this);
 };
 
 schema.methods.copy = function () {
-  throw new Error('copy() is not implemented');
+  return copy(this);
 };
 
 schema.methods.toString = function () {
@@ -40,6 +44,10 @@ schema.methods.toString = function () {
 
   return data.join(' | ');
 };
+
+schema.pre('validate', function (next) {
+  preValidateHook(this, next);
+});
 
 schema.index({ platformShopId: 1 });
 schema.index({ platformProductId: 1 });

@@ -4,11 +4,9 @@ import NextLink from 'next/link';
 const Link = ({ url, external, children, ...props }) => {
   if (external || url.match(/^https?:/)) {
     return (
-      <NextLink href={url}>
-        <a target="_blank" rel="noopener noreferrer" {...props}>
-          {children}
-        </a>
-      </NextLink>
+      <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+        {children}
+      </a>
     );
   } else {
     return (

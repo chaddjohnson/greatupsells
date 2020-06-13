@@ -16,16 +16,16 @@ const typeDef = gql`
     active: Boolean!
     internal: Boolean!
     uninstalledAt: String
-    plan: ShopPlan
-    createdAt: String
-    updatedAt: String
+    plan: ShopPlan!
+    createdAt: String!
+    updatedAt: String!
     offers: [Offer]
     products: [Product]
   }
 
   type ShopPlan {
-    level: ShopPlanLevel
-    active: Boolean!
+    level: ShopPlanLevel!
+    active: Boolean
     chargeId: ID
     billingOn: String
     upgradedAt: String

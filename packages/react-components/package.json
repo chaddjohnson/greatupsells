@@ -18,9 +18,10 @@
     "styled-components": "^5.0.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
+    "build": "webpack",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
-    "start": "webpack --watch"
+    "start": "webpack --watch",
+    "postinstall": "NODE_ENV=production yarn build"
   }
 }

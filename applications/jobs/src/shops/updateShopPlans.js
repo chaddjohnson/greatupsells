@@ -9,7 +9,7 @@ module.exports.handler = async (event, context) => {
   try {
     await cleanTmp();
 
-    const Shop = await models.get('Shop');
+    // const Shop = await models.get('Shop');
 
     // ...
   } catch (error) {

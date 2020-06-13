@@ -374,7 +374,6 @@ const OfferForm = (props) => {
                 {...name}
                 error={submitted && name.error}
                 onBlur={handleBlur('name')}
-                autoFocus
               />
             </FormLayout>
           </Card>

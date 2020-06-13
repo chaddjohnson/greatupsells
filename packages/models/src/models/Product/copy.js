@@ -68,5 +68,7 @@ module.exports = async (product) => {
     value_type: 'integer'
   });
 
+  // TODO: Create local copy of product? Rely on Shopify webhook?
+
   return copiedProduct;
 };

@@ -3,8 +3,15 @@
     "browser": true,
     "node": true
   },
-  "extends": ["react-app", "airbnb-base", "prettier", "eslint:recommended"],
-  "plugins": ["prettier"],
+  "extends": [
+    "react-app",
+    "airbnb-base",
+    "prettier",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": ["prettier", "jsx-a11y"],
   "rules": {
     "prettier/prettier": ["warn"],
     "func-names": ["off"],
@@ -30,7 +37,12 @@
       }
     ],
     "class-methods-use-this": "off",
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "varsIgnorePattern": "React"
+      }
+    ],
     "no-console": "warn",
     "import/no-extraneous-dependencies": "off",
     "keyword-spacing": [
@@ -43,13 +55,40 @@
     "space-infix-ops": "warn",
     "no-else-return": "off",
     "import/prefer-default-export": "off",
-    "jsx-a11y/anchor-is-valid": "off",
     "import/no-unresolved": "off",
-    "react/react-in-jsx-scope": "off",
     "import/newline-after-import": "warn",
+    "lines-between-class-members": "off",
+    "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "lines-between-class-members": "off"
+    "react/jsx-uses-react": "warn",
+    "react/jsx-uses-vars": "warn",
+    "react/display-name": "off",
+    "react/prop-types": [
+      "warn",
+      {
+        "ignore": ["sx"]
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ],
+    "jsx-a11y/alt-text": [
+      "error",
+      {
+        "elements": ["img", "object", "area", "input[type=\"image\"]"],
+        "img": ["Image"],
+        "object": ["Object"],
+        "area": ["Area"],
+        "input[type=\"image\"]": ["InputImage"]
+      }
+    ],
+    "jsx-a11y/no-static-element-interactions": "off"
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -71,6 +110,12 @@
     }
   },
   "overrides": [{
+      "files": ["applications/*/src/pages/**/*.js", "packages/*/src/**/*.js"],
+      "rules": {
+        "react/prop-types": "off"
+      }
+    },
+    {
       "files": ["*.spec.js"],
       "rules": {
         "no-return-assign": "off",
