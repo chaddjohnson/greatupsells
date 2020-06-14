@@ -46,8 +46,7 @@ const ManagedResourceItem = ({ children, onRemove, ...props }) => (
 );
 
 ManagedResourceItem.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-    .isRequired,
+  children: PropTypes.node.isRequired,
   onRemove: PropTypes.func.isRequired
 };
 
