@@ -6,7 +6,7 @@ const PageTitleBar = memo(() => <TitleBar title="Offers" />);
 
 export default () => {
   return (
-    <Page title="Offers">
+    <Page title="Offers" fullWidth>
       <PageTitleBar />
       <OfferList />
     </Page>
