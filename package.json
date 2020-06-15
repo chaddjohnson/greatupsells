@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
+    "@shopify/polaris-icons": "^3.10.0",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "apollo-boost": "^0.4.9",

@@ -266,7 +266,7 @@ const OfferForm = (props) => {
 
       try {
         // TODO: Handle update.
-        // await createOffer({ variables: { input: offer } });
+        await createOffer({ variables: { input: formValues } });
       } catch (error) {
         return { status: 'fail', errors: error };
       }

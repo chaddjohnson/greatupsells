@@ -3,6 +3,12 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/react-hooks';
 import { Loading } from '@shopify/app-bridge-react';
 import { Page } from '@shopify/polaris';
+import {
+  EditMinor,
+  ExternalMinor,
+  CircleDisableMinor,
+  DuplicateMinor
+} from '@shopify/polaris-icons';
 import { TitleBar, OfferForm } from '../../components';
 import { OFFER } from '../../graphql/queries';
 
@@ -28,7 +34,31 @@ const OfferEditPage = () => {
   }
 
   return (
-    <Page title={offer.name}>
+    <Page
+      title={offer.name}
+      secondaryActions={[
+        {
+          content: 'Edit',
+          accessibilityLabel: 'Edit this offer',
+          icon: EditMinor
+        },
+        {
+          content: 'Test',
+          accessibilityLabel: 'Test this offer',
+          icon: ExternalMinor
+        },
+        {
+          content: 'Disable',
+          accessibilityLabel: 'Disable this offer',
+          icon: CircleDisableMinor
+        },
+        {
+          content: 'Duplicate',
+          accessibilityLabel: 'Duplicate this offer',
+          icon: DuplicateMinor
+        }
+      ]}
+    >
       <PageTitleBar />
       <OfferForm offer={offer} />
     </Page>
