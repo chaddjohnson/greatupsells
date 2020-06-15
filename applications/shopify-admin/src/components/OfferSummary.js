@@ -8,8 +8,7 @@ const SummaryList = styled.div`
   margin-top: 16px;
 `;
 
-const OfferSummary = (props) => {
-  const { offer } = props;
+const OfferSummary = ({ offer }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {

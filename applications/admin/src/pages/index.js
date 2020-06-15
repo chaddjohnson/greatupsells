@@ -5,4 +5,6 @@ const Title = styled.h1`
   color: green;
 `;
 
-export default () => <Title>Admin</Title>;
+const DashboardPage = () => <Title>Admin</Title>;
+
+export default DashboardPage;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import styled from 'styled-components';
@@ -132,11 +132,16 @@ export const Mask = styled.div`
   cursor: ${(props) => (props.onClick ? 'zoom-in' : 'auto')};
 `;
 
-const OfferPopup = (props) => {
-  const { appRoot, renderTo, offer, product, onClick } = props;
-  const [open, setOpen] = useState(props.open);
-
-  const handleClose = () => !renderTo && setOpen(false);
+const OfferPopup = ({
+  appRoot,
+  renderTo,
+  open,
+  offer,
+  product,
+  onClose,
+  onClick
+}) => {
+  const handleClose = () => !renderTo && onClose();
 
   Modal.setAppElement(appRoot);
 
@@ -249,10 +254,11 @@ const OfferPopup = (props) => {
 
 OfferPopup.propTypes = {
   appRoot: PropTypes.string.isRequired,
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   product: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   renderTo: PropTypes.object,
+  onClose: PropTypes.func,
   onClick: PropTypes.func
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import {
@@ -12,16 +12,23 @@ import { CalendarMajorMonotone } from '@shopify/polaris-icons';
 const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
 const toIsoStartOfDay = (date) => date && moment(date).startOf('day').toDate();
 
-const DatePicker = (props) => {
-  const { name, label, selected, error, onChange } = props;
-
+const DatePicker = ({
+  name,
+  label,
+  selected,
+  disableDatesBefore,
+  error,
+  onChange
+}) => {
   const [text, setText] = useState(toIsoDate(selected));
   const [month, setMonth] = useState(new Date(selected).getMonth());
   const [year, setYear] = useState(new Date(selected).getFullYear());
   const [popoverShown, setPopoverShown] = useState(false);
 
-  const disableDatesBefore =
-    props.disableDatesBefore && toIsoStartOfDay(props.disableDatesBefore);
+  const disableDatesBeforeFormatted = useMemo(
+    () => disableDatesBefore && toIsoStartOfDay(disableDatesBefore),
+    [disableDatesBefore]
+  );
 
   const handleTextChange = useCallback(
     (newText) => {
@@ -81,7 +88,7 @@ const DatePicker = (props) => {
         selected={selected}
         month={month}
         year={year}
-        disableDatesBefore={disableDatesBefore}
+        disableDatesBefore={disableDatesBeforeFormatted}
         onChange={handleChange}
         onMonthChange={(newMonth, newYear) => {
           setMonth(newMonth);
@@ -100,6 +107,7 @@ DatePicker.propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Date)
   ]),
+  error: PropTypes.bool,
   onChange: PropTypes.func
 };
 

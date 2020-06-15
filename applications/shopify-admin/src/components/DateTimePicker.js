@@ -17,15 +17,13 @@ const Wrapper = styled.div`
 
 const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
 
-const DateTimePicker = (props) => {
-  const {
-    value,
-    disableDatesBefore,
-    datePickerProps,
-    timePickerProps,
-    onChange
-  } = props;
-
+const DateTimePicker = ({
+  value,
+  disableDatesBefore,
+  datePickerProps,
+  timePickerProps,
+  onChange
+}) => {
   const [date, setDate] = useState(value);
   const [time, setTime] = useState(moment(value).format('hh:mm A'));
 

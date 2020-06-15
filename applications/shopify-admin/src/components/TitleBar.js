@@ -1,7 +1,7 @@
-import { TitleBar } from '@shopify/app-bridge-react';
+import { TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
 import { useRouter } from 'next/router';
 
-export default (props) => {
+const TitleBar = (props) => {
   const router = useRouter();
 
   const primaryAction = {
@@ -45,7 +45,7 @@ export default (props) => {
   ];
 
   return (
-    <TitleBar
+    <ShopifyTitleBar
       primaryAction={primaryAction}
       secondaryActions={secondaryActions}
       actionGroups={actionGroups}
@@ -53,3 +53,5 @@ export default (props) => {
     />
   );
 };
+
+export default TitleBar;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import './styles.css';
@@ -48,16 +48,22 @@ const offerProduct = {
   // ...
 };
 
+const Container = () => {
+  const [popupOpen, setPopupOpen] = useState(true);
+
+  return (
+    <OfferPopup
+      appRoot="#upselling-popup-root"
+      open={popupOpen}
+      product={product}
+      offer={offer}
+      offerProduct={offerProduct}
+      onClose={() => setPopupOpen(false)}
+    />
+  );
+};
+
 root.setAttribute('id', 'upselling-popup-root');
 document.body.appendChild(root);
 
-ReactDOM.render(
-  <OfferPopup
-    appRoot="#upselling-popup-root"
-    open={true}
-    product={product}
-    offer={offer}
-    offerProduct={offerProduct}
-  />,
-  document.getElementById('upselling-popup-root')
-);
+ReactDOM.render(<Container />, document.getElementById('upselling-popup-root'));

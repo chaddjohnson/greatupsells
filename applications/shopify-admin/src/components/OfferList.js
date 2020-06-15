@@ -53,7 +53,7 @@ const rows = [
   ]
 ];
 
-export default () => {
+const OfferList = () => {
   const [query, setQuery] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
 
@@ -143,3 +143,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default OfferList;

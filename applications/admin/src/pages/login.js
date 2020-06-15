@@ -1,6 +1,6 @@
 import { Grid, Header, Segment, Form, Button } from 'semantic-ui-react';
 
-export default () => {
+const LoginPage = () => {
   return (
     <Grid centered columns={2}>
       <Grid.Column>
@@ -31,5 +31,7 @@ export default () => {
     </Grid>
   );
 };
+
+export default LoginPage;
 
 // Example: https://www.robinwieruch.de/react-semantic-ui-tutorial

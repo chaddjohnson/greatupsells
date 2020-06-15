@@ -4,9 +4,11 @@ import { TitleBar } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
 
-export default () => (
+const DashboardPage = () => (
   <Page title="Dashboard">
     <PageTitleBar />
     <Layout>Dashboard page!</Layout>
   </Page>
 );
+
+export default DashboardPage;

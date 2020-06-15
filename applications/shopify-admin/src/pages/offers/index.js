@@ -4,7 +4,7 @@ import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);
 
-export default () => {
+const OffersPage = () => {
   return (
     <Page title="Offers" fullWidth>
       <PageTitleBar />
@@ -12,3 +12,5 @@ export default () => {
     </Page>
   );
 };
+
+export default OffersPage;

@@ -4,9 +4,11 @@ import { TitleBar } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Settings" />);
 
-export default () => (
+const SettingsPage = () => (
   <Page title="Settings">
     <PageTitleBar />
     <Layout>Settings page!</Layout>
   </Page>
 );
+
+export default SettingsPage;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Popover,
@@ -91,13 +91,11 @@ const ActivatorWrapper = styled.span`
   }
 `;
 
-const ColorPicker = (props) => {
-  const { label, onChange } = props;
+const ColorPicker = ({ label, value, onChange }) => {
+  const sanitizedValue = useMemo(() => sanitizeHexValue(value), [value]);
 
-  const sanitizedValue = sanitizeHexValue(props.value);
-
-  const [active, setActive] = useState(props.active);
-  const [value, setValue] = useState(hexToHsb(sanitizedValue));
+  const [active, setActive] = useState(false);
+  const [hsbValue, setHsbValue] = useState(hexToHsb(sanitizedValue));
   const [hexValue, setHexValue] = useState(sanitizedValue);
   const [lastValidHexValue, setLastValidHexValue] = useState(sanitizedValue);
 
@@ -109,7 +107,7 @@ const ColorPicker = (props) => {
     (newValue) => {
       const newHexValue = hsbToHex(newValue);
 
-      setValue(newValue);
+      setHsbValue(newValue);
       setHexValue(newHexValue);
 
       onChange(newHexValue);
@@ -151,10 +149,10 @@ const ColorPicker = (props) => {
 
   // Update state value when props value changes.
   useEffect(() => {
-    setValue(hexToHsb(props.value));
-    setHexValue(props.value);
-    setLastValidHexValue(props.value);
-  }, [props.value]);
+    setHsbValue(hexToHsb(value));
+    setHexValue(value);
+    setLastValidHexValue(value);
+  }, [value]);
 
   return (
     <>
@@ -179,7 +177,7 @@ const ColorPicker = (props) => {
           onClose={togglePopover}
         >
           <ColorPickerWrapper>
-            <ShopifyColorPicker color={value} onChange={handleHsbChange} />
+            <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
             <div onKeyDown={handleHexKeyPress}>
               <TextField
                 value={hexValue}
@@ -197,14 +195,12 @@ const ColorPicker = (props) => {
 };
 
 ColorPicker.propTypes = {
-  active: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func
 };
 
 ColorPicker.defaultProps = {
-  active: false,
   onChange: () => {}
 };
 

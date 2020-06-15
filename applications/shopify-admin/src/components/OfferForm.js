@@ -780,6 +780,7 @@ const OfferForm = (props) => {
               <OfferPopup
                 appRoot="#__next"
                 renderTo={offerPopupContainer.current}
+                open={true}
                 offer={offer}
                 product={product}
               />
@@ -808,6 +809,7 @@ const OfferForm = (props) => {
                         <OfferPopup
                           appRoot="#__next"
                           renderTo={offerPopupSummaryContainer.current}
+                          open={true}
                           offer={offer}
                           product={product}
                           onClick={() =>
