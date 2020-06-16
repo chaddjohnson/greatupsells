@@ -35,7 +35,7 @@ const offer = {
   enableQuantitySelection: false,
   productQuantityLimit: 1,
   limitQuantitySelection: false,
-  upsellProductsQuantity: 1,
+  minimumProductsQuantity: 1,
   enableTimer: false,
   startAt: new Date()
   // ...

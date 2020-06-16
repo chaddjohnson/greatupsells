@@ -65,9 +65,9 @@ const schema = new mongoose.Schema({
     // notificationBannerBackgroundColor: { type: String, required: true },
     // notificationBannerTextColor: { type: String, required: true }
   },
-  upsellProducts: [offerProductSchema],
-  upsellProductsQuantity: { type: Number, required: true },
-  upsellCollections: [offerCollectionSchema],
+  products: [offerProductSchema],
+  minimumProductsQuantity: { type: Number, required: true },
+  collections: [offerCollectionSchema],
   discountType: {
     type: String,
     enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT'],
@@ -97,7 +97,7 @@ const schema = new mongoose.Schema({
   hideOutOfStockProducts: { type: Boolean, required: true },
   // discountCodes
   // discountPricingMethod
-  enabled: { type: Boolean, required: true }
+  enabled: { type: Boolean, required: true, default: true }
 });
 
 schema.statics.findByPlatformShopId = function (platformShopId) {

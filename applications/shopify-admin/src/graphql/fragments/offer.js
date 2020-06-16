@@ -32,15 +32,15 @@ export default gql`
       # notificationBannerBackgroundColor
       # notificationBannerTextColor
     }
-    upsellProducts {
+    products {
       title
       image {
         src
       }
       platformProductId
     }
-    upsellProductsQuantity
-    upsellCollections {
+    minimumProductsQuantity
+    collections {
       title
       image {
         src

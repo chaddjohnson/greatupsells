@@ -34,9 +34,9 @@ const offer = {
     // notificationBannerBackgroundColor,
     // notificationBannerTextColor,
   },
-  upsellProducts: [],
-  upsellProductsQuantity: 1,
-  upsellCollections: [],
+  products: [],
+  minimumProductsQuantity: 1,
+  collections: [],
   discountType: 'PERCENTAGE',
   // discountAmount
   triggerEvent: 'ADD',

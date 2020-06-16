@@ -121,8 +121,8 @@ const OfferForm = (props) => {
   const strategy = useField(props.offer.strategy);
   const triggerEvent = useField(props.offer.triggerEvent);
   const discountType = useField(props.offer.discountType);
-  const upsellProducts = useField(useList(props.offer.upsellProducts));
-  const upsellCollections = useField(useList(props.offer.upsellCollections));
+  const products = useField(useList(props.offer.products));
+  const collections = useField(useList(props.offer.collections));
   const triggerProducts = useField(useList(props.offer.triggerProducts));
   const triggerCollections = useField(useList(props.offer.triggerCollections));
   const actionButtonBehavior = useField(props.offer.actionButtonBehavior);
@@ -235,8 +235,9 @@ const OfferForm = (props) => {
       strategy,
       triggerEvent,
       discountType,
-      upsellProducts,
-      upsellCollections,
+      products,
+      // minimumProductsQuantity,
+      collections,
       triggerProducts,
       triggerCollections,
       actionButtonBehavior,
@@ -465,16 +466,15 @@ const OfferForm = (props) => {
                 prefix={<Icon source={SearchMinor} />}
                 connectedRight={
                   <Button onClick={() => setProductPickerOpen(true)}>
-                    {' '}
-                    Browse{' '}
+                    Browse
                   </Button>
                 }
                 onChange={() => setProductPickerOpen(true)}
               />
               <ManagedResourceList
-                items={offer.upsellProducts}
-                // onChange={upsellProducts.onChange}
-                // onItemRemoved={upsellProducts => setOffer({ ...offer, upsellProducts })}
+                items={offer.products}
+                // onChange={}
+                // onItemRemoved={products => setOffer({ ...offer, products })}
               />
             </Card.Section>
             <Card.Section title="Collections">
@@ -486,16 +486,15 @@ const OfferForm = (props) => {
                 prefix={<Icon source={SearchMinor} />}
                 connectedRight={
                   <Button onClick={() => setCollectionPickerOpen(true)}>
-                    {' '}
-                    Browse{' '}
+                    Browse
                   </Button>
                 }
                 onChange={() => setCollectionPickerOpen(true)}
               />
               <ManagedResourceList
-                items={offer.upsellCollections}
+                items={offer.collections}
                 // onChange={}
-                // onItemRemoved={upsellCollections => setOffer({ ...offer, upsellCollections })}
+                // onItemRemoved={collections => setOffer({ ...offer, collections })}
               />
             </Card.Section>
           </Card>

@@ -200,7 +200,7 @@ const OfferPopup = ({
                   alt={product.title}
                 />
                 <figcaption>
-                  {product.title} x {offer.upsellProductsQuantity}
+                  {product.title} x {offer.minimumProductsQuantity}
                 </figcaption>
               </figure>
             </a>
@@ -211,7 +211,7 @@ const OfferPopup = ({
                 alt={product.title}
               />
               <figcaption>
-                {product.title} x {offer.upsellProductsQuantity}
+                {product.title} x {offer.minimumProductsQuantity}
               </figcaption>
             </figure>
           )}

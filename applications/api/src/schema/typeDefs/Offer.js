@@ -21,9 +21,9 @@ const typeDef = gql`
     popupThemeType: OfferPopupThemeType!
     popupThemeTemplateId: String
     popupTheme: OfferPopupTheme
-    upsellProducts: [OfferProduct]
-    upsellProductsQuantity: Int
-    upsellCollections: [OfferCollection]
+    products: [OfferProduct]
+    minimumProductsQuantity: Int
+    collections: [OfferCollection]
     discountType: OfferDiscountType!
     # discountAmount
     triggerEvent: OfferTriggerEvent
@@ -126,9 +126,9 @@ const typeDef = gql`
     popupThemeType: String!
     popupThemeTemplateId: String
     popupTheme: OfferPopupThemeInput
-    upsellProducts: [OfferProductInput]
-    upsellProductsQuantity: Int
-    upsellCollections: [OfferCollectionInput]
+    products: [OfferProductInput]
+    minimumProductsQuantity: Int
+    collections: [OfferCollectionInput]
     discountType: String!
     # discountAmount
     triggerEvent: String
