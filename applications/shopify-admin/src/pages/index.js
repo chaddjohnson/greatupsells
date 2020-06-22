@@ -10,7 +10,7 @@ import {
   TextStyle
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { TitleBar } from '../components';
+import { TitleBar, AcceptedOffersChart } from '../components';
 
 const StatsFlex = styled.div`
   display: flex;
@@ -66,20 +66,9 @@ const DashboardPage = () => {
             </StatsFlex>
           </Card>
         </Layout.Section>
-        <Layout.Section oneHalf>
-          <Card title="Accepted offers" sectioned>
-            Chart
-          </Card>
-          <Card title="Overall revenue increase" sectioned>
-            Chart
-          </Card>
-        </Layout.Section>
-        <Layout.Section oneHalf>
-          <Card title="Average conversion rate" sectioned>
-            Chart
-          </Card>
-          <Card title="Best converting offers" sectioned>
-            Chart
+        <Layout.Section>
+          <Card sectioned actions={[{ content: 'View all stats' }]}>
+            <AcceptedOffersChart />
           </Card>
         </Layout.Section>
         <Layout.Section>

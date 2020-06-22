@@ -10,3 +10,5 @@ export { default as PopupThemeCustomization } from './PopupThemeCustomization';
 export { default as PopupThemeSelection } from './PopupThemeSelection';
 export { default as RoutePropagator } from './RoutePropagator';
 export { default as TitleBar } from './TitleBar';
+
+export * from './charts';
