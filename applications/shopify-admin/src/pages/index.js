@@ -40,25 +40,19 @@ const DashboardPage = () => {
           <Card sectioned>
             <StatsFlex>
               <Stat>
-                <DisplayText size="extraLarge">
-                  <TextStyle variation="positive">96</TextStyle>
-                </DisplayText>
+                <DisplayText size="extraLarge">96</DisplayText>
                 <StatLabel>
                   <TextStyle variation="strong">Accepted offers</TextStyle>
                 </StatLabel>
               </Stat>
               <Stat>
-                <DisplayText size="extraLarge">
-                  <TextStyle variation="positive">$1,214.16</TextStyle>
-                </DisplayText>
+                <DisplayText size="extraLarge">$1,214.16</DisplayText>
                 <StatLabel>
                   <TextStyle variation="strong">Revenue increase</TextStyle>
                 </StatLabel>
               </Stat>
               <Stat>
-                <DisplayText size="extraLarge">
-                  <TextStyle variation="positive">3.2%</TextStyle>
-                </DisplayText>
+                <DisplayText size="extraLarge">3.2%</DisplayText>
                 <StatLabel>
                   <TextStyle variation="strong">Avg. conversion rate</TextStyle>
                 </StatLabel>
@@ -67,7 +61,10 @@ const DashboardPage = () => {
           </Card>
         </Layout.Section>
         <Layout.Section>
-          <Card sectioned actions={[{ content: 'View all stats' }]}>
+          <Card
+            sectioned
+            actions={[{ content: 'View all analytics', url: '/analytics' }]}
+          >
             <AcceptedOffersChart />
           </Card>
         </Layout.Section>

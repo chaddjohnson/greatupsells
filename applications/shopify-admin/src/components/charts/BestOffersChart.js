@@ -4,12 +4,8 @@ import HighchartsReact from 'highcharts-react-official';
 
 const options = {
   title: {
-    text: 'Accepted offers',
-    align: 'left',
-    style: {
-      fontSize: '1.6rem',
-      fontWeight: 600
-    }
+    text: 'Best converting offers',
+    align: 'left'
   },
   yAxis: {
     title: {
@@ -53,12 +49,6 @@ const options = {
       ]
     }
   ],
-  chart: {
-    style: {
-      fontFamily:
-        '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
-    }
-  },
   exporting: {
     enabled: false
   },
@@ -67,8 +57,8 @@ const options = {
   }
 };
 
-const AcceptedOffersChart = (props) => (
+const BestOffersChart = (props) => (
   <HighchartsReact highcharts={Highcharts} options={options} {...props} />
 );
 
-export default AcceptedOffersChart;
+export default BestOffersChart;

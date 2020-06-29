@@ -1,11 +1,17 @@
 import { memo } from 'react';
 import { Page, Layout, Card } from '@shopify/polaris';
-import { TitleBar, AcceptedOffersChart } from '../components';
+import {
+  TitleBar,
+  AcceptedOffersChart,
+  RevenueIncreaseChart,
+  ConversionsChart,
+  BestOffersChart
+} from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
 
-const StatsPage = () => (
-  <Page>
+const AnalyticsPage = () => (
+  <Page title="Analytics for offers">
     <PageTitleBar />
     <Layout>
       <Layout.Section oneHalf>
@@ -13,19 +19,19 @@ const StatsPage = () => (
           <AcceptedOffersChart />
         </Card>
         <Card sectioned>
-          <AcceptedOffersChart />
+          <RevenueIncreaseChart />
         </Card>
       </Layout.Section>
       <Layout.Section oneHalf>
         <Card sectioned>
-          <AcceptedOffersChart />
+          <ConversionsChart />
         </Card>
         <Card sectioned>
-          <AcceptedOffersChart />
+          <BestOffersChart />
         </Card>
       </Layout.Section>
     </Layout>
   </Page>
 );
 
-export default StatsPage;
+export default AnalyticsPage;
