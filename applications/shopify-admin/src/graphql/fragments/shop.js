@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 export default gql`
   fragment ShopFragment on Shop {
-    platformShopId
+    shopifyShopId
     name
     domain
     realDomain

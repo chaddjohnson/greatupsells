@@ -12,9 +12,9 @@ provider:
   logRetentionInDays: 14
   environment:
     APP_SLUG: upselling
-    SHOPIFY_APP_API_KEY: ${env:SHOPIFY_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-app/api-key}
-    SHOPIFY_APP_API_SECRET_KEY: ${env:SHOPIFY_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-app/api-secret-key~true}
-    SHOPIFY_APP_URL: ${env:SHOPIFY_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-app/url}
+    SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
     CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
@@ -58,7 +58,7 @@ plugins:
 custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/api/endpoint/${self:provider.region}}
-    basePath: ''
+    basePath: ""
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
@@ -75,11 +75,11 @@ custom:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
           subdomain: ${env:API_TUNNEL_SUBDOMAIN}
-      - port: ${env:SHOPIFY_APP_PORT}
+      - port: ${env:SHOPIFY_ADMIN_PORT}
         ngrokOptions:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
-          subdomain: ${env:SHOPIFY_APP_SUBDOMAIN}
+          subdomain: ${env:SHOPIFY_ADMIN_SUBDOMAIN}
 
 package:
   exclude:

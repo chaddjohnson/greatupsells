@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 export default gql`
   fragment OfferFragment on Offer {
     _id
-    platformShopId
+    shopifyShopId
     name
     strategy
     viewCount
@@ -37,7 +37,7 @@ export default gql`
       image {
         src
       }
-      platformProductId
+      shopifyProductId
     }
     minimumProductsQuantity
     collections {
@@ -45,7 +45,7 @@ export default gql`
       image {
         src
       }
-      platformCollectionId
+      shopifyCollectionId
     }
     discountType
     # discountAmount
@@ -55,14 +55,14 @@ export default gql`
       image {
         src
       }
-      platformProductId
+      shopifyProductId
     }
     triggerCollections {
       title
       image {
         src
       }
-      platformCollectionId
+      shopifyCollectionId
     }
     startAt
     endAt

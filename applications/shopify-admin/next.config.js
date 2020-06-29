@@ -8,9 +8,9 @@ dotenvExpand(dotenv.config({ path: '../../.env' }));
 const dev = process.env.NODE_ENV !== 'production';
 
 const {
-  SHOPIFY_APP_URL,
-  SHOPIFY_APP_API_KEY,
-  SHOPIFY_APP_NAME,
+  SHOPIFY_ADMIN_URL,
+  SHOPIFY_ADMIN_API_KEY,
+  SHOPIFY_ADMIN_NAME,
   API_URL,
   CONTACT_EMAIL
 } = process.env;
@@ -66,12 +66,12 @@ module.exports = withSass({
   target: 'serverless',
 
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
-  assetPrefix: dev ? '' : SHOPIFY_APP_URL,
+  assetPrefix: dev ? '' : SHOPIFY_ADMIN_URL,
 
   env: {
-    SHOPIFY_APP_URL,
-    SHOPIFY_APP_API_KEY,
-    SHOPIFY_APP_NAME,
+    SHOPIFY_ADMIN_URL,
+    SHOPIFY_ADMIN_API_KEY,
+    SHOPIFY_ADMIN_NAME,
     API_URL,
     CONTACT_EMAIL
   }

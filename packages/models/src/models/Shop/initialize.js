@@ -1,6 +1,6 @@
 const logger = require('@neatowebsolutions/logger');
 
-const { SHOPIFY_APP_URL } = process.env;
+const { SHOPIFY_ADMIN_URL } = process.env;
 
 const createWebhooks = async () => {
   // ...
@@ -8,7 +8,7 @@ const createWebhooks = async () => {
 };
 
 const addScripts = async (shop) => {
-  const src = `${SHOPIFY_APP_URL}/storefront.js`;
+  const src = `${SHOPIFY_ADMIN_URL}/storefront.js`;
   const shopifyApiClient = shop.getShopifyApiClient();
   const scriptTags = await shopifyApiClient.scriptTag.list();
   const existingScriptTag = scriptTags.find(

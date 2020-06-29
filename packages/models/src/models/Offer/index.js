@@ -12,7 +12,7 @@ const offerProductSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  platformProductId: { type: Number, required: true }
+  shopifyProductId: { type: Number, required: true }
 });
 
 const offerCollectionSchema = new mongoose.Schema({
@@ -20,11 +20,11 @@ const offerCollectionSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  platformCollectionId: { type: Number, required: true }
+  shopifyCollectionId: { type: Number, required: true }
 });
 
 const schema = new mongoose.Schema({
-  platformShopId: { type: String, required: true },
+  shopifyShopId: { type: String, required: true },
   name: { type: String, required: true },
   shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
   strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
@@ -100,8 +100,8 @@ const schema = new mongoose.Schema({
   enabled: { type: Boolean, required: true, default: true }
 });
 
-schema.statics.findByPlatformShopId = function (platformShopId) {
-  return Offer.find({ platformShopId });
+schema.statics.findByShopifyShopId = function (shopifyShopId) {
+  return Offer.find({ shopifyShopId });
 };
 
 schema.statics.findByShopId = function (shopId) {
@@ -113,7 +113,7 @@ schema.methods.toString = function () {
 
   data.push(`ID = ${this.id}`);
   data.push(`Name = ${this.name}`);
-  data.push(`Platform Shop ID = ${this.platformShopId}`);
+  data.push(`Shopify Shop ID = ${this.shopifyShopId}`);
 
   if (this.shop) {
     data.push(`Shop = ${this.shop.domain}`);
@@ -143,7 +143,7 @@ schema.post('remove', async function (offer, next) {
   next();
 });
 
-schema.index({ platformShopId: 1 });
+schema.index({ shopifyShopId: 1 });
 
 Offer = mongodbClient.connection.model('Offer', schema);
 

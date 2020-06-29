@@ -3,9 +3,9 @@ const queryString = require('query-string');
 const ShopifyToken = require('shopify-token');
 
 const {
-  SHOPIFY_APP_API_KEY,
-  SHOPIFY_APP_API_SECRET_KEY,
-  SHOPIFY_APP_URL,
+  SHOPIFY_ADMIN_API_KEY,
+  SHOPIFY_ADMIN_API_SECRET_KEY,
+  SHOPIFY_ADMIN_URL,
   JWT_SECRET
 } = process.env;
 
@@ -47,9 +47,9 @@ module.exports.shopToken = async (root, args, context) => {
   const { shop: shopDomain } = queryParams;
 
   const shopifyToken = new ShopifyToken({
-    apiKey: SHOPIFY_APP_API_KEY,
-    sharedSecret: SHOPIFY_APP_API_SECRET_KEY,
-    redirectUri: SHOPIFY_APP_URL
+    apiKey: SHOPIFY_ADMIN_API_KEY,
+    sharedSecret: SHOPIFY_ADMIN_API_SECRET_KEY,
+    redirectUri: SHOPIFY_ADMIN_URL
   });
 
   // Validate the HMAC.

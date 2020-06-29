@@ -7,7 +7,7 @@ const createShop = async (shopDomain, accessToken) => {
   const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyShopData = await shopifyApiClient.shop.get();
 
-  shop.platformShopId = shopifyShopData.id;
+  shop.shopifyShopId = shopifyShopData.id;
   shop.name = shopifyShopData.name;
   shop.contactName = shopifyShopData.shop_owner;
   shop.contactEmail = shopifyShopData.email;
@@ -24,7 +24,7 @@ const createShop = async (shopDomain, accessToken) => {
 
   logger.info(`Created new shop ${shopDomain}`);
 
-  // Initialize the shop with its platform.
+  // Initialize the shop with Shopify.
   await shop.initialize();
 
   return shop;

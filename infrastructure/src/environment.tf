@@ -54,37 +54,37 @@ resource "aws_ssm_parameter" "mongodb_uri" {
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_name" {
-  name      = "/upselling/${terraform.workspace}/shopify-app/name"
+resource "aws_ssm_parameter" "shopify_admin_name" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin/name"
   type      = "String"
-  value     = var.shopify_app_name
+  value     = var.shopify_admin_name
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_url" {
-  name      = "/upselling/${terraform.workspace}/shopify-app/url"
+resource "aws_ssm_parameter" "shopify_admin_url" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin/url"
   type      = "String"
-  value     = var.shopify_app_url
+  value     = var.shopify_admin_url
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_domain" {
-  name      = "/upselling/${terraform.workspace}/shopify-app/domain"
+resource "aws_ssm_parameter" "shopify_admin_domain" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin/domain"
   type      = "String"
-  value     = var.shopify_app_domain
+  value     = var.shopify_admin_domain
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_api_key" {
-  name      = "/upselling/${terraform.workspace}/shopify-app/api-key"
+resource "aws_ssm_parameter" "shopify_admin_api_key" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin/api-key"
   type      = "String"
-  value     = var.shopify_app_api_key
+  value     = var.shopify_admin_api_key
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_api_secret_key" {
-  name      = "/upselling/${terraform.workspace}/shopify-app/api-secret-key"
+resource "aws_ssm_parameter" "shopify_admin_api_secret_key" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin/api-secret-key"
   type      = "SecureString"
-  value     = var.shopify_app_api_secret_key
+  value     = var.shopify_admin_api_secret_key
   overwrite = true
 }

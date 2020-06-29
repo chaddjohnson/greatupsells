@@ -17,15 +17,15 @@ dotenvExpand(dotenv.config({ path: '.env' }));
 
 const models = require('@neatowebsolutions/upselling-models');
 
-const port = getenv.int('SHOPIFY_APP_PORT');
+const port = getenv.int('SHOPIFY_ADMIN_PORT');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const {
-  SHOPIFY_APP_API_KEY,
-  SHOPIFY_APP_API_SECRET_KEY,
-  SHOPIFY_APP_STOREFRONT_PORT
+  SHOPIFY_ADMIN_API_KEY,
+  SHOPIFY_ADMIN_API_SECRET_KEY,
+  SHOPIFY_ADMIN_STOREFRONT_PORT
 } = process.env;
 
 const createServer = () => {
@@ -39,7 +39,7 @@ const createServer = () => {
     server.use(
       connect(
         createProxyMiddleware('/storefront.js', {
-          target: `http://localhost:${SHOPIFY_APP_STOREFRONT_PORT}`,
+          target: `http://localhost:${SHOPIFY_ADMIN_STOREFRONT_PORT}`,
           changeOrigin: true
         })
       )
@@ -48,11 +48,11 @@ const createServer = () => {
 
   // Initialize Shopify OAuth support.
   server.use(session({ secure: true, sameSite: 'None' }, server));
-  server.keys = [SHOPIFY_APP_API_SECRET_KEY];
+  server.keys = [SHOPIFY_ADMIN_API_SECRET_KEY];
   server.use(
     createShopifyAuth({
-      apiKey: SHOPIFY_APP_API_KEY,
-      secret: SHOPIFY_APP_API_SECRET_KEY,
+      apiKey: SHOPIFY_ADMIN_API_KEY,
+      secret: SHOPIFY_ADMIN_API_SECRET_KEY,
       scopes: [
         'read_products',
         'read_orders',

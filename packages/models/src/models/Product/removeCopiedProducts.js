@@ -14,11 +14,11 @@ module.exports = async () => {
   const cursor = Product.find(criteria).cursor({ batchSize: 50 });
 
   await cursor.eachAsync(async (product) => {
-    const { shop, platformShopId } = product;
+    const { shop, shopifyShopId } = product;
     const shopifyApiClient = shop.getShopifyApiClient();
 
     // Remove the product from Shopify.
-    await shopifyApiClient.delete(platformShopId);
+    await shopifyApiClient.delete(shopifyShopId);
 
     // Remove the product from our database.
     await product.remove();

@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-lambda');
 const typeDef = gql`
   type Shop {
     _id: ID!
-    platformShopId: ID!
+    shopifyShopId: ID!
     name: String!
     domain: String!
     realDomain: String

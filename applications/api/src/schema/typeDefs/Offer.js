@@ -5,7 +5,7 @@ const typeDef = gql`
 
   type Offer {
     _id: ID!
-    platformShopId: ID!
+    shopifyShopId: ID!
     name: String!
     shop: Shop
     strategy: OfferStrategy!
@@ -82,7 +82,7 @@ const typeDef = gql`
   type OfferProduct {
     title: String!
     image: OfferProductImage
-    platformProductId: ID
+    shopifyProductId: ID
   }
 
   type OfferProductImage {
@@ -92,7 +92,7 @@ const typeDef = gql`
   type OfferCollection {
     title: String!
     image: OfferCollectionImage
-    platformCollectionId: ID
+    shopifyCollectionId: ID
   }
 
   type OfferCollectionImage {
@@ -172,13 +172,13 @@ const typeDef = gql`
   input OfferProductInput {
     title: String!
     image: OfferProductImageInput
-    platformProductId: ID
+    shopifyProductId: ID
   }
 
   input OfferCollectionInput {
     title: String!
     image: OfferProductImageInput
-    platformCollectionId: ID
+    shopifyCollectionId: ID
   }
 
   input OfferProductImageInput {

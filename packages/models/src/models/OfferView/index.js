@@ -7,7 +7,7 @@ const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 let OfferView = null;
 
 const schema = new mongoose.Schema({
-  platformShopId: { type: Number, required: true },
+  shopifyShopId: { type: Number, required: true },
   offerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Offer',

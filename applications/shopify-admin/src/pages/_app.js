@@ -20,7 +20,7 @@ export default class extends App {
     return (
       <AppBridgeProvider
         config={{
-          apiKey: process.env.SHOPIFY_APP_API_KEY,
+          apiKey: process.env.SHOPIFY_ADMIN_API_KEY,
           shopOrigin: Cookies.get('shopOrigin'),
           forceRedirect: true
         }}

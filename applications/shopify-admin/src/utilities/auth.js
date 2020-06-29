@@ -6,7 +6,7 @@ import { SHOP_TOKEN } from '../graphql/queries';
 
 const initializeAuth = () => {
   const appConfig = {
-    apiKey: process.env.SHOPIFY_APP_API_KEY,
+    apiKey: process.env.SHOPIFY_ADMIN_API_KEY,
     shopOrigin: Cookies.get('shopOrigin')
   };
   const app = createApp(appConfig);
@@ -14,11 +14,11 @@ const initializeAuth = () => {
 
   if (window.top === window.self) {
     window.top.location.href = `${
-      process.env.SHOPIFY_APP_URL
+      process.env.SHOPIFY_ADMIN_URL
     }/auth?shop=${Cookies.get('shopOrigin')}`;
   } else {
     redirect.dispatch(Redirect.Action.REMOTE, {
-      url: `${process.env.SHOPIFY_APP_URL}/auth?shop=${Cookies.get(
+      url: `${process.env.SHOPIFY_ADMIN_URL}/auth?shop=${Cookies.get(
         'shopOrigin'
       )}`,
       newContext: false

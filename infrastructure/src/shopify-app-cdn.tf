@@ -1,13 +1,13 @@
-resource "aws_cloudfront_distribution" "shopify_app" {
+resource "aws_cloudfront_distribution" "shopify_admin" {
   enabled         = true
   is_ipv6_enabled = true
-  aliases         = [var.shopify_app_domain]
+  aliases         = [var.shopify_admin_domain]
   price_class     = var.cdn_price_class
   http_version    = "http2"
 
   # Static site on S3
   origin {
-    domain_name = var.shopify_app_static_domain
+    domain_name = var.shopify_admin_static_domain
     origin_id   = "static"
 
     custom_origin_config {
@@ -22,7 +22,7 @@ resource "aws_cloudfront_distribution" "shopify_app" {
 
   # App on API Gateway
   origin {
-    domain_name = var.shopify_app_endpoint
+    domain_name = var.shopify_admin_endpoint
     origin_id   = "app"
 
     custom_origin_config {
@@ -133,29 +133,29 @@ resource "aws_cloudfront_distribution" "shopify_app" {
   }
 }
 
-resource "aws_ssm_parameter" "shopify_app_endpoint_us" {
+resource "aws_ssm_parameter" "shopify_admin_endpoint_us" {
   name      = "/upselling/${terraform.workspace}/api/endpoint/us-east-1"
   type      = "String"
-  value     = var.shopify_app_endpoint_us
+  value     = var.shopify_admin_endpoint_us
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_endpoint_asia" {
+resource "aws_ssm_parameter" "shopify_admin_endpoint_asia" {
   name      = "/upselling/${terraform.workspace}/api/endpoint/ap-northeast-2"
   type      = "String"
-  value     = var.shopify_app_endpoint_asia
+  value     = var.shopify_admin_endpoint_asia
   overwrite = true
 }
 
-resource "aws_ssm_parameter" "shopify_app_endpoint_europe" {
+resource "aws_ssm_parameter" "shopify_admin_endpoint_europe" {
   name      = "/upselling/${terraform.workspace}/api/endpoint/eu-west-1"
   type      = "String"
-  value     = var.shopify_app_endpoint_europe
+  value     = var.shopify_admin_endpoint_europe
   overwrite = true
 }
 
-resource "aws_route53_health_check" "shopify_app_us" {
-  fqdn              = aws_ssm_parameter.shopify_app_endpoint_us.value
+resource "aws_route53_health_check" "shopify_admin_us" {
+  fqdn              = aws_ssm_parameter.shopify_admin_endpoint_us.value
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -163,12 +163,12 @@ resource "aws_route53_health_check" "shopify_app_us" {
   request_interval  = "30"
 
   tags = {
-    Name = "shopify-app-us-health-check-${terraform.workspace}"
+    Name = "shopify-admin-us-health-check-${terraform.workspace}"
   }
 }
 
-resource "aws_route53_health_check" "shopify_app_asia" {
-  fqdn              = aws_ssm_parameter.shopify_app_endpoint_asia.value
+resource "aws_route53_health_check" "shopify_admin_asia" {
+  fqdn              = aws_ssm_parameter.shopify_admin_endpoint_asia.value
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -176,12 +176,12 @@ resource "aws_route53_health_check" "shopify_app_asia" {
   request_interval  = "30"
 
   tags = {
-    Name = "shopify-app-asia-health-check-${terraform.workspace}"
+    Name = "shopify-admin-asia-health-check-${terraform.workspace}"
   }
 }
 
-resource "aws_route53_health_check" "shopify_app_europe" {
-  fqdn              = aws_ssm_parameter.shopify_app_endpoint_europe.value
+resource "aws_route53_health_check" "shopify_admin_europe" {
+  fqdn              = aws_ssm_parameter.shopify_admin_endpoint_europe.value
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -189,19 +189,19 @@ resource "aws_route53_health_check" "shopify_app_europe" {
   request_interval  = "30"
 
   tags = {
-    Name = "shopify-app-europe-health-check-${terraform.workspace}"
+    Name = "shopify-admin-europe-health-check-${terraform.workspace}"
   }
 }
 
-resource "aws_route53_record" "shopify_app_us" {
+resource "aws_route53_record" "shopify_admin_us" {
   zone_id         = var.domain_hosted_zone_id
-  name            = var.shopify_app_endpoint
+  name            = var.shopify_admin_endpoint
   type            = "A"
   set_identifier  = "us"
-  health_check_id = aws_route53_health_check.shopify_app_us.id
+  health_check_id = aws_route53_health_check.shopify_admin_us.id
 
   alias {
-    name                   = aws_ssm_parameter.shopify_app_endpoint_us.value
+    name                   = aws_ssm_parameter.shopify_admin_endpoint_us.value
     zone_id                = var.domain_hosted_zone_id
     evaluate_target_health = true
   }
@@ -211,15 +211,15 @@ resource "aws_route53_record" "shopify_app_us" {
   }
 }
 
-resource "aws_route53_record" "shopify_app_asia" {
+resource "aws_route53_record" "shopify_admin_asia" {
   zone_id         = var.domain_hosted_zone_id
-  name            = var.shopify_app_endpoint
+  name            = var.shopify_admin_endpoint
   type            = "A"
   set_identifier  = "asia"
-  health_check_id = aws_route53_health_check.shopify_app_asia.id
+  health_check_id = aws_route53_health_check.shopify_admin_asia.id
 
   alias {
-    name                   = aws_ssm_parameter.shopify_app_endpoint_asia.value
+    name                   = aws_ssm_parameter.shopify_admin_endpoint_asia.value
     zone_id                = var.domain_hosted_zone_id
     evaluate_target_health = true
   }
@@ -229,15 +229,15 @@ resource "aws_route53_record" "shopify_app_asia" {
   }
 }
 
-resource "aws_route53_record" "shopify_app_europe" {
+resource "aws_route53_record" "shopify_admin_europe" {
   zone_id         = var.domain_hosted_zone_id
-  name            = var.shopify_app_endpoint
+  name            = var.shopify_admin_endpoint
   type            = "A"
   set_identifier  = "europe"
-  health_check_id = aws_route53_health_check.shopify_app_europe.id
+  health_check_id = aws_route53_health_check.shopify_admin_europe.id
 
   alias {
-    name                   = aws_ssm_parameter.shopify_app_endpoint_europe.value
+    name                   = aws_ssm_parameter.shopify_admin_endpoint_europe.value
     zone_id                = var.domain_hosted_zone_id
     evaluate_target_health = true
   }
@@ -247,26 +247,26 @@ resource "aws_route53_record" "shopify_app_europe" {
   }
 }
 
-resource "aws_route53_record" "shopify_app" {
+resource "aws_route53_record" "shopify_admin" {
   zone_id = var.domain_hosted_zone_id
-  name    = var.shopify_app_domain
+  name    = var.shopify_admin_domain
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.shopify_app.domain_name
-    zone_id                = aws_cloudfront_distribution.shopify_app.hosted_zone_id
+    name                   = aws_cloudfront_distribution.shopify_admin.domain_name
+    zone_id                = aws_cloudfront_distribution.shopify_admin.hosted_zone_id
     evaluate_target_health = false
   }
 }
 
-resource "aws_route53_record" "shopify_app_ipv6" {
+resource "aws_route53_record" "shopify_admin_ipv6" {
   zone_id = var.domain_hosted_zone_id
-  name    = var.shopify_app_domain
+  name    = var.shopify_admin_domain
   type    = "AAAA"
 
   alias {
-    name                   = aws_cloudfront_distribution.shopify_app.domain_name
-    zone_id                = aws_cloudfront_distribution.shopify_app.hosted_zone_id
+    name                   = aws_cloudfront_distribution.shopify_admin.domain_name
+    zone_id                = aws_cloudfront_distribution.shopify_admin.hosted_zone_id
     evaluate_target_health = false
   }
 }

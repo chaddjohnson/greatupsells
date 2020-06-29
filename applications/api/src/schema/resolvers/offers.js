@@ -6,7 +6,7 @@ module.exports.offers = async (root, args, context) => {
 
   // TODO: Allow admin users to retrieve all offers.
 
-  const offer = await Offer.findByPlatformShopId(shop.platformShopId);
+  const offer = await Offer.findByShopifyShopId(shop.shopifyShopId);
 
   return offer;
 };
@@ -19,7 +19,7 @@ module.exports.offer = async (root, args, context) => {
     throw new Error(`Offer ${args.id} not found`);
   }
 
-  if (offer.platformShopId !== shop.platformShopId) {
+  if (offer.shopifyShopId !== shop.shopifyShopId) {
     logger.warn(`Unauthorized request for offer ${offer.id}`, context);
     throw new ForbiddenError('Unauthorized');
   }
@@ -36,9 +36,9 @@ module.exports.offerShop = async (root, args, context) => {
 
 module.exports.createOffer = async (root, args, context) => {
   const { shop, Offer } = context;
-  const { platformShopId } = shop;
+  const { shopifyShopId } = shop;
 
-  return Offer.create({ ...args.input, platformShopId, shop });
+  return Offer.create({ ...args.input, shopifyShopId, shop });
 };
 
 module.exports.updateOffer = async (root, args, context) => {
@@ -47,14 +47,14 @@ module.exports.updateOffer = async (root, args, context) => {
   const offer = await Offer.findById(args.id);
 
   // Disallow updating certain properties.
-  delete values.platformShopId;
+  delete values.shopifyShopId;
   delete values.shop;
 
   if (!offer) {
     throw new Error(`Offer ${args.id} not found`);
   }
 
-  if (offer.platformShopId !== shop.platformShopId) {
+  if (offer.shopifyShopId !== shop.shopifyShopId) {
     logger.warn(`Unauthorized update attempt for offer ${offer.id}`, context);
     throw new ForbiddenError('Unauthorized');
   }
@@ -72,7 +72,7 @@ module.exports.deleteOffer = async (root, args, context) => {
     throw new Error(`Offer ${args.id} not found`);
   }
 
-  if (offer.platformShopId !== shop.platformShopId) {
+  if (offer.shopifyShopId !== shop.shopifyShopId) {
     logger.warn(`Unauthorized deletion attempt for offer ${offer.id}`, context);
     throw new ForbiddenError('Unauthorized');
   }

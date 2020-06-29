@@ -1,5 +1,5 @@
-resource "aws_s3_bucket" "shopify_app_us" {
-  bucket        = var.shopify_app_bucket_name_us
+resource "aws_s3_bucket" "shopify_admin_us" {
+  bucket        = var.shopify_admin_bucket_name_us
   acl           = "private"
   region        = "us-east-1"
   force_destroy = true
@@ -12,15 +12,15 @@ resource "aws_s3_bucket" "shopify_app_us" {
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${var.shopify_app_bucket_name_us}/*"
+      "Resource": "arn:aws:s3:::${var.shopify_admin_bucket_name_us}/*"
     }
   ]
 }
 POLICY
 }
 
-resource "aws_s3_bucket" "shopify_app_asia" {
-  bucket        = var.shopify_app_bucket_name_asia
+resource "aws_s3_bucket" "shopify_admin_asia" {
+  bucket        = var.shopify_admin_bucket_name_asia
   acl           = "private"
   region        = "ap-northeast-2"
   force_destroy = true
@@ -33,15 +33,15 @@ resource "aws_s3_bucket" "shopify_app_asia" {
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${var.shopify_app_bucket_name_asia}/*"
+      "Resource": "arn:aws:s3:::${var.shopify_admin_bucket_name_asia}/*"
     }
   ]
 }
 POLICY
 }
 
-resource "aws_s3_bucket" "shopify_app_europe" {
-  bucket        = var.shopify_app_bucket_name_europe
+resource "aws_s3_bucket" "shopify_admin_europe" {
+  bucket        = var.shopify_admin_bucket_name_europe
   acl           = "private"
   region        = "eu-west-1"
   force_destroy = true
@@ -54,7 +54,7 @@ resource "aws_s3_bucket" "shopify_app_europe" {
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${var.shopify_app_bucket_name_europe}/*"
+      "Resource": "arn:aws:s3:::${var.shopify_admin_bucket_name_europe}/*"
     }
   ]
 }

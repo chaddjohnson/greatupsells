@@ -11,8 +11,8 @@ provider:
   versionFunctions: false
   logRetentionInDays: 14
   environment:
-    NODE_ENV: 'production'
-    SHOPIFY_APP_URL: ${ssm:/upselling/${self:provider.stage}/shopify-app/url}
+    NODE_ENV: "production"
+    SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     API_URL: ${ssm:/upselling/${self:provider.stage}/api/url}
     MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
 
@@ -46,8 +46,8 @@ plugins:
 
 custom:
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-app/endpoint/${self:provider.region}}
-    basePath: ''
+    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/endpoint/${self:provider.region}}
+    basePath: ""
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional

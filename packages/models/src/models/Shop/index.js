@@ -22,7 +22,7 @@ const hooks = require('./hooks');
 let Shop = null;
 
 const schema = new mongoose.Schema({
-  platformShopId: { type: String, required: true },
+  shopifyShopId: { type: String, required: true },
   name: { type: String, required: true, trim: true },
   domain: { type: String, required: true, trim: true },
   realDomain: { type: String, required: false, trim: true },
@@ -79,8 +79,8 @@ schema.statics.findByDomain = function (domain) {
   return Shop.findOne({ domain });
 };
 
-schema.statics.findByPlatformShopId = function (platformShopId) {
-  return Shop.findOne({ platformShopId });
+schema.statics.findByShopifyShopId = function (shopifyShopId) {
+  return Shop.findOne({ shopifyShopId });
 };
 
 schema.statics.findByDomain = function (domain) {
@@ -147,7 +147,7 @@ schema.methods.toString = function () {
   const data = [];
 
   data.push(`ID = ${this.id}`);
-  data.push(`Platform Shop ID = ${this.platformShopId}`);
+  data.push(`Shopify Shop ID = ${this.shopifyShopId}`);
   data.push(`Name = ${this.name}`);
   data.push(`Domain = ${this.domain}`);
 
@@ -159,7 +159,7 @@ schema.pre('validate', function (next) {
 });
 
 // Create indexes.
-schema.index({ platformShopId: 1 }, { unique: true });
+schema.index({ shopifyShopId: 1 }, { unique: true });
 schema.index({ domain: 1 }, { unique: true });
 schema.index({ 'plan.upgradedAt': 1 });
 schema.index({ createdAt: -1 });
