@@ -62,6 +62,7 @@ const DashboardPage = () => {
         </Layout.Section>
         <Layout.Section>
           <Card
+            title="Accepted offers"
             sectioned
             actions={[{ content: 'View all analytics', url: '/analytics' }]}
           >

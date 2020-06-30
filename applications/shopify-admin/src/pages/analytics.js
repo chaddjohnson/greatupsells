@@ -4,30 +4,30 @@ import {
   TitleBar,
   AcceptedOffersChart,
   RevenueIncreaseChart,
-  ConversionsChart,
-  BestOffersChart
+  OfferViewsChart,
+  ConversionsChart
 } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
 
 const AnalyticsPage = () => (
-  <Page title="Analytics for offers">
+  <Page title="Analytics for offers" fullWidth>
     <PageTitleBar />
     <Layout>
       <Layout.Section oneHalf>
-        <Card sectioned>
+        <Card title="Accepted offers" sectioned>
           <AcceptedOffersChart />
         </Card>
-        <Card sectioned>
+        <Card title="Revenue increase" sectioned>
           <RevenueIncreaseChart />
         </Card>
       </Layout.Section>
       <Layout.Section oneHalf>
-        <Card sectioned>
-          <ConversionsChart />
+        <Card title="Offer views" sectioned>
+          <OfferViewsChart />
         </Card>
-        <Card sectioned>
-          <BestOffersChart />
+        <Card title="Conversion rate" sectioned>
+          <ConversionsChart />
         </Card>
       </Layout.Section>
     </Layout>

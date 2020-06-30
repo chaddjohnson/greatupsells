@@ -4,12 +4,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 const options = {
   title: {
-    text: 'Overall revenue increase',
-    align: 'left',
-    style: {
-      fontSize: '1.6rem',
-      fontWeight: 600
-    }
+    text: ''
   },
   yAxis: {
     title: {
@@ -40,18 +35,36 @@ const options = {
   series: [
     {
       data: [
-        [new Date('1/1/2019').getTime(), 25],
-        [new Date('2/1/2019').getTime(), 36],
-        [new Date('3/1/2019').getTime(), 50],
-        [new Date('4/1/2019').getTime(), 73],
-        [new Date('5/1/2019').getTime(), 115],
-        [new Date('6/1/2019').getTime(), 92],
-        [new Date('7/1/2019').getTime(), 146],
-        [new Date('8/1/2019').getTime(), 125],
-        [new Date('9/1/2019').getTime(), 170],
-        [new Date('10/1/2019').getTime(), 160],
-        [new Date('11/1/2019').getTime(), 180],
-        [new Date('12/1/2019').getTime(), 201]
+        [new Date('6/1/2020').getTime(), 90],
+        [new Date('6/2/2020').getTime(), 162],
+        [new Date('6/3/2020').getTime(), 153],
+        [new Date('6/4/2020').getTime(), 82],
+        [new Date('6/5/2020').getTime(), 166],
+        [new Date('6/6/2020').getTime(), 100],
+        [new Date('6/7/2020').getTime(), 146],
+        [new Date('6/8/2020').getTime(), 61],
+        [new Date('6/9/2020').getTime(), 163],
+        [new Date('6/10/2020').getTime(), 168],
+        [new Date('6/11/2020').getTime(), 127],
+        [new Date('6/12/2020').getTime(), 1],
+        [new Date('6/13/2020').getTime(), 191],
+        [new Date('6/14/2020').getTime(), 96],
+        [new Date('6/15/2020').getTime(), 1],
+        [new Date('6/16/2020').getTime(), 141],
+        [new Date('6/17/2020').getTime(), 151],
+        [new Date('6/18/2020').getTime(), 167],
+        [new Date('6/19/2020').getTime(), 73],
+        [new Date('6/20/2020').getTime(), 116],
+        [new Date('6/21/2020').getTime(), 193],
+        [new Date('6/22/2020').getTime(), 107],
+        [new Date('6/23/2020').getTime(), 59],
+        [new Date('6/24/2020').getTime(), 21],
+        [new Date('6/25/2020').getTime(), 124],
+        [new Date('6/26/2020').getTime(), 171],
+        [new Date('6/27/2020').getTime(), 11],
+        [new Date('6/28/2020').getTime(), 37],
+        [new Date('6/29/2020').getTime(), 46],
+        [new Date('6/30/2020').getTime(), 82]
       ]
     }
   ],
