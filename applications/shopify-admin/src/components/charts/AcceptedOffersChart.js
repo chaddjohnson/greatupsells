@@ -30,6 +30,8 @@ const options = {
       label: {
         connectorAllowed: false
       },
+      color: '#9C6ADE',
+      lineWidth: 3,
       marker: {
         enabled: false
       }

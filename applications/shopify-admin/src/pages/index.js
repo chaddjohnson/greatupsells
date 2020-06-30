@@ -54,7 +54,7 @@ const DashboardPage = () => {
               <Stat>
                 <DisplayText size="extraLarge">3.2%</DisplayText>
                 <StatLabel>
-                  <TextStyle variation="strong">Avg. conversion rate</TextStyle>
+                  <TextStyle variation="strong">Conversion rate</TextStyle>
                 </StatLabel>
               </Stat>
             </StatsFlex>
@@ -72,11 +72,12 @@ const DashboardPage = () => {
           <CalloutCard
             title="Add upsell and cross-sell offers to your store"
             primaryAction={{
-              content: 'Create offer'
+              content: 'Create offer',
+              url: '/offers/new'
             }}
             secondaryAction={{
               content: 'Manage your offers',
-              onAction: () => router.push('/offers')
+              url: '/offers'
             }}
           >
             <p>
@@ -87,9 +88,8 @@ const DashboardPage = () => {
           <MediaCard
             title="Getting Started"
             primaryAction={{
-              // content: 'Learn about getting started',
               content: 'Visit the tutorials',
-              onAction: () => {}
+              url: 'https://tutorials.domain.com'
             }}
             // description="Discover how Shopify can power up your entrepreneurial journey."
             description="Learn how to use Great Upsells to boost your sales and revenue."
@@ -102,7 +102,7 @@ const DashboardPage = () => {
                 objectFit: 'cover',
                 objectPosition: 'center'
               }}
-              src="https://burst.shopifycdn.com/photos/smiling-businesswoman-in-office.jpg?width=1850"
+              src="/images/tutorials.jpg"
             />
           </MediaCard>
         </Layout.Section>

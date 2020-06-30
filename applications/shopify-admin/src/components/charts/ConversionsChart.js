@@ -5,7 +5,11 @@ import HighchartsReact from 'highcharts-react-official';
 const options = {
   title: {
     text: 'Average conversion rate',
-    align: 'left'
+    align: 'left',
+    style: {
+      fontSize: '1.6rem',
+      fontWeight: 600
+    }
   },
   yAxis: {
     title: {
@@ -26,6 +30,8 @@ const options = {
       label: {
         connectorAllowed: false
       },
+      color: '#9C6ADE',
+      lineWidth: 3,
       marker: {
         enabled: false
       }
@@ -49,6 +55,12 @@ const options = {
       ]
     }
   ],
+  chart: {
+    style: {
+      fontFamily:
+        '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
+    }
+  },
   exporting: {
     enabled: false
   },
