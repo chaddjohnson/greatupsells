@@ -99,7 +99,7 @@ const DashboardPage = () => (
               objectFit: 'cover',
               objectPosition: 'center'
             }}
-            src="/images/tutorials.jpg"
+            src="/images/tutorials.svg"
           />
         </MediaCard>
       </Layout.Section>
