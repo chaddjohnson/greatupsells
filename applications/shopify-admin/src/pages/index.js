@@ -86,7 +86,7 @@ const DashboardPage = () => (
           title="Getting Started"
           primaryAction={{
             content: 'Visit the tutorials',
-            url: 'https://tutorials.domain.com'
+            url: 'https://help.domain.com/tutorials'
           }}
           // description="Discover how Shopify can power up your entrepreneurial journey."
           description="Learn how to use Great Upsells to boost your sales and revenue."
