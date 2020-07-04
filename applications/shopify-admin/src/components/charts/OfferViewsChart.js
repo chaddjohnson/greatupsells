@@ -1,6 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import {
+  Stack,
+  Heading,
+  Subheading,
+  DisplayText,
+  TextStyle,
+  Icon
+} from '@shopify/polaris';
+import { ArrowUpMinor } from '@shopify/polaris-icons';
 
 const options = {
   title: {
@@ -82,8 +92,36 @@ const options = {
   }
 };
 
-const BestOffersChart = (props) => (
-  <HighchartsReact highcharts={Highcharts} options={options} {...props} />
+const BestOffersChart = ({ title, subtitle }) => (
+  <>
+    <Stack vertical>
+      <Stack vertical spacing="tight">
+        {title || <Heading>Offer views</Heading>}
+        <Stack alignment="center" spacing="tight">
+          <DisplayText size="medium" element="div">
+            214
+          </DisplayText>
+          <DisplayText size="small" element="div">
+            <Stack spacing="none" alignment="center">
+              <Icon source={ArrowUpMinor} color="green" />
+              <span style={{ color: '#50b83c' }}>4.7%</span>
+            </Stack>
+          </DisplayText>
+        </Stack>
+      </Stack>
+      <Subheading>
+        <TextStyle variation="subdued">
+          {subtitle || 'Offer views over time'}
+        </TextStyle>
+      </Subheading>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </Stack>
+  </>
 );
+
+BestOffersChart.propTypes = {
+  title: PropTypes.node,
+  subtitle: PropTypes.string
+};
 
 export default BestOffersChart;

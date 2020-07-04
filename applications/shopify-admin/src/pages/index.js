@@ -5,25 +5,17 @@ import {
   Card,
   CalloutCard,
   MediaCard,
+  Stack,
+  Heading,
   DisplayText,
-  TextStyle
+  TextStyle,
+  Button
 } from '@shopify/polaris';
 import styled from 'styled-components';
 import { TitleBar, AcceptedOffersChart } from '../components';
 
-const StatsFlex = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const Stat = styled.div`
-  flex: 1 1 0%;
+const Stats = styled.div`
   text-align: center;
-`;
-
-const StatLabel = styled.div`
-  margin-top: 1rem;
-  font-size: 1.5rem;
 `;
 
 const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
@@ -34,35 +26,43 @@ const DashboardPage = () => (
     <Layout>
       <Layout.Section>
         <Card sectioned>
-          <StatsFlex>
-            <Stat>
-              <DisplayText size="extraLarge">96</DisplayText>
-              <StatLabel>
-                <TextStyle variation="strong">Accepted offers</TextStyle>
-              </StatLabel>
-            </Stat>
-            <Stat>
-              <DisplayText size="extraLarge">$1,214.16</DisplayText>
-              <StatLabel>
-                <TextStyle variation="strong">Revenue increase</TextStyle>
-              </StatLabel>
-            </Stat>
-            <Stat>
-              <DisplayText size="extraLarge">3.2%</DisplayText>
-              <StatLabel>
-                <TextStyle variation="strong">Conversion rate</TextStyle>
-              </StatLabel>
-            </Stat>
-          </StatsFlex>
+          <Stats>
+            <Stack distribution="equalSpacing">
+              <Stack spacing="tight" vertical>
+                <DisplayText size="extraLarge">96</DisplayText>
+                <TextStyle variation="strong">
+                  <TextStyle variation="subdued">Accepted offers</TextStyle>
+                </TextStyle>
+              </Stack>
+              <Stack spacing="tight" vertical>
+                <DisplayText size="extraLarge">$1,214.16</DisplayText>
+                <TextStyle variation="strong">
+                  <TextStyle variation="subdued">Revenue increase</TextStyle>
+                </TextStyle>
+              </Stack>
+              <Stack spacing="tight" vertical>
+                <DisplayText size="extraLarge">3.2%</DisplayText>
+                <TextStyle variation="strong">
+                  <TextStyle variation="subdued">Conversion rate</TextStyle>
+                </TextStyle>
+              </Stack>
+            </Stack>
+          </Stats>
         </Card>
       </Layout.Section>
       <Layout.Section>
-        <Card
-          title="Accepted offers"
-          sectioned
-          actions={[{ content: 'View all analytics', url: '/analytics' }]}
-        >
-          <AcceptedOffersChart />
+        <Card sectioned>
+          <AcceptedOffersChart
+            title={
+              <Stack distribution="equalSpacing">
+                <Heading>Accepted offers</Heading>
+                <Button plain url="/analytics">
+                  View all analytics
+                </Button>
+              </Stack>
+            }
+            subtitle="Offers over last 90 days"
+          />
         </Card>
       </Layout.Section>
       <Layout.Section>
