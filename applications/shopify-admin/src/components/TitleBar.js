@@ -36,6 +36,11 @@ const TitleBar = (props) => {
           external: true
         },
         {
+          content: 'Tutorials',
+          url: 'https://help.domain.com/tutorials',
+          external: true
+        },
+        {
           content: 'FAQ',
           url: 'https://help.domain.com/faq',
           external: true
