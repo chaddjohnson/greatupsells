@@ -18,10 +18,10 @@ const Stats = styled.div`
   text-align: center;
 `;
 
-const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
+const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
 
 const DashboardPage = () => (
-  <Page>
+  <Page title="Overview dashboard">
     <PageTitleBar />
     <Layout>
       <Layout.Section>
