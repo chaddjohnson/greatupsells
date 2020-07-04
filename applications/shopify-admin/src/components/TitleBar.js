@@ -16,10 +16,6 @@ const TitleBar = (props) => {
     {
       content: 'Offers',
       onAction: () => router.push('/offers')
-    },
-    {
-      content: 'Settings',
-      onAction: () => router.push('/settings')
     }
   ];
   const actionGroups = [
