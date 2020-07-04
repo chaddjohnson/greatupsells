@@ -31,6 +31,7 @@ const rows = [
     <Link key={0} url="/offers/first-offer">
       <StyledLinkText>First Offer</StyledLinkText>
     </Link>,
+    14,
     140,
     '6%',
     '$875.00'
@@ -39,6 +40,7 @@ const rows = [
     <Link key={1} url="/offers/second-offer">
       <StyledLinkText>Second Offer</StyledLinkText>
     </Link>,
+    8,
     83,
     '3.5%',
     '$230.00'
@@ -47,6 +49,7 @@ const rows = [
     <Link key={3} url="/offers/third-offer">
       <StyledLinkText>Third Offer</StyledLinkText>
     </Link>,
+    4,
     32,
     '4%',
     '$445.00'
@@ -117,15 +120,22 @@ const OfferList = () => {
               />
             </Card.Section>
             <DataTable
-              columnContentTypes={['text', 'numeric', 'numeric', 'numeric']}
+              columnContentTypes={[
+                'text',
+                'numeric',
+                'numeric',
+                'numeric',
+                'numeric'
+              ]}
               headings={[
                 <StyledHeadingText key="0">Name</StyledHeadingText>,
-                <StyledHeadingText key="1">Views</StyledHeadingText>,
-                <StyledHeadingText key="2">Conversion Rate</StyledHeadingText>,
-                <StyledHeadingText key="3">Revenue Increase</StyledHeadingText>
+                <StyledHeadingText key="1">Acceptances</StyledHeadingText>,
+                <StyledHeadingText key="2">Views</StyledHeadingText>,
+                <StyledHeadingText key="3">Conversion rate</StyledHeadingText>,
+                <StyledHeadingText key="4">Revenue increase</StyledHeadingText>
               ]}
               rows={rows}
-              totals={['', '', '', '$155,830.00']}
+              totals={['', '', '', '', '$155,830.00']}
               showTotalsInFooter={true}
               footerContent={`Showing ${rows.length} of ${rows.length} results`}
             />
