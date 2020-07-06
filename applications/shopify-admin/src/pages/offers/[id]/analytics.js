@@ -195,8 +195,8 @@ const OfferAnalyticsPage = () => {
           <Layout.Section oneHalf>
             <Card sectioned>
               <LineChart
-                title="Accepted offers"
-                subtitle="Accepted offers over last 90 days"
+                title="Acceptances"
+                subtitle="Acceptances over last 90 days"
                 rangeDescription="January to December"
                 changeValue={85}
                 changePercentage={0.01}
@@ -205,8 +205,8 @@ const OfferAnalyticsPage = () => {
             </Card>
             <Card sectioned>
               <LineChart
-                title="Offer views"
-                subtitle="Offer views over last 90 days"
+                title="Views"
+                subtitle="Views over last 90 days"
                 rangeDescription="January to December"
                 changeValue={214}
                 changePercentage={0.115}
