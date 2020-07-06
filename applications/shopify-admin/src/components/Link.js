@@ -1,6 +1,17 @@
 import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 
+const dynamicHrefs = [
+  {
+    regex: /^\/offers\/[a-z0-9]+\/analytics\/?$/,
+    href: '/offers/[id]/analytics'
+  },
+  {
+    regex: /^\/offers\/[a-z0-9]+\/?$/,
+    href: '/offers/[id]'
+  }
+];
+
 const Link = ({ url, external, children, ...props }) => {
   if (external || url.match(/^https?:/)) {
     return (
@@ -9,8 +20,12 @@ const Link = ({ url, external, children, ...props }) => {
       </a>
     );
   } else {
+    const dynamicHref = dynamicHrefs.find(({ regex }) => url.match(regex));
+    const href = (dynamicHref && dynamicHref.href) || url;
+    const as = url;
+
     return (
-      <NextLink href={url} prefetch={false}>
+      <NextLink href={href} as={as} prefetch={false}>
         <a {...props}>{children}</a>
       </NextLink>
     );

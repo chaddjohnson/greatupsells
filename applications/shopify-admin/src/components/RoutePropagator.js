@@ -1,11 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import { RoutePropagator as AppBridgeRoutePropagator } from '@shopify/app-bridge-react';
 
-/* eslint-disable react/prop-types */
 const RoutePropagator = ({ router }) => (
-  <AppBridgeRoutePropagator location={router.pathname} />
+  <AppBridgeRoutePropagator location={router.asPath} />
 );
-/* eslint-enable react/prop-types */
+
+RoutePropagator.propTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default withRouter(RoutePropagator);

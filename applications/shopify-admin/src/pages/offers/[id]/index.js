@@ -127,4 +127,10 @@ const OfferEditPage = () => {
   );
 };
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
+
 export default OfferEditPage;

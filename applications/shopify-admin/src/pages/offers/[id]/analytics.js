@@ -89,4 +89,10 @@ const OfferAnalyticsPage = () => {
   );
 };
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
+
 export default OfferAnalyticsPage;

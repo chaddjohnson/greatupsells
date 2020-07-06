@@ -68,4 +68,10 @@ const OfferCreatePage = () => {
   );
 };
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
+
 export default OfferCreatePage;

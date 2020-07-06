@@ -23,6 +23,10 @@ const HeadingWrapper = styled.div`
 `;
 
 const StatusBadge = ({ offer }) => {
+  if (!offer._id) {
+    return null;
+  }
+
   if (!offer.enabled) {
     return <Badge>Disabled</Badge>;
   }

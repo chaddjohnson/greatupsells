@@ -351,9 +351,9 @@ const OfferForm = (props) => {
   //   [contextualSaveBar]
   // );
 
-  useEffect(() => {
-    contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
-  }, [contextualSaveBar]);
+  // useEffect(() => {
+  //   contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
+  // }, [contextualSaveBar]);
 
   // Set end date to start date when showing end date.
   useEffect(

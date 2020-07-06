@@ -105,4 +105,10 @@ const DashboardPage = () => (
   </Page>
 );
 
+export async function getServerSideProps() {
+  return {
+    props: {}
+  };
+}
+
 export default DashboardPage;
