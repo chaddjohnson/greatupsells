@@ -38,7 +38,6 @@ import {
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
-import VisibilitySensor from 'react-visibility-sensor';
 import scrollToComponent from 'react-scroll-to-component';
 import DateTimePicker from './DateTimePicker';
 import ManagedResourceList from './ManagedResourceList';
@@ -63,12 +62,12 @@ const product = {
 };
 
 const SummaryContainer = styled.div`
-  .Polaris-Card .Polaris-Card__Section:nth-child(3) {
+  .Polaris-Card__Section:last-child {
     display: none;
   }
 
   @media (min-width: 804px) {
-    .Polaris-Card .Polaris-Card__Section:nth-child(3) {
+    .Polaris-Card__Section:last-child {
       display: block;
     }
   }
@@ -98,7 +97,6 @@ const OfferForm = (props) => {
 
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
-  const [offerPopupVisible, setOfferPopupVisible] = useState(false);
   const [productPickerOpen, setProductPickerOpen] = useState(false);
   const [collectionPickerOpen, setCollectionPickerOpen] = useState(false);
   const [triggerProductPickerOpen, setTriggerProductPickerOpen] = useState(
@@ -287,7 +285,10 @@ const OfferForm = (props) => {
     }
   });
 
-  const offer = useMemo(() => getValues(fields), [fields]);
+  const offer = useMemo(() => ({ ...props.offer, ...getValues(fields) }), [
+    props.offer,
+    fields
+  ]);
 
   // Work around focus issues.
   const handleBlur = useCallback(
@@ -766,15 +767,7 @@ const OfferForm = (props) => {
             </Card.Section>
           </Card>
           <Card title="Preview (full size)" sectioned subdued>
-            <VisibilitySensor
-              partialVisibility={true}
-              minTopValue={100}
-              onChange={(visible) => setOfferPopupVisible(visible)}
-            >
-              <OfferPopupContainer
-                ref={offerPopupContainer}
-              ></OfferPopupContainer>
-            </VisibilitySensor>
+            <OfferPopupContainer ref={offerPopupContainer} />
             {offerPopupContainer && offerPopupContainer.current && (
               <OfferPopup
                 appRoot="#__next"
@@ -787,17 +780,10 @@ const OfferForm = (props) => {
           </Card>
         </Layout.Section>
         <Layout.Section secondary>
-          <Sticky offset={20} disableWhenStacked={true}>
+          <Sticky offset={20}>
             <SummaryContainer>
               <Card title="Summary" subdued>
-                <Card.Section>
-                  <OfferSummary offer={offer} />
-                </Card.Section>
-                <div
-                  style={{
-                    display: offerPopupVisible ? 'none' : 'block'
-                  }}
-                >
+                <OfferSummary offer={offer}>
                   <Card.Section title="Preview">
                     <OfferPopupSummaryContainer
                       ref={offerPopupSummaryContainer}
@@ -818,7 +804,7 @@ const OfferForm = (props) => {
                       )}
                     {/* eslint-enable indent */}
                   </Card.Section>
-                </div>
+                </OfferSummary>
               </Card>
             </SummaryContainer>
           </Sticky>

@@ -77,10 +77,8 @@ const DashboardPage = () => (
             url: '/offers'
           }}
         >
-          <p>
-            Upselling and cross-selling are two of the most effective ways to
-            increase sales in your store.
-          </p>
+          Upselling and cross-selling are two of the most effective ways to
+          increase sales in your store.
         </CalloutCard>
         <MediaCard
           title="Getting Started"

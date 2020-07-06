@@ -16,21 +16,37 @@ import {
   RevenueIncreaseChart,
   OfferViewsChart,
   ConversionsChart
-} from '../components';
+} from '../../../components';
 
-const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
-
-const AnalyticsPage = () => {
+const OfferAnalyticsPage = () => {
   const [datePickerActive, setDatePickerActive] = useState(false);
 
+  const offer = {
+    _id: 'a702955babd0e0c9bdcf176c13b60a1f',
+    name: 'Buy one get 10% off'
+  };
+
+  const PageTitleBar = memo(() => (
+    <TitleBar
+      title="Analytics"
+      breadcrumbs={[
+        { content: 'Offers', url: '/offers' },
+        {
+          content: offer.name,
+          url: `/offers/${offer._id}`
+        }
+      ]}
+    />
+  ));
+
   return (
-    <Page title="Analytics for all offers" fullWidth>
+    <Page title="Analytics for offer" fullWidth>
       <PageTitleBar />
       <Stack vertical>
         <Stack distribution="equalSpacing">
           <DisplayText size="medium">
             <TextStyle variation="subdued">
-              Here&rsquo;s a summary of how your offers are performing
+              Here&rsquo;s a summary of how your offer is performing
             </TextStyle>
           </DisplayText>
           <Popover
@@ -73,4 +89,4 @@ const AnalyticsPage = () => {
   );
 };
 
-export default AnalyticsPage;
+export default OfferAnalyticsPage;

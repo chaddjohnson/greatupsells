@@ -52,6 +52,7 @@
         "after": true
       }
     ],
+    "no-underscore-dangle": "off",
     "space-infix-ops": "warn",
     "no-else-return": "off",
     "import/prefer-default-export": "off",

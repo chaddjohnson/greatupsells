@@ -10,7 +10,7 @@ const Link = ({ url, external, children, ...props }) => {
     );
   } else {
     return (
-      <NextLink href={url}>
+      <NextLink href={url} prefetch={false}>
         <a {...props}>{children}</a>
       </NextLink>
     );

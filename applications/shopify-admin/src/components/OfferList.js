@@ -6,7 +6,8 @@ import {
   Filters,
   EmptyState,
   Link,
-  ChoiceList
+  ChoiceList,
+  Pagination
 } from '@shopify/polaris';
 import styled from 'styled-components';
 
@@ -18,40 +19,56 @@ const isEmpty = (value) => {
   }
 };
 
-const StyledHeadingText = styled.span`
+const HeadingText = styled.span`
   font-weight: 500;
 `;
 
-const StyledLinkText = styled.span`
+const LinkText = styled.span`
   font-weight: 600;
+`;
+
+const PaginationWrapper = styled.div`
+  text-align: center;
 `;
 
 const rows = [
   [
-    <Link key={0} url="/offers/first-offer">
-      <StyledLinkText>First Offer</StyledLinkText>
+    <Link
+      key={0}
+      url="/offers/f85564907759ae76f3c8c5363b7b9752"
+      prefetch={false}
+    >
+      <LinkText>First Offer</LinkText>
     </Link>,
-    14,
     140,
     '6%',
+    14,
     '$875.00'
   ],
   [
-    <Link key={1} url="/offers/second-offer">
-      <StyledLinkText>Second Offer</StyledLinkText>
+    <Link
+      key={1}
+      url="/offers/ac75b776a8c1dca148c9d6d8f4fec22f"
+      prefetch={false}
+    >
+      <LinkText>Second Offer</LinkText>
     </Link>,
-    8,
     83,
     '3.5%',
+    8,
     '$230.00'
   ],
   [
-    <Link key={3} url="/offers/third-offer">
-      <StyledLinkText>Third Offer</StyledLinkText>
+    <Link
+      key={3}
+      url="/offers/322cbdad3ba7f3e4169fb9d1f5371201"
+      prefetch={false}
+    >
+      <LinkText>Third Offer</LinkText>
     </Link>,
-    4,
     32,
     '4%',
+    4,
     '$445.00'
   ]
 ];
@@ -128,17 +145,24 @@ const OfferList = () => {
                 'numeric'
               ]}
               headings={[
-                <StyledHeadingText key="0">Name</StyledHeadingText>,
-                <StyledHeadingText key="1">Acceptances</StyledHeadingText>,
-                <StyledHeadingText key="2">Views</StyledHeadingText>,
-                <StyledHeadingText key="3">Conversion rate</StyledHeadingText>,
-                <StyledHeadingText key="4">Revenue increase</StyledHeadingText>
+                <HeadingText key="0">Name</HeadingText>,
+                <HeadingText key="2">Views</HeadingText>,
+                <HeadingText key="3">Conversion rate</HeadingText>,
+                <HeadingText key="1">Acceptances</HeadingText>,
+                <HeadingText key="4">Revenue increase</HeadingText>
               ]}
               rows={rows}
-              totals={['', '', '', '', '$155,830.00']}
-              showTotalsInFooter={true}
-              footerContent={`Showing ${rows.length} of ${rows.length} results`}
             />
+            <Card.Section>
+              <PaginationWrapper>
+                <Pagination
+                  hasPrevious
+                  hasNext
+                  onPrevious={() => {}}
+                  onNext={() => {}}
+                />
+              </PaginationWrapper>
+            </Card.Section>
           </Card>
         </Layout.Section>
       ) : (
@@ -147,7 +171,7 @@ const OfferList = () => {
           action={{ content: 'Add offer', url: '/offers/new' }}
           image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
         >
-          <p>Create new offers to increase your sales.</p>
+          Create new offers to increase your sales.
         </EmptyState>
       )}
     </Layout>

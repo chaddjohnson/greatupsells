@@ -11,12 +11,11 @@
   "dependencies": {
     "@neatowebsolutions/upselling-models": "^0.0.0",
     "@neatowebsolutions/upselling-react-components": "^0.0.0",
-    "@shopify/app-bridge": "^1.21.4",
-    "@shopify/app-bridge-react": "^1.21.4",
+    "@shopify/app-bridge": "^1.24.0",
+    "@shopify/app-bridge-react": "^1.24.0",
     "@shopify/koa-shopify-auth": "^3.1.61",
-    "@shopify/polaris": "^4.22.0",
+    "@shopify/polaris": "^4.26.1",
     "@shopify/react-form": "^0.6.2",
-    "@shopify/react-shopify-app-route-propagator": "^3.0.8",
     "colr": "^1.2.2",
     "highcharts": "^8.1.2",
     "highcharts-react-official": "^3.0.0",
@@ -27,7 +26,6 @@
     "koa-session": "^6.0.0",
     "raf": "^3.4.1",
     "react-scroll-to-component": "^1.0.2",
-    "react-visibility-sensor": "^5.1.1",
     "serverless-http": "^2.4.1",
     "tween": "^0.9.0"
   },

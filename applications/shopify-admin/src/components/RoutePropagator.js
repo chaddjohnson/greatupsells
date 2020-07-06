@@ -1,12 +1,11 @@
-import { useContext } from 'react';
+import React from 'react';
 import { withRouter } from 'next/router';
-import { RoutePropagator } from '@shopify/react-shopify-app-route-propagator';
-import { Context } from '@shopify/app-bridge-react';
+import { RoutePropagator as AppBridgeRoutePropagator } from '@shopify/app-bridge-react';
 
-export default withRouter(({ router, server }) => {
-  const app = useContext(Context);
+/* eslint-disable react/prop-types */
+const RoutePropagator = ({ router }) => (
+  <AppBridgeRoutePropagator location={router.pathname} />
+);
+/* eslint-enable react/prop-types */
 
-  return !server && app && router.pathname ? (
-    <RoutePropagator location={router.pathname} app={app} />
-  ) : null;
-});
+export default withRouter(RoutePropagator);
