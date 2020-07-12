@@ -28,9 +28,12 @@ export default class extends App {
         <AppProvider i18n={translations} linkComponent={Link}>
           <RoutePropagator />
           <ApolloProvider client={apolloClient}>
-            <main style={{ paddingBottom: '120px' }}>
-              <Component {...pageProps} />
-            </main>
+            {typeof window === 'undefined' ||
+              (window.top !== window.self && (
+                <main style={{ paddingBottom: '120px' }}>
+                  <Component {...pageProps} />
+                </main>
+              ))}
           </ApolloProvider>
         </AppProvider>
       </AppBridgeProvider>
