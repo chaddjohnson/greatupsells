@@ -47,7 +47,9 @@ const createServer = () => {
   }
 
   // Initialize Shopify OAuth support.
-  server.use(session({ secure: true, sameSite: 'None' }, server));
+  server.use(
+    session({ httpOnly: true, secure: true, sameSite: 'None' }, server)
+  );
   server.keys = [SHOPIFY_ADMIN_API_SECRET_KEY];
   server.use(
     createShopifyAuth({
