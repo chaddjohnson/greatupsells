@@ -3,7 +3,7 @@ import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import Cookies from 'js-cookie';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 import { Link, RoutePropagator } from '../components';
 import { apolloClient } from '../services';
 import { getAuthToken } from '../utilities';

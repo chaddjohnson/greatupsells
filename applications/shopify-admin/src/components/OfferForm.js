@@ -35,7 +35,7 @@ import {
   Context as AppBridgeContext,
   ResourcePicker
 } from '@shopify/app-bridge-react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
 import scrollToComponent from 'react-scroll-to-component';

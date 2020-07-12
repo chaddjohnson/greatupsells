@@ -12,6 +12,7 @@
     "lint": "lerna run lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.0.0-rc.12",
     "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
     "@shopify/polaris-icons": "^3.10.0",
     "@zeit/next-css": "^1.0.1",
@@ -40,7 +41,6 @@
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
-    "@apollo/react-hooks": "^3.1.5",
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",

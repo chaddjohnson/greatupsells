@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Loading } from '@shopify/app-bridge-react';
 import { Page } from '@shopify/polaris';
 import {
