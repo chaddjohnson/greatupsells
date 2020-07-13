@@ -1,7 +1,6 @@
-import { gql } from 'apollo-boost';
 import { OFFER_FRAGMENT } from '../fragments';
 
-export default gql`
+export default /* GraphQL */ `
   mutation CreateOffer($input: OfferInput!) {
     createOffer(input: $input) {
       ...OfferFragment

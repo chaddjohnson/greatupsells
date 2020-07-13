@@ -1,6 +1,4 @@
-import { gql } from 'apollo-boost';
-
-export default gql`
+export default /* GraphQL */ `
   query ShopToken($queryString: String!) {
     shopToken(queryString: $queryString) {
       token

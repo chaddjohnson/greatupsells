@@ -272,6 +272,8 @@ const OfferForm = (props) => {
 
       // contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
 
+      // TODO: Redirect to offers/:id page.
+
       return { status: 'success' };
     }
   });

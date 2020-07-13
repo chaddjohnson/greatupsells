@@ -1,6 +1,4 @@
-import { gql } from 'apollo-boost';
-
-export default gql`
+export default /* GraphQL */ `
   fragment ShopFragment on Shop {
     shopifyShopId
     name

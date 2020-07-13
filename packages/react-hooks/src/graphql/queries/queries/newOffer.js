@@ -1,9 +1,8 @@
-import { gql } from 'apollo-boost';
 import { OFFER_FRAGMENT } from '../fragments';
 
-export default gql`
-  query Offer($id: ID!) {
-    offer(id: $id) {
+export default /* GraphQL */ `
+  query Offer {
+    offer {
       ...OfferFragment
     }
   }

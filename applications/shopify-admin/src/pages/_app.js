@@ -3,9 +3,11 @@ import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import Cookies from 'js-cookie';
-import { ApolloProvider } from '@apollo/client';
+import {
+  ErrorBoundary,
+  Contexts
+} from '@neatowebsolutions/upselling-react-components';
 import { Link, RoutePropagator } from '../components';
-import { apolloClient } from '../services';
 import { getAuthToken } from '../utilities';
 import '@shopify/polaris/styles.scss';
 
@@ -27,14 +29,16 @@ export default class extends App {
       >
         <AppProvider i18n={translations} linkComponent={Link}>
           <RoutePropagator />
-          <ApolloProvider client={apolloClient}>
-            {typeof window === 'undefined' ||
-              (window.top !== window.self && (
-                <main style={{ paddingBottom: '120px' }}>
-                  <Component {...pageProps} />
-                </main>
-              ))}
-          </ApolloProvider>
+          {typeof window === 'undefined' ||
+            (window.top !== window.self && (
+              <ErrorBoundary>
+                <Contexts>
+                  <main style={{ paddingBottom: '120px' }}>
+                    <Component {...pageProps} />
+                  </main>
+                </Contexts>
+              </ErrorBoundary>
+            ))}
         </AppProvider>
       </AppBridgeProvider>
     );

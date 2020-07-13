@@ -10,7 +10,9 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0"
+  },
   "peerDependencies": {
     "prop-types": "^15.7.0",
     "react": "^16.13.0",
