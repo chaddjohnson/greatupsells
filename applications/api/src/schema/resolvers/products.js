@@ -9,7 +9,8 @@ module.exports.products = async (root, args, context) => {
 
 module.exports.product = async (root, args, context) => {
   const { Product } = context;
-  const product = await Product.findById(args.id);
+  const { id } = args;
+  const product = await Product.findById(id);
 
   // TODO: Authorization
 

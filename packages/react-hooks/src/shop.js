@@ -6,19 +6,17 @@ import { graphqlClient, SHOP_QUERY, UPDATE_SHOP_MUTATION } from './graphql';
 const ShopContext = createContext(null);
 
 export const ShopProvider = ({ children }) => {
-  const { data: shop, error: shopError } = useSWR(
-    SHOP_QUERY,
-    graphqlClient.query
-  );
-  const shopLoading = !shop && !shopError;
-
-  const fetchShop = async () => {
-    return mutate(SHOP_QUERY);
-  };
+  const {
+    data: shop,
+    error: shopError,
+    isValidating: shopIsValidating
+  } = useSWR(SHOP_QUERY, graphqlClient.query);
+  const shopLoading = (!shop && !shopError) || shopIsValidating;
 
   const updateShop = async (data) => {
-    await mutate(UPDATE_SHOP_MUTATION, (query) =>
-      graphqlClient.mutate(query, data)
+    await mutate(
+      UPDATE_SHOP_MUTATION,
+      graphqlClient.mutate(UPDATE_SHOP_MUTATION, data)
     );
     mutate(SHOP_QUERY);
   };
@@ -29,7 +27,6 @@ export const ShopProvider = ({ children }) => {
         shop,
         shopLoading,
         shopError,
-        fetchShop,
         updateShop
       }}
     >

@@ -20,7 +20,8 @@ module.exports.shops = async (root, args, context) => {
 
 module.exports.shop = async (root, args, context) => {
   const { Shop } = context;
-  const shop = await Shop.findById(args.id);
+  const { id } = args;
+  const shop = await Shop.findById(id);
 
   // TODO: Authorization
 

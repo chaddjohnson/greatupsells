@@ -13,15 +13,23 @@ module.exports.offers = async (root, args, context) => {
 
 module.exports.offer = async (root, args, context) => {
   const { shop, Offer } = context;
-  const offer = await Offer.find(args.id);
+  const { id } = args;
+  let offer = null;
 
-  if (!offer) {
-    throw new Error(`Offer ${args.id} not found`);
-  }
+  // Retrieve existing offer if an ID is provided; otherwise, return an instantiated offer.
+  if (id) {
+    offer = await Offer.find(id);
 
-  if (offer.shopifyShopId !== shop.shopifyShopId) {
-    logger.warn(`Unauthorized request for offer ${offer.id}`, context);
-    throw new ForbiddenError('Unauthorized');
+    if (!offer) {
+      throw new Error(`Offer ${id} not found`);
+    }
+
+    if (offer.shopifyShopId !== shop.shopifyShopId) {
+      logger.warn(`Unauthorized request for offer ${offer.id}`, context);
+      throw new ForbiddenError('Unauthorized');
+    }
+  } else {
+    offer = new Offer();
   }
 
   return offer;
@@ -44,14 +52,15 @@ module.exports.createOffer = async (root, args, context) => {
 module.exports.updateOffer = async (root, args, context) => {
   const { shop, Offer } = context;
   const { ...values } = args.input;
-  const offer = await Offer.findById(args.id);
+  const { id } = args;
+  const offer = await Offer.findById(id);
 
   // Disallow updating certain properties.
   delete values.shopifyShopId;
   delete values.shop;
 
   if (!offer) {
-    throw new Error(`Offer ${args.id} not found`);
+    throw new Error(`Offer ${id} not found`);
   }
 
   if (offer.shopifyShopId !== shop.shopifyShopId) {
@@ -66,10 +75,11 @@ module.exports.updateOffer = async (root, args, context) => {
 
 module.exports.deleteOffer = async (root, args, context) => {
   const { shop, Offer } = context;
-  const offer = await Offer.findById(args.id);
+  const { id } = args;
+  const offer = await Offer.findById(id);
 
   if (!offer) {
-    throw new Error(`Offer ${args.id} not found`);
+    throw new Error(`Offer ${id} not found`);
   }
 
   if (offer.shopifyShopId !== shop.shopifyShopId) {
