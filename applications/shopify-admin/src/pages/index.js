@@ -91,7 +91,7 @@ const DashboardPage = () => (
             title={
               <Stack distribution="equalSpacing">
                 <Heading>Accepted offers</Heading>
-                <Button plain url="/analytics">
+                <Button plain url="/analytics/">
                   View all analytics
                 </Button>
               </Stack>
@@ -110,11 +110,11 @@ const DashboardPage = () => (
           title="Add upsell and cross-sell offers to your store"
           primaryAction={{
             content: 'Create offer',
-            url: '/offers/new'
+            url: '/offers/new/'
           }}
           secondaryAction={{
             content: 'Manage your offers',
-            url: '/offers'
+            url: '/offers/'
           }}
         >
           Upselling and cross-selling are two of the most effective ways to

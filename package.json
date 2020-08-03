@@ -6,9 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "NODE_ENV=development lerna bootstrap --force-local",
+    "bootstrap": "NODE_ENV=development dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "NODE_ENV=production dotenv -- lerna run build --stream --scope=@neatowebsolutions/*",
-    "start": "yarn bootstrap && dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-api,upselling-shopify-admin,upselling-shopify-storefront}",
+    "start": "dotenv -- yarn bootstrap && dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-api,upselling-shopify-admin,upselling-shopify-storefront}",
     "lint": "lerna run lint"
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
     "mongoose": "^5.9.27",
-    "next": "^9.4.4",
+    "next": "^9.5.1",
     "node-sass": "^4.14.1",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",

@@ -155,10 +155,10 @@ const OfferAnalyticsPage = () => {
     <TitleBar
       title="Analytics"
       breadcrumbs={[
-        { content: 'Offers', url: '/offers' },
+        { content: 'Offers', url: '/offers/' },
         {
           content: offer.name,
-          url: `/offers/${offer._id}`
+          url: `/offers/${offer._id}/`
         }
       ]}
     />

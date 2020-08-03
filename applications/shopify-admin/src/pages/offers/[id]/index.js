@@ -14,7 +14,7 @@ const PageTitleBar = memo(() => (
   <TitleBar
     title="Edit offer"
     primaryAction={null}
-    breadcrumbs={[{ content: 'Offers', url: '/offers' }]}
+    breadcrumbs={[{ content: 'Offers', url: '/offers/' }]}
   />
 ));
 

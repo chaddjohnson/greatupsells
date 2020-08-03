@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { Loading } from '@shopify/app-bridge-react';
 import { Page } from '@shopify/polaris';
 import { useOffer } from '@neatowebsolutions/upselling-react-hooks';
 import { TitleBar, OfferForm } from '../../components';
@@ -8,7 +7,7 @@ const PageTitleBar = memo(() => (
   <TitleBar
     title="Create offer"
     primaryAction={null}
-    breadcrumbs={[{ content: 'Offers', url: '/offers' }]}
+    breadcrumbs={[{ content: 'Offers', url: '/offers/' }]}
   />
 ));
 
