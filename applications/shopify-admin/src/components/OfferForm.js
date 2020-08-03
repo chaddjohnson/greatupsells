@@ -35,7 +35,6 @@ import {
   Context as AppBridgeContext,
   ResourcePicker
 } from '@shopify/app-bridge-react';
-import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
 import scrollToComponent from 'react-scroll-to-component';
@@ -44,7 +43,6 @@ import ManagedResourceList from './ManagedResourceList';
 import OfferSummary from './OfferSummary';
 import PopupThemeCustomization from './PopupThemeCustomization';
 import PopupThemeSelection from './PopupThemeSelection';
-import { CREATE_OFFER } from '../graphql/mutations';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -88,12 +86,9 @@ const OfferPopupContainer = styled.div`
   }
 `;
 
-const OfferForm = (props) => {
+const OfferForm = ({ initialValues, onSubmit }) => {
   const app = useContext(AppBridgeContext);
   const router = useRouter();
-
-  // TODO: Handle update.
-  const [createOffer] = useMutation(CREATE_OFFER);
 
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
@@ -113,33 +108,35 @@ const OfferForm = (props) => {
   let contextualSaveBar = null;
 
   const name = useField({
-    value: props.offer.name,
+    value: initialValues.name,
     validates: [notEmpty("Name can't be blank")]
   });
-  const strategy = useField(props.offer.strategy);
-  const triggerEvent = useField(props.offer.triggerEvent);
-  const discountType = useField(props.offer.discountType);
-  const products = useField(useList(props.offer.products));
-  const collections = useField(useList(props.offer.collections));
-  const triggerProducts = useField(useList(props.offer.triggerProducts));
-  const triggerCollections = useField(useList(props.offer.triggerCollections));
-  const actionButtonBehavior = useField(props.offer.actionButtonBehavior);
-  const showNotificationBanner = useField(props.offer.showNotificationBanner);
+  const strategy = useField(initialValues.strategy);
+  const triggerEvent = useField(initialValues.triggerEvent);
+  const discountType = useField(initialValues.discountType);
+  const products = useField(useList(initialValues.products));
+  const collections = useField(useList(initialValues.collections));
+  const triggerProducts = useField(useList(initialValues.triggerProducts));
+  const triggerCollections = useField(
+    useList(initialValues.triggerCollections)
+  );
+  const actionButtonBehavior = useField(initialValues.actionButtonBehavior);
+  const showNotificationBanner = useField(initialValues.showNotificationBanner);
   const callToActionText = useField({
-    value: props.offer.callToActionText,
+    value: initialValues.callToActionText,
     validates: [notEmpty("Call to action text can't be blank")]
   });
   const actionButtonText = useField({
-    value: props.offer.actionButtonText,
+    value: initialValues.actionButtonText,
     validates: [notEmpty("Action text can't be blank")]
   });
   const cancelButtonText = useField({
-    value: props.offer.cancelButtonText,
+    value: initialValues.cancelButtonText,
     validates: [notEmpty("Cancel button text can't be blank")]
   });
   const successMessageText = useField(
     {
-      value: props.offer.successMessageText,
+      value: initialValues.successMessageText,
       validates: (value) => {
         if (showNotificationBanner.value && !value) {
           return "Success message text can't be blank";
@@ -148,11 +145,11 @@ const OfferForm = (props) => {
     },
     [showNotificationBanner.value]
   );
-  const popupThemeType = useField(props.offer.popupThemeType);
-  const popupThemeTemplateId = useField(props.offer.popupThemeTemplateId);
-  const popupTheme = useField(props.offer.popupTheme);
+  const popupThemeType = useField(initialValues.popupThemeType);
+  const popupThemeTemplateId = useField(initialValues.popupThemeTemplateId);
+  const popupTheme = useField(initialValues.popupTheme);
   const startAt = useField({
-    value: props.offer.startAt,
+    value: initialValues.startAt,
     validates: [
       notEmpty("Start date can't be blank"),
       (value) => {
@@ -164,7 +161,7 @@ const OfferForm = (props) => {
   });
   const endAt = useField(
     {
-      value: props.offer.endAt,
+      value: initialValues.endAt,
       validates: [
         (value) => {
           if (showEndDate && !value) {
@@ -190,14 +187,16 @@ const OfferForm = (props) => {
     },
     [showEndDate, startAt.value]
   );
-  const enableTimer = useField(props.offer.enableTimer);
-  const enableProductLinks = useField(props.offer.enableProductLinks);
-  const hideOutOfStockProducts = useField(props.offer.hideOutOfStockProducts);
-  const enableQuantitySelection = useField(props.offer.enableQuantitySelection);
-  const limitQuantitySelection = useField(props.offer.limitQuantitySelection);
+  const enableTimer = useField(initialValues.enableTimer);
+  const enableProductLinks = useField(initialValues.enableProductLinks);
+  const hideOutOfStockProducts = useField(initialValues.hideOutOfStockProducts);
+  const enableQuantitySelection = useField(
+    initialValues.enableQuantitySelection
+  );
+  const limitQuantitySelection = useField(initialValues.limitQuantitySelection);
   const productQuantityLimit = useField(
     {
-      value: props.offer.productQuantityLimit,
+      value: initialValues.productQuantityLimit,
       validates: [
         (value) => {
           if (limitQuantitySelection.value && !value) {
@@ -223,9 +222,9 @@ const OfferForm = (props) => {
     },
     [limitQuantitySelection.value]
   );
-  const allowMultipleUpsells = useField(props.offer.allowMultipleUpsells);
-  const hideIfItemAdded = useField(props.offer.hideIfItemAdded);
-  const allowWithDiscountCodes = useField(props.offer.allowWithDiscountCodes);
+  const allowMultipleUpsells = useField(initialValues.allowMultipleUpsells);
+  const hideIfItemAdded = useField(initialValues.hideIfItemAdded);
+  const allowWithDiscountCodes = useField(initialValues.allowWithDiscountCodes);
 
   const { fields, dirty, submit, submitting, submitErrors } = useForm({
     fields: {
@@ -265,7 +264,7 @@ const OfferForm = (props) => {
 
       try {
         // TODO: Handle update.
-        await createOffer({ variables: { input: formValues } });
+        await onSubmit(formValues);
       } catch (error) {
         return { status: 'fail', errors: error };
       }
@@ -287,10 +286,13 @@ const OfferForm = (props) => {
     }
   });
 
-  const offer = useMemo(() => ({ ...props.offer, ...getValues(fields) }), [
-    props.offer,
-    fields
-  ]);
+  const offer = useMemo(
+    () => ({
+      ...initialValues,
+      ...getValues(fields)
+    }),
+    [initialValues, fields]
+  );
 
   // Work around focus issues.
   const handleBlur = useCallback(
@@ -865,7 +867,12 @@ const OfferForm = (props) => {
 };
 
 OfferForm.propTypes = {
-  offer: PropTypes.object.isRequired
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func
+};
+
+OfferForm.defaultProps = {
+  onSubmit: () => {}
 };
 
 export default OfferForm;

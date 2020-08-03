@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server-lambda');
+const { DateTimeTypeDefinition, JSONDefinition } = require('graphql-scalars');
 const Shop = require('./Shop');
 const Offer = require('./Offer');
 const Product = require('./Product');
@@ -7,7 +8,7 @@ const Token = require('./Token');
 const Query = gql`
   type Query {
     shops: [Shop]
-    shop(id: ID!): Shop
+    shop(id: ID): Shop
     offers: [Offer]
     offer(id: ID!): Offer
     products: [Product]
@@ -27,4 +28,13 @@ const Mutation = gql`
 
 // TODO: Role authorization
 
-module.exports = [Shop, Offer, Product, Token, Query, Mutation];
+module.exports = [
+  DateTimeTypeDefinition,
+  JSONDefinition,
+  Shop,
+  Offer,
+  Product,
+  Token,
+  Query,
+  Mutation
+];

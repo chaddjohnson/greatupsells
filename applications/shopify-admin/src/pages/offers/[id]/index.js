@@ -63,7 +63,7 @@ const OfferEditPage = () => {
     >
       {offerLoading && <Loading />}
       <PageTitleBar />
-      <OfferForm offer={offer} onSubmit={updateOffer} />
+      <OfferForm initialValues={offer} onSubmit={updateOffer} />
     </Page>
   );
 };

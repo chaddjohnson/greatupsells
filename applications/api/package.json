@@ -14,13 +14,12 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/api#readme",
   "dependencies": {
+    "@graphql-tools/schema": "^6.0.15",
     "@neatowebsolutions/logger": "^0.0.0",
     "@neatowebsolutions/upselling-models": "^0.0.0",
     "apollo-server-lambda": "^2.13.1",
-    "graphql-tools": "^5.0.0",
-    "graphql-type-json": "^0.3.1",
+    "graphql-scalars": "^1.2.6",
     "jsonwebtoken": "^8.5.1",
     "shopify-token": "^4.0.0"
-  },
-  "devDependencies": {}
+  }
 }

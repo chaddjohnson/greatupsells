@@ -14,22 +14,16 @@ module.exports.offers = async (root, args, context) => {
 module.exports.offer = async (root, args, context) => {
   const { shop, Offer } = context;
   const { id } = args;
-  let offer = null;
 
-  // Retrieve existing offer if an ID is provided; otherwise, return an instantiated offer.
-  if (id) {
-    offer = await Offer.find(id);
+  const offer = await Offer.findById(id);
 
-    if (!offer) {
-      throw new Error(`Offer ${id} not found`);
-    }
+  if (!offer) {
+    throw new Error(`Offer ${id} not found`);
+  }
 
-    if (offer.shopifyShopId !== shop.shopifyShopId) {
-      logger.warn(`Unauthorized request for offer ${offer.id}`, context);
-      throw new ForbiddenError('Unauthorized');
-    }
-  } else {
-    offer = new Offer();
+  if (offer.shopifyShopId !== shop.shopifyShopId) {
+    logger.warn(`Unauthorized request for offer ${offer.id}`, context);
+    throw new ForbiddenError('Unauthorized');
   }
 
   return offer;

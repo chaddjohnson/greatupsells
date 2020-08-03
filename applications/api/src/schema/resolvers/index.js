@@ -1,4 +1,4 @@
-const GraphQLJSON = require('graphql-type-json');
+const { DateTimeResolver, JSONResolver } = require('graphql-scalars');
 const { shops, shop, shopOffers, shopProducts, shopToken } = require('./shops');
 const {
   offers,
@@ -11,6 +11,8 @@ const {
 const { products, product, productShop } = require('./products');
 
 const resolvers = {
+  DateTime: DateTimeResolver,
+  JSON: JSONResolver,
   Query: {
     shops,
     shop,
@@ -34,8 +36,7 @@ const resolvers = {
   },
   Product: {
     shop: productShop
-  },
-  JSON: GraphQLJSON
+  }
 };
 
 module.exports = resolvers;

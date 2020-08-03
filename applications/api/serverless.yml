@@ -42,12 +42,6 @@ functions:
           path: /graphql
           method: ANY
           cors: true
-  authShopifyToken:
-    handler: src/routes/auth/shopify/token.handler
-    events:
-      - http:
-          path: /auth/shopify/token
-          method: get
 
 plugins:
   - serverless-domain-manager
@@ -58,7 +52,7 @@ plugins:
 custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/api/endpoint/${self:provider.region}}
-    basePath: ""
+    basePath: ''
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional

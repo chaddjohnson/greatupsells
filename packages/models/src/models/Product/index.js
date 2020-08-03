@@ -11,13 +11,16 @@ const preValidateHook = require('./preValidateHook');
 
 let Product = null;
 
-const schema = new mongoose.Schema({
-  shopifyShopId: { type: String, required: true },
-  shopifyProductId: { type: String, required: true },
-  shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
-  title: { type: String, required: true },
-  shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true }
-});
+const schema = new mongoose.Schema(
+  {
+    shopifyShopId: { type: String, required: true },
+    shopifyProductId: { type: String, required: true },
+    shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
+    title: { type: String, required: true },
+    shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true }
+  },
+  { timestamps: true }
+);
 
 schema.statics.findByShopId = function (shopId) {
   return findByShopId(shopId);

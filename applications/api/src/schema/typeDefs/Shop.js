@@ -15,10 +15,10 @@ const typeDef = gql`
     timezone: String!
     active: Boolean!
     internal: Boolean!
-    uninstalledAt: String
+    uninstalledAt: DateTime
     plan: ShopPlan!
-    createdAt: String!
-    updatedAt: String!
+    createdAt: DateTime
+    updatedAt: DateTime
     offers: [Offer]
     products: [Product]
   }
@@ -28,9 +28,9 @@ const typeDef = gql`
     active: Boolean
     chargeId: ID
     billingOn: String
-    upgradedAt: String
-    canceledAt: String
-    grandfatheredAt: String
+    upgradedAt: DateTime
+    canceledAt: DateTime
+    grandfatheredAt: DateTime
   }
 
   enum ShopPlanLevel {

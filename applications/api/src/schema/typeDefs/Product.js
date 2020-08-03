@@ -8,8 +8,8 @@ const typeDef = gql`
     title: String!
     shop: Shop
     shopifyProductData: JSON
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 `;
 

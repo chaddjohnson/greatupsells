@@ -1,8 +1,6 @@
 const { gql } = require('apollo-server-lambda');
 
 const typeDef = gql`
-  scalar JSON
-
   type Offer {
     _id: ID!
     shopifyShopId: ID!
@@ -29,8 +27,8 @@ const typeDef = gql`
     triggerEvent: OfferTriggerEvent
     triggerProducts: [OfferProduct]
     triggerCollections: [OfferCollection]
-    startAt: String!
-    endAt: String
+    startAt: DateTime!
+    endAt: DateTime
     enableTimer: Boolean
     timerText: String
     timerCountdownStart: Int
@@ -46,8 +44,8 @@ const typeDef = gql`
     # discountCodes
     # discountPricingMethod
     enabled: Boolean
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   enum OfferStrategy {
@@ -134,8 +132,8 @@ const typeDef = gql`
     triggerEvent: String
     triggerProducts: [OfferProductInput]
     triggerCollections: [OfferCollectionInput]
-    startAt: String!
-    endAt: String
+    startAt: DateTime!
+    endAt: DateTime
     enableTimer: Boolean
     timerText: String
     timerCountdownStart: Int

@@ -7,7 +7,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    globalObject: 'this'
   },
   stats: 'errors-warnings',
   module: {
@@ -25,10 +26,12 @@ module.exports = {
     ]
   },
   plugins: [new CleanWebpackPlugin()],
-  externals: {
-    react: 'react',
-    'react-dom': 'react-dom',
-    'prop-types': 'prop-types',
-    'styled-components': 'styled-components'
-  }
+  externals: [
+    '@neatowebsolutions/upselling-react-hooks',
+    /^next(?:\/.*)?$/,
+    'prop-types',
+    'react',
+    'react-dom',
+    'styled-components'
+  ]
 };

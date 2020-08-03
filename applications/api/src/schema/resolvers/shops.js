@@ -21,9 +21,9 @@ module.exports.shops = async (root, args, context) => {
 module.exports.shop = async (root, args, context) => {
   const { Shop } = context;
   const { id } = args;
-  const shop = await Shop.findById(id);
+  const shop = id ? await Shop.findById(id) : context.shop;
 
-  // TODO: Authorization
+  // TODO: Authorization if requesting shop by ID.
 
   return shop;
 };

@@ -21,48 +21,51 @@ const hooks = require('./hooks');
 
 let Shop = null;
 
-const schema = new mongoose.Schema({
-  shopifyShopId: { type: String, required: true },
-  name: { type: String, required: true, trim: true },
-  domain: { type: String, required: true, trim: true },
-  realDomain: { type: String, required: false, trim: true },
-  accessToken: { type: String, required: false },
-  contactName: { type: String, required: true, trim: true },
-  contactEmail: { type: String, required: true, trim: true },
-  contactPhone: { type: String, required: false, trim: true },
-  countryCode: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 2,
-    match: /^[A-Z]+$/
-  },
-  currency: {
-    type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 3,
-    match: /^[A-Z]+$/
-  },
-  timezone: { type: String, required: true },
-  active: { type: Boolean, required: true, default: true },
-  internal: { type: Boolean, required: false, default: false },
-  plan: {
-    level: {
+const schema = new mongoose.Schema(
+  {
+    shopifyShopId: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
+    domain: { type: String, required: true, trim: true },
+    realDomain: { type: String, required: false, trim: true },
+    accessToken: { type: String, required: false },
+    contactName: { type: String, required: true, trim: true },
+    contactEmail: { type: String, required: true, trim: true },
+    contactPhone: { type: String, required: false, trim: true },
+    countryCode: {
       type: String,
       required: true,
-      enum: ['FREE', 'PREMIUM'],
-      default: 'FREE'
+      minlength: 2,
+      maxlength: 2,
+      match: /^[A-Z]+$/
     },
-    active: { type: Boolean, required: false, default: false },
-    chargeId: { type: String, required: false },
-    billingOn: { type: Date, required: false },
-    upgradedAt: { type: Date, required: false },
-    canceledAt: { type: Date, required: false },
-    grandfatheredAt: { type: Date, required: false }
+    currency: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 3,
+      match: /^[A-Z]+$/
+    },
+    timezone: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
+    internal: { type: Boolean, required: false, default: false },
+    plan: {
+      level: {
+        type: String,
+        required: true,
+        enum: ['FREE', 'PREMIUM'],
+        default: 'FREE'
+      },
+      active: { type: Boolean, required: false, default: false },
+      chargeId: { type: String, required: false },
+      billingOn: { type: Date, required: false },
+      upgradedAt: { type: Date, required: false },
+      canceledAt: { type: Date, required: false },
+      grandfatheredAt: { type: Date, required: false }
+    },
+    uninstalledAt: { type: Date, required: false }
   },
-  uninstalledAt: { type: Date, required: false }
-});
+  { timestamps: true }
+);
 
 schema.options.toJSON = {
   transform(document, transformed) {

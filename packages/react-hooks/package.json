@@ -9,9 +9,13 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-hooks#readme",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "graphql-request": "^2.0.0",
+    "swr": "^0.2.3"
+  },
   "peerDependencies": {
+    "@shopify/app-bridge": "^1.24.0",
+    "@shopify/app-bridge-react": "^1.24.0",
     "react": "^16.13.0"
   },
   "scripts": {

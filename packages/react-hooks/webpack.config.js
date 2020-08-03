@@ -26,7 +26,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new webpack.EnvironmentPlugin(['API_URL'])
+  ],
   stats: 'errors-warnings',
-  externals: ['react']
+  externals: ['@shopify/app-bridge', '@shopify/app-bridge-react', 'react']
 };

@@ -2,14 +2,13 @@ import useSWR from 'swr';
 import { graphqlClient, OFFER_VIEWS_QUERY } from './graphql';
 
 const useOfferViews = () => {
-  const {
-    data: offerViews,
-    error: offerViewsError,
-    isValidating: offerViewsValidating
-  } = useSWR(OFFER_VIEWS_QUERY, graphqlClient.query);
+  const { data: offerViews, error: offerViewsError } = useSWR(
+    OFFER_VIEWS_QUERY,
+    graphqlClient.query,
+    { revalidateOnFocus: false }
+  );
 
-  const offerViewsLoading =
-    (!offerViews && !offerViewsError) || offerViewsValidating;
+  const offerViewsLoading = !offerViews && !offerViewsError;
 
   return { offerViews, offerViewsLoading, offerViewsError };
 };

@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const models = require('@neatowebsolutions/upselling-models');
 const schema = require('../schema');
 
+const dev = process.env.NODE_ENV !== 'production';
+
 const { JWT_SECRET } = process.env;
 
 const getModels = async () => ({
@@ -14,8 +16,8 @@ const getModels = async () => ({
 
 const getShop = async (context) => {
   let token =
-    get(context, 'event.headers.authorization', '') ||
-    get(context, 'event.headers.Authorization', '');
+    get(context, 'event.headers.Authorization', '') ||
+    get(context, 'event.headers.authorization', '');
 
   token = token.replace('Bearer ', '');
 
@@ -54,7 +56,13 @@ const contextHandler = async (context) => {
   };
 };
 
-const server = new ApolloServer({ schema, context: contextHandler });
+const server = new ApolloServer({
+  schema,
+  playground: {
+    endpoint: dev ? '/dev/graphql' : '/graphql'
+  },
+  context: contextHandler
+});
 const config = {
   cors: {
     origin: '*',

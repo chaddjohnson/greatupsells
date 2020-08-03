@@ -2,18 +2,17 @@ import useSWR, { mutate } from 'swr';
 import {
   graphqlClient,
   OFFER_QUERY,
-  NEW_OFFER_QUERY,
   CREATE_OFFER_MUTATION,
   UPDATE_OFFER_MUTATION
 } from './graphql';
 
 const useOffer = (id) => {
-  const {
-    data: offer,
-    error: offerError,
-    isValidating: offerIsValidating
-  } = useSWR([id, id ? OFFER_QUERY : NEW_OFFER_QUERY], graphqlClient.query);
-  const offerLoading = (!offer && !offerError) || offerIsValidating;
+  const { data: offer, error: offerError } = useSWR(
+    id ? OFFER_QUERY : null,
+    graphqlClient.query,
+    { revalidateOnFocus: false }
+  );
+  const offerLoading = !offer && !offerError;
 
   const createOffer = async (data) => {
     await mutate(
@@ -23,10 +22,11 @@ const useOffer = (id) => {
   };
 
   const updateOffer = async (data) => {
-    await mutate(UPDATE_OFFER_MUTATION, (query) =>
-      graphqlClient.mutate(query, data)
+    await mutate(
+      UPDATE_OFFER_MUTATION,
+      graphqlClient.mutate(UPDATE_OFFER_MUTATION, data)
     );
-    mutate(OFFER_QUERY);
+    await mutate(OFFER_QUERY);
   };
 
   return { offer, offerLoading, offerError, createOffer, updateOffer };
