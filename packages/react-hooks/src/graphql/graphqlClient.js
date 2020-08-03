@@ -7,9 +7,7 @@ const options = {
 const client = new GraphQLClient(endpoint, options);
 
 const query = async (queryString, variables) => {
-  // const token = sessionStorage.getItem('authToken');
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaG9wRG9tYWluIjoibmVhdG93ZWJzb2x1dGlvbnMtY2hhZC5teXNob3BpZnkuY29tIiwiaWF0IjoxNTk0ODQyMzkzfQ.KDBL54OYdUPxwuQN56iEYwf5KDKjPiGstSBAUfxcyfM';
+  const token = sessionStorage.getItem('authToken');
 
   if (token) {
     client.setHeader('Authorization', `Bearer ${token}`);
