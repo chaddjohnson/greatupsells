@@ -109,7 +109,7 @@ const OfferSummary = ({ offer, children }) => {
               View{' '}
               <Button
                 plain
-                url="/offers/a702955babd0e0c9bdcf176c13b60a1f/analytics"
+                url="/offers/a702955babd0e0c9bdcf176c13b60a1f/analytics/"
               >
                 analytics for this offer
               </Button>

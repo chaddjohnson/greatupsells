@@ -68,6 +68,8 @@ module.exports = withSass({
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
   assetPrefix: dev ? '' : SHOPIFY_ADMIN_URL,
 
+  trailingSlash: true,
+
   env: {
     SHOPIFY_ADMIN_URL,
     SHOPIFY_ADMIN_API_KEY,

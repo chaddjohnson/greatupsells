@@ -35,7 +35,7 @@ const rows = [
   [
     <Link
       key={0}
-      url="/offers/f85564907759ae76f3c8c5363b7b9752"
+      url="/offers/f85564907759ae76f3c8c5363b7b9752/"
       prefetch={false}
     >
       <LinkText>First Offer</LinkText>
@@ -48,7 +48,7 @@ const rows = [
   [
     <Link
       key={1}
-      url="/offers/ac75b776a8c1dca148c9d6d8f4fec22f"
+      url="/offers/ac75b776a8c1dca148c9d6d8f4fec22f/"
       prefetch={false}
     >
       <LinkText>Second Offer</LinkText>
@@ -61,7 +61,7 @@ const rows = [
   [
     <Link
       key={3}
-      url="/offers/322cbdad3ba7f3e4169fb9d1f5371201"
+      url="/offers/322cbdad3ba7f3e4169fb9d1f5371201/"
       prefetch={false}
     >
       <LinkText>Third Offer</LinkText>
@@ -168,7 +168,7 @@ const OfferList = () => {
       ) : (
         <EmptyState
           heading="Manage your offers"
-          action={{ content: 'Add offer', url: '/offers/new' }}
+          action={{ content: 'Add offer', url: '/offers/new/' }}
           image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
         >
           Create new offers to increase your sales.
