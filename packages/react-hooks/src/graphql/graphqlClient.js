@@ -13,6 +13,7 @@ const query = async (queryString, variables) => {
     client.setHeader('Authorization', `Bearer ${token}`);
   }
 
+  // This throws an error if the response contains an error.
   const response = await client.request(queryString, variables);
 
   try {
@@ -27,6 +28,7 @@ const query = async (queryString, variables) => {
     // Return all objects.
     return response;
   } catch (error) {
+    // Return the original response if there was an issue working with the response.
     return response;
   }
 };
