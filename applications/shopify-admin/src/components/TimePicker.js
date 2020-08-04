@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
 import { ClockMajorMonotone } from '@shopify/polaris-icons';

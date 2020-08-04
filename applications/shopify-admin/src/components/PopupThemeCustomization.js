@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Stack } from '@shopify/polaris';
 import ColorPicker from './ColorPicker';

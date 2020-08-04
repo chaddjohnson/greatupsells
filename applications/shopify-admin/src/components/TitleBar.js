@@ -1,3 +1,4 @@
+import React from 'react';
 import { TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
 import { useRouter } from 'next/router';
 
