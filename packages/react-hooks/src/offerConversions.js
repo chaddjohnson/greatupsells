@@ -4,10 +4,7 @@ import { graphqlClient, OFFER_CONVERSIONS_QUERY } from './graphql';
 const useOfferConversions = () => {
   const { data: offerConversions, error: offerConversionsError } = useSWR(
     OFFER_CONVERSIONS_QUERY,
-    graphqlClient.query,
-    {
-      revalidateOnFocus: false
-    }
+    graphqlClient.query
   );
 
   const offerConversionsLoading = !offerConversions && !offerConversionsError;

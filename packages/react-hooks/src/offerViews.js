@@ -4,8 +4,7 @@ import { graphqlClient, OFFER_VIEWS_QUERY } from './graphql';
 const useOfferViews = () => {
   const { data: offerViews, error: offerViewsError } = useSWR(
     OFFER_VIEWS_QUERY,
-    graphqlClient.query,
-    { revalidateOnFocus: false }
+    graphqlClient.query
   );
 
   const offerViewsLoading = !offerViews && !offerViewsError;

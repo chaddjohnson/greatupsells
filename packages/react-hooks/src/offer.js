@@ -9,8 +9,7 @@ import {
 const useOffer = (id) => {
   const { data: offer, error: offerError } = useSWR(
     id ? OFFER_QUERY : null,
-    graphqlClient.query,
-    { revalidateOnFocus: false }
+    graphqlClient.query
   );
   const offerLoading = !offer && !offerError;
 
