@@ -50,7 +50,11 @@ export const ShopProvider = ({ children }) => {
       ? [SHOP_TOKEN_QUERY, window.location.search]
       : null,
     (query, queryString) => graphqlClient.query(query, { queryString }),
-    { shouldRetryOnError: false }
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false
+    }
   );
 
   const shopLoading = !shop && !shopError;
