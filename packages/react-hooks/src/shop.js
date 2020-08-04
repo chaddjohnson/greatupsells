@@ -42,7 +42,8 @@ export const ShopProvider = ({ children }) => {
 
   const { data: shop, error: shopError } = useSWR(
     SHOP_QUERY,
-    graphqlClient.query
+    graphqlClient.query,
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
   );
 
   const { data: shopToken, error: shopTokenError } = useSWR(
