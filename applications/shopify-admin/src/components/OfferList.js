@@ -46,7 +46,7 @@ const OfferList = ({ offers }) => {
       });
       return formatter.format(value);
     },
-    [shop.currency]
+    [shop]
   );
 
   const rows = useMemo(
