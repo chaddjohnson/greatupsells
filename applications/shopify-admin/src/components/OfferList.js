@@ -42,11 +42,11 @@ const OfferList = ({ offers }) => {
     (value) => {
       const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: shop.currency || 'USD'
+        currency: shop?.currency || 'USD'
       });
       return formatter.format(value);
     },
-    [shop]
+    [shop] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const rows = useMemo(
