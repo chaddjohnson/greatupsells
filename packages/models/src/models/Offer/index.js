@@ -30,6 +30,7 @@ const schema = new mongoose.Schema(
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
     viewCount: { type: Number, required: true, default: 0 },
+    acceptanceCount: { type: Number, required: true, default: 0 },
     conversionCount: { type: Number, required: true, default: 0 },
     conversionRate: { type: Number, required: true, default: 0 },
     revenueIncrease: { type: Number, required: true, default: 0 },

@@ -8,6 +8,7 @@ const typeDef = gql`
     shop: Shop
     strategy: OfferStrategy!
     viewCount: Int!
+    acceptanceCount: Int!
     conversionCount: Int!
     conversionRate: Float!
     revenueIncrease: Float!

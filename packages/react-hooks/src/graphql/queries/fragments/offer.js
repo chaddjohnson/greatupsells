@@ -5,6 +5,7 @@ export default /* GraphQL */ `
     name
     strategy
     viewCount
+    acceptanceCount
     conversionCount
     conversionRate
     revenueIncrease
