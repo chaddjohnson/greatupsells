@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const queryString = require('query-string');
 const ShopifyToken = require('shopify-token');
+const { AuthenticationError } = require('apollo-server-lambda');
 
 const {
   SHOPIFY_ADMIN_API_KEY,
@@ -75,7 +76,7 @@ module.exports.shopToken = async (root, args, context) => {
       await shop.removeAccessToken();
 
       // Proceed with error handling.
-      throw error;
+      throw AuthenticationError(error.message);
     }
 
     // Generate a JWT.
