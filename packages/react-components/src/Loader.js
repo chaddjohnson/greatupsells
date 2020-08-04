@@ -3,22 +3,25 @@ import PropTypes from 'prop-types';
 
 const DefaultLoadingComponent = () => <div>Loading...</div>;
 
-const DefaultErrorComponent = ({ children }) => (
-  <div style={{ color: '#DE3618' }}>{children}</div>
+const DefaultErrorComponent = () => (
+  <div style={{ color: '#DE3618' }}>
+    An unexpected error occurred. Please try again shortly.
+  </div>
 );
+
+const DefaultEmptyStateComponent = () => <div>No items found.</div>;
 
 const Loader = ({
   isLoading,
   isError,
   isEmpty,
-  error,
-  empty,
   loadingComponent: LoadingComponent,
   errorComponent: ErrorComponent,
+  emptyStateComponent: EmptyStateComponent,
   children
 }) => {
   if (isError) {
-    return <ErrorComponent>{error}</ErrorComponent>;
+    return <ErrorComponent />;
   }
 
   if (isLoading) {
@@ -26,7 +29,7 @@ const Loader = ({
   }
 
   if (!isLoading && !isError && isEmpty) {
-    return empty;
+    return <EmptyStateComponent />;
   }
 
   return children;
@@ -37,17 +40,16 @@ Loader.propTypes = {
   isError: PropTypes.bool,
   isEmpty: PropTypes.bool,
   error: PropTypes.node,
-  empty: PropTypes.node,
   loadingComponent: PropTypes.elementType,
   errorComponent: PropTypes.elementType,
+  emptyStateComponent: PropTypes.elementType,
   children: PropTypes.node
 };
 
 Loader.defaultProps = {
   loadingComponent: DefaultLoadingComponent,
   errorComponent: DefaultErrorComponent,
-  error: 'An unexpected error occurred. Please try again later.',
-  empty: 'No items found.'
+  emptyStateComponent: DefaultEmptyStateComponent
 };
 
 export default Loader;
