@@ -46,7 +46,6 @@ const offer = {
   startAt: new Date(),
   enableTimer: false,
   timerText: 'Ends in',
-  timerCountdownStart: 3000,
   allowWithDiscountCodes: true,
   allowMultipleUpsells: true,
   hideIfItemAdded: false,
