@@ -29,6 +29,9 @@ const App = ({ Component, pageProps }) => (
             </Contexts>
           </ErrorBoundary>
         ))}
+      {typeof window !== 'undefined' && window.top === window.self && (
+        <p>Loading...</p>
+      )}
     </AppProvider>
   </AppBridgeProvider>
 );
