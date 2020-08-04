@@ -6,9 +6,9 @@ module.exports.offers = async (root, args, context) => {
 
   // TODO: Allow admin users to retrieve all offers.
 
-  const offer = await Offer.findByShopifyShopId(shop.shopifyShopId);
+  const offers = await Offer.findByShopifyShopId(shop.shopifyShopId);
 
-  return offer;
+  return offers;
 };
 
 module.exports.offer = async (root, args, context) => {
