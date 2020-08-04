@@ -19,15 +19,18 @@ const OffersPage = () => {
   const { offers, offersLoading, offersError, fetchOffers } = useOffers();
 
   const loadingComponent = memo(() => (
-    <SkeletonPage>
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <SkeletonBodyText />
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
+    <>
+      <Loading />
+      <SkeletonPage fullWidth>
+        <Layout>
+          <Layout.Section>
+            <Card sectioned>
+              <SkeletonBodyText />
+            </Card>
+          </Layout.Section>
+        </Layout>
+      </SkeletonPage>
+    </>
   ));
 
   const emptyComponent = memo(() => (
@@ -55,20 +58,19 @@ const OffersPage = () => {
   ));
 
   return (
-    <Page title="Offers" fullWidth>
-      {offersLoading && <Loading />}
-      <PageTitleBar />
-      <Loader
-        isLoading={offersLoading}
-        isError={!!offersError}
-        isEmpty={!!offers && offers.length === 0}
-        loadingComponent={loadingComponent}
-        errorComponent={errorComponent}
-        emptyStateComponent={emptyComponent}
-      >
+    <Loader
+      isLoading={offersLoading}
+      isError={!!offersError}
+      isEmpty={!!offers && offers.length === 0}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+      emptyStateComponent={emptyComponent}
+    >
+      <Page title="Offers" fullWidth>
+        <PageTitleBar />
         <OfferList offers={offers} />
-      </Loader>
-    </Page>
+      </Page>
+    </Loader>
   );
 };
 
