@@ -28,7 +28,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['API_URL'])
+    new webpack.EnvironmentPlugin(['API_URL', 'SHOPIFY_ADMIN_URL'])
   ],
   stats: 'errors-warnings',
   externals: ['@shopify/app-bridge', '@shopify/app-bridge-react', 'react']
