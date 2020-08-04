@@ -46,7 +46,7 @@ export const ShopProvider = ({ children }) => {
   );
 
   const { data: shopToken, error: shopTokenError } = useSWR(
-    typeof window !== 'undefined'
+    typeof window !== 'undefined' && window.location.search
       ? [SHOP_TOKEN_QUERY, window.location.search]
       : null,
     (query, queryString) => graphqlClient.query(query, { queryString }),
@@ -69,7 +69,10 @@ export const ShopProvider = ({ children }) => {
       sessionStorage.setItem('authToken', shopToken.token);
     }
 
-    if (shopTokenError && !initializingAuth) {
+    const authTokenSet = !!sessionStorage.getItem('authToken');
+    const performOauth = !authTokenSet && shopTokenError && !initializingAuth;
+
+    if (performOauth) {
       setInitializingAuth(true);
       initializeAuth(app);
     }
