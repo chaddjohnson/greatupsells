@@ -21,12 +21,12 @@ const formatErrorData = (error) => {
   return string.trim();
 };
 
-const formatObjectData = (string) => {
-  if (typeof string === 'object') {
-    return JSON.stringify(string, null, 2);
+const formatObjectData = (data) => {
+  if (typeof data === 'object') {
+    return JSON.stringify(data, null, 2);
   }
 
-  return string;
+  return data;
 };
 
 const format = (data) =>
