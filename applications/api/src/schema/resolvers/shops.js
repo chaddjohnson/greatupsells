@@ -71,6 +71,11 @@ module.exports.shopToken = async (root, args, context) => {
     try {
       // Ensure the access token is valid.
       await shop.validateAccessToken();
+
+      // Generate a JWT.
+      const token = jwt.sign({ shopDomain }, JWT_SECRET);
+
+      return { token };
     } catch (error) {
       // Remove the invalid access token.
       await shop.removeAccessToken();
@@ -78,11 +83,6 @@ module.exports.shopToken = async (root, args, context) => {
       // Proceed with error handling.
       throw AuthenticationError(error.message);
     }
-
-    // Generate a JWT.
-    const token = jwt.sign({ shopDomain }, JWT_SECRET);
-
-    return { token };
   } catch (error) {
     throw new Error(`Unable to obtain access token: ${error.message}`);
   }
