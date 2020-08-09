@@ -12,7 +12,7 @@ import {
 import { CalendarMajorMonotone } from '@shopify/polaris-icons';
 import { TitleBar, LineChart } from '../components';
 
-const PageTitleBar = memo(() => <TitleBar title="Dashboard" />);
+const PageTitleBar = memo(() => <TitleBar title="Analytics" />);
 
 const data = {
   acceptedOffers: [
