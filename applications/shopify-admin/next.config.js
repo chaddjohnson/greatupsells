@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
-const withSass = require('@zeit/next-sass');
+const withCSS = require('@zeit/next-css');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 dotenvExpand(dotenv.config({ path: '../../.env' }));
@@ -15,7 +15,7 @@ const {
   CONTACT_EMAIL
 } = process.env;
 
-module.exports = withSass({
+module.exports = withCSS({
   webpack: (config) => {
     if (dev) {
       config.module.rules.push({

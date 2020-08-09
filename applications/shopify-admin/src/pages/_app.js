@@ -1,39 +1,49 @@
-import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
-import Cookies from 'js-cookie';
+import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import {
   ErrorBoundary,
   Contexts
 } from '@neatowebsolutions/upselling-react-components';
+import { getCookie } from '@neatowebsolutions/upselling-utilities';
 import { Link, RoutePropagator } from '../components';
-import '@shopify/polaris/styles.scss';
+import '@shopify/polaris/dist/styles.css';
 
-const App = ({ Component, pageProps }) => (
-  <AppBridgeProvider
-    config={{
-      apiKey: process.env.SHOPIFY_ADMIN_API_KEY,
-      shopOrigin: Cookies.get('shopOrigin'),
-      forceRedirect: true
-    }}
-  >
+const App = ({ Component, pageProps }) => {
+  const shopOrigin = getCookie('shopOrigin');
+
+  if (typeof window !== 'undefined') {
+    // Copy shop origin to session storage so that multiple instances of this app may
+    // be used simultaneously in multiple shops.
+    sessionStorage.setItem('shopOrigin', shopOrigin);
+  }
+
+  return (
     <AppProvider i18n={translations} linkComponent={Link}>
-      <RoutePropagator />
-      {typeof window === 'undefined' ||
-        (window.top !== window.self && (
-          <ErrorBoundary>
-            <Contexts>
-              <main style={{ paddingBottom: '120px' }}>
-                <Component {...pageProps} />
-              </main>
-            </Contexts>
-          </ErrorBoundary>
-        ))}
-      {typeof window !== 'undefined' && window.top === window.self && (
-        <p>Loading...</p>
-      )}
+      <AppBridgeProvider
+        config={{
+          apiKey: process.env.SHOPIFY_ADMIN_API_KEY,
+          shopOrigin,
+          forceRedirect: true
+        }}
+      >
+        <RoutePropagator />
+        {typeof window === 'undefined' ||
+          (window.top !== window.self && (
+            <ErrorBoundary>
+              <Contexts>
+                <main style={{ paddingBottom: '120px' }}>
+                  <Component {...pageProps} />
+                </main>
+              </Contexts>
+            </ErrorBoundary>
+          ))}
+        {typeof window !== 'undefined' && window.top === window.self && (
+          <p>Loading...</p>
+        )}
+      </AppBridgeProvider>
     </AppProvider>
-  </AppBridgeProvider>
-);
+  );
+};
 
 export default App;

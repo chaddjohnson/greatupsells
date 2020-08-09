@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
+import { getCookie } from '@neatowebsolutions/upselling-utilities';
 
 const endpoint = `${process.env.API_URL}/graphql`;
 const options = {
@@ -7,7 +8,9 @@ const options = {
 const client = new GraphQLClient(endpoint, options);
 
 const query = async (queryString, variables) => {
-  const token = sessionStorage.getItem('authToken');
+  // Retrieve token. Token is in session storage when running client side and in a cookie
+  // for server-side rendering.
+  const token = sessionStorage.getItem('authToken') || getCookie('authToken');
 
   if (token) {
     client.setHeader('Authorization', `Bearer ${token}`);

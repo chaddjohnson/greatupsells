@@ -69,6 +69,8 @@ const OfferEditPage = () => {
 };
 
 export async function getServerSideProps() {
+  // TODO
+
   return {
     props: {}
   };

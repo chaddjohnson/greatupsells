@@ -8,13 +8,13 @@
   "scripts": {
     "bootstrap": "NODE_ENV=development dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "NODE_ENV=production dotenv -- lerna run build --stream --scope=@neatowebsolutions/*",
+    "prestart": "yarn install",
     "start": "dotenv -- yarn bootstrap && dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-api,upselling-shopify-admin,upselling-shopify-storefront}",
     "lint": "lerna run lint"
   },
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
     "@zeit/next-css": "^1.0.1",
-    "@zeit/next-sass": "^1.0.1",
     "bluebird": "^3.7.2",
     "classnames": "^2.2.6",
     "dotenv": "^8.2.0",

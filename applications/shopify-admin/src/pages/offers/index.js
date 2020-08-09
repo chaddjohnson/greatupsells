@@ -9,14 +9,15 @@ import {
   SkeletonBodyText,
   EmptyState
 } from '@shopify/polaris';
-import { useOffers } from '@neatowebsolutions/upselling-react-hooks';
+import { useShop, useOffers } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);
 
 const OffersPage = () => {
-  const { offers, offersLoading, offersError, fetchOffers } = useOffers();
+  const { shop } = useShop();
+  const { offers, offersLoading, offersError } = useOffers();
 
   const loadingComponent = memo(() => (
     <>
@@ -50,7 +51,7 @@ const OffersPage = () => {
       action={{
         content: 'Try again',
         loading: offersLoading,
-        onAction: () => fetchOffers()
+        onAction: () => window.location.reload()
       }}
     >
       Unable to load offers. Please try again shortly.
@@ -58,23 +59,25 @@ const OffersPage = () => {
   ));
 
   return (
-    <Loader
-      isLoading={offersLoading}
-      isError={!!offersError}
-      isEmpty={!!offers && offers.length === 0}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-      emptyStateComponent={emptyComponent}
-    >
-      <Page title="Offers" fullWidth>
-        <PageTitleBar />
-        <OfferList offers={offers} />
-      </Page>
-    </Loader>
+    <Page title="Offers" fullWidth>
+      <PageTitleBar />
+      <Loader
+        isLoading={offersLoading}
+        isError={!!offersError}
+        isEmpty={!!offers && offers.length === 0}
+        loadingComponent={loadingComponent}
+        errorComponent={errorComponent}
+        emptyStateComponent={emptyComponent}
+      >
+        <OfferList offers={offers} currency={shop?.currency} />
+      </Loader>
+    </Page>
   );
 };
 
 export async function getServerSideProps() {
+  // TODO
+
   return {
     props: {}
   };

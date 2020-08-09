@@ -10,7 +10,6 @@ import {
   Pagination
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useShop } from '@neatowebsolutions/upselling-react-hooks';
 
 const isEmpty = (value) => {
   if (Array.isArray(value)) {
@@ -32,21 +31,19 @@ const PaginationWrapper = styled.div`
   text-align: center;
 `;
 
-const OfferList = ({ offers }) => {
+const OfferList = ({ offers, currency }) => {
   const [query, setQuery] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
-
-  const { shop } = useShop();
 
   const formatCurrency = useCallback(
     (value) => {
       const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: shop?.currency || 'USD'
+        currency
       });
       return formatter.format(value);
     },
-    [shop] // eslint-disable-line react-hooks/exhaustive-deps
+    [currency]
   );
 
   const rows = useMemo(
@@ -184,7 +181,12 @@ OfferList.propTypes = {
       acceptanceCount: PropTypes.number.isRequired,
       revenueIncrease: PropTypes.number.isRequired
     })
-  )
+  ),
+  currency: PropTypes.string
+};
+
+OfferList.defaultProps = {
+  currency: 'USD'
 };
 
 export default OfferList;
