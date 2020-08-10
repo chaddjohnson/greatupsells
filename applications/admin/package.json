@@ -17,7 +17,6 @@
     "build": "NODE_ENV=production next build",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
-    "server": "next start -p $(dotenv -p ADMIN_APP_PORT)",
     "start": "next dev -p $(dotenv -p ADMIN_APP_PORT)"
   }
 }
