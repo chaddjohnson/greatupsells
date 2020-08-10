@@ -1,5 +1,8 @@
 import useSWR from 'swr';
-import { graphqlClient, OFFER_ACCEPTANCES_QUERY } from './graphql';
+import {
+  graphqlClient,
+  OFFER_ACCEPTANCES_QUERY
+} from '@neatowebsolutions/upselling-graphql';
 
 const useOfferAcceptances = () => {
   const { data: offerAcceptances, error: offerAcceptancesError } = useSWR(

@@ -9,6 +9,7 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin#readme",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
+    "@neatowebsolutions/upselling-graphql": "0.0.0",
     "@neatowebsolutions/upselling-models": "^0.0.0",
     "@neatowebsolutions/upselling-react-components": "^0.0.0",
     "@shopify/app-bridge": "^1.26.2",

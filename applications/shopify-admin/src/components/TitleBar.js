@@ -7,16 +7,21 @@ const TitleBar = (props) => {
 
   const primaryAction = {
     content: 'Create offer',
-    onAction: () => router.push('/offers/new')
+    onAction: () => router.push('/offers/new/')
   };
   const secondaryActions = [
     {
       content: 'Dashboard',
-      onAction: () => router.push('/')
+      onAction: () => {
+        // Work around "maximum call stack size exceeded" issue.
+        if (router.pathname !== '/') {
+          router.push('/');
+        }
+      }
     },
     {
       content: 'Offers',
-      onAction: () => router.push('/offers')
+      onAction: () => router.push('/offers/')
     }
   ];
   const actionGroups = [

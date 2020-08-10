@@ -3,7 +3,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  target: 'web',
+  target: 'node',
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './src/index.js',
   output: {
@@ -28,13 +28,8 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['SHOPIFY_ADMIN_URL'])
+    new webpack.EnvironmentPlugin(['API_URL'])
   ],
   stats: 'errors-warnings',
-  externals: [
-    '@neatowebsolutions/upselling-graphql',
-    '@shopify/app-bridge',
-    '@shopify/app-bridge-react',
-    'react'
-  ]
+  externals: ['@neatowebsolutions/upselling-utilities']
 };

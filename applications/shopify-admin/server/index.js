@@ -5,6 +5,7 @@ const Koa = require('koa');
 const connect = require('koa-connect');
 const session = require('koa-session');
 const helmet = require('koa-helmet');
+const jwt = require('jsonwebtoken');
 const next = require('next');
 const serverless = require('serverless-http');
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -25,7 +26,8 @@ const handle = app.getRequestHandler();
 const {
   SHOPIFY_ADMIN_API_KEY,
   SHOPIFY_ADMIN_API_SECRET_KEY,
-  SHOPIFY_ADMIN_STOREFRONT_PORT
+  SHOPIFY_ADMIN_STOREFRONT_PORT,
+  JWT_SECRET
 } = process.env;
 
 const createServer = () => {
@@ -62,15 +64,19 @@ const createServer = () => {
         'read_script_tags',
         'write_script_tags'
       ],
-      afterAuth(ctx) {
+      afterAuth: async (ctx) => {
         const { shop: shopDomain, accessToken } = ctx.session;
+        const Shop = await models.get('Shop');
+        const authToken = jwt.sign({ shopDomain }, JWT_SECRET);
 
-        (async () => {
-          const Shop = await models.get('Shop');
-          await Shop.createOrUpdate(shopDomain, accessToken);
-        })();
+        await Shop.createOrUpdate(shopDomain, accessToken);
 
         ctx.cookies.set('shopOrigin', shopDomain, {
+          httpOnly: false,
+          sameSite: 'None',
+          secure: ctx.protocol === 'https'
+        });
+        ctx.cookies.set('authToken', authToken, {
           httpOnly: false,
           sameSite: 'None',
           secure: ctx.protocol === 'https'

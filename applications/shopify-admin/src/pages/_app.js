@@ -11,11 +11,13 @@ import '@shopify/polaris/dist/styles.css';
 
 const App = ({ Component, pageProps }) => {
   const shopOrigin = getCookie('shopOrigin');
+  const authToken = getCookie('authToken');
 
+  // Copy cookie values to session storage so that multiple instances of this app may
+  // be used across multiple shops simultaneously.
   if (typeof window !== 'undefined') {
-    // Copy shop origin to session storage so that multiple instances of this app may
-    // be used simultaneously in multiple shops.
     sessionStorage.setItem('shopOrigin', shopOrigin);
+    sessionStorage.setItem('authToken', authToken);
   }
 
   return (
@@ -32,7 +34,11 @@ const App = ({ Component, pageProps }) => {
           (window.top !== window.self && (
             <ErrorBoundary>
               <Contexts>
-                <main style={{ paddingBottom: '120px' }}>
+                <main
+                  style={{
+                    paddingBottom: '120px'
+                  }}
+                >
                   <Component {...pageProps} />
                 </main>
               </Contexts>

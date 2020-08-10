@@ -7,13 +7,20 @@ const options = {
 };
 const client = new GraphQLClient(endpoint, options);
 
-const query = async (queryString, variables) => {
-  // Retrieve token. Token is in session storage when running client side and in a cookie
-  // for server-side rendering.
-  const token = sessionStorage.getItem('authToken') || getCookie('authToken');
+const query = async (queryString, variables, headers = null) => {
+  // Use token from storage if available.
+  const token =
+    (typeof window !== 'undefined' &&
+      (sessionStorage.getItem('authToken') || getCookie('authToken'))) ||
+    undefined;
 
   if (token) {
     client.setHeader('Authorization', `Bearer ${token}`);
+  }
+
+  // Use override headers, if provided.
+  if (headers) {
+    client.setHeaders(headers);
   }
 
   // This throws an error if the response contains an error.
@@ -36,8 +43,8 @@ const query = async (queryString, variables) => {
   }
 };
 
-const mutate = async (queryString, variables) => {
-  return query(queryString, variables);
+const mutate = async (queryString, variables, headers = {}) => {
+  return query(queryString, variables, headers);
 };
 
 export default { query, mutate };

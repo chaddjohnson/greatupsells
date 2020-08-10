@@ -1,8 +1,6 @@
-import Cookies from 'universal-cookie';
+import UniversalCookies from 'universal-cookie';
 
-const cookies = new Cookies();
-
-const getCookieDomain = () => {
+const getDomain = () => {
   if (typeof window === 'undefined') {
     return undefined;
   }
@@ -16,35 +14,51 @@ const getCookieDomain = () => {
   return window.location.host;
 };
 
+class Cookies {
+  constructor(cookieString = undefined) {
+    this.cookies = new UniversalCookies(cookieString);
+  }
+
+  get(name) {
+    // This automatically deserializes objects.
+    return this.cookies.get(name);
+  }
+
+  set(name, value, options = {}) {
+    const defaultOptions = {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30, // 30 days in relative seconds
+      secure:
+        typeof window !== 'undefined' && window.location.protocol === 'https:', // Secure based on protocol.
+      sameSite: 'None',
+      domain: getDomain(), // Use top-level domain.
+      httpOnly: false // Allow access on client side.
+    };
+
+    // This automatically serializes objects.
+    this.cookies.set(name, value, { ...defaultOptions, ...options });
+  }
+
+  remove(name, options) {
+    const defaultOptions = {
+      path: '/',
+      domain: getDomain()
+    };
+
+    this.cookies.remove(name, { ...defaultOptions, ...options });
+  }
+}
+
 export const getCookie = (name) => {
-  // This automatically deserializes objects.
-  return cookies.get(name);
+  return new Cookies().get(name);
 };
 
 export const setCookie = (name, value, options = {}) => {
-  const path = '/';
-  const maxAge = 60 * 60 * 24 * 30; // 30 days in relative seconds
-  const secure =
-    typeof window !== 'undefined' && window.location.protocol === 'https:'; // Secure based on protocol.
-  const sameSite = 'lax';
-  const domain = getCookieDomain(); // Use top-level domain.
-  const httpOnly = false; // Allow access on client side.
-
-  // This automatically serializes objects.
-  cookies.set(name, value, {
-    path,
-    maxAge,
-    secure,
-    sameSite,
-    domain,
-    httpOnly,
-    ...options
-  });
+  return new Cookies().set(name, value, options);
 };
 
-export const removeCookie = (name) => {
-  const path = '/';
-  const domain = getCookieDomain();
-
-  cookies.remove(name, { path, domain });
+export const removeCookie = (name, options = {}) => {
+  return new Cookies().remove(name, options);
 };
+
+export default Cookies;

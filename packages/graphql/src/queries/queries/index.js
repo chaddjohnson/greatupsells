@@ -5,4 +5,3 @@ export { default as OFFER_QUERY } from './offer';
 export { default as OFFER_REVENUE_QUERY } from './offerRevenue';
 export { default as OFFER_VIEWS_QUERY } from './offerViews';
 export { default as SHOP_QUERY } from './shop';
-export { default as SHOP_TOKEN_QUERY } from './shopToken';

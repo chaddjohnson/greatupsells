@@ -11,55 +11,7 @@ const PageTitleBar = memo(() => (
   />
 ));
 
-const offer = {
-  name: '',
-  strategy: 'UPSELL',
-  callToActionText: '',
-  successMessageText: '',
-  actionButtonText: 'Add to cart',
-  cancelButtonText: 'No thanks',
-  actionButtonBehavior: 'CART',
-  popupThemeType: 'CUSTOM',
-  popupTheme: {
-    callToActionTextColor: '#3D4246',
-    successMessageTextColor: '#FFFFFF',
-    successMessageBackgroundColor: '#91BD49',
-    actionButtonBackgroundColor: '#91BD49',
-    actionButtonTextColor: '#FFFFFF',
-    // actionButtonFontFamily,
-    cancelButtonTextColor: '#999999',
-    priceTextColor: '#000000',
-    salePriceTextColor: '#800000',
-    popupBackgroundColor: '#FFFFFF'
-    // popupFontFamily,
-    // notificationBannerBackgroundColor,
-    // notificationBannerTextColor,
-  },
-  products: [],
-  minimumProductsQuantity: 1,
-  collections: [],
-  discountType: 'PERCENTAGE',
-  // discountAmount
-  triggerEvent: 'ADD',
-  triggerProducts: [],
-  triggerCollections: [],
-  startAt: new Date(),
-  enableTimer: false,
-  timerText: 'Ends in',
-  allowWithDiscountCodes: true,
-  allowMultipleUpsells: true,
-  hideIfItemAdded: false,
-  showNotificationBanner: true,
-  enableQuantitySelection: false,
-  limitQuantitySelection: false,
-  enableProductLinks: true,
-  hideOutOfStockProducts: true,
-  // discountCodes
-  // discountPricingMethod
-  enabled: true
-};
-
-const OfferCreatePage = () => {
+const OfferCreatePage = ({ offer }) => {
   const { createOffer } = useOffer();
 
   return (
@@ -70,10 +22,60 @@ const OfferCreatePage = () => {
   );
 };
 
-export async function getServerSideProps() {
-  return {
-    props: {}
+export const getServerSideProps = async () => {
+  const offer = {
+    name: '',
+    strategy: 'UPSELL',
+    callToActionText: '',
+    successMessageText: '',
+    actionButtonText: 'Add to cart',
+    cancelButtonText: 'No thanks',
+    actionButtonBehavior: 'CART',
+    popupThemeType: 'CUSTOM',
+    popupTheme: {
+      callToActionTextColor: '#3D4246',
+      successMessageTextColor: '#FFFFFF',
+      successMessageBackgroundColor: '#91BD49',
+      actionButtonBackgroundColor: '#91BD49',
+      actionButtonTextColor: '#FFFFFF',
+      // actionButtonFontFamily,
+      cancelButtonTextColor: '#999999',
+      priceTextColor: '#000000',
+      salePriceTextColor: '#800000',
+      popupBackgroundColor: '#FFFFFF'
+      // popupFontFamily,
+      // notificationBannerBackgroundColor,
+      // notificationBannerTextColor,
+    },
+    products: [],
+    minimumProductsQuantity: 1,
+    collections: [],
+    discountType: 'PERCENTAGE',
+    // discountAmount
+    triggerEvent: 'ADD',
+    triggerProducts: [],
+    triggerCollections: [],
+    startAt: new Date().toISOString(),
+    enableTimer: false,
+    timerText: 'Ends in',
+    allowWithDiscountCodes: true,
+    allowMultipleUpsells: true,
+    hideIfItemAdded: false,
+    showNotificationBanner: true,
+    enableQuantitySelection: false,
+    limitQuantitySelection: false,
+    enableProductLinks: true,
+    hideOutOfStockProducts: true,
+    // discountCodes
+    // discountPricingMethod
+    enabled: true
   };
-}
+
+  return {
+    props: {
+      offer
+    }
+  };
+};
 
 export default OfferCreatePage;

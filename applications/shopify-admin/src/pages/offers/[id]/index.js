@@ -1,13 +1,28 @@
 import { memo } from 'react';
 import { useRouter } from 'next/router';
 import { Loading } from '@shopify/app-bridge-react';
-import { Page } from '@shopify/polaris';
+import {
+  Page,
+  Layout,
+  Card,
+  TextContainer,
+  Banner,
+  SkeletonPage,
+  SkeletonBodyText,
+  SkeletonDisplayText
+} from '@shopify/polaris';
 import {
   ExternalMinor,
   DuplicateMinor,
   CircleDisableMinor
 } from '@shopify/polaris-icons';
 import { useOffer } from '@neatowebsolutions/upselling-react-hooks';
+import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { Cookies } from '@neatowebsolutions/upselling-utilities';
+import {
+  graphqlClient,
+  OFFER_QUERY
+} from '@neatowebsolutions/upselling-graphql';
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (
@@ -18,10 +33,76 @@ const PageTitleBar = memo(() => (
   />
 ));
 
-const OfferEditPage = () => {
+const loadingComponent = () => (
+  <>
+    <Loading />
+    <SkeletonPage>
+      <Layout>
+        <Layout.Section>
+          <Card sectioned>
+            <TextContainer>
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={2} />
+            </TextContainer>
+          </Card>
+          <Card sectioned>
+            <TextContainer>
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={2} />
+            </TextContainer>
+          </Card>
+          <Card sectioned>
+            <TextContainer>
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={3} />
+            </TextContainer>
+          </Card>
+          <Card sectioned>
+            <TextContainer>
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={3} />
+            </TextContainer>
+          </Card>
+        </Layout.Section>
+        <Layout.Section secondary>
+          <Card subdued>
+            <Card.Section>
+              <TextContainer>
+                <SkeletonDisplayText size="small" />
+                <SkeletonBodyText lines={2} />
+              </TextContainer>
+            </Card.Section>
+            <Card.Section>
+              <SkeletonBodyText lines={2} />
+            </Card.Section>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </SkeletonPage>
+  </>
+);
+
+const errorComponent = () => (
+  <Page fullWidth>
+    <Banner
+      title="Unable to load offer"
+      status="critical"
+      action={{
+        content: 'Try again',
+        onAction: () => window.location.reload()
+      }}
+    >
+      Unable to load offer. Please try again shortly.
+    </Banner>
+  </Page>
+);
+
+const OfferEditPage = ({ offer: initialOffer }) => {
   const router = useRouter();
   const offerId = router.query.id;
-  const { offer, offerLoading, offerError, updateOffer } = useOffer(offerId);
+  const { offer, offerLoading, offerError, updateOffer } = useOffer(offerId, {
+    initialOffer
+  });
 
   const handleTest = () => {
     // ...
@@ -35,45 +116,65 @@ const OfferEditPage = () => {
     // ...
   };
 
+  const secondaryActions = [
+    {
+      content: 'Test',
+      accessibilityLabel: 'Test this offer',
+      icon: ExternalMinor,
+      onAction: handleTest
+    },
+    {
+      content: 'Duplicate',
+      accessibilityLabel: 'Duplicate this offer',
+      icon: DuplicateMinor,
+      onAction: handleDuplicate
+    },
+    {
+      content: offer.enabled ? 'Disable' : 'Enable',
+      accessibilityLabel: offer.enabled
+        ? 'Disable this offer'
+        : 'Enable this offer',
+      icon: CircleDisableMinor,
+      onAction: handleToggleEnabled
+    }
+  ];
+
   return (
-    <Page
-      title={offer.name}
-      secondaryActions={[
-        {
-          content: 'Test',
-          accessibilityLabel: 'Test this offer',
-          icon: ExternalMinor,
-          onAction: handleTest
-        },
-        {
-          content: 'Duplicate',
-          accessibilityLabel: 'Duplicate this offer',
-          icon: DuplicateMinor,
-          onAction: handleDuplicate
-        },
-        {
-          content: offer.enabled ? 'Disable' : 'Enable',
-          accessibilityLabel: offer.enabled
-            ? 'Disable this offer'
-            : 'Enable this offer',
-          icon: CircleDisableMinor,
-          onAction: handleToggleEnabled
-        }
-      ]}
+    <Loader
+      isLoading={offerLoading}
+      isError={!!offerError}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
     >
-      {offerLoading && <Loading />}
-      <PageTitleBar />
-      <OfferForm initialValues={offer} onSubmit={updateOffer} />
-    </Page>
+      <Page title={offer.name} secondaryActions={secondaryActions}>
+        <PageTitleBar />
+        <OfferForm initialValues={offer} onSubmit={updateOffer} />
+      </Page>
+    </Loader>
   );
 };
 
-export async function getServerSideProps() {
-  // TODO
-
-  return {
-    props: {}
+export const getServerSideProps = async ({ req, query }) => {
+  const cookies = new Cookies(req.headers.cookie);
+  const authToken = cookies.get('authToken');
+  const headers = {
+    Authorization: `Bearer ${authToken}`
   };
-}
+  const { id } = query;
+
+  try {
+    const offer = await graphqlClient.query(OFFER_QUERY, { id }, headers);
+
+    return {
+      props: {
+        offer
+      }
+    };
+  } catch (error) {
+    return {
+      props: {}
+    };
+  }
+};
 
 export default OfferEditPage;

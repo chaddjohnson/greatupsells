@@ -342,7 +342,7 @@ const OfferForm = ({ initialValues, onSubmit }) => {
     () =>
       contextualSaveBar.subscribe(ContextualSaveBar.Action.DISCARD, () => {
         contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
-        router.push('/offers');
+        router.push('/offers/');
       }),
     [contextualSaveBar, router]
   );
