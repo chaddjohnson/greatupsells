@@ -4,10 +4,10 @@ import {
   OFFER_CONVERSIONS_QUERY
 } from '@neatowebsolutions/upselling-graphql';
 
-const useOfferConversions = () => {
+const useOfferConversions = (offerId) => {
   const { data: offerConversions, error: offerConversionsError } = useSWR(
-    OFFER_CONVERSIONS_QUERY,
-    graphqlClient.query
+    [OFFER_CONVERSIONS_QUERY, offerId],
+    (query, id) => graphqlClient.query(query, { id })
   );
 
   const offerConversionsLoading = !offerConversions && !offerConversionsError;

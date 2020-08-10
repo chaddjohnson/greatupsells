@@ -22,11 +22,11 @@ export const ShopProvider = ({ children }) => {
   const shopLoading = !shop && !shopError;
 
   const updateShop = async (data) => {
-    await mutate(
+    const updatedShop = await mutate(
       UPDATE_SHOP_MUTATION,
       graphqlClient.mutate(UPDATE_SHOP_MUTATION, data)
     );
-    await mutate(SHOP_QUERY);
+    await mutate(SHOP_QUERY, updatedShop, false);
   };
 
   return (
