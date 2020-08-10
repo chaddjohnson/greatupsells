@@ -242,12 +242,4 @@ const OfferAnalyticsPage = () => {
   );
 };
 
-export const getServerSideProps = async () => {
-  // TODO
-
-  return {
-    props: {}
-  };
-};
-
 export default OfferAnalyticsPage;

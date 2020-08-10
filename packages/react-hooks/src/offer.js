@@ -6,11 +6,10 @@ import {
   UPDATE_OFFER_MUTATION
 } from '@neatowebsolutions/upselling-graphql';
 
-const useOffer = (id = undefined, { initialOffer = null } = {}) => {
+const useOffer = (id) => {
   const { data: offer, error: offerError } = useSWR(
     id ? OFFER_QUERY : null,
-    (query) => graphqlClient.query(query, { id }),
-    { initialData: initialOffer }
+    (query) => graphqlClient.query(query, { id })
   );
   const offerLoading = !offer && !offerError;
 

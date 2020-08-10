@@ -4,15 +4,12 @@ import {
   OFFERS_QUERY
 } from '@neatowebsolutions/upselling-graphql';
 
-const useOffers = ({ initialOffers = [] } = {}) => {
-  const { data: offers, error: offersError, mutate: fetchOffers } = useSWR(
-    OFFERS_QUERY,
-    graphqlClient.query,
-    {
-      initialData: initialOffers,
-      refreshInterval: 10 * 1000
-    }
-  );
+const useOffers = () => {
+  const {
+    data: offers,
+    error: offersError,
+    mutate: fetchOffers
+  } = useSWR(OFFERS_QUERY, graphqlClient.query, { refreshInterval: 10 * 1000 });
 
   const offersLoading = !offers && !offersError;
 

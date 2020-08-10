@@ -226,12 +226,4 @@ const AnalyticsPage = () => {
   );
 };
 
-export const getServerSideProps = async () => {
-  // TODO
-
-  return {
-    props: {}
-  };
-};
-
 export default AnalyticsPage;

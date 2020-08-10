@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import {
   Page,
   Layout,
@@ -144,13 +144,5 @@ const DashboardPage = () => (
     </Layout>
   </Page>
 );
-
-export const getServerSideProps = async () => {
-  // TODO
-
-  return {
-    props: {}
-  };
-};
 
 export default DashboardPage;

@@ -11,11 +11,6 @@ import {
 } from '@shopify/polaris';
 import { useShop, useOffers } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { Cookies } from '@neatowebsolutions/upselling-utilities';
-import {
-  graphqlClient,
-  OFFERS_QUERY
-} from '@neatowebsolutions/upselling-graphql';
 import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);
@@ -79,28 +74,6 @@ const OffersPage = ({ offers: initialOffers }) => {
       </Page>
     </Loader>
   );
-};
-
-export const getServerSideProps = async ({ req }) => {
-  const cookies = new Cookies(req.headers.cookie);
-  const authToken = cookies.get('authToken');
-  const headers = {
-    Authorization: `Bearer ${authToken}`
-  };
-
-  try {
-    const offers = await graphqlClient.query(OFFERS_QUERY, null, headers);
-
-    return {
-      props: {
-        offers
-      }
-    };
-  } catch (error) {
-    return {
-      props: {}
-    };
-  }
 };
 
 export default OffersPage;

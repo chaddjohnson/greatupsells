@@ -18,11 +18,6 @@ import {
 } from '@shopify/polaris-icons';
 import { useOffer } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { Cookies } from '@neatowebsolutions/upselling-utilities';
-import {
-  graphqlClient,
-  OFFER_QUERY
-} from '@neatowebsolutions/upselling-graphql';
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (
@@ -97,12 +92,10 @@ const errorComponent = () => (
   </Page>
 );
 
-const OfferEditPage = ({ offer: initialOffer }) => {
+const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
-  const { offer, offerLoading, offerError, updateOffer } = useOffer(offerId, {
-    initialOffer
-  });
+  const { offer, offerLoading, offerError, updateOffer } = useOffer(offerId);
 
   const handleTest = () => {
     // ...
@@ -130,8 +123,8 @@ const OfferEditPage = ({ offer: initialOffer }) => {
       onAction: handleDuplicate
     },
     {
-      content: offer.enabled ? 'Disable' : 'Enable',
-      accessibilityLabel: offer.enabled
+      content: offer?.enabled ? 'Disable' : 'Enable',
+      accessibilityLabel: offer?.enabled
         ? 'Disable this offer'
         : 'Enable this offer',
       icon: CircleDisableMinor,
@@ -146,35 +139,12 @@ const OfferEditPage = ({ offer: initialOffer }) => {
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
     >
-      <Page title={offer.name} secondaryActions={secondaryActions}>
+      <Page title={offer?.name} secondaryActions={secondaryActions}>
         <PageTitleBar />
         <OfferForm initialValues={offer} onSubmit={updateOffer} />
       </Page>
     </Loader>
   );
-};
-
-export const getServerSideProps = async ({ req, query }) => {
-  const cookies = new Cookies(req.headers.cookie);
-  const authToken = cookies.get('authToken');
-  const headers = {
-    Authorization: `Bearer ${authToken}`
-  };
-  const { id } = query;
-
-  try {
-    const offer = await graphqlClient.query(OFFER_QUERY, { id }, headers);
-
-    return {
-      props: {
-        offer
-      }
-    };
-  } catch (error) {
-    return {
-      props: {}
-    };
-  }
 };
 
 export default OfferEditPage;
