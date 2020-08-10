@@ -7,7 +7,6 @@ import React, {
   useMemo
 } from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import {
   Form,
   Layout,
@@ -86,9 +85,8 @@ const OfferPopupContainer = styled.div`
   }
 `;
 
-const OfferForm = ({ initialValues, onSubmit }) => {
+const OfferForm = ({ initialValues, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
-  const router = useRouter();
 
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
@@ -342,9 +340,9 @@ const OfferForm = ({ initialValues, onSubmit }) => {
     () =>
       contextualSaveBar.subscribe(ContextualSaveBar.Action.DISCARD, () => {
         contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
-        router.push('/offers/');
+        onCancel();
       }),
-    [contextualSaveBar, router]
+    [contextualSaveBar, onCancel]
   );
 
   // useEffect(
@@ -822,7 +820,12 @@ const OfferForm = ({ initialValues, onSubmit }) => {
               submit: true,
               onAction: submit
             }}
-            secondaryActions={[{ content: 'Cancel' }]}
+            secondaryActions={[
+              {
+                content: 'Cancel',
+                onAction: onCancel
+              }
+            ]}
           />
         </Layout.Section>
       </Layout>
@@ -868,11 +871,13 @@ const OfferForm = ({ initialValues, onSubmit }) => {
 
 OfferForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  onCancel: PropTypes.func
 };
 
 OfferForm.defaultProps = {
-  onSubmit: () => {}
+  onSubmit: () => {},
+  onCancel: () => {}
 };
 
 export default OfferForm;

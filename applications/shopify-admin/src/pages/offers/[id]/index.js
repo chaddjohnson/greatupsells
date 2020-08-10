@@ -93,6 +93,8 @@ const OfferEditPage = () => {
     </Page>
   ));
 
+  const handleCancel = () => router.push('/offers/');
+
   const handleTest = () => {
     // ...
   };
@@ -137,7 +139,11 @@ const OfferEditPage = () => {
     >
       <Page title={offer?.name} secondaryActions={secondaryActions}>
         <PageTitleBar />
-        <OfferForm initialValues={offer} onSubmit={updateOffer} />
+        <OfferForm
+          initialValues={offer}
+          onSubmit={updateOffer}
+          onCancel={handleCancel}
+        />
       </Page>
     </Loader>
   );
