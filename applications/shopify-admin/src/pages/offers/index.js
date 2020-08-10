@@ -55,9 +55,9 @@ const emptyComponent = () => (
   </EmptyState>
 );
 
-const OffersPage = ({ offers: initialOffers }) => {
+const OffersPage = () => {
   const { shop } = useShop();
-  const { offers, offersLoading, offersError } = useOffers({ initialOffers });
+  const { offers, offersLoading, offersError } = useOffers();
 
   return (
     <Loader
