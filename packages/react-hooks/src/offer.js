@@ -7,7 +7,7 @@ import {
 } from '@neatowebsolutions/upselling-graphql';
 
 const useOffer = (id) => {
-  const { data: offer, error: offerError } = useSWR(
+  const { data: offer, error: offerError, mutate: fetchOffer } = useSWR(
     id ? OFFER_QUERY : null,
     (query) => graphqlClient.query(query, { id })
   );
@@ -28,7 +28,14 @@ const useOffer = (id) => {
     await mutate(OFFER_QUERY);
   };
 
-  return { offer, offerLoading, offerError, createOffer, updateOffer };
+  return {
+    offer,
+    offerLoading,
+    offerError,
+    createOffer,
+    updateOffer,
+    fetchOffer
+  };
 };
 
 export default useOffer;

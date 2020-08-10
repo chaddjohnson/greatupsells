@@ -77,25 +77,27 @@ const loadingComponent = () => (
   </>
 );
 
-const errorComponent = () => (
-  <Page fullWidth>
-    <Banner
-      title="Unable to load offer"
-      status="critical"
-      action={{
-        content: 'Try again',
-        onAction: () => window.location.reload()
-      }}
-    >
-      Unable to load offer. Please try again shortly.
-    </Banner>
-  </Page>
-);
-
 const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
-  const { offer, offerLoading, offerError, updateOffer } = useOffer(offerId);
+  const { offer, offerLoading, offerError, updateOffer, fetchOffer } = useOffer(
+    offerId
+  );
+
+  const errorComponent = memo(() => (
+    <Page fullWidth>
+      <Banner
+        title="Unable to load offer"
+        status="critical"
+        action={{
+          content: 'Try again',
+          onAction: () => fetchOffer()
+        }}
+      >
+        Unable to load offer. Please try again shortly.
+      </Banner>
+    </Page>
+  ));
 
   const handleTest = () => {
     // ...

@@ -30,21 +30,6 @@ const loadingComponent = () => (
   </>
 );
 
-const errorComponent = () => (
-  <Page fullWidth>
-    <Banner
-      title="Unable to load offers"
-      status="critical"
-      action={{
-        content: 'Try again',
-        onAction: () => window.location.reload()
-      }}
-    >
-      Unable to load offers. Please try again shortly.
-    </Banner>
-  </Page>
-);
-
 const emptyComponent = () => (
   <EmptyState
     heading="Manage your offers"
@@ -57,12 +42,27 @@ const emptyComponent = () => (
 
 const OffersPage = () => {
   const { shop } = useShop();
-  const { offers, offersLoading, offersError } = useOffers();
+  const { offers, offersLoading, offersError, fetchOffers } = useOffers();
+
+  const errorComponent = memo(() => (
+    <Page fullWidth>
+      <Banner
+        title="Unable to load offers"
+        status="critical"
+        action={{
+          content: 'Try again',
+          onAction: () => fetchOffers()
+        }}
+      >
+        Unable to load offers. Please try again shortly.
+      </Banner>
+    </Page>
+  ));
 
   return (
     <Loader
       isLoading={offersLoading}
-      isError={!!offersError}
+      isError={!!offersError && !offers}
       isEmpty={!offers?.length}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
