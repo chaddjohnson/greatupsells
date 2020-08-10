@@ -58,7 +58,7 @@ const LineChart = ({
       },
       series: [
         {
-          name: title,
+          name: typeof title === 'string' && title,
           data
         }
       ],
