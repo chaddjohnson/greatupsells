@@ -18,11 +18,11 @@ const PageTitleBar = memo(() => <TitleBar title="Offers" />);
 const loadingComponent = () => (
   <>
     <Loading />
-    <SkeletonPage fullWidth>
+    <SkeletonPage title="Offers" fullWidth>
       <Layout>
         <Layout.Section>
           <Card sectioned>
-            <SkeletonBodyText />
+            <SkeletonBodyText lines={3} />
           </Card>
         </Layout.Section>
       </Layout>
@@ -45,7 +45,7 @@ const OffersPage = () => {
   const { offers, offersLoading, offersError, fetchOffers } = useOffers();
 
   const errorComponent = memo(() => (
-    <Page fullWidth>
+    <Page title="Offers" fullWidth>
       <Banner
         title="Unable to load offers"
         status="critical"

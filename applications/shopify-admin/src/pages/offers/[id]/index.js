@@ -31,7 +31,7 @@ const PageTitleBar = memo(() => (
 const loadingComponent = () => (
   <>
     <Loading />
-    <SkeletonPage>
+    <SkeletonPage secondaryActions={3}>
       <Layout>
         <Layout.Section>
           <Card sectioned>
@@ -43,19 +43,13 @@ const loadingComponent = () => (
           <Card sectioned>
             <TextContainer>
               <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={2} />
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <TextContainer>
-              <SkeletonDisplayText size="small" />
               <SkeletonBodyText lines={3} />
             </TextContainer>
           </Card>
           <Card sectioned>
             <TextContainer>
               <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={3} />
+              <SkeletonBodyText lines={4} />
             </TextContainer>
           </Card>
         </Layout.Section>
