@@ -1,25 +1,44 @@
+const { AuthenticationError, ApolloError } = require('apollo-server-lambda');
+
 module.exports.products = async (root, args, context) => {
-  const { Product } = context;
-  const product = await Product.find();
+  const { user, Product } = context;
 
-  // TODO: Authorization
+  if (!user) {
+    throw new AuthenticationError('Unauthorized');
+  }
 
-  return product;
+  // TODO: Allow a shop to access its products.
+
+  try {
+    return await Product.find({});
+  } catch (error) {
+    throw new ApolloError('Error retrieving products');
+  }
 };
 
 module.exports.product = async (root, args, context) => {
-  const { Product } = context;
+  const { user, Product } = context;
   const { id } = args;
-  const product = await Product.findById(id);
 
-  // TODO: Authorization
+  if (!user) {
+    throw new AuthenticationError('Unauthorized');
+  }
 
-  return product;
+  // TODO: Allow a shop to access a product.
+
+  try {
+    return await Product.findById(id);
+  } catch (error) {
+    throw new ApolloError(`Error retrieving product`);
+  }
 };
 
 module.exports.productShop = async (root, args, context) => {
   const { Shop } = context;
-  const shop = await Shop.findById(root.shop);
 
-  return shop;
+  try {
+    return await Shop.findById(root.shop);
+  } catch (error) {
+    throw new ApolloError('Error retrieving product shop');
+  }
 };

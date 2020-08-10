@@ -15,7 +15,7 @@ const handler = middy(async (event, context) => {
     await mongodbClient.connect();
 
     if (!mongodbClient.connected) {
-      throw new Error(`Cannot connect to MongoDB`);
+      throw new Error(`Cannot connect to database`);
     }
 
     return {

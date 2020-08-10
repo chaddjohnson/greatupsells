@@ -3,7 +3,6 @@ const { DateTimeTypeDefinition, JSONDefinition } = require('graphql-scalars');
 const Shop = require('./Shop');
 const Offer = require('./Offer');
 const Product = require('./Product');
-const Token = require('./Token');
 
 const Query = gql`
   type Query {
@@ -14,7 +13,6 @@ const Query = gql`
     products: [Product]
     product(id: ID!): Product
     # login(username: String!, password: String!): User,
-    shopToken(queryString: String!): Token
   }
 `;
 
@@ -34,7 +32,6 @@ module.exports = [
   Shop,
   Offer,
   Product,
-  Token,
   Query,
   Mutation
 ];

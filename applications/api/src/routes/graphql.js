@@ -1,4 +1,4 @@
-const { ApolloServer } = require('apollo-server-lambda');
+const { ApolloServer, ApolloError } = require('apollo-server-lambda');
 const { get } = require('lodash');
 const jwt = require('jsonwebtoken');
 const models = require('@neatowebsolutions/upselling-models');
@@ -32,18 +32,18 @@ const getShop = async (context) => {
     const shop = await Shop.findByDomain(shopDomain);
 
     if (!shop) {
-      throw new Error('Invalid shop');
+      throw new ApolloError('Invalid shop');
     }
 
     return shop;
   } catch (error) {
-    throw new Error('Invalid token');
+    throw new ApolloError('Invalid token');
   }
 };
 
 const contextHandler = async (context) => {
   if (!context) {
-    throw new Error('context was not provided');
+    throw new ApolloError('context was not provided');
   }
 
   const allModels = await getModels();

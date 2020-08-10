@@ -1,29 +1,54 @@
-const { ForbiddenError } = require('apollo-server-lambda');
+const {
+  ApolloError,
+  AuthenticationError,
+  UserInputError
+} = require('apollo-server-lambda');
 const logger = require('@neatowebsolutions/logger');
 
 module.exports.offers = async (root, args, context) => {
-  const { shop, Offer } = context;
+  const { shop, user, Offer } = context;
 
-  // TODO: Allow admin users to retrieve all offers.
+  try {
+    if (shop) {
+      return await Offer.findByShopifyShopId(shop.shopifyShopId);
+    }
 
-  const offers = await Offer.findByShopifyShopId(shop.shopifyShopId);
+    if (user) {
+      return await Offer.find({});
+    }
+  } catch (error) {
+    logger.error('Error retrieving offers', error);
+    throw new ApolloError('Error retrieving offers');
+  }
 
-  return offers;
+  throw new AuthenticationError('Unauthorized');
 };
 
 module.exports.offer = async (root, args, context) => {
-  const { shop, Offer } = context;
+  const { shop, user, Offer } = context;
   const { id } = args;
+  let offer = null;
 
-  const offer = await Offer.findById(id);
-
-  if (!offer) {
-    throw new Error(`Offer ${id} not found`);
+  if (!shop && !user) {
+    throw new AuthenticationError('Unauthorized');
   }
 
-  if (offer.shopifyShopId !== shop.shopifyShopId) {
-    logger.warn(`Unauthorized request for offer ${offer.id}`, context);
-    throw new ForbiddenError('Unauthorized');
+  try {
+    offer = await Offer.findById(id);
+  } catch (error) {
+    logger.error(`Error retrieving offer ${id}`, error);
+    throw new ApolloError('Error retrieving offer');
+  }
+
+  if (!offer) {
+    throw new ApolloError(`Offer not found`);
+  }
+
+  if (shop && offer.shopifyShopId !== shop.shopifyShopId) {
+    logger.warn(
+      `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
+    );
+    throw new AuthenticationError('Unauthorized');
   }
 
   return offer;
@@ -31,55 +56,130 @@ module.exports.offer = async (root, args, context) => {
 
 module.exports.offerShop = async (root, args, context) => {
   const { Shop } = context;
-  const shop = await Shop.findById(root.shop);
 
-  return shop;
+  try {
+    return await Shop.findById(root.shop);
+  } catch (error) {
+    throw new ApolloError('Error retrieving offer shop');
+  }
 };
 
 module.exports.createOffer = async (root, args, context) => {
-  const { shop, Offer } = context;
-  const { shopifyShopId } = shop;
+  const { shop, user, Offer } = context;
+  const offer = new Offer(...args.input);
 
-  return Offer.create({ ...args.input, shopifyShopId, shop });
+  if (!user && !shop) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  if (user) {
+    offer.shopifyShopId = shop.shopifyShopId;
+    offer.shop = shop;
+  }
+
+  try {
+    await offer.validate();
+  } catch (error) {
+    throw new UserInputError('Bad Request');
+  }
+
+  try {
+    return await offer.save();
+  } catch (error) {
+    logger.error(`Error creating offer (${offer.toString()})`, error);
+    throw new ApolloError('Error creating offer');
+  }
 };
 
 module.exports.updateOffer = async (root, args, context) => {
-  const { shop, Offer } = context;
+  const { shop, user, Offer } = context;
   const { ...values } = args.input;
   const { id } = args;
-  const offer = await Offer.findById(id);
+  let offer = null;
+
+  if (!shop && !user) {
+    throw new AuthenticationError('Unauthorized');
+  }
 
   // Disallow updating certain properties.
   delete values.shopifyShopId;
   delete values.shop;
+  delete values.createdAt;
+  delete values.updatedAt;
+  delete values.viewCount;
+  delete values.acceptanceCount;
+  delete values.conversionCount;
+  delete values.conversionRate;
+  delete values.revenueIncrease;
+
+  try {
+    offer = await Offer.findById(id);
+  } catch (error) {
+    logger.error(`Error retrieving offer ${id}`, error);
+    throw new ApolloError('Error retrieving offers');
+  }
 
   if (!offer) {
-    throw new Error(`Offer ${id} not found`);
+    throw new ApolloError(`Offer not found`);
   }
 
-  if (offer.shopifyShopId !== shop.shopifyShopId) {
-    logger.warn(`Unauthorized update attempt for offer ${offer.id}`, context);
-    throw new ForbiddenError('Unauthorized');
+  if (!shop && !user) {
+    throw new AuthenticationError('Unauthorized');
   }
 
-  offer.set(values);
+  if (shop && offer.shopifyShopId !== shop.shopifyShopId) {
+    logger.warn(
+      `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
+    );
+    throw new AuthenticationError('Unauthorized');
+  }
 
-  return offer.save();
+  try {
+    offer.set(values);
+    await offer.validate();
+  } catch (error) {
+    throw new UserInputError('Bad Request');
+  }
+
+  try {
+    return await offer.save();
+  } catch (error) {
+    logger.error(`Error updating offer (${offer.toString()})`, error);
+    throw new ApolloError(`Error updating offer (${offer.toString()})`);
+  }
 };
 
 module.exports.deleteOffer = async (root, args, context) => {
-  const { shop, Offer } = context;
+  const { shop, user, Offer } = context;
   const { id } = args;
-  const offer = await Offer.findById(id);
+  let offer = null;
+
+  if (!shop && !user) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  try {
+    offer = await Offer.findById(id);
+  } catch (error) {
+    logger.error(`Error retrieving offer ${id}`, error);
+    throw new ApolloError('Error retrieving offer');
+  }
 
   if (!offer) {
-    throw new Error(`Offer ${id} not found`);
+    throw new ApolloError(`Offer not found`);
   }
 
-  if (offer.shopifyShopId !== shop.shopifyShopId) {
-    logger.warn(`Unauthorized deletion attempt for offer ${offer.id}`, context);
-    throw new ForbiddenError('Unauthorized');
+  if (shop && offer.shopifyShopId !== shop.shopifyShopId) {
+    logger.warn(
+      `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
+    );
+    throw new AuthenticationError('Unauthorized');
   }
 
-  await offer.remove();
+  try {
+    await offer.remove();
+  } catch (error) {
+    logger.error(`Error removing offer (${offer.toString()})`, error);
+    throw new ApolloError(`Error removing offer`);
+  }
 };

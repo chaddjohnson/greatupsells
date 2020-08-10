@@ -1,89 +1,62 @@
-const jwt = require('jsonwebtoken');
-const queryString = require('query-string');
-const ShopifyToken = require('shopify-token');
-const { AuthenticationError } = require('apollo-server-lambda');
-
-const {
-  SHOPIFY_ADMIN_API_KEY,
-  SHOPIFY_ADMIN_API_SECRET_KEY,
-  SHOPIFY_ADMIN_URL,
-  JWT_SECRET
-} = process.env;
+const { ApolloError, AuthenticationError } = require('apollo-server-lambda');
 
 module.exports.shops = async (root, args, context) => {
-  const { Shop } = context;
-  const shop = await Shop.find();
+  const { user, Shop } = context;
 
-  // TODO: Authorization
-
-  return shop;
-};
-
-module.exports.shop = async (root, args, context) => {
-  const { Shop } = context;
-  const { id } = args;
-  const shop = id ? await Shop.findById(id) : context.shop;
-
-  // TODO: Authorization if requesting shop by ID.
-
-  return shop;
-};
-
-module.exports.shopOffers = async (root, args, context) => {
-  const { Offer } = context;
-  const offers = Offer.findByShopId(root.id);
-
-  return offers;
-};
-
-module.exports.shopProducts = async (root, args, context) => {
-  const { Product } = context;
-  const products = await Product.findByShopId(root.id);
-
-  return products;
-};
-
-module.exports.shopToken = async (root, args, context) => {
-  const { Shop } = context;
-  const queryParams = queryString.parse(args.queryString);
-  const { shop: shopDomain } = queryParams;
-
-  const shopifyToken = new ShopifyToken({
-    apiKey: SHOPIFY_ADMIN_API_KEY,
-    sharedSecret: SHOPIFY_ADMIN_API_SECRET_KEY,
-    redirectUri: SHOPIFY_ADMIN_URL
-  });
-
-  // Validate the HMAC.
-  const hmacValid = shopifyToken.verifyHmac(queryParams);
-
-  if (!hmacValid) {
-    throw new Error('Invalid request');
+  if (!user) {
+    throw new AuthenticationError('Unauthorized');
   }
 
   try {
-    const shop = await Shop.findByDomain(shopDomain);
-
-    if (!shop) {
-      throw new Error('Shop not found');
-    }
-
-    try {
-      // Ensure the access token is valid.
-      await shop.validateAccessToken();
-
-      // Generate a JWT.
-      const token = jwt.sign({ shopDomain }, JWT_SECRET);
-
-      return { token };
-    } catch (error) {
-      // Remove the invalid access token.
-      await shop.removeAccessToken();
-
-      // Proceed with error handling.
-      throw AuthenticationError(error.message);
-    }
+    return await Shop.find({});
   } catch (error) {
-    throw new Error(`Unable to obtain access token: ${error.message}`);
+    throw new ApolloError('Error retrieving shops');
+  }
+};
+
+module.exports.shop = async (root, args, context) => {
+  const { shop, user, Shop } = context;
+  const { id } = args;
+
+  if (shop) {
+    return shop;
+  }
+
+  if (user) {
+    try {
+      return await Shop.findById(id);
+    } catch (error) {
+      throw new ApolloError('Error retrieving shop');
+    }
+  }
+
+  throw new AuthenticationError('Unauthorized');
+};
+
+module.exports.shopOffers = async (root, args, context) => {
+  const { user, Offer } = context;
+
+  if (!user) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  try {
+    return await Offer.findByShopId(root.id);
+  } catch (error) {
+    throw new ApolloError('Error retrieving shop offers');
+  }
+};
+
+module.exports.shopProducts = async (root, args, context) => {
+  const { user, Product } = context;
+
+  if (!user) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  try {
+    return await Product.findByShopId(root.id);
+  } catch (error) {
+    throw new ApolloError('Error retrieving shop products');
   }
 };

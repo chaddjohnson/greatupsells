@@ -126,6 +126,22 @@ schema.methods.toString = function () {
   return data.join(' | ');
 };
 
+schema.pre('validate', async function (next) {
+  const models = require('..');
+  const Shop = await models.get('Shop');
+
+  // Set up reference to shop if missing.
+  if (this.shopifyShopId && !this.shop) {
+    try {
+      this.shop = await Shop.findByShopifyShopId(this.shopifyShopId);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  next();
+});
+
 schema.pre('save', function () {
   this.$locals.wasNew = this.isNew;
 });

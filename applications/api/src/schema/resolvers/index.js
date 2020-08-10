@@ -1,5 +1,5 @@
 const { DateTimeResolver, JSONResolver } = require('graphql-scalars');
-const { shops, shop, shopOffers, shopProducts, shopToken } = require('./shops');
+const { shops, shop, shopOffers, shopProducts } = require('./shops');
 const {
   offers,
   offer,
@@ -19,8 +19,7 @@ const resolvers = {
     offers,
     offer,
     products,
-    product,
-    shopToken
+    product
   },
   Mutation: {
     createOffer,
