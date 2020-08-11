@@ -26,6 +26,7 @@ export const ShopProvider = ({ children }) => {
       UPDATE_SHOP_MUTATION,
       graphqlClient.mutate(UPDATE_SHOP_MUTATION, data)
     );
+
     await mutate(SHOP_QUERY, updatedShop, false);
   };
 

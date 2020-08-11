@@ -5,8 +5,11 @@ import {
   CREATE_OFFER_MUTATION,
   UPDATE_OFFER_MUTATION
 } from '@neatowebsolutions/upselling-graphql';
+import useToast from './toast';
 
 const useOffer = (offerId) => {
+  const { showSuccessToast, showErrorToast } = useToast();
+
   const { data: offer, error: offerError, mutate: fetchOffer } = useSWR(
     offerId ? [OFFER_QUERY, offerId] : null,
     (query, id) => graphqlClient.query(query, { id })
@@ -14,18 +17,31 @@ const useOffer = (offerId) => {
   const offerLoading = !offer && !offerError;
 
   const createOffer = async (data) => {
-    await mutate(
-      CREATE_OFFER_MUTATION,
-      graphqlClient.mutate(CREATE_OFFER_MUTATION, data)
-    );
+    try {
+      await mutate(
+        CREATE_OFFER_MUTATION,
+        graphqlClient.mutate(CREATE_OFFER_MUTATION, data)
+      );
+
+      showSuccessToast('Offer created');
+    } catch (error) {
+      showErrorToast('Error creating offer');
+    }
   };
 
   const updateOffer = async (data) => {
-    const updatedOffer = await mutate(
-      UPDATE_OFFER_MUTATION,
-      graphqlClient.mutate(UPDATE_OFFER_MUTATION, data)
-    );
-    await mutate([OFFER_QUERY, offerId], updatedOffer, false);
+    try {
+      const updatedOffer = await mutate(
+        UPDATE_OFFER_MUTATION,
+        graphqlClient.mutate(UPDATE_OFFER_MUTATION, data)
+      );
+
+      await mutate([OFFER_QUERY, offerId], updatedOffer, false);
+
+      showSuccessToast('Offer saved');
+    } catch (error) {
+      showErrorToast('Error saving offer');
+    }
   };
 
   return {
