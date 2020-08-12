@@ -74,12 +74,12 @@ const createServer = () => {
         ctx.cookies.set('shopOrigin', shopDomain, {
           httpOnly: false,
           sameSite: 'None',
-          secure: ctx.protocol === 'https'
+          secure: true
         });
         ctx.cookies.set('authToken', authToken, {
           httpOnly: false,
           sameSite: 'None',
-          secure: ctx.protocol === 'https'
+          secure: true
         });
         ctx.redirect('/');
       }
