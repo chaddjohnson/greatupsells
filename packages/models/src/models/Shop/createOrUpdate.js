@@ -14,6 +14,7 @@ const createShop = async (shopDomain, accessToken) => {
   shop.contactPhone = shopifyShopData.phone;
   shop.countryCode = shopifyShopData.country_code;
   shop.currency = shopifyShopData.currency;
+  shop.locale = shopifyShopData.primary_locale;
   shop.timezone = shopifyShopData.iana_timezone;
 
   if (shopifyShopData.domain !== shopifyShopData.myshopify_domain) {
