@@ -5,17 +5,22 @@ import {
   Layout,
   Card,
   Stack,
-  Popover,
-  Button,
   DisplayText,
   TextStyle,
   Banner,
   SkeletonPage
 } from '@shopify/polaris';
-import { CalendarMajorMonotone } from '@shopify/polaris-icons';
-import { useOfferAcceptances } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useOffer,
+  useOfferAcceptances
+} from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { TitleBar, LineChart, SkeletonChart } from '../../../components';
+import {
+  TitleBar,
+  LineChart,
+  DateRangePicker,
+  SkeletonChart
+} from '../../../components';
 
 const data = {
   revenueIncrease: [
@@ -116,6 +121,19 @@ const data = {
   ]
 };
 
+const PageTitleBar = memo(({ offer }) => (
+  <TitleBar
+    title="Analytics"
+    breadcrumbs={[
+      { content: 'Offers', url: '/offers/' },
+      {
+        content: offer?.name,
+        url: `/offers/${offer?._id}/`
+      }
+    ]}
+  />
+));
+
 const loadingComponent = () => (
   <>
     <Loading />
@@ -143,12 +161,14 @@ const loadingComponent = () => (
 );
 
 const OfferAnalyticsPage = () => {
-  const [datePickerActive, setDatePickerActive] = useState(false);
-
+  // TODO: Remove hardcoding.
   const offerId = '5f0f49a53058fb0e19df8358';
   const startAt = new Date(Date.now() - 60 * 60 * 24 * 30 * 1000);
   const endAt = new Date(Date.now());
 
+  const [datePickerActive, setDatePickerActive] = useState(false);
+
+  const { offer } = useOffer(offerId);
   const {
     offerAcceptances,
     offerAcceptancesLoading,
@@ -171,24 +191,6 @@ const OfferAnalyticsPage = () => {
       fetchOfferAcceptances();
     }
   };
-
-  const offer = {
-    _id: '5f0f49a53058fb0e19df8358',
-    name: 'Buy one get 10% off'
-  };
-
-  const PageTitleBar = memo(() => (
-    <TitleBar
-      title="Analytics"
-      breadcrumbs={[
-        { content: 'Offers', url: '/offers/' },
-        {
-          content: offer.name,
-          url: `/offers/${offer._id}/`
-        }
-      ]}
-    />
-  ));
 
   const errorComponent = memo(() => (
     <Page fullWidth>
@@ -213,7 +215,7 @@ const OfferAnalyticsPage = () => {
       errorComponent={errorComponent}
     >
       <Page title="Analytics for offer" fullWidth>
-        <PageTitleBar />
+        <PageTitleBar offer={offer} />
         <Stack vertical>
           <Stack distribution="equalSpacing">
             <DisplayText size="medium">
@@ -221,22 +223,11 @@ const OfferAnalyticsPage = () => {
                 Here&rsquo;s a summary of how your offer is performing
               </TextStyle>
             </DisplayText>
-            <Popover
+            <DateRangePicker
               active={datePickerActive}
-              activator={
-                <Button
-                  size="slim"
-                  disclosure
-                  icon={CalendarMajorMonotone}
-                  onClick={() => setDatePickerActive(!datePickerActive)}
-                >
-                  Last 90 days
-                </Button>
-              }
+              onActivate={() => setDatePickerActive(!datePickerActive)}
               onClose={() => setDatePickerActive(false)}
-            >
-              Date picker here
-            </Popover>
+            />
           </Stack>
           <Layout>
             <Layout.Section oneHalf>
