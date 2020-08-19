@@ -1,4 +1,8 @@
-const { DateTimeResolver, JSONResolver } = require('graphql-scalars');
+const {
+  DateTimeResolver,
+  JSONResolver,
+  LongResolver
+} = require('graphql-scalars');
 const { shops, shop, shopOffers, shopProducts } = require('./shops');
 const {
   offers,
@@ -8,16 +12,19 @@ const {
   updateOffer,
   deleteOffer
 } = require('./offers');
+const { offerAcceptances } = require('./offerHits');
 const { products, product, productShop } = require('./products');
 
 const resolvers = {
   DateTime: DateTimeResolver,
   JSON: JSONResolver,
+  Long: LongResolver,
   Query: {
     shops,
     shop,
     offers,
     offer,
+    offerAcceptances,
     products,
     product
   },
@@ -26,12 +33,12 @@ const resolvers = {
     updateOffer,
     deleteOffer
   },
-  Offer: {
-    shop: offerShop
-  },
   Shop: {
     offers: shopOffers,
     products: shopProducts
+  },
+  Offer: {
+    shop: offerShop
   },
   Product: {
     shop: productShop

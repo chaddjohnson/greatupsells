@@ -6,6 +6,9 @@ const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let PopupTheme = null;
 
+const schemaOptions = {
+  timestamps: true
+};
 const schema = new mongoose.Schema(
   {
     name: { type: String, required: false },
@@ -23,7 +26,7 @@ const schema = new mongoose.Schema(
     // notificationBannerBackgroundColor: { type: String, required: true },
     // notificationBannerTextColor: { type: String, required: true }
   },
-  { timestamps: true }
+  schemaOptions
 );
 
 PopupTheme = mongodbClient.connection.model('PopupTheme', schema);

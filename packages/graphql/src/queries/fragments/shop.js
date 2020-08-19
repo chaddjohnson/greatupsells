@@ -12,7 +12,6 @@ export default /* GraphQL */ `
     timezone
     active
     internal
-    uninstalledAt
     plan {
       level
       active
@@ -22,6 +21,11 @@ export default /* GraphQL */ `
       canceledAt
       grandfatheredAt
     }
+    uninstalledAt
+    acceptanceCount
+    conversionCount
+    conversionRate
+    revenueIncrease
     createdAt
     updatedAt
   }

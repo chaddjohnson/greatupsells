@@ -30,20 +30,19 @@ const App = ({ Component, pageProps }) => {
         }}
       >
         <RoutePropagator />
-        {typeof window === 'undefined' ||
-          (window.top !== window.self && (
-            <ErrorBoundary>
-              <Contexts>
-                <main
-                  style={{
-                    paddingBottom: '120px'
-                  }}
-                >
-                  <Component {...pageProps} />
-                </main>
-              </Contexts>
-            </ErrorBoundary>
-          ))}
+        {typeof window !== 'undefined' && window.top !== window.self && (
+          <ErrorBoundary>
+            <Contexts>
+              <main
+                style={{
+                  paddingBottom: '120px'
+                }}
+              >
+                <Component {...pageProps} />
+              </main>
+            </Contexts>
+          </ErrorBoundary>
+        )}
         {typeof window !== 'undefined' && window.top === window.self && (
           <p>Loading...</p>
         )}

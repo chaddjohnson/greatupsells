@@ -33,7 +33,7 @@ const format = (data) =>
   data
     .reduce(
       (string, item) =>
-        `${string}${formatErrorData(item)}${formatObjectData(item)}\n\n`,
+        `${string}\n${formatErrorData(item)}\n${formatObjectData(item)}\n\n`,
       ''
     )
     .trim();

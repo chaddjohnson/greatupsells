@@ -1,1 +1,6 @@
-export default /* GraphQL */ ``;
+export default /* GraphQL */ `
+  fragment OfferAcceptanceFragment on OfferAcceptance {
+    date
+    acceptances
+  }
+`;

@@ -8,8 +8,8 @@ import {
   TextContainer,
   Banner,
   SkeletonPage,
-  SkeletonBodyText,
-  SkeletonDisplayText
+  SkeletonDisplayText,
+  SkeletonBodyText
 } from '@shopify/polaris';
 import {
   ExternalMinor,

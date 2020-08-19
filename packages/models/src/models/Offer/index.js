@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
+const Int32 = require('mongoose-int32');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 const logger = require('@neatowebsolutions/logger');
+
+require('mongoose-long')(mongoose);
 
 const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
@@ -12,7 +15,7 @@ const offerProductSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  shopifyProductId: { type: Number, required: true }
+  shopifyProductId: { type: mongoose.Schema.Types.Long, required: true }
 });
 
 const offerCollectionSchema = new mongoose.Schema({
@@ -20,20 +23,23 @@ const offerCollectionSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  shopifyCollectionId: { type: Number, required: true }
+  shopifyCollectionId: { type: mongoose.Schema.Types.Long, required: true }
 });
 
+const schemaOptions = {
+  timestamps: true
+};
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: String, required: true },
+    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     name: { type: String, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
-    viewCount: { type: Number, required: true, default: 0 },
-    acceptanceCount: { type: Number, required: true, default: 0 },
-    conversionCount: { type: Number, required: true, default: 0 },
-    conversionRate: { type: Number, required: true, default: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0 },
+    viewCount: { type: Int32, required: true, default: 0 },
+    acceptanceCount: { type: Int32, required: true, default: 0 },
+    conversionCount: { type: Int32, required: true, default: 0 },
+    conversionRate: { type: Number, required: true, default: 0.0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
     callToActionText: { type: String, required: true },
     successMessageText: { type: String, required: true },
     actionButtonText: { type: String, required: true },
@@ -68,7 +74,7 @@ const schema = new mongoose.Schema(
       // notificationBannerTextColor: { type: String, required: true }
     },
     products: [offerProductSchema],
-    minimumProductsQuantity: { type: Number, required: true },
+    minimumProductsQuantity: { type: Int32, required: true },
     collections: [offerCollectionSchema],
     discountType: {
       type: String,
@@ -87,13 +93,13 @@ const schema = new mongoose.Schema(
     endAt: { type: Date, required: false },
     enableTimer: { type: Boolean, required: true },
     timerText: { type: String, required: false },
-    timerCountdownStart: { type: Number, required: false },
+    timerCountdownStart: { type: Int32, required: false },
     allowWithDiscountCodes: { type: Boolean, required: true },
     allowMultipleUpsells: { type: Boolean, required: true },
     hideIfItemAdded: { type: Boolean, required: true },
     showNotificationBanner: { type: Boolean, required: true },
     enableQuantitySelection: { type: Boolean, required: true },
-    productQuantityLimit: { type: Number, required: false },
+    productQuantityLimit: { type: Int32, required: false },
     limitQuantitySelection: { type: Boolean, required: true },
     enableProductLinks: { type: Boolean, required: true },
     hideOutOfStockProducts: { type: Boolean, required: true },
@@ -101,7 +107,7 @@ const schema = new mongoose.Schema(
     // discountPricingMethod
     enabled: { type: Boolean, required: true, default: true }
   },
-  { timestamps: true }
+  schemaOptions
 );
 
 schema.statics.findByShopifyShopId = function (shopifyShopId) {
@@ -110,6 +116,34 @@ schema.statics.findByShopifyShopId = function (shopifyShopId) {
 
 schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: shopId });
+};
+
+schema.methods.findViews = async function (startAt, endAt) {
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
+
+  return OfferHit.findViewsByOfferId(this._id, startAt, endAt);
+};
+
+schema.methods.findAcceptances = async function (startAt, endAt) {
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
+
+  return OfferHit.findAcceptancesByOfferId(this._id, startAt, endAt);
+};
+
+schema.methods.findRevenueIncreases = async function (startAt, endAt) {
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
+
+  return OfferHit.findRevenueIncreasesByOfferId(this._id, startAt, endAt);
+};
+
+schema.methods.findConversionRates = async function (startAt, endAt) {
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
+
+  return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.toString = function () {

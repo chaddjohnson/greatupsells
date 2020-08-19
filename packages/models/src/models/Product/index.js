@@ -2,24 +2,29 @@ const mongoose = require('mongoose');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
-
 const findByShopId = require('./findByShopId');
 const copy = require('./copy');
 const removeCopiedProducts = require('./removeCopiedProducts');
 const preValidateHook = require('./preValidateHook');
 
+require('mongoose-long')(mongoose);
+
+const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
+
 let Product = null;
 
+const schemaOptions = {
+  timestamps: true
+};
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: String, required: true },
-    shopifyProductId: { type: String, required: true },
+    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyProductId: { type: mongoose.Schema.Types.Long, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     title: { type: String, required: true },
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true }
   },
-  { timestamps: true }
+  schemaOptions
 );
 
 schema.statics.findByShopId = function (shopId) {

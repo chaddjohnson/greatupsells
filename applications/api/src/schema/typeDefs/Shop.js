@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-lambda');
 const typeDef = gql`
   type Shop {
     _id: ID!
-    shopifyShopId: ID!
+    shopifyShopId: Long!
     name: String!
     domain: String!
     realDomain: String
@@ -15,8 +15,12 @@ const typeDef = gql`
     timezone: String!
     active: Boolean!
     internal: Boolean!
-    uninstalledAt: DateTime
     plan: ShopPlan!
+    uninstalledAt: DateTime
+    acceptanceCount: Int
+    conversionCount: Int
+    conversionRate: Float
+    revenueIncrease: Float
     createdAt: DateTime
     updatedAt: DateTime
     offers: [Offer]

@@ -2,12 +2,14 @@ import { GraphQLClient } from 'graphql-request';
 import { getCookie } from '@neatowebsolutions/upselling-utilities';
 
 const endpoint = `${process.env.API_URL}/graphql`;
-const options = {
+const clientOptions = {
   credentials: 'include'
 };
-const client = new GraphQLClient(endpoint, options);
+const client = new GraphQLClient(endpoint, clientOptions);
 
-const query = async (queryString, variables, headers = null) => {
+const query = async (queryString, variables, options = {}) => {
+  const { headers } = options;
+
   // Use token from storage if available.
   const token =
     (typeof window !== 'undefined' &&
@@ -18,7 +20,7 @@ const query = async (queryString, variables, headers = null) => {
     client.setHeader('Authorization', `Bearer ${token}`);
   }
 
-  // Use override headers, if provided.
+  // Use override headers if provided.
   if (headers) {
     client.setHeaders(headers);
   }

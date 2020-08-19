@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
+const Int32 = require('mongoose-int32');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
@@ -19,11 +18,18 @@ const updatePlan = require('./updatePlan');
 const initialize = require('./initialize');
 const hooks = require('./hooks');
 
+require('mongoose-long')(mongoose);
+
+const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
+
 let Shop = null;
 
+const schemaOptions = {
+  timestamps: true
+};
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: String, required: true },
+    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     name: { type: String, required: true, trim: true },
     domain: { type: String, required: true, trim: true },
     realDomain: { type: String, required: false, trim: true },
@@ -63,9 +69,13 @@ const schema = new mongoose.Schema(
       canceledAt: { type: Date, required: false },
       grandfatheredAt: { type: Date, required: false }
     },
-    uninstalledAt: { type: Date, required: false }
+    uninstalledAt: { type: Date, required: false },
+    acceptanceCount: { type: Int32, required: true, default: 0 },
+    conversionCount: { type: Int32, required: true, default: 0 },
+    conversionRate: { type: Number, required: true, default: 0.0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 }
   },
-  { timestamps: true }
+  schemaOptions
 );
 
 schema.options.toJSON = {

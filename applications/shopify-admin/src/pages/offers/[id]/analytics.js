@@ -1,4 +1,5 @@
-import { memo, useState } from 'react';
+import { memo, useState, useMemo } from 'react';
+import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -7,44 +8,16 @@ import {
   Popover,
   Button,
   DisplayText,
-  TextStyle
+  TextStyle,
+  Banner,
+  SkeletonPage
 } from '@shopify/polaris';
 import { CalendarMajorMonotone } from '@shopify/polaris-icons';
-import { TitleBar, LineChart } from '../../../components';
+import { useOfferAcceptances } from '@neatowebsolutions/upselling-react-hooks';
+import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { TitleBar, LineChart, SkeletonChart } from '../../../components';
 
 const data = {
-  acceptedOffers: [
-    [new Date('6/1/2020').getTime(), 91],
-    [new Date('6/2/2020').getTime(), 33],
-    [new Date('6/3/2020').getTime(), 72],
-    [new Date('6/4/2020').getTime(), 35],
-    [new Date('6/5/2020').getTime(), 187],
-    [new Date('6/6/2020').getTime(), 180],
-    [new Date('6/7/2020').getTime(), 160],
-    [new Date('6/8/2020').getTime(), 21],
-    [new Date('6/9/2020').getTime(), 101],
-    [new Date('6/10/2020').getTime(), 113],
-    [new Date('6/11/2020').getTime(), 97],
-    [new Date('6/12/2020').getTime(), 43],
-    [new Date('6/13/2020').getTime(), 30],
-    [new Date('6/14/2020').getTime(), 75],
-    [new Date('6/15/2020').getTime(), 87],
-    [new Date('6/16/2020').getTime(), 118],
-    [new Date('6/17/2020').getTime(), 159],
-    [new Date('6/18/2020').getTime(), 180],
-    [new Date('6/19/2020').getTime(), 146],
-    [new Date('6/20/2020').getTime(), 166],
-    [new Date('6/21/2020').getTime(), 192],
-    [new Date('6/22/2020').getTime(), 116],
-    [new Date('6/23/2020').getTime(), 193],
-    [new Date('6/24/2020').getTime(), 121],
-    [new Date('6/25/2020').getTime(), 28],
-    [new Date('6/26/2020').getTime(), 83],
-    [new Date('6/27/2020').getTime(), 66],
-    [new Date('6/28/2020').getTime(), 66],
-    [new Date('6/29/2020').getTime(), 7],
-    [new Date('6/30/2020').getTime(), 171]
-  ],
   revenueIncrease: [
     [new Date('6/1/2020').getTime(), 90],
     [new Date('6/2/2020').getTime(), 162],
@@ -143,11 +116,64 @@ const data = {
   ]
 };
 
+const loadingComponent = () => (
+  <>
+    <Loading />
+    <SkeletonPage title="Analytics for offer" fullWidth>
+      <Layout>
+        <Layout.Section oneHalf>
+          <Card sectioned>
+            <SkeletonChart />
+          </Card>
+          <Card sectioned>
+            <SkeletonChart />
+          </Card>
+        </Layout.Section>
+        <Layout.Section oneHalf>
+          <Card sectioned>
+            <SkeletonChart />
+          </Card>
+          <Card sectioned>
+            <SkeletonChart />
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </SkeletonPage>
+  </>
+);
+
 const OfferAnalyticsPage = () => {
   const [datePickerActive, setDatePickerActive] = useState(false);
 
+  const offerId = '5f0f49a53058fb0e19df8358';
+  const startAt = new Date(Date.now() - 60 * 60 * 24 * 30 * 1000);
+  const endAt = new Date(Date.now());
+
+  const {
+    offerAcceptances,
+    offerAcceptancesLoading,
+    offerAcceptancesError,
+    fetchOfferAcceptances
+  } = useOfferAcceptances(offerId, startAt, endAt);
+
+  const offerAcceptancesChartData = useMemo(
+    () =>
+      offerAcceptances &&
+      offerAcceptances.map(({ date, acceptances }) => [
+        new Date(date).getTime(),
+        acceptances
+      ]),
+    [offerAcceptances]
+  );
+
+  const handleTryAgain = () => {
+    if (offerAcceptancesError) {
+      fetchOfferAcceptances();
+    }
+  };
+
   const offer = {
-    _id: 'a702955babd0e0c9bdcf176c13b60a1f',
+    _id: '5f0f49a53058fb0e19df8358',
     name: 'Buy one get 10% off'
   };
 
@@ -164,81 +190,105 @@ const OfferAnalyticsPage = () => {
     />
   ));
 
-  return (
-    <Page title="Analytics for offer" fullWidth>
-      <PageTitleBar />
-      <Stack vertical>
-        <Stack distribution="equalSpacing">
-          <DisplayText size="medium">
-            <TextStyle variation="subdued">
-              Here&rsquo;s a summary of how your offer is performing
-            </TextStyle>
-          </DisplayText>
-          <Popover
-            active={datePickerActive}
-            activator={
-              <Button
-                size="slim"
-                disclosure
-                icon={CalendarMajorMonotone}
-                onClick={() => setDatePickerActive(!datePickerActive)}
-              >
-                Last 90 days
-              </Button>
-            }
-            onClose={() => setDatePickerActive(false)}
-          >
-            Date picker here
-          </Popover>
-        </Stack>
-        <Layout>
-          <Layout.Section oneHalf>
-            <Card sectioned>
-              <LineChart
-                title="Acceptances"
-                subtitle="Acceptances over last 90 days"
-                rangeDescription="January to December"
-                changeValue={85}
-                changePercentage={0.01}
-                data={data.acceptedOffers}
-              />
-            </Card>
-            <Card sectioned>
-              <LineChart
-                title="Views"
-                subtitle="Views over last 90 days"
-                rangeDescription="January to December"
-                changeValue={214}
-                changePercentage={0.115}
-                data={data.acceptedOffers}
-              />
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card sectioned>
-              <LineChart
-                title="Revenue increase"
-                subtitle="Revenue increase over last 90 days"
-                rangeDescription="January to December"
-                changeValue={'$364'}
-                changePercentage={0.06}
-                data={data.revenueIncrease}
-              />
-            </Card>
-            <Card sectioned>
-              <LineChart
-                title="Conversion rate"
-                subtitle="Conversion rate over last 90 days"
-                rangeDescription="January to December"
-                changeValue={14}
-                changePercentage={0.04}
-                data={data.acceptedOffers}
-              />
-            </Card>
-          </Layout.Section>
-        </Layout>
-      </Stack>
+  const errorComponent = memo(() => (
+    <Page fullWidth>
+      <Banner
+        title="Unable to load analytics"
+        status="critical"
+        action={{
+          content: 'Try again',
+          onAction: handleTryAgain
+        }}
+      >
+        Unable to load offer. Please try again shortly.
+      </Banner>
     </Page>
+  ));
+
+  return (
+    <Loader
+      isLoading={offerAcceptancesLoading}
+      isError={!!offerAcceptancesError}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+    >
+      <Page title="Analytics for offer" fullWidth>
+        <PageTitleBar />
+        <Stack vertical>
+          <Stack distribution="equalSpacing">
+            <DisplayText size="medium">
+              <TextStyle variation="subdued">
+                Here&rsquo;s a summary of how your offer is performing
+              </TextStyle>
+            </DisplayText>
+            <Popover
+              active={datePickerActive}
+              activator={
+                <Button
+                  size="slim"
+                  disclosure
+                  icon={CalendarMajorMonotone}
+                  onClick={() => setDatePickerActive(!datePickerActive)}
+                >
+                  Last 90 days
+                </Button>
+              }
+              onClose={() => setDatePickerActive(false)}
+            >
+              Date picker here
+            </Popover>
+          </Stack>
+          <Layout>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                {!offerAcceptancesLoading && (
+                  <LineChart
+                    title="Acceptances"
+                    subtitle="Acceptances over last 90 days"
+                    rangeDescription="January to December"
+                    changeValue={85}
+                    changePercentage={0.01}
+                    data={offerAcceptancesChartData}
+                  />
+                )}
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Views"
+                  subtitle="Views over last 90 days"
+                  rangeDescription="January to December"
+                  changeValue={214}
+                  changePercentage={0.115}
+                  data={data.views}
+                />
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
+                  title="Revenue increase"
+                  subtitle="Revenue increase over last 90 days"
+                  rangeDescription="January to December"
+                  changeValue={'$364'}
+                  changePercentage={0.06}
+                  data={data.revenueIncrease}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversion rate"
+                  subtitle="Conversion rate over last 90 days"
+                  rangeDescription="January to December"
+                  changeValue={14}
+                  changePercentage={0.04}
+                  data={data.conversions}
+                />
+              </Card>
+            </Layout.Section>
+          </Layout>
+        </Stack>
+      </Page>
+    </Loader>
   );
 };
 

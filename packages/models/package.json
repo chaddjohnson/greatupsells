@@ -15,9 +15,10 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@neatowebsolutions/logger": "^0.0.0"
+    "@neatowebsolutions/logger": "^0.0.0",
+    "mongoose-int32": "^0.4.1",
+    "mongoose-long": "^0.3.1"
   },
-  "devDependencies": {},
   "peerDependencies": {
     "@chaddjohnson/mongodb-client-lambda": "1.x",
     "mongoose": "4.x || 5.x"

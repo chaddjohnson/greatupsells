@@ -11,6 +11,7 @@ const { JWT_SECRET } = process.env;
 const getModels = async () => ({
   Shop: await models.get('Shop'),
   Offer: await models.get('Offer'),
+  OfferHit: await models.get('OfferHit'),
   Product: await models.get('Product')
 });
 

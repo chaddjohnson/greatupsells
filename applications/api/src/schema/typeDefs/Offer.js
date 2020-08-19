@@ -3,9 +3,9 @@ const { gql } = require('apollo-server-lambda');
 const typeDef = gql`
   type Offer {
     _id: ID!
-    shopifyShopId: ID!
-    name: String!
+    shopifyShopId: Long!
     shop: Shop
+    name: String!
     strategy: OfferStrategy!
     viewCount: Int!
     acceptanceCount: Int!
