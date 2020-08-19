@@ -67,8 +67,8 @@ const loadingComponent = () => (
 const OfferAnalyticsPage = () => {
   // TODO: Remove hardcoding.
   const offerId = '5f0f49a53058fb0e19df8358';
-  const startAt = new Date(Date.now() - 60 * 60 * 24 * 30 * 1000);
-  const endAt = new Date(Date.now());
+  const startAt = new Date('2020-08-01T12:00:00.000+0000');
+  const endAt = new Date('2020-08-30T12:00:00.000+0000');
 
   const [datePickerActive, setDatePickerActive] = useState(false);
 
