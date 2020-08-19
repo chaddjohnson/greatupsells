@@ -11504,7 +11504,7 @@ mongoose-long@^0.3.1:
   resolved "https://registry.yarnpkg.com/mongoose-long/-/mongoose-long-0.3.1.tgz#eee11baaa07575d6bbd775ae42567cdcb0e56b28"
   integrity sha512-PqcJpCkzjGmJVJuDURHbjjqTXmoMhOWxiJ8ivHyW+vQVFM7vq5pO3nMPE6dGeGJfp8IuZiJeJXHwOdtjYas0og==
 
-mongoose@^5.9.27:
+mongoose@5.9.27:
   version "5.9.27"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.9.27.tgz#914cbc2a454520934fbbf2c0e366d9c7d8076b3b"
   integrity sha512-N8zj4pj9J2xJ2BnQ4NiIHEtmjPldtbmbEZOMz4phLTQr3KFWPR0T0I6EzQxNioHwmDbHD4VFzbEd755oD2SJxA==
