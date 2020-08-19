@@ -150,7 +150,11 @@ LineChart.propTypes = {
   changeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   changePercentage: PropTypes.number,
   tooltipText: PropTypes.string,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array
+};
+
+LineChart.defaultProps = {
+  data: []
 };
 
 export default LineChart;

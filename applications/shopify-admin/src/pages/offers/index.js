@@ -51,7 +51,8 @@ const OffersPage = () => {
         status="critical"
         action={{
           content: 'Try again',
-          onAction: () => fetchOffers()
+          onAction: () => fetchOffers(),
+          disabled: offersLoading
         }}
       >
         Unable to load offers. Please try again shortly.

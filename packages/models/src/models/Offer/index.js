@@ -139,6 +139,13 @@ schema.methods.findRevenueIncreases = async function (startAt, endAt) {
   return OfferHit.findRevenueIncreasesByOfferId(this._id, startAt, endAt);
 };
 
+schema.methods.findConversions = async function (startAt, endAt) {
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
+
+  return OfferHit.findConversionsByOfferId(this._id, startAt, endAt);
+};
+
 schema.methods.findConversionRates = async function (startAt, endAt) {
   const models = require('..');
   const OfferHit = await models.get('OfferHit');

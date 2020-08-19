@@ -12,7 +12,13 @@ const {
   updateOffer,
   deleteOffer
 } = require('./offers');
-const { offerAcceptances } = require('./offerHits');
+const {
+  offerAcceptances,
+  offerConversions,
+  offerConversionRates,
+  offerRevenueIncreases,
+  offerViews
+} = require('./offerHits');
 const { products, product, productShop } = require('./products');
 
 const resolvers = {
@@ -25,6 +31,10 @@ const resolvers = {
     offers,
     offer,
     offerAcceptances,
+    offerConversions,
+    offerConversionRates,
+    offerRevenueIncreases,
+    offerViews,
     products,
     product
   },

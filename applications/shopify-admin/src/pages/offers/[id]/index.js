@@ -85,7 +85,8 @@ const OfferEditPage = () => {
         status="critical"
         action={{
           content: 'Try again',
-          onAction: () => fetchOffer()
+          onAction: () => fetchOffer(),
+          disabled: offerLoading
         }}
       >
         Unable to load offer. Please try again shortly.
