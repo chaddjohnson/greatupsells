@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { sortBy } = require('lodash');
 
 const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
   if (typeof offerId !== 'object') {
@@ -38,12 +39,14 @@ const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
       }
     }
   ];
-  const groups = await OfferHit.aggregate(pipelines);
-  const formattedData =
-    groups.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) ||
-    [];
+  let data = [];
 
-  return formattedData;
+  data = await OfferHit.aggregate(pipelines);
+  data =
+    data.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) || [];
+  data = sortBy(data, ({ date }) => new Date(date));
+
+  return data;
 };
 
 module.exports = findRevenueIncreasesByOfferId;

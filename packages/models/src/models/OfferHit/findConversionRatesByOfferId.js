@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { sortBy } = require('lodash');
 
 const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
   if (typeof offerId !== 'object') {
@@ -51,11 +52,14 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
       }
     }
   ];
-  const groups = await OfferHit.aggregate(pipelines);
-  const formattedData =
-    groups.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
+  let data = [];
 
-  return formattedData;
+  data = await OfferHit.aggregate(pipelines);
+  data =
+    data.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
+  data = sortBy(data, ({ date }) => new Date(date));
+
+  return data;
 };
 
 module.exports = findConversionRatesByOfferId;
