@@ -1,5 +1,6 @@
 export { ShopProvider, useShop } from './shop';
 
+export { default as useNumberFormatter } from './numberFormatter';
 export { default as useOffer } from './offer';
 export { default as useOfferAcceptances } from './offerAcceptances';
 export { default as useOfferAnalytics } from './offerAnalytics';

@@ -9,10 +9,20 @@ import {
   Heading,
   DisplayText,
   TextStyle,
-  Button
+  Button,
+  Banner,
+  TextContainer,
+  SkeletonPage,
+  SkeletonDisplayText,
+  SkeletonBodyText
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { TitleBar, LineChart } from '../components';
+import {
+  useShop,
+  useNumberFormatter
+} from '@neatowebsolutions/upselling-react-hooks';
+import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { TitleBar, LineChart, SkeletonChart } from '../components';
 
 const Stats = styled.div`
   text-align: center;
@@ -55,94 +65,159 @@ const data = {
   ]
 };
 
-const DashboardPage = () => (
-  <Page title="Overview dashboard">
-    <PageTitleBar />
+const loadingComponent = () => (
+  <SkeletonPage title="Overview dashboard">
     <Layout>
       <Layout.Section>
         <Card sectioned>
-          <Stats>
-            <Stack distribution="equalSpacing">
-              <Stack spacing="tight" vertical>
-                <DisplayText size="extraLarge">96</DisplayText>
-                <TextStyle variation="strong">
-                  <TextStyle variation="subdued">Accepted offers</TextStyle>
-                </TextStyle>
-              </Stack>
-              <Stack spacing="tight" vertical>
-                <DisplayText size="extraLarge">$1,214.16</DisplayText>
-                <TextStyle variation="strong">
-                  <TextStyle variation="subdued">Revenue increase</TextStyle>
-                </TextStyle>
-              </Stack>
-              <Stack spacing="tight" vertical>
-                <DisplayText size="extraLarge">3.2%</DisplayText>
-                <TextStyle variation="strong">
-                  <TextStyle variation="subdued">Conversion rate</TextStyle>
-                </TextStyle>
-              </Stack>
-            </Stack>
-          </Stats>
+          <SkeletonBodyText lines={3} />
         </Card>
       </Layout.Section>
       <Layout.Section>
         <Card sectioned>
-          <LineChart
-            title={
-              <Stack distribution="equalSpacing">
-                <Heading>Accepted offers</Heading>
-                <Button plain url="/analytics/">
-                  View all analytics
-                </Button>
-              </Stack>
-            }
-            subtitle="Offers over last 90 days"
-            rangeDescription="January to December"
-            changeValue={85}
-            changePercentage={0.01}
-            tooltipText="accepted offers"
-            data={data.acceptedOffers}
-          />
+          <SkeletonChart />
         </Card>
       </Layout.Section>
       <Layout.Section>
-        <CalloutCard
-          title="Add upsell and cross-sell offers to your store"
-          primaryAction={{
-            content: 'Create offer',
-            url: '/offers/new/'
-          }}
-          secondaryAction={{
-            content: 'Manage your offers',
-            url: '/offers/'
-          }}
-        >
-          Upselling and cross-selling are two of the most effective ways to
-          increase sales in your store.
-        </CalloutCard>
-        <MediaCard
-          title="Getting Started"
-          primaryAction={{
-            content: 'Visit the tutorials',
-            url: 'https://help.domain.com/tutorials'
-          }}
-          // description="Discover how Shopify can power up your entrepreneurial journey."
-          description="Learn how to use Great Upsells to boost your sales and revenue."
-        >
-          <img
-            alt=""
-            width="100%"
-            height="100%"
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'center'
-            }}
-            src="/images/tutorials.svg"
-          />
-        </MediaCard>
+        <Card sectioned>
+          <TextContainer>
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={4} />
+          </TextContainer>
+        </Card>
       </Layout.Section>
     </Layout>
-  </Page>
+  </SkeletonPage>
 );
+
+const DashboardPage = () => {
+  const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const {
+    formatNumber,
+    formatCurrency,
+    formatPercentage
+  } = useNumberFormatter();
+
+  const errorComponent = memo(() => (
+    <Page title="Overview dashboard">
+      <Banner
+        title="Unable to load dashboad"
+        status="critical"
+        action={{
+          content: 'Try again',
+          onAction: () => fetchShop(),
+          disabled: shopLoading
+        }}
+      >
+        Unable to load offers. Please try again shortly.
+      </Banner>
+    </Page>
+  ));
+
+  return (
+    <Loader
+      isLoading={shopLoading}
+      isError={!!shopError}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+    >
+      <Page title="Overview dashboard">
+        <PageTitleBar />
+        <Layout>
+          <Layout.Section>
+            <Card sectioned>
+              <Stats>
+                <Stack distribution="equalSpacing" wrap>
+                  <Stack spacing="tight" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(shop?.acceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Accepted offers</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(shop?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(shop?.conversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                </Stack>
+              </Stats>
+            </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <Card sectioned>
+              <LineChart
+                title={
+                  <Stack distribution="equalSpacing">
+                    <Heading>Accepted offers</Heading>
+                    <Button plain url="/analytics/">
+                      View all analytics
+                    </Button>
+                  </Stack>
+                }
+                subtitle="Offers over last 90 days"
+                rangeDescription="January to December"
+                changeValue={formatNumber(85)}
+                changePercentage={formatPercentage(0.01, 1)}
+                tooltipText="accepted offers"
+                data={data.acceptedOffers}
+              />
+            </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <CalloutCard
+              title="Add upsell and cross-sell offers to your store"
+              primaryAction={{
+                content: 'Create offer',
+                url: '/offers/new/'
+              }}
+              secondaryAction={{
+                content: 'Manage your offers',
+                url: '/offers/'
+              }}
+            >
+              Upselling and cross-selling are two of the most effective ways to
+              increase sales in your store.
+            </CalloutCard>
+            <MediaCard
+              title="Getting Started"
+              primaryAction={{
+                content: 'Visit the tutorials',
+                url: 'https://help.domain.com/tutorials'
+              }}
+              // description="Discover how Shopify can power up your entrepreneurial journey."
+              description="Learn how to use Great Upsells to boost your sales and revenue."
+            >
+              <img
+                alt="Tutorials"
+                width="100%"
+                height="100%"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center'
+                }}
+                src="/images/tutorials.svg"
+              />
+            </MediaCard>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    </Loader>
+  );
+};
 
 export default DashboardPage;

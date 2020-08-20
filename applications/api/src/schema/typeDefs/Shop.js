@@ -12,6 +12,7 @@ const typeDef = gql`
     contactPhone: String
     countryCode: String!
     currency: String!
+    locale: String!
     timezone: String!
     active: Boolean!
     internal: Boolean!

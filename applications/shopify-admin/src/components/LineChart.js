@@ -112,7 +112,8 @@ const LineChart = ({
       <Stack vertical>
         <Stack vertical spacing="tight">
           {typeof title === 'string' ? <Heading>{title}</Heading> : title}
-          {(changeValue || changePercentage) && (
+          {(typeof changeValue !== 'undefined' ||
+            typeof changePercentage !== 'undefined') && (
             <Stack alignment="center" spacing="tight">
               {changeValue && (
                 <DisplayText size="medium" element="div">
@@ -123,9 +124,7 @@ const LineChart = ({
                 <DisplayText size="small" element="div">
                   <Stack spacing="none" alignment="center">
                     <Icon source={ArrowUpMinor} color="green" />
-                    <span style={{ color: '#50b83c' }}>
-                      {Math.round(changePercentage * 100 * 10) / 10}%
-                    </span>
+                    <span style={{ color: '#50b83c' }}>{changePercentage}</span>
                   </Stack>
                 </DisplayText>
               )}
@@ -148,7 +147,7 @@ LineChart.propTypes = {
   subtitle: PropTypes.node,
   rangeDescription: PropTypes.node,
   changeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  changePercentage: PropTypes.number,
+  changePercentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   tooltipText: PropTypes.string,
   data: PropTypes.array
 };

@@ -17,7 +17,7 @@ const SkeletonChart = () => (
   <>
     <Stack vertical>
       <SkeletonDisplayText size="small" />
-      <SkeletonBodyText lines={3} />
+      <SkeletonBodyText lines={2} />
       <SkeletonThumbnailWrapper>
         <SkeletonThumbnail />
       </SkeletonThumbnailWrapper>

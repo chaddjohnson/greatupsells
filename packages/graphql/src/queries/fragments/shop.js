@@ -9,6 +9,7 @@ export default /* GraphQL */ `
     contactPhone
     countryCode
     currency
+    locale
     timezone
     active
     internal

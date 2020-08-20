@@ -10,13 +10,9 @@ import {
 const ShopContext = createContext(null);
 
 export const ShopProvider = ({ children }) => {
-  const { data: shop, error: shopError } = useSWR(
+  const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
     SHOP_QUERY,
-    graphqlClient.query,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false
-    }
+    graphqlClient.query
   );
 
   const shopLoading = !shop && !shopError;
@@ -36,7 +32,8 @@ export const ShopProvider = ({ children }) => {
         shop,
         shopLoading,
         shopError,
-        updateShop
+        updateShop,
+        fetchShop
       }}
     >
       {children}

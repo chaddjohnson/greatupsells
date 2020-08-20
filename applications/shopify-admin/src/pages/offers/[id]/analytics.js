@@ -12,7 +12,8 @@ import {
 } from '@shopify/polaris';
 import {
   useOffer,
-  useOfferAnalytics
+  useOfferAnalytics,
+  useNumberFormatter
 } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import {
@@ -72,6 +73,7 @@ const OfferAnalyticsPage = () => {
 
   const [datePickerActive, setDatePickerActive] = useState(false);
 
+  const { formatNumber, formatPercentage } = useNumberFormatter();
   const { offer } = useOffer(offerId);
   const {
     offerAcceptances,
@@ -172,8 +174,8 @@ const OfferAnalyticsPage = () => {
                   title="Acceptances"
                   subtitle="Acceptances over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={85}
-                  changePercentage={0.01}
+                  changeValue={formatNumber(85)}
+                  changePercentage={formatPercentage(0.01, 1)}
                   data={offerAcceptancesChartData}
                 />
               </Card>
@@ -182,8 +184,8 @@ const OfferAnalyticsPage = () => {
                   title="Views"
                   subtitle="Views over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={214}
-                  changePercentage={0.115}
+                  changeValue={formatNumber(214)}
+                  changePercentage={formatPercentage(0.115, 1)}
                   data={offerViewsChartData}
                 />
               </Card>
@@ -192,8 +194,8 @@ const OfferAnalyticsPage = () => {
                   title="Conversion rate"
                   subtitle="Conversion rate over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={0.75}
-                  changePercentage={0.012}
+                  changeValue={formatNumber(0.75)}
+                  changePercentage={formatPercentage(0.012, 1)}
                   data={offerConversionRatesChartData}
                 />
               </Card>

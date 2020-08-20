@@ -10,6 +10,7 @@ import {
   TextStyle
 } from '@shopify/polaris';
 import { CalendarMajorMonotone } from '@shopify/polaris-icons';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { TitleBar, LineChart } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Analytics" />);
@@ -147,6 +148,11 @@ const data = {
 
 const AnalyticsPage = () => {
   const [datePickerActive, setDatePickerActive] = useState(false);
+  const {
+    formatNumber,
+    formatCurrency,
+    formatPercentage
+  } = useNumberFormatter();
 
   return (
     <Page title="Analytics for all offers" fullWidth>
@@ -182,8 +188,8 @@ const AnalyticsPage = () => {
                 title="Accepted offers"
                 subtitle="Accepted offers over last 90 days"
                 rangeDescription="January to December"
-                changeValue={85}
-                changePercentage={0.01}
+                changeValue={formatNumber(85)}
+                changePercentage={formatPercentage(0.01, 1)}
                 data={data.acceptedOffers}
               />
             </Card>
@@ -192,8 +198,8 @@ const AnalyticsPage = () => {
                 title="Offer views"
                 subtitle="Offer views over last 90 days"
                 rangeDescription="January to December"
-                changeValue={214}
-                changePercentage={0.116}
+                changeValue={formatNumber(214)}
+                changePercentage={formatPercentage(0.116, 1)}
                 data={data.acceptedOffers}
               />
             </Card>
@@ -204,8 +210,8 @@ const AnalyticsPage = () => {
                 title="Revenue increase"
                 subtitle="Revenue increase over last 90 days"
                 rangeDescription="January to December"
-                changeValue={'$364'}
-                changePercentage={0.06}
+                changeValue={formatCurrency(364)}
+                changePercentage={formatPercentage(0.06, 1)}
                 data={data.revenueIncrease}
               />
             </Card>
@@ -214,8 +220,8 @@ const AnalyticsPage = () => {
                 title="Conversion rate"
                 subtitle="Conversion rate over last 90 days"
                 rangeDescription="January to December"
-                changeValue={14}
-                changePercentage={0.04}
+                changeValue={formatNumber(14)}
+                changePercentage={formatPercentage(0.04, 1)}
                 data={data.acceptedOffers}
               />
             </Card>
