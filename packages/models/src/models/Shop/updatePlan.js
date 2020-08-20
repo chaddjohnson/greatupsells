@@ -56,14 +56,14 @@ module.exports = async (shop) => {
 
     if (deactivatePlan) {
       logger.warn(
-        `Deactivating premium plan for shop ${shop.domain} due to non-payment`
+        `Deactivating plan for shop ${shop.domain} due to non-payment`
       );
 
       shop.plan.active = false;
     }
 
     if (reactivatePlan) {
-      logger.warn(`Reactivating premium plan for shop ${shop.domain}`);
+      logger.warn(`Reactivating plan for shop ${shop.domain}`);
 
       shop.plan.active = true;
     }

@@ -19,7 +19,6 @@ export default /* GraphQL */ `
       billingOn
       upgradedAt
       canceledAt
-      grandfatheredAt
     }
     uninstalledAt
     acceptanceCount

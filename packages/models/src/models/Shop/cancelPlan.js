@@ -18,7 +18,7 @@ module.exports = async (shop) => {
       !recurringChargeData.cancelled_on
     ) {
       logger.info(
-        `Cancelling recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`
+        `Cancelling recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
       );
 
       try {
@@ -27,22 +27,27 @@ module.exports = async (shop) => {
         );
 
         logger.info(
-          `Cancelled recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`
+          `Cancelled recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
         );
       } catch (error) {
         logger.error(
-          `Error cancelling existing recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`,
+          `Error cancelling existing recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
           error
         );
       }
     }
 
+    shop.plan.level = 'FREE';
+    shop.plan.active = false;
+    shop.plan.chargeId = undefined;
+    shop.plan.upgradedAt = undefined;
+    shop.plan.billingOn = undefined;
     shop.plan.canceledAt = Date.now();
 
     await shop.save();
   } catch (error) {
     logger.warn(
-      `Error retrieving recurring charge ${shop.plan.chargeId} for premium plan for shop ${shop.domain}`,
+      `Error retrieving recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
       error
     );
   }

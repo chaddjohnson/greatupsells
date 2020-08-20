@@ -3,7 +3,7 @@ const logger = require('@neatowebsolutions/logger');
 module.exports = async (shop) => {
   try {
     // Do nothing if the shop is already upgraded.
-    if (shop.plan.level === 'premium') {
+    if (shop.plan.level !== 'FREE') {
       return;
     }
 
@@ -13,9 +13,7 @@ module.exports = async (shop) => {
       );
     }
 
-    logger.info(
-      `Activating recurring charge for premium upgrade for shop ${shop.domain}`
-    );
+    logger.info(`Activating recurring charge for shop ${shop.domain}`);
 
     const shopifyApiClient = shop.getShopifyApiClient();
     let recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
@@ -46,8 +44,8 @@ module.exports = async (shop) => {
       recurringChargeData
     );
 
-    // Flag the shop as in premium mode.
-    shop.plan.level = 'premium';
+    // Update shop plan.
+    shop.plan.level = 'premium'; // TODO
     shop.plan.active = true;
     shop.plan.upgradedAt = Date.now();
     shop.plan.billingOn = new Date(recurringChargeData.billing_on);
@@ -56,12 +54,12 @@ module.exports = async (shop) => {
     await shop.save();
 
     logger.info(
-      `Activated recurring charge ${shop.plan.chargeId} for premium upgrade for shop ${shop.domain}`,
+      `Activated recurring charge ${shop.plan.chargeId} for for shop ${shop.domain}`,
       recurringChargeData
     );
   } catch (error) {
     logger.error(
-      `Error activating recurring charge for premium upgrade for shop ${shop.domain}`,
+      `Error activating recurring charge for shop ${shop.domain}`,
       error
     );
     throw error;

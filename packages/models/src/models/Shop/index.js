@@ -9,7 +9,6 @@ const validateAccessToken = require('./validateAccessToken');
 const removeAccessToken = require('./removeAccessToken');
 const deactivate = require('./deactivate');
 const activateOrDeactivate = require('./activateOrDeactivate');
-const grandfather = require('./grandfather');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
 const activatePlanUpgrade = require('./activatePlanUpgrade');
 const cancelPlan = require('./cancelPlan');
@@ -59,15 +58,14 @@ const schema = new mongoose.Schema(
       level: {
         type: String,
         required: true,
-        enum: ['FREE', 'PREMIUM'],
+        enum: ['FREE', 'BASIC', 'SHOPIFY', 'ADVANCED'],
         default: 'FREE'
       },
       active: { type: Boolean, required: false, default: false },
       chargeId: { type: String, required: false },
       billingOn: { type: Date, required: false },
       upgradedAt: { type: Date, required: false },
-      canceledAt: { type: Date, required: false },
-      grandfatheredAt: { type: Date, required: false }
+      canceledAt: { type: Date, required: false }
     },
     uninstalledAt: { type: Date, required: false },
     acceptanceCount: { type: Int32, required: true, default: 0 },
@@ -127,10 +125,6 @@ schema.methods.deactivate = function () {
 
 schema.methods.activateOrDeactivate = function () {
   return activateOrDeactivate(this);
-};
-
-schema.methods.grandfather = function () {
-  return grandfather(this);
 };
 
 schema.methods.initiatePlanUpgrade = function () {

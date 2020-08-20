@@ -34,12 +34,13 @@ const typeDef = gql`
     billingOn: String
     upgradedAt: DateTime
     canceledAt: DateTime
-    grandfatheredAt: DateTime
   }
 
   enum ShopPlanLevel {
     FREE
-    PREMIUM
+    BASIC
+    SHOPIFY
+    ADVANCED
   }
 `;
 
