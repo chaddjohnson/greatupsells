@@ -16,7 +16,7 @@ import {
   DuplicateMinor,
   CircleDisableMinor
 } from '@shopify/polaris-icons';
-import { useOffer } from '@neatowebsolutions/upselling-react-hooks';
+import { useShop, useOffer } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { TitleBar, OfferForm } from '../../../components';
 
@@ -74,6 +74,7 @@ const loadingComponent = () => (
 const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
+  const { shop } = useShop();
   const { offer, offerLoading, offerError, updateOffer, fetchOffer } = useOffer(
     offerId
   );
@@ -142,6 +143,7 @@ const OfferEditPage = () => {
         <PageTitleBar />
         <OfferForm
           initialValues={offer}
+          currency={shop?.currency}
           onSubmit={updateOffer}
           onCancel={handleCancel}
         />

@@ -85,7 +85,7 @@ const OfferPopupContainer = styled.div`
   }
 `;
 
-const OfferForm = ({ initialValues, onSubmit, onCancel }) => {
+const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
 
   const [submitted, setSubmitted] = useState(false);
@@ -438,8 +438,8 @@ const OfferForm = ({ initialValues, onSubmit, onCancel }) => {
                     value: 'PERCENTAGE'
                   },
                   {
-                    label: 'USD off',
-                    value: 'USD'
+                    label: `${currency} off`,
+                    value: currency
                   },
                   {
                     label: 'Set price',
@@ -871,6 +871,7 @@ const OfferForm = ({ initialValues, onSubmit, onCancel }) => {
 
 OfferForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
+  currency: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func
 };

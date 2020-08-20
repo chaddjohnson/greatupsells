@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useRouter } from 'next/router';
 import { Page } from '@shopify/polaris';
-import { useOffer } from '@neatowebsolutions/upselling-react-hooks';
+import { useShop, useOffer } from '@neatowebsolutions/upselling-react-hooks';
 import { TitleBar, OfferForm } from '../../components';
 
 const PageTitleBar = memo(() => (
@@ -62,6 +62,7 @@ const initialOffer = {
 
 const OfferCreatePage = () => {
   const router = useRouter();
+  const { shop } = useShop();
   const { createOffer } = useOffer();
 
   const handleCancel = () => router.push('/offers/');
@@ -71,6 +72,7 @@ const OfferCreatePage = () => {
       <PageTitleBar />
       <OfferForm
         initialValues={initialOffer}
+        currency={shop?.currency}
         onSubmit={createOffer}
         onCancel={handleCancel}
       />
