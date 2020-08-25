@@ -58,6 +58,7 @@ const typeDef = gql`
     CART
     CHECKOUT
     PAGE
+    LINK
   }
 
   enum OfferPopupThemeType {
@@ -76,6 +77,7 @@ const typeDef = gql`
     ADD
     CART
     CHECKOUT
+    EXIT
   }
 
   type OfferProduct {

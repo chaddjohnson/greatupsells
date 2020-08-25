@@ -46,7 +46,7 @@ const schema = new mongoose.Schema(
     cancelButtonText: { type: String, required: true },
     actionButtonBehavior: {
       type: String,
-      enum: ['CART', 'CHECKOUT', 'PAGE'],
+      enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK'],
       required: true
     },
     popupThemeType: {
@@ -84,7 +84,7 @@ const schema = new mongoose.Schema(
     // discountAmount
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'CHECKOUT'],
+      enum: ['ADD', 'CART', 'CHECKOUT', 'EXIT'],
       required: true
     },
     triggerProducts: [offerProductSchema],

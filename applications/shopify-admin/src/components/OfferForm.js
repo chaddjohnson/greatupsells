@@ -17,8 +17,11 @@ import {
   TextField,
   Icon,
   Button,
+  Tag,
+  Autocomplete,
   PageActions,
-  Sticky
+  Sticky,
+  Stack
 } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
 import {
@@ -312,6 +315,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
         actionButtonText.onChange('Add to cart');
       } else if (behavior === 'CHECKOUT') {
         actionButtonText.onChange('Checkout');
+      } else if (behavior === 'EXIT') {
+        actionButtonText.onChange('Get this offer');
       } else {
         actionButtonText.onChange('Continue shopping');
       }
@@ -422,6 +427,12 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     label: 'Checkout page',
                     value: 'CHECKOUT',
                     helpText: 'Offer is shown on the Checkout page.'
+                  },
+                  {
+                    label: 'Exit',
+                    value: 'EXIT',
+                    helpText:
+                      'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.'
                   }
                 ]}
                 selected={triggerEvent.value}
@@ -455,6 +466,60 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               />
             </FormLayout>
           </Card>
+          <Card title="Minimum requirements" sectioned>
+            <FormLayout>
+              <ChoiceList
+                choices={[
+                  {
+                    label: 'None',
+                    value: 'NONE'
+                  },
+                  {
+                    label: 'Minimum purchase amount ($)',
+                    value: 'AMOUNT'
+                  },
+                  {
+                    label: 'Minimum quantity of items',
+                    value: 'QUANTITY'
+                  }
+                ]}
+                selected="NONE"
+              />
+            </FormLayout>
+          </Card>
+          <Card title="Action button behavior" sectioned>
+            <ChoiceList
+              choices={[
+                {
+                  label: 'Redirect customers to the Cart page',
+                  value: 'CART'
+                },
+                {
+                  label:
+                    'Skip the cart and take customers directly to the Checkout page',
+                  value: 'CHECKOUT',
+                  helpText:
+                    'Immediately initiating checkout can increase conversions.'
+                },
+                {
+                  label: 'Remain on the same page',
+                  value: 'PAGE'
+                },
+                {
+                  label: 'Open a link',
+                  value: 'LINK',
+                  helpText: (
+                    <Stack vertical spacing="tight">
+                      <TextField placeholder="URL" />
+                      <Checkbox label="Open in new browser tab" />
+                    </Stack>
+                  )
+                }
+              ]}
+              selected={actionButtonBehavior.value}
+              onChange={([value]) => handleActionButtonBehaviorChange(value)}
+            />
+          </Card>
           <Card
             title={`Products and collections to ${
               offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
@@ -462,7 +527,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
           >
             <Card.Section title="Products">
               <TextField
-                helpText={`Selected products will be selected at random and offered as ${
+                helpText={`Selected products will be shown at random and offered as ${
                   offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
                 }s.`}
                 placeholder="Search products"
@@ -482,7 +547,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             </Card.Section>
             <Card.Section title="Collections">
               <TextField
-                helpText={`Products from selected collections will be selected at random and offered as ${
+                helpText={`Products from selected collections will be shown at random and offered as ${
                   offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
                 }s.`}
                 placeholder="Search collections"
@@ -538,50 +603,19 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 // onItemRemoved={triggerCollections => setOffer({ ...offer, triggerCollections })}
               />
             </Card.Section>
-            <Card.Section title="Minimum requirements">
-              <FormLayout>
-                <ChoiceList
-                  choices={[
-                    {
-                      label: 'None',
-                      value: 'NONE'
-                    },
-                    {
-                      label: 'Minimum purchase amount ($)',
-                      value: 'AMOUNT'
-                    },
-                    {
-                      label: 'Minimum quantity of items',
-                      value: 'QUANTITY'
-                    }
-                  ]}
-                  selected="NONE"
-                />
-              </FormLayout>
-            </Card.Section>
           </Card>
-          <Card title="Action button behavior" sectioned>
-            <ChoiceList
-              choices={[
-                {
-                  label: 'Redirect customers to the Cart page',
-                  value: 'CART'
-                },
-                {
-                  label:
-                    'Skip the cart and take customers directly to the Checkout page',
-                  value: 'CHECKOUT',
-                  helpText:
-                    'Immediately initiating checkout can increase conversions.'
-                },
-                {
-                  label: 'Remain on the same page',
-                  value: 'PAGE'
-                }
-              ]}
-              selected={actionButtonBehavior.value}
-              onChange={([value]) => handleActionButtonBehaviorChange(value)}
-            />
+          <Card title="Geotargeting" sectioned>
+            <Stack vertical spacing="tight">
+              <Checkbox label="Restrict offer to specific countries" />
+              <Autocomplete.TextField
+                label="Countries"
+                placeholder="United States, England, Australia"
+              />
+              <Stack>
+                <Tag onRemove={() => {}}>United States</Tag>
+                <Tag onRemove={() => {}}>Australia</Tag>
+              </Stack>
+            </Stack>
           </Card>
           <Card title="Popup">
             <Card.Section title="Settings">
@@ -700,6 +734,11 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               )}
             </FormLayout>
           </Card>
+          <Card title="Email marketing" sectioned>
+            <FormLayout>
+              <Checkbox label="Require email address entry to accept offer" />
+            </FormLayout>
+          </Card>
           <Card title="Options">
             <Card.Section title="Products">
               <FormLayout>
@@ -737,6 +776,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                   }
                   {...asChoiceField(limitQuantitySelection)}
                 />
+                <Checkbox label="Delay showing popup" />
               </FormLayout>
             </Card.Section>
             <Card.Section title="Usage">
