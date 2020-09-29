@@ -3,7 +3,8 @@ const httpErrorHandler = require('@middy/http-error-handler');
 const cors = require('@middy/http-cors');
 const httpStatus = require('http-status-codes');
 const fetch = require('isomorphic-unfetch');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda').factory;
+const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
+  .factory;
 
 const { API_URL, MONGODB_URI } = process.env;
 const mongodbClient = mongodbClientFactory.get(MONGODB_URI);
@@ -29,7 +30,7 @@ const handler = middy(async (event, context) => {
   } catch (error) {
     return {
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      body: error.message
+      body: error.message || 'error'
     };
   }
 });

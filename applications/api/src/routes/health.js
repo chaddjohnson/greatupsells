@@ -25,7 +25,7 @@ const handler = middy(async (event, context) => {
   } catch (error) {
     return {
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      body: error.message
+      body: error.message || 'error'
     };
   }
 });
