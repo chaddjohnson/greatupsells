@@ -12,6 +12,7 @@ module.exports.handler = async (event, context) => {
     // const Shop = await models.get('Shop');
 
     // ...
+    // TODO: Run in parallel for shops.
   } catch (error) {
     logger.warn(`... failed`, error, event);
     throw error;
