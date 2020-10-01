@@ -2,9 +2,12 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
-
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
+const findRecentOfferHit = require('./findRecentOfferHit');
+const findRandomOffer = require('./findRandomOffer');
+const getCollectionCount = require('./getCollectionCount');
+const getProductCount = require('./getProductCount');
 const validateAccessToken = require('./validateAccessToken');
 const removeAccessToken = require('./removeAccessToken');
 const deactivate = require('./deactivate');
@@ -15,6 +18,7 @@ const cancelPlan = require('./cancelPlan');
 const downgradePlan = require('./downgradePlan');
 const updatePlan = require('./updatePlan');
 const initialize = require('./initialize');
+const toString = require('./toString');
 const hooks = require('./hooks');
 
 require('mongoose-long')(mongoose);
@@ -31,7 +35,7 @@ const schema = new mongoose.Schema(
     shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     name: { type: String, required: true, trim: true },
     domain: { type: String, required: true, trim: true },
-    realDomain: { type: String, required: false, trim: true },
+    alternateDomain: { type: String, required: false, trim: true },
     accessToken: { type: String, required: false },
     contactName: { type: String, required: true, trim: true },
     contactEmail: { type: String, required: true, trim: true },
@@ -54,6 +58,7 @@ const schema = new mongoose.Schema(
     timezone: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
     internal: { type: Boolean, required: false, default: false },
+    shopifyPlan: { type: String, required: true },
     plan: {
       level: {
         type: String,
@@ -88,19 +93,33 @@ schema.virtual('shopName').get(function () {
 });
 
 schema.statics.findByDomain = function (domain) {
-  return Shop.findOne({ domain });
+  return Shop.findOne({
+    $or: [{ domain }, { alternateDomain: domain }]
+  });
 };
 
 schema.statics.findByShopifyShopId = function (shopifyShopId) {
   return Shop.findOne({ shopifyShopId });
 };
 
-schema.statics.findByDomain = function (domain) {
-  return Shop.findOne({ domain });
-};
-
 schema.statics.createOrUpdate = function (shopDomain, accessToken) {
   return createOrUpdate(shopDomain, accessToken);
+};
+
+schema.methods.findRecentOfferHit = function (ipAddress) {
+  return findRecentOfferHit(this, ipAddress);
+};
+
+schema.methods.findRandomOffer = function (shopifyProductIds) {
+  return findRandomOffer(this, shopifyProductIds);
+};
+
+schema.methods.getCollectionCount = function () {
+  return getCollectionCount(this);
+};
+
+schema.methods.getProductCount = function () {
+  return getProductCount(this);
 };
 
 schema.methods.deactivate = function () {
@@ -152,14 +171,7 @@ schema.methods.initialize = function () {
 };
 
 schema.methods.toString = function () {
-  const data = [];
-
-  data.push(`ID = ${this.id}`);
-  data.push(`Shopify Shop ID = ${this.shopifyShopId}`);
-  data.push(`Name = ${this.name}`);
-  data.push(`Domain = ${this.domain}`);
-
-  return data.join(' | ');
+  return toString(this);
 };
 
 schema.pre('validate', function (next) {
@@ -169,6 +181,7 @@ schema.pre('validate', function (next) {
 // Create indexes.
 schema.index({ shopifyShopId: 1 }, { unique: true });
 schema.index({ domain: 1 }, { unique: true });
+schema.index({ alternateDomain: 1 });
 schema.index({ 'plan.upgradedAt': 1 });
 schema.index({ createdAt: -1 });
 

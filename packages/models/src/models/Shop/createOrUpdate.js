@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/logger');
+const models = require('..');
 
 const createShop = async (shopDomain, accessToken) => {
-  const models = require('..');
   const Shop = await models.get('Shop');
   const shop = new Shop({ domain: shopDomain, accessToken });
   const shopifyApiClient = shop.getShopifyApiClient();
@@ -16,24 +16,20 @@ const createShop = async (shopDomain, accessToken) => {
   shop.currency = shopifyShopData.currency;
   shop.locale = shopifyShopData.primary_locale;
   shop.timezone = shopifyShopData.iana_timezone;
+  shop.shopifyPlan = shopifyShopData.plan_name;
 
   if (shopifyShopData.domain !== shopifyShopData.myshopify_domain) {
-    shop.realDomain = shopifyShopData.domain;
+    shop.alternateDomain = shopifyShopData.domain;
   }
 
   await shop.save();
 
-  logger.info(`Created new shop ${shopDomain}`);
-
-  // Initialize the shop with Shopify.
-  await shop.initialize();
+  logger.info(`Created new shop (${shop.toString()})`);
 
   return shop;
 };
 
 const createOrUpdateShop = async (shopDomain, accessToken) => {
-  const models = require('..');
-
   try {
     const Shop = await models.get('Shop');
     let shop = await Shop.findByDomain(shopDomain);
@@ -61,7 +57,12 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
     // Mark the shop as active since it is being authenticated.
     shop.active = true;
 
-    return shop.save();
+    await shop.save();
+
+    // Run various initializations for the shop.
+    await shop.initialize();
+
+    return shop;
   } catch (error) {
     logger.info(`Error creating new shop ${shopDomain}`, error);
 
