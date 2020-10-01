@@ -16,8 +16,18 @@
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@neatowebsolutions/logger": "^0.0.0",
+    "@neatowebsolutions/shopify-graphql-transform": "^0.0.0",
+    "bluebird": "^3.7.2",
+    "http-status-codes": "^2.1.4",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.28",
     "mongoose-int32": "^0.4.1",
-    "mongoose-long": "^0.3.1"
+    "mongoose-long": "^0.3.1",
+    "shopify-api-node": "^3.3.1"
+  },
+  "devDependencies": {
+    "@neatowebsolutions/logger": "^0.0.0",
+    "@neatowebsolutions/shopify-graphql-transform": "^0.0.0"
   },
   "peerDependencies": {
     "@chaddjohnson/mongodb-client-lambda": "1.x",

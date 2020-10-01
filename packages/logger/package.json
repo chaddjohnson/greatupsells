@@ -2,17 +2,17 @@
   "name": "@neatowebsolutions/logger",
   "version": "0.0.0",
   "description": "Logger service for Neato Web Solutions.",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neatowebsolutions/logger.git"
   },
-  "main": "index.js",
-  "scripts": {
-    "format": "eslint --fix index.js",
-    "lint": "eslint index.js"
-  },
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts": {
+    "format": "eslint --fix index.js",
+    "lint": "eslint index.js"
+  }
 }

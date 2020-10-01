@@ -10,16 +10,21 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-storefront#readme",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@neatowebsolutions/upselling-react-components": "^0.0.0"
+    "@neatowebsolutions/upselling-react-components": "^0.0.0",
+    "preact": "^10.4.1"
   },
   "devDependencies": {
+    "@neatowebsolutions/upselling-react-components": "^0.0.0",
     "css-loader": "^3.5.3",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
     "file-loader": "^6.0.0",
+    "getenv": "^1.0.0",
     "style-loader": "^1.2.1",
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack -p",
+    "build": "webpack",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
     "start": "webpack-dev-server"
