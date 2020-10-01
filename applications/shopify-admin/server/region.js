@@ -1,10 +1,10 @@
-const httpStatus = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 
 const { AWS_REGION } = process.env;
 
 module.exports.handler = async () => {
   return {
-    statusCode: httpStatus.OK,
+    statusCode: StatusCodes.OK,
     body: AWS_REGION
   };
 };

@@ -1,4 +1,4 @@
-const httpStatus = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 
 module.exports = async (shop) => {
   if (!shop.accessToken) {
@@ -9,10 +9,10 @@ module.exports = async (shop) => {
     await shop.getShopifyApiClient().shop.get();
   } catch (error) {
     const errorHttpStatuses = [
-      httpStatus.PAYMENT_REQUIRED,
-      httpStatus.NOT_FOUND,
-      httpStatus.FORBIDDEN,
-      httpStatus.UNAUTHORIZED
+      StatusCodes.PAYMENT_REQUIRED,
+      StatusCodes.NOT_FOUND,
+      StatusCodes.FORBIDDEN,
+      StatusCodes.UNAUTHORIZED
     ];
 
     // Only consider the token to be invalid based on specific HTTP response codes.

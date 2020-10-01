@@ -1,4 +1,4 @@
-const httpStatus = require('http-status-codes');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 
@@ -13,11 +13,11 @@ const handler = async (request, response) => {
       throw new Error(`Cannot connect to database`);
     }
 
-    response.status(httpStatus.OK).send('OK');
+    response.status(StatusCodes.OK).send(ReasonPhrases.OK);
   } catch (error) {
     response
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .send(error.message || 'error');
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(error.message || ReasonPhrases.INTERNAL_SERVER_ERROR);
   }
 };
 

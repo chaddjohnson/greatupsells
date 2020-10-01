@@ -1,4 +1,4 @@
-const httpStatus = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const models = require('@neatowebsolutions/upselling-models');
 const logger = require('@neatowebsolutions/logger');
 
@@ -9,7 +9,7 @@ const handler = async (request, response) => {
   const shop = await Shop.findByDomain(domain);
 
   // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(httpStatus.OK).end();
+  response.status(StatusCodes.OK).end();
 
   if (shop) {
     try {

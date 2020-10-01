@@ -1,4 +1,4 @@
-const httpStatus = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const models = require('@neatowebsolutions/upselling-models');
 const logger = require('@neatowebsolutions/logger');
 
@@ -21,7 +21,7 @@ const handler = async (request, response) => {
     logger.warn(`Shop ${domain} not found for app uninstall webhook`);
   }
 
-  response.status(httpStatus.OK).end();
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

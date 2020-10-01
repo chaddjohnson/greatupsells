@@ -1,7 +1,7 @@
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const cors = require('@middy/http-cors');
-const httpStatus = require('http-status-codes');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 
@@ -19,13 +19,13 @@ const handler = middy(async (event, context) => {
     }
 
     return {
-      statusCode: httpStatus.OK,
-      body: 'OK'
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
     };
   } catch (error) {
     return {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      body: error.message || 'error'
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
 });

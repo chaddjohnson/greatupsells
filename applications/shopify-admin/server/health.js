@@ -1,8 +1,7 @@
 const middy = require('@middy/core');
 const httpErrorHandler = require('@middy/http-error-handler');
 const cors = require('@middy/http-cors');
-const httpStatus = require('http-status-codes');
-const fetch = require('isomorphic-unfetch');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 
@@ -16,7 +15,7 @@ const handler = middy(async (event, context) => {
     const apiResponse = await fetch(`${API_URL}/health`);
     await mongodbClient.connect();
 
-    if (apiResponse.status !== httpStatus.OK) {
+    if (apiResponse.status !== StatusCodes.OK) {
       throw new Error(`Cannot connect to API`);
     }
     if (!mongodbClient.connected) {
@@ -24,13 +23,13 @@ const handler = middy(async (event, context) => {
     }
 
     return {
-      statusCode: httpStatus.OK,
-      body: 'OK'
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
     };
   } catch (error) {
     return {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      body: error.message || 'error'
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
 });

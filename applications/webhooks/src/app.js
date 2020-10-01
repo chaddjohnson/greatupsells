@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const httpStatus = require('http-status-codes');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 const logger = require('@neatowebsolutions/logger');
@@ -80,8 +80,8 @@ app.use((error, request, response, next) => {
     error
   );
   response
-    .status(httpStatus.INTERNAL_SERVER_ERROR)
-    .send('Internal Server Error');
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .send(ReasonPhrases.INTERNAL_SERVER_ERROR);
 });
 
 // Log and exit on uncaught exception.
