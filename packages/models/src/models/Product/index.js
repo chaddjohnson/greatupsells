@@ -39,15 +39,10 @@ schema.statics.removeCopiedProducts = function () {
 };
 
 schema.statics.findShopifyProductVariant = function (
-  shop,
   shopifyProductId,
   shopifyProductVariantId
 ) {
-  return findShopifyProductVariant(
-    shop,
-    shopifyProductId,
-    shopifyProductVariantId
-  );
+  return findShopifyProductVariant(shopifyProductId, shopifyProductVariantId);
 };
 
 schema.methods.copy = function (shopifyProductDataOverrides) {
