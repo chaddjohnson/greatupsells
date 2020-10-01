@@ -1,4 +1,6 @@
-const copyFromShopifyProductData = (shopifyProductData) => {
+const models = require('..');
+
+const copyShopifyProductData = (shopifyProductData) => {
   const newShopifyProductData = { ...shopifyProductData };
 
   // Remove identifiers used by the original product.
@@ -46,21 +48,34 @@ const copyFromShopifyProductData = (shopifyProductData) => {
   return newShopifyProductData;
 };
 
-module.exports = async (product) => {
-  const { shop, shopifyProductData } = product;
+const copy = async (product, shopifyProductDataOverrides = {}) => {
+  const Product = await models.get('Product');
+  const { shop, shopifyShopId, shopifyProductData } = product;
   const shopifyApiClient = shop.getShopifyApiClient();
 
   // Create a clean copy of the product data.
-  const newShopifyProductData = copyFromShopifyProductData(shopifyProductData);
+  const newShopifyProductData = copyShopifyProductData({
+    ...shopifyProductData,
+    ...shopifyProductDataOverrides
+  });
 
-  // Create the product in Shopify.
-  const copiedProduct = await shopifyApiClient.product.create(
+  // Create the product in Shopify, and honor overrides.
+  const copiedShopifyProductData = await shopifyApiClient.product.create(
     newShopifyProductData
   );
 
+  // Save a copy of the product locally instead of relying solely on webhooks in
+  // case the product is needed before the webhook is triggered.
+  const copiedProduct = await Product.create({
+    shop,
+    shopifyShopId,
+    shopifyProductId: copiedShopifyProductData.id,
+    shopifyProductData: copiedShopifyProductData
+  });
+
   // Set metafields such that the product will not be indexable by search engines.
   await shopifyApiClient.metafield.create({
-    owner_id: copiedProduct.id,
+    owner_id: copiedShopifyProductData.id,
     owner_resource: 'product',
     namespace: 'seo',
     key: 'hidden',
@@ -68,7 +83,7 @@ module.exports = async (product) => {
     value_type: 'integer'
   });
 
-  // TODO: Create local copy of product? Rely on Shopify webhook?
-
   return copiedProduct;
 };
+
+module.exports = copy;
