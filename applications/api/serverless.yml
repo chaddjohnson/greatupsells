@@ -75,6 +75,11 @@ custom:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
           subdomain: ${env:SHOPIFY_ADMIN_SUBDOMAIN}
+      - port: ${env:WEBHOOKS_API_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:WEBHOOKS_API_URL}
 
 package:
   exclude:
