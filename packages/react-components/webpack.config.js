@@ -28,7 +28,6 @@ module.exports = {
   plugins: [new CleanWebpackPlugin()],
   externals: [
     '@neatowebsolutions/upselling-react-hooks',
-    /^next(?:\/.*)?$/,
     'prop-types',
     'react',
     'react-dom',
