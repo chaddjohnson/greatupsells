@@ -44,10 +44,11 @@ functions:
           cors: true
 
 plugins:
-  - serverless-domain-manager
   - serverless-offline
-  - serverless-ngrok-tunnel
   - serverless-dotenv-plugin
+  - serverless-ngrok-tunnel
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
 
 custom:
   customDomain:

@@ -11,7 +11,7 @@ provider:
   versionFunctions: false
   logRetentionInDays: 14
   environment:
-    NODE_ENV: "production"
+    NODE_ENV: 'production'
     SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     API_URL: ${ssm:/upselling/${self:provider.stage}/api/url}
     MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
@@ -42,12 +42,13 @@ functions:
           method: ANY
 
 plugins:
+  - serverless-plugin-monorepo
   - serverless-domain-manager
 
 custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/endpoint/${self:provider.region}}
-    basePath: ""
+    basePath: ''
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
