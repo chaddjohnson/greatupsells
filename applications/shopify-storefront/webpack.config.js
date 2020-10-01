@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
