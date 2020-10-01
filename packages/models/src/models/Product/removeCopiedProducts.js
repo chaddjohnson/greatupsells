@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
+const models = require('..');
 
 module.exports = async () => {
-  const models = require('..');
   const Product = await models.get('Product');
 
   const criteria = {
@@ -13,14 +13,15 @@ module.exports = async () => {
 
   const cursor = Product.find(criteria).cursor({ batchSize: 50 });
 
-  await cursor.eachAsync(async (product) => {
-    const { shop, shopifyShopId } = product;
-    const shopifyApiClient = shop.getShopifyApiClient();
+  await cursor.eachAsync(
+    async (product) => {
+      const { shop, shopifyShopId } = product;
+      const shopifyApiClient = shop.getShopifyApiClient();
 
-    // Remove the product from Shopify.
-    await shopifyApiClient.delete(shopifyShopId);
-
-    // Remove the product from our database.
-    await product.remove();
-  });
+      // Remove the product from Shopify. The product will then be marked as
+      // deleted (but not deleted) via webhook.
+      await shopifyApiClient.delete(shopifyShopId);
+    },
+    { parallel: 25 }
+  );
 };
