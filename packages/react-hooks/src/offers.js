@@ -1,17 +1,15 @@
-import useSWR from 'swr';
-import {
-  graphqlClient,
-  OFFERS_QUERY
-} from '@neatowebsolutions/upselling-graphql';
+import { useQuery } from '@neatowebsolutions/upselling-graphql-client';
+import { OFFERS_QUERY } from '@neatowebsolutions/upselling-graphql-queries';
 
 const useOffers = () => {
   const {
     data: offers,
+    loading: offersLoading,
     error: offersError,
     mutate: fetchOffers
-  } = useSWR(OFFERS_QUERY, graphqlClient.query, { refreshInterval: 10 * 1000 });
-
-  const offersLoading = !offers && !offersError;
+  } = useQuery(OFFERS_QUERY, null, {
+    refreshInterval: 10 * 1000
+  });
 
   return { offers, offersLoading, offersError, fetchOffers };
 };

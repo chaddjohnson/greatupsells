@@ -1,23 +1,17 @@
-import useSWR from 'swr';
-import {
-  graphqlClient,
-  OFFER_VIEWS_QUERY
-} from '@neatowebsolutions/upselling-graphql';
+import { useQuery } from '@neatowebsolutions/upselling-graphql-client';
+import { OFFER_VIEWS_QUERY } from '@neatowebsolutions/upselling-graphql-queries';
 
 const useOfferViews = (offerId, startAt, endAt) => {
   const {
     data: offerViews,
+    loading: offerViewsLoading,
     error: offerViewsError,
     mutate: fetchOfferViews
-  } = useSWR([OFFER_VIEWS_QUERY, offerId], (query, id) =>
-    graphqlClient.query(query, {
-      id,
-      startAt: new Date(startAt),
-      endAt: new Date(endAt)
-    })
-  );
-
-  const offerViewsLoading = !offerViews && !offerViewsError;
+  } = useQuery(OFFER_VIEWS_QUERY, {
+    id: offerId,
+    startAt: new Date(startAt),
+    endAt: new Date(endAt)
+  });
 
   return {
     offerViews,

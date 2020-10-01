@@ -1,30 +1,23 @@
-import useSWR from 'swr';
-import {
-  graphqlClient,
-  OFFER_CONVERSION_RATES_QUERY
-} from '@neatowebsolutions/upselling-graphql';
+import { useQuery } from '@neatowebsolutions/upselling-graphql-client';
+import { OFFER_CONVERSION_RATES_QUERY } from '@neatowebsolutions/upselling-graphql-queries';
 
 const useOfferConversionRates = (offerId, startAt, endAt) => {
   const {
     data: offerConversionRates,
+    loading: offerConversionRatesLoading,
     error: offerConversionRatesError,
-    mutate: fetchOfferConversionRates
-  } = useSWR([OFFER_CONVERSION_RATES_QUERY, offerId], (query, id) =>
-    graphqlClient.query(query, {
-      id,
-      startAt: new Date(startAt),
-      endAt: new Date(endAt)
-    })
-  );
-
-  const offerConversionRatesLoading =
-    !offerConversionRates && !offerConversionRatesError;
+    mutate: mutateOfferConversionRates
+  } = useQuery(OFFER_CONVERSION_RATES_QUERY, {
+    id: offerId,
+    startAt: new Date(startAt),
+    endAt: new Date(endAt)
+  });
 
   return {
     offerConversionRates,
     offerConversionRatesLoading,
     offerConversionRatesError,
-    fetchOfferConversionRates
+    fetchOfferConversionRates: mutateOfferConversionRates
   };
 };
 
