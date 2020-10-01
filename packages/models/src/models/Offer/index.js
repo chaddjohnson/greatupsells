@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
-const logger = require('@neatowebsolutions/logger');
+const findRandomByShopifyProductIds = require('./findRandomByShopifyProductIds');
+const findRandomProduct = require('./findRandomProduct');
+const toString = require('./toString');
+const hooks = require('./hooks');
+const trackView = require('./trackView');
 
 require('mongoose-long')(mongoose);
 
@@ -32,8 +36,8 @@ const schemaOptions = {
 const schema = new mongoose.Schema(
   {
     shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
-    name: { type: String, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
+    name: { type: String, required: true },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
     viewCount: { type: Int32, required: true, default: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0 },
@@ -84,7 +88,7 @@ const schema = new mongoose.Schema(
     // discountAmount
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'CHECKOUT', 'EXIT'],
+      enum: ['ADD', 'CART', 'CHECKOUT', 'LOAD', 'EXIT'],
       required: true
     },
     triggerProducts: [offerProductSchema],
@@ -116,6 +120,14 @@ schema.statics.findByShopifyShopId = function (shopifyShopId) {
 
 schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: shopId });
+};
+
+schema.statics.findRandomByShopifyProductIds = function (shopifyProductIds) {
+  return findRandomByShopifyProductIds(shopifyProductIds);
+};
+
+schema.models.findRandomProduct = function () {
+  return findRandomProduct(this);
 };
 
 schema.methods.findViews = async function (startAt, endAt) {
@@ -153,55 +165,28 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
   return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
 };
 
-schema.methods.toString = function () {
-  const data = [];
-
-  data.push(`ID = ${this.id}`);
-  data.push(`Name = ${this.name}`);
-  data.push(`Shopify Shop ID = ${this.shopifyShopId}`);
-
-  if (this.shop) {
-    data.push(`Shop = ${this.shop.domain}`);
-  }
-
-  return data.join(' | ');
+schema.methods.trackView = function (productId, variantId, ipAddress) {
+  return trackView(this, productId, variantId, ipAddress);
 };
 
-schema.pre('validate', async function (next) {
-  const models = require('..');
-  const Shop = await models.get('Shop');
+schema.methods.toString = function () {
+  return toString(this);
+};
 
-  // Set up reference to shop if missing.
-  if (this.shopifyShopId && !this.shop) {
-    try {
-      this.shop = await Shop.findByShopifyShopId(this.shopifyShopId);
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  next();
+schema.pre('validate', function (next) {
+  hooks.preValidate(this, next);
 });
 
 schema.pre('save', function () {
   this.$locals.wasNew = this.isNew;
 });
 
-schema.post('save', async function (offer, next) {
-  await offer.populate('shop').execPopulate();
-  logger.info(
-    `Offer ${
-      this.$locals.wasNew ? 'created' : 'updated'
-    } (${offer.toString()})`,
-    offer.toObject()
-  );
-  next();
+schema.post('save', function (offer, next) {
+  hooks.postSave(offer, next);
 });
 
-schema.post('remove', async function (offer, next) {
-  await offer.populate('shop').execPopulate();
-  logger.info(`Offer deleted (${offer.toString()})`);
-  next();
+schema.post('remove', function (offer, next) {
+  hooks.postRemove(offer, next);
 });
 
 schema.index({ shopifyShopId: 1 });
