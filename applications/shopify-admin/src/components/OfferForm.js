@@ -315,7 +315,9 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
         actionButtonText.onChange('Add to cart');
       } else if (behavior === 'CHECKOUT') {
         actionButtonText.onChange('Checkout');
-      } else if (behavior === 'EXIT') {
+      } else if (behavior === 'PAGE') {
+        actionButtonText.onChange('Add to cart');
+      } else if (behavior === 'LINK') {
         actionButtonText.onChange('Get this offer');
       } else {
         actionButtonText.onChange('Continue shopping');
@@ -394,13 +396,13 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     label: 'Upsell',
                     value: 'UPSELL',
                     helpText:
-                      'Encourage customers to buy related or complementary products.'
+                      'Encourage customers to purchase a comparable, more expensive product.'
                   },
                   {
                     label: 'Cross-sell',
                     value: 'CROSS_SELL',
                     helpText:
-                      'Encourage customers to buy comparable higher-end product.'
+                      'Encourage customers to purchase a related or complementary product.'
                   }
                 ]}
                 selected={strategy.value}
@@ -429,7 +431,12 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     helpText: 'Offer is shown on the Checkout page.'
                   },
                   {
-                    label: 'Exit',
+                    label: 'Shop visit',
+                    value: 'LOAD',
+                    helpText: 'Offer is shown when your shop is first visted.'
+                  },
+                  {
+                    label: 'Exit intent',
                     value: 'EXIT',
                     helpText:
                       'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.'
@@ -566,44 +573,48 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               />
             </Card.Section>
           </Card>
-          <Card title="Triggers">
-            <Card.Section title="Products">
-              <TextField
-                helpText="The popup will show when any selected products are in the cart."
-                placeholder="Search products"
-                prefix={<Icon source={SearchMinor} />}
-                connectedRight={
-                  <Button onClick={() => setTriggerProductPickerOpen(true)}>
-                    Browse
-                  </Button>
-                }
-                onChange={() => setTriggerProductPickerOpen(true)}
-              />
-              <ManagedResourceList
-                items={offer.triggerProducts}
-                // onChange={triggerProducts.onChange}
-                // onItemRemoved={triggerProducts => setOffer({ ...offer, triggerProducts })}
-              />
-            </Card.Section>
-            <Card.Section title="Collections">
-              <TextField
-                helpText="The popup will show when any products from selected collections are in the cart."
-                placeholder="Search collections"
-                prefix={<Icon source={SearchMinor} />}
-                connectedRight={
-                  <Button onClick={() => setTriggerCollectionPickerOpen(true)}>
-                    Browse
-                  </Button>
-                }
-                onChange={() => setTriggerCollectionPickerOpen(true)}
-              />
-              <ManagedResourceList
-                items={offer.triggerCollections}
-                // onChange={triggerCollections.onChange}
-                // onItemRemoved={triggerCollections => setOffer({ ...offer, triggerCollections })}
-              />
-            </Card.Section>
-          </Card>
+          {['ADD', 'CART', 'CHECKOUT'].indexOf(triggerEvent.value) > -1 && (
+            <Card title="Triggers">
+              <Card.Section title="Products">
+                <TextField
+                  helpText="The popup will show when any selected products are in the cart."
+                  placeholder="Search products"
+                  prefix={<Icon source={SearchMinor} />}
+                  connectedRight={
+                    <Button onClick={() => setTriggerProductPickerOpen(true)}>
+                      Browse
+                    </Button>
+                  }
+                  onChange={() => setTriggerProductPickerOpen(true)}
+                />
+                <ManagedResourceList
+                  items={offer.triggerProducts}
+                  // onChange={triggerProducts.onChange}
+                  // onItemRemoved={triggerProducts => setOffer({ ...offer, triggerProducts })}
+                />
+              </Card.Section>
+              <Card.Section title="Collections">
+                <TextField
+                  helpText="The popup will show when products from selected collections are in the cart. Please note that only the last 100 product added to the collection will be considered."
+                  placeholder="Search collections"
+                  prefix={<Icon source={SearchMinor} />}
+                  connectedRight={
+                    <Button
+                      onClick={() => setTriggerCollectionPickerOpen(true)}
+                    >
+                      Browse
+                    </Button>
+                  }
+                  onChange={() => setTriggerCollectionPickerOpen(true)}
+                />
+                <ManagedResourceList
+                  items={offer.triggerCollections}
+                  // onChange={triggerCollections.onChange}
+                  // onItemRemoved={triggerCollections => setOffer({ ...offer, triggerCollections })}
+                />
+              </Card.Section>
+            </Card>
+          )}
           <Card title="Geotargeting" sectioned>
             <Stack vertical spacing="tight">
               <Checkbox label="Restrict offer to specific countries" />
