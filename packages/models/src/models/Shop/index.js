@@ -63,7 +63,7 @@ const schema = new mongoose.Schema(
       level: {
         type: String,
         required: true,
-        enum: ['FREE', 'BASIC', 'SHOPIFY', 'ADVANCED'],
+        enum: ['FREE', 'BASIC', 'PLUS', 'PRO'],
         default: 'FREE'
       },
       active: { type: Boolean, required: false, default: false },
