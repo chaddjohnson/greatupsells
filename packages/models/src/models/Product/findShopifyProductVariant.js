@@ -4,6 +4,10 @@ const findShopifyProductVariant = async (
   shopifyProductId,
   shopifyProductVariantId
 ) => {
+  if (!shopifyProductId || !shopifyProductVariantId) {
+    return;
+  }
+
   const Product = await models.get('Product');
   const product = await Product.findByShopifyProductId(shopifyProductId);
   const { shop } = product;
