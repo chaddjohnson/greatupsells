@@ -18,7 +18,9 @@ const trackConversions = async (order) => {
   );
 
   // Track conversions for offer hits
-  await Promise.all(offerHits.map((offerHit) => offerHit.trackConversion()));
+  await Promise.all(
+    offerHits.map(async (offerHit) => offerHit.trackConversion())
+  );
 
   // Track revenue increase for order
   order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
