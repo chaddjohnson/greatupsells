@@ -5,11 +5,10 @@ const typeDef = gql`
     _id: ID!
     shopifyShopId: Long!
     shopifyProductId: Long!
-    title: String!
     shop: Shop
-    shopifyProductData: JSON
-    createdAt: DateTime
-    updatedAt: DateTime
+    shopifyProductData: JSON!
+    createdAt: DateTime!
+    updatedAt: DateTime!
   }
 `;
 

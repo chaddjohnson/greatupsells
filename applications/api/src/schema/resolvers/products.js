@@ -1,4 +1,5 @@
 const { AuthenticationError, ApolloError } = require('apollo-server-lambda');
+const logger = require('@neatowebsolutions/logger');
 
 module.exports.products = async (root, args, context) => {
   const { user, Product } = context;
@@ -40,5 +41,24 @@ module.exports.productShop = async (root, args, context) => {
     return await Shop.findById(root.shop);
   } catch (error) {
     throw new ApolloError('Error retrieving product shop');
+  }
+};
+
+module.exports.shopProducts = async (root, args, context) => {
+  const { shop, user, Product } = context;
+
+  if (!user && !shop) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  if (shop && shop.id !== root.id) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  try {
+    return await Product.findByShopId(root.id);
+  } catch (error) {
+    logger.error(`Error retrieving products for shop ${root.id}`, error);
+    throw new ApolloError('Error retrieving shop products');
   }
 };

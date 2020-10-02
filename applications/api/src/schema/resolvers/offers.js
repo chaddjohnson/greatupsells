@@ -57,13 +57,81 @@ module.exports.offer = async (root, args, context) => {
   return offer;
 };
 
-module.exports.offerShop = async (root, args, context) => {
-  const { Shop } = context;
+module.exports.randomOffer = async (root, args, context) => {
+  const { ip, host, Shop } = context;
+  const { event, shopifyProductIds } = args;
+  let shop = null;
+  let offerHit = null;
+
+  if (!host) {
+    logger.error(
+      `Unable to retrieve offer as domain is unavailable`,
+      context.event,
+      args
+    );
+    throw new ApolloError(`Error retrieving offer`);
+  }
 
   try {
-    return await Shop.findById(root.shop);
+    shop = await Shop.findByDomain(host);
+
+    if (!shop) {
+      logger.warn(
+        `Shop ${host} not found when requesting offer for product(s) ${shopifyProductIds.join(
+          ', '
+        )}`
+      );
+      throw new ApolloError('Error retrieving offer');
+    }
+
+    offerHit = await shop.findRecentOfferHit(ip);
+
+    // Abort if a recent offer hit for the requestor was found.
+    // TODO: Allow if there is a timer (and any other cases?).
+    if (offerHit) {
+      return;
+    }
+
+    // Find a random offer for the shop.
+    return await shop.findRandomOffer(event, shopifyProductIds);
+  } catch (error) {
+    logger.error(
+      `Error retrieving offer for Shopify product(s) ${shopifyProductIds.join(
+        ', '
+      )} in shop ${shop.toString()}`,
+      error,
+      args
+    );
+    throw new ApolloError('Error retrieving offer');
+  }
+};
+
+module.exports.offerShop = async (root, args, context) => {
+  const { Shop } = context;
+  const shopId = root.shop;
+
+  try {
+    return await Shop.findById(shopId);
   } catch (error) {
     throw new ApolloError('Error retrieving offer shop');
+  }
+};
+
+module.exports.offerProduct = async (root, args, context) => {
+  const { Offer } = context;
+  const offerId = root.id;
+  let offer = null;
+
+  try {
+    offer = await Offer.findById(offerId);
+
+    if (!offer) {
+      return;
+    }
+
+    return await offer.findRandomProduct();
+  } catch (error) {
+    throw new ApolloError(`Error retrieving product for offer`);
   }
 };
 
@@ -89,7 +157,7 @@ module.exports.createOffer = async (root, args, context) => {
   try {
     return await offer.save();
   } catch (error) {
-    logger.error(`Error creating offer (${offer.toString()})`, error);
+    logger.error(`Error creating offer (${offer.toString()})`, error, args);
     throw new ApolloError('Error creating offer');
   }
 };
@@ -118,7 +186,7 @@ module.exports.updateOffer = async (root, args, context) => {
   try {
     offer = await Offer.findById(id);
   } catch (error) {
-    logger.error(`Error retrieving offer ${id}`, error);
+    logger.error(`Error retrieving offer ${id}`, error, args);
     throw new ApolloError('Error retrieving offers');
   }
 
@@ -147,7 +215,7 @@ module.exports.updateOffer = async (root, args, context) => {
   try {
     return await offer.save();
   } catch (error) {
-    logger.error(`Error updating offer (${offer.toString()})`, error);
+    logger.error(`Error updating offer (${offer.toString()})`, error, args);
     throw new ApolloError(`Error updating offer (${offer.toString()})`);
   }
 };
@@ -184,5 +252,25 @@ module.exports.deleteOffer = async (root, args, context) => {
   } catch (error) {
     logger.error(`Error removing offer (${offer.toString()})`, error);
     throw new ApolloError(`Error removing offer`);
+  }
+};
+
+module.exports.shopOffers = async (root, args, context) => {
+  const { shop, user, Offer } = context;
+  const shopId = root.id;
+
+  if (!user && !shop) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  if (shop && shop.id !== shopId) {
+    throw new AuthenticationError('Unauthorized');
+  }
+
+  try {
+    return await Offer.findByShopId(shopId);
+  } catch (error) {
+    logger.error(`Error retrieving offers for shop ${root.id}`, error);
+    throw new ApolloError('Error retrieving shop offers');
   }
 };

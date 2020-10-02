@@ -45,8 +45,9 @@ const typeDef = gql`
     # discountCodes
     # discountPricingMethod
     enabled: Boolean
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    product: [Product]
   }
 
   enum OfferStrategy {
@@ -77,6 +78,7 @@ const typeDef = gql`
     ADD
     CART
     CHECKOUT
+    LOAD
     EXIT
   }
 

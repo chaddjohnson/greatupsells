@@ -19,27 +19,7 @@ const Query = gql`
     shop(id: ID): Shop
     offers: [Offer]
     offer(id: ID!): Offer
-    offerAcceptances(
-      id: ID!
-      startAt: DateTime!
-      endAt: DateTime!
-    ): [OfferAcceptance]
-    offerConversions(
-      id: ID!
-      startAt: DateTime!
-      endAt: DateTime!
-    ): [OfferConversion]
-    offerConversionRates(
-      id: ID!
-      startAt: DateTime!
-      endAt: DateTime!
-    ): [OfferConversionRate]
-    offerRevenueIncreases(
-      id: ID!
-      startAt: DateTime!
-      endAt: DateTime!
-    ): [OfferRevenueIncrease]
-    offerViews(id: ID!, startAt: DateTime!, endAt: DateTime!): [OfferView]
+    randomOffer(event: String!, shopifyProductIds: [Long!]!): Offer
     products: [Product]
     product(id: ID!): Product
     # login(username: String!, password: String!): User,
@@ -51,6 +31,13 @@ const Mutation = gql`
     createOffer(input: OfferInput!): Offer
     updateOffer(id: ID!, input: OfferInput!): Offer
     deleteOffer(id: ID!): Boolean
+    trackOfferView(offerId: ID!, productId: Long, variantId: Long): Boolean
+    trackOfferAcceptance(
+      offerHitId: ID!
+      productId: Long
+      variantId: Long
+      quantity: Int
+    ): Boolean
   }
 `;
 
