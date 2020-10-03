@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
-const findShopifyProductVariant = require('./findShopifyProductVariant');
 const copy = require('./copy');
 const removeCopiedProducts = require('./removeCopiedProducts');
 const preValidateHook = require('./preValidateHook');
@@ -34,19 +33,12 @@ schema.statics.findByShopifyProductId = function (shopifyProductId) {
   return Product.findOne({ shopifyProductId });
 };
 
-schema.statics.removeCopiedProducts = function () {
-  return removeCopiedProducts(this);
-};
-
-schema.statics.findShopifyProductVariant = function (
-  shopifyProductId,
-  shopifyProductVariantId
-) {
-  return findShopifyProductVariant(shopifyProductId, shopifyProductVariantId);
-};
-
 schema.methods.copy = function (shopifyProductDataOverrides) {
   return copy(this, shopifyProductDataOverrides);
+};
+
+schema.statics.removeCopiedProducts = function () {
+  return removeCopiedProducts(this);
 };
 
 schema.methods.toString = function () {
