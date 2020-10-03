@@ -2,9 +2,10 @@ const logger = require('@neatowebsolutions/logger');
 const models = require('..');
 
 const trackView = async (offer, productId, variantId, ipAddress) => {
-  const { shopifyShopId, shop, strategy, triggerEvent } = offer;
+  const Shop = await models.get('Shop');
+  const shop = await Shop.findById(offer.shop);
+  const { shopifyShopId, strategy, triggerEvent } = offer;
   const OfferHit = await models.get('OfferHit');
-  const Product = await models.get('Product');
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,
@@ -13,19 +14,9 @@ const trackView = async (offer, productId, variantId, ipAddress) => {
     strategy,
     ipAddress
   });
-  let offeredShopifyProductVariant = null;
 
   if (productId && variantId) {
-    offeredShopifyProductVariant = await Product.findShopifyProductVariant(
-      productId,
-      variantId
-    );
-
-    offerHit.offeredShopifyProductId = productId;
-    offerHit.offeredShopifyProductVariantId = variantId;
-    offerHit.offeredShopifyProductVariantPrice =
-      offeredShopifyProductVariant &&
-      (parseFloat(offeredShopifyProductVariant.price) || 0);
+    await offerHit.trackOriginalProduct(productId, variantId);
   }
 
   try {
@@ -39,6 +30,8 @@ const trackView = async (offer, productId, variantId, ipAddress) => {
       offerHit,
       ipAddress
     );
+
+    throw error;
   }
 };
 
