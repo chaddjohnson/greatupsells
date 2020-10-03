@@ -1,5 +1,4 @@
 const middy = require('@middy/core');
-const httpErrorHandler = require('@middy/http-error-handler');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
@@ -30,6 +29,6 @@ const handler = middy(async (event, context) => {
   }
 });
 
-handler.use(httpErrorHandler()).use(cors());
+handler.use(cors());
 
 module.exports.handler = handler;

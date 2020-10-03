@@ -12,7 +12,6 @@
     "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
-    "@middy/http-error-handler": "^1.0.0",
     "@neatowebsolutions/upselling-graphql-client": "^0.0.0",
     "@neatowebsolutions/upselling-graphql-queries": "^0.0.0",
     "@neatowebsolutions/upselling-models": "^0.0.0",
