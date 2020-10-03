@@ -1,8 +1,8 @@
 const Promise = require('bluebird');
 const { compact } = require('lodash');
-const models = require('..');
 
 const trackConversions = async (order) => {
+  const models = require('..');
   const OfferHit = await models.get('OfferHit');
 
   // Get line items for the order.

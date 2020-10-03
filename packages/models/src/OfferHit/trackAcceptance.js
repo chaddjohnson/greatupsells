@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/logger');
-const models = require('..');
 
 const trackAcceptance = async (offerHit, productId, variantId, quantity) => {
+  const models = require('..');
   const Offer = await models.get('Offer');
   const offer = await Offer.findById(offerHit.offer).populate('shop');
   const { shop } = offer;

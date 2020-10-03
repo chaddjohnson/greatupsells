@@ -1,8 +1,8 @@
 const logger = require('@neatowebsolutions/logger');
 const calculateRevenueIncrease = require('./calculateRevenueIncrease');
-const models = require('..');
 
 const trackConversion = async (offerHit, order) => {
+  const models = require('..');
   const Offer = await models.get('Offer');
   const offer = await Offer.findById(offerHit.offer).populate('shop');
   const { shop } = offer;

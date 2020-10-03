@@ -1,5 +1,3 @@
-const models = require('..');
-
 const copyShopifyProductData = (shopifyProductData) => {
   const newShopifyProductData = { ...shopifyProductData };
 
@@ -49,6 +47,7 @@ const copyShopifyProductData = (shopifyProductData) => {
 };
 
 const copy = async (product, shopifyProductDataOverrides = {}) => {
+  const models = require('..');
   const Product = await models.get('Product');
   const Shop = await models.get('Shop');
   const shop = await Shop.findById(product.shop);

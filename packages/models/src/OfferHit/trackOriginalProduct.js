@@ -1,6 +1,5 @@
-const models = require('..');
-
 const trackOriginalProduct = async (offerHit, productId, variantId) => {
+  const models = require('..');
   const Product = await models.get('Product');
   const product = await Product.findByShopifyProductId(productId);
   const variant =

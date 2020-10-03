@@ -1,5 +1,4 @@
 const logger = require('@neatowebsolutions/logger');
-const models = require('..');
 
 const trackAcceptedProduct = async (
   offerHit,
@@ -7,6 +6,7 @@ const trackAcceptedProduct = async (
   variantId,
   quantity
 ) => {
+  const models = require('..');
   const Product = await models.get('Product');
   const product = await Product.findByShopifyProductId(productId);
   const Offer = await models.get('Offer');

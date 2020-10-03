@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
-const models = require('..');
 
 module.exports = async () => {
+  const models = require('..');
   const Product = await models.get('Product');
 
   const criteria = {

@@ -1,5 +1,3 @@
-const models = require('..');
-
 // const buildCollectionsQuery = (shopifyProductIds) => {
 //   const queries = shopifyProductIds.map(
 //     (shopifyProductId) => /* GraphQL */ `
@@ -37,6 +35,7 @@ const models = require('..');
 // };
 
 const findRandomByShopifyProductIds = async (shop, shopifyProductIds) => {
+  const models = require('..');
   const Offer = models.get('Offer');
 
   // Query Shopify for collections associated with each of the Shopify products.

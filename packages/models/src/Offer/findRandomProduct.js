@@ -1,7 +1,6 @@
 const {
   transformShopifyProduct
 } = require('@neatowebsolutions/shopify-graphql-transform');
-const models = require('..');
 
 const findRandomCollectionProductId = async (shop, shopifyCollectionId) => {
   const shopifyApiClient = shop.getShopifyApiClient();
@@ -48,6 +47,7 @@ const getRandomItem = (array = []) =>
   array[Math.floor(Math.random() * array.length)];
 
 const findRandomProduct = async function (offer) {
+  const models = require('..');
   const Shop = await models.get('Shop');
   const shop = await Shop.findById(offer.shop);
   const { products, collections } = offer;

@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/logger');
-const models = require('..');
 
 const preValidate = async (offer, next) => {
+  const models = require('..');
   const Shop = await models.get('Shop');
 
   // Set up reference to shop if missing.
