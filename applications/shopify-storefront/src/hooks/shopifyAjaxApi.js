@@ -6,7 +6,7 @@ const useShopifyAjaxApi = () => {
     return data;
   };
 
-  const addProductToShopifyCart = async (variantId, quantity = 1) => {
+  const addProductToShopifyCart = async (variantId, quantity) => {
     await fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

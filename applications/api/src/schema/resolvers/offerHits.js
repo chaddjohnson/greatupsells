@@ -97,9 +97,10 @@ module.exports.offerConversions = async (root, args, context) => {
 module.exports.offerConversionRates = async (root, args, context) => {
   const { shop, Offer } = context;
   const { id, startAt, endAt } = args;
+  let offer = null;
 
   try {
-    const offer = await Offer.findById(id);
+    offer = await Offer.findById(id);
 
     if (!offer) {
       throw new ApolloError('Offer not found');
@@ -159,13 +160,14 @@ module.exports.offerRevenueIncreases = async (root, args, context) => {
 module.exports.trackOfferView = async (root, args, context) => {
   const { shop, ip, Offer } = context;
   const { offerId, productId, variantId } = args;
+  let offer = null;
 
   if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
   try {
-    const offer = await Offer.findById(offerId);
+    offer = await Offer.findById(offerId);
 
     if (!offer) {
       throw new ApolloError('Offer not found');
@@ -173,7 +175,6 @@ module.exports.trackOfferView = async (root, args, context) => {
 
     await offer.trackView(productId, variantId, ip);
   } catch (error) {
-    logger.error(`Error tracking offer view`, error, args);
     throw new ApolloError('Error tracking offer view');
   }
 };
@@ -181,21 +182,21 @@ module.exports.trackOfferView = async (root, args, context) => {
 module.exports.trackOfferAcceptance = async (root, args, context) => {
   const { shop, OfferHit } = context;
   const { offerHitId, productId, variantId, quantity } = args;
+  let offerHit = null;
 
   if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
   try {
-    const offerHit = await OfferHit.findById(offerHitId);
+    offerHit = await OfferHit.findById(offerHitId);
 
     if (!offerHit) {
       throw new ApolloError('Offer view not found');
     }
 
-    return await offerHit.trackAcceptance(productId, variantId, quantity);
+    await offerHit.trackAcceptance(productId, variantId, quantity);
   } catch (error) {
-    logger.error(`Error tracking offer acceptance`, error, args);
     throw new ApolloError('Error tracking offer acceptance');
   }
 };
