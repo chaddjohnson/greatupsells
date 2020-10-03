@@ -4,6 +4,7 @@ const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
 const findRandomByShopifyProductIds = require('./findRandomByShopifyProductIds');
 const findRandomProduct = require('./findRandomProduct');
+const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const toString = require('./toString');
 const hooks = require('./hooks');
 const trackView = require('./trackView');
@@ -126,8 +127,12 @@ schema.statics.findRandomByShopifyProductIds = function (shopifyProductIds) {
   return findRandomByShopifyProductIds(shopifyProductIds);
 };
 
-schema.models.findRandomProduct = function () {
+schema.methods.findRandomProduct = function () {
   return findRandomProduct(this);
+};
+
+schema.methods.calculateDiscountedPrice = function (price) {
+  return calculateDiscountedPrice(this, price);
 };
 
 schema.methods.findViews = async function (startAt, endAt) {
