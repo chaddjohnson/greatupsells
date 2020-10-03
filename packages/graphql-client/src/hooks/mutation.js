@@ -6,7 +6,7 @@ const useMutation = (query) => {
   const { client } = useContext(GraphQLContext);
 
   // Return a callable function.
-  return (data = {}) => {
+  return async (data = {}) => {
     return mutate(query, client.mutate(query, data));
   };
 };
