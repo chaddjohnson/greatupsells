@@ -17,7 +17,7 @@ const preValidate = async (offer, next) => {
 };
 
 const postSave = async (offer, next) => {
-  await offer.populate('shop').execPopulate();
+  await offer.execPopulate('shop');
 
   logger.info(
     `Offer ${
@@ -30,7 +30,7 @@ const postSave = async (offer, next) => {
 };
 
 const postRemove = async (offer, next) => {
-  await offer.populate('shop').execPopulate();
+  await offer.execPopulate('shop');
 
   logger.info(`Offer deleted (${offer.toString()})`);
 

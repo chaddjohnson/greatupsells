@@ -11,7 +11,9 @@ module.exports = async () => {
     }
   };
 
-  const cursor = Product.find(criteria).cursor({ batchSize: 50 });
+  const cursor = Product.find(criteria)
+    .populate('shop')
+    .cursor({ batchSize: 50 });
 
   await cursor.eachAsync(
     async (product) => {

@@ -50,7 +50,9 @@ const copyShopifyProductData = (shopifyProductData) => {
 
 const copy = async (product, shopifyProductDataOverrides = {}) => {
   const Product = await models.get('Product');
-  const { shop, shopifyShopId, shopifyProductData } = product;
+  const Shop = await models.get('Shop');
+  const shop = await Shop.findById(product.shop);
+  const { shopifyShopId, shopifyProductData } = product;
   const shopifyApiClient = shop.getShopifyApiClient();
 
   // Create a clean copy of the product data.

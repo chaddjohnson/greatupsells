@@ -4,7 +4,7 @@ const models = require('..');
 
 const trackConversion = async (offerHit, order) => {
   const Offer = await models.get('Offer');
-  const offer = await Offer.findById(offerHit.offer);
+  const offer = await Offer.findById(offerHit.offer).populate('shop');
   const { shop } = offer;
 
   try {
