@@ -13,15 +13,15 @@ const ShopVisitOffer = () => {
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer } = useRandomOffer({
     event: 'LOAD',
-    onSuccess: (offerData) => {
+    onSuccess: async (offerData) => {
       const { _id: offerId, triggerEvent, product = {} } = offerData;
       const { shopifyProductData } = product;
       const productId = shopifyProductData?.id;
       const variantId = shopifyProductData?.variants?.[0]?.id;
 
-      setPopupOpen(true);
+      await trackOfferView(offerId, triggerEvent, productId, variantId);
 
-      trackOfferView(offerId, triggerEvent, productId, variantId);
+      setPopupOpen(true);
     }
   });
 

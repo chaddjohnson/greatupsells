@@ -8,18 +8,21 @@ import { useShopifyAjaxApi } from '../hooks';
 
 const ExitIntentOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
+  const [offerViewTracked, setOfferViewTracked] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer } = useRandomOffer({
     event: 'EXIT',
-    onSuccess: (offerData) => {
+    onSuccess: async (offerData) => {
       const { _id: offerId, triggerEvent, product = {} } = offerData;
       const { shopifyProductData } = product;
       const productId = shopifyProductData?.id;
       const variantId = shopifyProductData?.variants?.[0]?.id;
 
-      trackOfferView(offerId, triggerEvent, productId, variantId);
+      await trackOfferView(offerId, triggerEvent, productId, variantId);
+
+      setOfferViewTracked(true);
     }
   });
 
@@ -82,7 +85,7 @@ const ExitIntentOffer = () => {
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"
-      open={!!offer && popupOpen}
+      open={!!offer && offerViewTracked && popupOpen}
       offer={offer}
       onAccept={handleAcceptance}
       onClose={() => setPopupOpen(false)}
