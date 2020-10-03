@@ -24,8 +24,8 @@ const trackOriginalProduct = async (
   }
 
   offerHit.originalShopifyProductId = shopifyProductId;
-  offerHit.originalShopifyProductVariantId = shopifyVariantId;
-  offerHit.originalShopifyProductVariantPrice = parseFloat(variant.price) || 0;
+  offerHit.originalShopifyVariantId = shopifyVariantId;
+  offerHit.originalShopifyVariantPrice = parseFloat(variant.price) || 0;
 };
 
 module.exports = trackOriginalProduct;

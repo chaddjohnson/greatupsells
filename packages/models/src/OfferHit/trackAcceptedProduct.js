@@ -61,9 +61,9 @@ const trackAcceptedProduct = async (
 
   // Track the accepted product data for the offer hit.
   offerHit.acceptedShopifyProductId = copiedProduct.shopifyProductId;
-  offerHit.acceptedShopifyProductVariantId =
+  offerHit.acceptedShopifyVariantId =
     copiedShopifyProductData.variants[variantIndex].id;
-  offerHit.acceptedShopifyProductVariantPrice =
+  offerHit.acceptedShopifyVariantPrice =
     copiedShopifyProductData.variants[variantIndex].price;
   offerHit.acceptedShopifyProductQuantity = quantity;
 };

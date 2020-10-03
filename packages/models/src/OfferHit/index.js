@@ -41,20 +41,20 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.Long,
       required: false
     },
-    originalShopifyProductVariantId: {
+    originalShopifyVariantId: {
       type: mongoose.Schema.Types.Long,
       required: false
     },
-    originalShopifyProductVariantPrice: { type: Number, required: false },
+    originalShopifyVariantPrice: { type: Number, required: false },
     acceptedShopifyProductId: {
       type: mongoose.Schema.Types.Long,
       required: false
     },
-    acceptedShopifyProductVariantId: {
+    acceptedShopifyVariantId: {
       type: mongoose.Schema.Types.Long,
       required: false
     },
-    acceptedShopifyProductVariantPrice: { type: Number, required: false },
+    acceptedShopifyVariantPrice: { type: Number, required: false },
     acceptedShopifyProductQuantity: { type: Number, required: false },
     shopifyOrderId: { type: mongoose.Schema.Types.Long, required: false },
     shopifyOrderNumber: { type: Int32, required: false },
