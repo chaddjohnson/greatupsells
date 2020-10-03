@@ -1,6 +1,11 @@
 const logger = require('@neatowebsolutions/logger');
 
-const trackView = async (offer, productId, variantId, ipAddress) => {
+const trackView = async (
+  offer,
+  shopifyProductId,
+  shopifyVariantId,
+  ipAddress
+) => {
   const models = require('..');
   const Shop = await models.get('Shop');
   const shop = await Shop.findById(offer.shop);
@@ -15,8 +20,8 @@ const trackView = async (offer, productId, variantId, ipAddress) => {
     ipAddress
   });
 
-  if (productId && variantId) {
-    await offerHit.trackOriginalProduct(productId, variantId);
+  if (shopifyProductId && shopifyVariantId) {
+    await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
   }
 
   try {

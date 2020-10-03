@@ -2,13 +2,13 @@ const logger = require('@neatowebsolutions/logger');
 
 const trackAcceptedProduct = async (
   offerHit,
-  productId,
-  variantId,
+  shopifyProductId,
+  shopifyVariantId,
   quantity
 ) => {
   const models = require('..');
   const Product = await models.get('Product');
-  const product = await Product.findByShopifyProductId(productId);
+  const product = await Product.findByShopifyProductId(shopifyProductId);
   const Offer = await models.get('Offer');
   const offer = await Offer.findById(offerHit.offer);
   const shopifyProductData = product && { ...product.shopifyProductData };
@@ -18,20 +18,20 @@ const trackAcceptedProduct = async (
   // Get a reference to the variant in the Shopify data.
   const variant =
     shopifyProductData &&
-    shopifyProductData.variants.find(({ id }) => id === variantId);
+    shopifyProductData.variants.find(({ id }) => id === shopifyVariantId);
 
   // Keep track of the variant position.
   const variantIndex =
     shopifyProductData &&
-    shopifyProductData.variants.findIndex(({ id }) => id === variantId);
+    shopifyProductData.variants.findIndex(({ id }) => id === shopifyVariantId);
 
   if (!product) {
-    throw new Error(`Unable to find Shopify product ${productId}`);
+    throw new Error(`Unable to find Shopify product ${shopifyProductId}`);
   }
 
   if (!variant) {
     throw new Error(
-      `Unable to find Shopify product variant ${variantId} for product (${product.toString()})`
+      `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
     );
   }
 
@@ -50,9 +50,9 @@ const trackAcceptedProduct = async (
     copiedProduct = await product.copy(shopifyProductData);
   } catch (error) {
     logger.error(
-      `Error copying product ${productId}`,
+      `Error copying product ${shopifyProductId}`,
       error,
-      `Variant = ${variantId}`
+      `Variant = ${shopifyVariantId}`
     );
     throw error;
   }

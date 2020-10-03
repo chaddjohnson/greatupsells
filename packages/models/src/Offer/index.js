@@ -170,8 +170,12 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
   return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
 };
 
-schema.methods.trackView = function (productId, variantId, ipAddress) {
-  return trackView(this, productId, variantId, ipAddress);
+schema.methods.trackView = function (
+  shopifyProductId,
+  shopifyVariantId,
+  ipAddress
+) {
+  return trackView(this, shopifyProductId, shopifyVariantId, ipAddress);
 };
 
 schema.methods.toString = function () {

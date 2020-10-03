@@ -1,14 +1,23 @@
 const logger = require('@neatowebsolutions/logger');
 
-const trackAcceptance = async (offerHit, productId, variantId, quantity) => {
+const trackAcceptance = async (
+  offerHit,
+  shopifyProductId,
+  shopifyVariantId,
+  quantity
+) => {
   const models = require('..');
   const Offer = await models.get('Offer');
   const offer = await Offer.findById(offerHit.offer).populate('shop');
   const { shop } = offer;
 
   // If a product is associated with this acceptance, track it.
-  if (productId && variantId) {
-    await offerHit.trackAcceptedProduct(productId, variantId, quantity);
+  if (shopifyProductId && shopifyVariantId) {
+    await offerHit.trackAcceptedProduct(
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    );
   }
 
   offerHit.acceptedAt = Date.now();

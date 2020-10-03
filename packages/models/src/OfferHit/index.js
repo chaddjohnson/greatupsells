@@ -106,20 +106,32 @@ schema.statics.findConversionRatesByOfferId = function (
   return findConversionRatesByOfferId(offerId, startAt, endAt);
 };
 
-schema.methods.trackOriginalProduct = function (productId, variantId) {
-  return trackOriginalProduct(this, productId, variantId);
+schema.methods.trackOriginalProduct = function (
+  shopifyProductId,
+  shopifyVariantId
+) {
+  return trackOriginalProduct(this, shopifyProductId, shopifyVariantId);
 };
 
 schema.methods.trackAcceptedProduct = function (
-  productId,
-  variantId,
+  shopifyProductId,
+  shopifyVariantId,
   quantity
 ) {
-  return trackAcceptedProduct(this, productId, variantId, quantity);
+  return trackAcceptedProduct(
+    this,
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  );
 };
 
-schema.methods.trackAcceptance = function (productId, variantId, quantity) {
-  return trackAcceptance(this, productId, variantId, quantity);
+schema.methods.trackAcceptance = function (
+  shopifyProductId,
+  shopifyVariantId,
+  quantity
+) {
+  return trackAcceptance(this, shopifyProductId, shopifyVariantId, quantity);
 };
 
 schema.methods.trackConversion = function (order) {
