@@ -7,10 +7,16 @@ const useDateFormatter = () => {
     dateString,
     dateFormat = 'MM/DD/YYYY hh:mm a',
     timezone = moment.tz.guess()
-  ) => moment(new Date(dateString)).tz(timezone).format(dateFormat);
+  ) => {
+    return moment(new Date(dateString)).tz(timezone).format(dateFormat);
+  };
 
-  const formatDateRelative = (dateString, timezone = moment.tz.guess()) =>
-    moment(new Date(dateString)).tz(timezone).startOf('minute').fromNow();
+  const formatDateRelative = (dateString, timezone = moment.tz.guess()) => {
+    return moment(new Date(dateString))
+      .tz(timezone)
+      .startOf('minute')
+      .fromNow();
+  };
 
   return { formatDate, formatDateRelative };
 };
