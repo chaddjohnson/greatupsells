@@ -28,7 +28,12 @@ const definitions = [
   },
   {
     topic: 'orders/paid',
-    address: `${WEBHOOKS_API_URL}/shopify/order`,
+    address: `${WEBHOOKS_API_URL}/shopify/order-paid`,
+    format: 'json'
+  },
+  {
+    topic: 'orders/updated',
+    address: `${WEBHOOKS_API_URL}/shopify/order-update`,
     format: 'json'
   },
   {
