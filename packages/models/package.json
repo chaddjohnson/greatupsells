@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "@neatowebsolutions/logger": "^0.0.0",
-    "@neatowebsolutions/shopify-graphql-transform": "^0.0.0"
+    "@neatowebsolutions/shopify-graphql-transform": "^0.0.0",
+    "aws-sdk": "^2.767.0"
   },
   "peerDependencies": {
     "@chaddjohnson/mongodb-client-lambda": "1.x",

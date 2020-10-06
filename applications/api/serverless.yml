@@ -20,6 +20,8 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
+    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
 
 functions:
   health:
