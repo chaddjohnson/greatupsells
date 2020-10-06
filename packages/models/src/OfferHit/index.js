@@ -74,8 +74,12 @@ schema.statics.findByOfferId = function (offerId) {
   return OfferHit.find({ offer: offerId });
 };
 
-schema.statics.findByShopifyProductId = function (shopifyProductId) {
-  return OfferHit.findOne({ shopifyProductId });
+schema.statics.findByShopifyOrderId = function (shopifyOrderId) {
+  return OfferHit.find({ shopifyOrderId });
+};
+
+schema.statics.findByAcceptedVariantId = function (shopifyVariantId) {
+  return OfferHit.findOne({ acceptedShopifyVariantId: shopifyVariantId });
 };
 
 schema.statics.findViewsByOfferId = function (offerId, startAt, endAt) {

@@ -11,8 +11,9 @@ const trackConversions = async (order) => {
   // Find all offer hits associated with line items.
   const offerHits = compact(
     await Promise.all(
-      lineItems.map(async (lineItem) =>
-        OfferHit.findByAcceptedShopifyProductId(lineItem.id)
+      lineItems.map(
+        async ({ variant_id: variantId }) =>
+          variantId && OfferHit.findByAcceptedVariantId(variantId)
       )
     )
   );
