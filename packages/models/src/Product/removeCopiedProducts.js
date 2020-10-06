@@ -4,10 +4,12 @@ module.exports = async () => {
   const models = require('..');
   const Product = await models.get('Product');
 
+  // Keep copied products for three months to match how long abandoned
+  // checkouts are kept.
   const criteria = {
     'shopifyProductData.product_type': 'upsellcrosssell',
     createdAt: {
-      $lte: moment().utc().subtract(3, 'days').toDate()
+      $lte: moment().utc().subtract(3, 'months').toDate()
     }
   };
 
