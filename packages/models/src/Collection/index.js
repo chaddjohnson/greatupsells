@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
   .factory;
+const toString = require('./toString');
 
 require('mongoose-long')(mongoose);
 
@@ -21,6 +22,14 @@ const schema = new mongoose.Schema(
   },
   schemaOptions
 );
+
+schema.statics.findByShopifyCollectionId = function (shopifyCollectionId) {
+  return Collection.findOne({ shopifyCollectionId });
+};
+
+schema.methods.toString = function () {
+  return toString(this);
+};
 
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyCollectionId: 1 }, { unique: true });
