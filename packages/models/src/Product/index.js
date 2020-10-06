@@ -20,7 +20,11 @@ const schema = new mongoose.Schema(
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     shopifyProductId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true }
+    shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
+    originalShopifyProductId: {
+      type: mongoose.Schema.Types.Long,
+      required: false
+    }
   },
   schemaOptions
 );

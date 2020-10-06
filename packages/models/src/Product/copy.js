@@ -71,7 +71,8 @@ const copy = async (product, shopifyProductDataOverrides = {}) => {
     shop,
     shopifyShopId,
     shopifyProductId: copiedShopifyProductData.id,
-    shopifyProductData: copiedShopifyProductData
+    shopifyProductData: copiedShopifyProductData,
+    originalShopifyProductId: product.shopifyProductId
   });
 
   // Set metafields such that the product will not be indexable by search engines.
