@@ -1,11 +1,21 @@
 const { StatusCodes } = require('http-status-codes');
+const models = require('@neatowebsolutions/upselling-models');
 
 const handler = async (request, response) => {
-  // TODO
+  const data = response.body;
+  const Product = await models.get('Product');
+  const product = await Product.findByShopifyProductId(data.id);
 
-  // TODO: Mark as deleted, but do not delete.
-
+  // Respond immediately so that Shopify does not consider this webhook as timed out.
   response.status(StatusCodes.OK).end();
+
+  // Delete the product if it exists.
+  if (product) {
+    await product.remove();
+  }
+
+  // Delete copied products originalShopifyProductId.
+  await Product.deleteMany({ originalShopifyProductId: data.id });
 };
 
 module.exports = handler;

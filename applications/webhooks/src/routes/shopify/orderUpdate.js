@@ -8,35 +8,25 @@ const handler = async (request, response) => {
   const Shop = await models.get('Shop');
   const Order = await models.get('Order');
   const shop = await Shop.findByDomain(domain);
-  let order = await Order.findByShopifyOrderId(data.id);
+  const order = await Order.findByShopifyOrderId(data.id);
+  const dataIsNewer =
+    !!order &&
+    new Date(data.updated_at) > new Date(order.shopifyOrderData.updated_at);
 
   // Respond immediately so that Shopify does not consider this webhook as timed out.
   response.status(StatusCodes.OK).end();
 
-  if (!shop) {
-    return logger.warn(
-      `Shop ${domain} not found for shop update webhook`,
+  try {
+    if (order && dataIsNewer) {
+      order.shopifyOrderData = data;
+      await order.save();
+    }
+  } catch (error) {
+    logger.error(
+      `Error updating order ${data.id} for shop (${shop.toString()})`,
+      error,
       data
     );
-  }
-
-  try {
-    // Track the order if it is not already tracked.
-    if (!order) {
-      order = await Order.create({
-        shop,
-        shopifyShopId: shop.shopifyShopId,
-        shopifyOrderId: data.id,
-        shopifyOrderNumber: data.order_number,
-        shopifyOrderData: data
-      });
-
-      await order.trackConversions();
-    }
-
-    await order.save();
-  } catch (error) {
-    logger.error(`Error processing order ${data.id}`, error, data);
   }
 };
 

@@ -1,9 +1,36 @@
 const { StatusCodes } = require('http-status-codes');
+const models = require('@neatowebsolutions/upselling-models');
+const logger = require('@neatowebsolutions/logger');
 
 const handler = async (request, response) => {
-  // TODO
+  const data = response.body;
+  const Order = await models.get('Order');
+  const order = await Order.findByShopifyOrderId(data.id).populate('shop');
+  const { shop } = order || {};
 
+  // Respond immediately so that Shopify does not consider this webhook as timed out.
   response.status(StatusCodes.OK).end();
+
+  if (!order) {
+    return;
+  }
+
+  try {
+    if (order && !order.canceledAt) {
+      // Handle order cancelation.
+      await order.cancel();
+
+      order.shopifyOrderData = data;
+
+      await order.save();
+    }
+  } catch (error) {
+    logger.error(
+      `Error updating order for shop (${shop.toString()})`,
+      error,
+      data
+    );
+  }
 };
 
 module.exports = handler;

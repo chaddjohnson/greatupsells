@@ -7,6 +7,9 @@ const handler = async (request, response) => {
   const Shop = await models.get('Shop');
   const shop = await Shop.findByDomain(domain);
 
+  // Respond immediately so that Shopify does not consider this webhook as timed out.
+  response.status(StatusCodes.OK).end();
+
   if (shop) {
     try {
       await shop.deactivate();
@@ -20,8 +23,6 @@ const handler = async (request, response) => {
   } else {
     logger.warn(`Shop ${domain} not found for app uninstall webhook`);
   }
-
-  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;
