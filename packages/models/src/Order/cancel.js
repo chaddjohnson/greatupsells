@@ -1,4 +1,8 @@
 const Promise = require('bluebird');
+const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
+  .factory;
+
+const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 const cancel = async (order) => {
   // Abort if the order is already canceled.
@@ -14,35 +18,54 @@ const cancel = async (order) => {
   const { shop, shopifyOrderId } = order;
   const offerHits = await OfferHit.findByShopifyOrderId(shopifyOrderId);
 
-  // Update stats for the order. Use one round trip to prevent write conflicts.
-  await order.findByIdAndUpdate(order.id, {
-    // Zero out revenue increase for the order.
-    revenueIncrease: 0,
+  const session = await mongodbClient.connection.startSession();
 
-    // Mark the order as canceled.
-    canceledAt: Date.now()
-  });
+  // Use a transaction.
+  await session.withTransaction(async () => {
+    // Update stats for the order. Use one round trip to prevent write conflicts.
+    await order.findByIdAndUpdate(
+      order.id,
+      {
+        // Zero out revenue increase for the order.
+        revenueIncrease: 0,
 
-  // Update stats for the shop. Use one round trip to prevent write conflicts. Use $inc in case the write is retried.
-  await Shop.findByIdAndUpdate(shop.id, {
-    $inc: {
-      revenueIncrease: order.revenueIncrease * -1,
-      conversionCount: -1
-    }
-    // conversionRate: // TODO
-  });
+        // Mark the order as canceled.
+        canceledAt: Date.now()
+      },
+      { session }
+    );
 
-  // Update offer hits.
-  await Promise.map(offerHits, async (offerHit) => {
-    // Update the offer hit. Use one round trip to prevent write conflicts.
-    await OfferHit.findByIdAndUpdate(offerHit.id, {
-      // Retract the conversion.
-      convertedAt: undefined,
+    // Update stats for the shop. Use one round trip to prevent write conflicts. Use $inc in case the write is retried.
+    await Shop.findByIdAndUpdate(
+      shop.id,
+      {
+        $inc: {
+          revenueIncrease: order.revenueIncrease * -1,
+          conversionCount: -1
+        }
+        // conversionRate: // TODO
+      },
+      { session }
+    );
 
-      // Zero out revenue increase for the order.
-      revenueIncrease: 0
+    // Update offer hits.
+    await Promise.map(offerHits, async (offerHit) => {
+      // Update the offer hit. Use one round trip to prevent write conflicts.
+      await OfferHit.findByIdAndUpdate(
+        offerHit.id,
+        {
+          // Retract the conversion.
+          convertedAt: undefined,
+
+          // Zero out revenue increase for the order.
+          revenueIncrease: 0
+        },
+        { session }
+      );
     });
   });
+
+  session.endSession();
 };
 
 module.exports = cancel;
