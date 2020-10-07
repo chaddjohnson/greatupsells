@@ -9,7 +9,6 @@ const findRandomOffer = require('./findRandomOffer');
 const getCollectionCount = require('./getCollectionCount');
 const getProductCount = require('./getProductCount');
 const validateAccessToken = require('./validateAccessToken');
-const removeAccessToken = require('./removeAccessToken');
 const deactivate = require('./deactivate');
 const activateOrDeactivate = require('./activateOrDeactivate');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
@@ -132,10 +131,6 @@ schema.methods.getShopifyApiClient = function () {
 
 schema.methods.validateAccessToken = function () {
   return validateAccessToken(this);
-};
-
-schema.methods.removeAccessToken = function () {
-  return removeAccessToken(this);
 };
 
 schema.methods.deactivate = function () {
