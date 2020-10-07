@@ -15,6 +15,7 @@ const handler = async (request, response) => {
 
   try {
     // Track the order if it is not already tracked.
+    // We ONLY track paid orders; unpaid orders are not counted as conversions.
     if (!order) {
       order = await Order.create({
         shop,
@@ -23,7 +24,6 @@ const handler = async (request, response) => {
         shopifyOrderNumber: data.order_number,
         shopifyOrderData: data
       });
-
       await order.trackConversions();
     }
   } catch (error) {
