@@ -1,6 +1,9 @@
 const logger = require('@neatowebsolutions/logger');
 
 module.exports = async (shop) => {
+  const models = require('..');
+  const Shop = await models.get('Shop');
+
   try {
     if (!shop.plan.chargeId) {
       throw new Error(
@@ -69,7 +72,8 @@ module.exports = async (shop) => {
     }
 
     if (shop.isModified()) {
-      await shop.save();
+      // Use one round trip to prevent write conflicts.
+      await Shop.findByIdAndUpdate(shop.id, shop.getChanges());
     }
   } catch (error) {
     logger.warn(

@@ -38,8 +38,11 @@ const handler = async (request, response) => {
     try {
       // Update if the incoming data is newer than what is saved.
       if (dataIsNewer) {
-        collection.shopifyCollectionData = data;
-        await collection.save();
+        // Update local Shopify data for the collection.
+        // Use one round trip to prevent write conflicts.
+        await Collection.findByIdAndUpdate(collection.id, {
+          shopifyCollectionData: data
+        });
 
         // TODO: Count products.
       }

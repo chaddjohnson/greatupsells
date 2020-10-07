@@ -1,27 +1,26 @@
 module.exports = async (shop) => {
-  if (shop.active) {
+  const models = require('..');
+  const Shop = await models.get('Shop');
+
+  // Use one round trip to prevent write conflicts.
+  await Shop.findByIdAndUpdate(shop.id, {
     // Record when the uninstall occurred.
-    shop.uninstalledAt = Date.now();
-  }
+    uninstalledAt: shop.uninstalledAt || Date.now(),
 
-  // Flag the shop as inactive.
-  shop.active = false;
+    // Flag the shop as inactive.
+    active: false,
 
-  // Remove the shop's access token.
-  shop.accessToken = null;
+    // Remove the shop's access token as it is no longer valid, and we can no
+    // longer interact with Shopify on behalf of the shop.
+    accessToken: null,
 
-  if (shop.plan.level !== 'FREE') {
     // Mark the shop's plan as canceled (Shopify cancels plans automatically on uninstall).
-    shop.plan.canceledAt = Date.now();
+    canceledAt: shop.plan.canceledAt || Date.now(),
 
     // Downgrade shop plan.
-    shop.plan.level = 'FREE';
-    shop.plan.active = false;
-    shop.plan.chargeId = undefined;
-    shop.plan.upgradedAt = undefined;
-    shop.plan.billingOn = undefined;
-    shop.plan.canceledAt = Date.now();
-  }
-
-  await shop.save();
+    'plan.level': 'FREE',
+    'plan.chargeId': undefined,
+    'plan.upgradedAt': undefined,
+    'plan.billingOn': undefined
+  });
 };

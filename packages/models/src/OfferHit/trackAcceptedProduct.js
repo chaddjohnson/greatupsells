@@ -9,11 +9,13 @@ const trackAcceptedProduct = async (
   const models = require('..');
   const Product = await models.get('Product');
   const product = await Product.findByShopifyProductId(shopifyProductId);
+  const OfferHit = await models.get('OfferHit');
   const Offer = await models.get('Offer');
   const offer = await Offer.findById(offerHit.offer);
   const shopifyProductData = product && { ...product.shopifyProductData };
   let copiedProduct = null;
   let copiedShopifyProductData = null;
+  let copiedVariant = null;
 
   // Get a reference to the variant in the Shopify data.
   const variant =
@@ -58,14 +60,20 @@ const trackAcceptedProduct = async (
   }
 
   copiedShopifyProductData = copiedProduct.shopifyProductData;
+  copiedVariant = copiedShopifyProductData.variants[variantIndex];
 
   // Track the accepted product data for the offer hit.
-  offerHit.acceptedShopifyProductId = copiedProduct.shopifyProductId;
-  offerHit.acceptedShopifyVariantId =
-    copiedShopifyProductData.variants[variantIndex].id;
-  offerHit.acceptedShopifyVariantPrice =
-    copiedShopifyProductData.variants[variantIndex].price;
-  offerHit.acceptedShopifyProductQuantity = quantity;
+  // Use one round trip to prevent write conflicts.
+  return OfferHit.findByIdAndUpdate(
+    offerHit.id,
+    {
+      acceptedShopifyProductId: copiedProduct.shopifyProductId,
+      acceptedShopifyVariantId: copiedVariant.id,
+      acceptedShopifyVariantPrice: copiedVariant.price,
+      acceptedShopifyProductQuantity: quantity
+    },
+    { new: true }
+  );
 };
 
 module.exports = trackAcceptedProduct;

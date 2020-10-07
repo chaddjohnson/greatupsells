@@ -3,6 +3,7 @@ const {
   AuthenticationError,
   UserInputError
 } = require('apollo-server-lambda');
+const { omit } = require('lodash');
 const logger = require('@neatowebsolutions/logger');
 
 module.exports.offers = async (root, args, context) => {
@@ -164,8 +165,8 @@ module.exports.createOffer = async (root, args, context) => {
 
 module.exports.updateOffer = async (root, args, context) => {
   const { shop, user, Offer } = context;
-  const { ...values } = args.input;
   const { id } = args;
+  let { ...values } = args.input;
   let offer = null;
 
   if (!shop && !user) {
@@ -173,15 +174,17 @@ module.exports.updateOffer = async (root, args, context) => {
   }
 
   // Disallow updating certain properties.
-  delete values.shopifyShopId;
-  delete values.shop;
-  delete values.createdAt;
-  delete values.updatedAt;
-  delete values.viewCount;
-  delete values.acceptanceCount;
-  delete values.conversionCount;
-  delete values.conversionRate;
-  delete values.revenueIncrease;
+  values = omit(values, [
+    'shopifyShopId',
+    'shop',
+    'viewCount',
+    'acceptanceCount',
+    'conversionCount',
+    'conversionRate',
+    'revenueIncrease',
+    'createdAt',
+    'updatedAt'
+  ]);
 
   try {
     offer = await Offer.findById(id);
@@ -194,10 +197,12 @@ module.exports.updateOffer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
+  // Require authorization.
   if (!shop && !user) {
     throw new AuthenticationError('Unauthorized');
   }
 
+  // Verify the offer belongs to the shop.
   if (shop && offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
     logger.warn(
       `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
@@ -205,6 +210,7 @@ module.exports.updateOffer = async (root, args, context) => {
     throw new AuthenticationError('Unauthorized');
   }
 
+  // Validate.
   try {
     offer.set(values);
     await offer.validate();
@@ -212,8 +218,9 @@ module.exports.updateOffer = async (root, args, context) => {
     throw new UserInputError('Bad Request');
   }
 
+  // Update.
   try {
-    return await offer.save();
+    return await Offer.findByIdAndUpdate(id, values, { new: true });
   } catch (error) {
     logger.error(`Error updating offer (${offer.toString()})`, error, args);
     throw new ApolloError(`Error updating offer (${offer.toString()})`);
@@ -248,7 +255,7 @@ module.exports.deleteOffer = async (root, args, context) => {
   }
 
   try {
-    await offer.remove();
+    await Offer.findByIdAndDelete(id);
   } catch (error) {
     logger.error(`Error removing offer (${offer.toString()})`, error);
     throw new ApolloError(`Error removing offer`);

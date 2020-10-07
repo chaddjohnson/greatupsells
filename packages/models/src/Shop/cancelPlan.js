@@ -6,17 +6,19 @@ module.exports = async (shop) => {
       return;
     }
 
+    const models = require('..');
+    const Shop = await models.get('Shop');
     const shopifyApiClient = shop.getShopifyApiClient();
     const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
       shop.plan.chargeId
     );
-
-    // Cancel the plan if it was activated and not canceled.
-    if (
+    const planActive =
       recurringChargeData &&
       recurringChargeData.activated_on &&
-      !recurringChargeData.cancelled_on
-    ) {
+      !recurringChargeData.cancelled_on;
+
+    // Cancel the plan if it was activated and not canceled.
+    if (planActive) {
       logger.info(
         `Cancelling recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
       );
@@ -37,14 +39,15 @@ module.exports = async (shop) => {
       }
     }
 
-    shop.plan.level = 'FREE';
-    shop.plan.active = false;
-    shop.plan.chargeId = undefined;
-    shop.plan.upgradedAt = undefined;
-    shop.plan.billingOn = undefined;
-    shop.plan.canceledAt = Date.now();
-
-    await shop.save();
+    // Use one round trip to prevent write conflicts.
+    await Shop.findByIdAndUpdate(shop.id, {
+      'plan.level': 'FREE',
+      'plan.active': false,
+      'plan.chargeId': undefined,
+      'plan.upgradedAt': undefined,
+      'plan.billingOn': undefined,
+      'plan.canceledAt': Date.now()
+    });
   } catch (error) {
     logger.warn(
       `Error retrieving recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,

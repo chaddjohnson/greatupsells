@@ -3,6 +3,7 @@ const { compact } = require('lodash');
 
 const trackConversions = async (order) => {
   const models = require('..');
+  const Order = await models.get('Order');
   const OfferHit = await models.get('OfferHit');
 
   // Get line items for the order.
@@ -18,19 +19,20 @@ const trackConversions = async (order) => {
     )
   );
 
-  // Track conversions for offer hits
+  // Track conversions for offer hits.
   await Promise.all(
     offerHits.map(async (offerHit) => {
       await offerHit.trackConversion(order);
     })
   );
 
-  // Track revenue increase for order
-  order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
+  const revenueIncrease = offerHits.reduce((sum, offerHit) => {
     return sum + (offerHit.revenueIncrease || 0);
   }, 0);
 
-  await order.save();
+  // Track revenue increase for order.
+  // Use one round trip to prevent write conflicts.
+  await Order.findByIdAndUpdate(order.id, { revenueIncrease });
 };
 
 module.exports = trackConversions;

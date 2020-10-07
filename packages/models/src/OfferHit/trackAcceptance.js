@@ -8,22 +8,24 @@ const trackAcceptance = async (
 ) => {
   const models = require('..');
   const Offer = await models.get('Offer');
+  const OfferHit = await models.get('OfferHit');
   const offer = await Offer.findById(offerHit.offer).populate('shop');
   const { shop } = offer;
 
-  // If a product is associated with this acceptance, track it.
-  if (shopifyProductId && shopifyVariantId) {
-    await offerHit.trackAcceptedProduct(
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-  }
-
-  offerHit.acceptedAt = Date.now();
-
   try {
-    await offerHit.save();
+    // Use one round trip to prevent write conflicts.
+    await OfferHit.findByIdAndUpdate(offerHit.id, {
+      acceptedAt: Date.now()
+    });
+
+    // If a product is associated with this acceptance, track it.
+    if (shopifyProductId && shopifyVariantId) {
+      await offerHit.trackAcceptedProduct(
+        shopifyProductId,
+        shopifyVariantId,
+        quantity
+      );
+    }
   } catch (error) {
     logger.error(
       `Error tracking offer acceptance for offer hit (${

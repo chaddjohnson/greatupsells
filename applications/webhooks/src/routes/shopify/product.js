@@ -33,10 +33,10 @@ const handler = async (request, response) => {
     }
   } else {
     try {
-      // Update if the incoming data is newer than what is saved.
       if (dataIsNewer) {
-        product.shopifyProductData = data;
-        await product.save();
+        // Update local Shopify data for the product.
+        // Use one round trip to prevent write conflicts.
+        await Product.findByIdAndUpdate(data.id, { shopifyProductData: data });
       }
     } catch (error) {
       logger.error(

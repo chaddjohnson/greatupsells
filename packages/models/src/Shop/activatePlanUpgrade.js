@@ -1,6 +1,9 @@
 const logger = require('@neatowebsolutions/logger');
 
 module.exports = async (shop) => {
+  const models = require('..');
+  const Shop = await models.get('Shop');
+
   try {
     // Do nothing if the shop is already upgraded.
     if (shop.plan.level !== 'FREE') {
@@ -25,12 +28,13 @@ module.exports = async (shop) => {
         `Aborting activation for recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
       );
 
-      shop.plan.level = 'FREE';
-      shop.plan.active = false;
-      shop.plan.chargeId = undefined;
-      shop.plan.upgradedAt = undefined;
-
-      return await shop.save();
+      // Use one round trip to prevent write conflicts.
+      return await Shop.findByIdAndUpdate(shop.id, {
+        'plan.level': 'FREE',
+        'plan.active': false,
+        'plan.chargeId': undefined,
+        'plan.upgradedAt': undefined
+      });
     }
 
     if (recurringChargeData.status !== 'accepted') {
@@ -45,13 +49,14 @@ module.exports = async (shop) => {
     );
 
     // Update shop plan.
-    shop.plan.level = 'premium'; // TODO
-    shop.plan.active = true;
-    shop.plan.upgradedAt = Date.now();
-    shop.plan.billingOn = new Date(recurringChargeData.billing_on);
-    shop.plan.canceledAt = undefined;
-
-    await shop.save();
+    // Use one round trip to prevent write conflicts.
+    await Shop.findByIdAndUpdate(shop.id, {
+      'plan.level': 'premium', // TODO
+      'plan.active': true,
+      'plan.upgradedAt': Date.now(),
+      'plan.billingOn': new Date(recurringChargeData.billing_on),
+      'plan.canceledAt': undefined
+    });
 
     logger.info(
       `Activated recurring charge ${shop.plan.chargeId} for for shop ${shop.domain}`,
@@ -62,6 +67,7 @@ module.exports = async (shop) => {
       `Error activating recurring charge for shop ${shop.domain}`,
       error
     );
+
     throw error;
   }
 };

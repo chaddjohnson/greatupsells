@@ -20,12 +20,12 @@ const trackView = async (
     ipAddress
   });
 
-  if (shopifyProductId && shopifyVariantId) {
-    await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
-  }
-
   try {
     await offerHit.save();
+
+    if (shopifyProductId && shopifyVariantId) {
+      await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
+    }
   } catch (error) {
     logger.error(
       `Error tracking offer view for offer (${
