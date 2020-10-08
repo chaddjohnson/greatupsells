@@ -29,7 +29,7 @@ const handler = async (request, response) => {
           data.domain !== data.myshopify_domain ? data.domain : undefined
       });
 
-      // Deactivate the shop for our app if the shop plan is canceled.
+      // Deactivate the shop for our app if the Shopify shop plan is canceled.
       if (shop.shopifyPlan === 'cancelled') {
         await shop.deactivate();
         logger.info(`Shop closed (${shop.toString()})`);
