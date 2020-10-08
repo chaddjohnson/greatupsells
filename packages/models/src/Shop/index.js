@@ -6,8 +6,6 @@ const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
 const findRandomOffer = require('./findRandomOffer');
-const getCollectionCount = require('./getCollectionCount');
-const getProductCount = require('./getProductCount');
 const validateAccessToken = require('./validateAccessToken');
 const deactivate = require('./deactivate');
 const activateOrDeactivate = require('./activateOrDeactivate');
@@ -111,14 +109,6 @@ schema.methods.findRecentOfferHit = function (ipAddress) {
 
 schema.methods.findRandomOffer = function (shopifyProductIds) {
   return findRandomOffer(this, shopifyProductIds);
-};
-
-schema.methods.getCollectionCount = function () {
-  return getCollectionCount(this);
-};
-
-schema.methods.getProductCount = function () {
-  return getProductCount(this);
 };
 
 schema.methods.deactivate = function () {
