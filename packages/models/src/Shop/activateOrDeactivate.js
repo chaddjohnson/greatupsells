@@ -55,7 +55,7 @@ module.exports = async (shop) => {
         logger.info(`Deactivating shop ${shop.domain}`);
 
         // Use one round trip to prevent write conflicts.
-        return Shop.findByIdAndUpdate(shop.id, {
+        return await Shop.findByIdAndUpdate(shop.id, {
           active: false
         });
       }
