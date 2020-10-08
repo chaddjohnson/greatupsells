@@ -22,19 +22,6 @@ const cancel = async (order) => {
 
   // Use a transaction.
   await session.withTransaction(async () => {
-    // Update stats for the order. Use one round trip to prevent write conflicts.
-    await order.findByIdAndUpdate(
-      order.id,
-      {
-        // Zero out revenue increase for the order.
-        revenueIncrease: 0,
-
-        // Mark the order as canceled.
-        canceledAt: Date.now()
-      },
-      { session }
-    );
-
     // Update stats for the shop. Use one round trip to prevent write conflicts. Use $inc in case the write is retried.
     await Shop.findByIdAndUpdate(
       shop.id,
@@ -44,6 +31,19 @@ const cancel = async (order) => {
           conversionCount: -1
         }
         // conversionRate: // TODO
+      },
+      { session }
+    );
+
+    // Update stats for the order. Use one round trip to prevent write conflicts.
+    await order.findByIdAndUpdate(
+      order.id,
+      {
+        // Zero out revenue increase for the order.
+        revenueIncrease: 0,
+
+        // Mark the order as canceled.
+        canceledAt: Date.now()
       },
       { session }
     );
