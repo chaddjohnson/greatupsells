@@ -50,16 +50,20 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
     }
 
     // Use one round trip to prevent write conflicts.
-    await Shop.findByIdAndUpdate(shop.id, {
-      // Update the access token if one is provided.
-      accessToken: accessToken || shop.accessToken,
+    shop = await Shop.findByIdAndUpdate(
+      shop.id,
+      {
+        // Update the access token if one is provided.
+        accessToken: accessToken || shop.accessToken,
 
-      // Mark the shop as no longer uninstalled (in case this app was uninstalled and reinstalled).
-      uninstalledAt: undefined,
+        // Mark the shop as no longer uninstalled (in case this app was uninstalled and reinstalled).
+        uninstalledAt: undefined,
 
-      // Mark the shop as active since it is being authenticated.
-      active: true
-    });
+        // Mark the shop as active since it is being authenticated.
+        active: true
+      },
+      { new: true }
+    );
   } catch (error) {
     logger.info(`Error creating new shop ${shopDomain}`, error);
 
