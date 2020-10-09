@@ -26,7 +26,7 @@ const trackOriginalProduct = async (
 
   // Track the original product data for the offer hit.
   // Use one round trip to prevent write conflicts.
-  return OfferHit.findByIdAndUpdate(offerHit.id, {
+  await OfferHit.findByIdAndUpdate(offerHit.id, {
     originalShopifyProductId: shopifyProductId,
     originalShopifyVariantId: shopifyVariantId,
     originalShopifyVariantPrice: parseFloat(variant.price) || 0

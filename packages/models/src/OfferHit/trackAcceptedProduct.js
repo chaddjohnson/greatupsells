@@ -64,7 +64,7 @@ const trackAcceptedProduct = async (
 
   // Track the accepted product data for the offer hit.
   // Use one round trip to prevent write conflicts.
-  return OfferHit.findByIdAndUpdate(
+  await OfferHit.findByIdAndUpdate(
     offerHit.id,
     {
       acceptedShopifyProductId: copiedProduct.shopifyProductId,
