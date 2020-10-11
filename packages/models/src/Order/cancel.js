@@ -22,7 +22,7 @@ const cancel = async (order) => {
 
   // Use a transaction.
   await session.withTransaction(async () => {
-    // Update stats for the shop. Use one round trip to prevent write conflicts. Use $inc in case the write is retried.
+    // Update stats for the shop. Use $inc and in round trip to prevent conflicts and in case the write is retried.
     await Shop.findByIdAndUpdate(
       shop.id,
       {

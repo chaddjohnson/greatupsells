@@ -13,21 +13,22 @@ const handler = async (request, response) => {
 
   if (shop) {
     try {
-      // Use one round trip to prevent write conflicts.
-      await Shop.findByIdAndUpdate(data.id, {
-        shopifyShopId: data.id,
-        name: data.name,
-        contactName: data.shop_owner,
-        contactEmail: data.email,
-        contactPhone: data.phone,
-        countryCode: data.country_code,
-        currency: data.currency,
-        locale: data.primary_locale,
-        timezone: data.iana_timezone,
-        shopifyPlan: data.plan_name,
-        alternateDomain:
-          data.domain !== data.myshopify_domain ? data.domain : undefined
-      });
+      shop.shopifyShopId = data.id;
+      shop.name = data.name;
+      shop.contactName = data.shop_owner;
+      shop.contactEmail = data.email;
+      shop.contactPhone = data.phone;
+      shop.countryCode = data.country_code;
+      shop.currency = data.currency;
+      shop.locale = data.primary_locale;
+      shop.timezone = data.iana_timezone;
+      shop.shopifyPlan = data.plan_name;
+
+      if (data.domain !== data.myshopify_domain) {
+        shop.alternateDomain = data.domain;
+      }
+
+      await shop.save();
 
       // Deactivate the shop for our app if the Shopify shop plan is canceled.
       if (shop.shopifyPlan === 'cancelled') {

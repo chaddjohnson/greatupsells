@@ -1,9 +1,6 @@
 const logger = require('@neatowebsolutions/logger');
 
 module.exports = async (shop) => {
-  const models = require('..');
-  const Shop = await models.get('Shop');
-
   try {
     if (!shop.plan.chargeId) {
       throw new Error(
@@ -71,10 +68,7 @@ module.exports = async (shop) => {
       shop.plan.active = true;
     }
 
-    if (shop.isModified()) {
-      // Use one round trip to prevent write conflicts.
-      await Shop.findByIdAndUpdate(shop.id, shop.getChanges());
-    }
+    await shop.save();
   } catch (error) {
     logger.warn(
       `Unable to verify and update plan statuses for shop ${shop.domain}`,

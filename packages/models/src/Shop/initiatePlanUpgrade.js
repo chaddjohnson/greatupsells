@@ -2,9 +2,6 @@ const getenv = require('getenv');
 const logger = require('@neatowebsolutions/logger');
 
 module.exports = async (shop) => {
-  const models = require('..');
-  const Shop = await models.get('Shop');
-
   try {
     // Do nothing if the shop is already upgraded.
     if (shop.plan.level !== 'FREE') {
@@ -35,11 +32,10 @@ module.exports = async (shop) => {
       } for shop (${shop.toString()})`
     );
 
-    // Save the plan charge ID.
-    // Use one round trip to prevent write conflicts.
-    await Shop.findByIdAndUpdate(shop.id, {
-      'plan.chargeId': recurringCharge.id
-    });
+    // Track the plan charge ID.
+    shop.plan.chargeId = recurringCharge.id;
+
+    await shop.save();
 
     // Return the confirmation redirection URL.
     return recurringCharge.confirmation_url;

@@ -220,7 +220,7 @@ module.exports.updateOffer = async (root, args, context) => {
 
   // Update.
   try {
-    return await Offer.findByIdAndUpdate(id, values, { new: true });
+    return await offer.save();
   } catch (error) {
     logger.error(`Error updating offer (${offer.toString()})`, error, args);
     throw new ApolloError(`Error updating offer (${offer.toString()})`);
@@ -255,7 +255,7 @@ module.exports.deleteOffer = async (root, args, context) => {
   }
 
   try {
-    await Offer.findByIdAndDelete(id);
+    await offer.remove();
   } catch (error) {
     logger.error(`Error removing offer (${offer.toString()})`, error);
     throw new ApolloError(`Error removing offer`);

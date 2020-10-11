@@ -2,9 +2,6 @@ const logger = require('@neatowebsolutions/logger');
 const { StatusCodes } = require('http-status-codes');
 
 module.exports = async (shop) => {
-  const models = require('..');
-  const Shop = await models.get('Shop');
-
   if (!shop.accessToken && !shop.active) {
     return;
   }
@@ -13,10 +10,9 @@ module.exports = async (shop) => {
   if (!shop.accessToken) {
     logger.info(`Deactivating shop ${shop.domain}`);
 
-    // Use one round trip to prevent write conflicts.
-    return Shop.findByIdAndUpdate(shop.id, {
-      active: false
-    });
+    shop.active = false;
+
+    return shop.save();
   }
 
   try {
@@ -29,11 +25,11 @@ module.exports = async (shop) => {
 
       logger.info(`Activating shop ${shop.domain}`);
 
-      // Use one round trip to prevent write conflicts.
-      return await Shop.findByIdAndUpdate(shop.id, {
-        active: true,
-        uninstalledAt: undefined
-      });
+      // Mark the shop as active.
+      shop.active = true;
+      shop.uninstalledAt = undefined;
+
+      return await shop.save();
     } catch (error) {
       // No need to proceed with deactivation if the shop is already deactivated.
       if (!shop.active) {
@@ -54,10 +50,9 @@ module.exports = async (shop) => {
       ) {
         logger.info(`Deactivating shop ${shop.domain}`);
 
-        // Use one round trip to prevent write conflicts.
-        return await Shop.findByIdAndUpdate(shop.id, {
-          active: false
-        });
+        shop.active = false;
+
+        return await shop.save();
       }
     }
   } catch (error) {

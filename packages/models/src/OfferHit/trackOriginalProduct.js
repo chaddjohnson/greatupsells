@@ -4,7 +4,6 @@ const trackOriginalProduct = async (
   shopifyVariantId
 ) => {
   const models = require('..');
-  const OfferHit = await models.get('OfferHit');
   const Product = await models.get('Product');
   const product = await Product.findByShopifyProductId(shopifyProductId);
   const variant =
@@ -25,12 +24,11 @@ const trackOriginalProduct = async (
   }
 
   // Track the original product data for the offer hit.
-  // Use one round trip to prevent write conflicts.
-  await OfferHit.findByIdAndUpdate(offerHit.id, {
-    originalShopifyProductId: shopifyProductId,
-    originalShopifyVariantId: shopifyVariantId,
-    originalShopifyVariantPrice: parseFloat(variant.price) || 0
-  });
+  offerHit.originalShopifyProductId = shopifyProductId;
+  offerHit.originalShopifyVariantId = shopifyVariantId;
+  offerHit.originalShopifyVariantPrice = parseFloat(variant.price) || 0;
+
+  await offerHit.save();
 };
 
 module.exports = trackOriginalProduct;

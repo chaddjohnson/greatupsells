@@ -6,8 +6,6 @@ module.exports = async (shop) => {
       return;
     }
 
-    const models = require('..');
-    const Shop = await models.get('Shop');
     const shopifyApiClient = shop.getShopifyApiClient();
     const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
       shop.plan.chargeId
@@ -39,15 +37,15 @@ module.exports = async (shop) => {
       }
     }
 
-    // Use one round trip to prevent write conflicts.
-    await Shop.findByIdAndUpdate(shop.id, {
-      'plan.level': 'FREE',
-      'plan.active': false,
-      'plan.chargeId': undefined,
-      'plan.upgradedAt': undefined,
-      'plan.billingOn': undefined,
-      'plan.canceledAt': Date.now()
-    });
+    // Mark the shop's plan as downgraded.
+    shop.plan.level = 'FREE';
+    shop.plan.active = false;
+    shop.plan.chargeId = undefined;
+    shop.plan.upgradedAt = undefined;
+    shop.plan.billingOn = undefined;
+    shop.plan.canceledAt = Date.now();
+
+    await shop.save();
   } catch (error) {
     logger.warn(
       `Error retrieving recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,

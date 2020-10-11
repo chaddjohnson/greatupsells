@@ -35,8 +35,9 @@ const handler = async (request, response) => {
     try {
       if (dataIsNewer) {
         // Update local Shopify data for the product.
-        // Use one round trip to prevent write conflicts.
-        await Product.findByIdAndUpdate(data.id, { shopifyProductData: data });
+        product.shopifyProductData = data;
+
+        await product.save();
       }
     } catch (error) {
       logger.error(
