@@ -6,10 +6,9 @@ const trackAcceptance = async (
   shopifyVariantId,
   quantity
 ) => {
-  const models = require('..');
-  const Offer = await models.get('Offer');
-  const offer = await Offer.findById(offerHit.offer).populate('shop');
-  const { shop } = offer;
+  await offerHit.populate('shop').populate('offer').execPopulate();
+
+  const { shop, offer } = offerHit;
 
   try {
     offerHit.acceptedAt = Date.now();

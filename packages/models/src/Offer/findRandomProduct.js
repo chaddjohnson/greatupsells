@@ -46,11 +46,10 @@ const findShopifyProduct = async (shop, shopifyProductId) => {
 const getRandomItem = (array = []) =>
   array[Math.floor(Math.random() * array.length)];
 
-const findRandomProduct = async function (offer) {
-  const models = require('..');
-  const Shop = await models.get('Shop');
-  const shop = await Shop.findById(offer.shop);
-  const { products, collections } = offer;
+const findRandomProduct = async (offer) => {
+  await offer.execPopulate('shop');
+
+  const { shop, products, collections } = offer;
 
   // TODO ?
   const productOrCollection = Math.round(Math.random());

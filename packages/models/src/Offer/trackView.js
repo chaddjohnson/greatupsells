@@ -6,10 +6,10 @@ const trackView = async (
   shopifyVariantId,
   ipAddress
 ) => {
+  await offer.execPopulate('shop');
+
   const models = require('..');
-  const Shop = await models.get('Shop');
-  const shop = await Shop.findById(offer.shop);
-  const { shopifyShopId, strategy, triggerEvent } = offer;
+  const { shop, shopifyShopId, strategy, triggerEvent } = offer;
   const OfferHit = await models.get('OfferHit');
   const offerHit = new OfferHit({
     offer,
