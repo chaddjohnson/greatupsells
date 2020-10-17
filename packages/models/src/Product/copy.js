@@ -49,8 +49,7 @@ const copyShopifyProductData = (shopifyProductData) => {
 const copy = async (product, shopifyProductDataOverrides = {}) => {
   await product.execPopulate('shop');
 
-  const models = require('..');
-  const Product = await models.get('Product');
+  const Product = product.constructor;
   const { shop, shopifyShopId, shopifyProductData } = product;
   const shopifyApiClient = shop.getShopifyApiClient();
 
