@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 const findViewsByOfferId = require('./findViewsByOfferId');
 const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
@@ -13,8 +12,6 @@ const trackAcceptance = require('./trackAcceptance');
 const trackConversion = require('./trackConversion');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let OfferHit = null;
 

@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 const toString = require('./toString');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let Collection = null;
 

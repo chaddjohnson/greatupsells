@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let User = null;
 

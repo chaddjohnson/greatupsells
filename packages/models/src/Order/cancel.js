@@ -1,8 +1,5 @@
 const Promise = require('bluebird');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
+const mongodbClient = require('../mongodbClient');
 
 const cancel = async (order) => {
   // Abort if the order is already canceled.

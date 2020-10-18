@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 const copy = require('./copy');
 const removeCopiedProducts = require('./removeCopiedProducts');
 const preValidateHook = require('./preValidateHook');
 const toString = require('./toString');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let Product = null;
 

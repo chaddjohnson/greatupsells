@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
+const mongodbClient = require('../mongodbClient');
 
 let PopupTheme = null;
 

@@ -1,34 +1,12 @@
+const Promise = require('bluebird');
+const mongoose = require('mongoose'); // eslint-disable-line import/no-unresolved
 const path = require('path');
-const { loadModel } = require('@chaddjohnson/mongodb-client-lambda').loader;
+const mongodbClient = require('../mongodbClient');
 
-const { MONGODB_URI } = process.env;
+let modelsLoaded = false;
+let modelMap = {};
 
-const connectionUri = MONGODB_URI;
-const connectionOptions = {
-  reconnectTries: 30,
-  reconnectInterval: 500,
-
-  // The maximum number of sockets the MongoDB driver will keep open for this connection.
-  poolSize: 5,
-
-  // How long the MongoDB driver will wait before killing a socket due to inactivity after initial connection.
-  socketTimeoutMS: 60 * 1000,
-
-  // Keep the connection alive.
-  keepAlive: true,
-
-  // Reference: https://mongoosejs.com/docs/lambda.html
-  // Buffering means mongoose will queue up operations if it gets
-  // disconnected from MongoDB and send them when it reconnects.
-  // With serverless, better to fail fast if not connected.
-  bufferCommands: false, // Disable mongoose buffering
-  bufferMaxEntries: 0, // and MongoDB driver buffering
-
-  useNewUrlParser: true,
-  useCreateIndex: true
-};
-
-const pathsMap = {
+const modelPathsMap = {
   Collection: path.join(__dirname, './Collection'),
   Offer: path.join(__dirname, './Offer'),
   OfferHit: path.join(__dirname, './OfferHit'),
@@ -39,8 +17,41 @@ const pathsMap = {
   User: path.join(__dirname, './User')
 };
 
+const loadModels = () => {
+  if (modelsLoaded) {
+    return modelMap;
+  }
+
+  const modelNames = Object.keys(modelPathsMap);
+
+  // Build a map of models indexed by model name.
+  modelMap = modelNames.reduce((map, modelName) => {
+    return {
+      ...map,
+      [modelName]: require(modelPathsMap[modelName]) // eslint-disable-line import/no-dynamic-require
+    };
+  }, {});
+
+  modelsLoaded = true;
+
+  return modelMap;
+};
+
+const loadModel = async (modelName) => {
+  if (mongodbClient.connected && modelMap[modelName]) {
+    return modelMap[modelName];
+  }
+
+  // If the bufferCommands connection option is false, the connection must be established prior to models being loaded.
+  await mongodbClient.connect();
+
+  loadModels();
+
+  return modelMap[modelName];
+};
+
 const get = async (name) => {
-  return loadModel(name, pathsMap, connectionUri, connectionOptions);
+  return loadModel(name);
 };
 
 const getAll = async () => ({
@@ -52,6 +63,18 @@ const getAll = async () => ({
   Shop: await get('Shop'),
   // Stat: await get('Stat'),
   User: await get('User')
+});
+
+// Use Bluebird for promises.
+mongoose.Promise = Promise;
+
+// Set default schema options.
+mongoose.plugin((schema) => {
+  // Turn on timestamps for all models.
+  schema.options.timestamps = true;
+
+  // Turn on usePushEach for all models.
+  schema.options.usePushEach = true;
 });
 
 module.exports = {

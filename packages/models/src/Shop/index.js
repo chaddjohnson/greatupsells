@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
@@ -19,8 +18,6 @@ const toString = require('./toString');
 const hooks = require('./hooks');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let Shop = null;
 

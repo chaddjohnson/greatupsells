@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const mongodbClient = require('../mongodbClient');
 const findRandomByShopifyProductIds = require('./findRandomByShopifyProductIds');
 const findRandomProduct = require('./findRandomProduct');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
@@ -10,8 +9,6 @@ const hooks = require('./hooks');
 const trackView = require('./trackView');
 
 require('mongoose-long')(mongoose);
-
-const mongodbClient = mongodbClientFactory.get(process.env.MONGODB_URI);
 
 let Offer = null;
 
