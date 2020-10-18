@@ -1,10 +1,11 @@
+const mongodbClient = require('../mongodbClient');
+
 const trackOriginalProduct = async (
   offerHit,
   shopifyProductId,
   shopifyVariantId
 ) => {
-  const models = require('..');
-  const Product = await models.get('Product');
+  const Product = mongodbClient.connection.model('Product');
   const product = await Product.findByShopifyProductId(shopifyProductId);
   const variant =
     product &&

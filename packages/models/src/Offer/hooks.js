@@ -1,8 +1,8 @@
 const logger = require('@neatowebsolutions/logger');
+const mongodbClient = require('../mongodbClient');
 
 const preValidate = async (offer, next) => {
-  const models = require('..');
-  const Shop = await models.get('Shop');
+  const Shop = mongodbClient.connection.model('Shop');
 
   // Set up reference to shop if missing.
   if (offer.shopifyShopId && !offer.shop) {

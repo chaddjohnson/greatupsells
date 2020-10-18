@@ -1,8 +1,8 @@
 const moment = require('moment-timezone');
+const mongodbClient = require('../mongodbClient');
 
 const findRecentOfferHit = async (shop, ipAddress) => {
-  const models = require('..');
-  const OfferHit = await models.get('OfferHit');
+  const OfferHit = mongodbClient.connection.model('OfferHit');
   const { shopifyShopId } = shop;
 
   return OfferHit.find({

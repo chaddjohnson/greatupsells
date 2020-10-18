@@ -1,8 +1,8 @@
 const moment = require('moment-timezone');
+const mongodbClient = require('../mongodbClient');
 
 module.exports = async () => {
-  const models = require('..');
-  const Product = await models.get('Product');
+  const Product = mongodbClient.connection.model('Product');
 
   // Keep copied products for three months to match how long abandoned
   // checkouts are kept.

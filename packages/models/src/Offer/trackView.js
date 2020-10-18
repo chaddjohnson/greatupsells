@@ -1,4 +1,5 @@
 const logger = require('@neatowebsolutions/logger');
+const mongodbClient = require('../mongodbClient');
 
 const trackView = async (
   offer,
@@ -8,9 +9,8 @@ const trackView = async (
 ) => {
   await offer.execPopulate('shop');
 
-  const models = require('..');
   const { shop, shopifyShopId, strategy, triggerEvent } = offer;
-  const OfferHit = await models.get('OfferHit');
+  const OfferHit = mongodbClient.connection.model('OfferHit');
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,

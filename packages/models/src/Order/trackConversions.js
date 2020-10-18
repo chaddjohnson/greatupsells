@@ -1,9 +1,9 @@
 const Promise = require('bluebird');
 const { compact } = require('lodash');
+const mongodbClient = require('../mongodbClient');
 
 const trackConversions = async (order) => {
-  const models = require('..');
-  const OfferHit = await models.get('OfferHit');
+  const OfferHit = mongodbClient.connection.model('OfferHit');
 
   // Get line items for the order.
   const lineItems = order.shopifyOrderData.line_items || [];

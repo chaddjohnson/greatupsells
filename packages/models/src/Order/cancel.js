@@ -9,9 +9,8 @@ const cancel = async (order) => {
 
   await order.execPopulate('shop');
 
-  const models = require('..');
-  const OfferHit = await models.get('OfferHit');
-  const Shop = await models.get('Shop');
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const Shop = mongodbClient.connection.model('Shop');
   const { shop, shopifyOrderId } = order;
   const offerHits = await OfferHit.findByShopifyOrderId(shopifyOrderId);
 

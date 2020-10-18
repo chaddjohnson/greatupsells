@@ -1,3 +1,5 @@
+const mongodbClient = require('../mongodbClient');
+
 // const buildCollectionsQuery = (shopifyProductIds) => {
 //   const queries = shopifyProductIds.map(
 //     (shopifyProductId) => /* GraphQL */ `
@@ -35,8 +37,7 @@
 // };
 
 const findRandomByShopifyProductIds = async (shop, shopifyProductIds) => {
-  const models = require('..');
-  const Offer = await models.get('Offer');
+  const Offer = mongodbClient.connection.model('Offer');
 
   // Query Shopify for collections associated with each of the Shopify products.
   const shopifyCollectionIds = await findShopifyProductCollectionIds(
