@@ -14,7 +14,7 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
+    "@chaddjohnson/mongodb-client-lambda": "^2.0.0",
     "@neatowebsolutions/logger": "^0.0.0",
     "@neatowebsolutions/upselling-models": "^0.0.0",
     "body-parser": "^1.19.0",

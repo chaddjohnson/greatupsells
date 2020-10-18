@@ -9,7 +9,7 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin#readme",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^1.2.11",
+    "@chaddjohnson/mongodb-client-lambda": "^2.0.0",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
     "@neatowebsolutions/upselling-graphql-client": "^0.0.0",
