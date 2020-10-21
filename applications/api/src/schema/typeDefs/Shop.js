@@ -16,6 +16,7 @@ const typeDef = gql`
     timezone: String!
     active: Boolean!
     internal: Boolean!
+    shopifyPlan: String!
     plan: ShopPlan!
     uninstalledAt: DateTime
     acceptanceCount: Int

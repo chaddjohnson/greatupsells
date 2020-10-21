@@ -15,14 +15,12 @@ const Product = require('./Product');
 
 const Query = gql`
   type Query {
-    shops: [Shop]
     shop(id: ID): Shop
     offers: [Offer]
     offer(id: ID!): Offer
     randomOffer(event: String!, shopifyProductIds: [Long!]!): Offer
     products: [Product]
     product(id: ID!): Product
-    # login(username: String!, password: String!): User,
   }
 `;
 

@@ -1,22 +1,21 @@
 const {
   ApolloError,
   AuthenticationError,
+  ForbiddenError,
   UserInputError
 } = require('apollo-server-lambda');
 const { omit } = require('lodash');
 const logger = require('@neatowebsolutions/logger');
 
 module.exports.offers = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
+
+  if (!shop) {
+    throw new AuthenticationError('Unauthorized');
+  }
 
   try {
-    if (shop) {
-      return await Offer.findByShopifyShopId(shop.shopifyShopId);
-    }
-
-    if (user) {
-      return await Offer.find({});
-    }
+    return await Offer.findByShopifyShopId(shop.shopifyShopId);
   } catch (error) {
     logger.error(
       `Error retrieving offers${shop ? ` for shop (${shop.toString()})` : ''}`,
@@ -24,16 +23,14 @@ module.exports.offers = async (root, args, context) => {
     );
     throw new ApolloError('Error retrieving offers');
   }
-
-  throw new AuthenticationError('Unauthorized');
 };
 
 module.exports.offer = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
   const { id } = args;
   let offer = null;
 
-  if (!shop && !user) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
@@ -48,11 +45,11 @@ module.exports.offer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
-  if (shop && offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
     logger.warn(
       `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
-    throw new AuthenticationError('Unauthorized');
+    throw new ForbiddenError('Forbidden');
   }
 
   return offer;
@@ -119,9 +116,10 @@ module.exports.offerShop = async (root, args, context) => {
 };
 
 module.exports.offerProduct = async (root, args, context) => {
-  const { Offer } = context;
+  const { shop, Offer } = context;
   const offerId = root.id;
   let offer = null;
+  let product = null;
 
   try {
     offer = await Offer.findById(offerId);
@@ -130,24 +128,32 @@ module.exports.offerProduct = async (root, args, context) => {
       return;
     }
 
-    return await offer.findRandomProduct();
+    product = await offer.findRandomProduct();
   } catch (error) {
     throw new ApolloError(`Error retrieving product for offer`);
   }
+
+  // Verify the offer belongs to the shop.
+  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+    logger.warn(
+      `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
+    );
+    throw new ForbiddenError('Forbidden');
+  }
+
+  return product;
 };
 
 module.exports.createOffer = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
   const offer = new Offer(...args.input);
 
-  if (!user && !shop) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
-  if (user) {
-    offer.shopifyShopId = shop.shopifyShopId;
-    offer.shop = shop;
-  }
+  offer.shopifyShopId = shop.shopifyShopId;
+  offer.shop = shop;
 
   try {
     await offer.validate();
@@ -164,12 +170,12 @@ module.exports.createOffer = async (root, args, context) => {
 };
 
 module.exports.updateOffer = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
   const { id } = args;
   let { ...values } = args.input;
   let offer = null;
 
-  if (!shop && !user) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
@@ -197,17 +203,12 @@ module.exports.updateOffer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
-  // Require authorization.
-  if (!shop && !user) {
-    throw new AuthenticationError('Unauthorized');
-  }
-
   // Verify the offer belongs to the shop.
-  if (shop && offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
     logger.warn(
       `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
-    throw new AuthenticationError('Unauthorized');
+    throw new ForbiddenError('Forbidden');
   }
 
   // Validate.
@@ -228,11 +229,11 @@ module.exports.updateOffer = async (root, args, context) => {
 };
 
 module.exports.deleteOffer = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
   const { id } = args;
   let offer = null;
 
-  if (!shop && !user) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
@@ -247,11 +248,11 @@ module.exports.deleteOffer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
-  if (shop && offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
     logger.warn(
       `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
-    throw new AuthenticationError('Unauthorized');
+    throw new ForbiddenError('Forbidden');
   }
 
   try {
@@ -263,14 +264,14 @@ module.exports.deleteOffer = async (root, args, context) => {
 };
 
 module.exports.shopOffers = async (root, args, context) => {
-  const { shop, user, Offer } = context;
+  const { shop, Offer } = context;
   const shopId = root.id;
 
-  if (!user && !shop) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
-  if (shop && shop.id !== shopId) {
+  if (shop.id !== shopId) {
     throw new AuthenticationError('Unauthorized');
   }
 

@@ -1,57 +1,60 @@
-const { AuthenticationError, ApolloError } = require('apollo-server-lambda');
+const {
+  ApolloError,
+  AuthenticationError,
+  ForbiddenError
+} = require('apollo-server-lambda');
 const logger = require('@neatowebsolutions/logger');
 
 module.exports.products = async (root, args, context) => {
-  const { user, Product } = context;
-
-  if (!user) {
-    throw new AuthenticationError('Unauthorized');
-  }
-
-  // TODO: Allow a shop to access its products.
+  const { shop, Product } = context;
 
   try {
-    return await Product.find({});
+    return await Product.findByShopId(shop._id);
   } catch (error) {
     throw new ApolloError('Error retrieving products');
   }
 };
 
 module.exports.product = async (root, args, context) => {
-  const { user, Product } = context;
+  const { shop, Product } = context;
   const { id } = args;
-
-  if (!user) {
-    throw new AuthenticationError('Unauthorized');
-  }
-
-  // TODO: Allow a shop to access a product.
+  let product = null;
 
   try {
-    return await Product.findById(id);
+    product = await Product.findById(id);
   } catch (error) {
     throw new ApolloError(`Error retrieving product`);
   }
+
+  if (shop.shopifyShopId.notEquals(product.shopifyShopId)) {
+    logger.warn(
+      `Unauthorized request for product (${product.toString()}) by shop (${shop.toString()})`
+    );
+    throw new ForbiddenError('Forbidden');
+  }
+
+  return product;
 };
 
 module.exports.productShop = async (root, args, context) => {
   const { Shop } = context;
+  const shopId = root.shop;
 
   try {
-    return await Shop.findById(root.shop);
+    return await Shop.findById(shopId);
   } catch (error) {
     throw new ApolloError('Error retrieving product shop');
   }
 };
 
 module.exports.shopProducts = async (root, args, context) => {
-  const { shop, user, Product } = context;
+  const { shop, Product } = context;
 
-  if (!user && !shop) {
+  if (!shop) {
     throw new AuthenticationError('Unauthorized');
   }
 
-  if (shop && shop.id !== root.id) {
+  if (shop.id !== root.id) {
     throw new AuthenticationError('Unauthorized');
   }
 

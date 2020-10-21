@@ -3,7 +3,7 @@ const {
   JSONResolver,
   LongResolver
 } = require('graphql-scalars');
-const { shops, shop } = require('./shops');
+const { shop } = require('./shops');
 const {
   offers,
   offer,
@@ -31,7 +31,6 @@ const resolvers = {
   JSON: JSONResolver,
   Long: LongResolver,
   Query: {
-    shops,
     shop,
     offers,
     offer,
