@@ -9,6 +9,8 @@ const trackAcceptance = async (
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;
+  const Offer = offer.constructor;
+  const Shop = shop.constructor;
 
   try {
     offerHit.acceptedAt = Date.now();
@@ -23,6 +25,20 @@ const trackAcceptance = async (
         quantity
       );
     }
+
+    // Increment offer acceptance count.
+    await Offer.findByIdAndUpdate(offer.id, {
+      $inc: {
+        acceptanceCount: 1
+      }
+    });
+
+    // Increment shop offer acceptance count.
+    await Shop.findByIdAndUpdate(shop.id, {
+      $inc: {
+        acceptanceCount: 1
+      }
+    });
   } catch (error) {
     logger.error(
       `Error tracking offer acceptance for offer hit (${

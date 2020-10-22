@@ -10,6 +10,7 @@ const cancel = async (order) => {
   await order.execPopulate('shop');
 
   const OfferHit = mongodbClient.connection.model('OfferHit');
+  const Offer = mongodbClient.connection.model('Offer');
   const Shop = mongodbClient.connection.model('Shop');
   const { shop, shopifyOrderId } = order;
   const offerHits = await OfferHit.findByShopifyOrderId(shopifyOrderId);
@@ -25,8 +26,8 @@ const cancel = async (order) => {
         $inc: {
           revenueIncrease: order.revenueIncrease * -1,
           conversionCount: -1
-        }
-        // conversionRate: // TODO
+        },
+        conversionRate: (shop.conversionCount - 1) / shop.viewCount
       },
       { session }
     );
@@ -46,6 +47,10 @@ const cancel = async (order) => {
 
     // Update offer hits.
     await Promise.map(offerHits, async (offerHit) => {
+      await offerHit.execPopulate('offer');
+
+      const { offer } = offerHit;
+
       // Update the offer hit. Use one round trip to prevent write conflicts.
       await OfferHit.findByIdAndUpdate(
         offerHit.id,
@@ -55,6 +60,19 @@ const cancel = async (order) => {
 
           // Zero out revenue increase for the order.
           revenueIncrease: 0
+        },
+        { session }
+      );
+
+      // Update the offer associated with the offer hit.
+      await Offer.findByIdAndUpdate(
+        offerHit.offer.id,
+        {
+          $inc: {
+            revenueIncrease: offerHit.revenueIncrease * -1,
+            conversionCount: -1
+          },
+          conversionRate: (offer.conversionCount - 1) / offer.viewCount
         },
         { session }
       );

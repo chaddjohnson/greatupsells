@@ -3,6 +3,8 @@ const { compact } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
 const trackConversions = async (order) => {
+  await order.execPopulate('shop');
+
   const OfferHit = mongodbClient.connection.model('OfferHit');
 
   // Get line items for the order.
@@ -18,11 +20,13 @@ const trackConversions = async (order) => {
     )
   );
 
-  // Track conversions for offer hits.
-  await Promise.all(
-    offerHits.map(async (offerHit) => {
+  // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
+  await Promise.map(
+    offerHits,
+    async (offerHit) => {
       await offerHit.trackConversion(order);
-    })
+    },
+    { concurrency: 1 }
   );
 
   // Track the total revenue increase for the order.

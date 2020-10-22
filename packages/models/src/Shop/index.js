@@ -67,6 +67,7 @@ const schema = new mongoose.Schema(
       canceledAt: { type: Date, required: false }
     },
     uninstalledAt: { type: Date, required: false },
+    viewCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionRate: { type: Number, required: true, default: 0.0, min: 0 },

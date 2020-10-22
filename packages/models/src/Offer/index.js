@@ -4,9 +4,9 @@ const mongodbClient = require('../mongodbClient');
 const findRandomByShopifyProductIds = require('./findRandomByShopifyProductIds');
 const findRandomProduct = require('./findRandomProduct');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
+const trackView = require('./trackView');
 const toString = require('./toString');
 const hooks = require('./hooks');
-const trackView = require('./trackView');
 
 require('mongoose-long')(mongoose);
 
