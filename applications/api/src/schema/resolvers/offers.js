@@ -183,10 +183,10 @@ module.exports.updateOffer = async (root, args, context) => {
   values = omit(values, [
     'shopifyShopId',
     'shop',
-    'viewCount',
-    'acceptanceCount',
-    'conversionCount',
-    'conversionRate',
+    'offerViewCount',
+    'offerAcceptanceCount',
+    'offerConversionCount',
+    'offerConversionRate',
     'revenueIncrease',
     'createdAt',
     'updatedAt'

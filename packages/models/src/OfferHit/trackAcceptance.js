@@ -36,7 +36,7 @@ const trackAcceptance = async (
     // Increment shop offer acceptance count.
     await Shop.findByIdAndUpdate(shop.id, {
       $inc: {
-        acceptanceCount: 1
+        offerAcceptanceCount: 1
       }
     });
   } catch (error) {

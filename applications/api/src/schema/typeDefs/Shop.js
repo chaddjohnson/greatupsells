@@ -19,10 +19,10 @@ const typeDef = gql`
     shopifyPlan: String!
     plan: ShopPlan!
     uninstalledAt: DateTime
-    viewCount: Int
-    acceptanceCount: Int
-    conversionCount: Int
-    conversionRate: Float
+    offerViewCount: Int
+    offerAcceptanceCount: Int
+    offerConversionCount: Int
+    offerConversionRate: Float
     revenueIncrease: Float
     createdAt: DateTime!
     updatedAt: DateTime!

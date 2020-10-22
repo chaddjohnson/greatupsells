@@ -39,7 +39,7 @@ const trackView = async (
     // Increment shop offer view count.
     await Shop.findByIdAndUpdate(shop.id, {
       $inc: {
-        viewCount: 1
+        offerViewCount: 1
       }
     });
   } catch (error) {

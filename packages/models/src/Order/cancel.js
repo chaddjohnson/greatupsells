@@ -25,9 +25,10 @@ const cancel = async (order) => {
       {
         $inc: {
           revenueIncrease: order.revenueIncrease * -1,
-          conversionCount: -1
+          offerConversionCount: -1
         },
-        conversionRate: (shop.conversionCount - 1) / shop.viewCount
+        offerConversionRate:
+          (shop.offerConversionCount - 1) / shop.offerViewCount
       },
       { session }
     );

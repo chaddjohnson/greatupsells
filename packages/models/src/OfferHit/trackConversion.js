@@ -28,9 +28,9 @@ const trackConversion = async (offerHit, order) => {
     await shop.findByIdAndUpdate(shop.id, {
       $inc: {
         revenueIncrease: offerHit.revenueIncrease,
-        conversionCount: 1
+        offerConversionCount: 1
       },
-      conversionRate: (shop.conversionCount + 1) / shop.viewCount
+      offerConversionRate: (shop.offerConversionCount + 1) / shop.offerViewCount
     });
   } catch (error) {
     logger.error(

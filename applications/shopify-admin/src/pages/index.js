@@ -130,7 +130,7 @@ const DashboardPage = () => {
                 <Stack distribution="equalSpacing" wrap>
                   <Stack spacing="tight" vertical>
                     <DisplayText size="extraLarge">
-                      {formatNumber(shop?.acceptanceCount)}
+                      {formatNumber(shop?.offerAcceptanceCount)}
                     </DisplayText>
                     <TextStyle variation="strong">
                       <TextStyle variation="subdued">Accepted offers</TextStyle>
@@ -148,7 +148,7 @@ const DashboardPage = () => {
                   </Stack>
                   <Stack spacing="tight" vertical>
                     <DisplayText size="extraLarge">
-                      {formatPercentage(shop?.conversionRate, 1)}
+                      {formatPercentage(shop?.offerConversionRate, 1)}
                     </DisplayText>
                     <TextStyle variation="strong">
                       <TextStyle variation="subdued">Conversion rate</TextStyle>

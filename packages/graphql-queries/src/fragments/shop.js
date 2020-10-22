@@ -22,10 +22,10 @@ export default /* GraphQL */ `
       canceledAt
     }
     uninstalledAt
-    viewCount
-    acceptanceCount
-    conversionCount
-    conversionRate
+    offerViewCount
+    offerAcceptanceCount
+    offerConversionCount
+    offerConversionRate
     revenueIncrease
     createdAt
     updatedAt
