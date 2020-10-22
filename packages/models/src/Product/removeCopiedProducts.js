@@ -24,7 +24,7 @@ module.exports = async () => {
 
       // Remove the product from Shopify. The product will then be marked as
       // deleted (but not deleted) via webhook.
-      await shopifyApiClient.delete(shopifyShopId);
+      await shopifyApiClient.product.delete(shopifyShopId);
     },
     { parallel: 25 }
   );
