@@ -40,7 +40,7 @@ const initialOffer = {
   minimumProductsQuantity: 1,
   collections: [],
   discountType: 'PERCENTAGE',
-  // discountAmount
+  discountAmount: 0.1,
   triggerEvent: 'ADD',
   triggerProducts: [],
   triggerCollections: [],

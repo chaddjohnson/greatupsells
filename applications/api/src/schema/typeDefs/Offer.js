@@ -24,7 +24,7 @@ const typeDef = gql`
     minimumProductsQuantity: Int
     collections: [OfferCollection]
     discountType: OfferDiscountType!
-    # discountAmount
+    discountAmount: Float
     triggerEvent: OfferTriggerEvent
     triggerProducts: [OfferProduct]
     triggerCollections: [OfferCollection]
@@ -133,7 +133,7 @@ const typeDef = gql`
     minimumProductsQuantity: Int
     collections: [OfferCollectionInput]
     discountType: String!
-    # discountAmount
+    discountAmount: Float
     triggerEvent: String
     triggerProducts: [OfferProductInput]
     triggerCollections: [OfferCollectionInput]

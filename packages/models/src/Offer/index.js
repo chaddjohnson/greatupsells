@@ -83,7 +83,7 @@ const schema = new mongoose.Schema(
       enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT'],
       required: true
     },
-    // discountAmount
+    discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
       enum: ['ADD', 'CART', 'CHECKOUT', 'LOAD', 'EXIT'],

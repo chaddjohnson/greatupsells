@@ -47,7 +47,7 @@ export default /* GraphQL */ `
       shopifyCollectionId
     }
     discountType
-    # discountAmount
+    discountAmount
     triggerEvent
     triggerProducts {
       title
