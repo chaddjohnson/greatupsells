@@ -1,7 +1,7 @@
 const Promise = require('bluebird');
 const mongoose = require('mongoose'); // eslint-disable-line import/no-unresolved
 const path = require('path');
-const mongodbClient = require('../mongodbClient');
+const mongodbClient = require('./mongodbClient');
 
 let modelsLoaded = false;
 let modelMap = {};

@@ -11,15 +11,15 @@ provider:
   versionFunctions: false
   logRetentionInDays: 14
   environment:
+    API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
     APP_SLUG: upselling
+    CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
+    MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+    SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
     SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
-    API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
-    CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
-    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
-    MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
 
@@ -81,7 +81,7 @@ custom:
         ngrokOptions:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
-          subdomain: ${env:WEBHOOKS_API_URL}
+          subdomain: ${env:WEBHOOKS_API_TUNNEL_SUBDOMAIN}
 
 package:
   exclude:
