@@ -13,6 +13,8 @@ const handler = async (request, response) => {
 
   // Delete copied products originalShopifyProductId.
   await Product.deleteMany({ originalShopifyProductId: data.id });
+
+  // TODO: Remove product association from offers.
 };
 
 module.exports = handler;

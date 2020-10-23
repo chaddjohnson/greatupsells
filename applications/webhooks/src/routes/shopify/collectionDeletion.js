@@ -10,6 +10,8 @@ const handler = async (request, response) => {
 
   // Delete the collection.
   await Collection.findByIdAndDelete(data.id);
+
+  // TODO: Remove collection association from offers.
 };
 
 module.exports = handler;
