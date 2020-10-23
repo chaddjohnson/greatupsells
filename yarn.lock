@@ -1092,12 +1092,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@chaddjohnson/mongodb-client-lambda@^1.2.11":
-  version "1.2.11"
-  resolved "https://registry.yarnpkg.com/@chaddjohnson/mongodb-client-lambda/-/mongodb-client-lambda-1.2.11.tgz#cce626092adfca0f56e8d693a090303e43bd77e3"
-  integrity sha512-uXf/61Np/Yj/DXzpkdSlJCFMVn7Hn85JRB46fdMor5Jkodv60XZASDTRBDboM1EuOGQvrEENfMkfjTxrtuwwUg==
-  dependencies:
-    bluebird "^3.5.5"
+"@chaddjohnson/mongodb-client-lambda@^2.0.0":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@chaddjohnson/mongodb-client-lambda/-/mongodb-client-lambda-2.0.2.tgz#5f6b4d77a25876c472fff1171c6b138d74dabdf5"
+  integrity sha512-+XmXA0IYM5k5cPIiTGdix1xdRe57kTeCTf9QvvdPDYWlp0VcudNqyvAIdkddzaIsq7nLL0w5zUIhdQrt3kYpBA==
 
 "@emotion/is-prop-valid@^0.8.8":
   version "0.8.8"
