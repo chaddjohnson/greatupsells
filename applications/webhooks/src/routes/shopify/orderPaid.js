@@ -8,7 +8,8 @@ const handler = async (request, response) => {
   const Shop = await models.get('Shop');
   const Order = await models.get('Order');
   const shop = await Shop.findByDomain(domain);
-  let order = await Order.findByShopifyOrderId(data.id);
+  const shopifyOrderId = data.id;
+  let order = await Order.findByShopifyOrderId(shopifyOrderId);
 
   // Respond immediately so that Shopify does not consider this webhook as timed out.
   response.status(StatusCodes.OK).end();
@@ -20,7 +21,7 @@ const handler = async (request, response) => {
       order = await Order.create({
         shop,
         shopifyShopId: shop.shopifyShopId,
-        shopifyOrderId: data.id,
+        shopifyOrderId,
         shopifyOrderNumber: data.order_number,
         shopifyOrderData: data
       });
@@ -28,7 +29,7 @@ const handler = async (request, response) => {
     }
   } catch (error) {
     logger.error(
-      `Error processing order ${data.id} for shop (${shop.toString()})`,
+      `Error processing order ${shopifyOrderId} for shop (${shop.toString()})`,
       error,
       data
     );

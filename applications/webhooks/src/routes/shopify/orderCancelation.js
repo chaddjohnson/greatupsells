@@ -5,7 +5,10 @@ const logger = require('@neatowebsolutions/logger');
 const handler = async (request, response) => {
   const data = response.body;
   const Order = await models.get('Order');
-  const order = await Order.findByShopifyOrderId(data.id).execPopulate('shop');
+  const shopifyOrderId = data.id;
+  const order = await Order.findByShopifyOrderId(shopifyOrderId).execPopulate(
+    'shop'
+  );
   const { shop } = order || {};
 
   // Respond immediately so that Shopify does not consider this webhook as timed out.

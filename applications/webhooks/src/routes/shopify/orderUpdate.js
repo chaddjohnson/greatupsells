@@ -8,7 +8,8 @@ const handler = async (request, response) => {
   const Shop = await models.get('Shop');
   const Order = await models.get('Order');
   const shop = await Shop.findByDomain(domain);
-  const order = await Order.findByShopifyOrderId(data.id);
+  const shopifyOrderId = data.id;
+  const order = await Order.findByShopifyOrderId(shopifyOrderId);
   const dataIsNewer =
     !!order &&
     new Date(data.updated_at) > new Date(order.shopifyOrderData.updated_at);
@@ -25,7 +26,7 @@ const handler = async (request, response) => {
     }
   } catch (error) {
     logger.error(
-      `Error updating order ${data.id} for shop (${shop.toString()})`,
+      `Error updating order ${shopifyOrderId} for shop (${shop.toString()})`,
       error,
       data
     );

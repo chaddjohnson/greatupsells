@@ -8,7 +8,8 @@ const handler = async (request, response) => {
   const Product = await models.get('Product');
   const Shop = await models.get('Shop');
   const shop = await Shop.findByDomain(domain);
-  let product = await Product.findByShopifyProductId(data.id);
+  const shopifyProductId = data.id;
+  let product = await Product.findByShopifyProductId(shopifyProductId);
   const dataIsNewer =
     !!product &&
     new Date(data.updated_at) > new Date(product.shopifyProductData.updated_at);
@@ -21,7 +22,7 @@ const handler = async (request, response) => {
       product = await Product.create({
         shop,
         shopifyShopId: shop.shopifyShopId,
-        shopifyProductId: data.id,
+        shopifyProductId,
         shopifyProductData: data
       });
     } catch (error) {

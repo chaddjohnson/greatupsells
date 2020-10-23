@@ -9,7 +9,10 @@ const handler = async (request, response) => {
   const Shop = await models.get('Shop');
   const shop = await Shop.findByDomain(domain);
   const shopifyApiClient = shop.getShopifyApiClient();
-  let collection = await Collection.findByShopifyCollectionId(data.id);
+  const shopifyCollectionId = data.id;
+  let collection = await Collection.findByShopifyCollectionId(
+    shopifyCollectionId
+  );
   const dataIsNewer =
     !!collection &&
     new Date(data.updated_at) >
@@ -23,10 +26,10 @@ const handler = async (request, response) => {
       collection = await Collection.create({
         shop,
         shopifyShopId: shop.shopifyShopId,
-        shopifyCollectionId: data.id,
+        shopifyCollectionId,
         shopifyCollectionData: data,
         productCount: await shopifyApiClient.collect.count({
-          collection_id: data.id
+          collection_id: shopifyCollectionId
         })
       });
     } catch (error) {
@@ -43,7 +46,7 @@ const handler = async (request, response) => {
         // Update local Shopify data for the collection.
         collection.shopifyCollectionData = data;
         collection.productCount = await shopifyApiClient.collect.count({
-          collection_id: data.id
+          collection_id: shopifyCollectionId
         });
 
         await collection.save();

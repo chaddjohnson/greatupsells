@@ -6,6 +6,7 @@ const handler = async (request, response) => {
   const domain = request.headers['x-shopify-shop-domain'];
   const data = request.body;
   const Shop = await models.get('Shop');
+  const shopifyShopId = data.id;
   const shop = await Shop.findByDomain(domain);
 
   // Respond immediately so that Shopify does not consider this webhook as timed out.
@@ -13,7 +14,7 @@ const handler = async (request, response) => {
 
   if (shop) {
     try {
-      shop.shopifyShopId = data.id;
+      shop.shopifyShopId = shopifyShopId;
       shop.name = data.name;
       shop.contactName = data.shop_owner;
       shop.contactEmail = data.email;
