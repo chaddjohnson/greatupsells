@@ -40,19 +40,19 @@ const findRandomByShopifyProductIds = async (shop, shopifyProductIds) => {
   const Offer = mongodbClient.connection.model('Offer');
 
   // Query Shopify for collections associated with each of the Shopify products.
-  const shopifyCollectionIds = await findShopifyProductCollectionIds(
-    shop,
-    shopifyProductIds
-  );
+  // const shopifyCollectionIds = await findShopifyProductCollectionIds(
+  //   shop,
+  //   shopifyProductIds
+  // );
 
   // Flatten collection IDs across products.
 
   // Randomly find an offer having the Shopify product as a trigger OR a collection
   // to which the product belongs as a trigger.
-  return Offer.find({
-    'triggerProducts.shopifyProductId': { $in: shopifyProductIds },
-    'triggerCollections.shopifyCollectionId': { $in: shopifyCollectionIds }
-  });
+  // return Offer.find({
+  //   'triggerProducts.shopifyProductId': { $in: shopifyProductIds },
+  //   'triggerCollections.shopifyCollectionId': { $in: shopifyCollectionIds }
+  // });
 };
 
 module.exports = findRandomByShopifyProductIds;

@@ -5,7 +5,11 @@ export default () => (
   <Menu>
     <Container>
       <Menu.Item as="a" header>
-        <Image size="small" src="http://via.placeholder.com/300x75" />
+        <Image
+          size="small"
+          src="http://via.placeholder.com/300x75"
+          alt="Mobile Menu"
+        />
       </Menu.Item>
       <Menu.Menu position="right">
         <Link href="/login" passHref>
