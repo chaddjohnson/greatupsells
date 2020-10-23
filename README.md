@@ -132,10 +132,10 @@ We support the following browsers:
 
 We do not support Internet Explorer.
 
-This app must work in [the native Shopify app](https://apps.apple.com/us/app/shopify-ecommerce-business/id371294472).
+This app must work in the [native Shopify app](https://apps.apple.com/us/app/shopify-ecommerce-business/id371294472).
 
 ### Licensing
 
 All licenses are permissive free software licenses imposing minimal restrictions on the use and distribution of covered software.
 
-Run npx license-checker --summary to check licenses for dependencies.
+Run `npx license-checker --summary` to check licenses for dependencies.
