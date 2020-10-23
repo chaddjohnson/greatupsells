@@ -22,25 +22,40 @@ const trackView = async (
     ipAddress
   });
 
+  const session = await mongodbClient.connection.startSession();
+
   try {
-    await offerHit.save();
+    // Use a transaction.
+    await session.withTransaction(async () => {
+      offerHit.$session(session);
 
-    if (shopifyProductId && shopifyVariantId) {
-      await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
-    }
+      await offerHit.save();
 
-    // Increment offer view count.
-    await Offer.findByIdAndUpdate(offer.id, {
-      $inc: {
-        viewCount: 1
+      if (shopifyProductId && shopifyVariantId) {
+        await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
       }
-    });
 
-    // Increment shop offer view count.
-    await Shop.findByIdAndUpdate(shop.id, {
-      $inc: {
-        offerViewCount: 1
-      }
+      // Increment offer view count.
+      await Offer.findByIdAndUpdate(
+        offer.id,
+        {
+          $inc: {
+            viewCount: 1
+          }
+        },
+        { session }
+      );
+
+      // Increment shop offer view count.
+      await Shop.findByIdAndUpdate(
+        shop.id,
+        {
+          $inc: {
+            offerViewCount: 1
+          }
+        },
+        { session }
+      );
     });
   } catch (error) {
     logger.error(

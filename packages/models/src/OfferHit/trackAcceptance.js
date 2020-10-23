@@ -1,4 +1,5 @@
 const logger = require('@neatowebsolutions/logger');
+const mongodbClient = require('../mongodbClient');
 
 const trackAcceptance = async (
   offerHit,
@@ -12,32 +13,47 @@ const trackAcceptance = async (
   const Offer = offer.constructor;
   const Shop = shop.constructor;
 
+  const session = await mongodbClient.connection.startSession();
+
   try {
-    offerHit.acceptedAt = Date.now();
+    // Use a transaction.
+    await session.withTransaction(async () => {
+      offerHit.$session(session);
 
-    await offerHit.save();
+      offerHit.acceptedAt = Date.now();
 
-    // If a product is associated with this acceptance, track it.
-    if (shopifyProductId && shopifyVariantId) {
-      await offerHit.trackAcceptedProduct(
-        shopifyProductId,
-        shopifyVariantId,
-        quantity
+      await offerHit.save();
+
+      // If a product is associated with this acceptance, track it.
+      if (shopifyProductId && shopifyVariantId) {
+        await offerHit.trackAcceptedProduct(
+          shopifyProductId,
+          shopifyVariantId,
+          quantity
+        );
+      }
+
+      // Increment offer acceptance count.
+      await Offer.findByIdAndUpdate(
+        offer.id,
+        {
+          $inc: {
+            acceptanceCount: 1
+          }
+        },
+        { session }
       );
-    }
 
-    // Increment offer acceptance count.
-    await Offer.findByIdAndUpdate(offer.id, {
-      $inc: {
-        acceptanceCount: 1
-      }
-    });
-
-    // Increment shop offer acceptance count.
-    await Shop.findByIdAndUpdate(shop.id, {
-      $inc: {
-        offerAcceptanceCount: 1
-      }
+      // Increment shop offer acceptance count.
+      await Shop.findByIdAndUpdate(
+        shop.id,
+        {
+          $inc: {
+            offerAcceptanceCount: 1
+          }
+        },
+        { session }
+      );
     });
   } catch (error) {
     logger.error(

@@ -52,6 +52,7 @@ const copy = async (product, shopifyProductDataOverrides = {}) => {
   const Product = product.constructor;
   const { shop, shopifyShopId, shopifyProductData } = product;
   const shopifyApiClient = shop.getShopifyApiClient();
+  const session = product.$session();
 
   // Create a clean copy of the product data.
   const newShopifyProductData = copyShopifyProductData({
@@ -66,13 +67,18 @@ const copy = async (product, shopifyProductDataOverrides = {}) => {
 
   // Save a copy of the product locally instead of relying solely on webhooks in
   // case the product is needed before the webhook is triggered.
-  const copiedProduct = await Product.create({
-    shop,
-    shopifyShopId,
-    shopifyProductId: copiedShopifyProductData.id,
-    shopifyProductData: copiedShopifyProductData,
-    originalShopifyProductId: product.shopifyProductId
-  });
+  const copiedProduct = await Product.create(
+    [
+      {
+        shop,
+        shopifyShopId,
+        shopifyProductId: copiedShopifyProductData.id,
+        shopifyProductData: copiedShopifyProductData,
+        originalShopifyProductId: product.shopifyProductId
+      }
+    ],
+    { session }
+  );
 
   // Set metafields such that the product will not be indexable by search engines.
   await shopifyApiClient.metafield.create({

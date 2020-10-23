@@ -16,6 +16,7 @@ const trackAcceptedProduct = async (
   let copiedProduct = null;
   let copiedShopifyProductData = null;
   let copiedVariant = null;
+  const session = offerHit.$session();
 
   // Get a reference to the variant in the Shopify data.
   const variant =
@@ -36,6 +37,8 @@ const trackAcceptedProduct = async (
       `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
     );
   }
+
+  product.$session(session);
 
   // Calculate the price discount for the variant based on the offer. Set this
   // value prior to copying the product so it is reflected in the copy.

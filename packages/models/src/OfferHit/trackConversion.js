@@ -1,4 +1,5 @@
 const logger = require('@neatowebsolutions/logger');
+const mongodbClient = require('../mongodbClient');
 const calculateRevenueIncrease = require('./calculateRevenueIncrease');
 
 const trackConversion = async (offerHit, order) => {
@@ -7,31 +8,47 @@ const trackConversion = async (offerHit, order) => {
   const { shop, offer } = offerHit;
   const Offer = offer.constructor;
 
+  const session = await mongodbClient.connection.startSession();
+
   try {
-    offerHit.convertedAt = Date.now();
-    offerHit.order = order;
-    offerHit.shopifyOrderId = order.shopifyOrderId;
-    offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
-    offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
+    // Use a transaction.
+    await session.withTransaction(async () => {
+      offerHit.$session(session);
 
-    await offerHit.save();
+      offerHit.convertedAt = Date.now();
+      offerHit.order = order;
+      offerHit.shopifyOrderId = order.shopifyOrderId;
+      offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
+      offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
 
-    // Update offer stats.
-    await Offer.findByIdAndUpdate(offer.id, {
-      $inc: {
-        revenueIncrease: offerHit.revenueIncrease,
-        conversionCount: 1
-      },
-      conversionRate: (offer.conversionCount + 1) / offer.viewCount
-    });
+      await offerHit.save();
 
-    // Update shop stats.
-    await shop.findByIdAndUpdate(shop.id, {
-      $inc: {
-        revenueIncrease: offerHit.revenueIncrease,
-        offerConversionCount: 1
-      },
-      offerConversionRate: (shop.offerConversionCount + 1) / shop.offerViewCount
+      // Update offer stats.
+      await Offer.findByIdAndUpdate(
+        offer.id,
+        {
+          $inc: {
+            revenueIncrease: offerHit.revenueIncrease,
+            conversionCount: 1
+          },
+          conversionRate: (offer.conversionCount + 1) / offer.viewCount
+        },
+        { session }
+      );
+
+      // Update shop stats.
+      await shop.findByIdAndUpdate(
+        shop.id,
+        {
+          $inc: {
+            revenueIncrease: offerHit.revenueIncrease,
+            offerConversionCount: 1
+          },
+          offerConversionRate:
+            (shop.offerConversionCount + 1) / shop.offerViewCount
+        },
+        { session }
+      );
     });
   } catch (error) {
     logger.error(

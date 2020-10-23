@@ -20,21 +20,28 @@ const trackConversions = async (order) => {
     )
   );
 
-  // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
-  await Promise.map(
-    offerHits,
-    async (offerHit) => {
-      await offerHit.trackConversion(order);
-    },
-    { concurrency: 1 }
-  );
+  const session = await mongodbClient.connection.startSession();
 
-  // Track the total revenue increase for the order.
-  order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
-    return sum + (offerHit.revenueIncrease || 0);
-  }, 0);
+  // Use a transaction.
+  await session.withTransaction(async () => {
+    order.$session(session);
 
-  await order.save();
+    // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
+    await Promise.map(
+      offerHits,
+      async (offerHit) => {
+        await offerHit.trackConversion(order);
+      },
+      { concurrency: 1 }
+    );
+
+    // Track the total revenue increase for the order.
+    order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
+      return sum + (offerHit.revenueIncrease || 0);
+    }, 0);
+
+    await order.save();
+  });
 };
 
 module.exports = trackConversions;
