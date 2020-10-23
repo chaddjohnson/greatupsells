@@ -106,7 +106,7 @@ CircleCI is used for deployment. Deployment is automatic when Git pushes occur t
 
 ## Architecture
 
-TODO: Create and add diagram here.
+TODO: Create and add diagram here showing both application and infrastructural architecture.
 
 ## Requirements
 
