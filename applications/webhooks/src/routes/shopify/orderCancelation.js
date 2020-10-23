@@ -11,11 +11,8 @@ const handler = async (request, response) => {
   );
   const { shop } = order || {};
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   if (!order) {
-    return;
+    return response.status(StatusCodes.OK).end();
   }
 
   try {
@@ -35,6 +32,8 @@ const handler = async (request, response) => {
       data
     );
   }
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

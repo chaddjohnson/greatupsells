@@ -6,13 +6,12 @@ const handler = async (request, response) => {
   const Collection = await models.get('Collection');
   const shopifyCollectionId = data.id;
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   // Delete the collection.
   await Collection.findByIdAndDelete(shopifyCollectionId);
 
   // TODO: Remove collection association from offers.
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

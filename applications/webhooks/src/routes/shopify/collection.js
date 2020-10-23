@@ -18,9 +18,6 @@ const handler = async (request, response) => {
     new Date(data.updated_at) >
       new Date(collection.shopifyCollectionData.updated_at);
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   if (!collection) {
     try {
       collection = await Collection.create({
@@ -59,6 +56,8 @@ const handler = async (request, response) => {
       );
     }
   }
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

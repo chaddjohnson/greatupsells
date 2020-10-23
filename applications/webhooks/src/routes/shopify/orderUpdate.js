@@ -14,9 +14,6 @@ const handler = async (request, response) => {
     !!order &&
     new Date(data.updated_at) > new Date(order.shopifyOrderData.updated_at);
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   try {
     if (order && dataIsNewer) {
       // Update local Shopify data for the order.
@@ -31,6 +28,8 @@ const handler = async (request, response) => {
       data
     );
   }
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

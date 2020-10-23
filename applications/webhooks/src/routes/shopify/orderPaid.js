@@ -11,9 +11,6 @@ const handler = async (request, response) => {
   const shopifyOrderId = data.id;
   let order = await Order.findByShopifyOrderId(shopifyOrderId);
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   try {
     // Track the order if it is not already tracked.
     // We ONLY track paid orders; unpaid orders are not counted as conversions.
@@ -34,6 +31,8 @@ const handler = async (request, response) => {
       data
     );
   }
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;

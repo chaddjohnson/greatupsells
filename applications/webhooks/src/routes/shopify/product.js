@@ -14,9 +14,6 @@ const handler = async (request, response) => {
     !!product &&
     new Date(data.updated_at) > new Date(product.shopifyProductData.updated_at);
 
-  // Respond immediately so that Shopify does not consider this webhook as timed out.
-  response.status(StatusCodes.OK).end();
-
   if (!product) {
     try {
       product = await Product.create({
@@ -48,6 +45,8 @@ const handler = async (request, response) => {
       );
     }
   }
+
+  response.status(StatusCodes.OK).end();
 };
 
 module.exports = handler;
