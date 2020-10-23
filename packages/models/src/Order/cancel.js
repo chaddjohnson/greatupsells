@@ -12,8 +12,8 @@ const cancel = async (order) => {
   const OfferHit = mongodbClient.connection.model('OfferHit');
   const Offer = mongodbClient.connection.model('Offer');
   const Shop = mongodbClient.connection.model('Shop');
-  const { shop, shopifyOrderId } = order;
-  const offerHits = await OfferHit.findByShopifyOrderId(shopifyOrderId);
+  const { shop } = order;
+  const offerHits = await OfferHit.findByOrderId(order._id);
 
   const session = await mongodbClient.connection.startSession();
 

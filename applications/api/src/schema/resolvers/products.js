@@ -26,7 +26,7 @@ module.exports.product = async (root, args, context) => {
     throw new ApolloError(`Error retrieving product`);
   }
 
-  if (shop.shopifyShopId.notEquals(product.shopifyShopId)) {
+  if (shop.id !== product.shop.id) {
     logger.warn(
       `Unauthorized request for product (${product.toString()}) by shop (${shop.toString()})`
     );

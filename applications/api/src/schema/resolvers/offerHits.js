@@ -35,7 +35,7 @@ module.exports.offerViews = async (root, args, context) => {
     throw new ApolloError('Error retrieving offer views');
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized access attempt for offer hits (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -75,7 +75,7 @@ module.exports.offerAcceptances = async (root, args, context) => {
     throw new ApolloError('Error retrieving offer acceptances');
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized access attempt for offer hits (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -115,7 +115,7 @@ module.exports.offerConversions = async (root, args, context) => {
     throw new ApolloError('Error retrieving offer conversions');
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized access attempt for offer hits (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -155,7 +155,7 @@ module.exports.offerConversionRates = async (root, args, context) => {
     throw new ApolloError('Error retrieving offer conversion rates');
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized access attempt for offer hits (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -195,7 +195,7 @@ module.exports.offerRevenueIncreases = async (root, args, context) => {
     throw new ApolloError('Error retrieving offer revenue increases');
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized access attempt for offer hits (${offer.toString()}) by shop (${shop.toString()})`
     );

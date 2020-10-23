@@ -9,6 +9,7 @@ const trackConversion = async (offerHit, order) => {
 
   try {
     offerHit.convertedAt = Date.now();
+    offerHit.order = order;
     offerHit.shopifyOrderId = order.shopifyOrderId;
     offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
     offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);

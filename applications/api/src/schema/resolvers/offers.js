@@ -15,7 +15,7 @@ module.exports.offers = async (root, args, context) => {
   }
 
   try {
-    return await Offer.findByShopifyShopId(shop.shopifyShopId);
+    return await Offer.findByShopId(shop._id);
   } catch (error) {
     logger.error(
       `Error retrieving offers${shop ? ` for shop (${shop.toString()})` : ''}`,
@@ -45,7 +45,7 @@ module.exports.offer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -134,7 +134,7 @@ module.exports.offerProduct = async (root, args, context) => {
   }
 
   // Verify the offer belongs to the shop.
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -204,7 +204,7 @@ module.exports.updateOffer = async (root, args, context) => {
   }
 
   // Verify the offer belongs to the shop.
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
     );
@@ -248,7 +248,7 @@ module.exports.deleteOffer = async (root, args, context) => {
     throw new ApolloError(`Offer not found`);
   }
 
-  if (offer.shopifyShopId.notEquals(shop.shopifyShopId)) {
+  if (offer.shop.id !== shop.id) {
     logger.warn(
       `Unauthorized request for offer (${offer.toString()}) by shop (${shop.toString()})`
     );

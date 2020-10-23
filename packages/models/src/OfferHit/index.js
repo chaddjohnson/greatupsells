@@ -53,6 +53,11 @@ const schema = new mongoose.Schema(
     },
     acceptedShopifyVariantPrice: { type: Number, required: false },
     acceptedShopifyProductQuantity: { type: Number, required: false },
+    order: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order',
+      required: true
+    },
     shopifyOrderId: { type: mongoose.Schema.Types.Long, required: false },
     shopifyOrderNumber: { type: Int32, required: false },
     ipAddress: { type: String, required: false },
@@ -68,7 +73,11 @@ schema.statics.findByShopifyShopId = function (shopifyShopId) {
 };
 
 schema.statics.findByOfferId = function (offerId) {
-  return OfferHit.find({ offer: offerId });
+  return OfferHit.find({ offer: mongoose.Types.ObjectId(offerId) });
+};
+
+schema.statics.findByOrderId = function (orderId) {
+  return OfferHit.find({ order: mongoose.Types.ObjectId(orderId) });
 };
 
 schema.statics.findByShopifyOrderId = function (shopifyOrderId) {

@@ -27,7 +27,7 @@ const schema = new mongoose.Schema(
 );
 
 schema.statics.findByShopId = function (shopId) {
-  return Product.find({ shop: shopId });
+  return Product.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
 
 schema.statics.findByShopifyProductId = function (shopifyProductId) {

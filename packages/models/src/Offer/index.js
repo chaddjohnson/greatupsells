@@ -117,7 +117,7 @@ schema.statics.findByShopifyShopId = function (shopifyShopId) {
 };
 
 schema.statics.findByShopId = function (shopId) {
-  return Offer.find({ shop: shopId });
+  return Offer.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
 
 schema.statics.findRandomByShopifyProductIds = function (shopifyProductIds) {
