@@ -43,7 +43,7 @@ const addProductTypeRule = async (shop) => {
   if (!smartAllCollection && !customAllCollection) {
     // No collection exists, so create a smart collection.
     smartAllCollection = await shopifyApiClient.smartCollection.create({
-      title: 'Products',
+      title: 'Products (DO NOT DELETE)',
       handle: 'all',
       published_scope: 'web',
       rules: [rule]
