@@ -13,13 +13,13 @@ const product = require('./product');
 const productDeletion = require('./productDeletion');
 const shop = require('./shop');
 
-const { SHOPIFY_API_SECRET } = process.env;
+const { SHOPIFY_ADMIN_API_SECRET_KEY } = process.env;
 
 // Verifies that a webhook request is valid.
 const verifyHmac = (request, response, next) => {
   const hmac = request.headers['x-shopify-hmac-sha256'];
   const digest = crypto
-    .createHmac('sha256', SHOPIFY_API_SECRET)
+    .createHmac('sha256', SHOPIFY_ADMIN_API_SECRET_KEY)
     .update(Buffer.from(request.rawBody), 'utf8')
     .digest('base64');
 
