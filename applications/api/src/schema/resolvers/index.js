@@ -35,11 +35,6 @@ const resolvers = {
     offers,
     offer,
     randomOffer,
-    offerAcceptances,
-    offerConversions,
-    offerConversionRates,
-    offerRevenueIncreases,
-    offerViews,
     products,
     product
   },

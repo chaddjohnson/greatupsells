@@ -8,7 +8,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const { JWT_SECRET } = process.env;
 
 const getTokenData = (event) => {
-  const authHeader = event.headers.Authorization || event.headers.authorization;
+  const authHeader =
+    event.headers.Authorization || event.headers.authorization || '';
   const token = authHeader.replace('Bearer ', '');
 
   try {

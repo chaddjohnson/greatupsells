@@ -48,6 +48,11 @@ const typeDef = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     product: [Product]
+    views: [OfferView]
+    acceptances: [OfferAcceptance]
+    conversions: [OfferConversion]
+    conversionRates: [OfferConversionRate]
+    revenueIncreases: [OfferRevenueIncrease]
   }
 
   enum OfferStrategy {

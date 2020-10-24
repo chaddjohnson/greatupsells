@@ -10,10 +10,16 @@ class GraphQLClient {
   }
 
   async query(queryString, variables = {}) {
-    this.interceptors.request(this.config);
+    const { interceptors, client, config } = this;
+
+    // Run request interceptor.
+    interceptors.request(config);
+
+    // Set request headers.
+    client.setHeaders(config.headers);
 
     // This throws an error if the response contains an error.
-    const response = await this.client.request(queryString, variables || {});
+    const response = await client.request(queryString, variables || {});
 
     try {
       // Determine the keys returned.

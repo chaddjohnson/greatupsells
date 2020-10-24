@@ -13,17 +13,30 @@ const OfferRevenueIncrease = require('./OfferRevenueIncrease');
 const OfferView = require('./OfferView');
 const Product = require('./Product');
 
+// Declare queries.
 const Query = gql`
   type Query {
     shop(id: ID): Shop
     offers: [Offer]
     offer(id: ID!): Offer
     randomOffer(event: String!, shopifyProductIds: [Long!]!): Offer
+    views(date: String, views: Int!): [OfferView]
+    acceptances(date: String!, acceptances: Int!): [OfferAcceptance]
+    conversions(date: String!, conversions: Int!): [OfferConversion]
+    conversionRates(
+      date: String!
+      conversionRate: Float!
+    ): [OfferConversionRate]
+    revenueIncreases(
+      date: String!
+      revenueIncrease: Float!
+    ): [OfferRevenueIncrease]
     products: [Product]
     product(id: ID!): Product
   }
 `;
 
+// Declare mutations.
 const Mutation = gql`
   type Mutation {
     createOffer(input: OfferInput!): Offer
@@ -41,17 +54,18 @@ const Mutation = gql`
 
 // TODO: Role authorization
 
+// Export types.
 module.exports = [
   DateTimeTypeDefinition,
   JSONDefinition,
   LongTypeDefinition,
   Shop,
   Offer,
+  OfferView,
   OfferAcceptance,
   OfferConversion,
   OfferConversionRate,
   OfferRevenueIncrease,
-  OfferView,
   Product,
   Query,
   Mutation
