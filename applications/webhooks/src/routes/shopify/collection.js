@@ -13,10 +13,18 @@ const handler = async (request, response) => {
   let collection = await Collection.findByShopifyCollectionId(
     shopifyCollectionId
   );
+  let productCount = 0;
   const dataIsNewer =
     !!collection &&
     new Date(data.updated_at) >
       new Date(collection.shopifyCollectionData.updated_at);
+
+  // Track product count for manual (non-smart) collections.
+  if (!data.rules) {
+    productCount = await shopifyApiClient.collect.count({
+      collection_id: shopifyCollectionId
+    });
+  }
 
   if (!collection) {
     try {
@@ -25,9 +33,7 @@ const handler = async (request, response) => {
         shopifyShopId: shop.shopifyShopId,
         shopifyCollectionId,
         shopifyCollectionData: data,
-        productCount: await shopifyApiClient.collect.count({
-          collection_id: shopifyCollectionId
-        })
+        productCount
       });
 
       logger.debug(
@@ -50,9 +56,7 @@ const handler = async (request, response) => {
 
         // Update local Shopify data for the collection.
         collection.shopifyCollectionData = data;
-        collection.productCount = await shopifyApiClient.collect.count({
-          collection_id: shopifyCollectionId
-        });
+        collection.productCount = productCount;
 
         await collection.save();
 
