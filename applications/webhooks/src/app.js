@@ -10,17 +10,15 @@ const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
+const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 const logger = require('@neatowebsolutions/logger');
 const router = require('./router');
 
-const { MONGODB_URI, LOG_LEVEL } = process.env;
+const logLevel = getenv('LOG_LEVEL', 'debug');
 
 // Initialize the service.
 const app = express();
 const port = getenv.int('WEBHOOKS_API_PORT');
-const mongodbClient = mongodbClientFactory.get(MONGODB_URI);
 
 // Enables access to raw request data.
 const rawBodySaver = (request, response, buffer, encoding) => {
@@ -38,7 +36,7 @@ const gracefulExit = (code = 0) => {
 };
 
 // Load config.
-dotenvExpand(dotenv.config({ path: '../../.env' }));
+dotenvExpand(dotenv.config({ path: '../../../.env' }));
 
 // Set the maximum number of concurrent requests allowed.
 http.globalAgent.maxSockets = Infinity;
@@ -51,7 +49,7 @@ https.globalAgent.options.keepAlive = true;
 // TODO: Configure logging. See https://github.com/logicbox-llc/wc-fulfillment-api/blob/develop/src/bootstrappers/logging.js.
 
 // Configure middleware.
-if (LOG_LEVEL === 'debug') {
+if (logLevel === 'debug') {
   app.use(morgan('dev'));
 }
 app.use(helmet());
@@ -101,4 +99,4 @@ process
 process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
 
 // Start the service.
-app.listen(port, () => logger.debug(`API listening on port ${port}`));
+app.listen(port, () => logger.debug(`Webhooks API listening on port ${port}`));

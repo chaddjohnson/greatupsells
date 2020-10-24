@@ -1,11 +1,7 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
-
-const { MONGODB_URI } = process.env;
-const mongodbClient = mongodbClientFactory.get(MONGODB_URI);
+const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

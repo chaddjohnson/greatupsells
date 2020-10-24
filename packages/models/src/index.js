@@ -76,5 +76,6 @@ mongoose.plugin((schema) => {
 
 module.exports = {
   get,
-  getAll
+  getAll,
+  mongodbClient
 };
