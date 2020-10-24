@@ -8,7 +8,7 @@ module.exports = async (shop) => {
   try {
     await shop.getShopifyApiClient().shop.get();
   } catch (error) {
-    const errorHttpStatuses = [
+    const validErrorHttpStatuses = [
       StatusCodes.PAYMENT_REQUIRED,
       StatusCodes.NOT_FOUND,
       StatusCodes.FORBIDDEN,
@@ -18,7 +18,7 @@ module.exports = async (shop) => {
     // Only consider the token to be invalid based on specific HTTP response codes.
     if (
       error.response &&
-      errorHttpStatuses.includes(error.response.statusCode)
+      validErrorHttpStatuses.includes(error.response.statusCode)
     ) {
       throw error;
     }

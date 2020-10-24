@@ -81,6 +81,7 @@ const createServer = () => {
           sameSite: 'None',
           secure: true
         });
+
         ctx.redirect('/');
       }
     })

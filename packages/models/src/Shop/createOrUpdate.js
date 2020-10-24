@@ -43,7 +43,7 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
         `Updating access token to ${accessToken} for shop ${shopDomain}`
       );
 
-      // Set the access token for the shop.
+      // Set/update the access token for the shop.
       shop.accessToken = accessToken;
     } else {
       logger.warn(
@@ -54,7 +54,7 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
     // Mark the shop as no longer uninstalled (in case this app was uninstalled and reinstalled).
     shop.uninstalledAt = undefined;
 
-    // Mark the shop as active since it is being authenticated.
+    // Mark the shop as active.
     shop.active = true;
 
     await shop.save();
