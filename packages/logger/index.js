@@ -2,7 +2,7 @@
 
 const formatErrorData = (error) => {
   if (!(error instanceof Error)) {
-    return error;
+    return '';
   }
 
   // Include stack trace.
