@@ -1,9 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
-
-const { MONGODB_URI } = process.env;
-const mongodbClient = mongodbClientFactory.get(MONGODB_URI);
+const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 
 const handler = async (request, response) => {
   try {
