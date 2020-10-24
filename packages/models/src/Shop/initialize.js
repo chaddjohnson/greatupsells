@@ -6,7 +6,7 @@ const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
 
 module.exports = async (shop) => {
-  logger.info(`Initializing shop (${shop.toString()})`);
+  logger.info(`(Re)initializing shop (${shop.toString()})`);
 
   await createWebhooks(shop);
   await addScripts(shop);
