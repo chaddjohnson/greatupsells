@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
@@ -6,7 +5,7 @@ const getenv = require('getenv');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-dotenvExpand(dotenv.config({ path: '.env' }));
+dotenvExpand(dotenv.config({ path: '../../.env' }));
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',

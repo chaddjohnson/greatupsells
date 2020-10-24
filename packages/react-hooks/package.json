@@ -10,16 +10,21 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "swr": "^0.2.3"
+    "universal-cookie": "^4.0.4",
+    "moment-timezone": "^0.5.28"
   },
   "devDependencies": {
-    "@neatowebsolutions/upselling-graphql": "0.0.0"
+    "@neatowebsolutions/upselling-graphql-client": "^0.0.0",
+    "@neatowebsolutions/upselling-graphql-queries": "^0.0.0"
   },
   "peerDependencies": {
-    "@neatowebsolutions/upselling-graphql": "0.0.0",
+    "@neatowebsolutions/upselling-graphql-client": "^0.0.0",
+    "@neatowebsolutions/upselling-graphql-queries": "^0.0.0",
     "@shopify/app-bridge": "^1.24.0",
     "@shopify/app-bridge-react": "^1.24.0",
-    "react": "^16.13.0"
+    "prop-types": "^15.7.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "scripts": {
     "build": "webpack",

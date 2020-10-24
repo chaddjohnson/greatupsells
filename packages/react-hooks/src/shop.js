@@ -1,29 +1,29 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
-import useSWR, { mutate } from 'swr';
 import {
-  graphqlClient,
+  useQuery,
+  useMutation
+} from '@neatowebsolutions/upselling-graphql-client';
+import {
   SHOP_QUERY,
   UPDATE_SHOP_MUTATION
-} from '@neatowebsolutions/upselling-graphql';
+} from '@neatowebsolutions/upselling-graphql-queries';
 
 const ShopContext = createContext(null);
 
 export const ShopProvider = ({ children }) => {
-  const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
-    SHOP_QUERY,
-    graphqlClient.query
-  );
+  const {
+    data: shop,
+    loading: shopLoading,
+    error: shopError,
+    mutate: mutateShop
+  } = useQuery(SHOP_QUERY);
 
-  const shopLoading = !shop && !shopError;
+  const update = useMutation(UPDATE_SHOP_MUTATION);
 
   const updateShop = async (data) => {
-    const updatedShop = await mutate(
-      UPDATE_SHOP_MUTATION,
-      graphqlClient.mutate(UPDATE_SHOP_MUTATION, data)
-    );
-
-    await mutate(SHOP_QUERY, updatedShop, false);
+    mutateShop(data, false);
+    await update(data);
   };
 
   return (
@@ -33,7 +33,7 @@ export const ShopProvider = ({ children }) => {
         shopLoading,
         shopError,
         updateShop,
-        fetchShop
+        fetchShop: mutateShop
       }}
     >
       {children}

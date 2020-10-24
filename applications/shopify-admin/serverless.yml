@@ -11,10 +11,13 @@ provider:
   versionFunctions: false
   logRetentionInDays: 14
   environment:
-    NODE_ENV: "production"
-    SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     API_URL: ${ssm:/upselling/${self:provider.stage}/api/url}
     MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+    SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
+    SHOPIFY_API_KEY: ${ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
+    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
+    WEBHOOKS_API_URL: ${ssm:/upselling/${self:provider.stage}/webhooks-api/url}
 
 functions:
   health:
@@ -42,12 +45,13 @@ functions:
           method: ANY
 
 plugins:
+  - serverless-plugin-monorepo
   - serverless-domain-manager
 
 custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/endpoint/${self:provider.region}}
-    basePath: ""
+    basePath: ''
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
@@ -55,7 +59,6 @@ custom:
 
 package:
   exclude:
-    - .terraform/**
     - test/**
     - node_modules/aws-sdk
     - node_modules/**/aws-sdk

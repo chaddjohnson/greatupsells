@@ -32,9 +32,12 @@ module.exports = {
   ],
   stats: 'errors-warnings',
   externals: [
-    '@neatowebsolutions/upselling-graphql',
+    '@neatowebsolutions/upselling-graphql-client',
+    '@neatowebsolutions/upselling-graphql-queries',
     '@shopify/app-bridge',
     '@shopify/app-bridge-react',
-    'react'
+    'prop-types',
+    'react',
+    'react-dom'
   ]
 };

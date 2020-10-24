@@ -26,3 +26,4 @@ variable "admin_app_endpoint" {}
 variable "admin_app_bucket_name" {}
 variable "contact_email" {}
 variable "sandbox" {}
+variable "webhooks_api_url" {}

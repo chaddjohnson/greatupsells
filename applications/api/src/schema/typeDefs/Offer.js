@@ -24,7 +24,7 @@ const typeDef = gql`
     minimumProductsQuantity: Int
     collections: [OfferCollection]
     discountType: OfferDiscountType!
-    # discountAmount
+    discountAmount: Float
     triggerEvent: OfferTriggerEvent
     triggerProducts: [OfferProduct]
     triggerCollections: [OfferCollection]
@@ -45,8 +45,14 @@ const typeDef = gql`
     # discountCodes
     # discountPricingMethod
     enabled: Boolean
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    product: [Product]
+    views: [OfferView]
+    acceptances: [OfferAcceptance]
+    conversions: [OfferConversion]
+    conversionRates: [OfferConversionRate]
+    revenueIncreases: [OfferRevenueIncrease]
   }
 
   enum OfferStrategy {
@@ -77,6 +83,7 @@ const typeDef = gql`
     ADD
     CART
     CHECKOUT
+    LOAD
     EXIT
   }
 
@@ -131,7 +138,7 @@ const typeDef = gql`
     minimumProductsQuantity: Int
     collections: [OfferCollectionInput]
     discountType: String!
-    # discountAmount
+    discountAmount: Float
     triggerEvent: String
     triggerProducts: [OfferProductInput]
     triggerCollections: [OfferCollectionInput]

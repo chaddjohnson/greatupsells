@@ -9,10 +9,24 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
+    "getenv": "^1.0.0",
+    "next": "^9.5.3",
+    "node-sass": "^4.14.1",
+    "preact": "^10.4.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "styled-components": "^5.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.10.7",
+    "babel-plugin-transform-imports": "^2.0.0",
+    "url-loader": "^4.1.0"
+  },
   "scripts": {
     "build": "NODE_ENV=production next build",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",

@@ -2,7 +2,7 @@
 
 const formatErrorData = (error) => {
   if (!(error instanceof Error)) {
-    return error;
+    return '';
   }
 
   // Include stack trace.
@@ -23,10 +23,15 @@ const formatErrorData = (error) => {
 
 const formatObjectData = (data) => {
   if (typeof data === 'object') {
-    return JSON.stringify(data, null, 2);
+    if (data.toObject) {
+      // For easy compatibility with Mongoose.
+      return JSON.stringify(data.toObject(), null, 2);
+    } else {
+      return JSON.stringify(data, null, 2);
+    }
   }
 
-  return data;
+  return data || '';
 };
 
 const format = (data) =>

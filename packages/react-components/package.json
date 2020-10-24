@@ -14,8 +14,7 @@
     "@neatowebsolutions/upselling-react-hooks": "0.0.0"
   },
   "peerDependencies": {
-    "@neatowebsolutions/upselling-react-hooks": "^0.0.0",
-    "next": "^9.4.0",
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "prop-types": "^15.7.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

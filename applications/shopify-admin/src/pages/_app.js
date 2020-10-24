@@ -1,17 +1,33 @@
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
+import Cookies from 'universal-cookie';
 import {
   ErrorBoundary,
   Contexts
 } from '@neatowebsolutions/upselling-react-components';
-import { getCookie } from '@neatowebsolutions/upselling-utilities';
+import {
+  GraphQLProvider,
+  GraphQLClient
+} from '@neatowebsolutions/upselling-graphql-client';
 import { Link, RoutePropagator } from '../components';
 import '@shopify/polaris/dist/styles.css';
 
+const cookies = new Cookies();
+
+const graphqlClient = new GraphQLClient({
+  uri: `${process.env.API_URL}/graphql`,
+  credentials: 'include',
+  interceptors: {
+    request: (config) => {
+      config.headers.Authorization = `Bearer ${cookies.get('authToken')}`;
+    }
+  }
+});
+
 const App = ({ Component, pageProps }) => {
-  const shopOrigin = getCookie('shopOrigin');
-  const authToken = getCookie('authToken');
+  const shopOrigin = cookies.get('shopOrigin');
+  const authToken = cookies.get('authToken');
 
   // Copy cookie values to session storage so that multiple instances of this app may
   // be used across multiple shops simultaneously.
@@ -29,23 +45,25 @@ const App = ({ Component, pageProps }) => {
           forceRedirect: true
         }}
       >
-        <RoutePropagator />
-        {typeof window !== 'undefined' && window.top !== window.self && (
-          <ErrorBoundary>
-            <Contexts>
-              <main
-                style={{
-                  paddingBottom: '120px'
-                }}
-              >
-                <Component {...pageProps} />
-              </main>
-            </Contexts>
-          </ErrorBoundary>
-        )}
-        {typeof window !== 'undefined' && window.top === window.self && (
-          <p>Loading...</p>
-        )}
+        <GraphQLProvider client={graphqlClient}>
+          <RoutePropagator />
+          {typeof window !== 'undefined' && window.top !== window.self && (
+            <ErrorBoundary>
+              <Contexts>
+                <main
+                  style={{
+                    paddingBottom: '120px'
+                  }}
+                >
+                  <Component {...pageProps} />
+                </main>
+              </Contexts>
+            </ErrorBoundary>
+          )}
+          {typeof window !== 'undefined' && window.top === window.self && (
+            <p>Loading...</p>
+          )}
+        </GraphQLProvider>
       </AppBridgeProvider>
     </AppProvider>
   );

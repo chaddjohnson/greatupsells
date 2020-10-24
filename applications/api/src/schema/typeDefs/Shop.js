@@ -6,7 +6,7 @@ const typeDef = gql`
     shopifyShopId: Long!
     name: String!
     domain: String!
-    realDomain: String
+    alternateDomain: String
     contactName: String!
     contactEmail: String!
     contactPhone: String
@@ -16,14 +16,16 @@ const typeDef = gql`
     timezone: String!
     active: Boolean!
     internal: Boolean!
+    shopifyPlan: String!
     plan: ShopPlan!
     uninstalledAt: DateTime
-    acceptanceCount: Int
-    conversionCount: Int
-    conversionRate: Float
+    offerViewCount: Int
+    offerAcceptanceCount: Int
+    offerConversionCount: Int
+    offerConversionRate: Float
     revenueIncrease: Float
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: DateTime!
+    updatedAt: DateTime!
     offers: [Offer]
     products: [Product]
   }
@@ -40,8 +42,8 @@ const typeDef = gql`
   enum ShopPlanLevel {
     FREE
     BASIC
-    SHOPIFY
-    ADVANCED
+    PLUS
+    PRO
   }
 `;
 

@@ -1,5 +1,4 @@
 const { ApolloServer, ApolloError } = require('apollo-server-lambda');
-const { get } = require('lodash');
 const jwt = require('jsonwebtoken');
 const models = require('@neatowebsolutions/upselling-models');
 const schema = require('../schema');
@@ -8,52 +7,37 @@ const dev = process.env.NODE_ENV !== 'production';
 
 const { JWT_SECRET } = process.env;
 
-const getModels = async () => ({
-  Shop: await models.get('Shop'),
-  Offer: await models.get('Offer'),
-  OfferHit: await models.get('OfferHit'),
-  Product: await models.get('Product')
-});
-
-const getShop = async (context) => {
-  let token =
-    get(context, 'event.headers.Authorization', '') ||
-    get(context, 'event.headers.authorization', '');
-
-  token = token.replace('Bearer ', '');
-
-  if (!token) {
-    // No shop will be available for context.
-    return null;
-  }
+const getTokenData = (event) => {
+  const authHeader =
+    event.headers.Authorization || event.headers.authorization || '';
+  const token = authHeader.replace('Bearer ', '');
 
   try {
-    const { shopDomain } = jwt.verify(token, JWT_SECRET);
-    const Shop = await models.get('Shop');
-    const shop = await Shop.findByDomain(shopDomain);
-
-    if (!shop) {
-      throw new ApolloError('Invalid shop');
-    }
-
-    return shop;
+    return jwt.verify(token, JWT_SECRET);
   } catch (error) {
     throw new ApolloError('Invalid token');
   }
 };
 
-const contextHandler = async (context) => {
-  if (!context) {
-    throw new ApolloError('context was not provided');
-  }
+const contextHandler = async ({ event, context }) => {
+  const { shopDomain, emailAddress } = getTokenData(event);
+  const host = event.headers.Host || event.requestContext.domainName;
+  const ip =
+    event.requestContext.identity.sourceIp || event.headers['X-Forwarded-For'];
+  const allModels = await models.getAll();
+  const { Shop, User } = allModels;
+  const shop = await Shop.findByDomain(shopDomain);
+  const user = await User.findByEmailAddress(emailAddress);
 
-  const allModels = await getModels();
-  const shop = await getShop(context);
-
+  // Provide common, useful things via context.
   return {
-    ...context,
-    ...allModels,
-    shop
+    event,
+    context,
+    host,
+    ip,
+    shop,
+    user,
+    ...allModels
   };
 };
 

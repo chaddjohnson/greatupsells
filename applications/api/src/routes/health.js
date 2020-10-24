@@ -1,12 +1,7 @@
 const middy = require('@middy/core');
-const httpErrorHandler = require('@middy/http-error-handler');
 const cors = require('@middy/http-cors');
-const httpStatus = require('http-status-codes');
-const mongodbClientFactory = require('@chaddjohnson/mongodb-client-lambda')
-  .factory;
-
-const { MONGODB_URI } = process.env;
-const mongodbClient = mongodbClientFactory.get(MONGODB_URI);
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -19,17 +14,17 @@ const handler = middy(async (event, context) => {
     }
 
     return {
-      statusCode: httpStatus.OK,
-      body: 'OK'
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
     };
   } catch (error) {
     return {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      body: error.message
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
 });
 
-handler.use(httpErrorHandler()).use(cors());
+handler.use(cors());
 
 module.exports.handler = handler;
