@@ -31,7 +31,7 @@ const formatObjectData = (data) => {
     }
   }
 
-  return data;
+  return data || '';
 };
 
 const format = (data) =>
