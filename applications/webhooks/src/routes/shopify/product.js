@@ -22,6 +22,8 @@ const handler = async (request, response) => {
         shopifyProductId,
         shopifyProductData: data
       });
+
+      logger.debug(`Product created (${product.toString()}) via webhook`, data);
     } catch (error) {
       logger.error(
         `Error creating product for shop (${shop.toString()})`,
@@ -32,10 +34,17 @@ const handler = async (request, response) => {
   } else {
     try {
       if (dataIsNewer) {
+        await product.execPopulate('shop');
+
         // Update local Shopify data for the product.
         product.shopifyProductData = data;
 
         await product.save();
+
+        logger.debug(
+          `Product updated (${product.toString()}) via webhook`,
+          data
+        );
       }
     } catch (error) {
       logger.error(

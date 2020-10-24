@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const models = require('@neatowebsolutions/upselling-models');
+const logger = require('@neatowebsolutions/logger');
 
 const handler = async (request, response) => {
   const data = response.body;
@@ -10,6 +11,8 @@ const handler = async (request, response) => {
   await Collection.findByIdAndDelete(shopifyCollectionId);
 
   // TODO: Remove collection association from offers.
+
+  logger.debug(`Collection deleted via webhook`, data);
 
   response.status(StatusCodes.OK).end();
 };

@@ -17,6 +17,8 @@ const handler = async (request, response) => {
 
   try {
     if (order && !order.canceledAt) {
+      await order.execPopulate('shop');
+
       // Update local Shopify data for the order.
       order.shopifyOrderData = data;
 
@@ -24,6 +26,8 @@ const handler = async (request, response) => {
 
       // Handle order cancelation.
       await order.cancel();
+
+      logger.debug(`Order canceled (${order.toString()}) via webhook`, data);
     }
   } catch (error) {
     logger.error(

@@ -20,6 +20,8 @@ const handler = async (request, response) => {
 
   if (!collection) {
     try {
+      await collection.execPopulate('shop');
+
       collection = await Collection.create({
         shop,
         shopifyShopId: shop.shopifyShopId,
@@ -29,6 +31,12 @@ const handler = async (request, response) => {
           collection_id: shopifyCollectionId
         })
       });
+
+      logger.debug(
+        `Collection created (${collection.toString()}) via webhook`,
+        data,
+        `${collection.productCount} associated products`
+      );
     } catch (error) {
       logger.error(
         `Error creating collection for shop (${shop.toString()})`,
@@ -47,6 +55,12 @@ const handler = async (request, response) => {
         });
 
         await collection.save();
+
+        logger.debug(
+          `Collection updated (${collection.toString()}) via webhook`,
+          data,
+          `${collection.productCount} associated products`
+        );
       }
     } catch (error) {
       logger.error(

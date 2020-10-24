@@ -16,10 +16,14 @@ const handler = async (request, response) => {
 
   try {
     if (order && dataIsNewer) {
+      await order.execPopulate('shop');
+
       // Update local Shopify data for the order.
       order.shopifyOrderData = data;
 
       await order.save();
+
+      logger.debug(`Order updated (${order.toString()}) via webhook`, data);
     }
   } catch (error) {
     logger.error(
