@@ -6,9 +6,7 @@ const handler = async (request, response) => {
   const data = response.body;
   const Order = await models.get('Order');
   const shopifyOrderId = data.id;
-  const order = await Order.findByShopifyOrderId(shopifyOrderId).execPopulate(
-    'shop'
-  );
+  const order = await Order.findByShopifyOrderId(shopifyOrderId);
   const { shop } = order || {};
 
   if (!order) {

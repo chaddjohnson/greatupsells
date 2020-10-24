@@ -20,8 +20,6 @@ const handler = async (request, response) => {
 
   if (!collection) {
     try {
-      await collection.execPopulate('shop');
-
       collection = await Collection.create({
         shop,
         shopifyShopId: shop.shopifyShopId,
@@ -48,6 +46,8 @@ const handler = async (request, response) => {
     try {
       // Update if the incoming data is newer than what is saved.
       if (dataIsNewer) {
+        await collection.execPopulate('shop');
+
         // Update local Shopify data for the collection.
         collection.shopifyCollectionData = data;
         collection.productCount = await shopifyApiClient.collect.count({
