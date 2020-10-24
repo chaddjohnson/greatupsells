@@ -1,12 +1,13 @@
-const toString = function (shop) {
+const toString = (product) => {
+  const { shop } = product;
   const data = [];
 
-  data.push(`ID = ${shop.id}`);
-  data.push(`Shopify Shop ID = ${shop.shopifyShopId}`);
-  data.push(`Shopify Product ID = ${shop.shopifyProductId}`);
+  data.push(`ID = ${product.id}`);
+  data.push(`Shopify Shop ID = ${product.shopifyShopId}`);
+  data.push(`Shopify Product ID = ${product.shopifyProductId}`);
 
-  if (shop.shop) {
-    data.push(`Shop = ${shop.shop.domain}`);
+  if (shop) {
+    data.push(`Shop = ${shop.domain}`);
   }
 
   return data.join(' | ');
