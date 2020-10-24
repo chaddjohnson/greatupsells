@@ -10,6 +10,7 @@ const handler = async (request, response) => {
   const shop = await Shop.findByDomain(domain);
   const shopifyOrderId = data.id;
   let order = await Order.findByShopifyOrderId(shopifyOrderId);
+  let offerHits = [];
 
   try {
     // Track the order if it is not already tracked.
@@ -22,7 +23,14 @@ const handler = async (request, response) => {
         shopifyOrderNumber: data.order_number,
         shopifyOrderData: data
       });
-      await order.trackConversions();
+      offerHits = await order.trackConversions();
+
+      logger.debug(`Order created (${order.toString()}) via webhook`, data);
+
+      // Only track orders resulting in offer conversions.
+      if (offerHits.length === 0) {
+        await order.remove();
+      }
     }
   } catch (error) {
     logger.error(

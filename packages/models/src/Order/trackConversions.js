@@ -42,6 +42,8 @@ const trackConversions = async (order) => {
 
     await order.save();
   });
+
+  return offerHits;
 };
 
 module.exports = trackConversions;
