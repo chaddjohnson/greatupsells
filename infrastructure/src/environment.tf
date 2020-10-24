@@ -88,3 +88,10 @@ resource "aws_ssm_parameter" "shopify_admin_api_secret_key" {
   value     = var.shopify_admin_api_secret_key
   overwrite = true
 }
+
+resource "aws_ssm_parameter" "webhooks_api_url" {
+  name      = "/upselling/${terraform.workspace}/webhooks-api/url"
+  type      = "String"
+  value     = var.webhooks_api_url
+  overwrite = true
+}
