@@ -37,7 +37,7 @@ const loadModels = () => {
   return modelMap;
 };
 
-const loadModel = async (modelName) => {
+const get = async (modelName) => {
   if (mongodbClient.connected && modelMap[modelName]) {
     return modelMap[modelName];
   }
@@ -48,10 +48,6 @@ const loadModel = async (modelName) => {
   loadModels();
 
   return modelMap[modelName];
-};
-
-const get = async (name) => {
-  return loadModel(name);
 };
 
 const getAll = async () => ({
@@ -71,6 +67,7 @@ mongoose.Promise = Promise;
 // Set default schema options.
 mongoose.plugin((schema) => {
   // Turn on timestamps for all models.
+  // NOTE: This doesn't seem to actually work, so the `timestamps` option should still be defined per model.
   schema.options.timestamps = true;
 
   // Turn on usePushEach for all models.
