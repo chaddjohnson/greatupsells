@@ -4,7 +4,8 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
-    "migrate": ""
+    "migrate": "",
+    "start": "nodemon src/app --watch src --watch ../../packages/models --ignore node_modules"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "getenv": "^1.0.0",
     "express": "^4.17.1",
+    "getenv": "^1.0.0",
     "helmet": "^4.1.1",
     "http-status-codes": "^2.1.4",
     "mongoose": "5.9.27",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@neatowebsolutions/logger": "^0.0.0",
     "@neatowebsolutions/upselling-models": "^0.0.0",
+    "nodemon": "^2.0.6",
     "serverless": "^1.78.1"
   }
 }
