@@ -15,6 +15,10 @@ const schema = new mongoose.Schema(
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     shopifyCollectionId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyCollectionData: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true
+    },
     productCount: { type: Int32, required: true, default: 0, min: 0 }
   },
   schemaOptions
