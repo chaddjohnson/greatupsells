@@ -3,6 +3,10 @@ const AWS = require('aws-sdk');
 const { SHOP_PRODUCT_IMPORT_QUEUE_URL } = process.env;
 
 const importProducts = async (shop) => {
+  if (!SHOP_PRODUCT_IMPORT_QUEUE_URL) {
+    return;
+  }
+
   const sqs = new AWS.SQS();
 
   // Enqueue a background worker.
