@@ -11,7 +11,8 @@ const handler = async (request, response) => {
   const shopifyProductId = data.id;
   let product = await Product.findByShopifyProductId(shopifyProductId);
   const dataIsNewer =
-    !!product &&
+    !product ||
+    !product.shopifyProductData ||
     new Date(data.updated_at) > new Date(product.shopifyProductData.updated_at);
 
   if (!product) {

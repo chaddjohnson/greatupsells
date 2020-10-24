@@ -11,7 +11,8 @@ const handler = async (request, response) => {
   const shopifyOrderId = data.id;
   const order = await Order.findByShopifyOrderId(shopifyOrderId);
   const dataIsNewer =
-    !!order &&
+    !order ||
+    !order.shopifyOrderData ||
     new Date(data.updated_at) > new Date(order.shopifyOrderData.updated_at);
 
   try {

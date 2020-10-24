@@ -15,7 +15,8 @@ const handler = async (request, response) => {
   );
   let productCount = 0;
   const dataIsNewer =
-    !!collection &&
+    !collection ||
+    !collection.shopifyCollectionData ||
     new Date(data.updated_at) >
       new Date(collection.shopifyCollectionData.updated_at);
 
