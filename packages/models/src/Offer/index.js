@@ -42,39 +42,39 @@ const schema = new mongoose.Schema(
     conversionCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionRate: { type: Number, required: true, default: 0.0, min: 0 },
     revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
-    callToActionText: { type: String, required: true },
-    successMessageText: { type: String, required: true },
-    actionButtonText: { type: String, required: true },
-    cancelButtonText: { type: String, required: true },
+    // callToActionText: { type: String, required: true },
+    // successMessageText: { type: String, required: true },
+    // actionButtonText: { type: String, required: true },
+    // cancelButtonText: { type: String, required: true },
     actionButtonBehavior: {
       type: String,
       enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK'],
       required: true
     },
-    popupThemeType: {
-      type: String,
-      enum: ['TEMPLATE', 'CUSTOM'],
-      required: true
-    },
+    // popupThemeType: {
+    //   type: String,
+    //   enum: ['TEMPLATE', 'CUSTOM'],
+    //   required: true
+    // },
     popupThemeTemplateId: {
       type: mongoose.Schema.Types.ObjectId,
       required: false
     },
-    popupTheme: {
-      callToActionTextColor: { type: String, required: true },
-      successMessageTextColor: { type: String, required: true },
-      successMessageBackgroundColor: { type: String, required: true },
-      actionButtonBackgroundColor: { type: String, required: true },
-      actionButtonTextColor: { type: String, required: true },
-      // actionButtonFontFamily: { type: String, required: false },
-      cancelButtonTextColor: { type: String, required: true },
-      priceTextColor: { type: String, required: true },
-      salePriceTextColor: { type: String, required: true },
-      popupBackgroundColor: { type: String, required: true }
-      // popupFontFamily: { type: String, required: false }
-      // notificationBannerBackgroundColor: { type: String, required: true },
-      // notificationBannerTextColor: { type: String, required: true }
-    },
+    // popupTheme: {
+    //   callToActionTextColor: { type: String, required: true },
+    //   successMessageTextColor: { type: String, required: true },
+    //   successMessageBackgroundColor: { type: String, required: true },
+    //   actionButtonBackgroundColor: { type: String, required: true },
+    //   actionButtonTextColor: { type: String, required: true },
+    //   // actionButtonFontFamily: { type: String, required: false },
+    //   cancelButtonTextColor: { type: String, required: true },
+    //   priceTextColor: { type: String, required: true },
+    //   salePriceTextColor: { type: String, required: true },
+    //   popupBackgroundColor: { type: String, required: true }
+    //   // popupFontFamily: { type: String, required: false }
+    //   // notificationBannerBackgroundColor: { type: String, required: true },
+    //   // notificationBannerTextColor: { type: String, required: true }
+    // },
     products: [offerProductSchema],
     minimumProductsQuantity: { type: Int32, required: true },
     collections: [offerCollectionSchema],
