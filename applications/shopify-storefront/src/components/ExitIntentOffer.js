@@ -12,7 +12,7 @@ const ExitIntentOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer } = useRandomOffer({
+  const { offer, product } = useRandomOffer({
     event: 'EXIT',
     onSuccess: async (offerData) => {
       const { _id: offerId, triggerEvent, product = {} } = offerData;
@@ -28,7 +28,7 @@ const ExitIntentOffer = () => {
 
   const handleAcceptance = async (productId, variantId, quantity) => {
     // Accept the offer.
-    await trackOfferAcceptance(productId, variantId, quantity);
+    await trackOfferAcceptance(offer._id, productId, variantId, quantity);
 
     // Add the product to the cart.
     if (variantId) {

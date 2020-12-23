@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -26,15 +25,11 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['SHOPIFY_ADMIN_URL'])
-  ],
+  plugins: [new CleanWebpackPlugin()],
   stats: 'errors-warnings',
   externals: [
-    '@neatowebsolutions/upselling-graphql-client',
-    '@neatowebsolutions/upselling-graphql-queries',
     '@shopify/app-bridge',
+    '@shopify/app-bridge/actions',
     '@shopify/app-bridge-react',
     'prop-types',
     'react',

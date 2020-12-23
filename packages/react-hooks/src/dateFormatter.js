@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-// TODO: Explore using date-fns or another library having a smaller footprint than moment.
+// TODO: Explore using date-fns or another library with a smaller footprint than moment.
 
 const useDateFormatter = () => {
   const formatDate = (

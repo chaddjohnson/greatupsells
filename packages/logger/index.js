@@ -1,4 +1,8 @@
+const AWS = require('aws-sdk');
+
 // TODO: Use bunyan? Use winston?
+
+const { AWS_ENDPOINT, AWS_REGION, LOG_QUEUE_URL } = process.env;
 
 const formatErrorData = (error) => {
   if (!(error instanceof Error)) {
@@ -43,24 +47,55 @@ const format = (data) =>
     )
     .trim();
 
-const debug = (message, ...data) => {
-  console.debug(message, format(data));
-  // TODO
+const sendMessage = async (source, type, message, data) => {
+  try {
+    const sqs = new AWS.SQS({
+      endpoint: AWS_ENDPOINT,
+      region: AWS_REGION
+    });
+    const body = { source, type, message, data };
+
+    await sqs
+      .sendMessage({
+        QueueUrl: LOG_QUEUE_URL,
+        MessageBody: JSON.stringify(body)
+      })
+      .promise();
+  } catch (error) {
+    console.error(
+      `Unable to log ${source} message "${message}": ${error.message}`
+    );
+  }
 };
 
-const info = (message, ...data) => {
-  console.info(message, format(data));
-  // TODO
+const debug = (source, message, ...data) => {
+  const formattedData = format(data);
+
+  console.debug(message, formattedData);
 };
 
-const warn = (message, ...data) => {
-  console.warn(message, format(data));
-  // TODO
+const info = async (source, message, ...data) => {
+  const formattedData = format(data);
+
+  console.info(message, formattedData);
+
+  await sendMessage(source, 'info', message, data);
 };
 
-const error = (message, ...data) => {
-  console.error(message, format(data));
-  // TODO
+const warn = async (source, message, ...data) => {
+  const formattedData = format(data);
+
+  console.warn(message, formattedData);
+
+  await sendMessage(source, 'warn', message, data);
+};
+
+const error = async (source, message, ...data) => {
+  const formattedData = format(data);
+
+  console.error(message, formattedData);
+
+  await sendMessage(source, 'error', message, data);
 };
 
 module.exports = {

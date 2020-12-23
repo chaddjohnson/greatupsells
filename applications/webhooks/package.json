@@ -15,9 +15,8 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^2.0.0",
-    "@neatowebsolutions/logger": "^0.0.0",
-    "@neatowebsolutions/upselling-models": "^0.0.0",
+    "@chaddjohnson/mongodb-client-lambda": "^2.0.2",
+    "@neatowebsolutions/upselling-logger": "^0.0.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -31,8 +30,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@neatowebsolutions/logger": "^0.0.0",
-    "@neatowebsolutions/upselling-models": "^0.0.0",
+    "@neatowebsolutions/upselling-logger": "^0.0.0",
     "nodemon": "^2.0.6",
     "serverless": "^1.78.1"
   }

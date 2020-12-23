@@ -1,0 +1,182 @@
+service: upselling-shops-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  timeout: 900
+  endpointType: REGIONAL
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    # APP_SLUG: upselling
+    # SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    # SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
+    # API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
+    # CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
+    # SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
+    # MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+
+functions:
+  createOffer:
+    handler: src/routes/offers/create.handler
+    events:
+      - http:
+          path: /offers
+          method: post
+          cors: true
+  deleteOffer:
+    handler: src/routes/offers/delete.handler
+    events:
+      - http:
+          path: /offers
+          method: delete
+          cors: true
+  find:
+    handler: src/routes/offers/find.handler
+    events:
+      - http:
+          path: /offers
+          method: get
+          cors: true
+  findOne:
+    handler: src/routes/offers/findOne.handler
+    events:
+      - http:
+          path: /offers/{id}
+          method: get
+          cors: true
+  findOneRandom:
+    handler: src/routes/offers/findOneRandom.handler
+    events:
+      - http:
+          path: /offers/random
+          method: get
+          cors: true
+  update:
+    handler: src/routes/offers/update.handler
+    events:
+      - http:
+          path: /offers/{id}
+          method: put
+          cors: true
+  trackOfferAcceptance:
+    handler: src/routes/offers/acceptances/create.handler
+    events:
+      - http:
+          path: /offers/{id}/acceptances
+          method: post
+          cors: true
+  findConversionRates:
+    handler: src/routes/offers/conversionRates/find.handler
+    events:
+      - http:
+          path: /offers/{id}/conversion-rates
+          method: get
+          cors: true
+  findConversions:
+    handler: src/routes/offers/conversions/find.handler
+    events:
+      - http:
+          path: /offers/{id}/conversions
+          method: get
+          cors: true
+  findRevenueIncreases:
+    handler: src/routes/offers/revenueIncreases/find.handler
+    events:
+      - http:
+          path: /offers/{id}/revenue-increases
+          method: get
+          cors: true
+  trackOfferView:
+    handler: src/routes/offers/views/create.handler
+    events:
+      - http:
+          path: /offers/{id}/views
+          method: post
+          cors: true
+  findOfferViews:
+    handler: src/routes/offers/views/find.handler
+    events:
+      - http:
+          path: /offers/{id}/views
+          method: get
+          cors: true
+  findOneShop:
+    handler: src/routes/shops/findOne.handler
+    events:
+      - http:
+          path: /shops/{id}
+          method: get
+          cors: true
+  updateShop:
+    handler: src/routes/shops/update.handler
+    events:
+      - http:
+          path: /shops/{id}
+          method: put
+          cors: true
+
+  activateAndDeactivateShops:
+    handler: src/workers/activateAndDeactivateShops.handler
+    events:
+      - schedule: rate(1 day)
+  calculateStats:
+    handler: src/workers/calculateStats.handler
+    events:
+      - schedule: cron(1 5,6 * * *)
+  fixShopWebhooks:
+    handler: src/workers/fixShopWebhooks.handler
+    events:
+      - schedule: rate(1 day)
+  removeCopiedProducts:
+    handler: src/workers/removeCopiedProducts.handler
+    events:
+      - schedule: rate(1 day)
+  shopCollectionImport:
+    reservedConcurrency: 10
+    handler: src/workers/shopCollectionImport.handler
+    events:
+      - sqs:
+          arn: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
+  shopProductImport:
+    reservedConcurrency: 10
+    handler: src/workers/shopProductImport.handler
+    events:
+      - sqs:
+          arn: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
+  updateShopPlans:
+    handler: src/workers/updateShopPlans.handler
+    events:
+      - schedule: rate(1 day)
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-offline-sqs-external
+  - serverless-plugin-monorepo
+
+custom:
+  dotenv:
+    path: .env
+  serverless-offline:
+    httpPort: ${env:SHOPS_API_PORT}
+  customDomain:
+    domainName: ${ssm:/upselling/${self:provider.stage}/shops-service-api/endpoint/${self:provider.region}}
+    basePath: ''
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map

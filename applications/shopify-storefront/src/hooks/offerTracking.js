@@ -1,0 +1,64 @@
+import { useState } from 'react';
+import {
+  useHttpClient,
+  useCookies
+} from '@neatowebsolutions/upselling-react-hooks';
+
+const useOfferTracking = () => {
+  const [offerHitId, setOfferHitId] = useState(null);
+
+  const { httpClient } = useHttpClient();
+  const { getCookie, setCookie } = useCookies();
+
+  const trackOfferView = async (
+    offerId,
+    triggerEvent,
+    shopifyProductId,
+    shopifyVariantId
+  ) => {
+    // Retrieve local event and offer tracking data.
+    const offerViews = getCookie('upsellingOfferViews') || {
+      events: [],
+      offers: []
+    };
+
+    // Record an offer hit.
+    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
+      shopifyProductId,
+      shopifyVariantId
+    });
+
+    // Keep track of the newly-created offer hit.
+    setOfferHitId(offerHit._id);
+
+    // Track the event and the offer locally.
+    offerViews.events.push(triggerEvent);
+    offerViews.offers.push(offerId);
+
+    // Save the offer view.
+    setCookie('upsellingOfferViews', offerViews, {
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 // 1 day
+    });
+  };
+
+  const trackOfferAcceptance = async (
+    offerId,
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  ) => {
+    await httpClient.post(`/offers/${offerId}/acceptances`, {
+      offerHitId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    });
+  };
+
+  // NOTE: Conversion tracking occurs in order creation webhook.
+
+  return { trackOfferView, trackOfferAcceptance };
+};
+
+export default useOfferTracking;

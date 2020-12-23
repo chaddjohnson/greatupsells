@@ -14,7 +14,7 @@ const {
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
 
-dotenvExpand(dotenv.config({ path: '../../.env' }));
+dotenvExpand(dotenv.config());
 
 const models = require('@neatowebsolutions/upselling-models');
 

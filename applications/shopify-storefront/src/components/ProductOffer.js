@@ -6,25 +6,17 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useShopifyAjaxApi } from '../hooks';
 
+const triggerEvent = 'ADD';
+
 const ProductOffer = () => {
   const [productIds, setProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer } = useRandomOffer({
-    event: 'ADD',
-    productIds,
-    onSuccess: async (offerData) => {
-      const { _id: offerId, triggerEvent, product = {} } = offerData;
-      const { shopifyProductData } = product;
-      const productId = shopifyProductData?.id;
-      const variantId = shopifyProductData?.variants?.[0]?.id;
-
-      await trackOfferView(offerId, triggerEvent, productId, variantId);
-
-      setPopupOpen(true);
-    }
+  const { offer, product } = useRandomOffer({
+    event: triggerEvent,
+    productIds
   });
 
   const handleClosePopup = () => {
@@ -32,18 +24,48 @@ const ProductOffer = () => {
     setProductIds([]);
   };
 
-  const handleAcceptance = async (productId, variantId, quantity) => {
+  const handleAcceptance = async (
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  ) => {
     // Accept the offer.
-    await trackOfferAcceptance(productId, variantId, quantity);
+    await trackOfferAcceptance(
+      offer._id,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    );
 
     // Add the product to the cart.
-    if (variantId) {
-      await addProductToShopifyCart(variantId, quantity);
+    if (shopifyVariantId) {
+      await addProductToShopifyCart(shopifyVariantId, quantity);
     }
 
     // Close the popup.
     handleClosePopup();
   };
+
+  useEffect(() => {
+    if (!offer || !product) {
+      return;
+    }
+
+    const { shopifyProductData } = product;
+    const shopifyProductId = shopifyProductData?.id;
+    const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+
+    (async () => {
+      await trackOfferView(
+        offer._id,
+        triggerEvent,
+        shopifyProductId,
+        shopifyVariantId
+      );
+
+      setPopupOpen(true);
+    })();
+  }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const originalOpen = window.XMLHttpRequest.prototype.open;
@@ -54,10 +76,10 @@ const ProductOffer = () => {
       // Intercept Shopify's add to cart event.
       if (url === '/cart/add.js') {
         request.addEventListener('load', () => {
-          const product = JSON.parse(request?.responseText || {});
+          const addedProduct = JSON.parse(request?.responseText || {});
 
-          if (product?.id) {
-            setProductIds([product.id]);
+          if (addedProduct?.id) {
+            setProductIds([addedProduct.id]);
           }
         });
       }

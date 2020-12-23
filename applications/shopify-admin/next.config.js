@@ -3,7 +3,7 @@ const dotenvExpand = require('dotenv-expand');
 const withCSS = require('@zeit/next-css');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-dotenvExpand(dotenv.config({ path: '../../.env' }));
+dotenvExpand(dotenv.config());
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -11,7 +11,7 @@ const {
   SHOPIFY_ADMIN_URL,
   SHOPIFY_ADMIN_API_KEY,
   SHOPIFY_ADMIN_NAME,
-  API_URL,
+  PUBLIC_API_URL,
   CONTACT_EMAIL
 } = process.env;
 
@@ -74,7 +74,7 @@ module.exports = withCSS({
     SHOPIFY_ADMIN_URL,
     SHOPIFY_ADMIN_API_KEY,
     SHOPIFY_ADMIN_NAME,
-    API_URL,
+    PUBLIC_API_URL,
     CONTACT_EMAIL
   }
 });

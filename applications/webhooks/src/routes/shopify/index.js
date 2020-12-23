@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const { StatusCodes } = require('http-status-codes');
-const logger = require('@neatowebsolutions/logger');
+const logger = require('@neatowebsolutions/upselling-logger');
 
 const appUninstall = require('./appUninstall');
 const collection = require('./collection');

@@ -7,22 +7,27 @@ import {
   Contexts
 } from '@neatowebsolutions/upselling-react-components';
 import {
-  GraphQLProvider,
-  GraphQLClient
-} from '@neatowebsolutions/upselling-graphql-client';
+  HttpClientProvider,
+  HttpClient
+} from '@neatowebsolutions/upselling-react-hooks';
 import { Link, RoutePropagator } from '../components';
 import '@shopify/polaris/dist/styles.css';
 
 const cookies = new Cookies();
 
-const graphqlClient = new GraphQLClient({
-  uri: `${process.env.API_URL}/graphql`,
-  credentials: 'include',
-  interceptors: {
-    request: (config) => {
-      config.headers.Authorization = `Bearer ${cookies.get('authToken')}`;
-    }
+const httpClient = new HttpClient({
+  baseUrl: process.env.PUBLIC_API_URL
+});
+
+// Add the token to each request.
+httpClient.addRequestInterceptor((config) => {
+  const token = sessionStorage.getItem('authToken');
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
+  return config;
 });
 
 const App = ({ Component, pageProps }) => {
@@ -45,16 +50,12 @@ const App = ({ Component, pageProps }) => {
           forceRedirect: true
         }}
       >
-        <GraphQLProvider client={graphqlClient}>
+        <HttpClientProvider httpClient={httpClient}>
           <RoutePropagator />
           {typeof window !== 'undefined' && window.top !== window.self && (
             <ErrorBoundary>
               <Contexts>
-                <main
-                  style={{
-                    paddingBottom: '120px'
-                  }}
-                >
+                <main style={{ paddingBottom: '120px' }}>
                   <Component {...pageProps} />
                 </main>
               </Contexts>
@@ -63,7 +64,7 @@ const App = ({ Component, pageProps }) => {
           {typeof window !== 'undefined' && window.top === window.self && (
             <p>Loading...</p>
           )}
-        </GraphQLProvider>
+        </HttpClientProvider>
       </AppBridgeProvider>
     </AppProvider>
   );

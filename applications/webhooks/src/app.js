@@ -11,7 +11,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { mongodbClient } = require('@neatowebsolutions/upselling-models');
-const logger = require('@neatowebsolutions/logger');
+const logger = require('@neatowebsolutions/upselling-logger');
 const router = require('./router');
 
 const logLevel = getenv('LOG_LEVEL', 'debug');

@@ -8,7 +8,7 @@
   },
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-components#readme",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {},
   "devDependencies": {
     "@neatowebsolutions/upselling-react-hooks": "0.0.0"

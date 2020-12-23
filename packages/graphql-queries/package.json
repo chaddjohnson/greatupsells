@@ -4,7 +4,7 @@
   "description": "GraphQL queries.",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/graphql-queries#readme",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
+  "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "main": "dist/index.js",
   "repository": {
     "type": "git",

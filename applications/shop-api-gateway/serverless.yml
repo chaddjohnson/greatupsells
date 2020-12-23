@@ -1,0 +1,94 @@
+service: upselling-shop-api-gateway
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  endpointType: REGIONAL
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    # API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
+    # APP_SLUG: upselling
+    # CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
+    # JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
+    # MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
+    # SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
+    # SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    # SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    # SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
+    # SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
+    # SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+
+functions:
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+  graphql:
+    handler: src/routes/graphql.handler
+    events:
+      - http:
+          path: /graphql
+          method: ANY
+          cors: true
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-ngrok-tunnel
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+
+custom:
+  dotenv:
+    path: .env
+    logging: false
+  serverless-offline:
+    httpPort: ${env:API_PORT}
+  ngrokTunnel:
+    tunnels:
+      - port: ${env:API_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:API_TUNNEL_SUBDOMAIN}
+      - port: ${env:SHOPIFY_ADMIN_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:SHOPIFY_ADMIN_SUBDOMAIN}
+      - port: ${env:WEBHOOKS_API_PORT}
+        ngrokOptions:
+          authToken: ${env:NGROK_AUTH_TOKEN}
+          region: ${env:NGROK_REGION}
+          subdomain: ${env:WEBHOOKS_API_TUNNEL_SUBDOMAIN}
+  customDomain:
+    domainName: ${ssm:/upselling/${self:provider.stage}/api/endpoint/${self:provider.region}}
+    basePath: ''
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map

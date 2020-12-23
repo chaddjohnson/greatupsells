@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const models = require('@neatowebsolutions/upselling-models');
-const logger = require('@neatowebsolutions/logger');
+const logger = require('@neatowebsolutions/upselling-logger');
 
 const handler = async (request, response) => {
   const domain = request.headers['x-shopify-shop-domain'];

@@ -3,13 +3,13 @@ const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 
-const { API_URL } = process.env;
+const { PUBLIC_API_URL } = process.env;
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const apiResponse = await fetch(`${API_URL}/health`);
+    const apiResponse = await fetch(`${PUBLIC_API_URL}/health`);
     await mongodbClient.connect();
 
     if (apiResponse.status !== StatusCodes.OK) {

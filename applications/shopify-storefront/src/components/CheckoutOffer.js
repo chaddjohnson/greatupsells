@@ -12,7 +12,7 @@ const CheckoutOffer = () => {
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer } = useRandomOffer({
+  const { offer, product } = useRandomOffer({
     event: 'CHECKOUT',
     productIds,
     onSuccess: async (offerData) => {
@@ -34,7 +34,7 @@ const CheckoutOffer = () => {
 
   const handleAcceptance = async (productId, variantId, quantity) => {
     // Accept the offer.
-    await trackOfferAcceptance(productId, variantId, quantity);
+    await trackOfferAcceptance(offer._id, productId, variantId, quantity);
 
     // Add the product to the cart.
     if (variantId) {

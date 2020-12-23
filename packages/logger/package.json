@@ -1,15 +1,18 @@
 {
-  "name": "@neatowebsolutions/logger",
+  "name": "@neatowebsolutions/upselling-logger",
   "version": "0.0.0",
-  "description": "Logger service for Neato Web Solutions.",
+  "description": "Logger service.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/logger.git"
+    "url": "git+https://github.com/neatowebsolutions/upselling.git"
   },
-  "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
-  "dependencies": {},
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/logger",
+  "dependencies": {
+    "aws-sdk": "^2.802.0"
+  },
   "devDependencies": {},
   "scripts": {
     "format": "eslint --fix index.js",

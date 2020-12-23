@@ -1,7 +1,0 @@
-.DS_Store
-*.log
-.terraform/
-terraform.tfvars
-*.secrets.tfvars
-terraform.tfstate*
-src/*.zip

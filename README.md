@@ -2,7 +2,7 @@
 
 ## Overview
 
-This monorepo is a collection of applications, packages, and infrastructure as code comprising the entirety of a Shopify app.
+This monorepo is a collection of applications, services, packages, and infrastructure as code comprising the entirety of a Shopify app.
 
 This application plugs into existing Shopify shops and enables shop owners to upsell, cross-sell, and display general offers to customers in order to boost sales and revenue.
 
@@ -48,11 +48,15 @@ Please note that server infrastructure is managed at the organization level and 
 
 1. Clone this repository.
 1. Create a top-level `.env` file by copying `.env.example` and filling in values.
+1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+1. Run Docker Desktop.
+1. Run `yarn docker`. This will start LocalStack (allowing you to run AWS services locally).
 1. Run `yarn start`. This automatically does the following:
     1. Installs dependencies.
     1. Runs Lerna bootstrapping.
     1. Builds packages.
-    1. Starts all applications and package build watching.
+    1. Starts all applications, services, and package build watching.
 
 ### Tooling
 
@@ -85,16 +89,20 @@ The following are used:
 
 Hosting is with AWS. The following AWS services are used:
 
-* Lambda
 * API Gateway
+* Lambda
+* EC2
+* SNS
+* SQS
 * S3
 * CloudFront
-* SQS
+* CloudWatch Events
+* SES
 * SSM
-* EC2
-* Elasticsearch
+* Elasticsearch (via EC2)
+* ACM
 
-All infrastructure is managed via Terraform and Ansible.
+All infrastructure is managed via Serverless, Terraform, and Ansible.
 
 Linux is used for hosting.
 
@@ -106,7 +114,7 @@ CircleCI is used for deployment. Deployment is automatic when Git pushes occur t
 
 ## Architecture
 
-TODO: Create and add diagram here showing both application and infrastructural architecture.
+A microservice architecture is used. Please refer to [this diagram](https://docs.google.com/drawings/d/1np6zTOc3GzO-teYaLsM9H3QjxCiMXBwuJRDnnITgji8).
 
 ## Requirements
 

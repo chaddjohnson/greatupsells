@@ -6,18 +6,21 @@ provider:
   memorySize: 256
   timeout: 10
   endpointType: REGIONAL
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
   environment:
-    API_URL: ${ssm:/upselling/${self:provider.stage}/api/url}
+    PUBLIC_API_URL: ${ssm:/upselling/${self:provider.stage}/public-api/url}
     MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
     SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     SHOPIFY_API_KEY: ${ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
     WEBHOOKS_API_URL: ${ssm:/upselling/${self:provider.stage}/webhooks-api/url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
 
 functions:
   health:

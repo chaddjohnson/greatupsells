@@ -3,9 +3,12 @@ node_modules
 .env
 *.log
 .serverless
+.terraform
+terraform.tfstate.d
 dist
 build
 .next
 *.save
 *.bak
 pm2.json
+/archive

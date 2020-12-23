@@ -1,0 +1,51 @@
+service: upselling-logs-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    AWS_ENDPOINT: ${env:AWS_ENDPOINT}
+    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL}
+
+functions:
+  log:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/workers/logQueue.handler
+    events:
+      - sqs:
+          arn: ${ssm:/upselling/${self:provider.stage}/log-queue-arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-monorepo
+  - serverless-offline
+  - serverless-offline-sqs-external
+
+custom:
+  dotenv:
+    path: .env
+  serverless-offline-sqs-external:
+    autoCreate: false
+    apiVersion: '2012-11-05'
+    host: localhost
+    port: 4566
+    region: ${self:provider.region}
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map
