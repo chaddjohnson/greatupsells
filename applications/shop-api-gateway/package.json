@@ -19,6 +19,7 @@
     "@graphql-tools/schema": "^6.0.15",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
+    "@neatowebsolutions/upselling-http-client": "0.0.0",
     "apollo-server-lambda": "^2.13.1",
     "graphql": "^15.0.0",
     "graphql-scalars": "^1.2.6",

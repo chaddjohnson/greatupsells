@@ -29,98 +29,102 @@ functions:
       - http:
           path: /offers
           method: post
-          cors: true
   deleteOffer:
     handler: src/routes/offers/delete.handler
     events:
       - http:
           path: /offers
           method: delete
-          cors: true
-  find:
+  findOffers:
     handler: src/routes/offers/find.handler
     events:
       - http:
           path: /offers
           method: get
-          cors: true
-  findOne:
+  findOneOffer:
     handler: src/routes/offers/findOne.handler
     events:
       - http:
-          path: /offers/{id}
+          path: /offers/{offerId}
           method: get
-          cors: true
-  findOneRandom:
-    handler: src/routes/offers/findOneRandom.handler
-    events:
-      - http:
-          path: /offers/random
-          method: get
-          cors: true
-  update:
+  updateOffer:
     handler: src/routes/offers/update.handler
     events:
       - http:
-          path: /offers/{id}
+          path: /offers/{offerId}
           method: put
-          cors: true
   trackOfferAcceptance:
     handler: src/routes/offers/acceptances/create.handler
     events:
       - http:
-          path: /offers/{id}/acceptances
+          path: /offers/{offerId}/acceptances
           method: post
-          cors: true
-  findConversionRates:
+  findOfferAcceptances:
+    handler: src/routes/offers/acceptances/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/acceptances
+          method: get
+  findOfferConversionRates:
     handler: src/routes/offers/conversionRates/find.handler
     events:
       - http:
-          path: /offers/{id}/conversion-rates
+          path: /offers/{offerId}/conversion-rates
           method: get
-          cors: true
-  findConversions:
+  findOfferConversions:
     handler: src/routes/offers/conversions/find.handler
     events:
       - http:
-          path: /offers/{id}/conversions
+          path: /offers/{offerId}/conversions
           method: get
-          cors: true
-  findRevenueIncreases:
+  findOfferRevenueIncreases:
     handler: src/routes/offers/revenueIncreases/find.handler
     events:
       - http:
-          path: /offers/{id}/revenue-increases
+          path: /offers/{offerId}/revenue-increases
           method: get
-          cors: true
   trackOfferView:
     handler: src/routes/offers/views/create.handler
     events:
       - http:
-          path: /offers/{id}/views
+          path: /offers/{offerId}/views
           method: post
-          cors: true
   findOfferViews:
     handler: src/routes/offers/views/find.handler
     events:
       - http:
-          path: /offers/{id}/views
+          path: /offers/{offerId}/views
           method: get
-          cors: true
+  findOneRandomOfferProduct:
+    handler: src/routes/offers/products/findOneRandom.handler
+    events:
+      - http:
+          path: /offers/{offerId}/products/random
+          method: get
   findOneShop:
     handler: src/routes/shops/findOne.handler
     events:
       - http:
-          path: /shops/{id}
+          path: /shops/{shopId}
           method: get
-          cors: true
   updateShop:
     handler: src/routes/shops/update.handler
     events:
       - http:
-          path: /shops/{id}
+          path: /shops/{shopId}
           method: put
-          cors: true
+  findShopOffers:
+    handler: src/routes/shops/offers/find.handler
+    events:
+      - http:
+          path: /shops/{shopId}/offers
+          method: get
+  findOneRandomShopOffer:
+    handler: src/routes/shops/offers/findOneRandom.handler
+    events:
+      - http:
+          path: /shops/{shopId}/offers/random
+          method: get
 
   activateAndDeactivateShops:
     handler: src/workers/activateAndDeactivateShops.handler

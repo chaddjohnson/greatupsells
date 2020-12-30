@@ -92,11 +92,12 @@ const loadingComponent = () => (
 
 const DashboardPage = () => {
   const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
     formatCurrency,
     formatPercentage
-  } = useNumberFormatter();
+  } = useNumberFormatter({ locale, countryCode, currency });
 
   const errorComponent = memo(() => (
     <Page title="Overview dashboard">

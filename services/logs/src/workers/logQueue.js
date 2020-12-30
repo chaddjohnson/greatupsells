@@ -27,16 +27,16 @@ const processRecord = async (record) => {
     }
   });
 
-  // Force an index refresh; otherwise, we will not get any result in the consequent searches.
-  await esClient.indices.refresh({ index: 'logs' });
-
-  // TODO: Send email notification for error logs (via SNS? or SQS?).
+  // TODO: Use Email Service to send email notification for error logs.
 };
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   await Promise.all(event.Records.map(processRecord));
+
+  // Force an index refresh to ensure the logs are included subsequent searches.
+  await esClient.indices.refresh({ index: 'logs' });
 };
 
 module.exports.handler = handler;

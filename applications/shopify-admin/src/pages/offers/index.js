@@ -15,7 +15,7 @@ import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);
 
-const loadingComponent = () => (
+const LoadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage title="Offers" fullWidth>
@@ -30,7 +30,7 @@ const loadingComponent = () => (
   </>
 );
 
-const emptyComponent = () => (
+const EmptyComponent = () => (
   <EmptyState
     heading="Manage your offers"
     action={{ content: 'Add offer', url: '/offers/new/' }}
@@ -44,7 +44,7 @@ const OffersPage = () => {
   const { shop } = useShop();
   const { offers, offersLoading, offersError, fetchOffers } = useOffers();
 
-  const errorComponent = memo(() => (
+  const ErrorComponent = memo(() => (
     <Page title="Offers" fullWidth>
       <Banner
         title="Unable to load offers"
@@ -65,9 +65,9 @@ const OffersPage = () => {
       isLoading={offersLoading}
       isError={!!offersError && !offers}
       isEmpty={!offers?.length}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-      emptyStateComponent={emptyComponent}
+      loadingComponent={LoadingComponent}
+      errorComponent={ErrorComponent}
+      emptyStateComponent={EmptyComponent}
     >
       <Page title="Offers" fullWidth>
         <PageTitleBar />

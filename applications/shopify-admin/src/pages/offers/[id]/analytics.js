@@ -11,6 +11,7 @@ import {
   SkeletonPage
 } from '@shopify/polaris';
 import {
+  useShop,
   useOffer,
   useOfferAnalytics,
   useNumberFormatter
@@ -73,7 +74,13 @@ const OfferAnalyticsPage = () => {
 
   const [datePickerActive, setDatePickerActive] = useState(false);
 
-  const { formatNumber, formatPercentage } = useNumberFormatter();
+  const { shop } = useShop();
+  const { locale, countryCode, currency } = shop || {};
+  const { formatNumber, formatPercentage } = useNumberFormatter(
+    locale,
+    countryCode,
+    currency
+  );
   const { offer } = useOffer(offerId);
   const {
     offerAcceptances,

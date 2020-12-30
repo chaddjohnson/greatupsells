@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
-import { useShop } from './shop';
 
-const useNumberFormatter = () => {
-  const { shop } = useShop();
-  const { locale, countryCode, currency } = shop || {};
-
+const useNumberFormatter = ({ locale, countryCode, currency }) => {
   const numberFormatter = useMemo(() => {
     if (!locale || !countryCode) {
       return;

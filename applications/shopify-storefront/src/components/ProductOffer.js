@@ -56,14 +56,14 @@ const ProductOffer = () => {
     const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
 
     (async () => {
+      setPopupOpen(true);
+
       await trackOfferView(
         offer._id,
         triggerEvent,
         shopifyProductId,
         shopifyVariantId
       );
-
-      setPopupOpen(true);
     })();
   }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
 

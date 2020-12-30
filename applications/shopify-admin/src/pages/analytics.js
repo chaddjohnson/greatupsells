@@ -10,7 +10,10 @@ import {
   TextStyle
 } from '@shopify/polaris';
 import { CalendarMajorMonotone } from '@shopify/polaris-icons';
-import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useShop,
+  useNumberFormatter
+} from '@neatowebsolutions/upselling-react-hooks';
 import { TitleBar, LineChart } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Analytics" />);
@@ -148,11 +151,14 @@ const data = {
 
 const AnalyticsPage = () => {
   const [datePickerActive, setDatePickerActive] = useState(false);
+
+  const { shop } = useShop();
+  const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
     formatCurrency,
     formatPercentage
-  } = useNumberFormatter();
+  } = useNumberFormatter({ locale, countryCode, currency });
 
   return (
     <Page title="Analytics for all offers" fullWidth>

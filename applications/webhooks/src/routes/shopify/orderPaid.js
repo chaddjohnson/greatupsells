@@ -29,7 +29,7 @@ const handler = async (request, response) => {
 
       // Only track orders resulting in offer conversions.
       if (offerHits.length === 0) {
-        await order.remove();
+        await order.deleteOne();
       }
     }
   } catch (error) {

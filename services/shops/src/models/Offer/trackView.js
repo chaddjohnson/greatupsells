@@ -57,6 +57,8 @@ const trackView = async (
         { session }
       );
     });
+
+    return offerHit;
   } catch (error) {
     logger.error(
       `Error tracking offer view for offer (${

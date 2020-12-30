@@ -66,6 +66,7 @@ const schema = new mongoose.Schema(
       upgradedAt: { type: Date, required: false },
       canceledAt: { type: Date, required: false }
     },
+    appLastOpenedAt: { type: Date, required: false },
     uninstalledAt: { type: Date, required: false },
     offerViewCount: { type: Int32, required: true, default: 0, min: 0 },
     offerAcceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
@@ -105,8 +106,8 @@ schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
 };
 
-schema.methods.findRandomOffer = function (shopifyProductIds) {
-  return findRandomOffer(this, shopifyProductIds);
+schema.methods.findRandomOffer = function (triggerEvent, shopifyProductIds) {
+  return findRandomOffer(this, triggerEvent, shopifyProductIds);
 };
 
 schema.methods.deactivate = function () {

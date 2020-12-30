@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/neatowebsolutions/upselling.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-components#readme",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-components",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {},

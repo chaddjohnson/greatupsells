@@ -6,73 +6,91 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useShopifyAjaxApi } from '../hooks';
 
+const triggerEvent = 'EXIT';
+
 const ExitIntentOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [offerViewTracked, setOfferViewTracked] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product } = useRandomOffer({
-    event: 'EXIT',
-    onSuccess: async (offerData) => {
-      const { _id: offerId, triggerEvent, product = {} } = offerData;
-      const { shopifyProductData } = product;
-      const productId = shopifyProductData?.id;
-      const variantId = shopifyProductData?.variants?.[0]?.id;
+  const { offer, product } = useRandomOffer({ event: triggerEvent });
 
-      await trackOfferView(offerId, triggerEvent, productId, variantId);
-
-      setOfferViewTracked(true);
-    }
-  });
-
-  const handleAcceptance = async (productId, variantId, quantity) => {
+  const handleAcceptance = async (
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  ) => {
     // Accept the offer.
-    await trackOfferAcceptance(offer._id, productId, variantId, quantity);
+    await trackOfferAcceptance(
+      offer._id,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    );
 
     // Add the product to the cart.
-    if (variantId) {
-      await addProductToShopifyCart(variantId, quantity);
+    if (shopifyVariantId) {
+      await addProductToShopifyCart(shopifyVariantId, quantity);
     }
 
     // Close the popup.
     setPopupOpen(false);
   };
 
-  // Reference: http://beeker.io/lab/exit-intent-popup/, https://stackoverflow.com/a/3187524/83897
-  const handleMouseOut = useCallback((event) => {
-    event = event || window.event;
+  // References:
+  //   - http://beeker.io/lab/exit-intent-popup/
+  //   - https://stackoverflow.com/a/3187524/83897
+  const handleMouseOut = useCallback(
+    async (event) => {
+      event = event || window.event;
 
-    // Works on mouse exiting window and user switching active program.
-    const from = event.relatedTarget || event.toElement;
+      if (!offer || !product) {
+        return;
+      }
 
-    // Get the current viewport width.
-    const viewportWidth = Math.max(
-      document.documentElement.clientWidth,
-      window.innerWidth || 0
-    );
+      const { shopifyProductData } = product;
+      const shopifyProductId = shopifyProductData?.id;
+      const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
 
-    const inputHasFocus = event.target.tagName.toLowerCase() === 'input';
+      // Works on mouse exiting window and user switching active program.
+      const from = event.relatedTarget || event.toElement;
 
-    // Skip if focus is on an input field.
-    if (inputHasFocus) {
-      return;
-    }
+      // Get the current viewport width.
+      const viewportWidth = Math.max(
+        document.documentElement.clientWidth,
+        window.innerWidth || 0
+      );
 
-    // Skip if the current mouse X position is within 50px of the right edge of the viewport.
-    if (event.clientX >= viewportWidth - 50) {
-      return;
-    }
+      const inputHasFocus = event.target.tagName.toLowerCase() === 'input';
 
-    // Skip if the current mouse Y position is not within 50px of the top edge of the viewport.
-    if (event.clientY >= 50) {
-      return;
-    }
+      // Skip if focus is on an input field.
+      if (inputHasFocus) {
+        return;
+      }
 
-    if (!from || from.nodeName === 'HTML') {
-      setPopupOpen(true);
-    }
-  }, []);
+      // Skip if the current mouse X position is within 50px of the right edge of the viewport.
+      if (event.clientX >= viewportWidth - 50) {
+        return;
+      }
+
+      // Skip if the current mouse Y position is not within 50px of the top edge of the viewport.
+      if (event.clientY >= 50) {
+        return;
+      }
+
+      if (!from || from.nodeName === 'HTML') {
+        await trackOfferView(
+          offer._id,
+          triggerEvent,
+          shopifyProductId,
+          shopifyVariantId
+        );
+
+        setPopupOpen(true);
+      }
+    },
+    [offer, product, trackOfferView]
+  );
 
   useEffect(() => {
     document.addEventListener('mouseout', handleMouseOut, true);
@@ -85,7 +103,7 @@ const ExitIntentOffer = () => {
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"
-      open={!!offer && offerViewTracked && popupOpen}
+      open={!!offer && popupOpen}
       offer={offer}
       onAccept={handleAcceptance}
       onClose={() => setPopupOpen(false)}

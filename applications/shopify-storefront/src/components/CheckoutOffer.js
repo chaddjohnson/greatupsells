@@ -6,6 +6,8 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useShopifyAjaxApi } from '../hooks';
 
+const triggerEvent = 'CHECKOUT';
+
 const CheckoutOffer = () => {
   const [productIds, setProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -13,18 +15,8 @@ const CheckoutOffer = () => {
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer, product } = useRandomOffer({
-    event: 'CHECKOUT',
-    productIds,
-    onSuccess: async (offerData) => {
-      const { _id: offerId, triggerEvent, product = {} } = offerData;
-      const { shopifyProductData } = product;
-      const productId = shopifyProductData?.id;
-      const variantId = shopifyProductData?.variants?.[0]?.id;
-
-      await trackOfferView(offerId, triggerEvent, productId, variantId);
-
-      setPopupOpen(true);
-    }
+    event: triggerEvent,
+    productIds
   });
 
   const handleClosePopup = () => {
@@ -45,6 +37,27 @@ const CheckoutOffer = () => {
     handleClosePopup();
   };
 
+  useEffect(() => {
+    if (!offer || !product) {
+      return;
+    }
+
+    const { shopifyProductData } = product;
+    const shopifyProductId = shopifyProductData?.id;
+    const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+
+    (async () => {
+      setPopupOpen(true);
+
+      await trackOfferView(
+        offer._id,
+        triggerEvent,
+        shopifyProductId,
+        shopifyVariantId
+      );
+    })();
+  }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
 
   useEffect(() => {
@@ -60,7 +73,7 @@ const CheckoutOffer = () => {
 
       setProductIds(items.map(({ id }) => id));
     })();
-  }, [fetchShopifyCart]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <OfferPopup

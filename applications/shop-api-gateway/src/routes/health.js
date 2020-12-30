@@ -1,17 +1,19 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { mongodbClient } = require('@neatowebsolutions/upselling-models');
+const HttpClient = require('@neatowebsolutions/upselling-http-client');
+
+const { SHOPS_API_URL } = process.env;
+
+const httpClient = new HttpClient({
+  baseUrl: SHOPS_API_URL
+});
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    await mongodbClient.connect();
-
-    if (!mongodbClient.connected) {
-      throw new Error(`Cannot connect to database`);
-    }
+    await httpClient.get('/health');
 
     return {
       statusCode: StatusCodes.OK,

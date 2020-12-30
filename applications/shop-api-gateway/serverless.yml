@@ -13,20 +13,13 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    # API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
-    # APP_SLUG: upselling
-    # CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
-    # JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    # MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
-    # SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
-    # SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
-    # SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
-    # SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
-    # SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
-    # SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
 
 functions:
+  authorizer:
+    handler: src/authorizer.handler
   health:
     handler: src/routes/health.handler
     events:
@@ -40,13 +33,139 @@ functions:
       - http:
           path: /region
           method: get
-  graphql:
-    handler: src/routes/graphql.handler
+          cors: true
+  createOffer:
+    handler: src/routes/offers/create.handler
     events:
       - http:
-          path: /graphql
-          method: ANY
+          path: /offers
+          method: post
           cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  deleteOffer:
+    handler: src/routes/offers/delete.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: delete
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOffers:
+    handler: src/routes/offers/find.handler
+    events:
+      - http:
+          path: /offers
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOneOffer:
+    handler: src/routes/offers/findOne.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  updateOffer:
+    handler: src/routes/offers/update.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOfferAcceptances:
+    handler: src/routes/offers/acceptances/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/acceptances
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOfferConversionRates:
+    handler: src/routes/offers/conversionRates/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/conversion-rates
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOfferConversions:
+    handler: src/routes/offers/conversions/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/conversions
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOfferRevenueIncreases:
+    handler: src/routes/offers/revenueIncreases/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/revenue-increases
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOfferViews:
+    handler: src/routes/offers/views/find.handler
+    events:
+      - http:
+          path: /offers/{offerId}/views
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOneShop:
+    handler: src/routes/shops/findOne.handler
+    events:
+      - http:
+          path: /shop
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  updateShop:
+    handler: src/routes/shops/update.handler
+    events:
+      - http:
+          path: /shop
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
 
 plugins:
   - serverless-offline
