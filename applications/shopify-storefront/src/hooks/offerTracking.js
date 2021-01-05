@@ -17,10 +17,7 @@ const useOfferTracking = () => {
     shopifyVariantId
   ) => {
     // Retrieve local event and offer tracking data.
-    const offerViews = getCookie('upsellingOfferViews') || {
-      events: [],
-      offers: []
-    };
+    const offerViews = getCookie('upsellingOfferViews') || { events: [] };
 
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
@@ -31,9 +28,8 @@ const useOfferTracking = () => {
     // Keep track of the newly-created offer hit.
     setOfferHitId(offerHit._id);
 
-    // Track the event and the offer locally.
+    // Track whether an offer has shown for the event.
     offerViews.events.push(triggerEvent);
-    offerViews.offers.push(offerId);
 
     // Save the offer view.
     setCookie('upsellingOfferViews', offerViews, {

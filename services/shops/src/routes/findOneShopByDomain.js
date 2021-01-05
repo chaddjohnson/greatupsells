@@ -6,33 +6,23 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const ip =
-      event.requestContext.identity.sourceIp ||
-      event.headers['X-Forwarded-For'];
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
-    const { shopifyProductId, shopifyVariantId } = JSON.parse(event.body);
+    const { domain } = event.pathParameters;
+    const Shop = await models.get('Shop');
+    const shop = await Shop.findByDomain(domain);
 
-    if (!offer) {
+    if (!shop) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    const offerHit = await offer.trackView(
-      shopifyProductId,
-      shopifyVariantId,
-      ip
-    );
-
     return {
-      statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offerHit)
+      statusCode: StatusCodes.OK,
+      body: JSON.stringify(shop)
     };
   } catch (error) {
-    logger.error(`Error tracking offer view`, error, event);
+    logger.error(`Error retrieving shop`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

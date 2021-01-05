@@ -35,7 +35,7 @@ functions:
           method: get
           cors: true
   createOffer:
-    handler: src/routes/offers/create.handler
+    handler: src/routes/createOffer.handler
     events:
       - http:
           path: /offers
@@ -46,7 +46,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   deleteOffer:
-    handler: src/routes/offers/delete.handler
+    handler: src/routes/deleteOffer.handler
     events:
       - http:
           path: /offers/{offerId}
@@ -57,7 +57,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOffers:
-    handler: src/routes/offers/find.handler
+    handler: src/routes/findOffers.handler
     events:
       - http:
           path: /offers
@@ -68,7 +68,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOneOffer:
-    handler: src/routes/offers/findOne.handler
+    handler: src/routes/findOneOffer.handler
     events:
       - http:
           path: /offers/{offerId}
@@ -79,7 +79,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   updateOffer:
-    handler: src/routes/offers/update.handler
+    handler: src/routes/updateOffer.handler
     events:
       - http:
           path: /offers/{offerId}
@@ -90,7 +90,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOfferAcceptances:
-    handler: src/routes/offers/acceptances/find.handler
+    handler: src/routes/findOfferAcceptances.handler
     events:
       - http:
           path: /offers/{offerId}/acceptances
@@ -101,7 +101,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOfferConversionRates:
-    handler: src/routes/offers/conversionRates/find.handler
+    handler: src/routes/findOfferConversionRates.handler
     events:
       - http:
           path: /offers/{offerId}/conversion-rates
@@ -112,7 +112,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOfferConversions:
-    handler: src/routes/offers/conversions/find.handler
+    handler: src/routes/findOfferConversions.handler
     events:
       - http:
           path: /offers/{offerId}/conversions
@@ -123,7 +123,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOfferRevenueIncreases:
-    handler: src/routes/offers/revenueIncreases/find.handler
+    handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
           path: /offers/{offerId}/revenue-increases
@@ -134,7 +134,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOfferViews:
-    handler: src/routes/offers/views/find.handler
+    handler: src/routes/findOfferViews.handler
     events:
       - http:
           path: /offers/{offerId}/views
@@ -145,7 +145,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOneShop:
-    handler: src/routes/shops/findOne.handler
+    handler: src/routes/findOneShop.handler
     events:
       - http:
           path: /shop
@@ -156,7 +156,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   updateShop:
-    handler: src/routes/shops/update.handler
+    handler: src/routes/updateShop.handler
     events:
       - http:
           path: /shop
@@ -198,7 +198,7 @@ custom:
           region: ${env:NGROK_REGION}
           subdomain: ${env:WEBHOOKS_API_TUNNEL_SUBDOMAIN}
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/api/endpoint/${self:provider.region}}
+    domainName: ${ssm:/upselling/${self:provider.stage}/shop-api-gateway/endpoint/${self:provider.region}}
     basePath: ''
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

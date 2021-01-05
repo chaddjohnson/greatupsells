@@ -7,10 +7,8 @@ const handler = async (event, context) => {
 
   try {
     const { shopId } = event.pathParameters;
-    const {
-      event: triggerEvent,
-      shopifyProductIds
-    } = event.queryStringParameters;
+    const { event: triggerEvent } = event.queryStringParameters;
+    const { shopifyProductIds } = event.multiValueQueryStringParameters;
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
     const offer = await shop.findRandomOffer(triggerEvent, shopifyProductIds);

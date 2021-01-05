@@ -23,104 +23,124 @@ provider:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
 
 functions:
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
   createOffer:
-    handler: src/routes/offers/create.handler
+    handler: src/routes/createOffer.handler
     events:
       - http:
           path: /offers
           method: post
   deleteOffer:
-    handler: src/routes/offers/delete.handler
+    handler: src/routes/deleteOffer.handler
     events:
       - http:
           path: /offers
           method: delete
   findOffers:
-    handler: src/routes/offers/find.handler
+    handler: src/routes/findOffers.handler
     events:
       - http:
           path: /offers
           method: get
   findOneOffer:
-    handler: src/routes/offers/findOne.handler
+    handler: src/routes/findOneOffer.handler
     events:
       - http:
           path: /offers/{offerId}
           method: get
   updateOffer:
-    handler: src/routes/offers/update.handler
+    handler: src/routes/updateOffer.handler
     events:
       - http:
           path: /offers/{offerId}
           method: put
   trackOfferAcceptance:
-    handler: src/routes/offers/acceptances/create.handler
+    handler: src/routes/trackOfferAcceptance.handler
     events:
       - http:
           path: /offers/{offerId}/acceptances
           method: post
   findOfferAcceptances:
-    handler: src/routes/offers/acceptances/find.handler
+    handler: src/routes/findOfferAcceptances.handler
     events:
       - http:
           path: /offers/{offerId}/acceptances
           method: get
   findOfferConversionRates:
-    handler: src/routes/offers/conversionRates/find.handler
+    handler: src/routes/findOfferConversionRates.handler
     events:
       - http:
           path: /offers/{offerId}/conversion-rates
           method: get
   findOfferConversions:
-    handler: src/routes/offers/conversions/find.handler
+    handler: src/routes/findOfferConversions.handler
     events:
       - http:
           path: /offers/{offerId}/conversions
           method: get
   findOfferRevenueIncreases:
-    handler: src/routes/offers/revenueIncreases/find.handler
+    handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
           path: /offers/{offerId}/revenue-increases
           method: get
   trackOfferView:
-    handler: src/routes/offers/views/create.handler
+    handler: src/routes/trackOfferView.handler
     events:
       - http:
           path: /offers/{offerId}/views
           method: post
   findOfferViews:
-    handler: src/routes/offers/views/find.handler
+    handler: src/routes/findOfferViews.handler
     events:
       - http:
           path: /offers/{offerId}/views
           method: get
   findOneRandomOfferProduct:
-    handler: src/routes/offers/products/findOneRandom.handler
+    handler: src/routes/findOneRandomOfferProduct.handler
     events:
       - http:
           path: /offers/{offerId}/products/random
           method: get
   findOneShop:
-    handler: src/routes/shops/findOne.handler
+    handler: src/routes/findOneShop.handler
     events:
       - http:
           path: /shops/{shopId}
           method: get
+  findOneShopByDomain:
+    handler: src/routes/findOneShopByDomain.handler
+    events:
+      - http:
+          path: /shops/domain/{domain}
+          method: get
   updateShop:
-    handler: src/routes/shops/update.handler
+    handler: src/routes/updateShop.handler
     events:
       - http:
           path: /shops/{shopId}
           method: put
   findShopOffers:
-    handler: src/routes/shops/offers/find.handler
+    handler: src/routes/findShopOffers.handler
     events:
       - http:
           path: /shops/{shopId}/offers
           method: get
   findOneRandomShopOffer:
-    handler: src/routes/shops/offers/findOneRandom.handler
+    handler: src/routes/findOneRandomShopOffer.handler
     events:
       - http:
           path: /shops/{shopId}/offers/random

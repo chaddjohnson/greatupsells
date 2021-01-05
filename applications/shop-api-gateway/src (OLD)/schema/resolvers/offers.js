@@ -55,54 +55,54 @@ module.exports.offer = async (root, args, context) => {
   return offer;
 };
 
-module.exports.randomOffer = async (root, args, context) => {
-  const { ip, host, Shop } = context;
-  const { event, shopifyProductIds } = args;
-  let shop = null;
-  let offerHit = null;
+// module.exports.randomOffer = async (root, args, context) => {
+//   const { ip, host, Shop } = context;
+//   const { event, shopifyProductIds } = args;
+//   let shop = null;
+//   let offerHit = null;
 
-  if (!host) {
-    logger.error(
-      `Unable to retrieve offer as domain is unavailable`,
-      context.event,
-      args
-    );
-    throw new ApolloError(`Error retrieving offer`);
-  }
+//   if (!host) {
+//     logger.error(
+//       `Unable to retrieve offer as domain is unavailable`,
+//       context.event,
+//       args
+//     );
+//     throw new ApolloError(`Error retrieving offer`);
+//   }
 
-  try {
-    shop = await Shop.findByDomain(host);
+//   try {
+//     shop = await Shop.findByDomain(host);
 
-    if (!shop) {
-      logger.warn(
-        `Shop ${host} not found when requesting offer for product(s) ${shopifyProductIds.join(
-          ', '
-        )}`
-      );
-      throw new ApolloError('Error retrieving offer');
-    }
+//     if (!shop) {
+//       logger.warn(
+//         `Shop ${host} not found when requesting offer for product(s) ${shopifyProductIds.join(
+//           ', '
+//         )}`
+//       );
+//       throw new ApolloError('Error retrieving offer');
+//     }
 
-    offerHit = await shop.findRecentOfferHit(ip);
+//     offerHit = await shop.findRecentOfferHit(ip);
 
-    // Abort if a recent offer hit for the requestor was found.
-    // TODO: Allow if there is a timer (and any other cases?).
-    if (offerHit) {
-      return;
-    }
+//     // Abort if a recent offer hit for the requestor was found.
+//     // TODO: Allow if there is a timer (and any other cases?).
+//     if (offerHit) {
+//       return;
+//     }
 
-    // Find a random offer for the shop.
-    return await shop.findRandomOffer(event, shopifyProductIds);
-  } catch (error) {
-    logger.error(
-      `Error retrieving offer for Shopify product(s) ${shopifyProductIds.join(
-        ', '
-      )} in shop ${shop.toString()}`,
-      error,
-      args
-    );
-    throw new ApolloError('Error retrieving offer');
-  }
-};
+//     // Find a random offer for the shop.
+//     return await shop.findRandomOffer(event, shopifyProductIds);
+//   } catch (error) {
+//     logger.error(
+//       `Error retrieving offer for Shopify product(s) ${shopifyProductIds.join(
+//         ', '
+//       )} in shop ${shop.toString()}`,
+//       error,
+//       args
+//     );
+//     throw new ApolloError('Error retrieving offer');
+//   }
+// };
 
 module.exports.offerShop = async (root, args, context) => {
   const { Shop } = context;
@@ -115,34 +115,34 @@ module.exports.offerShop = async (root, args, context) => {
   }
 };
 
-module.exports.offerProduct = async (root, args, context) => {
-  const { shop, Offer } = context;
-  const offerId = root.id;
-  let offer = null;
-  let product = null;
+// module.exports.offerProduct = async (root, args, context) => {
+//   const { shop, Offer } = context;
+//   const offerId = root.id;
+//   let offer = null;
+//   let product = null;
 
-  try {
-    offer = await Offer.findById(offerId);
+//   try {
+//     offer = await Offer.findById(offerId);
 
-    if (!offer) {
-      return;
-    }
+//     if (!offer) {
+//       return;
+//     }
 
-    product = await offer.findRandomProduct();
-  } catch (error) {
-    throw new ApolloError(`Error retrieving product for offer`);
-  }
+//     product = await offer.findRandomProduct();
+//   } catch (error) {
+//     throw new ApolloError(`Error retrieving product for offer`);
+//   }
 
-  // Verify the offer belongs to the shop.
-  if (offer.shop.id !== shop.id) {
-    logger.warn(
-      `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
-    );
-    throw new ForbiddenError('Forbidden');
-  }
+//   // Verify the offer belongs to the shop.
+//   if (offer.shop.id !== shop.id) {
+//     logger.warn(
+//       `Unauthorized update attempt for offer (${offer.toString()}) by shop (${shop.toString()})`
+//     );
+//     throw new ForbiddenError('Forbidden');
+//   }
 
-  return product;
-};
+//   return product;
+// };
 
 module.exports.createOffer = async (root, args, context) => {
   const { shop, Offer } = context;

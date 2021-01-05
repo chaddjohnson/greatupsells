@@ -1,0 +1,88 @@
+service: upselling-shop-api-gateway
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  endpointType: REGIONAL
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+
+functions:
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
+  findOneRandomOffer:
+    handler: src/routes/findOneRandomOffer.handler
+    events:
+      - http:
+          path: /offers/random
+          method: get
+          cors: true
+  findOneRandomProduct:
+    handler: src/routes/findOneRandomProduct.handler
+    events:
+      - http:
+          path: /offers/{offerId}/products/random
+          method: get
+          cors: true
+  trackOfferAcceptance:
+    handler: src/routes/trackOfferAcceptance.handler
+    events:
+      - http:
+          path: /offers/{offerId}/acceptances
+          method: post
+          cors: true
+  trackOfferView:
+    handler: src/routes/trackOfferView.handler
+    events:
+      - http:
+          path: /offers/{offerId}/views
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+
+custom:
+  dotenv:
+    path: .env
+    logging: false
+  serverless-offline:
+    httpPort: ${env:API_PORT}
+  customDomain:
+    domainName: ${ssm:/upselling/${self:provider.stage}/storefront-api-gateway/endpoint/${self:provider.region}}
+    basePath: ''
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map
