@@ -1,4 +1,12 @@
 const calculateDiscountedPrice = (offer, price) => {
+  if (!offer) {
+    throw new Error('`offer` must be provided');
+  }
+
+  if (typeof price !== 'number') {
+    throw new Error('`price` must be a number');
+  }
+
   let discountedPrice = price;
 
   switch (offer.discountType) {
