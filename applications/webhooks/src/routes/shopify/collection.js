@@ -27,6 +27,9 @@ const handler = async (request, response) => {
     });
   }
 
+  // TODO: Track collection.shopifyProductIds
+  // See "Retrieve only collects for a certain collection" at https://shopify.dev/docs/admin-api/rest/reference/products/collect#index-2021-01
+
   if (!collection) {
     try {
       collection = await Collection.create({

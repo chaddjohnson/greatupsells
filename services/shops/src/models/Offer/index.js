@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
-const findRandomByShopifyProductIds = require('./findRandomByShopifyProductIds');
+const findOneRandom = require('./findOneRandom');
 const findRandomProduct = require('./findRandomProduct');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const trackView = require('./trackView');
@@ -120,8 +120,8 @@ schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
 
-schema.statics.findRandomByShopifyProductIds = function (shopifyProductIds) {
-  return findRandomByShopifyProductIds(shopifyProductIds);
+schema.statics.findOneRandom = function (triggerEvent, shopifyProductIds) {
+  return findOneRandom(triggerEvent, shopifyProductIds);
 };
 
 schema.methods.findRandomProduct = function () {
