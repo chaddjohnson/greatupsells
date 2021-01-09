@@ -23,6 +23,7 @@ const handler = async (request, response) => {
         shopifyProductId,
         shopifyProductData: data
       });
+      await product.trackShopifyCollections();
 
       logger.debug(`Product created (${product.toString()}) via webhook`, data);
     } catch (error) {
@@ -41,6 +42,7 @@ const handler = async (request, response) => {
         product.shopifyProductData = data;
 
         await product.save();
+        await product.trackShopifyCollections();
 
         logger.debug(
           `Product updated (${product.toString()}) via webhook`,

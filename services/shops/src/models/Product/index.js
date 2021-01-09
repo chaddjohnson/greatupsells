@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
 const copy = require('./copy');
 const removeCopiedProducts = require('./removeCopiedProducts');
-const preValidateHook = require('./preValidateHook');
+const trackShopifyCollections = require('./trackShopifyCollections');
 const toString = require('./toString');
+const preValidateHook = require('./preValidateHook');
 
 require('mongoose-long')(mongoose);
 
@@ -17,6 +18,9 @@ const schema = new mongoose.Schema(
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
     shopifyProductId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyCollectionIds: [
+      { type: mongoose.Schema.Types.Long, required: true }
+    ],
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
     originalShopifyProductId: {
       type: mongoose.Schema.Types.Long,
@@ -40,6 +44,10 @@ schema.methods.copy = function (shopifyProductDataOverrides) {
 
 schema.statics.removeCopiedProducts = function () {
   return removeCopiedProducts(this);
+};
+
+schema.methods.trackShopifyCollections = function () {
+  return trackShopifyCollections(this);
 };
 
 schema.methods.toString = function () {

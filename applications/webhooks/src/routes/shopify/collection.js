@@ -8,27 +8,15 @@ const handler = async (request, response) => {
   const Collection = await models.get('Collection');
   const Shop = await models.get('Shop');
   const shop = await Shop.findByDomain(domain);
-  const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyCollectionId = data.id;
   let collection = await Collection.findByShopifyCollectionId(
     shopifyCollectionId
   );
-  let productCount = 0;
   const dataIsNewer =
     !collection ||
     !collection.shopifyCollectionData ||
     new Date(data.updated_at) >
       new Date(collection.shopifyCollectionData.updated_at);
-
-  // Track product count for manual (non-smart) collections.
-  if (!data.rules) {
-    productCount = await shopifyApiClient.collect.count({
-      collection_id: shopifyCollectionId
-    });
-  }
-
-  // TODO: Track collection.shopifyProductIds
-  // See "Retrieve only collects for a certain collection" at https://shopify.dev/docs/admin-api/rest/reference/products/collect#index-2021-01
 
   if (!collection) {
     try {
@@ -36,14 +24,13 @@ const handler = async (request, response) => {
         shop,
         shopifyShopId: shop.shopifyShopId,
         shopifyCollectionId,
-        shopifyCollectionData: data,
-        productCount
+        shopifyCollectionData: data
       });
+      await collection.trackShopifyProducts();
 
       logger.debug(
         `Collection created (${collection.toString()}) via webhook`,
-        data,
-        `${collection.productCount} associated products`
+        data
       );
     } catch (error) {
       logger.error(
@@ -60,14 +47,13 @@ const handler = async (request, response) => {
 
         // Update local Shopify data for the collection.
         collection.shopifyCollectionData = data;
-        collection.productCount = productCount;
 
         await collection.save();
+        await collection.trackShopifyProducts();
 
         logger.debug(
           `Collection updated (${collection.toString()}) via webhook`,
-          data,
-          `${collection.productCount} associated products`
+          data
         );
       }
     } catch (error) {

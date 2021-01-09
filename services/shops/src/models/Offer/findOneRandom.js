@@ -32,7 +32,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     (collection) => collection.shopifyCollectionId
   );
 
-  // Randomly find an offer having the trigger event as a trigger AND [one of
+  // Randomly select an offer having the trigger event as a trigger AND [one of
   // the Shopify products as a trigger OR a collection to which one or more
   // of the products belong as a trigger].
   const offers = await Offer.aggregate([

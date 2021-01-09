@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const findOneRandom = require('./findOneRandom');
-const findRandomProduct = require('./findRandomProduct');
+const findOneRandomProduct = require('./findOneRandomProduct');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const trackView = require('./trackView');
 const toString = require('./toString');
@@ -76,8 +76,8 @@ const schema = new mongoose.Schema(
       // notificationBannerTextColor: { type: String, required: true }
     },
     products: [offerProductSchema],
-    minimumProductsQuantity: { type: Int32, required: true },
     collections: [offerCollectionSchema],
+    minimumProductsQuantity: { type: Int32, required: true },
     discountType: {
       type: String,
       enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT'],
@@ -124,8 +124,8 @@ schema.statics.findOneRandom = function (triggerEvent, shopifyProductIds) {
   return findOneRandom(triggerEvent, shopifyProductIds);
 };
 
-schema.methods.findRandomProduct = function () {
-  return findRandomProduct(this);
+schema.methods.findOneRandomProduct = function () {
+  return findOneRandomProduct(this);
 };
 
 schema.methods.calculateDiscountedPrice = function (price) {

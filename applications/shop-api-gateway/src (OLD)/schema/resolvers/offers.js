@@ -128,7 +128,7 @@ module.exports.offerShop = async (root, args, context) => {
 //       return;
 //     }
 
-//     product = await offer.findRandomProduct();
+//     product = await offer.findOneRandomProduct();
 //   } catch (error) {
 //     throw new ApolloError(`Error retrieving product for offer`);
 //   }

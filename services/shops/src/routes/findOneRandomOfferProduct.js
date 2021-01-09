@@ -17,7 +17,7 @@ const handler = async (event, context) => {
       };
     }
 
-    const product = await offer.findRandomProduct();
+    const product = await offer.findOneRandomProduct();
 
     if (!product) {
       return {

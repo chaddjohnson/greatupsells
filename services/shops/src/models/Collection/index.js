@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
+const trackShopifyProducts = require('./trackShopifyProducts');
 const toString = require('./toString');
 
 require('mongoose-long')(mongoose);
@@ -27,6 +28,10 @@ const schema = new mongoose.Schema(
 
 schema.statics.findByShopifyCollectionId = function (shopifyCollectionId) {
   return Collection.findOne({ shopifyCollectionId });
+};
+
+schema.methods.trackShopifyProducts = function () {
+  return trackShopifyProducts(this);
 };
 
 schema.methods.toString = function () {
