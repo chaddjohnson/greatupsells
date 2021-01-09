@@ -4,8 +4,6 @@ const mongodbClient = require('../mongodbClient');
 const trackConversions = require('./trackConversions');
 const cancel = require('./cancel');
 
-require('mongoose-long')(mongoose);
-
 let Order = null;
 
 const schemaOptions = {
@@ -14,8 +12,8 @@ const schemaOptions = {
 const schema = new mongoose.Schema(
   {
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyOrderId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyShopId: { type: Number, required: true },
+    shopifyOrderId: { type: Number, required: true },
     shopifyOrderNumber: { type: Int32, required: true },
     shopifyOrderData: { type: mongoose.Schema.Types.Mixed, required: true },
     revenueIncrease: { type: Number, required: true, default: 0, min: 0 },

@@ -8,8 +8,6 @@ const trackView = require('./trackView');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
-require('mongoose-long')(mongoose);
-
 let Offer = null;
 
 const offerProductSchema = new mongoose.Schema({
@@ -17,7 +15,7 @@ const offerProductSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  shopifyProductId: { type: mongoose.Schema.Types.Long, required: true }
+  shopifyProductId: { type: Number, required: true }
 });
 
 const offerCollectionSchema = new mongoose.Schema({
@@ -25,7 +23,7 @@ const offerCollectionSchema = new mongoose.Schema({
   image: {
     src: { type: String, required: false }
   },
-  shopifyCollectionId: { type: mongoose.Schema.Types.Long, required: true }
+  shopifyCollectionId: { type: Number, required: true }
 });
 
 const schemaOptions = {
@@ -33,7 +31,7 @@ const schemaOptions = {
 };
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyShopId: { type: Number, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     name: { type: String, required: true },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },

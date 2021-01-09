@@ -11,8 +11,6 @@ const trackAcceptedProduct = require('./trackAcceptedProduct');
 const trackAcceptance = require('./trackAcceptance');
 const trackConversion = require('./trackConversion');
 
-require('mongoose-long')(mongoose);
-
 let OfferHit = null;
 
 const schemaOptions = {
@@ -26,7 +24,7 @@ const schema = new mongoose.Schema(
       ref: 'Offer',
       required: true
     },
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyShopId: { type: Number, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     triggerEvent: {
       type: String,
@@ -34,23 +32,11 @@ const schema = new mongoose.Schema(
       required: true
     },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
-    originalShopifyProductId: {
-      type: mongoose.Schema.Types.Long,
-      required: false
-    },
-    originalShopifyVariantId: {
-      type: mongoose.Schema.Types.Long,
-      required: false
-    },
+    originalShopifyProductId: { type: Number, required: false },
+    originalShopifyVariantId: { type: Number, required: false },
     originalShopifyVariantPrice: { type: Number, required: false },
-    acceptedShopifyProductId: {
-      type: mongoose.Schema.Types.Long,
-      required: false
-    },
-    acceptedShopifyVariantId: {
-      type: mongoose.Schema.Types.Long,
-      required: false
-    },
+    acceptedShopifyProductId: { type: Number, required: false },
+    acceptedShopifyVariantId: { type: Number, required: false },
     acceptedShopifyVariantPrice: { type: Number, required: false },
     acceptedShopifyProductQuantity: { type: Number, required: false },
     order: {
@@ -58,7 +44,7 @@ const schema = new mongoose.Schema(
       ref: 'Order',
       required: true
     },
-    shopifyOrderId: { type: mongoose.Schema.Types.Long, required: false },
+    shopifyOrderId: { type: Number, required: false },
     shopifyOrderNumber: { type: Int32, required: false },
     ipAddress: { type: String, required: false },
     acceptedAt: { type: Date, required: false },

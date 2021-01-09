@@ -6,8 +6,6 @@ const trackShopifyCollections = require('./trackShopifyCollections');
 const toString = require('./toString');
 const preValidateHook = require('./preValidateHook');
 
-require('mongoose-long')(mongoose);
-
 let Product = null;
 
 const schemaOptions = {
@@ -16,16 +14,11 @@ const schemaOptions = {
 const schema = new mongoose.Schema(
   {
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyProductId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyCollectionIds: [
-      { type: mongoose.Schema.Types.Long, required: true }
-    ],
+    shopifyShopId: { type: Number, required: true },
+    shopifyProductId: { type: Number, required: true },
+    shopifyCollectionIds: [{ type: Number, required: true }],
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
-    originalShopifyProductId: {
-      type: mongoose.Schema.Types.Long,
-      required: false
-    }
+    originalShopifyProductId: { type: Number, required: false }
   },
   schemaOptions
 );

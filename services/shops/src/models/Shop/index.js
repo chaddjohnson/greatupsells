@@ -17,8 +17,6 @@ const initialize = require('./initialize');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
-require('mongoose-long')(mongoose);
-
 let Shop = null;
 
 const schemaOptions = {
@@ -26,7 +24,7 @@ const schemaOptions = {
 };
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
+    shopifyShopId: { type: Number, required: true },
     name: { type: String, required: true, trim: true },
     domain: { type: String, required: true, trim: true },
     alternateDomain: { type: String, required: false, trim: true },

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
 
-require('mongoose-long')(mongoose);
-
 let User = null;
 
 const schemaOptions = {

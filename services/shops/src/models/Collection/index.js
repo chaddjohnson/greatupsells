@@ -4,8 +4,6 @@ const mongodbClient = require('../mongodbClient');
 const trackShopifyProducts = require('./trackShopifyProducts');
 const toString = require('./toString');
 
-require('mongoose-long')(mongoose);
-
 let Collection = null;
 
 const schemaOptions = {
@@ -14,9 +12,9 @@ const schemaOptions = {
 const schema = new mongoose.Schema(
   {
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
-    shopifyShopId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyCollectionId: { type: mongoose.Schema.Types.Long, required: true },
-    shopifyProductIds: [{ type: mongoose.Schema.Types.Long, required: true }],
+    shopifyShopId: { type: Number, required: true },
+    shopifyCollectionId: { type: Number, required: true },
+    shopifyProductIds: [{ type: Number, required: true }],
     shopifyCollectionData: {
       type: mongoose.Schema.Types.Mixed,
       required: true
