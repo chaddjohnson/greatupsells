@@ -1,24 +1,60 @@
 const mongodbClient = require('../mongodbClient');
 
-const getShopifyCollectionIds = async (product) => {
+const getManualCollectionIds = async (product) => {
   const { shop, shopifyProductId } = product;
   const shopifyApiClient = shop.getShopifyApiClient();
-
-  // Get a list of manual collections this product belongs to.
-  // TODO: Deal with pagination.
-  const collects = await shopifyApiClient.collect.list({
+  let params = {
     product_id: shopifyProductId,
+    limit: 250,
     fields: 'collection_id'
-  });
-  const manualCollectionIds = collects.map((collect) => collect.collection_id);
+  };
+  let manualCollectionIds = [];
 
-  // Get a list of smart collections the product belongs to.
-  // TODO: Deal with pagination.
-  const smartCollections = await shopifyApiClient.smartCollection.list({
+  // Handle pagination.
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const collects = await shopifyApiClient.collect.list(params);
+
+    manualCollectionIds = manualCollectionIds.concat(
+      collects.map((collect) => collect.collection_id)
+    );
+    params = collects.nextPageParameters;
+  } while (params);
+
+  return manualCollectionIds;
+};
+
+const getSmartCollectionIds = async (product) => {
+  const { shop, shopifyProductId } = product;
+  const shopifyApiClient = shop.getShopifyApiClient();
+  let params = {
     product_id: shopifyProductId,
     fields: 'id'
-  });
-  const smartCollectionIds = smartCollections.map(({ id }) => id);
+  };
+  let smartCollectionIds = [];
+
+  // Handle pagination.
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const smartCollections = await shopifyApiClient.smartCollection.list(
+      params
+    );
+
+    smartCollectionIds = smartCollectionIds.concat(
+      smartCollections.map(({ id }) => id)
+    );
+    params = smartCollections.nextPageParameters;
+  } while (params);
+
+  return smartCollectionIds;
+};
+
+const getShopifyCollectionIds = async (product) => {
+  // Get a list of manual collections this product belongs to.
+  const manualCollectionIds = await getManualCollectionIds(product);
+
+  // Get a list of smart collections the product belongs to.
+  const smartCollectionIds = await getSmartCollectionIds(product);
 
   // Combine manual and smart collection IDs.
   const shopifyCollectionIds = manualCollectionIds.concat(smartCollectionIds);
