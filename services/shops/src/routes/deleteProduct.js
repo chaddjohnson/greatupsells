@@ -6,26 +6,35 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { offerId } = event.pathParameters;
+    const { productId } = event.pathParameters;
+    const Product = await models.get('Product');
     const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
+    const product = await Product.findById(productId);
+    const { shopifyProductId } = product;
 
-    if (!offer) {
+    if (!product) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    await Offer.findByIdAndDelete(offerId);
+    // Delete the product.
+    await Product.findByIdAndDelete(productId);
 
-    logger.info(`Offer deleted (${offer.toString()})`);
+    // Delete copied products based on originalShopifyProductId.
+    await Product.deleteMany({ originalShopifyProductId: shopifyProductId });
+
+    // Remove product association from offers.
+    await Offer.updateMany({}, { $pull: { products: { shopifyProductId } } });
+
+    logger.info(`Product deleted (${product.toString()})`);
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    logger.error(`Error deleting offer`, error, event);
+    logger.error(`Error deleting product`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

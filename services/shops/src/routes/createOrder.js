@@ -6,12 +6,13 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const Offer = await models.get('Offer');
+    const Order = await models.get('Order');
     const data = JSON.parse(event.body);
-    const offer = new Offer(data);
+    const order = new Order(data);
+    let offerHits = [];
 
     try {
-      await offer.validate();
+      await order.validate();
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
@@ -19,17 +20,29 @@ const handler = async (event, context) => {
       };
     }
 
-    await offer.save();
-    await offer.execPopulate('shop');
+    await order.save();
+    await order.execPopulate('shop');
 
-    logger.info(`Offer created (${offer.toString()})`, offer);
+    offerHits = await order.trackConversions();
+
+    // Only track orders resulting in offer conversions.
+    if (offerHits.length === 0) {
+      logger.debug(
+        `Skipping order as no conversions were recorded (${order.toString()})`,
+        order
+      );
+
+      await order.deleteOne();
+    } else {
+      logger.info(`Order created (${order.toString()})`, order);
+    }
 
     return {
       statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offer)
+      body: JSON.stringify(order)
     };
   } catch (error) {
-    logger.error(`Error creating offer`, error, event);
+    logger.error(`Error creating order`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

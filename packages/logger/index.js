@@ -68,7 +68,7 @@ const sendMessage = async (source, type, message, data) => {
   }
 };
 
-const debug = (source, message, ...data) => {
+const debug = async (source, message, ...data) => {
   const formattedData = format(data);
 
   console.debug(message, formattedData);
@@ -78,7 +78,6 @@ const info = async (source, message, ...data) => {
   const formattedData = format(data);
 
   console.info(message, formattedData);
-
   await sendMessage(source, 'info', message, data);
 };
 
@@ -86,7 +85,6 @@ const warn = async (source, message, ...data) => {
   const formattedData = format(data);
 
   console.warn(message, formattedData);
-
   await sendMessage(source, 'warn', message, data);
 };
 
@@ -94,7 +92,6 @@ const error = async (source, message, ...data) => {
   const formattedData = format(data);
 
   console.error(message, formattedData);
-
   await sendMessage(source, 'error', message, data);
 };
 

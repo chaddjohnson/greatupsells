@@ -22,6 +22,17 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
+schema.options.toJSON = {
+  transform(document, transformed) {
+    transformed.orderNumber = document.orderNumber;
+    return transformed;
+  }
+};
+
+schema.virtual('orderNumber').get(function () {
+  return `${this.shopifyShopId}-${this.shopifyOrderNumber}`;
+});
+
 schema.statics.findByShopifyOrderId = function (shopifyOrderId) {
   return Order.findOne({ shopifyOrderId });
 };

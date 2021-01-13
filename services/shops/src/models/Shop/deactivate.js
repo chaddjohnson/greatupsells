@@ -1,3 +1,5 @@
+const logger = require('@neatowebsolutions/upselling-logger');
+
 module.exports = async (shop) => {
   // Record when the uninstall occurred.
   shop.uninstalledAt = shop.uninstalledAt || Date.now();
@@ -19,4 +21,10 @@ module.exports = async (shop) => {
   shop.plan.billingOn = undefined;
 
   await shop.save();
+
+  logger.info(`Deactivated shop (${shop.toString()})`);
+
+  if (shop.shopifyPlan === 'cancelled') {
+    logger.info(`Shop closed (${shop.toString()})`);
+  }
 };

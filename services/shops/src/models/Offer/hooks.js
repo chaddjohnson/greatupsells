@@ -1,8 +1,12 @@
-const logger = require('@neatowebsolutions/upselling-logger');
+const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
 
 const preValidate = async (offer, next) => {
   const Shop = mongodbClient.connection.model('Shop');
+
+  if (typeof offer.shop === 'string') {
+    offer.shop = mongoose.Types.ObjectId(offer.shop);
+  }
 
   // Set up reference to shop if missing.
   if (offer.shopifyShopId && !offer.shop) {
@@ -16,29 +20,4 @@ const preValidate = async (offer, next) => {
   next();
 };
 
-const postSave = async (offer, next) => {
-  await offer.execPopulate('shop');
-
-  logger.info(
-    `Offer ${
-      offer.$locals.wasNew ? 'created' : 'updated'
-    } (${offer.toString()})`,
-    offer.toObject()
-  );
-
-  next();
-};
-
-const postRemove = async (offer, next) => {
-  await offer.execPopulate('shop');
-
-  logger.info(`Offer deleted (${offer.toString()})`);
-
-  next();
-};
-
-module.exports = {
-  preValidate,
-  postSave,
-  postRemove
-};
+module.exports.preValidate = preValidate;

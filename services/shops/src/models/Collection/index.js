@@ -3,6 +3,7 @@ const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const trackShopifyProducts = require('./trackShopifyProducts');
 const toString = require('./toString');
+const hooks = require('./hooks');
 
 let Collection = null;
 
@@ -19,6 +20,7 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       required: true
     },
+    title: { type: String, required: true },
     productCount: { type: Int32, required: true, default: 0, min: 0 }
   },
   schemaOptions
@@ -35,6 +37,10 @@ schema.methods.trackShopifyProducts = function () {
 schema.methods.toString = function () {
   return toString(this);
 };
+
+schema.pre('validate', function (next) {
+  hooks.preValidate(this, next);
+});
 
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyCollectionId: 1 }, { unique: true });

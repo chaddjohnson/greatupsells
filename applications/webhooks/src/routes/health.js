@@ -1,6 +1,10 @@
 // const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 // const { mongodbClient } = require('@neatowebsolutions/upselling-models');
 
+// TODO: Use middy + cors plugin
+
+// TODO: Check Shops Service API accessibility.
+
 const handler = async (request, response) => {
   // try {
   // await mongodbClient.connect();

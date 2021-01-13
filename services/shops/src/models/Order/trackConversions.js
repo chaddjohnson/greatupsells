@@ -20,6 +20,10 @@ const trackConversions = async (order) => {
     )
   );
 
+  if (offerHits.length === 0) {
+    return offerHits;
+  }
+
   const session = await mongodbClient.connection.startSession();
 
   // Use a transaction.

@@ -25,6 +25,7 @@ const schemaOptions = {
 const schema = new mongoose.Schema(
   {
     shopifyShopId: { type: Number, required: true },
+    shopifyShopData: { type: mongoose.Schema.Types.Mixed, required: true },
     name: { type: String, required: true, trim: true },
     domain: { type: String, required: true, trim: true },
     alternateDomain: { type: String, required: false, trim: true },

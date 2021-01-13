@@ -6,26 +6,24 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
+    const { shopId } = event.pathParameters;
+    const Shop = await models.get('Shop');
+    const shop = await Shop.findById(shopId);
 
-    if (!offer) {
+    if (!shop) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    await Offer.findByIdAndDelete(offerId);
-
-    logger.info(`Offer deleted (${offer.toString()})`);
+    await shop.deactivate();
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    logger.error(`Error deleting offer`, error, event);
+    logger.error(`Error deactivating shop`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

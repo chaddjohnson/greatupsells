@@ -6,26 +6,26 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
+    const { orderId } = event.pathParameters;
+    const Order = await models.get('Order');
+    const order = await Order.findById(orderId);
 
-    if (!offer) {
+    if (!order) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    await Offer.findByIdAndDelete(offerId);
+    await order.cancel();
 
-    logger.info(`Offer deleted (${offer.toString()})`);
+    logger.info(`Order canceled (${order.toString()})`);
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    logger.error(`Error deleting offer`, error, event);
+    logger.error(`Error canceling order`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

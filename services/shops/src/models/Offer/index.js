@@ -176,18 +176,6 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
-schema.pre('save', function () {
-  this.$locals.wasNew = this.isNew;
-});
-
-schema.post('save', function (offer, next) {
-  hooks.postSave(offer, next);
-});
-
-schema.post('remove', function (offer, next) {
-  hooks.postRemove(offer, next);
-});
-
 schema.index({ shopifyShopId: 1 });
 
 Offer = mongodbClient.connection.model('Offer', schema);

@@ -31,6 +31,7 @@ module.exports = async (shop) => {
       shop.plan.active = false;
       shop.plan.chargeId = undefined;
       shop.plan.upgradedAt = undefined;
+      shop.plan.billingOn = undefined;
 
       return await shop.save();
     }
@@ -56,7 +57,7 @@ module.exports = async (shop) => {
     await shop.save();
 
     logger.info(
-      `Activated recurring charge ${shop.plan.chargeId} for for shop ${shop.domain}`,
+      `Activated recurring charge ${shop.plan.chargeId} for shop ${shop.domain} and set plan to ${shop.plan.level}`,
       recurringChargeData
     );
   } catch (error) {

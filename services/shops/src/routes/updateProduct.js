@@ -6,15 +6,15 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
+    const { productId } = event.pathParameters;
+    const Product = await models.get('Product');
+    const product = await Product.findById(productId);
     const data = JSON.parse(event.body);
 
-    Object.assign(offer, data);
+    Object.assign(product, data);
 
     try {
-      await offer.validate();
+      await product.validate();
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
@@ -22,17 +22,18 @@ const handler = async (event, context) => {
       };
     }
 
-    await offer.save();
-    await offer.execPopulate('shop');
+    await product.save();
+    await product.trackShopifyCollections();
+    await product.execPopulate('shop');
 
-    logger.info(`Offer updated (${offer.toString()})`, offer);
+    logger.info(`Product updated (${product.toString()})`, product);
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offer)
+      body: JSON.stringify(product)
     };
   } catch (error) {
-    logger.error(`Error updating offer`, error, event);
+    logger.error(`Error updating product`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

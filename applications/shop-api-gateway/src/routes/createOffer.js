@@ -23,6 +23,7 @@ const handler = middy(async (event, context) => {
     const shop = await httpClient.get(`/shops/${shopId}`);
     const data = JSON.parse(event.body);
 
+    data.shop = shop._id;
     data.shopifyShopId = shop.shopifyShopId;
 
     const offer = await httpClient.post(`/offers/${offerId}`, data);

@@ -15,10 +15,14 @@ module.exports.handler = async (event, context) => {
 
     // const Shop = await models.get('Shop');
 
-    // ...
     // TODO: Run in parallel for shops.
+    try {
+      //
+    } catch (error) {
+      logger.error(`Error activating/deactivating shop ${shop.domain}`, error);
+    }
   } catch (error) {
-    logger.warn(`... failed`, error, event);
+    logger.error(`Error activating/deactivating shop ${shop.domain}`, error);
     throw error;
   }
 };

@@ -6,15 +6,12 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
+    const Collection = await models.get('Collection');
     const data = JSON.parse(event.body);
-
-    Object.assign(offer, data);
+    const collection = new Collection(data);
 
     try {
-      await offer.validate();
+      await collection.validate();
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
@@ -22,17 +19,18 @@ const handler = async (event, context) => {
       };
     }
 
-    await offer.save();
-    await offer.execPopulate('shop');
+    await collection.save();
+    await collection.trackShopifyProducts();
+    await collection.execPopulate('shop');
 
-    logger.info(`Offer updated (${offer.toString()})`, offer);
+    logger.info(`Collection created (${collection.toString()})`, collection);
 
     return {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify(offer)
+      statusCode: StatusCodes.CREATED,
+      body: JSON.stringify(collection)
     };
   } catch (error) {
-    logger.error(`Error updating offer`, error, event);
+    logger.error(`Error creating collection`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -65,16 +65,15 @@ The following are used:
 * Node.js
 * React (with Hooks)
 * Next.js
-* GraphQL
+* REST
 * Apollo Server (AWS Lambda integration)
 * Lerna
 * webpack (v4)
-* Styled Components
+* Emotion
 * Mongoose
 * Serverless
-* Express
 * Shopify Polaris
-* Semantic UI React
+* Material UI
 
 ### Coding Conventions
 
@@ -91,6 +90,7 @@ Hosting is with AWS. The following AWS services are used:
 
 * API Gateway
 * Lambda
+* EventBridge
 * EC2
 * SNS
 * SQS

@@ -18,7 +18,7 @@ module.exports = async (shop) => {
     // Cancel the plan if it was activated and not canceled.
     if (planActive) {
       logger.info(
-        `Cancelling recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
+        `Canceling recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
       );
 
       try {
@@ -27,11 +27,11 @@ module.exports = async (shop) => {
         );
 
         logger.info(
-          `Cancelled recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
+          `Canceled recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
         );
       } catch (error) {
         logger.error(
-          `Error cancelling existing recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
+          `Error canceling existing recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
           error
         );
       }

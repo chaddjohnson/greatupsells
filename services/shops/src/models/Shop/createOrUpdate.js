@@ -7,20 +7,7 @@ const createShop = async (shopDomain, accessToken) => {
   const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyShopData = await shopifyApiClient.shop.get();
 
-  shop.shopifyShopId = shopifyShopData.id;
-  shop.name = shopifyShopData.name;
-  shop.contactName = shopifyShopData.shop_owner;
-  shop.contactEmail = shopifyShopData.email;
-  shop.contactPhone = shopifyShopData.phone;
-  shop.countryCode = shopifyShopData.country_code;
-  shop.currency = shopifyShopData.currency;
-  shop.locale = shopifyShopData.primary_locale;
-  shop.timezone = shopifyShopData.iana_timezone;
-  shop.shopifyPlan = shopifyShopData.plan_name;
-
-  if (shopifyShopData.domain !== shopifyShopData.myshopify_domain) {
-    shop.alternateDomain = shopifyShopData.domain;
-  }
+  shop.shopifyShopData = shopifyShopData;
 
   await shop.save();
 

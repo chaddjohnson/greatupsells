@@ -4,7 +4,7 @@ const copy = require('./copy');
 const removeCopiedProducts = require('./removeCopiedProducts');
 const trackShopifyCollections = require('./trackShopifyCollections');
 const toString = require('./toString');
-const preValidateHook = require('./preValidateHook');
+const hooks = require('./hooks');
 
 let Product = null;
 
@@ -18,7 +18,8 @@ const schema = new mongoose.Schema(
     shopifyProductId: { type: Number, required: true },
     shopifyCollectionIds: [{ type: Number, required: true }],
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
-    originalShopifyProductId: { type: Number, required: false }
+    originalShopifyProductId: { type: Number, required: false },
+    title: { type: String, required: true }
   },
   schemaOptions
 );
@@ -48,7 +49,7 @@ schema.methods.toString = function () {
 };
 
 schema.pre('validate', function (next) {
-  preValidateHook(this, next);
+  hooks.prevalidate(this, next);
 });
 
 schema.index({ shopifyShopId: 1 });

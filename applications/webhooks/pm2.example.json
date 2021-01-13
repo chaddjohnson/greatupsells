@@ -1,9 +1,0 @@
-{
-  "name": "upselling-webhooks",
-  "script": "src/app.js",
-  "cwd": "/home/upselling/www/upselling-webhooks/current",
-  "out_file": "/home/upselling/www/upselling-webhooks/logs/app.log",
-  "error_file": "/home/upselling/www/upselling-webhooks/logs/error.log",
-  "instances": "max",
-  "exec_mode": "cluster"
-}

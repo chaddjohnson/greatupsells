@@ -10,6 +10,7 @@ const handler = async (event, context) => {
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
     const data = JSON.parse(event.body);
+    const shopifyPlanCanceled = shop.shopifyPlan === 'cancelled';
 
     if (!shop) {
       return {
@@ -30,6 +31,11 @@ const handler = async (event, context) => {
     }
 
     await shop.save();
+
+    // Deactivate the shop for our app if the Shopify shop plan is canceled.
+    if (!shopifyPlanCanceled && shop.shopifyPlan === 'cancelled') {
+      await shop.deactivate();
+    }
 
     return {
       statusCode: StatusCodes.OK,
