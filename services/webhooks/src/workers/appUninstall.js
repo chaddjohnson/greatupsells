@@ -25,7 +25,7 @@ const processRecord = async (record) => {
 
     await logger.info(`Deactivating shop ${shop.domain} via webhook`, record);
 
-    await httpClient.get(`/shops/${shop._id}/deactivation`);
+    await httpClient.post(`/shops/${shop._id}/deactivation`);
   } catch (error) {
     await logger.error(`Error handling app uninstall webhook`, error, record);
   }

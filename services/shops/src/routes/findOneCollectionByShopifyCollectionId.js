@@ -8,7 +8,9 @@ const handler = async (event, context) => {
   try {
     const { shopifyCollectionId } = event.pathParameters;
     const Collection = await models.get('Collection');
-    const collection = await Collection.findByDomain(shopifyCollectionId);
+    const collection = await Collection.findByShopifyCollectionId(
+      shopifyCollectionId
+    );
 
     if (!collection) {
       return {
