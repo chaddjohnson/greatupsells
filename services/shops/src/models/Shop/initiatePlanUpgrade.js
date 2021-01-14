@@ -12,9 +12,16 @@ const initiatePlanUpgrade = async (shop) => {
       `Creating recurring charge for shop (${shop.toString()})`
     );
 
-    // Cancel any existing plan.
-    if (shop.plan.chargeId) {
-      await shop.cancelPlan();
+    try {
+      // Cancel any existing plan.
+      if (shop.plan.chargeId) {
+        await shop.cancelPlan();
+      }
+    } catch (error) {
+      await logger.warn(
+        `Unable to cancel existing recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
+        error
+      );
     }
 
     const shopifyApiClient = shop.getShopifyApiClient();
