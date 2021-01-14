@@ -42,8 +42,10 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
+schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyCollectionId: 1 }, { unique: true });
+schema.index({ shopifyProductIds: 1 });
 
 Collection = mongodbClient.connection.model('Collection', schema);
 

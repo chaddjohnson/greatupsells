@@ -165,7 +165,6 @@ schema.pre('validate', function (next) {
 schema.index({ shopifyShopId: 1 }, { unique: true });
 schema.index({ domain: 1 }, { unique: true });
 schema.index({ alternateDomain: 1 });
-schema.index({ 'plan.upgradedAt': 1 });
 schema.index({ createdAt: -1 });
 
 Shop = mongodbClient.connection.model('Shop', schema);

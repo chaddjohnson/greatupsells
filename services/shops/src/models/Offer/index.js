@@ -31,8 +31,8 @@ const schemaOptions = {
 };
 const schema = new mongoose.Schema(
   {
-    shopifyShopId: { type: Number, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
+    shopifyShopId: { type: Number, required: true },
     name: { type: String, required: true },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
     viewCount: { type: Int32, required: true, default: 0, min: 0 },
@@ -176,7 +176,10 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
+schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
+schema.index({ shop: 1, triggerEvent: 1 });
+schema.index({ createdAt: -1 });
 
 Offer = mongodbClient.connection.model('Offer', schema);
 

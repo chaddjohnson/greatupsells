@@ -24,8 +24,8 @@ const schema = new mongoose.Schema(
       ref: 'Offer',
       required: true
     },
-    shopifyShopId: { type: Number, required: true },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
+    shopifyShopId: { type: Number, required: true },
     triggerEvent: {
       type: String,
       enum: ['ADD', 'CART', 'CHECKOUT', 'LOAD', 'EXIT'],
@@ -139,8 +139,10 @@ schema.methods.trackConversion = function (order) {
 //   hooks.preValidate(this, next);
 // });
 
-schema.index({ shopifyShopId: 1, ipAddress: 1 });
-schema.index({ shopifyProductId: 1 }, { unique: true, sparse: true });
+schema.index({ offer: 1 });
+schema.index({ shop: 1, ipAddress: 1 });
+schema.index({ acceptedShopifyVariantId: 1 });
+schema.index({ order: 1 });
 
 OfferHit = mongodbClient.connection.model('OfferHit', schema);
 

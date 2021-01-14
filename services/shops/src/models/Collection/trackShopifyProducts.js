@@ -59,10 +59,10 @@ const trackProductCollections = async (collection) => {
 const trackShopifyProducts = async (collection) => {
   await collection.execPopulate('shop');
 
-  // Update `collection.shopifyProductIds` for the collection.
+  // Track products for the collection.
   await trackCollectionProducts(collection);
 
-  // Update `product.shopifyCollectionIds` for collection products.
+  // Track collections for the product.
   await trackProductCollections(collection);
 };
 
