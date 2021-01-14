@@ -18,7 +18,6 @@ const handler = async (event, context) => {
     }
 
     await order.cancel();
-
     await logger.info(`Order canceled (${order.toString()})`);
 
     return {
