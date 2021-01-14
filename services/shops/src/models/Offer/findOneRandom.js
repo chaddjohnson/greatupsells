@@ -8,7 +8,8 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent) => {
     {
       $match: {
         shop: shop._id,
-        triggerEvent
+        triggerEvent,
+        enabled: true
       }
     },
     { $sample: { size: 1 } }
@@ -41,7 +42,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
         shop: shop._id,
         triggerEvent,
         'triggerProducts.shopifyProductId': { $in: shopifyProductIds },
-        'triggerCollections.shopifyCollectionId': { $in: shopifyCollectionIds }
+        'triggerCollections.shopifyCollectionId': { $in: shopifyCollectionIds },
+        enabled: true
       }
     },
     { $sample: { size: 1 } }
