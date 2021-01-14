@@ -1,6 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 
-module.exports = async (shop) => {
+const activatePlanUpgrade = async (shop) => {
   const shopifyApiClient = shop.getShopifyApiClient();
 
   try {
@@ -69,3 +69,5 @@ module.exports = async (shop) => {
     throw error;
   }
 };
+
+module.exports = activatePlanUpgrade;

@@ -1,6 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 
-module.exports = async (shop) => {
+const deactivate = async (shop) => {
   // Record when the uninstall occurred.
   shop.uninstalledAt = shop.uninstalledAt || Date.now();
 
@@ -28,3 +28,5 @@ module.exports = async (shop) => {
     await logger.info(`Shop closed (${shop.toString()})`);
   }
 };
+
+module.exports = deactivate;

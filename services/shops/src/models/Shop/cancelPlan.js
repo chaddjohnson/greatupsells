@@ -1,6 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 
-module.exports = async (shop) => {
+const cancelPlan = async (shop) => {
   try {
     if (!shop.plan.chargeId) {
       return;
@@ -53,3 +53,5 @@ module.exports = async (shop) => {
     );
   }
 };
+
+module.exports = cancelPlan;

@@ -5,7 +5,7 @@ const addProductTypeRule = require('./addProductTypeRule');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
 
-module.exports = async (shop) => {
+const initialize = async (shop) => {
   await logger.info(`(Re)initializing shop (${shop.toString()})`);
 
   await createWebhooks(shop);
@@ -14,3 +14,5 @@ module.exports = async (shop) => {
   await importCollections(shop);
   await importProducts(shop);
 };
+
+module.exports = initialize;

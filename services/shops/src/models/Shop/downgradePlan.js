@@ -1,6 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 
-module.exports = async (shop) => {
+const downgradePlan = async (shop) => {
   try {
     // Do nothing if the shop is already downgraded.
     if (shop.plan === 'FREE') {
@@ -15,3 +15,5 @@ module.exports = async (shop) => {
     throw error;
   }
 };
+
+module.exports = downgradePlan;

@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
 const mongodbClient = require('../mongodbClient');
 
-module.exports = async () => {
+const removeCopiedProducts = async () => {
   const Product = mongodbClient.connection.model('Product');
 
   // Keep copied products for three months to match how long abandoned
@@ -29,3 +29,5 @@ module.exports = async () => {
     { parallel: 25 }
   );
 };
+
+module.exports = removeCopiedProducts;

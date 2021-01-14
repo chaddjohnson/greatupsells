@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-module.exports = async (shop) => {
+const validateAccessToken = async (shop) => {
   if (!shop.accessToken) {
     throw new Error(`No access token available for shop ${shop.domain}`);
   }
@@ -24,3 +24,5 @@ module.exports = async (shop) => {
     }
   }
 };
+
+module.exports = validateAccessToken;

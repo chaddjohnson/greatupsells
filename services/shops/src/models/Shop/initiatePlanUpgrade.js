@@ -1,7 +1,7 @@
 const getenv = require('getenv');
 const logger = require('@neatowebsolutions/upselling-logger');
 
-module.exports = async (shop) => {
+const initiatePlanUpgrade = async (shop) => {
   try {
     // Do nothing if the shop is already upgraded.
     if (shop.plan.level !== 'FREE') {
@@ -49,3 +49,5 @@ module.exports = async (shop) => {
     throw error;
   }
 };
+
+module.exports = initiatePlanUpgrade;
