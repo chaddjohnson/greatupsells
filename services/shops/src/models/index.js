@@ -14,7 +14,7 @@ const modelPathsMap = {
   Product: path.join(__dirname, './Product'),
   Shop: path.join(__dirname, './Shop'),
   // Stat: path.join(__dirname, './Stat'),
-  User: path.join(__dirname, './User'),
+  User: path.join(__dirname, './User')
 };
 
 const loadModels = () => {
@@ -28,7 +28,7 @@ const loadModels = () => {
   modelMap = modelNames.reduce((map, modelName) => {
     return {
       ...map,
-      [modelName]: require(modelPathsMap[modelName]), // eslint-disable-line import/no-dynamic-require
+      [modelName]: require(modelPathsMap[modelName]) // eslint-disable-line import/no-dynamic-require
     };
   }, {});
 
@@ -58,7 +58,7 @@ const getAll = async () => ({
   Product: await get('Product'),
   Shop: await get('Shop'),
   // Stat: await get('Stat'),
-  User: await get('User'),
+  User: await get('User')
 });
 
 // Use Bluebird for promises.
@@ -66,5 +66,5 @@ mongoose.Promise = Promise;
 
 module.exports = {
   get,
-  getAll,
+  getAll
 };
