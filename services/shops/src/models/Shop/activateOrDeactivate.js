@@ -8,7 +8,7 @@ const activateOrDeactivate = async (shop) => {
 
   // If no access token is available, just mark the shop as inactive.
   if (!shop.accessToken) {
-    return shop.deactivate();
+    return await shop.deactivate();
   }
 
   try {
@@ -43,7 +43,7 @@ const activateOrDeactivate = async (shop) => {
       error.response &&
       errorCodeWhitelist.includes(error.response.statusCode)
     ) {
-      return shop.deactivate();
+      return await shop.deactivate();
     }
   }
 };

@@ -25,6 +25,7 @@
         "functions": false
       }
     ],
+    "no-return-await": "off",
     "object-curly-spacing": ["warn", "always"],
     "max-len": "off",
     "no-plusplus": "off",

@@ -23,7 +23,7 @@ const findRandomOffer = async (shop, triggerEvent, shopifyProductIds) => {
 
   const Offer = mongodbClient.connection.model('Offer');
 
-  return Offer.findOneRandom(shop, triggerEvent, shopifyProductIds);
+  return await Offer.findOneRandom(shop, triggerEvent, shopifyProductIds);
 };
 
 module.exports = findRandomOffer;

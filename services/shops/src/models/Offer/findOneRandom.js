@@ -73,13 +73,13 @@ const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {
   }
 
   if (shopifyProductIdsRequired) {
-    return findOneRandomByTriggerEventAndShopifyProductIds(
+    return await findOneRandomByTriggerEventAndShopifyProductIds(
       shop,
       triggerEvent,
       shopifyProductIds
     );
   } else {
-    return findOneRandomByTriggerEvent(shop, triggerEvent);
+    return await findOneRandomByTriggerEvent(shop, triggerEvent);
   }
 };
 
