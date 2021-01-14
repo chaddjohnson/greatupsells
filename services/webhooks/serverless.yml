@@ -1,4 +1,4 @@
-service: upselling-webhooks
+service: upselling-webhooks-service
 
 provider:
   name: aws

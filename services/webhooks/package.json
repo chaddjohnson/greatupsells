@@ -1,5 +1,5 @@
 {
-  "name": "upselling-webhooks",
+  "name": "upselling-webhooks-service",
   "version": "0.0.0",
   "scripts": {
     "lint": "eslint src/**/*.js",

@@ -13,4 +13,4 @@ lerna run infrastructure --stream --scope=upselling-logs-service
 # lerna run infrastructure --stream --scope=upselling-storefront-api-gateway
 # lerna run infrastructure --stream --scope=upselling-admin-api-gateway
 # lerna run infrastructure --stream --scope=upselling-shopify-admin
-# lerna run infrastructure --stream --scope=upselling-webhooks
+# lerna run infrastructure --stream --scope=upselling-webhooks-service
