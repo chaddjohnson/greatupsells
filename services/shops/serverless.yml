@@ -23,56 +23,60 @@ provider:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
 
 functions:
-  health:
-    handler: src/routes/health.handler
+  cancelOrder:
+    handler: src/routes/cancelOrder.handler
     events:
       - http:
-          path: /health
-          method: get
-          cors: true
-  region:
-    handler: src/routes/region.handler
+          path: /order/{orderId}/cancelation
+          method: post
+  createCollection:
+    handler: src/routes/createCollection.handler
     events:
       - http:
-          path: /region
-          method: get
-          cors: true
+          path: /collections
+          method: post
   createOffer:
     handler: src/routes/createOffer.handler
     events:
       - http:
           path: /offers
           method: post
+  createOrder:
+    handler: src/routes/createOrder.handler
+    events:
+      - http:
+          path: /orders
+          method: post
+  createProduct:
+    handler: src/routes/createProduct.handler
+    events:
+      - http:
+          path: /products
+          method: post
+  deactivateShop:
+    handler: src/routes/deactivateShop.handler
+    events:
+      - http:
+          path: /shops/{shopId}/deactivation
+          method: post
+  deleteCollection:
+    handler: src/routes/deleteCollection.handler
+    events:
+      - http:
+          path: /collections/{collectionId}
+          method: delete
   deleteOffer:
     handler: src/routes/deleteOffer.handler
     events:
       - http:
           path: /offers
           method: delete
-  findOffers:
-    handler: src/routes/findOffers.handler
+  deleteProduct:
+    handler: src/routes/deleteProduct.handler
     events:
       - http:
-          path: /offers
-          method: get
-  findOneOffer:
-    handler: src/routes/findOneOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: get
-  updateOffer:
-    handler: src/routes/updateOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: put
-  trackOfferAcceptance:
-    handler: src/routes/trackOfferAcceptance.handler
-    events:
-      - http:
-          path: /offers/{offerId}/acceptances
-          method: post
+          path: /products/{productId}
+          method: delete
   findOfferAcceptances:
     handler: src/routes/findOfferAcceptances.handler
     events:
@@ -97,23 +101,59 @@ functions:
       - http:
           path: /offers/{offerId}/revenue-increases
           method: get
-  trackOfferView:
-    handler: src/routes/trackOfferView.handler
+  findOffers:
+    handler: src/routes/findOffers.handler
     events:
       - http:
-          path: /offers/{offerId}/views
-          method: post
+          path: /offers
+          method: get
   findOfferViews:
     handler: src/routes/findOfferViews.handler
     events:
       - http:
           path: /offers/{offerId}/views
           method: get
+  findOneCollectionByShopifyCollectionId:
+    handler: src/routes/findOneCollectionByShopifyCollectionId.handler
+    events:
+      - http:
+          path: /collections/shopify-collection-id/{shopifyCollectionId}
+          method: get
+  findOneOffer:
+    handler: src/routes/findOneOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: get
+  findOneOrder:
+    handler: src/routes/findOneOrder.handler
+    events:
+      - http:
+          path: /orders/{orderId}
+          method: get
+  findOneOrderByShopifyOrderId:
+    handler: src/routes/findOneOrderByShopifyOrderId.handler
+    events:
+      - http:
+          path: /orders/shopify-order-id/{shopifyOrderId}
+          method: get
+  findOneProductByShopifyProductId:
+    handler: src/routes/findOneProductByShopifyProductId.handler
+    events:
+      - http:
+          path: /orders/shopify-product-id/{shopifyProductId}
+          method: get
   findOneRandomOfferProduct:
     handler: src/routes/findOneRandomOfferProduct.handler
     events:
       - http:
           path: /offers/{offerId}/products/random
+          method: get
+  findOneRandomShopOffer:
+    handler: src/routes/findOneRandomShopOffer.handler
+    events:
+      - http:
+          path: /shops/{shopId}/offers/random
           method: get
   findOneShop:
     handler: src/routes/findOneShop.handler
@@ -127,24 +167,62 @@ functions:
       - http:
           path: /shops/domain/{domain}
           method: get
-  updateShop:
-    handler: src/routes/updateShop.handler
-    events:
-      - http:
-          path: /shops/{shopId}
-          method: put
   findShopOffers:
     handler: src/routes/findShopOffers.handler
     events:
       - http:
           path: /shops/{shopId}/offers
           method: get
-  findOneRandomShopOffer:
-    handler: src/routes/findOneRandomShopOffer.handler
+  health:
+    handler: src/routes/health.handler
     events:
       - http:
-          path: /shops/{shopId}/offers/random
+          path: /health
           method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
+  trackOfferAcceptance:
+    handler: src/routes/trackOfferAcceptance.handler
+    events:
+      - http:
+          path: /offers/{offerId}/acceptances
+          method: post
+  trackOfferView:
+    handler: src/routes/trackOfferView.handler
+    events:
+      - http:
+          path: /offers/{offerId}/views
+          method: post
+  updateCollection:
+    handler: src/routes/updateCollection.handler
+    events:
+      - http:
+          path: /collections/{collectionId}
+          method: put
+  updateOffer:
+    handler: src/routes/updateOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: put
+  updateProduct:
+    handler: src/routes/updateProduct.handler
+    events:
+      - http:
+          path: /products/{productId}
+          method: put
+  updateShop:
+    handler: src/routes/updateShop.handler
+    events:
+      - http:
+          path: /shops/{shopId}
+          method: put
 
   activateAndDeactivateShops:
     handler: src/workers/activateAndDeactivateShops.handler
