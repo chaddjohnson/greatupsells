@@ -18,8 +18,8 @@ const schema = new mongoose.Schema(
     shopifyProductId: { type: Number, required: true },
     shopifyCollectionIds: [{ type: Number, required: true }],
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
-    originalShopifyProductId: { type: Number, required: false },
-    title: { type: String, required: true }
+    title: { type: String, required: true },
+    originalShopifyProductId: { type: Number, required: false }
   },
   schemaOptions
 );
@@ -37,7 +37,7 @@ schema.methods.copy = function (shopifyProductDataOverrides) {
 };
 
 schema.statics.removeCopiedProducts = function () {
-  return removeCopiedProducts(this);
+  return removeCopiedProducts();
 };
 
 schema.methods.trackShopifyCollections = function () {
