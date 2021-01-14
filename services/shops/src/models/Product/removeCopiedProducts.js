@@ -7,7 +7,7 @@ const removeCopiedProducts = async () => {
   // Keep copied products for three months to match how long abandoned
   // checkouts are kept.
   const criteria = {
-    'shopifyProductData.product_type': 'upsellcrosssell',
+    originalShopifyProductId: { $ne: null },
     createdAt: {
       $lte: moment().utc().subtract(3, 'months').toDate()
     }
