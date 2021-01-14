@@ -4,7 +4,6 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
-const findRandomOffer = require('./findRandomOffer');
 const validateAccessToken = require('./validateAccessToken');
 const deactivate = require('./deactivate');
 const activateOrDeactivate = require('./activateOrDeactivate');
@@ -103,10 +102,6 @@ schema.statics.createOrUpdate = function (shopDomain, accessToken) {
 
 schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
-};
-
-schema.methods.findRandomOffer = function (triggerEvent, shopifyProductIds) {
-  return findRandomOffer(this, triggerEvent, shopifyProductIds);
 };
 
 schema.methods.deactivate = function () {

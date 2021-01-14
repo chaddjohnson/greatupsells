@@ -10,8 +10,13 @@ const handler = async (event, context) => {
     const { event: triggerEvent } = event.queryStringParameters;
     const { shopifyProductIds } = event.multiValueQueryStringParameters;
     const Shop = await models.get('Shop');
+    const Offer = await models.get('Offer');
     const shop = await Shop.findById(shopId);
-    const offer = await shop.findRandomOffer(triggerEvent, shopifyProductIds);
+    const offer = await Offer.findOneRandom(
+      shop,
+      triggerEvent,
+      shopifyProductIds
+    );
 
     return {
       statusCode: StatusCodes.OK,
