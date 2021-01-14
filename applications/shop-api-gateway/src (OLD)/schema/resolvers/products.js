@@ -27,7 +27,7 @@ module.exports.product = async (root, args, context) => {
   }
 
   if (shop.id !== product.shop.id) {
-    logger.warn(
+    await logger.warn(
       `Unauthorized request for product (${product.toString()}) by shop (${shop.toString()})`
     );
     throw new ForbiddenError('Forbidden');
@@ -61,7 +61,7 @@ module.exports.shopProducts = async (root, args, context) => {
   try {
     return await Product.findByShopId(root.id);
   } catch (error) {
-    logger.error(`Error retrieving products for shop ${root.id}`, error);
+    await logger.error(`Error retrieving products for shop ${root.id}`, error);
     throw new ApolloError('Error retrieving shop products');
   }
 };

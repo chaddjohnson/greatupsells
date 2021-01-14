@@ -18,7 +18,7 @@ module.exports = async (shop) => {
       return;
     }
 
-    logger.info(`Activating shop ${shop.domain}`);
+    await logger.info(`Activating shop ${shop.domain}`);
 
     // Mark the shop as active.
     shop.active = true;

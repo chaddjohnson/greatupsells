@@ -15,14 +15,14 @@ module.exports = async (shop) => {
       );
     }
 
-    logger.info(`Activating recurring charge for shop ${shop.domain}`);
+    await logger.info(`Activating recurring charge for shop ${shop.domain}`);
 
     let recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
       shop.plan.chargeId
     );
 
     if (recurringChargeData.status === 'declined') {
-      logger.info(
+      await logger.info(
         `Aborting activation for recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
       );
 
@@ -56,12 +56,12 @@ module.exports = async (shop) => {
 
     await shop.save();
 
-    logger.info(
+    await logger.info(
       `Activated recurring charge ${shop.plan.chargeId} for shop ${shop.domain} and set plan to ${shop.plan.level}`,
       recurringChargeData
     );
   } catch (error) {
-    logger.error(
+    await logger.error(
       `Error activating recurring charge for shop ${shop.domain}`,
       error
     );

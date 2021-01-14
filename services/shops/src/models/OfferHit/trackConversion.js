@@ -51,7 +51,7 @@ const trackConversion = async (offerHit, order) => {
       );
     });
   } catch (error) {
-    logger.error(
+    await logger.error(
       `Error tracking offer conversion for offer hit (${
         offerHit && offerHit.toString()
       }) in shop (${shop && shop.toString()})`,

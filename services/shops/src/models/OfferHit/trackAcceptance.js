@@ -56,7 +56,7 @@ const trackAcceptance = async (
       );
     });
   } catch (error) {
-    logger.error(
+    await logger.error(
       `Error tracking offer acceptance for offer hit (${
         offerHit && offerHit.toString()
       }) in shop (${shop && shop.toString()})`,

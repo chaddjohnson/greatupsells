@@ -60,7 +60,7 @@ const trackView = async (
 
     return offerHit;
   } catch (error) {
-    logger.error(
+    await logger.error(
       `Error tracking offer view for offer (${
         offer && offer.toString()
       }) in shop (${shop && shop.toString()})`,

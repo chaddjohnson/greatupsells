@@ -36,7 +36,7 @@ const handler = middy(async (event, context) => {
 
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
-      logger.warn(
+      await logger.warn(
         `Unauthorized view tracking attempt for offer ${offerId} from domain ${domain}`,
         event
       );
@@ -58,7 +58,7 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    logger.error(`Error requesting shop`, error, event);
+    await logger.error(`Error requesting shop`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

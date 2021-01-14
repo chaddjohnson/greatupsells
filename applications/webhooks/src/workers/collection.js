@@ -13,7 +13,11 @@ const processRecord = async (record) => {
     const { metadata, payload, errors } = detail;
 
     if (errors) {
-      return logger.error(`Error handling collection webhook`, errors, record);
+      return await logger.error(
+        `Error handling collection webhook`,
+        errors,
+        record
+      );
     }
 
     const shopifyCollectionData = payload.collection;
@@ -31,7 +35,7 @@ const processRecord = async (record) => {
         new Date(collection.shopifyCollectionData.updated_at);
 
     if (!collection) {
-      logger.debug(`Creating collection via webhook`, record);
+      await logger.debug(`Creating collection via webhook`, record);
 
       await httpClient.post('/collections', {
         shop: shop._id,
@@ -40,14 +44,14 @@ const processRecord = async (record) => {
         shopifyCollectionData
       });
     } else if (dataIsNewer) {
-      logger.debug(`Updating collection via webhook`, record);
+      await logger.debug(`Updating collection via webhook`, record);
 
       collection.shopifyCollectionData = shopifyCollectionData;
 
       await httpClient.put(`/collections/${collection._id}`, collection);
     }
   } catch (error) {
-    logger.error(`Error handling collection webhook`, error, record);
+    await logger.error(`Error handling collection webhook`, error, record);
   }
 };
 

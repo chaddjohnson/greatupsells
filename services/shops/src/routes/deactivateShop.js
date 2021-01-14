@@ -23,7 +23,7 @@ const handler = async (event, context) => {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    logger.error(`Error deactivating shop`, error, event);
+    await logger.error(`Error deactivating shop`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

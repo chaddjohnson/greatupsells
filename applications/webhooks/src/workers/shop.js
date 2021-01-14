@@ -13,20 +13,20 @@ const processRecord = async (record) => {
     const { metadata, payload, errors } = detail;
 
     if (errors) {
-      return logger.error(`Error handling shop webhook`, errors, record);
+      return await logger.error(`Error handling shop webhook`, errors, record);
     }
 
     const shopifyShopData = payload.shop;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    logger.info(`Updating shop ${shop.domain} via webhook`, record);
+    await logger.info(`Updating shop ${shop.domain} via webhook`, record);
 
     shop.shopifyShopData = shopifyShopData;
 
     await httpClient.put(`/shops/${shop._id}`);
   } catch (error) {
-    logger.error(`Error updating shop via webhook`, error, record);
+    await logger.error(`Error updating shop via webhook`, error, record);
   }
 };
 

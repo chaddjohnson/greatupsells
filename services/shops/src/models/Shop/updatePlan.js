@@ -42,7 +42,7 @@ module.exports = async (shop) => {
       !shop.plan.active;
 
     if (removePlan) {
-      logger.warn(
+      await logger.warn(
         `Downgrading plan for shop ${shop.domain} as recurring charge is declined or expired`
       );
 
@@ -55,7 +55,7 @@ module.exports = async (shop) => {
     }
 
     if (deactivatePlan) {
-      logger.warn(
+      await logger.warn(
         `Deactivating plan for shop ${shop.domain} due to non-payment`
       );
 
@@ -63,14 +63,14 @@ module.exports = async (shop) => {
     }
 
     if (reactivatePlan) {
-      logger.warn(`Reactivating plan for shop ${shop.domain}`);
+      await logger.warn(`Reactivating plan for shop ${shop.domain}`);
 
       shop.plan.active = true;
     }
 
     await shop.save();
   } catch (error) {
-    logger.warn(
+    await logger.warn(
       `Unable to verify and update plan statuses for shop ${shop.domain}`,
       error
     );

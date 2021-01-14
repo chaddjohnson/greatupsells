@@ -43,7 +43,8 @@ const handler = async (event) => {
   const { methodArn } = event;
 
   if (!token || !methodArn) {
-    logger.warn('Unauthorized access attempt', event);
+    await logger.warn('Unauthorized access attempt', event);
+
     return {
       statusCode: StatusCodes.UNAUTHORIZED,
       body: ReasonPhrases.UNAUTHORIZED
@@ -60,7 +61,8 @@ const handler = async (event) => {
       }
     };
   } else {
-    logger.warn('Invalid access attempt', decoded, event);
+    await logger.warn('Invalid access attempt', decoded, event);
+
     return generateAuthResponse(decoded.userId, 'Deny', methodArn);
   }
 };

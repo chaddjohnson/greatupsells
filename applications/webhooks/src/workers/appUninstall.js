@@ -13,7 +13,7 @@ const processRecord = async (record) => {
     const { metadata, errors } = detail;
 
     if (errors) {
-      return logger.error(
+      return await logger.error(
         `Error handling app uninstall webhook`,
         errors,
         record
@@ -23,11 +23,11 @@ const processRecord = async (record) => {
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    logger.info(`Deactivating shop ${shop.domain} via webhook`, record);
+    await logger.info(`Deactivating shop ${shop.domain} via webhook`, record);
 
     await httpClient.get(`/shops/${shop._id}/deactivation`);
   } catch (error) {
-    logger.error(`Error handling app uninstall webhook`, error, record);
+    await logger.error(`Error handling app uninstall webhook`, error, record);
   }
 };
 

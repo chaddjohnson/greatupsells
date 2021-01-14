@@ -27,14 +27,14 @@ const handler = async (event, context) => {
 
     // Only track orders resulting in offer conversions.
     if (offerHits.length === 0) {
-      logger.debug(
+      await logger.debug(
         `Skipping order as no conversions were recorded (${order.toString()})`,
         order
       );
 
       await order.deleteOne();
     } else {
-      logger.info(`Order created (${order.toString()})`, order);
+      await logger.info(`Order created (${order.toString()})`, order);
     }
 
     return {
@@ -42,7 +42,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(order)
     };
   } catch (error) {
-    logger.error(`Error creating order`, error, event);
+    await logger.error(`Error creating order`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

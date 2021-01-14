@@ -13,7 +13,7 @@ const processRecord = async (record) => {
     const { payload, errors } = detail;
 
     if (errors) {
-      return logger.error(
+      return await logger.error(
         `Error handling order cancelation via webhook`,
         errors,
         record
@@ -29,7 +29,10 @@ const processRecord = async (record) => {
       return;
     }
 
-    logger.debug(`Updating order ${order.orderNumber} via webhook`, record);
+    await logger.debug(
+      `Updating order ${order.orderNumber} via webhook`,
+      record
+    );
 
     order.shopifyOrderData = shopifyOrderData;
 
@@ -37,12 +40,19 @@ const processRecord = async (record) => {
 
     // Only cancel if the order is not marked as canceled.
     if (order && !order.canceledAt) {
-      logger.info(`Canceling order ${order.orderNumber} via webhook`, record);
+      await logger.info(
+        `Canceling order ${order.orderNumber} via webhook`,
+        record
+      );
 
       await httpClient.post(`/orders/${order._id}/cancelation`);
     }
   } catch (error) {
-    logger.error(`Error handling order update via webhook`, error, record);
+    await logger.error(
+      `Error handling order update via webhook`,
+      error,
+      record
+    );
   }
 };
 

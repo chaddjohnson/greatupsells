@@ -13,7 +13,11 @@ const processRecord = async (record) => {
     const { metadata, payload, errors } = detail;
 
     if (errors) {
-      return logger.error(`Error handling order paid webhook`, errors, record);
+      return await logger.error(
+        `Error handling order paid webhook`,
+        errors,
+        record
+      );
     }
 
     const shopifyOrderData = payload.order;
@@ -28,7 +32,7 @@ const processRecord = async (record) => {
     // Track the order if it is not already tracked. We ONLY track paid orders;
     // unpaid orders are not counted as conversions.
     if (!order) {
-      logger.debug(`Creating order via webhook`, record);
+      await logger.debug(`Creating order via webhook`, record);
 
       await httpClient.post(`/orders`, {
         shop: shop._id,
@@ -39,7 +43,7 @@ const processRecord = async (record) => {
       });
     }
   } catch (error) {
-    logger.error(`Error handling order paid webhook`, error, record);
+    await logger.error(`Error handling order paid webhook`, error, record);
   }
 };
 

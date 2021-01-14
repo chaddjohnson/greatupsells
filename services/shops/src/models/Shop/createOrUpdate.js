@@ -11,7 +11,7 @@ const createShop = async (shopDomain, accessToken) => {
 
   await shop.save();
 
-  logger.info(`Created new shop (${shop.toString()})`);
+  await logger.info(`Created new shop (${shop.toString()})`);
 
   return shop;
 };
@@ -26,14 +26,14 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
     }
 
     if (accessToken) {
-      logger.info(
+      await logger.info(
         `Updating access token to ${accessToken} for shop ${shopDomain}`
       );
 
       // Set/update the access token for the shop.
       shop.accessToken = accessToken;
     } else {
-      logger.warn(
+      await logger.warn(
         `Attempted to update shop access token with empty token for shop ${shopDomain}`
       );
     }
@@ -46,7 +46,7 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
 
     await shop.save();
   } catch (error) {
-    logger.info(`Error creating new shop ${shopDomain}`, error);
+    await logger.info(`Error creating new shop ${shopDomain}`, error);
 
     throw error;
   }
@@ -55,7 +55,7 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
     // Run various initializations for the shop.
     await shop.initialize();
   } catch (error) {
-    logger.info(`Error initializing shop (${shop.toString()})`, error);
+    await logger.info(`Error initializing shop (${shop.toString()})`, error);
 
     throw error;
   }

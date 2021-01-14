@@ -6,7 +6,7 @@ const { logger, cleanTmp } = require('../utilities');
 module.exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  logger.info(`Running job updateShopPlans`);
+  await logger.info(`Running job updateShopPlans`);
 
   try {
     if (isLambda) {
@@ -18,7 +18,7 @@ module.exports.handler = async (event, context) => {
     // ...
     // TODO: Run in parallel for shops.
   } catch (error) {
-    logger.warn(`... failed`, error, event);
+    await logger.warn(`... failed`, error, event);
     throw error;
   }
 };

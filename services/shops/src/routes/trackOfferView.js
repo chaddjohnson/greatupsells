@@ -31,7 +31,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    logger.error(`Error tracking offer view`, error, event);
+    await logger.error(`Error tracking offer view`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

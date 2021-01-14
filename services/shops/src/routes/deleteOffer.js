@@ -18,14 +18,13 @@ const handler = async (event, context) => {
     }
 
     await Offer.findByIdAndDelete(offerId);
-
-    logger.info(`Offer deleted (${offer.toString()})`);
+    await logger.info(`Offer deleted (${offer.toString()})`);
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    logger.error(`Error deleting offer`, error, event);
+    await logger.error(`Error deleting offer`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

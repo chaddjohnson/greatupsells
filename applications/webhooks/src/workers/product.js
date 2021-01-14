@@ -13,7 +13,11 @@ const processRecord = async (record) => {
     const { metadata, payload, errors } = detail;
 
     if (errors) {
-      return logger.error(`Error handling product webhook`, errors, record);
+      return await logger.error(
+        `Error handling product webhook`,
+        errors,
+        record
+      );
     }
 
     const shopifyProductData = payload.product;
@@ -31,7 +35,7 @@ const processRecord = async (record) => {
         new Date(product.shopifyProductData.updated_at);
 
     if (!product) {
-      logger.debug(`Creating product via webhook`, record);
+      await logger.debug(`Creating product via webhook`, record);
 
       await httpClient.post(`/products`, {
         shop: shop._id,
@@ -40,14 +44,14 @@ const processRecord = async (record) => {
         shopifyProductData
       });
     } else if (dataIsNewer) {
-      logger.debug(`Updating product via webhook`, record);
+      await logger.debug(`Updating product via webhook`, record);
 
       product.shopifyProductData = shopifyProductData;
 
       await httpClient.put(`/products/${product._id}`, product);
     }
   } catch (error) {
-    logger.error(`Error handling product webhook`, error, record);
+    await logger.error(`Error handling product webhook`, error, record);
   }
 };
 

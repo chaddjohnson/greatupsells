@@ -22,7 +22,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(order)
     };
   } catch (error) {
-    logger.error(`Error retrieving order`, error, event);
+    await logger.error(`Error retrieving order`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

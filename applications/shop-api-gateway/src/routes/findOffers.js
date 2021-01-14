@@ -33,7 +33,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    logger.error(`Error requesting offers`, error, event);
+    await logger.error(`Error requesting offers`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

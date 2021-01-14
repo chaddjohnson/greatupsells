@@ -15,7 +15,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offers)
     };
   } catch (error) {
-    logger.error(`Error retrieving shop offers`, error, event);
+    await logger.error(`Error retrieving shop offers`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

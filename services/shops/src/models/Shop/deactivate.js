@@ -22,9 +22,9 @@ module.exports = async (shop) => {
 
   await shop.save();
 
-  logger.info(`Deactivated shop (${shop.toString()})`);
+  await logger.info(`Deactivated shop (${shop.toString()})`);
 
   if (shop.shopifyPlan === 'cancelled') {
-    logger.info(`Shop closed (${shop.toString()})`);
+    await logger.info(`Shop closed (${shop.toString()})`);
   }
 };

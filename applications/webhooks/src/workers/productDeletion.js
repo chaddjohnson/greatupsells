@@ -13,7 +13,7 @@ const processRecord = async (record) => {
     const { payload, errors } = detail;
 
     if (errors) {
-      return logger.error(
+      return await logger.error(
         `Error handling product deletion webhook`,
         errors,
         record
@@ -26,11 +26,15 @@ const processRecord = async (record) => {
       `/products/shopify-product-id/${shopifyProductId}`
     );
 
-    logger.debug(`Deleting product via webhook`, record);
+    await logger.debug(`Deleting product via webhook`, record);
 
     await httpClient.delete(`/products/${product._id}`);
   } catch (error) {
-    logger.error(`Error handling product deletion webhook`, error, record);
+    await logger.error(
+      `Error handling product deletion webhook`,
+      error,
+      record
+    );
   }
 };
 

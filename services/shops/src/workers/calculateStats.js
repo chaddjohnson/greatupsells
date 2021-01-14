@@ -1,13 +1,12 @@
 const fs = require('fs-extra');
 const isLambda = require('is-lambda');
 const moment = require('moment-timezone');
-const models = require('@neatowebsolutions/upselling-models');
 const { logger, cleanTmp } = require('../utilities');
 
 module.exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  logger.info(`Running job calculateStats`);
+  await logger.info(`Running job calculateStats`);
 
   try {
     if (isLambda) {
@@ -39,7 +38,7 @@ module.exports.handler = async (event, context) => {
 
     await Stat.create(stat);
   } catch (error) {
-    logger.warn(`Error alculating status for today`, error, event);
+    await logger.warn(`Error alculating status for today`, error, event);
     throw error;
   }
 };

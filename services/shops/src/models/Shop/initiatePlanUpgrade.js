@@ -8,7 +8,9 @@ module.exports = async (shop) => {
       return;
     }
 
-    logger.info(`Creating recurring charge for shop (${shop.toString()})`);
+    await logger.info(
+      `Creating recurring charge for shop (${shop.toString()})`
+    );
 
     // Cancel any existing plan.
     if (shop.plan.chargeId) {
@@ -26,7 +28,7 @@ module.exports = async (shop) => {
       }
     );
 
-    logger.info(
+    await logger.info(
       `Created recurring charge ${
         recurringCharge.id
       } for shop (${shop.toString()})`
@@ -40,7 +42,7 @@ module.exports = async (shop) => {
     // Return the confirmation redirection URL.
     return recurringCharge.confirmation_url;
   } catch (error) {
-    logger.error(
+    await logger.error(
       `Error creating recurring charge for shop ${shop.domain}`,
       error
     );

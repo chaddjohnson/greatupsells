@@ -9,9 +9,9 @@ module.exports = async (shop) => {
 
     await shop.cancelPlan();
 
-    logger.info(`Successfully downgraded plan for shop ${shop.domain}`);
+    await logger.info(`Successfully downgraded plan for shop ${shop.domain}`);
   } catch (error) {
-    logger.error(`Error downgrading plan for shop ${shop.domain}`, error);
+    await logger.error(`Error downgrading plan for shop ${shop.domain}`, error);
     throw error;
   }
 };

@@ -33,7 +33,7 @@ const addProductTypeRule = async (shop) => {
       }
     );
 
-    logger.info(
+    await logger.info(
       `Added rule to existing smart collection for shop (${shop.toString()})`,
       rule,
       smartAllCollection
@@ -49,7 +49,7 @@ const addProductTypeRule = async (shop) => {
       rules: [rule]
     });
 
-    logger.info(
+    await logger.info(
       `Created new smart collection for shop (${shop.toString()})`,
       rule,
       smartAllCollection
@@ -57,7 +57,7 @@ const addProductTypeRule = async (shop) => {
   }
 
   if (customAllCollection) {
-    logger.info(
+    await logger.info(
       `No collection changes made for shop as custom "all" collection exists (${shop.toString()})`,
       customAllCollection
     );

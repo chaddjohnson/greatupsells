@@ -13,7 +13,7 @@ const processRecord = async (record) => {
     const { payload, errors } = detail;
 
     if (errors) {
-      return logger.error(
+      return await logger.error(
         `Error handling order update webhook`,
         errors,
         record
@@ -32,14 +32,17 @@ const processRecord = async (record) => {
         new Date(order.shopifyOrderData.updated_at);
 
     if (order && dataIsNewer) {
-      logger.debug(`Updating order ${order.orderNumber} via webhook`, record);
+      await logger.debug(
+        `Updating order ${order.orderNumber} via webhook`,
+        record
+      );
 
       order.shopifyOrderData = shopifyOrderData;
 
       await httpClient.put(`/orders/${order._id}`, order);
     }
   } catch (error) {
-    logger.error(`Error handling order update webhook`, error, record);
+    await logger.error(`Error handling order update webhook`, error, record);
   }
 };
 

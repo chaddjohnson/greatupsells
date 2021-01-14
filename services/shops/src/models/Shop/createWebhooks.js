@@ -74,14 +74,14 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
   if (!webhook) {
     try {
       await shopifyApiClient.webhook.create(definition);
-      logger.info(
+      await logger.info(
         `Created Shopify webhook "${
           definition.topic
         }" for shop (${shop.toString()})`,
         definition
       );
     } catch (error) {
-      logger.warn(
+      await logger.warn(
         `Failed to create Shopify webhook "${
           definition.topic
         }" for shop (${shop.toString()})`,
@@ -101,7 +101,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
 
     try {
       await shopifyApiClient.webhook.update(webhook.id, webhook);
-      logger.info(
+      await logger.info(
         `Updated Shopify webhook "${
           definition.topic
         }" for shop (${shop.toString()})`,
@@ -118,7 +118,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         ignoredHttpStatuses.includes(error.response.statusCode);
 
       if (isValidError) {
-        logger.warn(
+        await logger.warn(
           `Failed to update Shopify webhook ${
             definition.topic
           } for shop ${shop.toString()}`,

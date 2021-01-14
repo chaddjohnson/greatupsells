@@ -13,7 +13,7 @@ const processRecord = async (record) => {
     const { metadata, payload, errors } = detail;
 
     if (errors) {
-      return logger.error(
+      return await logger.error(
         `Error handling collection deletion webhook`,
         errors,
         record
@@ -31,14 +31,14 @@ const processRecord = async (record) => {
       return;
     }
 
-    logger.info(
+    await logger.info(
       `Deleting collection "${collection.title}" for shop ${shop.domain} via webhook`,
       record
     );
 
     await httpClient.delete(`/collections/${collection._id}`);
   } catch (error) {
-    return logger.error(
+    await logger.error(
       `Error handling collection deletion webhook`,
       error,
       record
