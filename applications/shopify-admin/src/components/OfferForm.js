@@ -115,8 +115,10 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const strategy = useField(initialValues.strategy);
   const triggerEvent = useField(initialValues.triggerEvent);
   const discountType = useField(initialValues.discountType);
-  const products = useField(useList(initialValues.products));
-  const collections = useField(useList(initialValues.collections));
+  const offeredProducts = useField(useList(initialValues.offeredProducts));
+  const offeredCollections = useField(
+    useList(initialValues.offeredCollections)
+  );
   const triggerProducts = useField(useList(initialValues.triggerProducts));
   const triggerCollections = useField(
     useList(initialValues.triggerCollections)
@@ -232,10 +234,11 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
       name,
       strategy,
       triggerEvent,
-      discountType,
-      products,
+      offeredProducts,
+      offeredCollections,
       // minimumProductsQuantity,
-      collections,
+      discountType,
+      // discountAmount,
       triggerProducts,
       triggerCollections,
       actionButtonBehavior,
@@ -547,9 +550,9 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 onChange={() => setProductPickerOpen(true)}
               />
               <ManagedResourceList
-                items={offer.products}
+                items={offer.offeredProducts}
                 // onChange={}
-                // onItemRemoved={products => setOffer({ ...offer, products })}
+                // onItemRemoved={offeredProducts => setOffer({ ...offer, offeredProducts })}
               />
             </Card.Section>
             <Card.Section title="Collections">
@@ -567,9 +570,9 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 onChange={() => setCollectionPickerOpen(true)}
               />
               <ManagedResourceList
-                items={offer.collections}
+                items={offer.offeredCollections}
                 // onChange={}
-                // onItemRemoved={collections => setOffer({ ...offer, collections })}
+                // onItemRemoved={offeredCollections => setOffer({ ...offer, offeredCollections })}
               />
             </Card.Section>
           </Card>
@@ -595,7 +598,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               </Card.Section>
               <Card.Section title="Collections">
                 <TextField
-                  helpText="The popup will show when products from selected collections are in the cart. Please note that only the last 100 product added to the collection will be considered."
+                  helpText="The popup will show when products from selected collections are in the cart."
                   placeholder="Search collections"
                   prefix={<Icon source={SearchMinor} />}
                   connectedRight={

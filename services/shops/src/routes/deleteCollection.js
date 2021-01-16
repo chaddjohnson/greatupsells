@@ -24,7 +24,8 @@ const handler = async (event, context) => {
     // Remove collection association from offers.
     await Collection.updateMany(
       {},
-      { $pull: { collections: { shopifyCollectionId } } }
+      { $pull: { offeredCollections: { shopifyCollectionId } } },
+      { $pull: { triggerCollections: { shopifyCollectionId } } }
     );
 
     await logger.info(`Collection deleted (${collection.toString()})`);

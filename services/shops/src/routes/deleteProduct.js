@@ -26,7 +26,11 @@ const handler = async (event, context) => {
     await Product.deleteMany({ originalShopifyProductId: shopifyProductId });
 
     // Remove product association from offers.
-    await Offer.updateMany({}, { $pull: { products: { shopifyProductId } } });
+    await Offer.updateMany(
+      {},
+      { $pull: { offeredProducts: { shopifyProductId } } },
+      { $pull: { triggerProducts: { shopifyProductId } } }
+    );
 
     await logger.info(`Product deleted (${product.toString()})`);
 

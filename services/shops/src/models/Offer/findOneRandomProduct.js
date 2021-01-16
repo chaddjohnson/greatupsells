@@ -1,43 +1,39 @@
 const mongodbClient = require('../mongodbClient');
 
 const findOneRandomProduct = async (offer) => {
-  // Return no product if the offer has neither product nor collection triggers.
-  if (offer.products.length === 0 && offer.shopifyCollectionIds.length === 0) {
+  const { shop, offeredProducts, offeredCollections } = offer;
+
+  // Return no product if the offer has neither products nor collections.
+  if (offeredProducts.length === 0 && offeredCollections.length === 0) {
     return;
   }
 
+  const Product = mongodbClient.connection.model('Product');
+  const offeredShopifyProductIds = offeredProducts.map(
+    ({ shopifyProductId }) => shopifyProductId
+  );
+  const offeredShopifyCollectionIds = offeredCollections.map(
+    ({ shopifyCollectionId }) => shopifyCollectionId
+  );
+
   await offer.execPopulate('shop');
 
-  const Product = mongodbClient.connection.model('Product');
-  const {
-    shop,
-    products: triggerProducts,
-    collections: triggerCollections
-  } = offer;
-  const triggerShopifyProductIds = triggerProducts.map(
-    (triggerProduct) => triggerProduct.shopifyProductId
-  );
-  const triggerShopifyCollectionIds = triggerCollections.map(
-    (triggerCollection) => triggerCollection.shopifyCollectionId
-  );
-
-  // Randomly select a product that is a trigger for the offer OR a product in a collection
-  // that is a trigger for the offer.
-  const products = await Product.aggregate([
+  // Randomly select a product for the offer OR a product in a collection for the offer.
+  const randomProducts = await Product.aggregate([
     {
       $match: {
         shop: shop._id,
         $or: [
-          { shopifyProductId: { $in: triggerShopifyProductIds } },
-          { shopifyCollectionIds: { $in: triggerShopifyCollectionIds } }
+          { shopifyProductId: { $in: offeredShopifyProductIds } },
+          { shopifyCollectionIds: { $in: offeredShopifyCollectionIds } }
         ]
       }
     },
     { $sample: { size: 1 } }
   ]);
-  const product = products[0];
+  const randomProduct = randomProducts[0];
 
-  return product;
+  return randomProduct;
 };
 
 module.exports = findOneRandomProduct;
