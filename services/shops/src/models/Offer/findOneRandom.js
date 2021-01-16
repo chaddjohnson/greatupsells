@@ -30,7 +30,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     shopifyProductIds: { $in: shopifyProductIds }
   });
   const shopifyCollectionIds = collections.map(
-    (collection) => collection.shopifyCollectionId
+    ({ shopifyCollectionId }) => shopifyCollectionId
   );
 
   // Randomly select an offer having the trigger event as a trigger AND [one of
@@ -41,8 +41,18 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
       $match: {
         shop: shop._id,
         triggerEvent,
-        'triggerProducts.shopifyProductId': { $in: shopifyProductIds },
-        'triggerCollections.shopifyCollectionId': { $in: shopifyCollectionIds },
+        $or: [
+          {
+            'triggerProducts.shopifyProductId': {
+              $in: shopifyProductIds
+            }
+          },
+          {
+            'triggerCollections.shopifyCollectionId': {
+              $in: shopifyCollectionIds
+            }
+          }
+        ],
         enabled: true
       }
     },
