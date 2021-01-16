@@ -12,17 +12,13 @@ let Offer = null;
 
 const offerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  image: {
-    src: { type: String, required: false }
-  },
+  imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true }
 });
 
 const offerCollectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  image: {
-    src: { type: String, required: false }
-  },
+  imageUrl: { type: String, required: false },
   shopifyCollectionId: { type: Number, required: true }
 });
 
@@ -73,8 +69,8 @@ const schema = new mongoose.Schema(
       // notificationBannerBackgroundColor: { type: String, required: true },
       // notificationBannerTextColor: { type: String, required: true }
     },
-    products: [offerProductSchema],
-    collections: [offerCollectionSchema],
+    offeredProducts: [offerProductSchema],
+    offeredCollections: [offerCollectionSchema],
     minimumProductsQuantity: { type: Int32, required: true },
     discountType: {
       type: String,

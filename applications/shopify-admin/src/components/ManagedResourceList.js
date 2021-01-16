@@ -13,9 +13,9 @@ const ManagedResourceList = ({ items, onChange, onItemRemoved }) => {
     <ResourceList
       items={items}
       onSelectionChange={onChange}
-      renderItem={({ title, image }, id, index) => (
+      renderItem={({ title, imageUrl }, id, index) => (
         <ManagedResourceItem
-          media={<Thumbnail source={image.src} alt={title} size="small" />}
+          media={<Thumbnail source={imageUrl} alt={title} size="small" />}
           onRemove={() => onItemRemoved(removeItem(index, items))}
         >
           {title}
@@ -29,9 +29,7 @@ ManagedResourceList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      image: PropTypes.shape({
-        src: PropTypes.string.isRequired
-      }).isRequired
+      imageUrl: PropTypes.string.isRequired
     })
   ).isRequired,
   onChange: PropTypes.func,
