@@ -13,14 +13,14 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    # APP_SLUG: upselling
+    WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
     # SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     # SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     # API_URL: ${env:API_URL, ssm:/upselling/${self:provider.stage}/api/url}
     # CONTACT_EMAIL: ${env:CONTACT_EMAIL, ssm:/upselling/${self:provider.stage}/contact-email}
     # SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     # MONGODB_URI: ${env:MONGODB_URI, ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
 
 functions:
   cancelOrder:

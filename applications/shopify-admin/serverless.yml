@@ -17,10 +17,10 @@ provider:
     MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
     SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     SHOPIFY_API_KEY: ${ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
-    WEBHOOKS_API_URL: ${ssm:/upselling/${self:provider.stage}/webhooks-api/url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
 
 functions:
   health:

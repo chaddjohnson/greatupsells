@@ -1,0 +1,41 @@
+{
+  "version": "0",
+  "id": "54d2e647-a59e-a394-621c-2ed57946a1ab",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-18T22:55:26Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 207371436077,
+      "handle": "smart-test",
+      "title": "Smart Test",
+      "updated_at": "2021-01-18T17:55:23-05:00",
+      "body_html": "description",
+      "published_at": "2021-01-18T17:53:08-05:00",
+      "sort_order": "best-selling",
+      "template_suffix": "",
+      "disjunctive": false,
+      "rules": [
+        {
+          "column": "title",
+          "relation": "contains",
+          "condition": "shoes"
+        }
+      ],
+      "published_scope": "web",
+      "admin_graphql_api_id": "gid://shopify/Collection/207371436077"
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "collections/update",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Collection-Id": "207371436077",
+      "X-Shopify-Hmac-SHA256": "2ZbVlDws8HN3EAgdZUT14VztdmecBXVFtEY1S78FL5k=",
+      "X-Shopify-Webhook-Id": "d5ed1d6f-1179-4f0a-b244-bd3cde0df75e",
+      "X-Shopify-API-Version": "2020-04"
+    }
+  }
+}

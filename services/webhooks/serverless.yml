@@ -14,7 +14,7 @@ provider:
     shouldStartNameWithService: true
   environment:
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/log-queue-url}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
 
 functions:
   health:
@@ -29,43 +29,43 @@ functions:
     handler: src/workers/appUninstall.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-app-uninstall-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn}
   collection:
     reservedConcurrency: 1
     handler: src/workers/collection.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-collection-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn}
   collectionDeletion:
     reservedConcurrency: 1
     handler: src/workers/collectionDeletion.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-collection-deletion-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn}
   orderCancelation:
     reservedConcurrency: 1
     handler: src/workers/orderCancelation.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-order-cancelation-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn}
   orderPaid:
     reservedConcurrency: 1
     handler: src/workers/orderPaid.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-order-paid-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn}
   orderUpdate:
     reservedConcurrency: 1
     handler: src/workers/orderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-order-update-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn}
   product:
     reservedConcurrency: 2
     handler: src/workers/product.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-product-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn}
           batchSize: 10
           maximumBatchingWindow: 60
   productDeletion:
@@ -73,13 +73,13 @@ functions:
     handler: src/workers/productDeletion.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-product-deletion-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn}
   shop:
     reservedConcurrency: 1
     handler: src/workers/shop.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/webhook-shop-queue-arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn}
 
 plugins:
   - serverless-offline
@@ -91,7 +91,7 @@ custom:
   dotenv:
     path: .env
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/webhooks-api/endpoint/${self:provider.region}}
+    domainName: ${ssm:/upselling/${self:provider.stage}/webhooks/endpoint/${self:provider.region}}
     basePath: ''
     certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

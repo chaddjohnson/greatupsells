@@ -1,0 +1,41 @@
+{
+  "version": "0",
+  "id": "9c69e464-8bac-1544-adf7-d09d1175c897",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-18T22:53:09Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 207371436077,
+      "handle": "smart-test",
+      "title": "Smart Test",
+      "updated_at": "2021-01-18T17:53:08-05:00",
+      "body_html": "description",
+      "published_at": "2021-01-18T17:53:08-05:00",
+      "sort_order": "best-selling",
+      "template_suffix": "",
+      "disjunctive": false,
+      "rules": [
+        {
+          "column": "tag",
+          "relation": "equals",
+          "condition": "hat"
+        }
+      ],
+      "published_scope": "web",
+      "admin_graphql_api_id": "gid://shopify/Collection/207371436077"
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "collections/create",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Collection-Id": "207371436077",
+      "X-Shopify-Hmac-SHA256": "pEZlxBXrCzfxARYib9JZluNBu/8/8N5rI+fD7Jv6wwI=",
+      "X-Shopify-Webhook-Id": "b83c53f1-5a15-4ac3-adad-9613f8da3732",
+      "X-Shopify-API-Version": "2020-04"
+    }
+  }
+}

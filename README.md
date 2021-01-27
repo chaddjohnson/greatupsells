@@ -84,6 +84,24 @@ The following are used:
 * Hyphens for image and media file names.
 * Default exports are used for modules and components (with the exception of index.js files).
 
+## Deployment
+
+### Setup
+
+Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console.
+
+### Deploying
+
+Simply push to the appropriate branch.
+
+CircleCI is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
+
+* `master` = development environment
+* `test` = test environment
+* `production` = production environment
+
+All infrastructure will be setup and updated via Terraform with each deployment.
+
 ## Infrastructure
 
 Hosting is with AWS. The following AWS services are used:
@@ -105,12 +123,6 @@ Hosting is with AWS. The following AWS services are used:
 All infrastructure is managed via Serverless, Terraform, and Ansible.
 
 Linux is used for hosting.
-
-CircleCI is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
-
-* `master` = development environment
-* `test` = test environment
-* `production` = production environment
 
 ## Architecture
 

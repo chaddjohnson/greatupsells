@@ -3,64 +3,20 @@ const { StatusCodes } = require('http-status-codes');
 const promiseRetry = require('promise-retry');
 const logger = require('@neatowebsolutions/upselling-logger');
 
-const { WEBHOOKS_API_URL } = process.env;
+const { WEBHOOKS_ARN } = process.env;
 
 const definitions = [
-  {
-    topic: 'app/uninstalled',
-    address: `${WEBHOOKS_API_URL}/shopify/app-uninstall`,
-    format: 'json'
-  },
-  {
-    topic: 'collections/create',
-    address: `${WEBHOOKS_API_URL}/shopify/collection`,
-    format: 'json'
-  },
-  {
-    topic: 'collections/update',
-    address: `${WEBHOOKS_API_URL}/shopify/collection`,
-    format: 'json'
-  },
-  {
-    topic: 'collections/delete',
-    address: `${WEBHOOKS_API_URL}/shopify/collection-deletion`,
-    format: 'json'
-  },
-  {
-    topic: 'orders/paid',
-    address: `${WEBHOOKS_API_URL}/shopify/order-paid`,
-    format: 'json'
-  },
-  {
-    topic: 'orders/updated',
-    address: `${WEBHOOKS_API_URL}/shopify/order-update`,
-    format: 'json'
-  },
-  {
-    topic: 'orders/cancelled',
-    address: `${WEBHOOKS_API_URL}/shopify/order-cancelation`,
-    format: 'json'
-  },
-  {
-    topic: 'products/create',
-    address: `${WEBHOOKS_API_URL}/shopify/order`,
-    format: 'json'
-  },
-  {
-    topic: 'products/update',
-    address: `${WEBHOOKS_API_URL}/shopify/product`,
-    format: 'json'
-  },
-  {
-    topic: 'products/delete',
-    address: `${WEBHOOKS_API_URL}/shopify/product-deletion`,
-    format: 'json'
-  },
-  {
-    topic: 'shop/update',
-    address: `${WEBHOOKS_API_URL}/shopify/shop`,
-    format: 'json'
-  }
+  { topic: 'app/uninstalled', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'collections/create', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'collections/update', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'collections/delete', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'orders/paid', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'orders/updated', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'orders/cancelled', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'products/create', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'products/update', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'products/delete', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'shop/update', address: WEBHOOKS_ARN, format: 'json' }
 ];
 
 const createWebhook = async (shop, existingWebhooks, definition) => {
@@ -122,7 +78,8 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
           `Failed to update Shopify webhook ${
             definition.topic
           } for shop ${shop.toString()}`,
-          error
+          error,
+          webhook
         );
       }
     }

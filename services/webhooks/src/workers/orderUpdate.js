@@ -20,7 +20,7 @@ const processRecord = async (record) => {
       );
     }
 
-    const shopifyOrderData = payload.order;
+    const shopifyOrderData = payload;
     const shopifyOrderId = shopifyOrderData.id;
     const order = await httpClient.get(
       `/orders/shopify-order-id/${shopifyOrderId}`

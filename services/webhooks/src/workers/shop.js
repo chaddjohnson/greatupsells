@@ -16,7 +16,7 @@ const processRecord = async (record) => {
       return await logger.error(`Error handling shop webhook`, errors, record);
     }
 
-    const shopifyShopData = payload.shop;
+    const shopifyShopData = payload;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 

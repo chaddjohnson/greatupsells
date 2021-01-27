@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "neatowebsolutions-upselling-infrastructure"
+    key    = "logs.tfstate"
+    region = "us-east-1"
+  }
+}
+
 provider "aws" {
   region                      = var.region
   s3_force_path_style         = terraform.workspace == "dev"
@@ -12,18 +20,18 @@ provider "aws" {
   }
 }
 
-resource "aws_sqs_queue" "log-queue" {
+resource "aws_sqs_queue" "log" {
   name = "log-queue-${terraform.workspace}"
 }
 
-resource "aws_ssm_parameter" "log-queue-arn" {
-  name  = "/${terraform.workspace}/log-queue-arn"
+resource "aws_ssm_parameter" "log_queue_arn" {
+  name  = "/${terraform.workspace}/queues/log/arn"
   type  = "String"
-  value = aws_sqs_queue.log-queue.arn
+  value = aws_sqs_queue.log.arn
 }
 
-resource "aws_ssm_parameter" "log-queue-url" {
-  name  = "/upselling/${terraform.workspace}/log-queue-url"
+resource "aws_ssm_parameter" "log_queue_url" {
+  name  = "/upselling/${terraform.workspace}/queues/log/url"
   type  = "String"
-  value = aws_sqs_queue.log-queue.id
+  value = aws_sqs_queue.log.id
 }

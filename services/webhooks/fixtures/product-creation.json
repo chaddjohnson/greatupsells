@@ -1,0 +1,79 @@
+{
+  "version": "0",
+  "id": "e4833c2e-6b87-824c-ca00-7d70b2882772",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-27T00:48:53Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 5293605126189,
+      "title": "Test Product",
+      "body_html": "Description here",
+      "vendor": "neatowebsolutions-chad",
+      "product_type": "",
+      "created_at": "2021-01-26T19:48:49-05:00",
+      "handle": "test-product",
+      "updated_at": "2021-01-26T19:48:51-05:00",
+      "published_at": null,
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "admin_graphql_api_id": "gid://shopify/Product/5293605126189",
+      "variants": [
+        {
+          "id": 35110478381101,
+          "product_id": 5293605126189,
+          "title": "Default Title",
+          "price": "23.45",
+          "sku": "",
+          "position": 1,
+          "inventory_policy": "deny",
+          "compare_at_price": null,
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2021-01-26T19:48:49-05:00",
+          "updated_at": "2021-01-26T19:48:49-05:00",
+          "taxable": true,
+          "barcode": "",
+          "grams": 0,
+          "image_id": null,
+          "weight": 0,
+          "weight_unit": "lb",
+          "inventory_item_id": 36800354582573,
+          "inventory_quantity": 0,
+          "old_inventory_quantity": 0,
+          "requires_shipping": true,
+          "admin_graphql_api_id": "gid://shopify/ProductVariant/35110478381101"
+        }
+      ],
+      "options": [
+        {
+          "id": 6809434619949,
+          "product_id": 5293605126189,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [],
+      "image": null
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "products/create",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Product-Id": "5293605126189",
+      "X-Shopify-Hmac-SHA256": "2rJsKTpg+xr0gyRZ20d/1S0lk/iUsgLtXEr3PNwOCs8=",
+      "X-Shopify-Webhook-Id": "a3a93a76-bb8d-4591-b86c-6a373b0785a7",
+      "X-Shopify-API-Version": "2020-04"
+    }
+  }
+}

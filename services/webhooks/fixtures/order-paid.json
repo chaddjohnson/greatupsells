@@ -1,0 +1,306 @@
+{
+  "version": "0",
+  "id": "5624f804-ca12-a268-a5a6-e4f1a9dec510",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-18T22:25:50Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 2968072093741,
+      "email": "",
+      "closed_at": null,
+      "created_at": "2021-01-18T17:25:48-05:00",
+      "updated_at": "2021-01-18T17:25:48-05:00",
+      "number": 3,
+      "note": "",
+      "token": "75c91e319b2bf12cae71f5a3853273ce",
+      "gateway": "manual",
+      "test": false,
+      "total_price": "37.09",
+      "subtotal_price": "34.99",
+      "total_weight": 0,
+      "total_tax": "2.10",
+      "taxes_included": false,
+      "currency": "USD",
+      "financial_status": "paid",
+      "confirmed": true,
+      "total_discounts": "0.00",
+      "total_line_items_price": "34.99",
+      "cart_token": null,
+      "buyer_accepts_marketing": false,
+      "name": "#1003",
+      "referring_site": null,
+      "landing_site": null,
+      "cancelled_at": null,
+      "cancel_reason": null,
+      "total_price_usd": "37.09",
+      "checkout_token": null,
+      "reference": null,
+      "user_id": 40546500653,
+      "location_id": null,
+      "source_identifier": null,
+      "source_url": null,
+      "processed_at": "2021-01-18T17:25:48-05:00",
+      "device_id": null,
+      "phone": null,
+      "customer_locale": "en",
+      "app_id": 1354745,
+      "browser_ip": null,
+      "landing_site_ref": null,
+      "order_number": 1003,
+      "discount_applications": [],
+      "discount_codes": [],
+      "note_attributes": [],
+      "payment_gateway_names": [
+        "manual"
+      ],
+      "processing_method": "manual",
+      "checkout_id": null,
+      "source_name": "shopify_draft_order",
+      "fulfillment_status": null,
+      "tax_lines": [
+        {
+          "price": "2.10",
+          "rate": 0.06,
+          "title": "Michigan State Tax",
+          "price_set": {
+            "shop_money": {
+              "amount": "2.10",
+              "currency_code": "USD"
+            },
+            "presentment_money": {
+              "amount": "2.10",
+              "currency_code": "USD"
+            }
+          }
+        }
+      ],
+      "tags": "",
+      "contact_email": null,
+      "order_status_url": "https://neatowebsolutions-chad.myshopify.com/27708653613/orders/75c91e319b2bf12cae71f5a3853273ce/authenticate?key=6e05372314ad162e2e1d9f5c040af094",
+      "presentment_currency": "USD",
+      "total_line_items_price_set": {
+        "shop_money": {
+          "amount": "34.99",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "34.99",
+          "currency_code": "USD"
+        }
+      },
+      "total_discounts_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        }
+      },
+      "total_shipping_price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        }
+      },
+      "subtotal_price_set": {
+        "shop_money": {
+          "amount": "34.99",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "34.99",
+          "currency_code": "USD"
+        }
+      },
+      "total_price_set": {
+        "shop_money": {
+          "amount": "37.09",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "37.09",
+          "currency_code": "USD"
+        }
+      },
+      "total_tax_set": {
+        "shop_money": {
+          "amount": "2.10",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "2.10",
+          "currency_code": "USD"
+        }
+      },
+      "line_items": [
+        {
+          "id": 6421343600685,
+          "variant_id": 32183839457325,
+          "title": "Fancy Ass Hat",
+          "quantity": 1,
+          "sku": "FH-1234",
+          "variant_title": null,
+          "vendor": "neatowebsolutions-chad",
+          "fulfillment_service": "manual",
+          "product_id": 4552007483437,
+          "requires_shipping": true,
+          "taxable": true,
+          "gift_card": false,
+          "name": "Fancy Ass Hat",
+          "variant_inventory_management": "shopify",
+          "properties": [],
+          "product_exists": true,
+          "fulfillable_quantity": 1,
+          "grams": 0,
+          "price": "34.99",
+          "total_discount": "0.00",
+          "fulfillment_status": null,
+          "price_set": {
+            "shop_money": {
+              "amount": "34.99",
+              "currency_code": "USD"
+            },
+            "presentment_money": {
+              "amount": "34.99",
+              "currency_code": "USD"
+            }
+          },
+          "total_discount_set": {
+            "shop_money": {
+              "amount": "0.00",
+              "currency_code": "USD"
+            },
+            "presentment_money": {
+              "amount": "0.00",
+              "currency_code": "USD"
+            }
+          },
+          "discount_allocations": [],
+          "duties": [],
+          "admin_graphql_api_id": "gid://shopify/LineItem/6421343600685",
+          "tax_lines": [
+            {
+              "title": "Michigan State Tax",
+              "price": "2.10",
+              "rate": 0.06,
+              "price_set": {
+                "shop_money": {
+                  "amount": "2.10",
+                  "currency_code": "USD"
+                },
+                "presentment_money": {
+                  "amount": "2.10",
+                  "currency_code": "USD"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "fulfillments": [],
+      "refunds": [],
+      "total_tip_received": "0.0",
+      "original_total_duties_set": null,
+      "current_total_duties_set": null,
+      "admin_graphql_api_id": "gid://shopify/Order/2968072093741",
+      "shipping_lines": [],
+      "billing_address": {
+        "first_name": "Chad",
+        "address1": "123 Main St",
+        "phone": null,
+        "city": "Grand Rapids",
+        "zip": "49501",
+        "province": "Michigan",
+        "country": "United States",
+        "last_name": "Johnson",
+        "address2": null,
+        "company": null,
+        "latitude": null,
+        "longitude": null,
+        "name": "Chad Johnson",
+        "country_code": "US",
+        "province_code": "MI"
+      },
+      "shipping_address": {
+        "first_name": "Chad",
+        "address1": "123 Main St",
+        "phone": null,
+        "city": "Grand Rapids",
+        "zip": "49501",
+        "province": "Michigan",
+        "country": "United States",
+        "last_name": "Johnson",
+        "address2": null,
+        "company": null,
+        "latitude": null,
+        "longitude": null,
+        "name": "Chad Johnson",
+        "country_code": "US",
+        "province_code": "MI"
+      },
+      "customer": {
+        "id": 2877532602413,
+        "email": null,
+        "accepts_marketing": false,
+        "created_at": "2020-01-26T18:11:06-05:00",
+        "updated_at": "2021-01-18T17:25:48-05:00",
+        "first_name": "Chad",
+        "last_name": "Johnson",
+        "orders_count": 2,
+        "state": "disabled",
+        "total_spent": "74.18",
+        "last_order_id": 2968072093741,
+        "note": null,
+        "verified_email": true,
+        "multipass_identifier": null,
+        "tax_exempt": false,
+        "phone": "+15125376061",
+        "tags": "",
+        "last_order_name": "#1003",
+        "currency": "USD",
+        "accepts_marketing_updated_at": "2021-01-18T17:25:48-05:00",
+        "marketing_opt_in_level": null,
+        "admin_graphql_api_id": "gid://shopify/Customer/2877532602413",
+        "default_address": {
+          "id": 3067947057197,
+          "customer_id": 2877532602413,
+          "first_name": "Chad",
+          "last_name": "Johnson",
+          "company": null,
+          "address1": "123 Main St",
+          "address2": "",
+          "city": "Grand Rapids",
+          "province": "Michigan",
+          "country": "United States",
+          "zip": "49501",
+          "phone": null,
+          "name": "Chad Johnson",
+          "province_code": "MI",
+          "country_code": "US",
+          "country_name": "United States",
+          "default": true
+        }
+      }
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "orders/paid",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Order-Id": "2968072093741",
+      "X-Shopify-Test": "false",
+      "X-Shopify-Hmac-SHA256": "+WSK/nRQ/MjTMmjK2V/LgZue5lOefmDj6B91oNsN1Kk=",
+      "X-Shopify-Webhook-Id": "a3159d10-cf06-4dbf-8d5d-c4331749f419",
+      "X-Shopify-API-Version": "2020-04"
+    }
+  }
+}

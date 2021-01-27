@@ -20,7 +20,7 @@ const processRecord = async (record) => {
       );
     }
 
-    const shopifyCollectionData = payload.collection;
+    const shopifyCollectionData = payload;
     const shopifyCollectionId = shopifyCollectionData.id;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);

@@ -1,0 +1,105 @@
+{
+  "version": "0",
+  "id": "1e1ad5ee-d4c5-35c1-9849-a3bfd18a8a78",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-17T02:46:10Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 4552007483437,
+      "title": "Fancy Ass Hat",
+      "body_html": "test 17",
+      "vendor": "neatowebsolutions-chad",
+      "product_type": "",
+      "created_at": "2020-01-26T19:12:07-05:00",
+      "handle": "fancy-hat",
+      "updated_at": "2021-01-16T21:45:57-05:00",
+      "published_at": "2020-01-26T19:02:22-05:00",
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "admin_graphql_api_id": "gid://shopify/Product/4552007483437",
+      "variants": [
+        {
+          "id": 32183839457325,
+          "product_id": 4552007483437,
+          "title": "Default Title",
+          "price": "34.99",
+          "sku": "FH-1234",
+          "position": 1,
+          "inventory_policy": "continue",
+          "compare_at_price": null,
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2020-01-26T19:12:07-05:00",
+          "updated_at": "2021-01-16T21:45:57-05:00",
+          "taxable": true,
+          "barcode": "",
+          "grams": 0,
+          "image_id": null,
+          "weight": 0,
+          "weight_unit": "lb",
+          "inventory_item_id": 33815062183981,
+          "inventory_quantity": -1,
+          "old_inventory_quantity": -1,
+          "requires_shipping": true,
+          "admin_graphql_api_id": "gid://shopify/ProductVariant/32183839457325"
+        }
+      ],
+      "options": [
+        {
+          "id": 5904676618285,
+          "product_id": 4552007483437,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 14485486534701,
+          "product_id": 4552007483437,
+          "position": 1,
+          "created_at": "2020-01-31T22:57:08-05:00",
+          "updated_at": "2020-01-31T22:57:08-05:00",
+          "alt": null,
+          "width": 1670,
+          "height": 1997,
+          "src": "https://cdn.shopify.com/s/files/1/0277/0865/3613/products/hat.jpg?v=1580529428",
+          "variant_ids": [],
+          "admin_graphql_api_id": "gid://shopify/ProductImage/14485486534701"
+        }
+      ],
+      "image": {
+        "id": 14485486534701,
+        "product_id": 4552007483437,
+        "position": 1,
+        "created_at": "2020-01-31T22:57:08-05:00",
+        "updated_at": "2020-01-31T22:57:08-05:00",
+        "alt": null,
+        "width": 1670,
+        "height": 1997,
+        "src": "https://cdn.shopify.com/s/files/1/0277/0865/3613/products/hat.jpg?v=1580529428",
+        "variant_ids": [],
+        "admin_graphql_api_id": "gid://shopify/ProductImage/14485486534701"
+      }
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "products/update",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Product-Id": "4552007483437",
+      "X-Shopify-Hmac-SHA256": "1rm4vOp5BtkZxIxP9ZTdbFjvArqubJUn5Fsc/8WB9Nw=",
+      "X-Shopify-Webhook-Id": "722d0c74-d48d-410e-830d-625003b209d8",
+      "X-Shopify-API-Version": "2020-01"
+    }
+  }
+}

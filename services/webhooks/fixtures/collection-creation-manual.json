@@ -1,0 +1,33 @@
+{
+  "version": "0",
+  "id": "44f4b558-7b4b-c440-10e6-a0123ac313f7",
+  "detail-type": "shopifyWebhook",
+  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "account": "174585217681",
+  "time": "2021-01-18T23:04:11Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "payload": {
+      "id": 207371632685,
+      "handle": "manual-test-2",
+      "title": "Manual Test 2",
+      "updated_at": "2021-01-18T18:04:09-05:00",
+      "body_html": "description",
+      "published_at": "2021-01-18T18:04:09-05:00",
+      "sort_order": "best-selling",
+      "template_suffix": "",
+      "published_scope": "web",
+      "admin_graphql_api_id": "gid://shopify/Collection/207371632685"
+    },
+    "metadata": {
+      "Content-Type": "application/json",
+      "X-Shopify-Topic": "collections/create",
+      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Collection-Id": "207371632685",
+      "X-Shopify-Hmac-SHA256": "gY4vyybh3T9V2z4tVlvKv5MvTV3Ow694WSvL4KizgpA=",
+      "X-Shopify-Webhook-Id": "fe9df856-2cc0-477d-b189-8f2ac43f7a70",
+      "X-Shopify-API-Version": "2020-04"
+    }
+  }
+}
