@@ -30,6 +30,7 @@ functions:
       - http:
           path: /health
           method: get
+          cors: true
   region:
     memorySize: 128
     handler: server/region.handler
@@ -37,6 +38,7 @@ functions:
       - http:
           path: /region
           method: get
+          cors: true
   server:
     handler: server/index.handler
     events:
