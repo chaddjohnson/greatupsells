@@ -10,7 +10,6 @@ const createShop = async (shopDomain, accessToken) => {
   shop.shopifyShopData = shopifyShopData;
 
   await shop.save();
-
   await logger.info(`Created new shop (${shop.toString()})`);
 
   return shop;

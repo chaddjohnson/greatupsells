@@ -179,14 +179,18 @@ functions:
       - http:
           path: /health
           method: get
-          cors: true
+  initializeShopByDomain:
+    handler: src/routes/initializeShopByDomain.handler
+    events:
+      - http:
+          path: /shops/domain/{domain}/initialization
+          method: post
   region:
     handler: src/routes/region.handler
     events:
       - http:
           path: /region
           method: get
-          cors: true
   trackOfferAcceptance:
     handler: src/routes/trackOfferAcceptance.handler
     events:

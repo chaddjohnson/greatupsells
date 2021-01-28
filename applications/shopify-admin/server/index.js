@@ -13,10 +13,9 @@ const {
   default: createShopifyAuth,
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
+const HttpClient = require('@neatowebsolutions/upselling-http-client');
 
 dotenvExpand(dotenv.config());
-
-const models = require('@neatowebsolutions/upselling-models');
 
 const port = getenv.int('SHOPIFY_ADMIN_PORT');
 const dev = process.env.NODE_ENV !== 'production';
@@ -27,8 +26,13 @@ const {
   SHOPIFY_ADMIN_API_KEY,
   SHOPIFY_ADMIN_API_SECRET_KEY,
   SHOPIFY_ADMIN_STOREFRONT_PORT,
-  JWT_SECRET
+  JWT_SECRET,
+  SHOPS_API_URL
 } = process.env;
+
+const shopsServiceHttpClient = new HttpClient({
+  baseUrl: SHOPS_API_URL
+});
 
 const createServer = () => {
   const server = new Koa();
@@ -66,10 +70,12 @@ const createServer = () => {
       ],
       afterAuth: async (ctx) => {
         const { shop: shopDomain, accessToken } = ctx.session;
-        const Shop = await models.get('Shop');
         const authToken = jwt.sign({ shopDomain }, JWT_SECRET);
 
-        await Shop.createOrUpdate(shopDomain, accessToken);
+        await shopsServiceHttpClient.post(
+          `/shops/domain/${shopDomain}/initialization`,
+          { accessToken }
+        );
 
         ctx.cookies.set('shopOrigin', shopDomain, {
           httpOnly: false,
