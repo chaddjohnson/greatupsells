@@ -1,24 +1,32 @@
-// const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-// const { mongodbClient } = require('@neatowebsolutions/upselling-models');
+const middy = require('@middy/core');
+const cors = require('@middy/http-cors');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const HttpClient = require('@neatowebsolutions/upselling-http-client');
 
-// TODO: Use middy + cors plugin
+const { SHOPS_API_URL } = process.env;
 
-// TODO: Check Shops Service API accessibility.
+const httpClient = new HttpClient({
+  baseUrl: SHOPS_API_URL
+});
 
-const handler = async (request, response) => {
-  // try {
-  // await mongodbClient.connect();
+const handler = middy(async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
 
-  // if (!mongodbClient.connected) {
-  //   throw new Error(`Cannot connect to database`);
-  // }
+  try {
+    await httpClient.get('/health');
 
-  response.status(StatusCodes.OK).send(ReasonPhrases.OK);
-  // } catch (error) {
-  //   response
-  //     .status(StatusCodes.INTERNAL_SERVER_ERROR)
-  //     .send(error.message || ReasonPhrases.INTERNAL_SERVER_ERROR);
-  // }
-};
+    return {
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
+    };
+  } catch (error) {
+    return {
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
+    };
+  }
+});
 
-module.exports = handler;
+handler.use(cors());
+
+module.exports.handler = handler;
