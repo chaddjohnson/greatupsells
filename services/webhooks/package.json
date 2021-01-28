@@ -17,7 +17,8 @@
   "dependencies": {
     "@neatowebsolutions/upselling-logger": "0.0.0",
     "dotenv": "^8.2.0",
-    "dotenv-expand": "^5.1.0"
+    "dotenv-expand": "^5.1.0",
+    "shopify-hmac-validation": "^1.1.1"
   },
   "devDependencies": {
     "@neatowebsolutions/upselling-logger": "0.0.0",
