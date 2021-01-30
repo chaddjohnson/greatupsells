@@ -42,7 +42,7 @@ const handler = async (event, context) => {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error deleting product`, error, event);
+    await logger.error(`Error deleting collection`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
