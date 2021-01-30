@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "neatowebsolutions-upselling-infrastructure"
-    key    = "logs.tfstate"
+    key    = "logs-service.tfstate"
     region = "us-east-1"
   }
 }
@@ -25,7 +25,7 @@ resource "aws_sqs_queue" "log" {
 }
 
 resource "aws_ssm_parameter" "log_queue_arn" {
-  name  = "/${terraform.workspace}/queues/log/arn"
+  name  = "/upselling/${terraform.workspace}/queues/log/arn"
   type  = "String"
   value = aws_sqs_queue.log.arn
 }

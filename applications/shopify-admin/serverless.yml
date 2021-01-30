@@ -40,6 +40,7 @@ functions:
           method: get
           cors: true
   server:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: server/index.handler
     events:
       - http:

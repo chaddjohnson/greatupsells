@@ -13,6 +13,7 @@ const {
   default: createShopifyAuth,
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
+const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client');
 
 dotenvExpand(dotenv.config());
@@ -23,6 +24,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const {
+  AWS_REGION,
   SHOPIFY_ADMIN_API_KEY,
   SHOPIFY_ADMIN_API_SECRET_KEY,
   SHOPIFY_ADMIN_STOREFRONT_PORT,
@@ -33,6 +35,13 @@ const {
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
+
+shopsServiceHttpClient.addRequestInterceptor(
+  aws4Interceptor({
+    region: AWS_REGION,
+    service: 'execute-api'
+  })
+);
 
 const createServer = () => {
   const server = new Koa();

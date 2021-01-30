@@ -2,14 +2,22 @@ const {
   checkWebhookHmacValidity,
   createRawBody
 } = require('shopify-hmac-validation');
+const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client');
 const logger = require('@neatowebsolutions/upselling-logger');
 
-const { SHOPS_API_URL, SHOPIFY_ADMIN_API_SECRET_KEY } = process.env;
+const { AWS_REGION, SHOPS_API_URL, SHOPIFY_ADMIN_API_SECRET_KEY } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
+
+httpClient.addRequestInterceptor(
+  aws4Interceptor({
+    region: AWS_REGION,
+    service: 'execute-api'
+  })
+);
 
 const processRecord = async (record) => {
   try {

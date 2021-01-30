@@ -61,9 +61,9 @@ const handler = async (event) => {
       }
     };
   } else {
-    await logger.warn('Invalid access attempt', decoded, event);
+    await logger.warn('Invalid access attempt', event);
 
-    return generateAuthResponse(decoded.userId, 'Deny', methodArn);
+    return generateAuthResponse('user', 'Deny', methodArn);
   }
 };
 

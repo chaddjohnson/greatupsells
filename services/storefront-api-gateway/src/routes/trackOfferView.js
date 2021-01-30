@@ -1,14 +1,22 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client');
 const logger = require('@neatowebsolutions/upselling-logger');
 
-const { SHOPS_API_URL } = process.env;
+const { AWS_REGION, SHOPS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
+
+httpClient.addRequestInterceptor(
+  aws4Interceptor({
+    region: AWS_REGION,
+    service: 'execute-api'
+  })
+);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

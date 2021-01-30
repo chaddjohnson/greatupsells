@@ -11,6 +11,12 @@ provider:
   logRetentionInDays: 14
   apiGateway:
     shouldStartNameWithService: true
+  resourcePolicy:
+    - Effect: Allow
+      Principal:
+        AWS: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+      Action: execute-api:Invoke
+      Resource: "*"
   environment:
     WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
     # SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
@@ -28,150 +34,175 @@ functions:
       - http:
           path: /order/{orderId}/cancelation
           method: post
+          authorizer: aws_iam
   createCollection:
     handler: src/routes/createCollection.handler
     events:
       - http:
           path: /collections
           method: post
+          authorizer: aws_iam
   createOffer:
     handler: src/routes/createOffer.handler
     events:
       - http:
           path: /offers
           method: post
+          authorizer: aws_iam
   createOrder:
     handler: src/routes/createOrder.handler
     events:
       - http:
           path: /orders
           method: post
+          authorizer: aws_iam
   createProduct:
     handler: src/routes/createProduct.handler
     events:
       - http:
           path: /products
           method: post
+          authorizer: aws_iam
   deactivateShop:
     handler: src/routes/deactivateShop.handler
     events:
       - http:
           path: /shops/{shopId}/deactivation
           method: post
+          authorizer: aws_iam
   deleteCollection:
     handler: src/routes/deleteCollection.handler
     events:
       - http:
           path: /collections/{collectionId}
           method: delete
+          authorizer: aws_iam
   deleteOffer:
     handler: src/routes/deleteOffer.handler
     events:
       - http:
           path: /offers
           method: delete
+          authorizer: aws_iam
   deleteProduct:
     handler: src/routes/deleteProduct.handler
     events:
       - http:
           path: /products/{productId}
           method: delete
+          authorizer: aws_iam
   findOfferAcceptances:
     handler: src/routes/findOfferAcceptances.handler
     events:
       - http:
           path: /offers/{offerId}/acceptances
           method: get
+          authorizer: aws_iam
   findOfferConversionRates:
     handler: src/routes/findOfferConversionRates.handler
     events:
       - http:
           path: /offers/{offerId}/conversion-rates
           method: get
+          authorizer: aws_iam
   findOfferConversions:
     handler: src/routes/findOfferConversions.handler
     events:
       - http:
           path: /offers/{offerId}/conversions
           method: get
+          authorizer: aws_iam
   findOfferRevenueIncreases:
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
           path: /offers/{offerId}/revenue-increases
           method: get
+          authorizer: aws_iam
   findOffers:
     handler: src/routes/findOffers.handler
     events:
       - http:
           path: /offers
           method: get
+          authorizer: aws_iam
   findOfferViews:
     handler: src/routes/findOfferViews.handler
     events:
       - http:
           path: /offers/{offerId}/views
           method: get
+          authorizer: aws_iam
   findOneCollectionByShopifyCollectionId:
     handler: src/routes/findOneCollectionByShopifyCollectionId.handler
     events:
       - http:
           path: /collections/shopify-collection-id/{shopifyCollectionId}
           method: get
+          authorizer: aws_iam
   findOneOffer:
     handler: src/routes/findOneOffer.handler
     events:
       - http:
           path: /offers/{offerId}
           method: get
+          authorizer: aws_iam
   findOneOrder:
     handler: src/routes/findOneOrder.handler
     events:
       - http:
           path: /orders/{orderId}
           method: get
+          authorizer: aws_iam
   findOneOrderByShopifyOrderId:
     handler: src/routes/findOneOrderByShopifyOrderId.handler
     events:
       - http:
           path: /orders/shopify-order-id/{shopifyOrderId}
           method: get
+          authorizer: aws_iam
   findOneProductByShopifyProductId:
     handler: src/routes/findOneProductByShopifyProductId.handler
     events:
       - http:
           path: /orders/shopify-product-id/{shopifyProductId}
           method: get
+          authorizer: aws_iam
   findOneRandomOfferProduct:
     handler: src/routes/findOneRandomOfferProduct.handler
     events:
       - http:
           path: /offers/{offerId}/products/random
           method: get
+          authorizer: aws_iam
   findOneRandomShopOffer:
     handler: src/routes/findOneRandomShopOffer.handler
     events:
       - http:
           path: /shops/{shopId}/offers/random
           method: get
+          authorizer: aws_iam
   findOneShop:
     handler: src/routes/findOneShop.handler
     events:
       - http:
           path: /shops/{shopId}
           method: get
+          authorizer: aws_iam
   findOneShopByDomain:
     handler: src/routes/findOneShopByDomain.handler
     events:
       - http:
           path: /shops/domain/{domain}
           method: get
+          authorizer: aws_iam
   findShopOffers:
     handler: src/routes/findShopOffers.handler
     events:
       - http:
           path: /shops/{shopId}/offers
           method: get
+          authorizer: aws_iam
   health:
     handler: src/routes/health.handler
     events:
@@ -184,6 +215,7 @@ functions:
       - http:
           path: /shops/domain/{domain}/initialization
           method: post
+          authorizer: aws_iam
   region:
     handler: src/routes/region.handler
     events:
@@ -196,36 +228,42 @@ functions:
       - http:
           path: /offers/{offerId}/acceptances
           method: post
+          authorizer: aws_iam
   trackOfferView:
     handler: src/routes/trackOfferView.handler
     events:
       - http:
           path: /offers/{offerId}/views
           method: post
+          authorizer: aws_iam
   updateCollection:
     handler: src/routes/updateCollection.handler
     events:
       - http:
           path: /collections/{collectionId}
           method: put
+          authorizer: aws_iam
   updateOffer:
     handler: src/routes/updateOffer.handler
     events:
       - http:
           path: /offers/{offerId}
           method: put
+          authorizer: aws_iam
   updateProduct:
     handler: src/routes/updateProduct.handler
     events:
       - http:
           path: /products/{productId}
           method: put
+          authorizer: aws_iam
   updateShop:
     handler: src/routes/updateShop.handler
     events:
       - http:
           path: /shops/{shopId}
           method: put
+          authorizer: aws_iam
 
   activateAndDeactivateShops:
     handler: src/workers/activateAndDeactivateShops.handler
