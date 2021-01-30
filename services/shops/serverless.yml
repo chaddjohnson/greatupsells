@@ -4,7 +4,6 @@ provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 256
-  timeout: 900
   endpointType: REGIONAL
   stage: ${env:STAGE, 'dev'}
   region: ${env:AWS_REGION, 'us-east-1'}
@@ -232,34 +231,41 @@ functions:
     handler: src/workers/activateAndDeactivateShops.handler
     events:
       - schedule: rate(1 day)
+    timeout: 900
   calculateStats:
     handler: src/workers/calculateStats.handler
     events:
       - schedule: cron(1 5,6 * * *)
+    timeout: 900
   fixShopWebhooks:
     handler: src/workers/fixShopWebhooks.handler
     events:
       - schedule: rate(1 day)
+    timeout: 900
   removeCopiedProducts:
     handler: src/workers/removeCopiedProducts.handler
     events:
       - schedule: rate(1 day)
+    timeout: 900
   shopCollectionImport:
     reservedConcurrency: 10
     handler: src/workers/shopCollectionImport.handler
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
+    timeout: 900
   shopProductImport:
     reservedConcurrency: 10
     handler: src/workers/shopProductImport.handler
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
+    timeout: 900
   updateShopPlans:
     handler: src/workers/updateShopPlans.handler
     events:
       - schedule: rate(1 day)
+    timeout: 900
 
 plugins:
   - serverless-offline
