@@ -265,11 +265,6 @@ functions:
           method: put
           authorizer: aws_iam
 
-  activateAndDeactivateShops:
-    handler: src/workers/activateAndDeactivateShops.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
   calculateStats:
     handler: src/workers/calculateStats.handler
     events:
@@ -298,6 +293,11 @@ functions:
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
+    timeout: 900
+  updateShopActiveStatuses:
+    handler: src/workers/updateShopActiveStatuses.handler
+    events:
+      - schedule: rate(1 day)
     timeout: 900
   updateShopPlans:
     handler: src/workers/updateShopPlans.handler
