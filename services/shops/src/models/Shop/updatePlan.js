@@ -4,7 +4,7 @@ const updatePlan = async (shop) => {
   try {
     if (!shop.plan.chargeId) {
       throw new Error(
-        `Cannot update plan for shop ${shop.domain} as no recurring charge exists`
+        `Cannot update plan for shop as no recurring charge exists (${shop.toString()})`
       );
     }
 
@@ -47,6 +47,7 @@ const updatePlan = async (shop) => {
       );
 
       shop.plan.level = 'FREE';
+      shop.plan.price = 0.0;
       shop.plan.active = false;
       shop.plan.chargeId = undefined;
       shop.plan.upgradedAt = undefined;
@@ -74,7 +75,6 @@ const updatePlan = async (shop) => {
       `Unable to verify and update plan statuses for shop ${shop.domain}`,
       error
     );
-    throw error;
   }
 };
 

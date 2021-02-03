@@ -67,21 +67,24 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
       const ignoredHttpStatuses = [
         StatusCodes.PAYMENT_REQUIRED,
         StatusCodes.NOT_FOUND,
-        StatusCodes.FORBIDDEN
+        StatusCodes.FORBIDDEN,
+        StatusCodes.LOCKED
       ];
       const isValidError =
         !error.response ||
-        ignoredHttpStatuses.includes(error.response.statusCode);
+        !ignoredHttpStatuses.includes(error.response.statusCode);
 
-      if (isValidError) {
-        await logger.warn(
-          `Failed to update Shopify webhook ${
-            definition.topic
-          } for shop ${shop.toString()}`,
-          error,
-          webhook
-        );
+      if (!isValidError) {
+        return;
       }
+
+      await logger.warn(
+        `Failed to update Shopify webhook ${
+          definition.topic
+        } for shop ${shop.toString()}`,
+        error,
+        webhook
+      );
     }
   }
 };

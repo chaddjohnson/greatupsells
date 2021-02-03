@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const isLambda = require('is-lambda');
-const models = require('@neatowebsolutions/upselling-models');
-const { logger, cleanTmp } = require('../utilities');
+const logger = require('@neatowebsolutions/upselling-logger');
+const models = require('../models');
 
 module.exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -13,12 +13,11 @@ module.exports.handler = async (event, context) => {
       await fs.emptyDir('/tmp');
     }
 
-    // const Shop = await models.get('Shop');
+    const Shop = await models.get('Shop');
 
-    // ...
-    // TODO: Run in parallel for shops.
+    await Shop.updatePlans();
   } catch (error) {
-    await logger.warn(`... failed`, error, event);
+    await logger.warn(`Job updateShopPlans failed`, error, event);
     throw error;
   }
 };

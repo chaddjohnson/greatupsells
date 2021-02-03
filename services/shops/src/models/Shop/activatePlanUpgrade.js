@@ -28,6 +28,7 @@ const activatePlanUpgrade = async (shop) => {
 
       // Mark the shop's plan as downgraded.
       shop.plan.level = 'FREE';
+      shop.plan.price = 0.0;
       shop.plan.active = false;
       shop.plan.chargeId = undefined;
       shop.plan.upgradedAt = undefined;
@@ -49,6 +50,7 @@ const activatePlanUpgrade = async (shop) => {
 
     // Update the shop's plan.
     shop.plan.level = 'premium'; // TODO
+    // shop.plan.price = ?; // TODO
     shop.plan.active = true;
     shop.plan.upgradedAt = Date.now();
     shop.plan.billingOn = new Date(recurringChargeData.billing_on);

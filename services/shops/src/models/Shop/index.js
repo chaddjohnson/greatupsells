@@ -4,14 +4,16 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
-const validateAccessToken = require('./validateAccessToken');
 const deactivate = require('./deactivate');
-const activateOrDeactivate = require('./activateOrDeactivate');
+const updateActiveStatus = require('./updateActiveStatus');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
 const activatePlanUpgrade = require('./activatePlanUpgrade');
 const cancelPlan = require('./cancelPlan');
 const downgradePlan = require('./downgradePlan');
 const updatePlan = require('./updatePlan');
+const updatePlans = require('./updatePlans');
+const fixWebhooks = require('./fixWebhooks');
+const updateActiveStatuses = require('./updateActiveStatuses');
 const initialize = require('./initialize');
 const toString = require('./toString');
 const hooks = require('./hooks');
@@ -49,7 +51,6 @@ const schema = new mongoose.Schema(
     locale: { type: String, required: true },
     timezone: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
-    internal: { type: Boolean, required: false, default: false },
     shopifyPlan: { type: String, required: true },
     plan: {
       level: {
@@ -58,6 +59,7 @@ const schema = new mongoose.Schema(
         enum: ['FREE', 'BASIC', 'PLUS', 'PRO'],
         default: 'FREE'
       },
+      price: { type: Number, required: false, default: 0.0, min: 0 },
       active: { type: Boolean, required: false, default: false },
       chargeId: { type: String, required: false },
       billingOn: { type: Date, required: false },
@@ -100,6 +102,18 @@ schema.statics.createOrUpdate = function (shopDomain, accessToken) {
   return createOrUpdate(shopDomain, accessToken);
 };
 
+schema.statics.updatePlans = function () {
+  return updatePlans();
+};
+
+schema.statics.fixWebhooks = function () {
+  return fixWebhooks();
+};
+
+schema.statics.updateActiveStatuses = function () {
+  return updateActiveStatuses();
+};
+
 schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
 };
@@ -112,16 +126,12 @@ schema.methods.getShopifyApiClient = function () {
   return getShopifyApiClient(this);
 };
 
-schema.methods.validateAccessToken = function () {
-  return validateAccessToken(this);
-};
-
 schema.methods.deactivate = function () {
   return deactivate(this);
 };
 
-schema.methods.activateOrDeactivate = function () {
-  return activateOrDeactivate(this);
+schema.methods.updateActiveStatus = function () {
+  return updateActiveStatus(this);
 };
 
 schema.methods.initiatePlanUpgrade = function () {

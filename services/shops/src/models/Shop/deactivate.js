@@ -16,6 +16,7 @@ const deactivate = async (shop) => {
 
   // Mark the shop's plan as downgraded.
   shop.plan.level = 'FREE';
+  shop.plan.price = 0.0;
   shop.plan.chargeId = undefined;
   shop.plan.upgradedAt = undefined;
   shop.plan.billingOn = undefined;

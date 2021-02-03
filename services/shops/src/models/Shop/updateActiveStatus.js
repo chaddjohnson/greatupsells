@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 const { StatusCodes } = require('http-status-codes');
 
-const activateOrDeactivate = async (shop) => {
+const updateActiveStatus = async (shop) => {
   if (!shop.accessToken && !shop.active) {
     return;
   }
@@ -48,4 +48,4 @@ const activateOrDeactivate = async (shop) => {
   }
 };
 
-module.exports = activateOrDeactivate;
+module.exports = updateActiveStatus;

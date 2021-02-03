@@ -6,7 +6,7 @@ const models = require('../models');
 module.exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await logger.info(`Running job fixShopWebhooks`);
+  await logger.info(`Running job updateShopActiveStatuses`);
 
   try {
     if (isLambda) {
@@ -15,9 +15,9 @@ module.exports.handler = async (event, context) => {
 
     const Shop = await models.get('Shop');
 
-    await Shop.fixWebhooks();
+    await Shop.updateActiveStatuses();
   } catch (error) {
-    await logger.warn(`Job fixShopWebhooks failed`, error, event);
+    await logger.warn(`Job updateShopActiveStatuses failed`, error, event);
     throw error;
   }
 };
