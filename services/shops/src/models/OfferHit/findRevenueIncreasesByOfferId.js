@@ -39,14 +39,15 @@ const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
       }
     }
   ];
-  let data = [];
+  let results = [];
 
-  data = await OfferHit.aggregate(pipelines);
-  data =
-    data.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) || [];
-  data = sortBy(data, ({ date }) => new Date(date));
+  results = await OfferHit.aggregate(pipelines);
+  results =
+    results.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) ||
+    [];
+  results = sortBy(results, ({ date }) => new Date(date));
 
-  return data;
+  return results;
 };
 
 module.exports = findRevenueIncreasesByOfferId;

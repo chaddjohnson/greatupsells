@@ -52,14 +52,14 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
       }
     }
   ];
-  let data = [];
+  let results = [];
 
-  data = await OfferHit.aggregate(pipelines);
-  data =
-    data.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
-  data = sortBy(data, ({ date }) => new Date(date));
+  results = await OfferHit.aggregate(pipelines);
+  results =
+    results.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
+  results = sortBy(results, ({ date }) => new Date(date));
 
-  return data;
+  return results;
 };
 
 module.exports = findConversionRatesByOfferId;
