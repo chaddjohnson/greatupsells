@@ -17,6 +17,8 @@ const removeCopiedProducts = async () => {
     .populate('shop')
     .cursor({ batchSize: 50 });
 
+  cursor.addCursorFlag('noCursorTimeout', true);
+
   await cursor.eachAsync(
     async (product) => {
       const { shop, shopifyShopId } = product;
