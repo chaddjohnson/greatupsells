@@ -13,7 +13,7 @@ const modelPathsMap = {
   // PopupTheme: path.join(__dirname, './PopupTheme'),
   Product: path.join(__dirname, './Product'),
   Shop: path.join(__dirname, './Shop'),
-  // Stat: path.join(__dirname, './Stat'),
+  Stats: path.join(__dirname, './Stats'),
   User: path.join(__dirname, './User')
 };
 
@@ -57,7 +57,7 @@ const getAll = async () => ({
   // PopupTheme: await get('PopupTheme'),
   Product: await get('Product'),
   Shop: await get('Shop'),
-  // Stat: await get('Stat'),
+  Stats: await get('Stats'),
   User: await get('User')
 });
 

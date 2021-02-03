@@ -1,0 +1,32 @@
+const mongodbClient = require('../mongodbClient');
+
+const calculateGrossProfitChange = async (startDate, endDate) => {
+  // TODO: Sum shop.plan.price for active shops installed today.
+
+  const Shop = mongodbClient.connection.model('Shop');
+  const pipelines = [
+    {
+      $match: {
+        active: true,
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate)
+        }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: '$plan.price'
+        }
+      }
+    }
+  ];
+
+  const { total } = await Shop.aggregate(pipelines);
+
+  return total;
+};
+
+module.exports = calculateGrossProfitChange;
