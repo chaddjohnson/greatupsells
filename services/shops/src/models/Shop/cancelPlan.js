@@ -2,6 +2,7 @@ const logger = require('@neatowebsolutions/upselling-logger');
 
 const cancelPlan = async (shop) => {
   if (!shop.plan.chargeId) {
+    await shop.resetPlan();
     return;
   }
 
@@ -36,16 +37,7 @@ const cancelPlan = async (shop) => {
     }
   }
 
-  // Mark the shop's plan as downgraded.
-  shop.plan.level = 'FREE';
-  shop.plan.price = 0.0;
-  shop.plan.active = false;
-  shop.plan.chargeId = undefined;
-  shop.plan.upgradedAt = undefined;
-  shop.plan.billingOn = undefined;
-  shop.plan.canceledAt = Date.now();
-
-  await shop.save();
+  await shop.resetPlan();
 };
 
 module.exports = cancelPlan;

@@ -1,3 +1,4 @@
+const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../mongodbClient');
 
 const updateActiveStatuses = async () => {
@@ -6,7 +7,16 @@ const updateActiveStatuses = async () => {
 
   cursor.addCursorFlag('noCursorTimeout', true);
 
-  await cursor.eachAsync((shop) => shop.updateActiveStatus(), { parallel: 50 });
+  await cursor.eachAsync(
+    async (shop) => {
+      try {
+        await shop.updateActiveStatus();
+      } catch (error) {
+        logger.warn(`Error updating shop active status ${shop.toString()}`);
+      }
+    },
+    { parallel: 50 }
+  );
 };
 
 module.exports = updateActiveStatuses;

@@ -44,6 +44,8 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         error,
         definition
       );
+
+      throw error;
     }
   }
 
@@ -85,6 +87,8 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         error,
         webhook
       );
+
+      throw error;
     }
   }
 };

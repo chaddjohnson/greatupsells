@@ -19,45 +19,33 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
   const Shop = mongodbClient.connection.model('Shop');
   let shop = await Shop.findByDomain(shopDomain);
 
-  try {
-    if (!shop) {
-      shop = await createShop(shopDomain, accessToken);
-    }
-
-    if (accessToken) {
-      await logger.info(
-        `Updating access token to ${accessToken} for shop ${shopDomain}`
-      );
-
-      // Set/update the access token for the shop.
-      shop.accessToken = accessToken;
-    } else {
-      await logger.warn(
-        `Attempted to update shop access token with empty token for shop ${shopDomain}`
-      );
-    }
-
-    // Mark the shop as no longer uninstalled (in case this app was uninstalled and reinstalled).
-    shop.uninstalledAt = undefined;
-
-    // Mark the shop as active.
-    shop.active = true;
-
-    await shop.save();
-  } catch (error) {
-    await logger.info(`Error creating new shop ${shopDomain}`, error);
-
-    throw error;
+  if (!shop) {
+    shop = await createShop(shopDomain, accessToken);
   }
 
-  try {
-    // Run various initializations for the shop.
-    await shop.initialize();
-  } catch (error) {
-    await logger.info(`Error initializing shop (${shop.toString()})`, error);
+  if (accessToken) {
+    await logger.info(
+      `Updating access token to ${accessToken} for shop ${shopDomain}`
+    );
 
-    throw error;
+    // Set/update the access token for the shop.
+    shop.accessToken = accessToken;
+  } else {
+    await logger.warn(
+      `Attempted to update shop access token with empty token for shop ${shopDomain}`
+    );
   }
+
+  // Mark the shop as no longer uninstalled (in case this app was uninstalled and reinstalled).
+  shop.uninstalledAt = undefined;
+
+  // Mark the shop as active.
+  shop.active = true;
+
+  await shop.save();
+
+  // Run various initializations for the shop.
+  await shop.initialize();
 
   return shop;
 };

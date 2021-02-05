@@ -9,6 +9,7 @@ const updateActiveStatus = require('./updateActiveStatus');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
 const activatePlanUpgrade = require('./activatePlanUpgrade');
 const cancelPlan = require('./cancelPlan');
+const resetPlan = require('./resetPlan');
 const downgradePlan = require('./downgradePlan');
 const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
@@ -144,6 +145,10 @@ schema.methods.activatePlanUpgrade = function () {
 
 schema.methods.cancelPlan = function () {
   return cancelPlan(this);
+};
+
+schema.methods.resetPlan = function () {
+  return resetPlan(this);
 };
 
 schema.methods.downgradePlan = function () {

@@ -6,9 +6,10 @@ const updateActiveStatus = async (shop) => {
     return;
   }
 
-  // If no access token is available, just mark the shop as inactive.
+  // Deactivate the shop if no access token is available.
   if (!shop.accessToken) {
-    return await shop.deactivate();
+    await shop.deactivate();
+    return;
   }
 
   try {
@@ -31,7 +32,11 @@ const updateActiveStatus = async (shop) => {
       return;
     }
 
-    const errorCodeWhitelist = [
+    const cancelPlanErrorCodeWhitelist = [
+      StatusCodes.NOT_FOUND,
+      StatusCodes.FORBIDDEN
+    ];
+    const deactivationErrorCodeWhitelist = [
       StatusCodes.PAYMENT_REQUIRED,
       StatusCodes.NOT_FOUND,
       StatusCodes.FORBIDDEN,
@@ -39,11 +44,23 @@ const updateActiveStatus = async (shop) => {
       StatusCodes.LOCKED
     ];
 
-    if (
+    const cancelShopPlan =
       error.response &&
-      errorCodeWhitelist.includes(error.response.statusCode)
-    ) {
-      return await shop.deactivate();
+      cancelPlanErrorCodeWhitelist.includes(error.response.statusCode);
+    const deactivateShop =
+      error.response &&
+      deactivationErrorCodeWhitelist.includes(error.response.statusCode);
+
+    if (cancelShopPlan) {
+      await shop.cancelPlan();
+    }
+
+    if (deactivateShop) {
+      await shop.deactivate();
+    }
+
+    if (!cancelShopPlan && !deactivateShop) {
+      throw error;
     }
   }
 };

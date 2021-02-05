@@ -11,18 +11,7 @@ const deactivate = async (shop) => {
   // longer interact with Shopify on behalf of the shop.
   shop.accessToken = null;
 
-  // Mark the shop's plan as canceled (Shopify cancels plans automatically on uninstall).
-  shop.canceledAt = shop.plan.canceledAt || Date.now();
-
-  // Mark the shop's plan as downgraded.
-  shop.plan.level = 'FREE';
-  shop.plan.price = 0.0;
-  shop.plan.chargeId = undefined;
-  shop.plan.upgradedAt = undefined;
-  shop.plan.billingOn = undefined;
-
   await shop.save();
-
   await logger.info(`Deactivated shop (${shop.toString()})`);
 
   if (shop.shopifyPlan === 'cancelled') {

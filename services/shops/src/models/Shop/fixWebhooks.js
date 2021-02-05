@@ -1,3 +1,4 @@
+const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../mongodbClient');
 
 const fixWebhooks = async () => {
@@ -9,7 +10,16 @@ const fixWebhooks = async () => {
 
   cursor.addCursorFlag('noCursorTimeout', true);
 
-  await cursor.eachAsync((shop) => shop.createWebhooks(), { parallel: 50 });
+  await cursor.eachAsync(
+    async (shop) => {
+      try {
+        await shop.createWebhooks();
+      } catch (error) {
+        logger.warn(`Error updating shop webhooks ${shop.toString()}`);
+      }
+    },
+    { parallel: 50 }
+  );
 };
 
 module.exports = fixWebhooks;
