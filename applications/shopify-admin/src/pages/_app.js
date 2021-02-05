@@ -16,7 +16,7 @@ import '@shopify/polaris/dist/styles.css';
 const cookies = new Cookies();
 
 const httpClient = new HttpClient({
-  baseUrl: process.env.PUBLIC_API_URL
+  baseUrl: process.env.SHOP_API_GATEWAY_URL
 });
 
 // Add the token to each request.
@@ -45,7 +45,7 @@ const App = ({ Component, pageProps }) => {
     <AppProvider i18n={translations} linkComponent={Link}>
       <AppBridgeProvider
         config={{
-          apiKey: process.env.SHOPIFY_ADMIN_API_KEY,
+          apiKey: process.env.SHOPIFY_ADMIN_APP_API_KEY,
           shopOrigin,
           forceRedirect: true
         }}

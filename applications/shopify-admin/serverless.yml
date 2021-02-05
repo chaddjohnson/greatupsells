@@ -14,10 +14,10 @@ provider:
     shouldStartNameWithService: true
   environment:
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    PUBLIC_API_URL: ${env:PUBLIC_API_URL, ssm:/upselling/${self:provider.stage}/public-api/url}
-    SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
-    SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
-    SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
+    SHOP_API_GATEWAY_URL: ${env:SHOP_API_GATEWAY_URL, ssm:/upselling/${self:provider.stage}/public-api/url}
+    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:

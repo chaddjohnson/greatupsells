@@ -15,7 +15,7 @@ provider:
   environment:
     AWS_ENDPOINT: ${env:AWS_ENDPOINT}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
-    SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:

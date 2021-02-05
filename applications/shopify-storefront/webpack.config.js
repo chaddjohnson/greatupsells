@@ -49,7 +49,7 @@ module.exports = {
       minRatio: 0.8,
       deleteOriginalAssets: false
     }),
-    new webpack.EnvironmentPlugin(['STOREFRONT_API_URL'])
+    new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL'])
   ],
   resolve: {
     symlinks: false,
@@ -61,7 +61,7 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
-    port: getenv.int('SHOPIFY_ADMIN_STOREFRONT_PORT'),
+    port: getenv.int('SHOPIFY_ADMIN_APP_STOREFRONT_PORT'),
     contentBase: path.join(__dirname, 'dist'),
     compress: true
   }

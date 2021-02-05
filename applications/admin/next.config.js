@@ -7,7 +7,7 @@ dotenvExpand(dotenv.config({ path: '../../.env' }));
 
 const dev = process.env.NODE_ENV !== 'production';
 
-const { ADMIN_APP_URL, ADMIN_API_URL } = process.env;
+const { ADMIN_APP_URL, ADMIN_API_GATEWAY_URL } = process.env;
 
 module.exports = withCss({
   webpack: (config) => {
@@ -74,5 +74,5 @@ module.exports = withCss({
   // Generate page/index.html instead of page.html.
   exportTrailingSlash: true,
 
-  env: { ADMIN_API_URL }
+  env: { ADMIN_API_GATEWAY_URL }
 });

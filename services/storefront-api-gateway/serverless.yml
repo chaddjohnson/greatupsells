@@ -76,7 +76,7 @@ custom:
     path: .env
     logging: false
   serverless-offline:
-    httpPort: ${env:STOREFRONT_API_PORT}
+    httpPort: ${env:STOREFRONT_API_GATEWAY_PORT}
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/storefront-api-gateway/endpoint/${self:provider.region}}
     basePath: ''
