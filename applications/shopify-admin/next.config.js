@@ -10,9 +10,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const {
   SHOPIFY_ADMIN_URL,
   SHOPIFY_ADMIN_API_KEY,
-  SHOPIFY_ADMIN_NAME,
-  PUBLIC_API_URL,
-  CONTACT_EMAIL
+  PUBLIC_API_URL
 } = process.env;
 
 module.exports = withCSS({
@@ -73,8 +71,6 @@ module.exports = withCSS({
   env: {
     SHOPIFY_ADMIN_URL,
     SHOPIFY_ADMIN_API_KEY,
-    SHOPIFY_ADMIN_NAME,
-    PUBLIC_API_URL,
-    CONTACT_EMAIL
+    PUBLIC_API_URL
   }
 });

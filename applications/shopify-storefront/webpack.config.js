@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
@@ -47,7 +48,8 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8,
       deleteOriginalAssets: false
-    })
+    }),
+    new webpack.EnvironmentPlugin(['STOREFRONT_API_URL'])
   ],
   resolve: {
     symlinks: false,

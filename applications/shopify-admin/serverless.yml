@@ -13,14 +13,12 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    PUBLIC_API_URL: ${ssm:/upselling/${self:provider.stage}/public-api/url}
-    MONGODB_URI: ${ssm:/upselling/${self:provider.stage}/database/mongodb/uri~true}
-    SHOPIFY_ADMIN_URL: ${ssm:/upselling/${self:provider.stage}/shopify-admin/url}
-    SHOPIFY_API_KEY: ${ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
-    WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-url}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
+    PUBLIC_API_URL: ${env:PUBLIC_API_URL, ssm:/upselling/${self:provider.stage}/public-api/url}
+    SHOPIFY_ADMIN_API_KEY: ${env:SHOPIFY_ADMIN_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    SHOPIFY_ADMIN_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    SHOPIFY_ADMIN_URL: ${env:SHOPIFY_ADMIN_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
   health:

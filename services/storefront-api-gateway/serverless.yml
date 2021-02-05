@@ -13,8 +13,9 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    AWS_ENDPOINT: ${env:AWS_ENDPOINT}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
   health:
@@ -75,7 +76,7 @@ custom:
     path: .env
     logging: false
   serverless-offline:
-    httpPort: ${env:API_PORT}
+    httpPort: ${env:STOREFRONT_API_PORT}
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/storefront-api-gateway/endpoint/${self:provider.region}}
     basePath: ''

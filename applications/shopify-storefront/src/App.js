@@ -12,7 +12,7 @@ import {
 } from './components';
 
 const httpClient = new HttpClient({
-  baseUrl: process.env.PUBLIC_API_URL
+  baseUrl: process.env.STOREFRONT_API_URL
 });
 
 const App = () => (

@@ -13,9 +13,10 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    AWS_ENDPOINT: ${env:AWS_ENDPOINT}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
   authorizer:
@@ -191,24 +192,19 @@ custom:
     path: .env
     logging: false
   serverless-offline:
-    httpPort: ${env:API_PORT}
+    httpPort: ${env:PUBLIC_API_PORT}
   ngrokTunnel:
     tunnels:
-      - port: ${env:API_PORT}
+      - port: ${env:PUBLIC_API_PORT}
         ngrokOptions:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
-          subdomain: ${env:API_TUNNEL_SUBDOMAIN}
+          subdomain: ${env:PUBLIC_API_TUNNEL_SUBDOMAIN}
       - port: ${env:SHOPIFY_ADMIN_PORT}
         ngrokOptions:
           authToken: ${env:NGROK_AUTH_TOKEN}
           region: ${env:NGROK_REGION}
           subdomain: ${env:SHOPIFY_ADMIN_SUBDOMAIN}
-      - port: ${env:WEBHOOKS_API_PORT}
-        ngrokOptions:
-          authToken: ${env:NGROK_AUTH_TOKEN}
-          region: ${env:NGROK_REGION}
-          subdomain: ${env:WEBHOOKS_API_TUNNEL_SUBDOMAIN}
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shop-api-gateway/endpoint/${self:provider.region}}
     basePath: ''

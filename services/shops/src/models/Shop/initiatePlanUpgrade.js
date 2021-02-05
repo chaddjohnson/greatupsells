@@ -1,6 +1,8 @@
 const getenv = require('getenv');
 const logger = require('@neatowebsolutions/upselling-logger');
 
+const { SHOPIFY_ADMIN_API_KEY } = process.env;
+
 const initiatePlanUpgrade = async (shop) => {
   try {
     // Do nothing if the shop is already upgraded.
@@ -30,7 +32,7 @@ const initiatePlanUpgrade = async (shop) => {
         name: 'Premium Plan', // TODO
         price: 4.99, // TODO
         trial_days: 14, // TODO
-        return_url: `https://${shop.domain}/admin/apps/${process.env.SHOPIFY_API_KEY}/account/premium`, // TODO
+        return_url: `https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_API_KEY}/account/premium`, // TODO
         test: getenv.bool('SANDBOX', true) || null
       }
     );

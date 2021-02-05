@@ -27,7 +27,7 @@ const processRecord = async (record) => {
     }
   });
 
-  // TODO: Use Email Service to send email notification for error logs.
+  // TODO: Use Email Service to enqueue an email notification for error logs.
 };
 
 const handler = async (event, context) => {

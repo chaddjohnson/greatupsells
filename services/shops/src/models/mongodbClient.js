@@ -1,8 +1,8 @@
 const MongodbClientLambda = require('@chaddjohnson/mongodb-client-lambda');
 
-const { MONGODB_URI } = process.env;
+const { MONGODB_URI_SHOPS } = process.env;
 
-const connectionUri = MONGODB_URI;
+const connectionUri = MONGODB_URI_SHOPS;
 const connectionOptions = {
   reconnectTries: 30,
   reconnectInterval: 500,

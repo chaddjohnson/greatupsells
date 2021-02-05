@@ -11,9 +11,10 @@ provider:
     shouldStartNameWithService: true
   environment:
     AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
     AWS_ENDPOINT: ${env:AWS_ENDPOINT}
-    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch/uri~true}
+    MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri~true}
 
 functions:
   log:
