@@ -2,7 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  target: 'web',
+  target: 'node',
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: './index.js',
   output: {
@@ -26,16 +26,5 @@ module.exports = {
     ]
   },
   plugins: [new CleanWebpackPlugin()],
-  stats: 'errors-warnings',
-  resolve: {
-    fallback: {
-      fs: false,
-      http: false,
-      https: false,
-      stream: false,
-      tty: false,
-      zlib: false,
-      net: false
-    }
-  }
+  stats: 'errors-warnings'
 };

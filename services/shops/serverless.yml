@@ -30,8 +30,8 @@ provider:
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${env:SHOP_COLLECTION_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${env:SHOP_PRODUCT_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
+    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
+    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
     WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
 
 functions:
