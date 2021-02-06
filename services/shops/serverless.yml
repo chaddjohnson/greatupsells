@@ -11,6 +11,12 @@ provider:
   logRetentionInDays: 14
   apiGateway:
     shouldStartNameWithService: true
+    resourcePolicy: # https://www.serverless.com/framework/docs/deprecations/#AWS_API_GATEWAY_SPECIFIC_KEYS
+      - Effect: Allow
+        Principal:
+          AWS: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+        Action: execute-api:Invoke
+        Resource: "*"
   resourcePolicy:
     - Effect: Allow
       Principal:
@@ -269,7 +275,7 @@ functions:
   calculateStats:
     handler: src/workers/calculateStats.handler
     events:
-      - schedule: cron(1 5,6 * * *)
+      - schedule: cron(1 5,6 * * * *)
     timeout: 900
   fixShopWebhooks:
     handler: src/workers/fixShopWebhooks.handler
@@ -309,7 +315,6 @@ functions:
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
-  - serverless-offline-sqs-external
   - serverless-plugin-monorepo
 
 custom:
@@ -317,6 +322,7 @@ custom:
     path: .env
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT}
+    lambdaPort: 5002
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shops-service-api/endpoint/${self:provider.region}}
     basePath: ''

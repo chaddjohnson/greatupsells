@@ -14,7 +14,7 @@ const {
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/upselling-http-client');
+const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
 dotenvExpand(dotenv.config());
 

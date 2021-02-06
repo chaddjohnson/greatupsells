@@ -7,7 +7,7 @@ let modelsLoaded = false;
 let modelMap = {};
 
 const modelPathsMap = {
-  Log: path.join(__dirname, './Log'),
+  Log: path.join(__dirname, './Log')
 };
 
 const loadModels = () => {

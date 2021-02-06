@@ -1,10 +1,10 @@
-terraform {
-  backend "s3" {
-    bucket = "neatowebsolutions-upselling-infrastructure"
-    key    = "logs-service.tfstate"
-    region = "us-east-1"
-  }
-}
+# terraform {
+#   backend "s3" {
+#     bucket = "neatowebsolutions-upselling-infrastructure"
+#     key    = "logs-service.tfstate"
+#     region = "us-east-1"
+#   }
+# }
 
 provider "aws" {
   version                     = "~> 3.18"
@@ -15,6 +15,7 @@ provider "aws" {
   skip_requesting_account_id  = terraform.workspace == "dev"
 
   endpoints {
+    # s3  = terraform.workspace == "dev" ? "http://localhost:4566" : null
     sqs = terraform.workspace == "dev" ? "http://localhost:4566" : null
     ssm = terraform.workspace == "dev" ? "http://localhost:4566" : null
   }

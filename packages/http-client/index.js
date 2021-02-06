@@ -6,6 +6,7 @@ class HttpClient {
 
     client.defaults.baseURL = baseUrl;
     client.defaults.timeout = 10 * 1000;
+    client.defaults.responseType = 'json';
     client.defaults.headers.common['Content-Type'] =
       'application/json; charset=utf-8';
 
@@ -21,7 +22,7 @@ class HttpClient {
   async request(method, url, data = {}, options = {}) {
     const response = await this.client({ method, url, data, ...options });
 
-    return response?.data;
+    return response && response.data;
   }
 
   async get(url, options = {}) {

@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const isLambda = require('is-lambda');
 const logger = require('@neatowebsolutions/upselling-logger');
+const models = require('../models');
 
 module.exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

@@ -3,7 +3,7 @@ const {
   createRawBody
 } = require('shopify-hmac-validation');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/upselling-http-client');
+const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 const logger = require('@neatowebsolutions/upselling-logger');
 
 const {

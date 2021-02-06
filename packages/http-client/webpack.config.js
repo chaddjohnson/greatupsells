@@ -26,5 +26,16 @@ module.exports = {
     ]
   },
   plugins: [new CleanWebpackPlugin()],
-  stats: 'errors-warnings'
+  stats: 'errors-warnings',
+  resolve: {
+    fallback: {
+      fs: false,
+      http: false,
+      https: false,
+      stream: false,
+      tty: false,
+      zlib: false,
+      net: false
+    }
+  }
 };

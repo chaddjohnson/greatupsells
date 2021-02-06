@@ -193,6 +193,7 @@ custom:
     logging: false
   serverless-offline:
     httpPort: ${env:SHOP_API_GATEWAY_PORT}
+    lambdaPort: 5000
   ngrokTunnel:
     tunnels:
       - port: ${env:SHOP_API_GATEWAY_PORT}

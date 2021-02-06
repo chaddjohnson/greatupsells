@@ -1,7 +1,7 @@
 #!/bin/bash
 
-[ -z "$STAGE" ] && echo "STAGE not set" && exit 1;
-[ -z "$AWS_REGION" ] && echo "AWS_REGION not set" && exit 1;
+[ -z "$STAGE" ] && echo "STAGE not set" && exit 1
+[ -z "$AWS_REGION" ] && echo "AWS_REGION not set" && exit 1
 
 # Remove old Terraform state.
 find . -type d -name ".terraform" -exec rm -rf {} +

@@ -1,7 +1,7 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const HttpClient = require('@neatowebsolutions/upselling-http-client');
+const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
 const { SHOPS_API_URL } = process.env;
 

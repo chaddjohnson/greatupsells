@@ -2,7 +2,7 @@ const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/upselling-http-client');
+const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 const logger = require('@neatowebsolutions/upselling-logger');
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
