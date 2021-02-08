@@ -26,5 +26,6 @@ module.exports = {
     ]
   },
   plugins: [new CleanWebpackPlugin()],
-  stats: 'errors-warnings'
+  stats: 'errors-warnings',
+  externals: ['axios']
 };

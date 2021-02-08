@@ -13,6 +13,7 @@
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
     "@neatowebsolutions/upselling-react-components": "0.0.0",
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "@shopify/app-bridge": "^1.26.2",
     "@shopify/app-bridge-react": "^1.26.2",
     "@shopify/koa-shopify-auth": "^3.1.70",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@neatowebsolutions/upselling-react-components": "0.0.0",
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-imports": "^2.0.0",
     "http-proxy-middleware": "^1.0.3",
