@@ -49,9 +49,6 @@ Please note that server infrastructure is managed at the organization level and 
 1. Clone this repository.
 1. Create a top-level `.env` file by copying `.env.example` and filling in values.
 1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop).
-1. Run Docker Desktop.
-1. Run `yarn docker`. This will start LocalStack (allowing you to run AWS services locally).
 1. Run `yarn start`. This automatically does the following:
     1. Installs dependencies.
     1. Runs Lerna bootstrapping.
@@ -117,8 +114,8 @@ Hosting is with AWS. The following AWS services are used:
 * CloudWatch Events
 * SES
 * SSM
-* Elasticsearch (via EC2)
 * ACM
+* Elasticsearch
 
 All infrastructure is managed via Serverless, Terraform, and Ansible.
 

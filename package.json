@@ -11,7 +11,8 @@
     "format": "lerna run format",
     "bootstrap": "NODE_ENV=development dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "NODE_ENV=production dotenv -- lerna run build --stream --scope=@neatowebsolutions/*",
-    "start": "dotenv -- ./scripts/start.sh"
+    "prestart": "yarn install && yarn bootstrap",
+    "start": "dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-shopify-admin,upselling-shopify-storefront,upselling-logs-service,upselling-shop-api-gateway,upselling-shops-service,upselling-storefront-api-gateway}"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",

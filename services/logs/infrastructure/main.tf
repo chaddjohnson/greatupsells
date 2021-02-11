@@ -1,24 +1,14 @@
-# terraform {
-#   backend "s3" {
-#     bucket = "neatowebsolutions-upselling-infrastructure"
-#     key    = "logs-service.tfstate"
-#     region = "us-east-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "neatowebsolutions-upselling-infrastructure"
+    key    = "logs-service.tfstate"
+    region = "us-east-1"
+  }
+}
 
 provider "aws" {
-  version                     = "~> 3.18"
-  region                      = "us-east-1"
-  s3_force_path_style         = terraform.workspace == "dev"
-  skip_credentials_validation = terraform.workspace == "dev"
-  skip_metadata_api_check     = terraform.workspace == "dev"
-  skip_requesting_account_id  = terraform.workspace == "dev"
-
-  endpoints {
-    # s3  = terraform.workspace == "dev" ? "http://localhost:4566" : null
-    sqs = terraform.workspace == "dev" ? "http://localhost:4566" : null
-    ssm = terraform.workspace == "dev" ? "http://localhost:4566" : null
-  }
+  version = "~> 3.18"
+  region  = "us-east-1"
 }
 
 resource "aws_sqs_queue" "log" {

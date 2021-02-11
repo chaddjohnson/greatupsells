@@ -10,9 +10,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_ENDPOINT: ${env:AWS_ENDPOINT}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
     ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch/uri~true}
     MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri~true}
 
@@ -31,20 +28,10 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-monorepo
   - serverless-offline
-  - serverless-offline-sqs-external
 
 custom:
   dotenv:
     path: .env
-  serverless-offline-sqs-external:
-    autoCreate: false
-    apiVersion: '2012-11-05'
-    host: localhost
-    port: 4566
-    region: ${self:provider.region}
-    accessKeyId: root
-    secretAccessKey: root
-    skipCacheInvalidation: false
 
 package:
   exclude:

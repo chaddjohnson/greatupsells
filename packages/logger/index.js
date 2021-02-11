@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 
 // TODO: Use bunyan? Use winston?
 
-const { AWS_ENDPOINT, AWS_REGION, LOG_QUEUE_URL, LOG_SOURCE } = process.env;
+const { LOG_QUEUE_URL, LOG_SOURCE } = process.env;
 
 const formatErrorData = (error) => {
   if (!(error instanceof Error)) {
@@ -51,18 +51,17 @@ const sendMessage = async (type, message, data) => {
   const source = LOG_SOURCE;
 
   try {
-    const sqs = new AWS.SQS({
-      endpoint: AWS_ENDPOINT,
-      region: AWS_REGION
-    });
+    const sqs = new AWS.SQS();
     const body = { source, type, message, data };
 
-    await sqs
-      .sendMessage({
-        QueueUrl: LOG_QUEUE_URL,
-        MessageBody: JSON.stringify(body)
-      })
-      .promise();
+    if (LOG_QUEUE_URL) {
+      await sqs
+        .sendMessage({
+          QueueUrl: LOG_QUEUE_URL,
+          MessageBody: JSON.stringify(body)
+        })
+        .promise();
+    }
   } catch (error) {
     console.error(
       `Unable to log ${source} message "${message}": ${error.message}`
