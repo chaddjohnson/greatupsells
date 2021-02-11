@@ -1,4 +1,4 @@
-service: upselling-shop-api-gateway
+service: upselling-storefront-api-gateway
 
 provider:
   name: aws
