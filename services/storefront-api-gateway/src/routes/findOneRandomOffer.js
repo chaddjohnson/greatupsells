@@ -27,8 +27,8 @@ const handler = middy(async (event, context) => {
 
   try {
     const domain = event.headers.Host || event.requestContext.domainName;
-    const { event: triggerEvent } = event.queryStringParameters;
-    const { shopifyProductIds } = event.multiValueQueryStringParameters;
+    const { event: triggerEvent } = event.queryStringParameters || {};
+    const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
     if (!shop) {

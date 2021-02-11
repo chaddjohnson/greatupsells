@@ -1,6 +1,6 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
-const models = require('../../models');
+const models = require('../models');
 const Product = require('../models/Product');
 
 const handler = async (event, context) => {

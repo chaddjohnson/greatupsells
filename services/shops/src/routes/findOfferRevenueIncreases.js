@@ -1,13 +1,13 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
-const models = require('../../models');
+const models = require('../models');
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
     const { offerId } = event.pathParameters;
-    const { startAt, endAt } = event.queryStringParameters;
+    const { startAt, endAt } = event.queryStringParameters || {};
     const Offer = await models.get('Offer');
     const offer = await Offer.findById(offerId);
 
