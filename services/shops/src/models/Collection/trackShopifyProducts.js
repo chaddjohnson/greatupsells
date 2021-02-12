@@ -63,7 +63,7 @@ const trackShopifyProducts = async (collection) => {
   // Track products for the collection.
   await trackCollectionProducts(collection);
 
-  // Track collections for the product.
+  // Track collection for the products.
   await trackProductCollections(collection);
 };
 
