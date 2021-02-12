@@ -34,7 +34,7 @@ const handler = async (event, context) => {
 
       await order.deleteOne();
     } else {
-      await logger.info(`Order created (${order.toString()})`, order);
+      await logger.info(`Order created (${order.toString()})`, data);
     }
 
     return {

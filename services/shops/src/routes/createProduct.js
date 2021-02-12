@@ -23,7 +23,7 @@ const handler = async (event, context) => {
     await product.trackShopifyCollections();
     await product.execPopulate('shop');
 
-    await logger.info(`Product created (${product.toString()})`, product);
+    await logger.info(`Product created (${product.toString()})`, data);
 
     return {
       statusCode: StatusCodes.CREATED,

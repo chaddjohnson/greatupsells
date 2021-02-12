@@ -26,10 +26,7 @@ const handler = async (event, context) => {
     await collection.trackShopifyProducts();
     await collection.execPopulate('shop');
 
-    await logger.info(
-      `Collection updated (${collection.toString()})`,
-      collection
-    );
+    await logger.info(`Collection updated (${collection.toString()})`, data);
 
     return {
       statusCode: StatusCodes.OK,

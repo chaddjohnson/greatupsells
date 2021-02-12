@@ -25,7 +25,7 @@ const handler = async (event, context) => {
     await product.save();
     await product.trackShopifyCollections();
     await product.execPopulate('shop');
-    await logger.info(`Product updated (${product.toString()})`, product);
+    await logger.info(`Product updated (${product.toString()})`, data);
 
     return {
       statusCode: StatusCodes.OK,
