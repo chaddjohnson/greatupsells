@@ -6,7 +6,7 @@ const useOffers = () => {
 
   const { data: offers, error: offersError, mutate: fetchOffers } = useSWR(
     `/offers`,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: false
     }

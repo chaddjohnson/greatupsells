@@ -26,7 +26,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.claims;
     const shop = await httpClient.get(`/shops/${shopId}`);
 
     return {

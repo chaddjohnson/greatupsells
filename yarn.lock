@@ -3039,19 +3039,19 @@
     uuid "^8.3.2"
     write-file-atomic "^3.0.3"
 
-"@shopify/app-bridge-react@^1.26.2":
+"@shopify/app-bridge-react@^1.29.0":
   version "1.29.0"
   resolved "https://registry.yarnpkg.com/@shopify/app-bridge-react/-/app-bridge-react-1.29.0.tgz#b6bc4300a9f07278f23809c9c263814945f58b26"
   integrity sha512-AheyyIT/Rcdrl+K4GCPZ6vlpRBHb/boqAm6pPF9fiMTJrMhcSnR3d2RmpDU1DI8S3e+EIavR0Hwv30WTxxYa6g==
   dependencies:
     "@shopify/app-bridge" "^1.29.0"
 
-"@shopify/app-bridge@^1.26.2", "@shopify/app-bridge@^1.29.0":
+"@shopify/app-bridge@^1.29.0":
   version "1.29.0"
   resolved "https://registry.yarnpkg.com/@shopify/app-bridge/-/app-bridge-1.29.0.tgz#217a7cc4cf8ccb51d76e87e6800bca9b9af61673"
   integrity sha512-gaGHjs9Ov0FLbjGnysrXDYU8r+WI+SKlORkmtJRbAR+Wq3/nlegvopY24/1P5R6bCPgoH+LBH0U9E31ZVCxbpw==
 
-"@shopify/koa-shopify-auth@^3.1.70":
+"@shopify/koa-shopify-auth@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@shopify/koa-shopify-auth/-/koa-shopify-auth-3.2.0.tgz#796377d8a532dfb44415fbb9a47d0ab0eb174dec"
   integrity sha512-84xbhz4YetDb/DQ3gxIvEXmdn5ZC92vDpweo88r6HRHy4jGGbEjT2/n9PJF2XDDmNFWsNMcVbiI19BwcOjmQUg==
@@ -3068,15 +3068,15 @@
   dependencies:
     tslib "^1.14.1"
 
-"@shopify/polaris-icons@^3.12.0":
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-3.12.0.tgz#8c8c396f37b53f2f1be1c05f327cf9a1c72ae307"
-  integrity sha512-2mFVSasVkZ6N7J5jOfnl4F83Ws6Q3xLef/k1pz3iV2osw0vUyJN0U4+E1H/8MFpY0hpBshTZYa1nHLwx9ORlPQ==
-
 "@shopify/polaris-icons@^4.1.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-4.3.0.tgz#78703fb7ce36933184c092d7df25453d061b01c2"
   integrity sha512-H1GGFwUEYDjW6w/89LyINj18MZgF5n6bF7AcFAF8w6JQJAvcl7oPjFn7dACqECX8CJG/v+2z901O17TS3g6Eow==
+
+"@shopify/polaris-icons@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-4.4.0.tgz#e66153159b3269df813c22dfe52f8a2b9ae32c11"
+  integrity sha512-MoqlzZPcVPKzGjlTSOfnxpdbXPxX6USUUnz9AqdgucacnNntNkij9S3Q92YUiWZiAXnLh57poXz9TB6XIjwv7w==
 
 "@shopify/polaris-tokens@^2.16.0":
   version "2.18.0"
@@ -3086,10 +3086,10 @@
     hsluv "^0.1.0"
     tslib "^1.14.1"
 
-"@shopify/polaris@^5.1.0":
-  version "5.15.1"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-5.15.1.tgz#4ec76ed51f6a481a35130067d2b1ba1c461fa9f3"
-  integrity sha512-01Fc6QEv1Q+5rYEHf++mvJuDiKSo2Zo2wImXmbsi7NtlSP3atZ+cKvTsaG0MUX56Soxs1Ns+k2y6os2TGHBeOg==
+"@shopify/polaris@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-6.0.1.tgz#c809b23396bd7cc539f788b84c3e7a7702afa882"
+  integrity sha512-3uDmySj7IBYc7TXrsq9NZqiMGEBqTh5Mgt7aI0gcDJag8JK7+7rek+k+05DWoERQN7vXUdS8EAo0dFnz0YhYLw==
   dependencies:
     "@shopify/polaris-icons" "^4.1.0"
     "@shopify/polaris-tokens" "^2.16.0"
@@ -3099,24 +3099,25 @@
     lodash "^4.17.4"
     react-transition-group "^4.4.1"
 
-"@shopify/predicates@^1.2.6":
+"@shopify/predicates@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@shopify/predicates/-/predicates-1.3.0.tgz#5a03f114436f95afc1f12f579cebd3021d756922"
   integrity sha512-avTonlWQA47uE5OTrKSdhGqrsu6RBFYbZ/j73SOwQnKyr2fwuv56O34YgejHt3O+d1lIYX9QvSuOucN1TyFTcg==
   dependencies:
     tslib "^1.14.1"
 
-"@shopify/react-form@^0.7.1":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@shopify/react-form/-/react-form-0.7.3.tgz#36176a7f6104a5cb35d8d39c5b2174c382eda025"
-  integrity sha512-3SuoIQxdEscP8u1gXWjkKgYR4qfQDCyhj+TsMzWrVNHCAWwqhCroeK7+eUs0droDJ7BH1z/m7h/fWsB1RZtpeg==
+"@shopify/react-form@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@shopify/react-form/-/react-form-0.11.0.tgz#b19962a5fd8b5431e6961862d7668d839b501013"
+  integrity sha512-m0DNiDN5P+n8EzWff0RMbGya1epq+ZoKhqlCUiPmpVAoGB+6Q9RbuKUJeyPlGeEgHTuuFwDjmrSecIJFeHJVBw==
   dependencies:
-    "@shopify/predicates" "^1.2.6"
-    "@shopify/react-hooks" "^1.11.1"
-    fast-deep-equal "^2.0.1"
+    "@shopify/predicates" "^1.3.0"
+    "@shopify/react-hooks" "^1.12.0"
+    fast-deep-equal "^3.1.3"
     get-value "^3.0.1"
+    tslib "^1.14.1"
 
-"@shopify/react-hooks@^1.11.1":
+"@shopify/react-hooks@^1.12.0":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@shopify/react-hooks/-/react-hooks-1.12.0.tgz#b31e7eb3c1a1eaa8f20a1473b0def619f90cb462"
   integrity sha512-j8c9J0alSt0/NcuPg1K5L57GO8rYfbskulqFrsCv4gCYVgEVPyJd3DqKaErxcY9kYzDEKfEDI2+hIAiR3Uiqsw==
@@ -7571,12 +7572,7 @@ fast-base64-decode@^1.0.0:
   resolved "https://registry.yarnpkg.com/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz#b434a0dd7d92b12b43f26819300d2dafb83ee418"
   integrity sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==
 
-fast-deep-equal@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
-  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
-
-fast-deep-equal@^3.1.1:
+fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
@@ -13126,15 +13122,6 @@ react-transition-group@^4.4.1:
     "@babel/runtime" "^7.5.5"
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
-    prop-types "^15.6.2"
-
-react@^16.13.1:
-  version "16.14.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
-  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
     prop-types "^15.6.2"
 
 react@^17.0.1:

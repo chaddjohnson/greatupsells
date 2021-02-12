@@ -19,11 +19,9 @@
     "@neatowebsolutions/upselling-http-client": "0.0.0"
   },
   "peerDependencies": {
-    "@shopify/app-bridge": "^1.24.0",
-    "@shopify/app-bridge-react": "^1.24.0",
     "prop-types": "^15.7.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "scripts": {
     "build": "webpack",

@@ -26,7 +26,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.claims;
     const { offerId } = event.pathParameters;
     const { startAt, endAt } = event.queryStringParameters || {};
     const [offer, offerAcceptances] = await Promise.all([

@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover, Button } from '@shopify/polaris';
-import { CalendarMajorMonotone } from '@shopify/polaris-icons';
+import { CalendarMajor } from '@shopify/polaris-icons';
 
 const DateRangePicker = ({ active, onActivate, onClose }) => (
   <Popover
     active={active}
     activator={
-      <Button
-        size="slim"
-        disclosure
-        icon={CalendarMajorMonotone}
-        onClick={onActivate}
-      >
+      <Button size="slim" disclosure icon={CalendarMajor} onClick={onActivate}>
         Last 90 days
       </Button>
     }

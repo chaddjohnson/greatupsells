@@ -7,7 +7,7 @@ const useRandomProduct = ({ offer }) => {
   const offerId = offer && offer._id;
   const { data: product } = useSWR(
     offerId ? `/offers/{offerId}/products/random` : null,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
 

@@ -1,6 +1,5 @@
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
-const withCSS = require('@zeit/next-css');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 dotenvExpand(dotenv.config());
@@ -13,7 +12,7 @@ const {
   SHOP_API_GATEWAY_URL
 } = process.env;
 
-module.exports = withCSS({
+module.exports = {
   webpack: (config) => {
     if (dev) {
       config.module.rules.push({
@@ -37,6 +36,13 @@ module.exports = withCSS({
         })
       );
     }
+
+    // Add support for .mjs files.
+    config.module.rules.push({
+      test: /\.mjs$/,
+      include: /node_modules/,
+      type: 'javascript/auto'
+    });
 
     // Necessary to use symlinked packages (Lerna creates symlinks in node_modules).
     config.resolve.symlinks = false;
@@ -73,4 +79,4 @@ module.exports = withCSS({
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOP_API_GATEWAY_URL
   }
-});
+};

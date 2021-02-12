@@ -2,14 +2,12 @@ import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import Cookies from 'universal-cookie';
-import {
-  ErrorBoundary,
-  Contexts
-} from '@neatowebsolutions/upselling-react-components';
+import { ErrorBoundary } from '@neatowebsolutions/upselling-react-components';
 import {
   HttpClientProvider,
   HttpClient
 } from '@neatowebsolutions/upselling-react-hooks';
+import { ShopProvider } from '../hooks';
 import { Link, RoutePropagator } from '../components';
 import '@shopify/polaris/dist/styles.css';
 
@@ -51,19 +49,19 @@ const App = ({ Component, pageProps }) => {
         }}
       >
         <HttpClientProvider httpClient={httpClient}>
-          <RoutePropagator />
-          {typeof window !== 'undefined' && window.top !== window.self && (
-            <ErrorBoundary>
-              <Contexts>
+          <ShopProvider>
+            <RoutePropagator />
+            {typeof window !== 'undefined' && window.top !== window.self && (
+              <ErrorBoundary>
                 <main style={{ paddingBottom: '120px' }}>
                   <Component {...pageProps} />
                 </main>
-              </Contexts>
-            </ErrorBoundary>
-          )}
-          {typeof window !== 'undefined' && window.top === window.self && (
-            <p>Loading...</p>
-          )}
+              </ErrorBoundary>
+            )}
+            {typeof window !== 'undefined' && window.top === window.self && (
+              <p>Loading...</p>
+            )}
+          </ShopProvider>
         </HttpClientProvider>
       </AppBridgeProvider>
     </AppProvider>

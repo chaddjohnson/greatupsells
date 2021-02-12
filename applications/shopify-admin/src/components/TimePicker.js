@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
-import { ClockMajorMonotone } from '@shopify/polaris-icons';
+import { ClockMajor } from '@shopify/polaris-icons';
 import moment from 'moment-timezone';
 import { flatten, times } from 'lodash';
 
@@ -127,7 +127,7 @@ const TimePicker = (props) => {
         <Autocomplete.TextField
           label={label}
           placeholder={placeholder}
-          prefix={<Icon source={ClockMajorMonotone} />}
+          prefix={<Icon source={ClockMajor} />}
           value={value}
           maxLength={8}
           onChange={handleTextChange}

@@ -10,13 +10,9 @@ import {
   Banner,
   SkeletonPage
 } from '@shopify/polaris';
-import {
-  useShop,
-  useOffer,
-  useOfferAnalytics,
-  useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
 import {
   TitleBar,
   LineChart,

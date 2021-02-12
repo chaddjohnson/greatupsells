@@ -27,12 +27,5 @@ module.exports = {
   },
   plugins: [new CleanWebpackPlugin()],
   stats: 'errors-warnings',
-  externals: [
-    '@shopify/app-bridge',
-    '@shopify/app-bridge/actions',
-    '@shopify/app-bridge-react',
-    'prop-types',
-    'react',
-    'react-dom'
-  ]
+  externals: ['prop-types', 'react', 'react-dom']
 };

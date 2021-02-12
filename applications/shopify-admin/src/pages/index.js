@@ -17,11 +17,9 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import {
-  useShop,
-  useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { useShop } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 
 const Stats = styled.div`

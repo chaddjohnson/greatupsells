@@ -9,8 +9,8 @@ import {
   SkeletonBodyText,
   EmptyState
 } from '@shopify/polaris';
-import { useShop, useOffers } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { useShop, useOffers } from '../../hooks';
 import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);

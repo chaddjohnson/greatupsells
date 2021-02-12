@@ -16,8 +16,8 @@ import {
   DuplicateMinor,
   CircleDisableMinor
 } from '@shopify/polaris-icons';
-import { useShop, useOffer } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { useShop, useOffer } from '../../../hooks';
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (

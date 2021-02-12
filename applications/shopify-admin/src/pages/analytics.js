@@ -9,11 +9,9 @@ import {
   DisplayText,
   TextStyle
 } from '@shopify/polaris';
-import { CalendarMajorMonotone } from '@shopify/polaris-icons';
-import {
-  useShop,
-  useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+import { CalendarMajor } from '@shopify/polaris-icons';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import { useShop } from '../hooks';
 import { TitleBar, LineChart } from '../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Analytics" />);
@@ -176,7 +174,7 @@ const AnalyticsPage = () => {
               <Button
                 size="slim"
                 disclosure
-                icon={CalendarMajorMonotone}
+                icon={CalendarMajor}
                 onClick={() => setDatePickerActive(!datePickerActive)}
               >
                 Last 90 days

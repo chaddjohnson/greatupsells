@@ -30,7 +30,7 @@ const useRandomOffer = ({ event, productIds }) => {
     shouldQuery
       ? `/offers/random?event=${event}&${shopifyProductIdsParam}`
       : null,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
 

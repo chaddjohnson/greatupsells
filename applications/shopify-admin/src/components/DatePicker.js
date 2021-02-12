@@ -7,7 +7,7 @@ import {
   DatePicker as ShopifyDatePicker,
   Icon
 } from '@shopify/polaris';
-import { CalendarMajorMonotone } from '@shopify/polaris-icons';
+import { CalendarMajor } from '@shopify/polaris-icons';
 
 const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
 const toIsoStartOfDay = (date) => date && moment(date).startOf('day').toDate();
@@ -75,7 +75,7 @@ const DatePicker = ({
           maxLength={10}
           readOnly
           error={error}
-          prefix={<Icon source={CalendarMajorMonotone} />}
+          prefix={<Icon source={CalendarMajor} />}
           onChange={handleTextChange}
           onFocus={() => setPopoverShown(true)}
         />

@@ -4,8 +4,6 @@ const logger = require('@neatowebsolutions/upselling-logger');
 
 const { JWT_SECRET } = process.env;
 
-const secret = Buffer.from(JWT_SECRET, 'base64');
-
 // Reference: https://github.com/tmaximini/serverless-jwt-authorizer/blob/master/functions/authorize.js
 
 const generatePolicyDocument = (effect, methodArn) => {
@@ -51,16 +49,20 @@ const handler = async (event) => {
     };
   }
 
-  const decoded = jwt.verify(token, secret);
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
 
-  if (decoded) {
-    return {
-      ...generateAuthResponse(decoded.userId, 'Allow', methodArn),
-      context: {
-        userId: decoded.userId
-      }
-    };
-  } else {
+    if (decoded) {
+      return {
+        ...generateAuthResponse(decoded.shopId, 'Allow', methodArn),
+        context: {
+          userId: decoded.userId
+        }
+      };
+    } else {
+      throw new Error('Cannot decode JWT');
+    }
+  } catch (error) {
     await logger.warn('Invalid access attempt', event);
 
     return generateAuthResponse('user', 'Deny', methodArn);

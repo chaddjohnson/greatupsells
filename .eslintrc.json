@@ -107,9 +107,6 @@
     "ecmaVersion": 10
   },
   "settings": {
-    "react": {
-      "version": "16.13.0"
-    },
     "import/resolver": {
       "node": {
         "paths": ["src"]

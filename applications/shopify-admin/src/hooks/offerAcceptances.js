@@ -15,7 +15,7 @@ const useOfferAcceptances = (offerId, startAt, endAt) => {
     offerId
       ? `/offers/${offerId}/acceptances?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
   const offerAcceptancesLoading = !offerAcceptances && !offerAcceptancesError;

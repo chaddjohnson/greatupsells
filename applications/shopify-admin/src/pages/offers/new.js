@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useRouter } from 'next/router';
 import { Page } from '@shopify/polaris';
-import { useShop, useOffer } from '@neatowebsolutions/upselling-react-hooks';
+import { useShop, useOffer } from '../../hooks';
 import { TitleBar, OfferForm } from '../../components';
 
 const PageTitleBar = memo(() => (

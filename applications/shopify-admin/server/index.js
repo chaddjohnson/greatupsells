@@ -79,12 +79,12 @@ const createServer = () => {
       ],
       afterAuth: async (ctx) => {
         const { shop: shopDomain, accessToken } = ctx.session;
-        const authToken = jwt.sign({ shopDomain }, JWT_SECRET);
-
-        await shopsServiceHttpClient.post(
+        const shop = await shopsServiceHttpClient.post(
           `/shops/domain/${shopDomain}/initialization`,
           { accessToken }
         );
+        const shopId = shop._id;
+        const authToken = jwt.sign({ shopId }, JWT_SECRET);
 
         ctx.cookies.set('shopOrigin', shopDomain, {
           httpOnly: false,

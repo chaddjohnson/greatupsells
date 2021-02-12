@@ -8,7 +8,7 @@ const useOffer = (offerId) => {
 
   const { data: offer, error: offerError, mutate: mutateOffer } = useSWR(
     offerId ? `/offers/${offerId}` : null,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
   const offerLoading = !offer && !offerError;
@@ -27,7 +27,6 @@ const useOffer = (offerId) => {
     try {
       mutateOffer(data, false);
       await httpClient.put(`/offers/${offerId}`, data);
-
       showSuccessToast('Offer saved');
     } catch (error) {
       showErrorToast('Error saving offer');

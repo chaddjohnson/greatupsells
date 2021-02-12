@@ -15,7 +15,7 @@ const useOfferViews = (offerId, startAt, endAt) => {
     offerId
       ? `/offers/${offerId}/views?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
-    httpClient.get,
+    httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
   const offerViewsLoading = !offerViews && !offerViewsError;
