@@ -76,7 +76,7 @@ functions:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn}
           batchSize: 10
-          maximumBatchingWindow: 60
+          maximumBatchingWindow: 10
   productDeletion:
     reservedConcurrency: 1
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
