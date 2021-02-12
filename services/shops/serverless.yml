@@ -287,16 +287,16 @@ functions:
     events:
       - schedule: rate(1 day)
     timeout: 900
-  shopCollectionImport:
-    reservedConcurrency: 10
-    handler: src/workers/shopCollectionImport.handler
+  importShopCollections:
+    reservedConcurrency: 5
+    handler: src/workers/importShopCollections.handler
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
     timeout: 900
-  shopProductImport:
-    reservedConcurrency: 10
-    handler: src/workers/shopProductImport.handler
+  importShopProducts:
+    reservedConcurrency: 5
+    handler: src/workers/importShopProducts.handler
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}

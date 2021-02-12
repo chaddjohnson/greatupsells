@@ -50,6 +50,7 @@ const trackProductCollections = async (collection) => {
       if (!product.shopifyCollectionIds.includes(shopifyCollectionId)) {
         product.shopifyCollectionIds.push(shopifyCollectionId);
         product.markModified('shopifyCollectionIds');
+
         await product.save();
       }
     })

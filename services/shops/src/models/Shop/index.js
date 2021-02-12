@@ -13,6 +13,8 @@ const resetPlan = require('./resetPlan');
 const downgradePlan = require('./downgradePlan');
 const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
+const importCollections = require('./importCollections');
+const importProducts = require('./importProducts');
 const fixWebhooks = require('./fixWebhooks');
 const updateActiveStatuses = require('./updateActiveStatuses');
 const initialize = require('./initialize');
@@ -105,6 +107,14 @@ schema.statics.createOrUpdate = function (shopDomain, accessToken) {
 
 schema.statics.updatePlans = function () {
   return updatePlans();
+};
+
+schema.statics.importCollections = function () {
+  return importCollections(this);
+};
+
+schema.statics.importProducts = function () {
+  return importProducts(this);
 };
 
 schema.statics.fixWebhooks = function () {

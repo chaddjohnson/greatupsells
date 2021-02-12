@@ -70,6 +70,7 @@ const addProductToCollections = async (product, collections) => {
       if (!collection.shopifyProductIds.includes(shopifyProductId)) {
         collection.shopifyProductIds.push(shopifyProductId);
         collection.markModified('shopifyProductIds');
+
         await collection.save();
       }
     })
@@ -90,6 +91,7 @@ const trackShopifyCollections = async (product) => {
   // Track the collections for the product.
   product.shopifyCollectionIds = shopifyCollectionIds;
   product.markModified('shopifyCollectionIds');
+
   await product.save();
 
   // Update the collections to reference the product.

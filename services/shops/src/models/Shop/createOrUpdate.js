@@ -15,7 +15,7 @@ const createShop = async (shopDomain, accessToken) => {
   return shop;
 };
 
-const createOrUpdateShop = async (shopDomain, accessToken) => {
+const createOrUpdate = async (shopDomain, accessToken) => {
   const Shop = mongodbClient.connection.model('Shop');
   let shop = await Shop.findByDomain(shopDomain);
 
@@ -50,4 +50,4 @@ const createOrUpdateShop = async (shopDomain, accessToken) => {
   return shop;
 };
 
-module.exports = createOrUpdateShop;
+module.exports = createOrUpdate;

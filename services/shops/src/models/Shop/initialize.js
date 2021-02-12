@@ -2,8 +2,8 @@ const logger = require('@neatowebsolutions/upselling-logger');
 const createWebhooks = require('./createWebhooks');
 const addScripts = require('./addScripts');
 const addProductTypeRule = require('./addProductTypeRule');
-const importCollections = require('./importCollections');
-const importProducts = require('./importProducts');
+const enqueueCollectionImport = require('./enqueueCollectionImport');
+const enqueueProductImport = require('./enqueueProductImport');
 
 const initialize = async (shop) => {
   await logger.info(`(Re)initializing shop (${shop.toString()})`);
@@ -11,8 +11,8 @@ const initialize = async (shop) => {
   await createWebhooks(shop);
   await addScripts(shop);
   await addProductTypeRule(shop);
-  await importCollections(shop);
-  await importProducts(shop);
+  await enqueueCollectionImport(shop);
+  await enqueueProductImport(shop);
 };
 
 module.exports = initialize;

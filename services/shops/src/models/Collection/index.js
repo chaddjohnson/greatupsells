@@ -15,11 +15,11 @@ const schema = new mongoose.Schema(
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: Number, required: true },
     shopifyCollectionId: { type: Number, required: true },
-    shopifyProductIds: [{ type: Number, required: true }],
     shopifyCollectionData: {
       type: mongoose.Schema.Types.Mixed,
       required: true
     },
+    shopifyProductIds: [{ type: Number, required: true }],
     title: { type: String, required: true },
     productCount: { type: Int32, required: true, default: 0, min: 0 }
   },

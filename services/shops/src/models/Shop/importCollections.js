@@ -1,23 +1,92 @@
-const AWS = require('aws-sdk');
+const Promise = require('bluebird');
+const logger = require('@neatowebsolutions/upselling-logger');
+const models = require('..');
 
-const { SHOP_COLLECTION_IMPORT_QUEUE_URL } = process.env;
+const importCollection = async (shop, shopifyCollectionData) => {
+  try {
+    const Collection = await models.get('Collection');
+    const { shopifyShopId } = shop;
+    const shopifyCollectionId = shopifyCollectionData.id;
+    let collection = await Collection.findByShopifyCollectionId(
+      shopifyCollectionData.id
+    );
+
+    if (Collection) {
+      Collection.shopifyCollectionData = shopifyCollectionData;
+    } else {
+      collection = new Collection({
+        shop,
+        shopifyShopId,
+        shopifyCollectionId,
+        shopifyCollectionData
+      });
+
+      logger.info(
+        `Imported collection from Shopify (${collection.toString()})`,
+        shopifyCollectionData
+      );
+    }
+
+    await collection.save();
+    await collection.trackShopifyProducts();
+  } catch (error) {
+    logger.warn(
+      `Error importing Shopify collection ${
+        shopifyCollectionData.id
+      } for shop (${shop.toString()})`
+    );
+  }
+};
+
+const importCustomCollections = async (shop) => {
+  const shopifyApiClient = shop.getShopifyApiClient();
+  let params = { limit: 100 };
+
+  // Handle pagination.
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const shopifyCollections = await shopifyApiClient.customCollection.list(
+      params
+    );
+
+    // eslint-disable-next-line no-await-in-loop
+    await Promise.mapSeries(
+      shopifyCollections,
+      async (shopifyCollectionData) => {
+        await importCollection(shop, shopifyCollectionData);
+      }
+    );
+
+    params = shopifyCollections.nextPageParameters;
+  } while (params);
+};
+
+const importSmartCollections = async (shop) => {
+  const shopifyApiClient = shop.getShopifyApiClient();
+  let params = { limit: 100 };
+
+  // Handle pagination.
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const shopifyCollections = await shopifyApiClient.smartCollection.list(
+      params
+    );
+
+    // eslint-disable-next-line no-await-in-loop
+    await Promise.mapSeries(
+      shopifyCollections,
+      async (shopifyCollectionData) => {
+        await importCollection(shop, shopifyCollectionData);
+      }
+    );
+
+    params = shopifyCollections.nextPageParameters;
+  } while (params);
+};
 
 const importCollections = async (shop) => {
-  if (!SHOP_COLLECTION_IMPORT_QUEUE_URL) {
-    return;
-  }
-
-  const sqs = new AWS.SQS();
-
-  // Enqueue a background worker.
-  await sqs
-    .sendMessage({
-      QueueUrl: SHOP_COLLECTION_IMPORT_QUEUE_URL,
-      MessageBody: JSON.stringify({
-        shopId: shop.id
-      })
-    })
-    .promise();
+  await importCustomCollections(shop);
+  await importSmartCollections(shop);
 };
 
 module.exports = importCollections;
