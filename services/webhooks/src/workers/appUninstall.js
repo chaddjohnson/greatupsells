@@ -63,4 +63,4 @@ const handler = async (event) => {
   await Promise.all(event.Records.map(processRecord));
 };
 
-module.exports = handler;
+module.exports.handler = handler;
