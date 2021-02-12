@@ -11,7 +11,7 @@ const handler = async (event, context) => {
 
     await Shop.updatePlans();
   } catch (error) {
-    await logger.warn(`Job updateShopPlans failed`, error, event);
+    await logger.error(`Job updateShopPlans failed`, error, event);
     throw error;
   }
 };
