@@ -26,7 +26,8 @@ const findOneRandomProduct = async (offer) => {
         $or: [
           { shopifyProductId: { $in: offeredShopifyProductIds } },
           { shopifyCollectionIds: { $in: offeredShopifyCollectionIds } }
-        ]
+        ],
+        'shopifyProductData.published_at': { $ne: null }
       }
     },
     { $sample: { size: 1 } }
