@@ -6,9 +6,12 @@ const useRandomProduct = ({ offer }) => {
 
   const offerId = offer && offer._id;
   const { data: product } = useSWR(
-    offerId ? `/offers/{offerId}/products/random` : null,
+    offerId ? `/offers/${offerId}/products/random` : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false
+    }
   );
 
   return { product };

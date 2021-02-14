@@ -145,6 +145,10 @@ const OfferPopup = ({
 
   Modal.setAppElement(appRoot);
 
+  if (!offer || !product) {
+    return null;
+  }
+
   return (
     <Modal
       closeTimeoutMS={!renderTo ? 200 : 0}

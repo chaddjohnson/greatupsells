@@ -1,3 +1,4 @@
+const URL = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const {
@@ -5,6 +6,7 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
+const qs = require('qs');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 const logger = require('@neatowebsolutions/upselling-logger');
@@ -26,7 +28,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const domain = event.headers.Host || event.requestContext.domainName;
+    const domain = URL.parse(event.headers.Origin).host;
     const { event: triggerEvent } = event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
     const shop = await httpClient.get(`/shops/domain/${domain}`);
@@ -39,11 +41,15 @@ const handler = middy(async (event, context) => {
     }
 
     const shopId = shop._id;
-    const shopifyProductIdsParam = shopifyProductIds.map(
-      (shopifyProductId) => `shopifyProductIds=${shopifyProductId}`
+    const params = qs.stringify(
+      {
+        event: triggerEvent,
+        shopifyProductIds
+      },
+      { arrayFormat: 'repeat' }
     );
     const offer = await httpClient.get(
-      `/shops/${shopId}/offers/random?event=${triggerEvent}&${shopifyProductIdsParam}`
+      `/shops/${shopId}/offers/random?${params}`
     );
 
     if (!offer) {

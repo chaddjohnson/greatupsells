@@ -74,7 +74,8 @@ The following are used:
 
 ### Coding Conventions
 
-* PascalCase for component file names and exported components.
+* kebab-case for names of repositories, applications, packages, and services.
+* PascalCase for names of component file and exported components.
 * camelCase for variable names.
 * camelCase for code file names (except for pages, which must use hyphens).
 * Prettier and ESLint for code formatting.

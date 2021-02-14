@@ -107,6 +107,7 @@ const ExitIntentOffer = () => {
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       offer={offer}
+      product={product}
       onAccept={handleAcceptance}
       onClose={() => setPopupOpen(false)}
     />

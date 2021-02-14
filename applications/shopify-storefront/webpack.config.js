@@ -23,12 +23,8 @@ module.exports = {
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|dist)/,
         use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env', '@babel/preset-react']
-            }
-          },
+          { loader: 'cache-loader' },
+          { loader: 'babel-loader' },
           { loader: 'eslint-loader' }
         ]
       },
@@ -52,7 +48,9 @@ module.exports = {
     new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL'])
   ],
   resolve: {
-    symlinks: false,
+    // Setting this to `true` allows dependency packages to be watched.
+    symlinks: true,
+
     alias: {
       react: 'preact/compat',
       'react-dom/test-utils': 'preact/test-utils',

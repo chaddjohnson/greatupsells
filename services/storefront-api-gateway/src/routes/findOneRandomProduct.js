@@ -1,3 +1,4 @@
+const URL = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const {
@@ -26,8 +27,8 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const domain = event.headers.Host || event.requestContext.domainName;
-    const offerId = event.pathParams.id;
+    const domain = URL.parse(event.headers.Origin).host;
+    const { offerId } = event.pathParameters;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
     if (!shop) {

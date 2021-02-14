@@ -1,6 +1,8 @@
 const mongodbClient = require('../mongodbClient');
 
 const findOneRandomProduct = async (offer) => {
+  await offer.execPopulate('shop');
+
   const { shop, offeredProducts, offeredCollections } = offer;
 
   // Return no product if the offer has neither products nor collections.
@@ -15,8 +17,6 @@ const findOneRandomProduct = async (offer) => {
   const offeredShopifyCollectionIds = offeredCollections.map(
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
-
-  await offer.execPopulate('shop');
 
   // Randomly select a product for the offer OR a product in a collection for the offer.
   const randomProducts = await Product.aggregate([

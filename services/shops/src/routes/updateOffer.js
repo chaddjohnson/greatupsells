@@ -24,6 +24,7 @@ const handler = async (event, context) => {
 
     await offer.save();
     await offer.execPopulate('shop');
+
     await logger.info(`Offer updated (${offer.toString()})`, offer);
 
     return {

@@ -10,20 +10,20 @@ import {
 const triggerEvent = 'CHECKOUT';
 
 const CheckoutOffer = () => {
-  const [productIds, setProductIds] = useState([]);
+  const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer } = useRandomOffer({
     event: triggerEvent,
-    productIds
+    shopifyProductIds
   });
   const { product } = useRandomProduct({ offer });
 
   const handleClosePopup = () => {
     setPopupOpen(false);
-    setProductIds([]);
+    setShopifyProductIds([]);
   };
 
   const handleAcceptance = async (productId, variantId, quantity) => {
@@ -73,7 +73,7 @@ const CheckoutOffer = () => {
     (async () => {
       const { items } = await fetchShopifyCart();
 
-      setProductIds(items.map(({ id }) => id));
+      setShopifyProductIds(items.map(({ id }) => id));
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -82,7 +82,7 @@ const CheckoutOffer = () => {
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       offer={offer}
-      product={offer?.product}
+      product={product}
       onAccept={handleAcceptance}
       onClose={handleClosePopup}
     />

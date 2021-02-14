@@ -72,27 +72,31 @@ const sendMessage = async (type, message, data) => {
 const debug = async (message, ...data) => {
   const formattedData = format(data);
 
-  console.debug(message, formattedData);
+  console.debug(message);
+  console.debug(formattedData);
 };
 
 const info = async (message, ...data) => {
   const formattedData = format(data);
 
-  console.info(message, formattedData);
+  console.info(message);
+  console.info(formattedData);
   await sendMessage('info', message, data);
 };
 
 const warn = async (message, ...data) => {
   const formattedData = format(data);
 
-  console.warn(message, formattedData);
+  console.warn(message);
+  console.warn(formattedData);
   await sendMessage('warn', message, data);
 };
 
 const error = async (message, ...data) => {
   const formattedData = format(data);
 
-  console.error(message, formattedData);
+  console.error(message);
+  console.error(formattedData);
   await sendMessage('error', message, data);
 };
 

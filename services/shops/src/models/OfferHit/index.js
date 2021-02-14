@@ -42,7 +42,7 @@ const schema = new mongoose.Schema(
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',
-      required: true
+      required: false
     },
     shopifyOrderId: { type: Number, required: false },
     shopifyOrderNumber: { type: Int32, required: false },

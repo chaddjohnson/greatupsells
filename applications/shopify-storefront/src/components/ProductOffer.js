@@ -10,20 +10,20 @@ import {
 const triggerEvent = 'ADD';
 
 const ProductOffer = () => {
-  const [productIds, setProductIds] = useState([]);
+  const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer } = useRandomOffer({
     event: triggerEvent,
-    productIds
+    shopifyProductIds
   });
   const { product } = useRandomProduct({ offer });
 
   const handleClosePopup = () => {
     setPopupOpen(false);
-    setProductIds([]);
+    setShopifyProductIds([]);
   };
 
   const handleAcceptance = async (
@@ -81,7 +81,7 @@ const ProductOffer = () => {
           const addedProduct = JSON.parse(request?.responseText || {});
 
           if (addedProduct?.id) {
-            setProductIds([addedProduct.id]);
+            setShopifyProductIds([addedProduct.id]);
           }
         });
       }
@@ -99,7 +99,7 @@ const ProductOffer = () => {
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       offer={offer}
-      product={offer?.product}
+      product={product}
       onAccept={handleAcceptance}
       onClose={handleClosePopup}
     />

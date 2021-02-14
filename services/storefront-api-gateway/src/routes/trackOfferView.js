@@ -1,3 +1,4 @@
+const URL = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
@@ -25,8 +26,8 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = event.headers.Host || event.requestContext.domainName;
-    const offerId = event.pathParams.id;
+    const domain = URL.parse(event.headers.Origin).host;
+    const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
       httpClient.get(`/offers/${offerId}`)
