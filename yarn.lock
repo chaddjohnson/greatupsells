@@ -14170,10 +14170,10 @@ shell-quote@1.7.2:
   resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
   integrity sha512-mRz/m/JVscCrkMyPqHc/bczi3OQHkLTqXHEFu0zDhK/qfv3UcOA4SVmRCLmos4bhjr9ekVQubj/R7waKapmiQg==
 
-shopify-api-node@^3.3.1:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/shopify-api-node/-/shopify-api-node-3.6.3.tgz#22e9c06acb5a392c075c65186973faf6b77dd844"
-  integrity sha512-JcCUeCF5DJxMndctmZVXPuKexy4vgEK+lAjS//BmkitNWnh5GmYp6OIzNUGkCHCB9aPYe8BY7JbAlbRZMlqB2g==
+shopify-api-node@^3.6.5:
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/shopify-api-node/-/shopify-api-node-3.6.5.tgz#f2163fa0ec9ee352ae4578907c8d4ce63bbce372"
+  integrity sha512-gYcU+XY3vjlut0JDMMPNJvzjbd9W3579ovKuEn1BVfAy/NrqkZhnD6dF+ndEHn5ucZDFEjCiHJTZEgP9WkWYbQ==
   dependencies:
     got "^11.1.4"
     lodash "^4.17.10"
