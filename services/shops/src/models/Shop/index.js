@@ -4,6 +4,7 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
+const createWebhooks = require('./createWebhooks');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
@@ -129,12 +130,12 @@ schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
 };
 
-schema.methods.deactivate = function () {
-  return deactivate(this);
-};
-
 schema.methods.getShopifyApiClient = function () {
   return getShopifyApiClient(this);
+};
+
+schema.methods.createWebhooks = function () {
+  return createWebhooks(this);
 };
 
 schema.methods.deactivate = function () {
