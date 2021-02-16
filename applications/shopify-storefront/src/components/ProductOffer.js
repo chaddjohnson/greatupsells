@@ -80,8 +80,8 @@ const ProductOffer = () => {
         request.addEventListener('load', () => {
           const addedProduct = JSON.parse(request?.responseText || {});
 
-          if (addedProduct?.id) {
-            setShopifyProductIds([addedProduct.id]);
+          if (addedProduct?.product_id) {
+            setShopifyProductIds([addedProduct.product_id]);
           }
         });
       }

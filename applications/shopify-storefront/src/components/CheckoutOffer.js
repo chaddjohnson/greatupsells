@@ -73,7 +73,7 @@ const CheckoutOffer = () => {
     (async () => {
       const { items } = await fetchShopifyCart();
 
-      setShopifyProductIds(items.map(({ id }) => id));
+      setShopifyProductIds(items.map((item) => item.product_id));
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
