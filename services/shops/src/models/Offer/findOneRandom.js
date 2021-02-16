@@ -24,6 +24,10 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   triggerEvent,
   shopifyProductIds
 ) => {
+  shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
+    parseInt(shopifyProductId)
+  );
+
   const Collection = mongodbClient.connection.model('Collection');
   const Offer = mongodbClient.connection.model('Offer');
   const collections = await Collection.find({

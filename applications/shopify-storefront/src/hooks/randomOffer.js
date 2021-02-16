@@ -6,7 +6,11 @@ import {
   useCookies
 } from '@neatowebsolutions/upselling-react-hooks';
 
-const useRandomOffer = ({ event, shopifyProductIds }) => {
+const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
+  if (!Array.isArray(shopifyProductIds)) {
+    shopifyProductIds = [shopifyProductIds];
+  }
+
   const { httpClient } = useHttpClient();
   const { getCookie } = useCookies();
 
