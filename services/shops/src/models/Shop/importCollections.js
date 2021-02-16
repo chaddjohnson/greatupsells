@@ -33,7 +33,8 @@ const importCollection = async (shop, shopifyCollectionData) => {
     logger.warn(
       `Error importing Shopify collection ${
         shopifyCollectionData.id
-      } for shop (${shop.toString()})`
+      } for shop (${shop.toString()})`,
+      error
     );
   }
 };

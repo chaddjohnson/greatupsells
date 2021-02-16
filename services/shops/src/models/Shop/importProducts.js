@@ -31,7 +31,8 @@ const importProduct = async (shop, shopifyProductData) => {
     logger.warn(
       `Error importing Shopify product ${
         shopifyProductData.id
-      } for shop (${shop.toString()})`
+      } for shop (${shop.toString()})`,
+      error
     );
   }
 };
