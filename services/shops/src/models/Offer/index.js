@@ -114,8 +114,12 @@ schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
 
-schema.statics.findOneRandom = function (triggerEvent, shopifyProductIds) {
-  return findOneRandom(triggerEvent, shopifyProductIds);
+schema.statics.findOneRandom = function (
+  shop,
+  triggerEvent,
+  shopifyProductIds
+) {
+  return findOneRandom(shop, triggerEvent, shopifyProductIds);
 };
 
 schema.methods.findOneRandomProduct = function () {
