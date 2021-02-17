@@ -20,7 +20,7 @@ const useOfferTracking = () => {
     const offerViews = getCookie('upsellingOfferViews') || { events: [] };
 
     // Track whether an offer has shown for the event.
-    if (!offerViews.events.includes(triggerEvent)) {
+    if (!offerViews.events.indexOf(triggerEvent) > -1) {
       offerViews.events.push(triggerEvent);
 
       // Save the offer view.
