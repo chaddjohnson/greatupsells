@@ -29,13 +29,15 @@ const useOfferTracking = () => {
     setOfferHitId(offerHit._id);
 
     // Track whether an offer has shown for the event.
-    offerViews.events.push(triggerEvent);
+    if (!offerViews.events.includes(triggerEvent)) {
+      offerViews.events.push(triggerEvent);
 
-    // Save the offer view.
-    setCookie('upsellingOfferViews', offerViews, {
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 // 1 day
-    });
+      // Save the offer view.
+      setCookie('upsellingOfferViews', offerViews, {
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 // 1 day
+      });
+    }
   };
 
   const trackOfferAcceptance = async (
