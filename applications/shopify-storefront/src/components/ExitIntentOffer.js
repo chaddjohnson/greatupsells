@@ -75,14 +75,14 @@ const ExitIntentOffer = () => {
       }
 
       if (!from || from.nodeName === 'HTML') {
+        setPopupOpen(true);
+
         await trackOfferView(
           offer._id,
           triggerEvent,
           shopifyProductId,
           shopifyVariantId
         );
-
-        setPopupOpen(true);
       }
     },
     [offer, product, trackOfferView]
