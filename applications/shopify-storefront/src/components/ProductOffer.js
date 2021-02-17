@@ -8,7 +8,10 @@ const ProductOffer = () => {
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const {
+    addProductToShopifyCart,
+    onProductAddedToShopifyCart
+  } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer, product } = useRandomOffer({
     event: triggerEvent,
@@ -63,30 +66,14 @@ const ProductOffer = () => {
     })();
   }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Subscribe to product add events.
   useEffect(() => {
-    const originalOpen = window.XMLHttpRequest.prototype.open;
-
-    window.XMLHttpRequest.prototype.open = function (method, url, ...params) {
-      const request = this;
-
-      // Intercept Shopify's add to cart event.
-      if (url === '/cart/add.js') {
-        request.addEventListener('load', () => {
-          const addedProduct = JSON.parse(request?.responseText || {});
-
-          if (addedProduct?.product_id) {
-            setShopifyProductIds([addedProduct.product_id]);
-          }
-        });
+    return onProductAddedToShopifyCart((addedProduct) => {
+      if (addedProduct?.product_id) {
+        setShopifyProductIds([addedProduct.product_id]);
       }
-
-      return originalOpen.apply(this, [method, url, ...params]);
-    };
-
-    return () => {
-      window.XMLHttpRequest.prototype.open = originalOpen;
-    };
-  }, []);
+    });
+  }, [onProductAddedToShopifyCart]);
 
   return (
     <OfferPopup
