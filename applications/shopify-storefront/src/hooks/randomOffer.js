@@ -14,7 +14,6 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const { getCookie } = useCookies();
 
   const offerViews = getCookie('upsellingOfferViews') || { events: [] };
-
   const offerViewed = offerViews.events.indexOf(event) > -1;
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
