@@ -31,7 +31,20 @@ const handler = middy(async (event, context) => {
     const domain = URL.parse(event.headers.Origin).host;
     const { event: triggerEvent } = event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
-    const shop = await httpClient.get(`/shops/domain/${domain}`);
+
+    const offerParams = qs.stringify(
+      {
+        event: triggerEvent,
+        shopifyProductIds
+      },
+      { arrayFormat: 'repeat' }
+    );
+
+    // Look up offers by domain to reduce this method's latency.
+    const [shop, offer] = await Promise.all([
+      httpClient.get(`/shops/domain/${domain}`),
+      httpClient.get(`/shops/domain/${domain}/offers/random?${offerParams}`)
+    ]);
 
     if (!shop) {
       return {
@@ -39,18 +52,6 @@ const handler = middy(async (event, context) => {
         body: ReasonPhrases.NOT_FOUND
       };
     }
-
-    const shopId = shop._id;
-    const params = qs.stringify(
-      {
-        event: triggerEvent,
-        shopifyProductIds
-      },
-      { arrayFormat: 'repeat' }
-    );
-    const offer = await httpClient.get(
-      `/shops/${shopId}/offers/random?${params}`
-    );
 
     if (!offer) {
       return {

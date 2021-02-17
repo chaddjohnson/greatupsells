@@ -6,12 +6,20 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.pathParameters;
+    const { domain } = event.pathParameters;
     const { event: triggerEvent } = event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
     const Shop = await models.get('Shop');
     const Offer = await models.get('Offer');
-    const shop = await Shop.findById(shopId);
+    const shop = await Shop.findByDomain(domain);
+
+    if (!shop) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     const offer = await Offer.findOneRandom(
       shop,
       triggerEvent,

@@ -29,7 +29,10 @@ const handler = middy(async (event, context) => {
   try {
     const domain = URL.parse(event.headers.Origin).host;
     const { offerId } = event.pathParameters;
-    const shop = await httpClient.get(`/shops/domain/${domain}`);
+    const [shop, product] = await Promise.all([
+      httpClient.get(`/shops/domain/${domain}`),
+      httpClient.get(`/offers/${offerId}/products/random`)
+    ]);
 
     if (!shop) {
       return {
@@ -37,8 +40,6 @@ const handler = middy(async (event, context) => {
         body: ReasonPhrases.NOT_FOUND
       };
     }
-
-    const product = await httpClient.get(`/offers/${offerId}/products/random`);
 
     if (!product) {
       return {

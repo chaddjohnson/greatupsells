@@ -182,11 +182,11 @@ functions:
           path: /offers/{offerId}/products/random
           method: get
           authorizer: aws_iam
-  findOneRandomShopOffer:
-    handler: src/routes/findOneRandomShopOffer.handler
+  findOneRandomShopOfferByDomain:
+    handler: src/routes/findOneRandomShopOfferByDomain.handler
     events:
       - http:
-          path: /shops/{shopId}/offers/random
+          path: /shops/domain/{domain}/offers/random
           method: get
           authorizer: aws_iam
   findOneShop:
