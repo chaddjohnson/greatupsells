@@ -4,7 +4,7 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent) => {
   const Offer = mongodbClient.connection.model('Offer');
 
   // Randomly find an offer having the trigger event as a trigger.
-  const offers = await Offer.aggregate([
+  const randomOffers = await Offer.aggregate([
     {
       $match: {
         shop: shop._id,
@@ -12,11 +12,21 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent) => {
         enabled: true
       }
     },
-    { $sample: { size: 1 } }
+    { $sample: { size: 1 } },
+    {
+      $project: {
+        _id: 1
+      }
+    }
   ]);
-  const offer = offers[0];
+  const randomOffer = randomOffers[0];
 
-  return offer;
+  if (!randomOffer || !randomOffer._id) {
+    return;
+  }
+
+  // Aggregation only returns JSON, so query for a Mongoose document.
+  return await Offer.findById(randomOffer._id);
 };
 
 const findOneRandomByTriggerEventAndShopifyProductIds = async (
@@ -40,7 +50,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   // Randomly select an offer having the trigger event as a trigger AND [one of
   // the Shopify products as a trigger OR a collection to which one or more
   // of the products belong as a trigger].
-  const offers = await Offer.aggregate([
+  const randomOffers = await Offer.aggregate([
     {
       $match: {
         shop: shop._id,
@@ -67,14 +77,14 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
       }
     }
   ]);
-  const { _id } = offers[0];
+  const randomOffer = randomOffers[0];
 
-  if (!_id) {
+  if (!randomOffer || !randomOffer._id) {
     return;
   }
 
   // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Offer.findById(_id);
+  return await Offer.findById(randomOffer._id);
 };
 
 const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {

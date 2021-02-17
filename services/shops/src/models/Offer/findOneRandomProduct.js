@@ -30,11 +30,21 @@ const findOneRandomProduct = async (offer) => {
         'shopifyProductData.published_at': { $ne: null }
       }
     },
-    { $sample: { size: 1 } }
+    { $sample: { size: 1 } },
+    {
+      $project: {
+        _id: 1
+      }
+    }
   ]);
   const randomProduct = randomProducts[0];
 
-  return randomProduct;
+  if (!randomProduct || !randomProduct._id) {
+    return;
+  }
+
+  // Aggregation only returns JSON, so query for a Mongoose document.
+  return await Product.findById(randomProduct._id);
 };
 
 module.exports = findOneRandomProduct;
