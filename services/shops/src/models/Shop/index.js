@@ -5,6 +5,8 @@ const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const findRecentOfferHit = require('./findRecentOfferHit');
 const createWebhooks = require('./createWebhooks');
+const importCollections = require('./importCollections');
+const importProducts = require('./importProducts');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
 const initiatePlanUpgrade = require('./initiatePlanUpgrade');
@@ -14,8 +16,6 @@ const resetPlan = require('./resetPlan');
 const downgradePlan = require('./downgradePlan');
 const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
-const importCollections = require('./importCollections');
-const importProducts = require('./importProducts');
 const fixWebhooks = require('./fixWebhooks');
 const updateActiveStatuses = require('./updateActiveStatuses');
 const initialize = require('./initialize');
@@ -110,14 +110,6 @@ schema.statics.updatePlans = function () {
   return updatePlans();
 };
 
-schema.statics.importCollections = function () {
-  return importCollections(this);
-};
-
-schema.statics.importProducts = function () {
-  return importProducts(this);
-};
-
 schema.statics.fixWebhooks = function () {
   return fixWebhooks();
 };
@@ -136,6 +128,14 @@ schema.methods.getShopifyApiClient = function () {
 
 schema.methods.createWebhooks = function () {
   return createWebhooks(this);
+};
+
+schema.methods.importCollections = function () {
+  return importCollections(this);
+};
+
+schema.methods.importProducts = function () {
+  return importProducts(this);
 };
 
 schema.methods.deactivate = function () {

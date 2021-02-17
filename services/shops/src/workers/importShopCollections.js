@@ -5,7 +5,7 @@ const processRecord = async (record) => {
   const body = JSON.parse(record.body);
   const { shopId } = body;
   const Shop = await models.get('Shop');
-  const shop = Shop.findById(shopId);
+  const shop = await Shop.findById(shopId);
 
   await shop.importCollections();
 };
