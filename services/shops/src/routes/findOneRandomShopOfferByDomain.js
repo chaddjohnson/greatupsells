@@ -26,9 +26,28 @@ const handler = async (event, context) => {
       shopifyProductIds
     );
 
+    if (!offer) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
+    const product = await offer.findOneRandomProduct();
+
+    if (!product) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offer)
+      body: JSON.stringify({
+        offer,
+        product
+      })
     };
   } catch (error) {
     await logger.error(`Error retrieving random offer for shop`, error, event);

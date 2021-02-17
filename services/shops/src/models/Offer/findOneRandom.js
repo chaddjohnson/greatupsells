@@ -60,11 +60,21 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
         enabled: true
       }
     },
-    { $sample: { size: 1 } }
+    { $sample: { size: 1 } },
+    {
+      $project: {
+        _id: 1
+      }
+    }
   ]);
-  const offer = offers[0];
+  const { _id } = offers[0];
 
-  return offer;
+  if (!_id) {
+    return;
+  }
+
+  // Aggregation only returns JSON, so query for a Mongoose document.
+  return await Offer.findById(_id);
 };
 
 const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {

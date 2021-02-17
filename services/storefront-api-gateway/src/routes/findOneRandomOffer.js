@@ -40,20 +40,14 @@ const handler = middy(async (event, context) => {
       { arrayFormat: 'repeat' }
     );
 
-    // Look up offers by domain to reduce this method's latency.
-    const [shop, offer] = await Promise.all([
+    // Look up offer by domain to reduce this method's latency. Offer and product
+    // are combined into one response to reduce latency.
+    const [shop, { offer, product }] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
       httpClient.get(`/shops/domain/${domain}/offers/random?${offerParams}`)
     ]);
 
-    if (!shop) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
-    if (!offer) {
+    if (!shop || !offer || !product) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
@@ -62,7 +56,10 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offer)
+      body: JSON.stringify({
+        offer,
+        product
+      })
     };
   } catch (error) {
     if (error.response && error.response.status) {

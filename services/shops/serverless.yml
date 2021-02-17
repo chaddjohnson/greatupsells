@@ -175,13 +175,6 @@ functions:
           path: /orders/shopify-product-id/{shopifyProductId}
           method: get
           authorizer: aws_iam
-  findOneRandomOfferProduct:
-    handler: src/routes/findOneRandomOfferProduct.handler
-    events:
-      - http:
-          path: /offers/{offerId}/products/random
-          method: get
-          authorizer: aws_iam
   findOneRandomShopOfferByDomain:
     handler: src/routes/findOneRandomShopOfferByDomain.handler
     events:

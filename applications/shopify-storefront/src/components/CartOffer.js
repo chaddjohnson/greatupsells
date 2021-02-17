@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import {
-  useOfferTracking,
-  useRandomOffer,
-  useRandomProduct,
-  useShopifyAjaxApi
-} from '../hooks';
+import { useOfferTracking, useRandomOffer, useShopifyAjaxApi } from '../hooks';
 
 const triggerEvent = 'CART';
 
@@ -15,11 +10,10 @@ const CartOffer = () => {
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer } = useRandomOffer({
+  const { offer, product } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
-  const { product } = useRandomProduct({ offer });
 
   const handleClosePopup = () => {
     setPopupOpen(false);

@@ -37,7 +37,7 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
     { arrayFormat: 'repeat' }
   );
 
-  const { data: offer } = useSWR(
+  const { data } = useSWR(
     shouldQuery ? `/offers/random?${params}` : null,
     httpClient.get.bind(httpClient),
     {
@@ -45,8 +45,9 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
       shouldRetryOnError: false
     }
   );
+  const { offer, product } = data || {};
 
-  return { offer };
+  return { offer, product };
 };
 
 export default useRandomOffer;
