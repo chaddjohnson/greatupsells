@@ -9,7 +9,9 @@ const ExitIntentOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product } = useRandomOffer({ event: triggerEvent });
+  const { offer, product, offerViewed } = useRandomOffer({
+    event: triggerEvent
+  });
 
   const handleAcceptance = async (
     shopifyProductId,
@@ -40,7 +42,13 @@ const ExitIntentOffer = () => {
     async (event) => {
       event = event || window.event;
 
+      // Nothing to show if there is no offer or product.
       if (!offer || !product) {
+        return;
+      }
+
+      // Do not show the offer if one has already shown.
+      if (offerViewed) {
         return;
       }
 
@@ -85,7 +93,7 @@ const ExitIntentOffer = () => {
         );
       }
     },
-    [offer, product, trackOfferView]
+    [offer, product, offerViewed] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   useEffect(() => {

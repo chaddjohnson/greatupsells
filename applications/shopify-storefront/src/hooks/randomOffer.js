@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import qs from 'qs';
 import useSWR from 'swr';
 import {
@@ -16,18 +15,11 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
 
   const offerViews = getCookie('upsellingOfferViews') || { events: [] };
 
-  // Query only when an offer has not already shown for the event. This
-  // reduces costly API traffic by preventing unnecessary API requests
-  // on every page load across potentially thousands of sites.
-  const offerViewedForEvent = useMemo(
-    () => offerViews.events.includes(event),
-    [event] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  const offerViewed = offerViews.events.includes(event);
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
   const isProductEvent = !!shopifyProductIds?.length;
-  const shouldQuery =
-    !offerViewedForEvent && (isLoadEvent || isExitEvent || isProductEvent);
+  const shouldQuery = isLoadEvent || isExitEvent || isProductEvent;
 
   const params = qs.stringify(
     {
@@ -47,7 +39,7 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   );
   const { offer, product } = data || {};
 
-  return { offer, product };
+  return { offer, product, offerViewed };
 };
 
 export default useRandomOffer;

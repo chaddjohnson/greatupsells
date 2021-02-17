@@ -19,15 +19,6 @@ const useOfferTracking = () => {
     // Retrieve local event and offer tracking data.
     const offerViews = getCookie('upsellingOfferViews') || { events: [] };
 
-    // Record an offer hit.
-    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
-      shopifyProductId,
-      shopifyVariantId
-    });
-
-    // Keep track of the newly-created offer hit.
-    setOfferHitId(offerHit._id);
-
     // Track whether an offer has shown for the event.
     if (!offerViews.events.includes(triggerEvent)) {
       offerViews.events.push(triggerEvent);
@@ -38,6 +29,15 @@ const useOfferTracking = () => {
         maxAge: 60 * 60 * 24 // 1 day
       });
     }
+
+    // Record an offer hit.
+    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
+      shopifyProductId,
+      shopifyVariantId
+    });
+
+    // Keep track of the newly-created offer hit.
+    setOfferHitId(offerHit._id);
   };
 
   const trackOfferAcceptance = async (

@@ -9,7 +9,9 @@ const ShopVisitOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product } = useRandomOffer({ event: triggerEvent });
+  const { offer, product, offerViewed } = useRandomOffer({
+    event: triggerEvent
+  });
 
   const handleAcceptance = async (
     shopifyProductId,
@@ -34,7 +36,13 @@ const ShopVisitOffer = () => {
   };
 
   useEffect(() => {
+    // Nothing to show if there is no offer or product.
     if (!offer || !product) {
+      return;
+    }
+
+    // Do not show the offer if one has already shown.
+    if (offerViewed) {
       return;
     }
 
@@ -52,7 +60,7 @@ const ShopVisitOffer = () => {
         shopifyVariantId
       );
     })();
-  }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <OfferPopup

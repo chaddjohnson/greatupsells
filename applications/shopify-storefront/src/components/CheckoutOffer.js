@@ -10,7 +10,7 @@ const CheckoutOffer = () => {
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product } = useRandomOffer({
+  const { offer, product, offerViewed } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
@@ -34,7 +34,13 @@ const CheckoutOffer = () => {
   };
 
   useEffect(() => {
+    // Nothing to show if there is no offer or product.
     if (!offer || !product) {
+      return;
+    }
+
+    // Do not show the offer if one has already shown.
+    if (offerViewed) {
       return;
     }
 
@@ -52,7 +58,7 @@ const CheckoutOffer = () => {
         shopifyVariantId
       );
     })();
-  }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
 

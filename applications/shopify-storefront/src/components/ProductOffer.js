@@ -13,7 +13,7 @@ const ProductOffer = () => {
     onProductAddedToShopifyCart
   } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product } = useRandomOffer({
+  const { offer, product, offerViewed } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
@@ -46,7 +46,13 @@ const ProductOffer = () => {
   };
 
   useEffect(() => {
+    // Nothing to show if there is no offer or product.
     if (!offer || !product) {
+      return;
+    }
+
+    // Do not show the offer if one has already shown.
+    if (offerViewed) {
       return;
     }
 
@@ -64,7 +70,7 @@ const ProductOffer = () => {
         shopifyVariantId
       );
     })();
-  }, [offer, product]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Subscribe to product add events.
   useEffect(() => {
