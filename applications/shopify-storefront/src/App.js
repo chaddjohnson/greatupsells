@@ -5,7 +5,6 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import {
   CartOffer,
-  CheckoutOffer,
   ExitIntentOffer,
   ProductOffer,
   ShopVisitOffer
@@ -18,7 +17,6 @@ const httpClient = new HttpClient({
 const App = () => (
   <HttpClientProvider httpClient={httpClient}>
     <CartOffer />
-    <CheckoutOffer />
     <ExitIntentOffer />
     <ProductOffer />
     <ShopVisitOffer />

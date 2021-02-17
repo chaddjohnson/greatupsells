@@ -89,9 +89,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
 const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {
   const shopifyProductIdsRequired =
-    triggerEvent === 'ADD' ||
-    triggerEvent === 'CART' ||
-    triggerEvent === 'CHECKOUT';
+    triggerEvent === 'ADD' || triggerEvent === 'CART';
   const shopifyProductIdsMissing =
     shopifyProductIdsRequired &&
     (!shopifyProductIds || shopifyProductIds.length === 0);

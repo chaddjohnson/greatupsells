@@ -80,7 +80,7 @@ const schema = new mongoose.Schema(
     discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'CHECKOUT', 'LOAD', 'EXIT'],
+      enum: ['ADD', 'CART', 'LOAD', 'EXIT'],
       required: true
     },
     triggerProducts: [offerProductSchema],

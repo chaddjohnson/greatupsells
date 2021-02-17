@@ -429,11 +429,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     helpText: 'Offer is shown on the Cart page before checkout.'
                   },
                   {
-                    label: 'Checkout page',
-                    value: 'CHECKOUT',
-                    helpText: 'Offer is shown on the Checkout page.'
-                  },
-                  {
                     label: 'Shop visit',
                     value: 'LOAD',
                     helpText: 'Offer is shown when your shop is first visted.'
@@ -576,7 +571,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               />
             </Card.Section>
           </Card>
-          {['ADD', 'CART', 'CHECKOUT'].indexOf(triggerEvent.value) > -1 && (
+          {['ADD', 'CART'].indexOf(triggerEvent.value) > -1 && (
             <Card title="Triggers">
               <Card.Section title="Products">
                 <TextField
