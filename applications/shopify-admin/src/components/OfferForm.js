@@ -115,14 +115,10 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const strategy = useField(initialValues.strategy);
   const triggerEvent = useField(initialValues.triggerEvent);
   const discountType = useField(initialValues.discountType);
-  const offeredProducts = useField(useList(initialValues.offeredProducts));
-  const offeredCollections = useField(
-    useList(initialValues.offeredCollections)
-  );
-  const triggerProducts = useField(useList(initialValues.triggerProducts));
-  const triggerCollections = useField(
-    useList(initialValues.triggerCollections)
-  );
+  const offeredProducts = useList(initialValues.offeredProducts);
+  const offeredCollections = useList(initialValues.offeredCollections);
+  const triggerProducts = useList(initialValues.triggerProducts);
+  const triggerCollections = useList(initialValues.triggerCollections);
   const actionButtonBehavior = useField(initialValues.actionButtonBehavior);
   const showNotificationBanner = useField(initialValues.showNotificationBanner);
   const callToActionText = useField({
