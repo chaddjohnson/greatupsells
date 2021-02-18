@@ -1,7 +1,55 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { ResourceList, Thumbnail } from '@shopify/polaris';
-import ManagedResourceItem from './ManagedResourceItem';
+import { ResourceList, Thumbnail, ResourceItem, Icon } from '@shopify/polaris';
+import { CancelSmallMinor } from '@shopify/polaris-icons';
+import styled from 'styled-components';
+
+const ManagedResourceItemWrapper = styled.div`
+  cursor: default;
+
+  .Polaris-ResourceItem {
+    cursor: default;
+
+    &:hover {
+      background-image: none;
+    }
+  }
+
+  .Polaris-ResourceItem__Container {
+    padding-left: 0;
+  }
+
+  .Polaris-ResourceItem__Container {
+    align-items: center;
+  }
+
+  svg {
+    fill: #637381;
+
+    &:hover {
+      fill: #212b36;
+    }
+  }
+`;
+
+const ManagedResourceItem = ({ children, onRemove, ...props }) => (
+  <ManagedResourceItemWrapper>
+    <ResourceItem
+      shortcutActions={[
+        { content: <Icon source={CancelSmallMinor} />, onAction: onRemove }
+      ]}
+      persistActions
+      {...props}
+    >
+      {children}
+    </ResourceItem>
+  </ManagedResourceItemWrapper>
+);
+
+ManagedResourceItem.propTypes = {
+  children: PropTypes.node.isRequired,
+  onRemove: PropTypes.func.isRequired
+};
 
 const ManagedResourceList = ({ items, onChange, onItemRemoved }) => {
   const removeItem = useCallback(
