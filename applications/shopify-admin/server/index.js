@@ -10,7 +10,7 @@ const next = require('next');
 const serverless = require('serverless-http');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const {
-  default: createShopifyAuth,
+  default: shopifyAuth,
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
 const { aws4Interceptor } = require('aws4-axios');
@@ -67,7 +67,7 @@ const createServer = () => {
   );
   server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
   server.use(
-    createShopifyAuth({
+    shopifyAuth({
       apiKey: SHOPIFY_ADMIN_APP_API_KEY,
       secret: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
       scopes: [
@@ -77,6 +77,7 @@ const createServer = () => {
         'read_script_tags',
         'write_script_tags'
       ],
+      accessMode: 'offline',
       afterAuth: async (ctx) => {
         const { shop: shopDomain, accessToken } = ctx.session;
         const shop = await shopsServiceHttpClient.post(
