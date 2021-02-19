@@ -94,6 +94,12 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
 };
 
 const createWebhooks = async (shop) => {
+  if (!WEBHOOKS_ARN) {
+    return logger.warn(
+      `Skipping webhook creation for shop as webhook address is not set (${shop.toString()})`
+    );
+  }
+
   const shopifyApiClient = shop.getShopifyApiClient();
   const webhooks = await shopifyApiClient.webhook.list();
   const retryConfig = {
