@@ -14,7 +14,8 @@ import {
 import {
   ExternalMinor,
   DuplicateMinor,
-  CircleDisableMinor
+  CircleDisableMinor,
+  CircleTickOutlineMinor
 } from '@shopify/polaris-icons';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useOffer } from '../../../hooks';
@@ -127,7 +128,7 @@ const OfferEditPage = () => {
       accessibilityLabel: offer?.enabled
         ? 'Disable this offer'
         : 'Enable this offer',
-      icon: CircleDisableMinor,
+      icon: offer?.enabled ? CircleDisableMinor : CircleTickOutlineMinor,
       onAction: handleToggleEnabled
     }
   ];

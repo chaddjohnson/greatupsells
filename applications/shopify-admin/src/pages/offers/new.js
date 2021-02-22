@@ -44,6 +44,8 @@ const initialOffer = {
   triggerEvent: 'ADD',
   triggerProducts: [],
   triggerCollections: [],
+  enableGeotargeting: true,
+  geotargetingCountries: [],
   startAt: new Date().toISOString(),
   enableTimer: false,
   timerText: 'Ends in',

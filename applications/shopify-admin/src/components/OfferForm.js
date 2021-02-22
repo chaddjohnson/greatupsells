@@ -1,11 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useMemo
-} from 'react';
+import React, { useContext, useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -45,6 +38,7 @@ import ManagedResourceList from './ManagedResourceList';
 import OfferSummary from './OfferSummary';
 import PopupThemeCustomization from './PopupThemeCustomization';
 import PopupThemeSelection from './PopupThemeSelection';
+import countries from './countries.json';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -88,6 +82,14 @@ const OfferPopupContainer = styled.div`
   }
 `;
 
+const getCountryName = (countryCode) => {
+  const country = countries.find(({ code }) => code === countryCode);
+
+  if (country) {
+    return country.name;
+  }
+};
+
 const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
 
@@ -119,7 +121,23 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const offeredCollections = useList(initialValues.offeredCollections);
   const triggerProducts = useList(initialValues.triggerProducts);
   const triggerCollections = useList(initialValues.triggerCollections);
+  const enableGeotargeting = useField(initialValues.enableGeotargeting);
+  const geotargetingCountries = useField(initialValues.geotargetingCountries);
   const actionButtonBehavior = useField(initialValues.actionButtonBehavior);
+  const actionButtonLink = useField(
+    {
+      value: '',
+      validates: (value) => {
+        if (actionButtonBehavior.value === 'Link' && !value) {
+          return "Action button link can't be blank";
+        }
+      }
+    },
+    [actionButtonBehavior.value]
+  );
+  const actionButtonLinkOpenInNewTab = useField(
+    initialValues.actionButtonLinkOpenInNewTab || false
+  );
   const showNotificationBanner = useField(initialValues.showNotificationBanner);
   const callToActionText = useField({
     value: initialValues.callToActionText,
@@ -237,7 +255,11 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
       // discountAmount,
       triggerProducts,
       triggerCollections,
+      enableGeotargeting,
+      geotargetingCountries,
       actionButtonBehavior,
+      actionButtonLink,
+      actionButtonLinkOpenInNewTab,
       showNotificationBanner,
       callToActionText,
       actionButtonText,
@@ -295,51 +317,50 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   );
 
   // Work around focus issues.
-  const handleBlur = useCallback(
-    (fieldName) => (event) => {
-      const field = fields[fieldName];
+  const handleBlur = (fieldName) => (event) => {
+    const field = fields[fieldName];
 
-      if (event && event.target && field) {
-        setTimeout(() => field.onBlur(event), 0);
-      }
-    },
-    [fields]
-  );
+    if (event && event.target && field) {
+      setTimeout(() => field.onBlur(event), 0);
+    }
+  };
 
-  const handleActionButtonBehaviorChange = useCallback(
-    (behavior) => {
-      actionButtonBehavior.onChange(behavior);
+  const handleActionButtonBehaviorChange = (behavior) => {
+    actionButtonBehavior.onChange(behavior);
 
-      if (behavior === 'CART') {
-        actionButtonText.onChange('Add to cart');
-      } else if (behavior === 'CHECKOUT') {
-        actionButtonText.onChange('Checkout');
-      } else if (behavior === 'PAGE') {
-        actionButtonText.onChange('Add to cart');
-      } else if (behavior === 'LINK') {
-        actionButtonText.onChange('Get this offer');
-      } else {
-        actionButtonText.onChange('Continue shopping');
-      }
-    },
-    [actionButtonBehavior, actionButtonText]
-  );
+    if (behavior === 'CART') {
+      actionButtonText.onChange('Add to cart');
+    } else if (behavior === 'CHECKOUT') {
+      actionButtonText.onChange('Checkout');
+    } else if (behavior === 'PAGE') {
+      actionButtonText.onChange('Add to cart');
+    } else if (behavior === 'LINK') {
+      actionButtonText.onChange('Get this offer');
+    } else {
+      actionButtonText.onChange('Continue shopping');
+    }
+  };
 
-  const handleStartAtChange = useCallback(
-    (value) => {
-      startAt.onChange(value);
+  const handleEnableGeotargeting = (value) => {
+    enableGeotargeting.onChange(value);
 
-      if (
-        showEndDate &&
-        offer.endAt &&
-        value &&
-        new Date(offer.endAt) < new Date(value)
-      ) {
-        endAt.onChange(value);
-      }
-    },
-    [endAt, offer.endAt, showEndDate, startAt]
-  );
+    if (!value) {
+      geotargetingCountries.onChange([]);
+    }
+  };
+
+  const handleStartAtChange = (value) => {
+    startAt.onChange(value);
+
+    if (
+      showEndDate &&
+      offer.endAt &&
+      value &&
+      new Date(offer.endAt) < new Date(value)
+    ) {
+      endAt.onChange(value);
+    }
+  };
 
   // Handle Contextual Save Bar behavior.
   useEffect(
@@ -368,8 +389,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     () => {
       endAt.onChange(showEndDate ? startAt.value : undefined);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [showEndDate]
+    [showEndDate] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (
@@ -509,10 +529,19 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 {
                   label: 'Open a link',
                   value: 'LINK',
-                  helpText: (
+                  helpText: actionButtonBehavior.value === 'LINK' && (
                     <Stack vertical spacing="tight">
-                      <TextField placeholder="URL" />
-                      <Checkbox label="Open in new browser tab" />
+                      <TextField
+                        placeholder="https://"
+                        {...actionButtonLink}
+                        error={submitted && actionButtonLink.error}
+                        onBlur={handleBlur('actionButtonLink')}
+                        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+                      />
+                      <Checkbox
+                        label="Open in new browser tab"
+                        {...asChoiceField(actionButtonLinkOpenInNewTab)}
+                      />
                     </Stack>
                   )
                 }
@@ -611,15 +640,30 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
           )}
           <Card title="Geotargeting" sectioned>
             <Stack vertical spacing="tight">
-              <Checkbox label="Restrict offer to specific countries" />
-              <Autocomplete.TextField
-                label="Countries"
-                placeholder="United States, England, Australia"
+              <Checkbox
+                label="Restrict offer to specific countries"
+                {...asChoiceField(enableGeotargeting)}
+                onChange={handleEnableGeotargeting}
               />
-              <Stack>
-                <Tag onRemove={() => {}}>United States</Tag>
-                <Tag onRemove={() => {}}>Australia</Tag>
-              </Stack>
+              {enableGeotargeting.value && (
+                <Autocomplete.TextField
+                  label="Countries"
+                  placeholder="United States, England, Australia"
+                  prefix={<Icon source={SearchMinor} color="base" />}
+                  {...geotargetingCountries}
+                  error={submitted && geotargetingCountries.error}
+                  onBlur={handleBlur('geotargetingCountries')}
+                />
+              )}
+              {enableGeotargeting.value && (
+                <Stack>
+                  {geotargetingCountries.value.map((countryCode, index) => (
+                    <Tag key={index} onRemove={() => {}}>
+                      {getCountryName(countryCode)}
+                    </Tag>
+                  ))}
+                </Stack>
+              )}
             </Stack>
           </Card>
           <Card title="Popup">
@@ -813,7 +857,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               </FormLayout>
             </Card.Section>
           </Card>
-          <Card title="Preview (full size)" sectioned subdued>
+          <Card title="Preview" sectioned subdued>
             <OfferPopupContainer ref={offerPopupContainer} />
             {offerPopupContainer && offerPopupContainer.current && (
               <OfferPopup
@@ -915,13 +959,15 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
 };
 
 OfferForm.propTypes = {
-  initialValues: PropTypes.object.isRequired,
-  currency: PropTypes.string.isRequired,
+  initialValues: PropTypes.object,
+  currency: PropTypes.string,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func
 };
 
 OfferForm.defaultProps = {
+  initialValues: {},
+  currency: 'USD',
   onSubmit: () => {},
   onCancel: () => {}
 };
