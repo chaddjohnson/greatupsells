@@ -45,6 +45,18 @@ const schema = new mongoose.Schema(
       enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK'],
       required: true
     },
+    actionButtonLink: {
+      type: String,
+      required() {
+        return this.actionButtonBehavior === 'LINK';
+      }
+    },
+    actionButtonLinkOpenInNewTab: {
+      type: String,
+      required() {
+        return this.actionButtonBehavior === 'LINK';
+      }
+    },
     popupThemeType: {
       type: String,
       enum: ['TEMPLATE', 'CUSTOM'],
@@ -85,6 +97,8 @@ const schema = new mongoose.Schema(
     },
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
+    enableGeotargeting: { type: Boolean, required: true, default: false },
+    geotargetingCountries: [{ type: String, required: true }],
     startAt: { type: Date, required: true },
     endAt: { type: Date, required: false },
     enableTimer: { type: Boolean, required: true },
@@ -95,8 +109,8 @@ const schema = new mongoose.Schema(
     hideIfItemAdded: { type: Boolean, required: true },
     showNotificationBanner: { type: Boolean, required: true },
     enableQuantitySelection: { type: Boolean, required: true },
-    productQuantityLimit: { type: Int32, required: false },
     limitQuantitySelection: { type: Boolean, required: true },
+    productQuantityLimit: { type: Int32, required: false },
     enableProductLinks: { type: Boolean, required: true },
     hideOutOfStockProducts: { type: Boolean, required: true },
     // discountCodes
@@ -117,9 +131,10 @@ schema.statics.findByShopId = function (shopId) {
 schema.statics.findOneRandom = function (
   shop,
   triggerEvent,
-  shopifyProductIds
+  shopifyProductIds,
+  ipAddress
 ) {
-  return findOneRandom(shop, triggerEvent, shopifyProductIds);
+  return findOneRandom(shop, triggerEvent, shopifyProductIds, ipAddress);
 };
 
 schema.methods.findOneRandomProduct = function () {

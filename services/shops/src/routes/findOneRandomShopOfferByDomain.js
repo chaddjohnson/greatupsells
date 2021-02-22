@@ -7,7 +7,8 @@ const handler = async (event, context) => {
 
   try {
     const { domain } = event.pathParameters;
-    const { event: triggerEvent } = event.queryStringParameters || {};
+    const { event: triggerEvent, ipAddress } =
+      event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
     const Shop = await models.get('Shop');
     const Offer = await models.get('Offer');
@@ -23,7 +24,8 @@ const handler = async (event, context) => {
     const offer = await Offer.findOneRandom(
       shop,
       triggerEvent,
-      shopifyProductIds
+      shopifyProductIds,
+      ipAddress
     );
 
     if (!offer) {

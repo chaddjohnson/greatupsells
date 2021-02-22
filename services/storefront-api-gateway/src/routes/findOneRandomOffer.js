@@ -28,6 +28,9 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
+    const ipAddress =
+      event.requestContext.identity.sourceIp ||
+      event.headers['X-Forwarded-For'];
     const domain = URL.parse(event.headers.Origin).host;
     const { event: triggerEvent } = event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
@@ -35,7 +38,8 @@ const handler = middy(async (event, context) => {
     const offerParams = qs.stringify(
       {
         event: triggerEvent,
-        shopifyProductIds
+        shopifyProductIds,
+        ipAddress
       },
       { arrayFormat: 'repeat' }
     );

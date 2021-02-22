@@ -1,17 +1,28 @@
+const geoip = require('geoip-country');
 const mongodbClient = require('../mongodbClient');
 
-const findOneRandomByTriggerEvent = async (shop, triggerEvent) => {
+const findOneRandomByTriggerEvent = async (shop, triggerEvent, ipAddress) => {
   const Offer = mongodbClient.connection.model('Offer');
+  const geoData =
+    !!ipAddress && ipAddress !== '127.0.0.1' && geoip.lookup(ipAddress);
+  const criteria = {
+    shop: shop._id,
+    triggerEvent,
+    enabled: true
+  };
+
+  // Limit to offers with no geotargeting AND offers targeting the country that
+  // the IP address resolves to.
+  if (geoData) {
+    criteria.$or = [
+      { enableGeotargeting: false },
+      { geotargetingCountries: geoData.country }
+    ];
+  }
 
   // Randomly find an offer having the trigger event as a trigger.
   const randomOffers = await Offer.aggregate([
-    {
-      $match: {
-        shop: shop._id,
-        triggerEvent,
-        enabled: true
-      }
-    },
+    { $match: criteria },
     { $sample: { size: 1 } },
     {
       $project: {
@@ -32,7 +43,8 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent) => {
 const findOneRandomByTriggerEventAndShopifyProductIds = async (
   shop,
   triggerEvent,
-  shopifyProductIds
+  shopifyProductIds,
+  ipAddress
 ) => {
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
     parseInt(shopifyProductId)
@@ -40,6 +52,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
   const Collection = mongodbClient.connection.model('Collection');
   const Offer = mongodbClient.connection.model('Offer');
+  const geoData =
+    !!ipAddress && ipAddress !== '127.0.0.1' && geoip.lookup(ipAddress);
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
   });
@@ -47,29 +61,38 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
 
+  const criteria = {
+    shop: shop._id,
+    triggerEvent,
+    $or: [
+      {
+        'triggerProducts.shopifyProductId': {
+          $in: shopifyProductIds
+        }
+      },
+      {
+        'triggerCollections.shopifyCollectionId': {
+          $in: shopifyCollectionIds
+        }
+      }
+    ],
+    enabled: true
+  };
+
+  // Limit to offers with no geotargeting AND offers targeting the country that
+  // the IP address resolves to.
+  if (geoData) {
+    criteria.$or = [
+      { enableGeotargeting: false },
+      { geotargetingCountries: geoData.country }
+    ];
+  }
+
   // Randomly select an offer having the trigger event as a trigger AND [one of
   // the Shopify products as a trigger OR a collection to which one or more
   // of the products belong as a trigger].
   const randomOffers = await Offer.aggregate([
-    {
-      $match: {
-        shop: shop._id,
-        triggerEvent,
-        $or: [
-          {
-            'triggerProducts.shopifyProductId': {
-              $in: shopifyProductIds
-            }
-          },
-          {
-            'triggerCollections.shopifyCollectionId': {
-              $in: shopifyCollectionIds
-            }
-          }
-        ],
-        enabled: true
-      }
-    },
+    { $match: criteria },
     { $sample: { size: 1 } },
     {
       $project: {
@@ -87,7 +110,12 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   return await Offer.findById(randomOffer._id);
 };
 
-const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {
+const findOneRandom = async (
+  shop,
+  triggerEvent,
+  shopifyProductIds,
+  ipAddress
+) => {
   const shopifyProductIdsRequired =
     triggerEvent === 'ADD' || triggerEvent === 'CART';
   const shopifyProductIdsMissing =
@@ -110,10 +138,11 @@ const findOneRandom = async (shop, triggerEvent, shopifyProductIds) => {
     return await findOneRandomByTriggerEventAndShopifyProductIds(
       shop,
       triggerEvent,
-      shopifyProductIds
+      shopifyProductIds,
+      ipAddress
     );
   } else {
-    return await findOneRandomByTriggerEvent(shop, triggerEvent);
+    return await findOneRandomByTriggerEvent(shop, triggerEvent, ipAddress);
   }
 };
 
