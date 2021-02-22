@@ -10,8 +10,6 @@ import {
   TextField,
   Icon,
   Button,
-  Tag,
-  Autocomplete,
   PageActions,
   Sticky,
   Stack
@@ -33,12 +31,12 @@ import {
 import styled from 'styled-components';
 import moment from 'moment-timezone';
 import scrollToComponent from 'react-scroll-to-component';
-import DateTimePicker from './DateTimePicker';
+import CountryAutocomplete from './CountryAutocomplete';
 import ManagedResourceList from './ManagedResourceList';
-import OfferSummary from './OfferSummary';
+import DateTimePicker from './DateTimePicker';
 import PopupThemeCustomization from './PopupThemeCustomization';
 import PopupThemeSelection from './PopupThemeSelection';
-import countries from './countries.json';
+import OfferSummary from './OfferSummary';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -81,14 +79,6 @@ const OfferPopupContainer = styled.div`
     position: static;
   }
 `;
-
-const getCountryName = (countryCode) => {
-  const country = countries.find(({ code }) => code === countryCode);
-
-  if (country) {
-    return country.name;
-  }
-};
 
 const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
@@ -639,30 +629,21 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             </Card>
           )}
           <Card title="Geotargeting" sectioned>
-            <Stack vertical spacing="tight">
+            <Stack vertical>
               <Checkbox
                 label="Restrict offer to specific countries"
                 {...asChoiceField(enableGeotargeting)}
                 onChange={handleEnableGeotargeting}
               />
               {enableGeotargeting.value && (
-                <Autocomplete.TextField
+                <CountryAutocomplete
                   label="Countries"
-                  placeholder="United States, England, Australia"
-                  prefix={<Icon source={SearchMinor} color="base" />}
-                  {...geotargetingCountries}
+                  placeholder="Search"
+                  selected={geotargetingCountries.value}
+                  onChange={geotargetingCountries.onChange}
                   error={submitted && geotargetingCountries.error}
                   onBlur={handleBlur('geotargetingCountries')}
                 />
-              )}
-              {enableGeotargeting.value && (
-                <Stack>
-                  {geotargetingCountries.value.map((countryCode, index) => (
-                    <Tag key={index} onRemove={() => {}}>
-                      {getCountryName(countryCode)}
-                    </Tag>
-                  ))}
-                </Stack>
               )}
             </Stack>
           </Card>
