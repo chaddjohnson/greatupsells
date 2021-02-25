@@ -29,6 +29,9 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
+schema.index({ shop: 1 }, { sparse: true });
+schema.index({ shop: 1, name: 1 }, { sparse: true, unique: true });
+
 PopupTheme = mongodbClient.connection.model('PopupTheme', schema);
 
 module.exports = PopupTheme;
