@@ -62,6 +62,10 @@ const ShopVisitOffer = () => {
     })();
   }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!offer || !product) {
+    return null;
+  }
+
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"

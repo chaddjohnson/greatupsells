@@ -77,6 +77,10 @@ const CartOffer = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!offer || !product) {
+    return null;
+  }
+
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"

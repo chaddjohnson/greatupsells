@@ -81,6 +81,10 @@ const ProductOffer = () => {
     });
   }, [onProductAddedToShopifyCart]);
 
+  if (!offer || !product) {
+    return null;
+  }
+
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"

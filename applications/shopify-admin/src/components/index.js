@@ -8,8 +8,6 @@ export { default as ManagedResourceList } from './ManagedResourceList';
 export { default as OfferForm } from './OfferForm';
 export { default as OfferList } from './OfferList';
 export { default as OfferSummary } from './OfferSummary';
-export { default as PopupThemeCustomization } from './PopupThemeCustomization';
-export { default as PopupThemeSelection } from './PopupThemeSelection';
 export { default as RoutePropagator } from './RoutePropagator';
 export { default as SkeletonChart } from './SkeletonChart';
 export { default as TitleBar } from './TitleBar';

@@ -9,8 +9,12 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-components",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "css-loader": "^3.5.3",
+    "handlebars": "^4.7.7",
+    "react-modal": "^3.12.1",
+    "style-loader": "^1.2.1"
+  },
   "peerDependencies": {
     "prop-types": "^15.7.0",
     "react": "^17.0.0",

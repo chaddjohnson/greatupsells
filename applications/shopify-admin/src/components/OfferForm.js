@@ -34,8 +34,6 @@ import scrollToComponent from 'react-scroll-to-component';
 import CountryAutocomplete from './CountryAutocomplete';
 import ManagedResourceList from './ManagedResourceList';
 import DateTimePicker from './DateTimePicker';
-import PopupThemeCustomization from './PopupThemeCustomization';
-import PopupThemeSelection from './PopupThemeSelection';
 import OfferSummary from './OfferSummary';
 
 const { OfferPopup } =
@@ -129,18 +127,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     initialValues.actionButtonLinkOpenInNewTab || false
   );
   const showNotificationBanner = useField(initialValues.showNotificationBanner);
-  const callToActionText = useField({
-    value: initialValues.callToActionText,
-    validates: [notEmpty("Call to action text can't be blank")]
-  });
-  const actionButtonText = useField({
-    value: initialValues.actionButtonText,
-    validates: [notEmpty("Action text can't be blank")]
-  });
-  const cancelButtonText = useField({
-    value: initialValues.cancelButtonText,
-    validates: [notEmpty("Cancel button text can't be blank")]
-  });
   const successMessageText = useField(
     {
       value: initialValues.successMessageText,
@@ -152,8 +138,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     },
     [showNotificationBanner.value]
   );
-  const popupThemeType = useField(initialValues.popupThemeType);
-  const popupThemeTemplateId = useField(initialValues.popupThemeTemplateId);
   const popupTheme = useField(initialValues.popupTheme);
   const startAt = useField({
     value: initialValues.startAt,
@@ -251,12 +235,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
       actionButtonLink,
       actionButtonLinkOpenInNewTab,
       showNotificationBanner,
-      callToActionText,
-      actionButtonText,
-      cancelButtonText,
       successMessageText,
-      popupThemeType,
-      popupThemeTemplateId,
       popupTheme,
       startAt,
       endAt,
@@ -312,22 +291,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
 
     if (event && event.target && field) {
       setTimeout(() => field.onBlur(event), 0);
-    }
-  };
-
-  const handleActionButtonBehaviorChange = (behavior) => {
-    actionButtonBehavior.onChange(behavior);
-
-    if (behavior === 'CART') {
-      actionButtonText.onChange('Add to cart');
-    } else if (behavior === 'CHECKOUT') {
-      actionButtonText.onChange('Checkout');
-    } else if (behavior === 'PAGE') {
-      actionButtonText.onChange('Add to cart');
-    } else if (behavior === 'LINK') {
-      actionButtonText.onChange('Get this offer');
-    } else {
-      actionButtonText.onChange('Continue shopping');
     }
   };
 
@@ -537,7 +500,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 }
               ]}
               selected={actionButtonBehavior.value}
-              onChange={([value]) => handleActionButtonBehaviorChange(value)}
+              onChange={([value]) => actionButtonBehavior.onChange(value)}
             />
           </Card>
           <Card
@@ -648,74 +611,9 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             </Stack>
           </Card>
           <Card title="Popup">
-            <Card.Section title="Settings">
-              <FormLayout>
-                <TextField
-                  label="Call to action text"
-                  labelAction={{ content: 'Variables reference' }}
-                  placeholder="Buy one get one 10% off"
-                  {...callToActionText}
-                  error={submitted && callToActionText.error}
-                  onBlur={handleBlur('callToActionText')}
-                />
-                <TextField
-                  label="Action button text"
-                  placeholder="Add to cart"
-                  {...actionButtonText}
-                  error={submitted && actionButtonText.error}
-                  onBlur={handleBlur('actionButtonText')}
-                />
-                <TextField
-                  label="Cancel button text"
-                  placeholder="No thanks"
-                  {...cancelButtonText}
-                  error={submitted && cancelButtonText.error}
-                  onBlur={handleBlur('cancelButtonText')}
-                />
-                <TextField
-                  label="Success message text"
-                  labelAction={{ content: 'Variables reference' }}
-                  helpText="This displays in the banner after a customer accepts an offer."
-                  placeholder="You saved 10%!"
-                  disabled={!offer.showNotificationBanner}
-                  {...successMessageText}
-                  error={
-                    submitted &&
-                    offer.showNotificationBanner &&
-                    successMessageText.error
-                  }
-                  onBlur={handleBlur('successMessageText')}
-                />
-              </FormLayout>
-            </Card.Section>
             <Card.Section title="Theme">
-              <ChoiceList
-                choices={[
-                  {
-                    label: 'Use a template',
-                    value: 'TEMPLATE'
-                  },
-                  {
-                    label: 'Customize',
-                    value: 'CUSTOM'
-                  }
-                ]}
-                selected={popupThemeType.value}
-                onChange={([value]) => popupThemeType.onChange(value)}
-              />
-              <Card.Section>
-                {offer.popupThemeType === 'TEMPLATE' ? (
-                  <PopupThemeSelection
-                    popupThemeTemplateId={offer.popupThemeTemplateId}
-                    onChange={popupThemeTemplateId.onChange}
-                  />
-                ) : (
-                  <PopupThemeCustomization
-                    theme={offer.popupTheme}
-                    onChange={popupTheme.onChange}
-                  />
-                )}
-              </Card.Section>
+              Section
+              <Card.Section>Section</Card.Section>
             </Card.Section>
           </Card>
           <Card title="Active dates" sectioned>
