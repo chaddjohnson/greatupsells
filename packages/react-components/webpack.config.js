@@ -30,5 +30,10 @@ module.exports = {
     ]
   },
   plugins: [new CleanWebpackPlugin()],
+  resolve: {
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.min.js'
+    }
+  },
   externals: ['prop-types', 'react', 'react-dom', 'styled-components']
 };
