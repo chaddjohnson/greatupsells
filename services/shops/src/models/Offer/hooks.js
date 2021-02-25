@@ -4,8 +4,12 @@ const mongodbClient = require('../mongodbClient');
 const preValidate = async (offer, next) => {
   const Shop = mongodbClient.connection.model('Shop');
 
+  // Ensure ObjectId fields are indeed type ObjectId.
   if (typeof offer.shop === 'string') {
     offer.shop = mongoose.Types.ObjectId(offer.shop);
+  }
+  if (typeof offer.popupTheme === 'string') {
+    offer.popupTheme = mongoose.Types.ObjectId(offer.popupTheme);
   }
 
   // Set up reference to shop if missing.
