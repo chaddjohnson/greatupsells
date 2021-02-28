@@ -203,6 +203,13 @@ functions:
           path: /shops/{shopId}/offers
           method: get
           authorizer: aws_iam
+  findShopPopupThemes:
+    handler: src/routes/findShopPopupThemes.handler
+    events:
+      - http:
+          path: /shops/{shopId}/popup-themes
+          method: get
+          authorizer: aws_iam
   health:
     handler: src/routes/health.handler
     events:

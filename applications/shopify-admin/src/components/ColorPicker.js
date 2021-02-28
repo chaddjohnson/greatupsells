@@ -91,7 +91,7 @@ const ActivatorWrapper = styled.span`
   }
 `;
 
-const ColorPicker = ({ label, value, onChange }) => {
+const ColorPicker = ({ label, value, onChange, ...props }) => {
   const sanitizedValue = useMemo(() => sanitizeHexValue(value), [value]);
 
   const [active, setActive] = useState(false);
@@ -155,7 +155,7 @@ const ColorPicker = ({ label, value, onChange }) => {
   }, [value]);
 
   return (
-    <>
+    <div {...props}>
       <Tooltip content={hexValue}>
         <ColorPreview
           onClick={togglePopover}
@@ -190,7 +190,7 @@ const ColorPicker = ({ label, value, onChange }) => {
           </ColorPickerWrapper>
         </Popover>
       </PopoverWrapper>
-    </>
+    </div>
   );
 };
 

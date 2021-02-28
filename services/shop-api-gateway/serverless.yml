@@ -83,6 +83,18 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
+  findPopupThemes:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findPopupThemes.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
   updateOffer:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler

@@ -31,10 +31,12 @@ import {
 import styled from 'styled-components';
 import moment from 'moment-timezone';
 import scrollToComponent from 'react-scroll-to-component';
+import { usePopupThemes } from '../../hooks';
+import ManagedResourceList from '../ManagedResourceList';
+import DateTimePicker from '../DateTimePicker';
 import CountryAutocomplete from './CountryAutocomplete';
-import ManagedResourceList from './ManagedResourceList';
-import DateTimePicker from './DateTimePicker';
 import OfferSummary from './OfferSummary';
+import ThemeEditor from './ThemeEditor';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -95,6 +97,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
 
   const offerPopupSummaryContainer = useRef();
   const offerPopupContainer = useRef();
+
+  const { popupThemes } = usePopupThemes();
 
   let contextualSaveBar = null;
 
@@ -591,31 +595,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               </Card.Section>
             </Card>
           )}
-          <Card title="Geotargeting" sectioned>
-            <Stack vertical>
-              <Checkbox
-                label="Restrict offer to specific countries"
-                {...asChoiceField(enableGeotargeting)}
-                onChange={handleEnableGeotargeting}
-              />
-              {enableGeotargeting.value && (
-                <CountryAutocomplete
-                  label="Countries"
-                  placeholder="Search"
-                  selected={geotargetingCountries.value}
-                  onChange={geotargetingCountries.onChange}
-                  error={submitted && geotargetingCountries.error}
-                  onBlur={handleBlur('geotargetingCountries')}
-                />
-              )}
-            </Stack>
-          </Card>
-          <Card title="Popup">
-            <Card.Section title="Theme">
-              Section
-              <Card.Section>Section</Card.Section>
-            </Card.Section>
-          </Card>
+          <ThemeEditor theme={offer.popupTheme} themes={popupThemes} />
           <Card title="Active dates" sectioned>
             <FormLayout>
               <DateTimePicker
@@ -647,6 +627,25 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 />
               )}
             </FormLayout>
+          </Card>
+          <Card title="Geotargeting" sectioned>
+            <Stack vertical>
+              <Checkbox
+                label="Restrict offer to specific countries"
+                {...asChoiceField(enableGeotargeting)}
+                onChange={handleEnableGeotargeting}
+              />
+              {enableGeotargeting.value && (
+                <CountryAutocomplete
+                  label="Countries"
+                  placeholder="Search"
+                  selected={geotargetingCountries.value}
+                  onChange={geotargetingCountries.onChange}
+                  error={submitted && geotargetingCountries.error}
+                  onBlur={handleBlur('geotargetingCountries')}
+                />
+              )}
+            </Stack>
           </Card>
           <Card title="Timer" sectioned>
             <FormLayout>

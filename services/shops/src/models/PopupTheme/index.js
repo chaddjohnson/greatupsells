@@ -11,6 +11,7 @@ const schemaOptions = {
 const variableSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
+  description: { type: String, required: false },
   value: { type: mongoose.Schema.Types.Mixed, required: true }
 });
 const schema = new mongoose.Schema(
@@ -22,12 +23,21 @@ const schema = new mongoose.Schema(
       required: false
     },
     displayOrder: { type: Int32, required: false },
+    category: { type: String, required: true },
+    thumbnailImageUrl: { type: String, required: true },
+    description: { type: String, required: false },
     markup: { type: String, required: true },
     themeVariables: [variableSchema],
     inputVariables: [variableSchema]
   },
   schemaOptions
 );
+
+schema.statics.findByShopId = function (shopId) {
+  return PopupTheme.find({
+    $or: [{ shop: null }, { shop: mongoose.Types.ObjectId(shopId) }]
+  });
+};
 
 schema.index({ shop: 1 }, { sparse: true });
 schema.index({ shop: 1, name: 1 }, { sparse: true, unique: true });
