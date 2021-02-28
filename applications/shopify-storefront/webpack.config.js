@@ -36,6 +36,8 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL']),
     new CompressionWebpackPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
@@ -44,8 +46,7 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.8,
       deleteOriginalAssets: false
-    }),
-    new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL'])
+    })
   ],
   resolve: {
     // Setting this to `true` allows dependency packages to be watched.
