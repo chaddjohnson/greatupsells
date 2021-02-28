@@ -27,5 +27,5 @@ module.exports = {
   },
   plugins: [new CleanWebpackPlugin()],
   stats: 'errors-warnings',
-  externals: ['prop-types', 'react', 'react-dom']
+  externals: ['moment-timezone', 'prop-types', 'react', 'react-dom']
 };
