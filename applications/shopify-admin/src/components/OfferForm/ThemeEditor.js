@@ -77,49 +77,53 @@ const VariablesEditor = ({ theme }) => {
     }
   ];
 
-  return types.map((type, typeIndex) => {
-    const typeVariables = variablesByType[type.value];
+  return (
+    <>
+      {types.map((type) => {
+        const typeVariables = variablesByType[type.value];
 
-    return (
-      <Card.Section key={typeIndex} fullWidth>
-        <FormLayout>
-          <Subheading>{type.name}</Subheading>
-          {typeVariables.map(({ name, description, value }, variablesIndex) => (
-            <>
-              {type.value === 'text' && (
-                <TextField
-                  key={variablesIndex}
-                  type="text"
-                  label={name}
-                  helpText={description}
-                  value={value}
-                  onChange={() => {}}
-                />
-              )}
-              {type.value === 'color' && (
-                <ColorPicker
-                  key={variablesIndex}
-                  label={name}
-                  value={value}
-                  onChange={() => {}}
-                />
-              )}
-            </>
-          ))}
-        </FormLayout>
-      </Card.Section>
-    );
-  });
+        return (
+          <Card.Section key={type.value} fullWidth>
+            <FormLayout>
+              <Subheading>{type.name}</Subheading>
+              {typeVariables.map(({ name, description, value }) => (
+                <div key={name}>
+                  {type.value === 'text' && (
+                    <TextField
+                      type="text"
+                      label={name}
+                      helpText={description}
+                      value={value}
+                      onChange={() => {}}
+                    />
+                  )}
+                  {type.value === 'color' && (
+                    <ColorPicker
+                      label={name}
+                      value={value}
+                      onChange={() => {}}
+                    />
+                  )}
+                </div>
+              ))}
+            </FormLayout>
+          </Card.Section>
+        );
+      })}
+    </>
+  );
 };
 
 VariablesEditor.propTypes = {
   theme: PropTypes.shape({
-    themeVariables: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    })
+    themeVariables: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      })
+    )
   }).isRequired
 };
 
@@ -136,6 +140,12 @@ CodeEditor.propTypes = {
 };
 
 const tabs = [
+  {
+    id: 'preview',
+    accessibilityLabel: 'Preview',
+    panelID: 'preview',
+    content: 'Preview'
+  },
   {
     id: 'variables',
     accessibilityLabel: 'Variables',
@@ -154,8 +164,8 @@ const tabs = [
   }
 ];
 
-const ThemeEditor = ({ theme, themes }) => {
-  const [selectedTheme, setSelectedTheme] = useState([]);
+const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
+  const [selectedTheme, setSelectedTheme] = useState([theme && theme._id]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const themeOptionSections = useMemo(() => {
@@ -167,7 +177,7 @@ const ThemeEditor = ({ theme, themes }) => {
       return {
         title: category,
         options: categoryThemes.map((categoryTheme) => ({
-          value: categoryTheme.name,
+          value: categoryTheme._id,
           label: <ThemeOption theme={categoryTheme} />
         }))
       };
@@ -175,6 +185,14 @@ const ThemeEditor = ({ theme, themes }) => {
 
     return sections;
   }, [themes]);
+
+  const handleThemeSelect = (value) => {
+    setSelectedTheme(value);
+
+    if (value?.[0]) {
+      onChange(themes.find(({ _id }) => _id === value[0]));
+    }
+  };
 
   const handleTabChange = (index) => {
     setSelectedTabIndex(index);
@@ -184,7 +202,7 @@ const ThemeEditor = ({ theme, themes }) => {
     <Card title="Theme" actions={[{ content: 'Add theme' }]}>
       <Card.Section>
         <TextField
-          type="text"
+          type="search"
           placeholder="Search themes"
           prefix={<Icon source={SearchMinor} />}
           onChange={() => {}}
@@ -192,19 +210,22 @@ const ThemeEditor = ({ theme, themes }) => {
 
         <ThemeOptionsContainer>
           <OptionList
-            onChange={setSelectedTheme}
+            onChange={handleThemeSelect}
             sections={themeOptionSections}
             selected={selectedTheme}
           />
         </ThemeOptionsContainer>
       </Card.Section>
-      <Card.Section title="Theme settings" fullWidth>
+      <Card.Section title="Settings" fullWidth>
         <Tabs
           tabs={tabs}
           selected={selectedTabIndex}
           onSelect={handleTabChange}
         >
-          <Card.Section>
+          <Card.Section
+            fullWidth={tabs[selectedTabIndex].panelID === 'preview'}
+          >
+            {tabs[selectedTabIndex].panelID === 'preview' && previewElement}
             {tabs[selectedTabIndex].panelID === 'variables' && (
               <VariablesEditor theme={theme} />
             )}
@@ -217,18 +238,26 @@ const ThemeEditor = ({ theme, themes }) => {
           </Card.Section>
         </Tabs>
       </Card.Section>
+      {tabs[selectedTabIndex].panelID === 'code-editor' && (
+        <Card.Section flush fullWidth>
+          {previewElement}
+        </Card.Section>
+      )}
     </Card>
   );
 };
 
 ThemeEditor.propTypes = {
   theme: PropTypes.object,
-  themes: PropTypes.arrayOf(PropTypes.object)
+  themes: PropTypes.arrayOf(PropTypes.object),
+  previewElement: PropTypes.node,
+  onChange: PropTypes.func
 };
 
 ThemeEditor.defaultProps = {
   theme: {},
-  themes: []
+  themes: [],
+  onChange: () => {}
 };
 
 export default ThemeEditor;

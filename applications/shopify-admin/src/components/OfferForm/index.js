@@ -95,8 +95,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     setTriggerCollectionPickerOpen
   ] = useState(false);
 
+  const [offerPopupContainer, setOfferPopupContainer] = useState(null);
   const offerPopupSummaryContainer = useRef();
-  const offerPopupContainer = useRef();
 
   const { popupThemes } = usePopupThemes();
 
@@ -595,7 +595,27 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               </Card.Section>
             </Card>
           )}
-          <ThemeEditor theme={offer.popupTheme} themes={popupThemes} />
+          <ThemeEditor
+            theme={offer.popupTheme}
+            themes={popupThemes}
+            previewElement={
+              <>
+                <OfferPopupContainer
+                  ref={(ref) => setOfferPopupContainer(ref)}
+                />
+                {offerPopupContainer && (
+                  <OfferPopup
+                    appRoot="#__next"
+                    renderTo={offerPopupContainer}
+                    open={true}
+                    offer={offer}
+                    product={product}
+                  />
+                )}
+              </>
+            }
+            onChange={(value) => popupTheme.onChange(value)}
+          />
           <Card title="Active dates" sectioned>
             <FormLayout>
               <DateTimePicker
@@ -735,18 +755,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               </FormLayout>
             </Card.Section>
           </Card>
-          <Card title="Preview" sectioned subdued>
-            <OfferPopupContainer ref={offerPopupContainer} />
-            {offerPopupContainer && offerPopupContainer.current && (
-              <OfferPopup
-                appRoot="#__next"
-                renderTo={offerPopupContainer.current}
-                open={true}
-                offer={offer}
-                product={product}
-              />
-            )}
-          </Card>
         </Layout.Section>
         <Layout.Section secondary>
           <Sticky offset={20}>
@@ -766,9 +774,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                           open={true}
                           offer={offer}
                           product={product}
-                          onClick={() =>
-                            scrollToComponent(offerPopupContainer.current)
-                          }
+                          onClick={() => scrollToComponent(offerPopupContainer)}
                         />
                       )}
                     {/* eslint-enable indent */}
