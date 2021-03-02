@@ -24,6 +24,7 @@ const Container = styled.div`
 const VariableResourceItemWrapper = styled.div`
   cursor: default;
   margin-left: -1rem;
+  margin-right: -1rem;
 
   && .Polaris-ResourceItem__ItemWrapper {
     border-bottom-left-radius: 0;
