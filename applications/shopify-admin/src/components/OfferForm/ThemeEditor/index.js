@@ -147,7 +147,7 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
               <FormFieldsEditor fields={theme.inputVariables} />
             )}
             {tabs[selectedTabIndex].panelID === 'code-editor' && (
-              <CodeEditor markup={theme.markup} />
+              <CodeEditor markup={theme.markup} onChange={() => {}} />
             )}
           </Card.Section>
         </Tabs>
