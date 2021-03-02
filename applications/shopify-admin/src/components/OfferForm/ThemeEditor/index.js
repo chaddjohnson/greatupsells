@@ -6,30 +6,20 @@ import {
   Tabs,
   TextContainer,
   Heading,
-  Subheading,
-  FormLayout,
   TextField,
   Icon
 } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
 import { groupBy, sortBy } from 'lodash';
 import styled from 'styled-components';
-import ColorPicker from '../ColorPicker';
+import VariablesEditor from './VariablesEditor';
+import FormFieldsEditor from './FormFieldsEditor';
+import CodeEditor from './CodeEditor';
 
 const ThemeOptionsContainer = styled.div`
   max-height: 32.5rem;
   overflow-y: auto;
   position: relative;
-
-  /* .Polaris-OptionList__Title {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: white;
-    margin-left: -1rem;
-    padding-left: 1.75rem;
-    margin-top: 1rem;
-  } */
 `;
 
 const ThemeDescription = styled.div`
@@ -62,83 +52,6 @@ ThemeOption.defaultProps = {
   }
 };
 
-const VariablesEditor = ({ theme }) => {
-  const variablesByType = useMemo(() => groupBy(theme.themeVariables, 'type'), [
-    theme.themeVariables
-  ]);
-  const types = [
-    {
-      value: 'text',
-      name: 'Texts'
-    },
-    {
-      value: 'color',
-      name: 'Colors'
-    }
-  ];
-
-  return (
-    <>
-      {types.map((type) => {
-        const typeVariables = variablesByType[type.value];
-
-        return (
-          <Card.Section key={type.value} fullWidth>
-            <FormLayout>
-              <Subheading>{type.name}</Subheading>
-              {typeVariables.map(({ name, description, value }) => (
-                <div key={name}>
-                  {type.value === 'text' && (
-                    <TextField
-                      type="text"
-                      label={name}
-                      helpText={description}
-                      value={value}
-                      onChange={() => {}}
-                    />
-                  )}
-                  {type.value === 'color' && (
-                    <ColorPicker
-                      label={name}
-                      value={value}
-                      onChange={() => {}}
-                    />
-                  )}
-                </div>
-              ))}
-            </FormLayout>
-          </Card.Section>
-        );
-      })}
-    </>
-  );
-};
-
-VariablesEditor.propTypes = {
-  theme: PropTypes.shape({
-    themeVariables: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-      })
-    )
-  }).isRequired
-};
-
-const InputFieldsEditor = ({ theme }) => <>Text fields editor here</>;
-
-InputFieldsEditor.propTypes = {
-  theme: PropTypes.object.isRequired
-};
-
-const CodeEditor = ({ theme }) => <>Code editor here</>;
-
-CodeEditor.propTypes = {
-  theme: PropTypes.object.isRequired
-};
-
 const tabs = [
   {
     id: 'preview',
@@ -153,9 +66,9 @@ const tabs = [
     content: 'Variables'
   },
   {
-    id: 'input-fields',
-    panelID: 'input-fields',
-    content: 'Text fields'
+    id: 'form-fields',
+    panelID: 'form-fields',
+    content: 'Form fields'
   },
   {
     id: 'code-editor',
@@ -222,26 +135,25 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
           selected={selectedTabIndex}
           onSelect={handleTabChange}
         >
-          <Card.Section
-            fullWidth={tabs[selectedTabIndex].panelID === 'preview'}
-          >
+          <Card.Section>
             {tabs[selectedTabIndex].panelID === 'preview' && previewElement}
             {tabs[selectedTabIndex].panelID === 'variables' && (
-              <VariablesEditor theme={theme} />
+              <VariablesEditor
+                variables={theme.themeVariables}
+                onItemRemoved={() => {}}
+              />
             )}
-            {tabs[selectedTabIndex].panelID === 'input-fields' && (
-              <InputFieldsEditor theme={theme} />
+            {tabs[selectedTabIndex].panelID === 'form-fields' && (
+              <FormFieldsEditor fields={theme.inputVariables} />
             )}
             {tabs[selectedTabIndex].panelID === 'code-editor' && (
-              <CodeEditor theme={theme} />
+              <CodeEditor markup={theme.markup} />
             )}
           </Card.Section>
         </Tabs>
       </Card.Section>
       {tabs[selectedTabIndex].panelID === 'code-editor' && (
-        <Card.Section flush fullWidth>
-          {previewElement}
-        </Card.Section>
+        <Card.Section>{previewElement}</Card.Section>
       )}
     </Card>
   );

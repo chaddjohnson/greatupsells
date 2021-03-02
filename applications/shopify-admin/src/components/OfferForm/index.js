@@ -32,7 +32,7 @@ import styled from 'styled-components';
 import moment from 'moment-timezone';
 import scrollToComponent from 'react-scroll-to-component';
 import { usePopupThemes } from '../../hooks';
-import ManagedResourceList from '../ManagedResourceList';
+import ManagedResourceList from './ManagedResourceList';
 import DateTimePicker from '../DateTimePicker';
 import CountryAutocomplete from './CountryAutocomplete';
 import OfferSummary from './OfferSummary';

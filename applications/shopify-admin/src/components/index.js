@@ -4,7 +4,6 @@ export { default as DateRangePicker } from './DateRangePicker';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as LineChart } from './LineChart';
 export { default as Link } from './Link';
-export { default as ManagedResourceList } from './ManagedResourceList';
 export { default as OfferForm } from './OfferForm';
 export { default as OfferList } from './OfferList';
 export { default as RoutePropagator } from './RoutePropagator';
