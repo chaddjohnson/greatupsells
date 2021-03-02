@@ -9,7 +9,8 @@ import {
   ResourceList,
   ResourceItem,
   Subheading,
-  Stack
+  Stack,
+  EmptyState
 } from '@shopify/polaris';
 import { CancelSmallMinor } from '@shopify/polaris-icons';
 import { groupBy } from 'lodash';
@@ -130,10 +131,25 @@ const VariablesEditor = ({ variables, onItemRemoved }) => {
     }
   ];
 
+  if (Object.keys(variablesByType).length === 0) {
+    return (
+      <EmptyState
+        heading="Manage variables"
+        action={{ content: 'Add variable' }}
+      >
+        Enable template customization using variables.
+      </EmptyState>
+    );
+  }
+
   return (
     <Container>
       {types.map((type) => {
         const typeVariables = variablesByType[type.value];
+
+        if (!typeVariables?.length) {
+          return null;
+        }
 
         return (
           <Card.Section key={type.value}>
