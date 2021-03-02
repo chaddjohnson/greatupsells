@@ -16,8 +16,14 @@ import { groupBy } from 'lodash';
 import styled from 'styled-components';
 import ColorPicker from '../../ColorPicker';
 
+const Container = styled.div`
+  margin-top: -2rem;
+  margin-bottom: -2rem;
+`;
+
 const VariableResourceItemWrapper = styled.div`
   cursor: default;
+  margin-left: -1rem;
 
   && .Polaris-ResourceItem__ItemWrapper {
     border-bottom-left-radius: 0;
@@ -30,6 +36,7 @@ const VariableResourceItemWrapper = styled.div`
 
   .Polaris-ResourceItem__Container {
     padding-left: 0;
+    margin-left: 1rem;
     align-items: flex-end;
   }
 
@@ -123,12 +130,12 @@ const VariablesEditor = ({ variables, onItemRemoved }) => {
   ];
 
   return (
-    <Stack vertical spacing="loose">
+    <Container>
       {types.map((type) => {
         const typeVariables = variablesByType[type.value];
 
         return (
-          <Card.Section key={type.value} flush>
+          <Card.Section key={type.value}>
             <Stack vertical spacing="extraTight">
               <Stack alignment="baseline">
                 <Stack.Item fill>
@@ -149,7 +156,7 @@ const VariablesEditor = ({ variables, onItemRemoved }) => {
           </Card.Section>
         );
       })}
-    </Stack>
+    </Container>
   );
 };
 
