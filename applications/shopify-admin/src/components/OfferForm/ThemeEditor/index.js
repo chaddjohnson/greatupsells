@@ -7,10 +7,13 @@ import {
   TextContainer,
   Heading,
   TextField,
+  Button,
+  Popover,
+  ChoiceList,
   Icon
 } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
-import { groupBy, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 import styled from 'styled-components';
 import VariablesEditor from './VariablesEditor';
 import FormFieldsEditor from './FormFieldsEditor';
@@ -52,6 +55,47 @@ ThemeOption.defaultProps = {
   }
 };
 
+const SearchFilter = ({ onChange }) => {
+  const [active, setActive] = useState(false);
+
+  return (
+    <Popover
+      active={active}
+      activator={
+        <Button disclosure onClick={() => setActive(!active)}>
+          Type
+        </Button>
+      }
+      preferredAlignment="right"
+      sectioned
+      onClose={() => setActive(false)}
+    >
+      <ChoiceList
+        title="Type"
+        titleHidden
+        choices={[
+          { value: '', label: 'All' },
+          { value: 'product-promotion', label: 'Product promotion' },
+          { value: 'email', label: 'Email' },
+          { value: 'survey', label: 'Survey' },
+          { value: 'newsletter', label: 'Newsletter signup' }
+        ]}
+        selected=""
+        // selected={statusFilter || []}
+        onChange={onChange}
+      />
+    </Popover>
+  );
+};
+
+SearchFilter.propTypes = {
+  onChange: PropTypes.func
+};
+
+SearchFilter.defaultProps = {
+  onChange: () => {}
+};
+
 const tabs = [
   {
     id: 'preview',
@@ -81,23 +125,14 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
   const [selectedTheme, setSelectedTheme] = useState([theme && theme._id]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const themeOptionSections = useMemo(() => {
-    const themesByCategory = groupBy(themes, 'category');
-    const categories = Object.keys(themesByCategory);
-    const sections = categories.map((category) => {
-      const categoryThemes = sortBy(themesByCategory[category], 'displayOrder');
-
-      return {
-        title: category,
-        options: categoryThemes.map((categoryTheme) => ({
-          value: categoryTheme._id,
-          label: <ThemeOption theme={categoryTheme} />
-        }))
-      };
-    });
-
-    return sections;
-  }, [themes]);
+  const themeOptions = useMemo(
+    () =>
+      sortBy(themes, 'displayOrder').map((item) => ({
+        value: item._id,
+        label: <ThemeOption theme={item} />
+      })),
+    [themes]
+  );
 
   const handleThemeSelect = (value) => {
     setSelectedTheme(value);
@@ -118,13 +153,14 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
           type="search"
           placeholder="Search themes"
           prefix={<Icon source={SearchMinor} />}
+          connectedRight={<SearchFilter onChange={() => {}} />}
           onChange={() => {}}
         />
 
         <ThemeOptionsContainer>
           <OptionList
             onChange={handleThemeSelect}
-            sections={themeOptionSections}
+            options={themeOptions}
             selected={selectedTheme}
           />
         </ThemeOptionsContainer>
@@ -144,7 +180,7 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
               />
             )}
             {tabs[selectedTabIndex].panelID === 'form-fields' && (
-              <FormFieldsEditor fields={theme.inputVariables} />
+              <FormFieldsEditor formFields={theme.formFields} />
             )}
             {tabs[selectedTabIndex].panelID === 'code-editor' && (
               <CodeEditor markup={theme.markup} onChange={() => {}} />
