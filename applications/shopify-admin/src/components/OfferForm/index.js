@@ -681,11 +681,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               )}
             </FormLayout>
           </Card>
-          <Card title="Email marketing" sectioned>
-            <FormLayout>
-              <Checkbox label="Require email address entry to accept offer" />
-            </FormLayout>
-          </Card>
           <Card title="Options">
             <Card.Section title="Products">
               <FormLayout>
