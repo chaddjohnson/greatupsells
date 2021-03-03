@@ -104,6 +104,7 @@ const OfferSummary = ({ offer, children }) => {
               <List.Item>7 acceptances</List.Item>
               <List.Item>3.5% conversion rate</List.Item>
               <List.Item>$123.50 revenue increase</List.Item>
+              <List.Item>44 data submissions</List.Item>
             </List>
             <TextStyle variation="subdued">
               View{' '}
@@ -111,8 +112,13 @@ const OfferSummary = ({ offer, children }) => {
                 plain
                 url="/offers/a702955babd0e0c9bdcf176c13b60a1f/analytics/"
               >
-                analytics for this offer
-              </Button>
+                analytics
+              </Button>{' '}
+              and{' '}
+              <Button plain url="/a702955babd0e0c9bdcf176c13b60a1f/data/">
+                data submissions
+              </Button>{' '}
+              for this offer
             </TextStyle>
           </Stack>
         </Card.Section>

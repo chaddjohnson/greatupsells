@@ -8,11 +8,19 @@ const schemaOptions = {
   timestamps: true,
   collection: 'popupThemes'
 };
-const variableSchema = new mongoose.Schema({
+const themeVariablesSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
-  description: { type: String, required: false },
   value: { type: mongoose.Schema.Types.Mixed, required: true }
+});
+const formFieldsSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  type: {
+    type: String,
+    required: true,
+    enum: ['text', 'email', 'number', 'tel', 'checkbox', 'select']
+  },
+  options: [{ type: String, required: true }]
 });
 const schema = new mongoose.Schema(
   {
@@ -27,8 +35,8 @@ const schema = new mongoose.Schema(
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     markup: { type: String, required: true },
-    themeVariables: [variableSchema],
-    inputVariables: [variableSchema]
+    themeVariables: [themeVariablesSchema],
+    formFields: [formFieldsSchema]
   },
   schemaOptions
 );

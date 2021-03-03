@@ -26,6 +26,11 @@ const VariableResourceItemWrapper = styled.div`
   cursor: default;
   margin-left: -1rem;
   margin-right: -1rem;
+  border-bottom: 0.1rem solid rgb(225, 227, 229);
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 
   && .Polaris-ResourceItem__ItemWrapper {
     border-bottom-left-radius: 0;
@@ -39,7 +44,11 @@ const VariableResourceItemWrapper = styled.div`
   .Polaris-ResourceItem__Container {
     padding-left: 0;
     margin-left: 1rem;
-    align-items: flex-end;
+    align-items: center;
+  }
+
+  .Polaris-ResourceItem__Actions {
+    top: ${(props) => (props.type === 'text' ? '1.3rem' : 0)};
   }
 
   svg {
@@ -49,8 +58,9 @@ const VariableResourceItemWrapper = styled.div`
     }
   }
 `;
-const VariableResourceItem = ({ variable, type, onRemove, ...props }) => (
-  <VariableResourceItemWrapper>
+
+const VariableResourceItem = ({ type, variable, onRemove, ...props }) => (
+  <VariableResourceItemWrapper type={type.value}>
     <ResourceItem
       shortcutActions={[
         {
@@ -62,13 +72,20 @@ const VariableResourceItem = ({ variable, type, onRemove, ...props }) => (
       {...props}
     >
       {type.value === 'text' && (
-        <TextField
-          type="text"
-          label={variable.name}
-          helpText={variable.description}
-          value={variable.value}
-          onChange={() => {}}
-        />
+        <Stack distribution="fill">
+          <TextField
+            label="Name"
+            type="text"
+            value={variable.name}
+            onChange={() => {}}
+          />
+          <TextField
+            label="Value"
+            type="text"
+            value={variable.value}
+            onChange={() => {}}
+          />
+        </Stack>
       )}
       {type.value === 'color' && (
         <ColorPicker
@@ -82,8 +99,8 @@ const VariableResourceItem = ({ variable, type, onRemove, ...props }) => (
 );
 
 VariableResourceItem.propTypes = {
-  variable: PropTypes.object.isRequired,
   type: PropTypes.object.isRequired,
+  variable: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired
 };
 
@@ -109,6 +126,7 @@ const VariableResourceList = ({ type, items, onChange, onItemRemoved }) => {
 };
 
 VariableResourceList.propTypes = {
+  type: PropTypes.object.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChange: PropTypes.func,
   onItemRemoved: PropTypes.func
@@ -182,7 +200,6 @@ VariablesEditor.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
-      description: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
