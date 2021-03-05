@@ -75,10 +75,11 @@ const SearchFilter = ({ onChange }) => {
         titleHidden
         choices={[
           { value: '', label: 'All' },
-          { value: 'product-promotion', label: 'Product promotion' },
+          { value: 'upsell', label: 'Upsell' },
+          { value: 'cross-sell', label: 'Cross-sell' },
           { value: 'email', label: 'Email' },
-          { value: 'survey', label: 'Survey' },
-          { value: 'newsletter', label: 'Newsletter signup' }
+          { value: 'newsletter', label: 'Newsletter signup' },
+          { value: 'survey', label: 'Survey' }
         ]}
         selected=""
         // selected={statusFilter || []}
@@ -146,6 +147,40 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
     setSelectedTabIndex(index);
   };
 
+  const handleAddVariable = (variable) => {
+    onChange({
+      ...theme,
+      variables: [...theme.variables, variable]
+    });
+  };
+
+  const handleRemoveVariable = (index) => {
+    onChange({
+      ...theme,
+      variables: [
+        ...theme.variables.slice(0, index),
+        ...theme.variables.slice(index + 1)
+      ]
+    });
+  };
+
+  const handleAddFormField = (formField) => {
+    onChange({
+      ...theme,
+      formFields: [...theme.formFields, formField]
+    });
+  };
+
+  const handleRemoveFormField = (index) => {
+    onChange({
+      ...theme,
+      formFields: [
+        ...theme.formFields.slice(0, index),
+        ...theme.formFields.slice(index + 1)
+      ]
+    });
+  };
+
   return (
     <Card title="Theme" actions={[{ content: 'Add theme' }]}>
       <Card.Section>
@@ -175,12 +210,18 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
             {tabs[selectedTabIndex].panelID === 'preview' && previewElement}
             {tabs[selectedTabIndex].panelID === 'variables' && (
               <VariablesEditor
-                variables={theme.themeVariables}
-                onItemRemoved={() => {}}
+                variables={theme.variables}
+                // onChange={() => {}}
+                onAddItem={handleAddVariable}
+                onRemoveItem={handleRemoveVariable}
               />
             )}
             {tabs[selectedTabIndex].panelID === 'form-fields' && (
-              <FormFieldsEditor formFields={theme.formFields} />
+              <FormFieldsEditor
+                formFields={theme.formFields}
+                onAddItem={handleAddFormField}
+                onRemoveItem={handleRemoveFormField}
+              />
             )}
             {tabs[selectedTabIndex].panelID === 'code-editor' && (
               <CodeEditor markup={theme.markup} onChange={() => {}} />

@@ -49,7 +49,7 @@ ManagedResourceItem.propTypes = {
   onRemove: PropTypes.func.isRequired
 };
 
-const ManagedResourceList = ({ items, onChange, onItemRemoved }) => {
+const ManagedResourceList = ({ items, onChange, onRemoveItem }) => {
   const removeItem = (index) => [
     ...items.slice(0, index),
     ...items.slice(index + 1)
@@ -62,7 +62,7 @@ const ManagedResourceList = ({ items, onChange, onItemRemoved }) => {
       renderItem={({ title, imageUrl }, id, index) => (
         <ManagedResourceItem
           media={<Thumbnail source={imageUrl} alt={title} size="small" />}
-          onRemove={() => onItemRemoved(removeItem(index, items))}
+          onRemove={() => onRemoveItem(removeItem(index, items))}
         >
           {title}
         </ManagedResourceItem>
@@ -79,12 +79,12 @@ ManagedResourceList.propTypes = {
     })
   ).isRequired,
   onChange: PropTypes.func,
-  onItemRemoved: PropTypes.func
+  onRemoveItem: PropTypes.func
 };
 
 ManagedResourceList.defaultProps = {
   onChange: () => {},
-  onItemRemoved: () => {}
+  onRemoveItem: () => {}
 };
 
 export default ManagedResourceList;

@@ -529,7 +529,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               <ManagedResourceList
                 items={offer.offeredProducts}
                 // onChange={}
-                // onItemRemoved={offeredProducts => setOffer({ ...offer, offeredProducts })}
+                // onRemoveItem={offeredProducts => setOffer({ ...offer, offeredProducts })}
               />
             </Card.Section>
             <Card.Section title="Collections">
@@ -549,7 +549,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
               <ManagedResourceList
                 items={offer.offeredCollections}
                 // onChange={}
-                // onItemRemoved={offeredCollections => setOffer({ ...offer, offeredCollections })}
+                // onRemoveItem={offeredCollections => setOffer({ ...offer, offeredCollections })}
               />
             </Card.Section>
           </Card>
@@ -570,7 +570,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 <ManagedResourceList
                   items={offer.triggerProducts}
                   // onChange={triggerProducts.onChange}
-                  // onItemRemoved={triggerProducts => setOffer({ ...offer, triggerProducts })}
+                  // onRemoveItem={triggerProducts => setOffer({ ...offer, triggerProducts })}
                 />
               </Card.Section>
               <Card.Section title="Collections">
@@ -590,7 +590,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 <ManagedResourceList
                   items={offer.triggerCollections}
                   // onChange={triggerCollections.onChange}
-                  // onItemRemoved={triggerCollections => setOffer({ ...offer, triggerCollections })}
+                  // onRemoveItem={triggerCollections => setOffer({ ...offer, triggerCollections })}
                 />
               </Card.Section>
             </Card>

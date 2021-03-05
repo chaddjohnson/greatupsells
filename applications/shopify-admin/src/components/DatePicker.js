@@ -82,7 +82,7 @@ const DatePicker = ({
       }
       preferredAlignment="left"
       sectioned
-      onClose={() => setPopoverShown(!popoverShown)}
+      onClose={() => setPopoverShown(false)}
     >
       <ShopifyDatePicker
         selected={selected}

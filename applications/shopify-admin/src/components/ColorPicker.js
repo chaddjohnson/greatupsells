@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Popover,
-  Button,
-  Tooltip,
-  ColorPicker as ShopifyColorPicker,
-  TextField
-} from '@shopify/polaris';
+import { ColorPicker as ShopifyColorPicker, TextField } from '@shopify/polaris';
 import Colr from 'colr';
 import styled from 'styled-components';
 
@@ -50,22 +44,6 @@ const sanitizeHexValue = (unsanitizedHexValue) => {
   return sanitizedHexValue ? `#${sanitizedHexValue}` : sanitizedHexValue;
 };
 
-const ColorPreview = styled.div`
-  border: 1px solid #dfe3e8;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 9px;
-  cursor: pointer;
-`;
-
-const PopoverWrapper = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-`;
-
 const ColorPickerWrapper = styled.div`
   .Polaris-TextField {
     width: 100px;
@@ -80,18 +58,7 @@ const ColorPickerWrapper = styled.div`
   }
 `;
 
-const ActivatorWrapper = styled.span`
-  button.Polaris-Button {
-    color: black;
-    text-decoration: none;
-  }
-
-  svg.Polaris-Icon__Svg {
-    fill: black;
-  }
-`;
-
-const ColorPicker = ({ label, value, onChange, ...props }) => {
+const ColorPicker = ({ value, onChange, ...props }) => {
   const sanitizedValue = useMemo(() => sanitizeHexValue(value), [value]);
 
   const [active, setActive] = useState(false);
@@ -156,46 +123,23 @@ const ColorPicker = ({ label, value, onChange, ...props }) => {
 
   return (
     <div {...props}>
-      <Tooltip content={hexValue}>
-        <ColorPreview
-          onClick={togglePopover}
-          style={{ backgroundColor: hexValue }}
-        />
-      </Tooltip>
-      <PopoverWrapper>
-        <Popover
-          active={active}
-          activator={
-            <ActivatorWrapper>
-              <Button onClick={togglePopover} disclosure plain>
-                {label}
-              </Button>
-            </ActivatorWrapper>
-          }
-          preferredAlignment="left"
-          sectioned
-          onClose={togglePopover}
-        >
-          <ColorPickerWrapper>
-            <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
-            <div onKeyDown={handleHexKeyPress}>
-              <TextField
-                value={hexValue}
-                maxLength={7}
-                onChange={handleHexChange}
-                onFocus={(event) => event.target.select()}
-                onBlur={handleHexBlur}
-              />
-            </div>
-          </ColorPickerWrapper>
-        </Popover>
-      </PopoverWrapper>
+      <ColorPickerWrapper>
+        <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
+        <div onKeyDown={handleHexKeyPress}>
+          <TextField
+            value={hexValue}
+            maxLength={7}
+            onChange={handleHexChange}
+            onFocus={(event) => event.target.select()}
+            onBlur={handleHexBlur}
+          />
+        </div>
+      </ColorPickerWrapper>
     </div>
   );
 };
 
 ColorPicker.propTypes = {
-  label: PropTypes.string.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func
 };

@@ -5,16 +5,11 @@ import {
   FormLayout,
   Link,
   Card,
-  ResourceList,
-  ResourceItem,
   TextField,
-  Icon,
-  Subheading,
   Button,
-  Select,
-  Stack
+  TextStyle,
+  Select
 } from '@shopify/polaris';
-import { CancelSmallMinor } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -22,44 +17,12 @@ const Container = styled.div`
   margin-bottom: -2rem;
 `;
 
-const FormFieldResourceItemWrapper = styled.div`
-  cursor: default;
-  margin-left: -1rem;
-  margin-right: -1rem;
+const FormFieldContainer = styled.div`
   border-bottom: 0.1rem solid rgb(225, 227, 229);
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-
-  && .Polaris-ResourceItem__ItemWrapper {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .Polaris-ResourceItem {
-    cursor: default;
-  }
-
-  .Polaris-ResourceItem__Container {
-    padding-left: 0;
-    margin-left: 1rem;
-    align-items: flex-end;
-  }
-
-  .Polaris-ResourceItem__Actions {
-    top: -0.4rem;
-  }
-
-  svg {
-    fill: #637381;
-    &:hover {
-      fill: #212b36;
-    }
-  }
+  padding-bottom: 2rem;
 `;
 
-const FormFieldResourceItem = ({ formField, onRemove, ...props }) => {
+const FormFieldEditor = ({ formField, onRemoveItem, ...props }) => {
   const filterKeyPresses = (event) => {
     if (!event.key.match(/[a-zA-Z0-9\-_]/)) {
       event.preventDefault();
@@ -67,111 +30,97 @@ const FormFieldResourceItem = ({ formField, onRemove, ...props }) => {
   };
 
   return (
-    <FormFieldResourceItemWrapper>
-      <ResourceItem
-        shortcutActions={[
-          {
-            content: <Icon source={CancelSmallMinor} />,
-            onAction: onRemove
-          }
-        ]}
-        persistActions
-        {...props}
-      >
-        <Stack distribution="fill">
-          <div onKeyPress={filterKeyPresses}>
-            <TextField
-              label="Name"
-              type="text"
-              value={formField.name}
+    <FormFieldContainer onKeyPress={filterKeyPresses} {...props}>
+      <TextField
+        type="text"
+        label="Field name"
+        value={formField.name}
+        labelAction={{
+          content: 'Remove',
+          onAction: onRemoveItem
+        }}
+        connectedRight={
+          <div style={{ width: '10rem' }}>
+            <Select
+              label="Type"
+              labelHidden
+              options={[
+                { value: 'text', label: 'Text' },
+                { value: 'email', label: 'Email' },
+                { value: 'number', label: 'Number' },
+                { value: 'tel', label: 'Phone' },
+                { value: 'checkbox', label: 'Checkbox' },
+                { value: 'select', label: 'Select' },
+                { value: 'radio', label: 'Radio' }
+              ]}
+              value={formField.type}
               onChange={() => {}}
             />
           </div>
-          <Select
-            label="Type"
-            options={[
-              { value: 'text', label: 'Text' },
-              { value: 'email', label: 'Email' },
-              { value: 'number', label: 'Number' },
-              { value: 'tel', label: 'Phone' },
-              { value: 'checkbox', label: 'Checkbox' },
-              { value: 'select', label: 'Select' }
-            ]}
-            value={formField.type}
-            onChange={() => {}}
-          />
-        </Stack>
-      </ResourceItem>
-    </FormFieldResourceItemWrapper>
+        }
+        onChange={() => {}}
+      />
+    </FormFieldContainer>
   );
 };
 
-FormFieldResourceItem.propTypes = {
+FormFieldEditor.propTypes = {
   formField: PropTypes.object.isRequired,
-  onRemove: PropTypes.func.isRequired
+  onRemoveItem: PropTypes.func
 };
 
-const FormFieldResourceList = ({ items, onChange, onItemRemoved }) => {
-  const removeItem = (index) => [
-    ...items.slice(0, index),
-    ...items.slice(index + 1)
-  ];
-
-  return (
-    <ResourceList
-      items={items}
-      onSelectionChange={onChange}
-      renderItem={(formField, index) => (
-        <FormFieldResourceItem
-          formField={formField}
-          onRemove={() => onItemRemoved(removeItem(index, items))}
-        />
-      )}
-    />
-  );
+FormFieldEditor.defaltProps = {
+  onRemoveItem: () => {}
 };
 
-FormFieldResourceList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onChange: PropTypes.func,
-  onItemRemoved: PropTypes.func
+const EmptyComponent = ({ onAddItem }) => (
+  <EmptyState
+    heading="Manage form fields"
+    action={{ content: 'Add form field', onAction: onAddItem }}
+    secondaryAction={{
+      content: 'Learn more',
+      url: 'https://help.domain.com/tutorials/data-integration'
+    }}
+  >
+    Track data from popups, and integrate with third-party services.
+  </EmptyState>
+);
+
+EmptyComponent.propTypes = {
+  onAddItem: PropTypes.func
 };
 
-const FormFieldsEditor = ({ formFields, onItemRemoved }) => {
+EmptyComponent.defaultProps = {
+  onAddItem: () => {}
+};
+
+const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
+  const handleAddItem = () => {
+    onAddItem({
+      name: '',
+      type: 'text'
+    });
+  };
+
   if (formFields?.length === 0) {
-    return (
-      <EmptyState
-        heading="Manage form fields"
-        action={{ content: 'Add form field' }}
-        secondaryAction={{
-          content: 'Learn more',
-          url: 'https://help.domain.com/tutorials/data-integration'
-        }}
-      >
-        Track data from popups, and integrate with third-party services.
-      </EmptyState>
-    );
+    return <EmptyComponent onAddItem={handleAddItem} />;
   }
 
   return (
     <Container>
       <Card.Section>
-        <Stack vertical spacing="extraTight">
-          <Stack alignment="baseline">
-            <Stack.Item fill>
-              <Subheading>Form fields</Subheading>
-            </Stack.Item>
-            <Button plain onClick={() => {}}>
-              Add field
-            </Button>
-          </Stack>
-          <FormLayout>
-            <FormFieldResourceList
-              items={formFields}
-              onItemRemoved={onItemRemoved}
+        <FormLayout>
+          {formFields.map((formField, index) => (
+            <FormFieldEditor
+              key={index}
+              formField={formField}
+              onRemoveItem={() => onRemoveItem(index)}
             />
-          </FormLayout>
-        </Stack>
+          ))}
+          <Button onClick={handleAddItem}>
+            <TextStyle variation="strong">Add another field</TextStyle>
+          </Button>
+        </FormLayout>
       </Card.Section>
       <Card.Section>
         Set up third-party service integrations on the{' '}
@@ -183,11 +132,13 @@ const FormFieldsEditor = ({ formFields, onItemRemoved }) => {
 
 FormFieldsEditor.propTypes = {
   formFields: PropTypes.array.isRequired,
-  onItemRemoved: PropTypes.func
+  onAddItem: PropTypes.func,
+  onRemoveItem: PropTypes.func
 };
 
 FormFieldsEditor.defaultProps = {
-  onItemRemoved: () => {}
+  onAddItem: () => {},
+  onRemoveItem: () => {}
 };
 
 export default FormFieldsEditor;

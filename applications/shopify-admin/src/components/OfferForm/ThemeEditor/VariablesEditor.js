@@ -1,19 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
   Button,
   FormLayout,
-  Icon,
   TextField,
-  ResourceList,
-  ResourceItem,
-  Subheading,
-  Stack,
-  EmptyState
+  Select,
+  TextStyle,
+  EmptyState,
+  Popover,
+  Stack
 } from '@shopify/polaris';
-import { CancelSmallMinor } from '@shopify/polaris-icons';
-import { groupBy } from 'lodash';
 import styled from 'styled-components';
 import ColorPicker from '../../ColorPicker';
 
@@ -22,175 +19,162 @@ const Container = styled.div`
   margin-bottom: -2rem;
 `;
 
-const VariableResourceItemWrapper = styled.div`
-  cursor: default;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  border-bottom: 0.1rem solid rgb(225, 227, 229);
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-
-  && .Polaris-ResourceItem__ItemWrapper {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .Polaris-ResourceItem {
-    cursor: default;
-  }
-
-  .Polaris-ResourceItem__Container {
-    padding-left: 0;
-    margin-left: 1rem;
-    align-items: center;
-  }
-
-  .Polaris-ResourceItem__Actions {
-    top: ${(props) => (props.type === 'text' ? '1.3rem' : 0)};
-  }
-
-  svg {
-    fill: #637381;
-    &:hover {
-      fill: #212b36;
-    }
-  }
+const ColorPreview = styled.div`
+  border: 1px solid rgb(225, 227, 229);
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: -30px;
+  cursor: pointer;
 `;
 
-const VariableResourceItem = ({ type, variable, onRemove, ...props }) => (
-  <VariableResourceItemWrapper type={type.value}>
-    <ResourceItem
-      shortcutActions={[
-        {
-          content: <Icon source={CancelSmallMinor} />,
-          onAction: onRemove
-        }
-      ]}
-      persistActions
-      {...props}
-    >
-      {type.value === 'text' && (
-        <Stack distribution="fill">
-          <TextField
-            label="Name"
-            type="text"
-            value={variable.name}
+const VariableContainer = styled.div`
+  border-bottom: 0.1rem solid rgb(225, 227, 229);
+  padding-bottom: 2rem;
+`;
+
+const VariableEditor = ({ variable, onChange, onRemoveItem, ...props }) => {
+  const [colorPickerActive, setColorPickerActive] = useState(false);
+
+  const filterKeyPresses = (event) => {
+    if (!event.key.match(/[a-zA-Z0-9\-_]/)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleTypeChange = (value) => {
+    // onChange();
+  };
+
+  const valueInput = (
+    <TextField
+      type="text"
+      label="Value"
+      placeholder="#000000"
+      maxLength={7}
+      readOnly
+      value={variable.value}
+      labelAction={{
+        content: 'Remove',
+        onAction: onRemoveItem
+      }}
+      connectedRight={
+        <div style={{ width: '10rem' }}>
+          <Select
+            label="Type"
+            labelHidden
+            options={[
+              { value: 'text', label: 'Text' },
+              { value: 'color', label: 'Color' }
+            ]}
+            value={variable.type}
             onChange={() => {}}
           />
-          <TextField
-            label="Value"
-            type="text"
-            value={variable.value}
-            onChange={() => {}}
-          />
-        </Stack>
-      )}
-      {type.value === 'color' && (
-        <ColorPicker
-          label={variable.name}
-          value={variable.value}
-          onChange={() => {}}
-        />
-      )}
-    </ResourceItem>
-  </VariableResourceItemWrapper>
-);
-
-VariableResourceItem.propTypes = {
-  type: PropTypes.object.isRequired,
-  variable: PropTypes.object.isRequired,
-  onRemove: PropTypes.func.isRequired
-};
-
-const VariableResourceList = ({ type, items, onChange, onItemRemoved }) => {
-  const removeItem = (index) => [
-    ...items.slice(0, index),
-    ...items.slice(index + 1)
-  ];
+        </div>
+      }
+      suffix={
+        variable.type === 'color' && (
+          <ColorPreview style={{ backgroundColor: variable.value }} />
+        )
+      }
+      onChange={() => {}}
+      onFocus={() => setColorPickerActive(true)}
+    />
+  );
 
   return (
-    <ResourceList
-      items={items}
-      onSelectionChange={onChange}
-      renderItem={(variable, index) => (
-        <VariableResourceItem
-          type={type}
-          variable={variable}
-          onRemove={() => onItemRemoved(removeItem(index, items))}
+    <VariableContainer onKeyPress={filterKeyPresses} {...props}>
+      <Stack distribution="fillEvenly" alignment="trailing" spacing="tight">
+        <TextField
+          type="text"
+          label="Name"
+          value={variable.name}
+          onChange={() => {}}
         />
-      )}
-    />
+        {variable.type === 'color' ? (
+          <Popover
+            active={colorPickerActive}
+            activator={valueInput}
+            preferredAlignment="left"
+            sectioned
+            onClose={() => setColorPickerActive(false)}
+          >
+            <ColorPicker value={variable.value} onChange={() => {}} />
+          </Popover>
+        ) : (
+          valueInput
+        )}
+      </Stack>
+    </VariableContainer>
   );
 };
 
-VariableResourceList.propTypes = {
-  type: PropTypes.object.isRequired,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+VariableEditor.propTypes = {
+  variable: PropTypes.object.isRequired,
   onChange: PropTypes.func,
-  onItemRemoved: PropTypes.func
+  onRemoveItem: PropTypes.func
 };
 
-const VariablesEditor = ({ variables, onItemRemoved }) => {
-  const variablesByType = useMemo(() => groupBy(variables, 'type'), [
-    variables
-  ]);
-  const types = [
-    {
-      value: 'text',
-      name: 'Texts',
-      nameSingular: 'Text'
-    },
-    {
-      value: 'color',
-      name: 'Colors',
-      nameSingular: 'Color'
-    }
-  ];
+VariableEditor.defaltProps = {
+  onChange: () => {},
+  onRemoveItem: () => {}
+};
 
-  if (Object.keys(variablesByType).length === 0) {
-    return (
-      <EmptyState
-        heading="Manage variables"
-        action={{ content: 'Add variable' }}
-      >
-        Enable template customization using variables.
-      </EmptyState>
-    );
+const EmptyComponent = ({ onAddItem }) => (
+  <EmptyState
+    heading="Manage variables"
+    action={{
+      content: 'Add variable',
+      onAction: onAddItem
+    }}
+    secondaryAction={{
+      content: 'Learn more',
+      url: 'https://help.domain.com/tutorials/template-variables'
+    }}
+  >
+    Enable template customization using variables.
+  </EmptyState>
+);
+
+EmptyComponent.propTypes = {
+  onAddItem: PropTypes.func
+};
+
+EmptyComponent.defaultProps = {
+  onAddItem: () => {}
+};
+
+const VariablesEditor = ({ variables, onAddItem, onRemoveItem }) => {
+  const handleAddItem = () => {
+    onAddItem({
+      name: '',
+      type: 'text',
+      value: ''
+    });
+  };
+
+  if (variables?.length === 0) {
+    return <EmptyComponent onAddItem={handleAddItem} />;
   }
 
   return (
     <Container>
-      {types.map((type) => {
-        const typeVariables = variablesByType[type.value];
-
-        if (!typeVariables?.length) {
-          return null;
-        }
-
-        return (
-          <Card.Section key={type.value}>
-            <Stack vertical spacing="extraTight">
-              <Stack alignment="baseline">
-                <Stack.Item fill>
-                  <Subheading>{type.name}</Subheading>
-                </Stack.Item>
-                <Button plain onClick={() => {}}>
-                  Add {type.nameSingular.toLowerCase()}
-                </Button>
-              </Stack>
-              <FormLayout>
-                <VariableResourceList
-                  type={type}
-                  items={typeVariables}
-                  onItemRemoved={onItemRemoved}
-                />
-              </FormLayout>
-            </Stack>
-          </Card.Section>
-        );
-      })}
+      <Card.Section>
+        <FormLayout>
+          {variables.map((variable, index) => (
+            <VariableEditor
+              key={index}
+              variable={variable}
+              // onChange={() => {}}
+              onRemoveItem={() => onRemoveItem(index)}
+            />
+          ))}
+          <Button onClick={handleAddItem}>
+            <TextStyle variation="strong">Add another field</TextStyle>
+          </Button>
+        </FormLayout>
+      </Card.Section>
     </Container>
   );
 };
@@ -203,11 +187,13 @@ VariablesEditor.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
-  onItemRemoved: PropTypes.func
+  onAddItem: PropTypes.func,
+  onRemoveItem: PropTypes.func
 };
 
 VariablesEditor.defaultProps = {
-  onItemRemoved: () => {}
+  onAddItem: () => {},
+  onRemoveItem: () => {}
 };
 
 export default VariablesEditor;
