@@ -69,11 +69,14 @@ const OfferPopup = ({
   // Create a key/value map from theme variables.
   const themeVariables = useMemo(
     () =>
-      popupTheme.themeVariables.reduce((map, themeVariable) => ({
-        ...map,
-        [themeVariable.name]: themeVariable.value
-      })),
-    [popupTheme.themeVariables]
+      popupTheme.variables.reduce(
+        (map, themeVariable) => ({
+          ...map,
+          [themeVariable.name]: themeVariable.value
+        }),
+        []
+      ),
+    [popupTheme.variables]
   );
 
   // Set up the template function.
@@ -105,7 +108,7 @@ const OfferPopup = ({
     const data = Object.fromEntries(formData.entries());
 
     // TODO: Create data model for tracking submissions.
-    // TODO: Save submission. Work with `popupTheme.themeVariables` when processing submission.
+    // TODO: Save submission. Work with `popupTheme.variables` when processing submission.
   };
 
   const handleClose = () => {
