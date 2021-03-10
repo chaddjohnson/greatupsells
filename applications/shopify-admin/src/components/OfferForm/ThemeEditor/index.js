@@ -15,9 +15,8 @@ import {
 import { SearchMinor } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import styled from 'styled-components';
-import VariablesEditor from './VariablesEditor';
+import WysiwygEditor from './WysiwygEditor';
 import FormFieldsEditor from './FormFieldsEditor';
-import CodeEditor from './CodeEditor';
 
 const ThemeOptionsContainer = styled.div`
   max-height: 32.5rem;
@@ -98,27 +97,22 @@ SearchFilter.defaultProps = {
 };
 
 const tabs = [
+  // {
+  //   id: 'preview',
+  //   accessibilityLabel: 'Preview',
+  //   panelID: 'preview',
+  //   content: 'Preview'
+  // },
   {
-    id: 'preview',
-    accessibilityLabel: 'Preview',
-    panelID: 'preview',
-    content: 'Preview'
+    id: 'design',
+    accessibilityLabel: 'Design',
+    panelID: 'design',
+    content: 'Design'
   },
   {
-    id: 'variables',
-    accessibilityLabel: 'Variables',
-    panelID: 'variables',
-    content: 'Variables'
-  },
-  {
-    id: 'form-fields',
-    panelID: 'form-fields',
-    content: 'Form fields'
-  },
-  {
-    id: 'code-editor',
-    panelID: 'code-editor',
-    content: 'Code editor'
+    id: 'data-collection',
+    panelID: 'data-collection',
+    content: 'Data collection'
   }
 ];
 
@@ -147,21 +141,8 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
     setSelectedTabIndex(index);
   };
 
-  const handleAddVariable = (variable) => {
-    onChange({
-      ...theme,
-      variables: [...theme.variables, variable]
-    });
-  };
-
-  const handleRemoveVariable = (index) => {
-    onChange({
-      ...theme,
-      variables: [
-        ...theme.variables.slice(0, index),
-        ...theme.variables.slice(index + 1)
-      ]
-    });
+  const handleTemplateChange = (value) => {
+    onChange({ ...theme, template: value });
   };
 
   const handleAddFormField = (formField) => {
@@ -205,33 +186,25 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
           tabs={tabs}
           selected={selectedTabIndex}
           onSelect={handleTabChange}
+          fullWidth
         >
           <Card.Section>
-            {tabs[selectedTabIndex].panelID === 'preview' && previewElement}
-            {tabs[selectedTabIndex].panelID === 'variables' && (
-              <VariablesEditor
-                variables={theme.variables}
-                // onChange={() => {}}
-                onAddItem={handleAddVariable}
-                onRemoveItem={handleRemoveVariable}
+            {tabs[selectedTabIndex].panelID === 'design' && (
+              <WysiwygEditor
+                template={theme.template}
+                onChange={handleTemplateChange}
               />
             )}
-            {tabs[selectedTabIndex].panelID === 'form-fields' && (
+            {tabs[selectedTabIndex].panelID === 'data-collection' && (
               <FormFieldsEditor
                 formFields={theme.formFields}
                 onAddItem={handleAddFormField}
                 onRemoveItem={handleRemoveFormField}
               />
             )}
-            {tabs[selectedTabIndex].panelID === 'code-editor' && (
-              <CodeEditor markup={theme.markup} onChange={() => {}} />
-            )}
           </Card.Section>
         </Tabs>
       </Card.Section>
-      {tabs[selectedTabIndex].panelID === 'code-editor' && (
-        <Card.Section>{previewElement}</Card.Section>
-      )}
     </Card>
   );
 };

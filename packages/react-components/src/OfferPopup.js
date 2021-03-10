@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
@@ -66,56 +66,48 @@ const OfferPopup = ({
 }) => {
   const { popupTheme } = offer;
 
-  // Create a key/value map from theme variables.
-  const themeVariables = useMemo(
-    () =>
-      popupTheme.variables.reduce(
-        (map, themeVariable) => ({
-          ...map,
-          [themeVariable.name]: themeVariable.value
-        }),
-        []
-      ),
-    [popupTheme.variables]
-  );
-
-  // Set up the template function.
-  const template = useMemo(() => handlebars.compile(popupTheme.markup), [
-    popupTheme.markup
-  ]);
-
-  // Generate the markup.
-  const markup = useMemo(
-    () =>
-      template({
-        themeVariables,
-        offer,
-        product
-      }),
-    [template, themeVariables, offer, product]
-  );
-
-  const handleSubmit = (event) => {
+  const handleSubmit = useCallback((event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
     }
 
     event.preventDefault();
 
-    // Collect form values;
+    // Collect form values.
     const form = event.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
     // TODO: Create data model for tracking submissions.
-    // TODO: Save submission. Work with `popupTheme.variables` when processing submission.
-  };
+    // TODO: Save submission.
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     if (!renderTo) {
       onClose();
     }
-  };
+  }, [renderTo, onClose]);
+
+  // Set up the template function.
+  const template = useMemo(() => handlebars.compile(popupTheme.template), [
+    popupTheme.template
+  ]);
+
+  // Generate the markup.
+  const markup = useMemo(
+    () =>
+      // TODO: Replace placeholders.
+      template({
+        submit_handler: 'window.OfferPopup.submit()',
+        close_handler: 'window.OfferPopup.close()',
+        product_url:
+          'https://neatowebsolutions-chad.myshopify.com/products/fancy-shoes',
+        product_title: 'Fancy Ass Shoes',
+        price: '12.34',
+        sale_price: '11.29'
+      }),
+    [template]
+  );
 
   // Expose methods globally to enable themes to programmatically interface with popups.
   window.OfferPopup.submit = handleSubmit;
@@ -143,12 +135,12 @@ const OfferPopup = ({
         overlay: {
           position: renderTo ? 'relative' : 'fixed',
           background: 'rgba(0, 0, 0, 0.5)',
-          zIndex: 2147483647
+          zIndex: renderTo ? 'auto' : 2147483647
         }
       }}
     >
       <ModalContentContainer dangerouslySetInnerHTML={{ __html: markup }} />
-      {renderTo && <Mask onClick={onClick} />}
+      {/* {renderTo && <Mask onClick={onClick} />} */}
     </Modal>
   );
 };
