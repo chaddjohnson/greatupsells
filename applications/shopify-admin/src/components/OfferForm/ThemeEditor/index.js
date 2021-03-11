@@ -54,15 +54,38 @@ ThemeOption.defaultProps = {
   }
 };
 
-const SearchFilter = ({ onChange }) => {
+const SearchFilter = ({ type, category, onChange }) => {
   const [active, setActive] = useState(false);
+
+  const choices = useMemo(() => {
+    if (type === 'UPSELL') {
+      return [{ value: 'upsell', label: 'Upsell' }];
+    } else if (type === 'CROSS_SELL') {
+      return [{ value: 'cross-sell', label: 'Cross-sell' }];
+    } else if (type === 'POPUP') {
+      return [
+        { value: '', label: 'All' },
+        { value: 'email', label: 'Email' },
+        { value: 'newsletter', label: 'Newsletter signup' },
+        { value: 'survey', label: 'Survey' }
+      ];
+    } else {
+      return [];
+    }
+  }, [type]);
+
+  // TODO: Select the first available choice when `type` changes.
+
+  const handleChange = ([value]) => {
+    onChange(value);
+  };
 
   return (
     <Popover
       active={active}
       activator={
         <Button disclosure onClick={() => setActive(!active)}>
-          Type
+          Category
         </Button>
       }
       preferredAlignment="right"
@@ -70,25 +93,19 @@ const SearchFilter = ({ onChange }) => {
       onClose={() => setActive(false)}
     >
       <ChoiceList
-        title="Type"
+        title="Category"
         titleHidden
-        choices={[
-          { value: '', label: 'All' },
-          { value: 'upsell', label: 'Upsell' },
-          { value: 'cross-sell', label: 'Cross-sell' },
-          { value: 'email', label: 'Email' },
-          { value: 'newsletter', label: 'Newsletter signup' },
-          { value: 'survey', label: 'Survey' }
-        ]}
-        selected=""
-        // selected={statusFilter || []}
-        onChange={onChange}
+        choices={choices}
+        selected={category}
+        onChange={handleChange}
       />
     </Popover>
   );
 };
 
 SearchFilter.propTypes = {
+  type: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
   onChange: PropTypes.func
 };
 
@@ -116,17 +133,28 @@ const tabs = [
   }
 ];
 
-const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
+const ThemeEditor = ({ type, theme, themes, previewElement, onChange }) => {
   const [selectedTheme, setSelectedTheme] = useState([theme && theme._id]);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [category, setCategory] = useState('');
+
+  const typeThemes = useMemo(() => {
+    if (type === 'UPSELL') {
+      return themes.filter((item) => item.type === 'UPSELL');
+    } else if (type === 'CROSS_SELL') {
+      return themes.filter((item) => item.type === 'CROSS_SELL');
+    } else if (type === 'POPUP') {
+      return themes.filter((item) => item.type === 'POPUP');
+    }
+  }, [type, themes]);
 
   const themeOptions = useMemo(
     () =>
-      sortBy(themes, 'displayOrder').map((item) => ({
+      sortBy(typeThemes, 'displayOrder').map((item) => ({
         value: item._id,
         label: <ThemeOption theme={item} />
       })),
-    [themes]
+    [typeThemes]
   );
 
   const handleThemeSelect = (value) => {
@@ -135,6 +163,15 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
     if (value?.[0]) {
       onChange(themes.find(({ _id }) => _id === value[0]));
     }
+  };
+
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+
+    // TODO: Filter available templates within this component (`typeThemes`?).
+
+    // TODO: Set theme to first theme in available categories on type change?
+    // Maybe this doesn't make sense since categories are already filtered based on `type`.
   };
 
   const handleTabChange = (index) => {
@@ -169,7 +206,13 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
           type="search"
           placeholder="Search themes"
           prefix={<Icon source={SearchMinor} />}
-          connectedRight={<SearchFilter onChange={() => {}} />}
+          connectedRight={
+            <SearchFilter
+              type={type}
+              category={category}
+              onChange={handleCategoryChange}
+            />
+          }
           onChange={() => {}}
         />
 
@@ -210,6 +253,7 @@ const ThemeEditor = ({ theme, themes, previewElement, onChange }) => {
 };
 
 ThemeEditor.propTypes = {
+  type: PropTypes.string.isRequired,
   theme: PropTypes.object,
   themes: PropTypes.arrayOf(PropTypes.object),
   previewElement: PropTypes.node,
