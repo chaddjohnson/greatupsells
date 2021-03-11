@@ -379,6 +379,12 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     value: 'CROSS_SELL',
                     helpText:
                       'Encourage customers to purchase a related or complementary product.'
+                  },
+                  {
+                    label: 'Popup',
+                    value: 'POPUP',
+                    helpText:
+                      'Display a popup for email collection, newsletter signups, surveys, sales, promotions, and general information.'
                   }
                 ]}
                 selected={strategy.value}
@@ -596,6 +602,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             </Card>
           )}
           <ThemeEditor
+            type={offer.strategy}
             theme={offer.popupTheme}
             themes={popupThemes}
             previewElement={

@@ -26,6 +26,11 @@ const schema = new mongoose.Schema(
       required: false
     },
     displayOrder: { type: Int32, required: false },
+    type: {
+      type: String,
+      required: true,
+      enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
+    },
     category: { type: String, required: true },
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
