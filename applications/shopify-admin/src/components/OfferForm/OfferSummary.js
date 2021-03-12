@@ -50,7 +50,7 @@ StatusBadge.propTypes = {
   offer: PropTypes.object.isRequired
 };
 
-const OfferSummary = ({ offer, children }) => {
+const OfferSummary = ({ offer }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -108,14 +108,11 @@ const OfferSummary = ({ offer, children }) => {
             </List>
             <TextStyle variation="subdued">
               View{' '}
-              <Button
-                plain
-                url="/offers/a702955babd0e0c9bdcf176c13b60a1f/analytics/"
-              >
+              <Button plain url="/offers/602d83ce6e555811fa75e378/analytics/">
                 analytics
               </Button>{' '}
               and{' '}
-              <Button plain url="/a702955babd0e0c9bdcf176c13b60a1f/data/">
+              <Button plain url="/602d83ce6e555811fa75e378/data/">
                 data submissions
               </Button>{' '}
               for this offer
@@ -123,14 +120,12 @@ const OfferSummary = ({ offer, children }) => {
           </Stack>
         </Card.Section>
       )}
-      {children}
     </>
   );
 };
 
 OfferSummary.propTypes = {
-  offer: PropTypes.object.isRequired,
-  children: PropTypes.node
+  offer: PropTypes.object.isRequired
 };
 
 export default OfferSummary;

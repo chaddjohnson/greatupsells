@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -11,7 +11,6 @@ import {
   Icon,
   Button,
   PageActions,
-  Sticky,
   Stack
 } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
@@ -30,7 +29,6 @@ import {
 } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
-import scrollToComponent from 'react-scroll-to-component';
 import { usePopupThemes } from '../../hooks';
 import ManagedResourceList from './ManagedResourceList';
 import DateTimePicker from '../DateTimePicker';
@@ -52,27 +50,6 @@ const product = {
   salePrice: 12.99
   // ...
 };
-
-const SummaryContainer = styled.div`
-  .Polaris-Card__Section:last-child {
-    display: none;
-  }
-
-  @media (min-width: 804px) {
-    .Polaris-Card__Section:last-child {
-      display: block;
-    }
-  }
-`;
-
-const OfferPopupSummaryContainer = styled.div`
-  zoom: 35%;
-  margin-top: 8px;
-
-  > div {
-    position: static;
-  }
-`;
 
 const OfferPopupContainer = styled.div`
   > div {
@@ -96,7 +73,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   ] = useState(false);
 
   const [offerPopupContainer, setOfferPopupContainer] = useState(null);
-  const offerPopupSummaryContainer = useRef();
 
   const { popupThemes } = usePopupThemes();
 
@@ -499,7 +475,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                         {...actionButtonLink}
                         error={submitted && actionButtonLink.error}
                         onBlur={handleBlur('actionButtonLink')}
-                        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
                       />
                       <Checkbox
                         label="Open in new browser tab"
@@ -759,32 +734,9 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
           </Card>
         </Layout.Section>
         <Layout.Section secondary>
-          <Sticky offset={20}>
-            <SummaryContainer>
-              <Card title="Summary" subdued>
-                <OfferSummary offer={offer}>
-                  <Card.Section title="Preview">
-                    <OfferPopupSummaryContainer
-                      ref={offerPopupSummaryContainer}
-                    />
-                    {/* eslint-disable indent */}
-                    {offerPopupSummaryContainer &&
-                      offerPopupSummaryContainer.current && (
-                        <OfferPopup
-                          appRoot="#__next"
-                          renderTo={offerPopupSummaryContainer.current}
-                          open={true}
-                          offer={offer}
-                          product={product}
-                          onClick={() => scrollToComponent(offerPopupContainer)}
-                        />
-                      )}
-                    {/* eslint-enable indent */}
-                  </Card.Section>
-                </OfferSummary>
-              </Card>
-            </SummaryContainer>
-          </Sticky>
+          <Card title="Summary" subdued>
+            <OfferSummary offer={offer} />
+          </Card>
         </Layout.Section>
         <Layout.Section>
           <PageActions

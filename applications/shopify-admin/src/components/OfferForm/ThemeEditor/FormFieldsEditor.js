@@ -3,19 +3,14 @@ import PropTypes from 'prop-types';
 import {
   EmptyState,
   FormLayout,
-  Link,
   Card,
   TextField,
   Button,
   TextStyle,
-  Select
+  Select,
+  TextContainer
 } from '@shopify/polaris';
 import styled from 'styled-components';
-
-const Container = styled.div`
-  margin-top: -2rem;
-  margin-bottom: -2rem;
-`;
 
 const FormFieldContainer = styled.div`
   border-bottom: 0.1rem solid rgb(225, 227, 229);
@@ -79,10 +74,12 @@ const EmptyComponent = ({ onAddItem }) => (
     action={{ content: 'Add form field', onAction: onAddItem }}
     secondaryAction={{
       content: 'Learn more',
-      url: 'https://help.domain.com/tutorials/data-integration'
+      url: 'https://help.domain.com/tutorials/data-integrations'
     }}
   >
-    Track data from popups, and integrate with third-party services.
+    <TextContainer>
+      Track data from popups, and integrate with third-party services.
+    </TextContainer>
   </EmptyState>
 );
 
@@ -107,8 +104,8 @@ const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
   }
 
   return (
-    <Container>
-      <Card.Section>
+    <>
+      <Card.Section title="Form fields">
         <FormLayout>
           {formFields.map((formField, index) => (
             <FormFieldEditor
@@ -122,11 +119,7 @@ const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
           </Button>
         </FormLayout>
       </Card.Section>
-      <Card.Section>
-        Set up third-party service integrations on the{' '}
-        <Link url="/settings">Settings page</Link>.
-      </Card.Section>
-    </Container>
+    </>
   );
 };
 

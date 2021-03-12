@@ -140,7 +140,7 @@ const OfferPopup = ({
       }}
     >
       <ModalContentContainer dangerouslySetInnerHTML={{ __html: markup }} />
-      {/* {renderTo && <Mask onClick={onClick} />} */}
+      {renderTo && <Mask onClick={onClick} />}
     </Modal>
   );
 };
