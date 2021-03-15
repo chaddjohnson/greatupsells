@@ -94,20 +94,19 @@ const OfferPopup = ({
   ]);
 
   // Generate the markup.
-  const markup = useMemo(
-    () =>
-      // TODO: Replace placeholders.
-      template({
-        submit_handler: 'window.OfferPopup.submit()',
-        close_handler: 'window.OfferPopup.close()',
-        product_url:
-          'https://neatowebsolutions-chad.myshopify.com/products/fancy-shoes',
-        product_title: 'Fancy Ass Shoes',
-        price: '12.34',
-        sale_price: '11.29'
-      }),
-    [template]
-  );
+  const markup = useMemo(() => {
+    const mappedVariables = popupTheme.variables.reduce(
+      (map, { name, value }) => ({ ...map, [name]: value })
+    );
+
+    // TODO: Replace placeholders.
+    return template({
+      ...mappedVariables,
+      product,
+      submitHandler: 'window.OfferPopup.submit()',
+      closeHandler: 'window.OfferPopup.close()'
+    });
+  }, [template, popupTheme.variables, product]);
 
   // Expose methods globally to enable themes to programmatically interface with popups.
   window.OfferPopup.submit = handleSubmit;
