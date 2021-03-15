@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import {
   Card,
   FormLayout,
-  TextField,
   Subheading,
   TextStyle,
   Stack
 } from '@shopify/polaris';
 import { groupBy } from 'lodash';
+import ColorPicker from './ColorPicker';
 
 const ColorEditor = ({ variables, onChange }) => {
   const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
@@ -26,9 +26,8 @@ const ColorEditor = ({ variables, onChange }) => {
           <Card sectioned>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (
-                <TextField
+                <ColorPicker
                   key={variableIndex}
-                  type="text"
                   label={variable.label}
                   value={variable.value}
                   onChange={(value) => onChange(variable.name, value)}
