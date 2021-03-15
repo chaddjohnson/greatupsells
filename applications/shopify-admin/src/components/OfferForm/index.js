@@ -198,7 +198,7 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const hideIfItemAdded = useField(initialValues.hideIfItemAdded);
   const allowWithDiscountCodes = useField(initialValues.allowWithDiscountCodes);
 
-  const { fields, dirty, submit, submitting, submitErrors } = useForm({
+  const { fields, dirty, submit, submitting /* submitErrors */ } = useForm({
     fields: {
       name,
       strategy,

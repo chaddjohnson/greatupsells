@@ -2,11 +2,12 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   OptionList,
-  Heading,
+  DisplayText,
   TextField,
   Button,
   Popover,
   ChoiceList,
+  Card,
   Tabs,
   Icon,
   Sheet,
@@ -23,6 +24,7 @@ const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #f4f6f8;
 `;
 
 const HeaderWrapper = styled.div`
@@ -49,6 +51,7 @@ const ThemeOptionWrapper = styled.div`
   border-radius: 3px;
   padding-bottom: 0.5rem;
   margin: auto;
+  background-color: #ffffff;
 `;
 
 const ThemeThumbnailImage = styled.img`
@@ -199,7 +202,7 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
     <Sheet open={open} onClose={onClose} accessibilityLabel="Select theme">
       <InnerWrapper>
         <HeaderWrapper>
-          <Heading>Select theme</Heading>
+          <DisplayText size="small">Select theme</DisplayText>
           <Button
             accessibilityLabel="Cancel"
             icon={MobileCancelMajor}
@@ -229,19 +232,23 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
                     }
                     onChange={() => {}}
                   />
+                  <Card>
+                    <OptionList
+                      options={themeOptions}
+                      selected={selectedTheme}
+                      onChange={handleThemeSelect}
+                    />
+                  </Card>
+                </Stack>
+              )}
+              {tabs[selectedTabIndex].id === 'history' && (
+                <Card>
                   <OptionList
                     options={themeOptions}
                     selected={selectedTheme}
                     onChange={handleThemeSelect}
                   />
-                </Stack>
-              )}
-              {tabs[selectedTabIndex].id === 'history' && (
-                <OptionList
-                  options={themeOptions}
-                  selected={selectedTheme}
-                  onChange={handleThemeSelect}
-                />
+                </Card>
               )}
             </SearchWrapper>
           </Tabs>

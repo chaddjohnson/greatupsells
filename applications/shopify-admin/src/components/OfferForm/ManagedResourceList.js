@@ -20,9 +20,12 @@ const ManagedResourceItemWrapper = styled.div`
   }
 
   svg {
-    fill: #637381;
-    &:hover {
-      fill: #212b36;
+    fill: #5c5f62;
+  }
+
+  .Polaris-ResourceItem__ListItem:hover {
+    svg {
+      fill: #1a1c1d;
     }
   }
 `;
