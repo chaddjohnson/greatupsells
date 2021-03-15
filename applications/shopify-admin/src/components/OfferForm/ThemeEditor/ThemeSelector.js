@@ -213,9 +213,9 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
             selected={selectedTabIndex}
             onSelect={handleTabChange}
           >
-            {tabs[selectedTabIndex].id === 'explore' && (
-              <>
-                <SearchWrapper>
+            <SearchWrapper>
+              {tabs[selectedTabIndex].id === 'explore' && (
+                <Stack vertical spacing="tight">
                   <TextField
                     type="search"
                     placeholder="Search"
@@ -229,21 +229,21 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
                     }
                     onChange={() => {}}
                   />
-                </SearchWrapper>
+                  <OptionList
+                    options={themeOptions}
+                    selected={selectedTheme}
+                    onChange={handleThemeSelect}
+                  />
+                </Stack>
+              )}
+              {tabs[selectedTabIndex].id === 'history' && (
                 <OptionList
                   options={themeOptions}
                   selected={selectedTheme}
                   onChange={handleThemeSelect}
                 />
-              </>
-            )}
-            {tabs[selectedTabIndex].id === 'history' && (
-              <OptionList
-                options={themeOptions}
-                selected={selectedTheme}
-                onChange={handleThemeSelect}
-              />
-            )}
+              )}
+            </SearchWrapper>
           </Tabs>
         </Scrollable>
         <PageActionsWrapper>

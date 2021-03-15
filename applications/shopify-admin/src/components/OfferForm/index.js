@@ -47,7 +47,8 @@ const timezoneAbbreviation = moment.tz(timezone).format('z');
 const product = {
   title: 'Example Product',
   price: 14.99,
-  salePrice: 12.99
+  salePrice: 12.99,
+  url: '/products/example-product'
   // ...
 };
 

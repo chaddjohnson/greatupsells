@@ -8,23 +8,6 @@ const ThemeEditor = ({ type, theme, themes, previewElement, onChange }) => {
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
 
-  // const handleAddFormField = (formField) => {
-  //   onChange({
-  //     ...theme,
-  //     formFields: [...theme.formFields, formField]
-  //   });
-  // };
-
-  // const handleRemoveFormField = (index) => {
-  //   onChange({
-  //     ...theme,
-  //     formFields: [
-  //       ...theme.formFields.slice(0, index),
-  //       ...theme.formFields.slice(index + 1)
-  //     ]
-  //   });
-  // };
-
   const handleVariablesChange = (values) => {
     onChange({ ...theme, variables: values });
   };
@@ -61,7 +44,7 @@ const ThemeEditor = ({ type, theme, themes, previewElement, onChange }) => {
       />
       <VariablesEditor
         open={variablesEditorOpen}
-        theme={theme}
+        variables={theme.variables}
         onChange={handleVariablesChange}
         onClose={() => setVariablesEditorOpen(false)}
       />
