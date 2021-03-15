@@ -8,6 +8,12 @@ const schemaOptions = {
   timestamps: true,
   collection: 'popupThemes'
 };
+const variablesSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  label: { type: String, required: true },
+  type: { type: String, required: true, enum: ['text', 'color'] },
+  value: { type: mongoose.Schema.Types.Mixed, required: true }
+});
 const formFieldsSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: {
@@ -35,6 +41,7 @@ const schema = new mongoose.Schema(
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     template: { type: String, required: true },
+    variables: [variablesSchema],
     formFields: [formFieldsSchema]
   },
   schemaOptions
