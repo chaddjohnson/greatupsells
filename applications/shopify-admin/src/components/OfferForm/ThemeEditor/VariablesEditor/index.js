@@ -145,6 +145,7 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
                   media={<Icon source={section.icon} />}
                   accessibilityLabel={`Edit ${section.name.toLowerCase()}`}
                   verticalAlignment="center"
+                  onClick={() => setSelectedSection(section)}
                 >
                   <Stack alignment="center">
                     <Stack.Item fill>{section.name}</Stack.Item>
