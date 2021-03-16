@@ -41,7 +41,7 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
       const formattedValue =
         Math.round(value * 100 * 10 ** decimals) / 10 ** decimals;
 
-      return formattedValue
+      return typeof formattedValue === 'number'
         ? `${numberFormatter.format(formattedValue)}%`
         : value;
     }
