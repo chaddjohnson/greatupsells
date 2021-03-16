@@ -126,7 +126,7 @@ const DashboardPage = () => {
           <Layout.Section>
             <Card sectioned>
               <Stats>
-                <Stack distribution="equalSpacing" wrap>
+                <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" vertical>
                     <DisplayText size="extraLarge">
                       {formatNumber(shop?.offerAcceptanceCount)}
@@ -179,7 +179,7 @@ const DashboardPage = () => {
           </Layout.Section>
           <Layout.Section>
             <CalloutCard
-              title="Add upsell and cross-sell offers to your store"
+              title="Add upsell, cross-sell, and popup offers to your store"
               primaryAction={{
                 content: 'Create offer',
                 url: '/offers/new/'
@@ -198,8 +198,7 @@ const DashboardPage = () => {
                 content: 'Visit the tutorials',
                 url: 'https://help.domain.com/tutorials'
               }}
-              // description="Discover how Shopify can power up your entrepreneurial journey."
-              description="Learn how to use Great Upsells to boost your sales and revenue."
+              description="Learn how upselling and cross-selling can boost your sales and revenue."
             >
               <img
                 alt="Tutorials"
