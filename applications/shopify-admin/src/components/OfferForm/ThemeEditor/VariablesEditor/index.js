@@ -68,7 +68,7 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const ResourceItemIconWrapper = styled.span`
+const ResourceListWrapper = styled.span`
   svg {
     fill: #5c5f62;
   }
@@ -135,7 +135,7 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
           </Stack>
         </HeaderWrapper>
         {!selectedSection && (
-          <ResourceItemIconWrapper>
+          <ResourceListWrapper>
             <ResourceList
               items={sections}
               renderItem={(section) => (
@@ -144,17 +144,20 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
                   name={section.name}
                   media={<Icon source={section.icon} />}
                   accessibilityLabel={`Edit ${section.name.toLowerCase()}`}
-                  shortcutActions={[
-                    { content: <Icon source={ChevronRightMinor} /> }
-                  ]}
-                  persistActions
-                  onClick={() => setSelectedSection(section)}
+                  verticalAlignment="center"
                 >
-                  {section.name}
+                  <Stack alignment="center">
+                    <Stack.Item fill>{section.name}</Stack.Item>
+                    <Button
+                      icon={ChevronRightMinor}
+                      plain
+                      onClick={() => setSelectedSection(section)}
+                    />
+                  </Stack>
                 </ResourceItem>
               )}
             />
-          </ResourceItemIconWrapper>
+          </ResourceListWrapper>
         )}
         {selectedSection && (
           /* eslint-disable indent */

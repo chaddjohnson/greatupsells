@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ResourceList, Thumbnail, ResourceItem, Icon } from '@shopify/polaris';
+import {
+  ResourceList,
+  Thumbnail,
+  ResourceItem,
+  Button,
+  Stack
+} from '@shopify/polaris';
 import { CancelSmallMinor } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 
-const ManagedResourceItemWrapper = styled.div`
+const ResourceListWrapper = styled.div`
   cursor: default;
 
   .Polaris-ResourceItem {
@@ -30,28 +36,6 @@ const ManagedResourceItemWrapper = styled.div`
   }
 `;
 
-const ManagedResourceItem = ({ children, onRemove, ...props }) => (
-  <ManagedResourceItemWrapper>
-    <ResourceItem
-      shortcutActions={[
-        {
-          content: <Icon source={CancelSmallMinor} />,
-          onAction: onRemove
-        }
-      ]}
-      persistActions
-      {...props}
-    >
-      {children}
-    </ResourceItem>
-  </ManagedResourceItemWrapper>
-);
-
-ManagedResourceItem.propTypes = {
-  children: PropTypes.node.isRequired,
-  onRemove: PropTypes.func.isRequired
-};
-
 const ManagedResourceList = ({ items, onChange, onRemoveItem }) => {
   const removeItem = (index) => [
     ...items.slice(0, index),
@@ -59,18 +43,28 @@ const ManagedResourceList = ({ items, onChange, onRemoveItem }) => {
   ];
 
   return (
-    <ResourceList
-      items={items}
-      onSelectionChange={onChange}
-      renderItem={({ title, imageUrl }, id, index) => (
-        <ManagedResourceItem
-          media={<Thumbnail source={imageUrl} alt={title} size="small" />}
-          onRemove={() => onRemoveItem(removeItem(index, items))}
-        >
-          {title}
-        </ManagedResourceItem>
-      )}
-    />
+    <ResourceListWrapper>
+      <ResourceList
+        items={items}
+        onSelectionChange={onChange}
+        renderItem={({ title, imageUrl }, id, index) => (
+          <ResourceItem
+            name={title}
+            media={<Thumbnail source={imageUrl} alt={title} size="small" />}
+            verticalAlignment="center"
+          >
+            <Stack alignment="center">
+              <Stack.Item fill>{title}</Stack.Item>
+              <Button
+                icon={CancelSmallMinor}
+                plain
+                onClick={() => onRemoveItem(removeItem(index, items))}
+              />
+            </Stack>
+          </ResourceItem>
+        )}
+      />
+    </ResourceListWrapper>
   );
 };
 
