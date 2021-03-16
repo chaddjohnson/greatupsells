@@ -63,7 +63,7 @@ const createServer = () => {
 
   // Initialize Shopify OAuth support.
   server.use(
-    session({ httpOnly: true, secure: true, sameSite: 'None' }, server)
+    session({ httpOnly: true, secure: true, sameSite: 'none' }, server)
   );
   server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
   server.use(
@@ -89,12 +89,12 @@ const createServer = () => {
 
         ctx.cookies.set('shopOrigin', shopDomain, {
           httpOnly: false,
-          sameSite: 'None',
+          sameSite: 'none',
           secure: true
         });
         ctx.cookies.set('authToken', authToken, {
           httpOnly: false,
-          sameSite: 'None',
+          sameSite: 'none',
           secure: true
         });
 
