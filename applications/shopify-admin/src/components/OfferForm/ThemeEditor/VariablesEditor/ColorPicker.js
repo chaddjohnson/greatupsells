@@ -35,7 +35,8 @@ const hsbToHex = (hsb) => {
       s: hsb.saturation * 100,
       v: hsb.brightness * 100
     })
-    .toHex();
+    .toHex()
+    .toUpperCase();
 };
 
 const validateHexValue = (test) =>
@@ -72,13 +73,23 @@ const ColorPreview = styled.div`
   background-color: ${(props) => props.value};
 `;
 
+const TextFieldColorPreview = styled.div`
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 7%),
+    inset 0 1px 3px 0 rgb(0 0 0 / 15%);
+  background-color: ${(props) => props.value};
+  width: 2rem;
+  height: 2rem;
+  margin-left: -0.4rem;
+`;
+
 const ColorPickerWrapper = styled.div`
   .Polaris-TextField {
-    width: 100px;
+    width: 115px;
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
-    display: block;
+    /* display: block; */
 
     input {
       text-align: center;
@@ -180,17 +191,16 @@ const ColorPicker = ({ label, value, onChange, ...props }) => {
         sectioned
         onClose={togglePopover}
       >
-        <ColorPickerWrapper>
-          <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
-          <div onKeyDown={handleHexKeyPress}>
-            <TextField
-              value={hexValue}
-              maxLength={7}
-              onChange={handleHexChange}
-              onFocus={(event) => event.target.select()}
-              onBlur={handleHexBlur}
-            />
-          </div>
+        <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
+        <ColorPickerWrapper onKeyDown={handleHexKeyPress}>
+          <TextField
+            value={hexValue}
+            maxLength={7}
+            prefix={<TextFieldColorPreview value={hexValue} />}
+            onChange={handleHexChange}
+            onFocus={(event) => event.target.select()}
+            onBlur={handleHexBlur}
+          />
         </ColorPickerWrapper>
       </Popover>
     </div>
