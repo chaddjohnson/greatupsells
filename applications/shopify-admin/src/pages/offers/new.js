@@ -37,6 +37,8 @@ const initialOffer = {
   limitQuantitySelection: false,
   enableProductLinks: true,
   hideOutOfStockProducts: true,
+  enableEscClose: false,
+  enableMaskClose: false,
   // discountCodes
   // discountPricingMethod
   enabled: true

@@ -11,7 +11,8 @@ import {
   Icon,
   Button,
   PageActions,
-  Stack
+  Stack,
+  KeyboardKey
 } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
 import {
@@ -164,6 +165,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
   const enableTimer = useField(initialValues.enableTimer);
   const enableProductLinks = useField(initialValues.enableProductLinks);
   const hideOutOfStockProducts = useField(initialValues.hideOutOfStockProducts);
+  const enableEscClose = useField(initialValues.enableEscClose);
+  const enableMaskClose = useField(initialValues.enableMaskClose);
   const enableQuantitySelection = useField(
     initialValues.enableQuantitySelection
   );
@@ -225,6 +228,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
       enableTimer,
       enableProductLinks,
       hideOutOfStockProducts,
+      enableEscClose,
+      enableMaskClose,
       enableQuantitySelection,
       limitQuantitySelection,
       productQuantityLimit,
@@ -707,6 +712,18 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                   {...asChoiceField(limitQuantitySelection)}
                 />
                 <Checkbox label="Delay showing popup" />
+                <Checkbox
+                  label={
+                    <>
+                      Allow <KeyboardKey>esc</KeyboardKey> key to close popup
+                    </>
+                  }
+                  {...asChoiceField(enableEscClose)}
+                />
+                <Checkbox
+                  label="Allow clicking outside to close popup"
+                  {...asChoiceField(enableMaskClose)}
+                />
               </FormLayout>
             </Card.Section>
             <Card.Section title="Usage">

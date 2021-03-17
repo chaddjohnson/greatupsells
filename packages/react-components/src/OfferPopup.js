@@ -30,7 +30,7 @@ const Modal = styled(ReactModal)`
     transform: initial;
     margin-right: ${(props) => (props.renderTo ? 0 : '-50%')};
     transform: ${(props) =>
-    props.renderTo ? 'none' : 'translate(-50%, -25%)'};
+      props.renderTo ? 'none' : 'translate(-50%, -25%)'};
   }
 `;
 
@@ -132,8 +132,8 @@ const OfferPopup = ({
       parentSelector={() => renderTo || document.body}
       isOpen={open || !!renderTo}
       shouldFocusAfterRender={!renderTo}
-      shouldCloseOnOverlayClick={false}
-      shouldCloseOnEsc={false}
+      shouldCloseOnOverlayClick={offer.enableMaskClose}
+      shouldCloseOnEsc={offer.enableEscClose}
       contentLabel="Offer Modal"
       onRequestClose={handleClose}
       className="offer-popup-modal"

@@ -94,6 +94,8 @@ const schema = new mongoose.Schema(
     productQuantityLimit: { type: Int32, required: false },
     enableProductLinks: { type: Boolean, required: true, default: true },
     hideOutOfStockProducts: { type: Boolean, required: true, default: true },
+    enableEscClose: { type: Boolean, required: false, default: false },
+    enableMaskClose: { type: Boolean, required: false, default: false },
     // discountCodes
     // discountPricingMethod
     enabled: { type: Boolean, required: true, default: true }
