@@ -30,7 +30,7 @@ const Modal = styled(ReactModal)`
     transform: initial;
     margin-right: ${(props) => (props.renderTo ? 0 : '-50%')};
     transform: ${(props) =>
-      props.renderTo ? 'none' : 'translate(-50%, -25%)'};
+    props.renderTo ? 'none' : 'translate(-50%, -25%)'};
   }
 `;
 
@@ -59,6 +59,7 @@ const OfferPopup = ({
   appRoot,
   renderTo,
   open,
+  previewMode,
   offer,
   product,
   onClose,
@@ -66,21 +67,28 @@ const OfferPopup = ({
 }) => {
   const { popupTheme } = offer;
 
-  const handleSubmit = useCallback((event) => {
-    if (!event) {
-      throw new Error('No event object passed to form submission handler');
-    }
+  const handleSubmit = useCallback(
+    (event) => {
+      if (!event) {
+        throw new Error('No event object passed to form submission handler');
+      }
 
-    event.preventDefault();
+      event.preventDefault();
 
-    // Collect form values.
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+      if (previewMode) {
+        return;
+      }
 
-    // TODO: Create data model for tracking submissions.
-    // TODO: Save submission.
-  }, []);
+      // Collect form values.
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      // TODO: Create data model for tracking submissions.
+      // TODO: Save submission.
+    },
+    [previewMode]
+  );
 
   const handleClose = useCallback(() => {
     if (!renderTo) {
@@ -103,7 +111,7 @@ const OfferPopup = ({
     return template({
       ...mappedVariables,
       product,
-      submitHandler: 'window.OfferPopup.submit()',
+      submitHandler: 'window.OfferPopup.submit(event)',
       closeHandler: 'window.OfferPopup.close()'
     });
   }, [template, popupTheme.variables, product]);
@@ -120,7 +128,7 @@ const OfferPopup = ({
 
   return (
     <Modal
-      closeTimeoutMS={!renderTo ? 200 : 0}
+      closeTimeoutMS={!previewMode ? 200 : 0}
       parentSelector={() => renderTo || document.body}
       isOpen={open || !!renderTo}
       shouldFocusAfterRender={!renderTo}
@@ -147,15 +155,17 @@ const OfferPopup = ({
 OfferPopup.propTypes = {
   appRoot: PropTypes.string.isRequired,
   open: PropTypes.bool,
+  previewMode: PropTypes.bool,
   product: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
-  renderTo: PropTypes.object,
+  renderTo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   onClose: PropTypes.func,
   onClick: PropTypes.func
 };
 
 OfferPopup.defaultProps = {
   open: false,
+  previewMode: false,
   onClose: () => {}
 };
 

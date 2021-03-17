@@ -56,6 +56,8 @@ const OfferPopupContainer = styled.div`
   > div {
     position: static;
   }
+
+  min-height: 360px;
 `;
 
 const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
@@ -72,8 +74,8 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     triggerCollectionPickerOpen,
     setTriggerCollectionPickerOpen
   ] = useState(false);
-
   const [offerPopupContainer, setOfferPopupContainer] = useState(null);
+  const [previewActive, setPreviewActive] = useState(false);
 
   const { popupThemes } = usePopupThemes();
 
@@ -589,10 +591,13 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                 {offerPopupContainer && (
                   <OfferPopup
                     appRoot="#__next"
-                    renderTo={offerPopupContainer}
+                    renderTo={!previewActive && offerPopupContainer}
                     open={true}
+                    previewMode={true}
                     offer={offer}
                     product={product}
+                    onClose={() => setPreviewActive(false)}
+                    onClick={() => setPreviewActive(true)}
                   />
                 )}
               </>
