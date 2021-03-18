@@ -165,14 +165,21 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
     }
   }, [type, themes]);
 
-  const themeOptions = useMemo(
-    () =>
-      sortBy(typeThemes, 'displayOrder').map((item) => ({
-        value: item._id,
-        label: <ThemeOption theme={item} />
-      })),
-    [typeThemes]
-  );
+  const themeOptions = useMemo(() => {
+    const sortedTypeThemes = sortBy(typeThemes, (typeTheme) => {
+      // Display the current theme first.
+      if (typeTheme._id === theme?._id) {
+        return -1;
+      }
+
+      return typeTheme.displayOrder;
+    });
+
+    return sortedTypeThemes.map((item) => ({
+      value: item._id,
+      label: <ThemeOption theme={item} />
+    }));
+  }, [typeThemes, theme]);
 
   const handleTabChange = (index) => {
     setSelectedTabIndex(index);
