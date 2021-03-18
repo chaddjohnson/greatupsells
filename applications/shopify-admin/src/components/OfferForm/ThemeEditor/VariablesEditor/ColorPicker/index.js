@@ -152,16 +152,6 @@ const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
     [handleHexChange, togglePopover]
   );
 
-  const handleAlphaKeyDown = (event) => {
-    const isNumeric = event.key.match(/\d/);
-    const isDelete = event.key === 'Delete';
-    const isBackspace = event.key === 'Backspace';
-
-    if (!isNumeric && !isDelete && !isBackspace) {
-      event.preventDefault();
-    }
-  };
-
   // Update state value when props value changes.
   useEffect(() => {
     setHsbValue(hexToHsb(sanitizedValue, alphaValue));
