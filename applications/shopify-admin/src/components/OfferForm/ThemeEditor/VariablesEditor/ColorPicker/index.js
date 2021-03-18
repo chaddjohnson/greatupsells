@@ -5,7 +5,8 @@ import {
   Button,
   ColorPicker as ShopifyColorPicker,
   TextField,
-  Stack
+  Stack,
+  RangeSlider
 } from '@shopify/polaris';
 import styled from 'styled-components';
 import {
@@ -41,31 +42,6 @@ const ColorPreview = styled.div.attrs((props) => ({
   height: 100%;
   border-radius: inherit;
   box-shadow: inherit;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background-position: 0 0, 0.6rem 0.6rem;
-    background-size: 1.2rem 1.2rem;
-    background-image: linear-gradient(
-        45deg,
-        #dfe3e8 25%,
-        transparent 0,
-        transparent 75%,
-        #dfe3e8 0,
-        #dfe3e8
-      ),
-      linear-gradient(45deg, #dfe3e8 25%, #fff 0, #fff 75%, #dfe3e8 0, #dfe3e8);
-    z-index: -1;
-  }
 `;
 
 const TextFieldColorPreview = styled.div.attrs((props) => ({
@@ -79,52 +55,15 @@ const TextFieldColorPreview = styled.div.attrs((props) => ({
   width: 2rem;
   height: 2rem;
   margin-left: -0.4rem;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-position: 0 0, 0.6rem 0.6rem;
-    background-size: 1.2rem 1.2rem;
-    background-image: linear-gradient(
-        45deg,
-        #dfe3e8 25%,
-        transparent 0,
-        transparent 75%,
-        #dfe3e8 0,
-        #dfe3e8
-      ),
-      linear-gradient(45deg, #dfe3e8 25%, #fff 0, #fff 75%, #dfe3e8 0, #dfe3e8);
-    z-index: -1;
-  }
 `;
 
 const HexColorTextWrapper = styled.div`
   .Polaris-TextField {
     width: 115px;
-    margin-top: 1rem;
-  }
-`;
-
-const TransparencyTextWrapper = styled.div`
-  .Polaris-TextField {
-    width: 95px;
-    margin-top: 1rem;
   }
 `;
 
 const ActivatorWrapper = styled.div`
-  .Polaris-Stack__Item {
-    z-index: 1;
-  }
-
   .Polaris-Button {
     color: black;
     text-decoration: none;
@@ -135,13 +74,7 @@ const ActivatorWrapper = styled.div`
   }
 `;
 
-const ColorPicker = ({
-  label,
-  value,
-  allowTransparency,
-  onChange,
-  ...props
-}) => {
+const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
   const [normalizedValue, alphaValue] = useMemo(() => normalize(value), [
     value
   ]);
@@ -170,13 +103,13 @@ const ColorPicker = ({
       setHsbValue(newValue);
       setHexValue(newHexValue);
 
-      if (allowTransparency) {
+      if (allowAlpha) {
         onChange(hexToRgb(newHexValue, newValue.alpha));
       } else {
         onChange(newHexValue);
       }
     },
-    [onChange, allowTransparency]
+    [onChange, allowAlpha]
   );
 
   const handleHexChange = useCallback(
@@ -187,26 +120,18 @@ const ColorPicker = ({
       setHexValue(sanitizedNewHexValue);
 
       if (isValid) {
-        if (allowTransparency) {
+        if (allowAlpha) {
           onChange(hexToRgb(sanitizedNewHexValue, alphaValue));
         } else {
           onChange(sanitizedNewHexValue);
         }
       }
     },
-    [onChange, allowTransparency, alphaValue]
+    [onChange, allowAlpha, alphaValue]
   );
 
   const handleAlphaChange = (newAlphaValue) => {
-    newAlphaValue = parseFloat(newAlphaValue);
-
-    onChange(
-      hexToRgb(
-        hexValue,
-        typeof newAlphaValue === 'number' &&
-          parseInt(Math.round(newAlphaValue)) / 100
-      )
-    );
+    onChange(hexToRgb(hexValue, newAlphaValue / 100));
   };
 
   const handleHexBlur = useCallback(() => {
@@ -245,14 +170,14 @@ const ColorPicker = ({
   }, [sanitizedValue, alphaValue]);
 
   return (
-    <div {...props}>
+    <Stack spacing="tight" vertical>
       <Popover
         active={active}
         activator={
           <ActivatorWrapper>
             <Stack>
               <PreviewButton type="button" onClick={togglePopover}>
-                <ColorPreview value={value} />
+                <ColorPreview value={hexValue} />
               </PreviewButton>
               <Button onClick={togglePopover} plain>
                 {label}
@@ -264,57 +189,44 @@ const ColorPicker = ({
         sectioned
         onClose={togglePopover}
       >
-        <ShopifyColorPicker
-          color={hsbValue}
-          allowAlpha={allowTransparency}
-          onChange={handleHsbChange}
-        />
-        <Stack
-          spacing="extraTight"
-          distribution={allowTransparency ? 'equalSpacing' : 'center'}
-        >
+        <Stack spacing="tight" alignment="center" vertical>
+          <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
           <HexColorTextWrapper onKeyDown={handleHexKeyPress}>
             <TextField
               name="color"
               value={hexValue}
               maxLength={7}
-              prefix={<TextFieldColorPreview value={value} />}
+              prefix={<TextFieldColorPreview value={hexValue} />}
               onChange={handleHexChange}
               onBlur={handleHexBlur}
             />
           </HexColorTextWrapper>
-          <TransparencyTextWrapper onKeyDown={handleAlphaKeyDown}>
-            {allowTransparency && (
-              <TextField
-                name="transparency"
-                type="number"
-                suffix="%"
-                inputMode="numeric"
-                min={0}
-                max={100}
-                minLength={1}
-                maxLength={3}
-                step={1}
-                value={alphaDisplayValue.toString()}
-                onChange={handleAlphaChange}
-              />
-            )}
-          </TransparencyTextWrapper>
         </Stack>
       </Popover>
-    </div>
+      {allowAlpha && (
+        <RangeSlider
+          output
+          label="Opacity"
+          min={0}
+          max={100}
+          value={alphaDisplayValue}
+          onChange={handleAlphaChange}
+          suffix={`${alphaDisplayValue}%`}
+        />
+      )}
+    </Stack>
   );
 };
 
 ColorPicker.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
-  allowTransparency: PropTypes.bool,
+  allowAlpha: PropTypes.bool,
   onChange: PropTypes.func
 };
 
 ColorPicker.defaultProps = {
-  allowTransparency: false,
+  allowAlpha: false,
   onChange: () => {}
 };
 
