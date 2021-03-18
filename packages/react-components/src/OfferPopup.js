@@ -101,20 +101,32 @@ const OfferPopup = ({
     popupTheme.template
   ]);
 
-  // Generate the markup.
-  const markup = useMemo(() => {
-    const mappedVariables = popupTheme.variables.reduce(
-      (map, { name, value }) => ({ ...map, [name]: value })
-    );
+  // Set up template variables.
+  const mappedVariables = useMemo(
+    () =>
+      popupTheme.variables.reduce((map, { name, value }) => ({
+        ...map,
+        [name]: value
+      })),
+    [popupTheme.variables]
+  );
 
-    // TODO: Replace placeholders.
-    return template({
-      ...mappedVariables,
-      product,
-      submitHandler: 'window.OfferPopup.submit(event)',
-      closeHandler: 'window.OfferPopup.close()'
-    });
-  }, [template, popupTheme.variables, product]);
+  // Generate the markup.
+  const markup = useMemo(
+    () =>
+      template({
+        ...mappedVariables,
+        product,
+        submitHandler: 'window.OfferPopup.submit(event)',
+        closeHandler: 'window.OfferPopup.close()'
+      }),
+    [template, mappedVariables, product]
+  );
+
+  const maskBackgroundColor = useMemo(
+    () => mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)',
+    [mappedVariables]
+  );
 
   // Expose methods globally to enable themes to programmatically interface with popups.
   window.OfferPopup.submit = handleSubmit;
@@ -141,7 +153,7 @@ const OfferPopup = ({
       style={{
         overlay: {
           position: renderTo ? 'relative' : 'fixed',
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: maskBackgroundColor,
           zIndex: renderTo ? 'auto' : 2147483647
         }
       }}

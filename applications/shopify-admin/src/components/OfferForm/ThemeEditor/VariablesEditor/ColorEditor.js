@@ -30,6 +30,7 @@ const ColorEditor = ({ variables, onChange }) => {
                   key={variableIndex}
                   label={variable.label}
                   value={variable.value}
+                  allowTransparency={variable.options?.allowTransparency}
                   onChange={(value) => onChange(variable.name, value)}
                 />
               ))}

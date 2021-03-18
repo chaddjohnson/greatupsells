@@ -17,7 +17,8 @@ const variablesSchema = new mongoose.Schema({
     enum: ['text', 'color', 'font', 'fontSize']
   },
   group: { type: String, required: false },
-  value: { type: mongoose.Schema.Types.Mixed, required: true }
+  value: { type: mongoose.Schema.Types.Mixed, required: true },
+  options: { type: mongoose.Schema.Types.Mixed, required: false }
 });
 const formFieldsSchema = new mongoose.Schema({
   name: { type: String, required: true },

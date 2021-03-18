@@ -19,7 +19,11 @@ const FormFieldContainer = styled.div`
 
 const FormFieldEditor = ({ formField, onRemoveItem, ...props }) => {
   const filterKeyPresses = (event) => {
-    if (!event.key.match(/[a-zA-Z0-9\-_]/)) {
+    const isNameCharacter = !event.key.match(/[a-zA-Z0-9\-_]/);
+    const isDelete = event.key === 'Delete';
+    const isBackspace = event.key === 'Backspace';
+
+    if (!isNameCharacter && !isDelete && !isBackspace) {
       event.preventDefault();
     }
   };
