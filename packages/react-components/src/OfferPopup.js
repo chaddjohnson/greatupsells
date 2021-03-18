@@ -67,34 +67,31 @@ const OfferPopup = ({
 }) => {
   const { popupTheme } = offer;
 
-  const handleSubmit = useCallback(
-    (event) => {
-      if (!event) {
-        throw new Error('No event object passed to form submission handler');
-      }
+  const handleSubmit = (event) => {
+    if (!event) {
+      throw new Error('No event object passed to form submission handler');
+    }
 
-      event.preventDefault();
+    event.preventDefault();
 
-      if (previewMode) {
-        return;
-      }
+    if (previewMode) {
+      return;
+    }
 
-      // Collect form values.
-      const form = event.target;
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+    // Collect form values.
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-      // TODO: Create data model for tracking submissions.
-      // TODO: Save submission.
-    },
-    [previewMode]
-  );
+    // TODO: Create data model for tracking submissions.
+    // TODO: Save submission.
+  };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     if (!renderTo) {
       onClose();
     }
-  }, [renderTo, onClose]);
+  };
 
   // Set up template variables.
   const mappedVariables = useMemo(
