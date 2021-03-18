@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
-import handlebars from 'handlebars';
+import { useLiquid } from 'react-liquid';
 
 const Modal = styled(ReactModal)`
   position: ${(props) => (props.renderTo ? 'static' : 'fixed')};
@@ -96,11 +96,6 @@ const OfferPopup = ({
     }
   }, [renderTo, onClose]);
 
-  // Set up the template function.
-  const template = useMemo(() => handlebars.compile(popupTheme.template), [
-    popupTheme.template
-  ]);
-
   // Set up template variables.
   const mappedVariables = useMemo(
     () =>
@@ -112,16 +107,12 @@ const OfferPopup = ({
   );
 
   // Generate the markup.
-  const markup = useMemo(
-    () =>
-      template({
-        ...mappedVariables,
-        product,
-        submitHandler: 'window.OfferPopup.submit(event)',
-        closeHandler: 'window.OfferPopup.close()'
-      }),
-    [template, mappedVariables, product]
-  );
+  const { markup } = useLiquid(popupTheme.template, {
+    ...mappedVariables,
+    product,
+    submitHandler: 'window.OfferPopup.submit(event)',
+    closeHandler: 'window.OfferPopup.close()'
+  });
 
   const maskBackgroundColor = useMemo(
     () => mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)',
