@@ -14,11 +14,18 @@ import {
   TextContainer,
   Scrollable,
   PageActions,
+  EmptyState,
   Stack
 } from '@shopify/polaris';
 import { SearchMinor, MobileCancelMajor } from '@shopify/polaris-icons';
-import { sortBy } from 'lodash';
+import { sortBy, groupBy } from 'lodash';
 import styled from 'styled-components';
+
+const typeMap = {
+  UPSELL: 'Upselling',
+  CROSS_SELL: 'Cross-selling',
+  POPUP: 'Popup'
+};
 
 const InnerWrapper = styled.div`
   display: flex;
@@ -135,6 +142,18 @@ ThemeOption.propTypes = {
   })
 };
 
+const EmptyComponent = ({ type }) => (
+  <EmptyState heading="No themes">
+    <TextContainer>
+      No {typeMap[type].toLowerCase()} themes are available.
+    </TextContainer>
+  </EmptyState>
+);
+
+EmptyComponent.propTypes = {
+  type: PropTypes.string
+};
+
 const tabs = [
   {
     id: 'explore',
@@ -175,9 +194,15 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
       return typeTheme.displayOrder;
     });
 
-    return sortedTypeThemes.map((item) => ({
-      value: item._id,
-      label: <ThemeOption theme={item} />
+    const categoryThemes = groupBy(sortedTypeThemes, 'category');
+    const categoryNames = Object.keys(categoryThemes).sort();
+
+    return categoryNames.map((categoryName) => ({
+      title: categoryName,
+      options: categoryThemes[categoryName].map((categoryTheme) => ({
+        value: categoryTheme._id,
+        label: <ThemeOption theme={categoryTheme} />
+      }))
     }));
   }, [typeThemes, theme]);
 
@@ -223,41 +248,45 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
             selected={selectedTabIndex}
             onSelect={handleTabChange}
           >
+            {/* eslint-disable indent */}
             <SearchWrapper>
-              {tabs[selectedTabIndex].id === 'explore' && (
-                <Stack vertical spacing="tight">
-                  <TextField
-                    type="search"
-                    placeholder="Search"
-                    prefix={<Icon source={SearchMinor} />}
-                    connectedRight={
-                      <SearchFilter
-                        type={type}
-                        category={category}
-                        onChange={handleCategoryChange}
-                      />
-                    }
-                    onChange={() => {}}
-                  />
-                  <Card>
-                    <OptionList
-                      options={themeOptions}
-                      selected={selectedTheme}
-                      onChange={handleThemeSelect}
+              {tabs[selectedTabIndex].id === 'explore' &&
+                themeOptions?.length > 0 && (
+                  <Stack vertical spacing="tight">
+                    <TextField
+                      type="search"
+                      placeholder="Search"
+                      prefix={<Icon source={SearchMinor} />}
+                      connectedRight={
+                        <SearchFilter
+                          type={type}
+                          category={category}
+                          onChange={handleCategoryChange}
+                        />
+                      }
+                      onChange={() => {}}
                     />
-                  </Card>
-                </Stack>
-              )}
+                    <Card>
+                      <OptionList
+                        sections={themeOptions}
+                        selected={selectedTheme}
+                        onChange={handleThemeSelect}
+                      />
+                    </Card>
+                  </Stack>
+                )}
+              {!themeOptions?.length && <EmptyComponent type={type} />}
               {tabs[selectedTabIndex].id === 'history' && (
                 <Card>
                   <OptionList
-                    options={themeOptions}
+                    sections={themeOptions}
                     selected={selectedTheme}
                     onChange={handleThemeSelect}
                   />
                 </Card>
               )}
             </SearchWrapper>
+            {/* eslint-enable indent */}
           </Tabs>
         </Scrollable>
         <PageActionsWrapper>
