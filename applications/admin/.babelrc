@@ -2,8 +2,12 @@
   "presets": ["next/babel"],
   "plugins": [
     [
-      "styled-components", {
-        "ssr": true
+      "transform-imports",
+      {
+        "lodash": {
+          "transform": "lodash/${member}",
+          "preventFullImport": true
+        }
       }
     ]
   ]

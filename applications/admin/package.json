@@ -9,23 +9,33 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@zeit/next-css": "^1.0.1",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@neatowebsolutions/upselling-react-components": "0.0.0",
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
+    "clsx": "^1.1.1",
+    "compression-webpack-plugin": "^4.0.0",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "getenv": "^1.0.0",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.28",
     "next": "^10.0.6",
-    "node-sass": "^4.14.1",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2",
-    "styled-components": "^5.2.1"
+    "react-dom": "^17.0.1",
+    "styled-components": "^5.2.1",
+    "swr": "^0.4.2",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
+    "@neatowebsolutions/upselling-react-components": "0.0.0",
+    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-imports": "^2.0.0",
-    "url-loader": "^4.1.0"
+    "serverless": "^2.4.0",
+    "serverless-domain-manager": "^4.0.1",
+    "serverless-plugin-monorepo": "^0.9.0"
   },
   "scripts": {
     "build": "NODE_ENV=production next build",

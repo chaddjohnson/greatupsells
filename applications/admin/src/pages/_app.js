@@ -1,19 +1,31 @@
-import App from 'next/app';
-import { Container } from 'semantic-ui-react';
-import { Menu } from '../components';
-import 'semantic-ui-css/semantic.css';
+import { useEffect } from 'react';
+import Head from 'next/head';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import theme from '../theme';
+import '../theme/index.css';
 
-export default class extends App {
-  render() {
-    const { Component, pageProps } = this.props;
+const App = ({ Component, ...pageProps }) => {
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
 
-    return (
-      <>
-        <Menu />
-        <Container>
-          <Component {...pageProps} />
-        </Container>
-      </>
-    );
-  }
-}
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
+  return (
+    <>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </>
+  );
+};
+
+export default App;

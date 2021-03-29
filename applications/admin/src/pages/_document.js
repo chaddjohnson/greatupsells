@@ -1,31 +1,41 @@
-import Document from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+import React from 'react';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { ServerStyleSheets } from '@material-ui/core/styles';
+import theme from '../theme';
 
 export default class extends Document {
   static async getInitialProps(ctx) {
-    const sheet = new ServerStyleSheet();
+    const sheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />)
-        });
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />)
+      });
 
-      const initialProps = await Document.getInitialProps(ctx);
+    const initialProps = await Document.getInitialProps(ctx);
 
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        )
-      };
-    } finally {
-      sheet.seal();
-    }
+    return {
+      ...initialProps,
+      // Styles fragment is rendered after the app and page rendering finish.
+      styles: [
+        ...React.Children.toArray(initialProps.styles),
+        sheets.getStyleElement()
+      ]
+    };
+  }
+
+  render() {
+    return (
+      <Html lang="en-us">
+        <Head>
+          <meta name="theme-color" content={theme.palette.primary.main} />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }

@@ -1,17 +1,19 @@
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
-const withCss = require('@zeit/next-css');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
-dotenvExpand(dotenv.config({ path: '../../.env' }));
+dotenvExpand(dotenv.config());
 
 const dev = process.env.NODE_ENV !== 'production';
 
 const { ADMIN_APP_URL, ADMIN_API_GATEWAY_URL } = process.env;
 
-module.exports = withCss({
+module.exports = {
   webpack: (config) => {
     if (dev) {
+      // Disable sourcemaps to speed things up.
+      config.devtool = undefined;
+
       config.module.rules.push({
         test: /\.js$/,
         exclude: /node_modules/,
@@ -33,18 +35,6 @@ module.exports = withCss({
         })
       );
     }
-
-    config.module.rules.push({
-      test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
-      use: {
-        loader: 'url-loader',
-        options: {
-          limit: 100000,
-          name: '[name].[ext]',
-          esModule: false
-        }
-      }
-    });
 
     // Necessary to use symlinked packages (Lerna creates symlinks in node_modules).
     config.resolve.symlinks = false;
@@ -68,11 +58,15 @@ module.exports = withCss({
     return config;
   },
 
+  // SSR instead of SSG is used as OAuth is handled within this app.
+  target: 'serverless',
+
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
   assetPrefix: dev ? '' : ADMIN_APP_URL,
 
-  // Generate page/index.html instead of page.html.
-  exportTrailingSlash: true,
+  trailingSlash: true,
 
-  env: { ADMIN_API_GATEWAY_URL }
-});
+  env: {
+    ADMIN_API_GATEWAY_URL
+  }
+};
