@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Drawer,
@@ -12,11 +11,12 @@ import {
   IconButton,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Hidden
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
-  ChevronLeft as MenuCloseIcon,
+  Close as MenuCloseIcon,
   PieChartOutlined as DashboardIcon,
   BarChart as StatsIcon,
   Store as ShopIcon,
@@ -32,21 +32,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex'
   },
   appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth
+    }
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none'
+    }
   },
   title: {
     display: 'flex',
@@ -60,65 +55,94 @@ const useStyles = makeStyles((theme) => ({
     display: 'none'
   },
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidth,
+      flexShrink: 0
+    }
   },
   drawerPaper: {
     width: drawerWidth
   },
+
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
+    justifyContent: 'flex-end',
+
     // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end'
+    ...theme.mixins.toolbar
   },
+
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
+    padding: theme.spacing(3)
   }
 }));
 
 const Layout = ({ title, icon, children }) => {
   const classes = useStyles();
-  const [menuOpen, setMenuOpen] = React.useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
-  const handleOpenMenu = () => {
-    setMenuOpen(true);
+  const handleToggleMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   const handleCloseMenu = () => {
-    setMenuOpen(false);
+    setMobileMenuOpen(false);
   };
+
+  const drawer = (
+    <>
+      <Divider />
+      <List>
+        <ListItem button component={Link} href="/">
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem button component={Link} href="/stats">
+          <ListItemIcon>
+            <StatsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stats" />
+        </ListItem>
+        <ListItem button component={Link} href="/shops">
+          <ListItemIcon>
+            <ShopIcon />
+          </ListItemIcon>
+          <ListItemText primary="Shops" />
+        </ListItem>
+        <ListItem button component={Link} href="/popup-themes">
+          <ListItemIcon>
+            <PopupThemesIcon />
+          </ListItemIcon>
+          <ListItemText primary="Popup Themes" />
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button component={Link} href="/logs">
+          <ListItemIcon>
+            <LogsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Logs" />
+        </ListItem>
+      </List>
+    </>
+  );
 
   return (
     <div className={classes.root}>
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: menuOpen
-        })}
-      >
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
-            color="inherit"
+            className={classes.menuButton}
             aria-label="Open menu"
-            onClick={handleOpenMenu}
+            color="inherit"
             edge="start"
-            className={clsx(classes.menuButton, menuOpen && classes.hide)}
+            onClick={handleToggleMenu}
           >
             <MenuIcon />
           </IconButton>
@@ -128,62 +152,42 @@ const Layout = ({ title, icon, children }) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={menuOpen}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleCloseMenu}>
-            {menuOpen ? <MenuCloseIcon /> : <MenuIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button component={Link} href="/">
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button component={Link} href="/stats">
-            <ListItemIcon>
-              <StatsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Stats" />
-          </ListItem>
-          <ListItem button component={Link} href="/shops">
-            <ListItemIcon>
-              <ShopIcon />
-            </ListItemIcon>
-            <ListItemText primary="Shops" />
-          </ListItem>
-          <ListItem button component={Link} href="/popup-themes">
-            <ListItemIcon>
-              <PopupThemesIcon />
-            </ListItemIcon>
-            <ListItemText primary="Popup Themes" />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem button component={Link} href="/logs">
-            <ListItemIcon>
-              <LogsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logs" />
-          </ListItem>
-        </List>
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: menuOpen
-        })}
-      >
+      <nav className={classes.drawer}>
+        <Hidden mdUp implementation="css">
+          <Drawer
+            variant="temporary"
+            anchor="left"
+            open={mobileMenuOpen}
+            classes={{
+              paper: classes.drawerPaper
+            }}
+            ModalProps={{
+              keepMounted: true
+            }}
+            onClose={handleCloseMenu}
+          >
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleCloseMenu}>
+                <MenuCloseIcon />
+              </IconButton>
+            </div>
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper
+            }}
+            variant="permanent"
+            open
+          >
+            <div className={classes.drawerHeader} />
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+      <main className={classes.content}>
         <div className={classes.drawerHeader} />
         {children}
       </main>
