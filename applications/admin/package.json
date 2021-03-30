@@ -19,7 +19,7 @@
     "dotenv-expand": "^5.1.0",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
-    "next": "^10.0.6",
+    "next": "^10.1.1",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
