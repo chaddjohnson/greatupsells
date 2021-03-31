@@ -1,85 +1,69 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import CodeEditor from './CodeEditor';
-import Preview from './Preview';
+import { Tabs, Tab, Box } from '@material-ui/core';
+import PopupTemplateEditor from './PopupTemplateEditor';
+import PopupVariablesEditor from './PopupVariablesEditor';
+import PopupFormFieldsEditor from './PopupFormFieldsEditor';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flex: 1,
-    flexDirection: 'column',
+const TabPanel = ({ index, value, children, ...props }) => (
+  <div
+    role="tabpanel"
+    hidden={value !== index}
+    id={`tabpanel-${index}`}
+    aria-labelledby={`tab-${index}`}
+    {...props}
+  >
+    {value === index && <Box py={2}>{children}</Box>}
+  </div>
+);
 
-    [theme.breakpoints.up('lg')]: {
-      flexDirection: 'row'
-    }
-  },
-  gridItem: {
-    maxWidth: `calc(100vw - ${theme.spacing(3)}px)`,
-
-    [theme.breakpoints.up('lg')]: {
-      maxWidth: '50%'
-    }
-  },
-  paper: {
-    width: '100%',
-    height: '50vh',
-    minHeight: '500px',
-
-    [theme.breakpoints.up('lg')]: {
-      height: `calc(100vh - (64px + 48px + ${theme.spacing(8)}px))`
-    }
-  },
-  editor: {
-    height: '100%',
-
-    '& > .CodeMirror': {
-      height: '100%',
-      fontSize: '13px'
-    }
-  },
-  preview: {
-    width: '100%',
-    height: '100%',
-    border: 'none'
-  }
-}));
-
-const PopupThemeEditor = ({ initialValues }) => {
-  const classes = useStyles();
-
+const PopupThemeEditor = ({ initialValues, onSubmit }) => {
+  const [tabIndex, setTabIndex] = useState(0);
   const [popupTheme, setPopupTheme] = useState(initialValues);
 
-  const handleTemplateChange = (template) => {
-    setPopupTheme({ ...popupTheme, template });
+  const handleTabChange = (event, index) => {
+    setTabIndex(index);
+  };
+
+  const handleChange = (value) => {
+    setPopupTheme(value);
+  };
+
+  const handleSubmit = () => {
+    onSubmit(popupTheme);
   };
 
   return (
-    <Grid className={classes.root} container spacing={3}>
-      <Grid className={classes.gridItem} item xs={12} sm={6}>
-        <Paper className={classes.paper}>
-          <CodeEditor
-            className={classes.editor}
-            value={popupTheme.template}
-            onChange={handleTemplateChange}
-          />
-        </Paper>
-      </Grid>
-      <Grid className={classes.gridItem} item xs={12} sm={6}>
-        <Paper className={classes.paper}>
-          <Preview className={classes.preview} popupTheme={popupTheme} />
-        </Paper>
-      </Grid>
-    </Grid>
+    <form onValidate onSubmit={handleSubmit}>
+      <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Tab id="tab-1" label="Design" />
+        <Tab id="tab-2" label="Variables" />
+        <Tab id="tab-3" label="Form Fields" />
+      </Tabs>
+      <TabPanel value={tabIndex} index={0}>
+        <PopupTemplateEditor popupTheme={popupTheme} onChange={handleChange} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={1}>
+        <PopupVariablesEditor popupTheme={popupTheme} onChange={handleChange} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={2}>
+        <PopupFormFieldsEditor
+          popupTheme={popupTheme}
+          onChange={handleChange}
+        />
+      </TabPanel>
+    </form>
   );
 };
 
 PopupThemeEditor.propTypes = {
-  initialValues: PropTypes.object
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func
 };
 
 PopupThemeEditor.defaultProps = {
-  initialValues: {}
+  initialValues: {},
+  onSubmit: () => {}
 };
 
 export default PopupThemeEditor;
