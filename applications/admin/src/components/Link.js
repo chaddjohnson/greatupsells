@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import { Link as MuiLink } from '@material-ui/core';
 
 const Link = forwardRef(({ href, children, ...props }, ref) => (
-  <NextLink href={href}>
+  <NextLink href={href} passHref>
     <MuiLink ref={ref} {...props}>
       {children}
     </MuiLink>

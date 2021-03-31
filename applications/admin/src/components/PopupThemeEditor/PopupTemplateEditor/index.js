@@ -11,14 +11,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
 
     [theme.breakpoints.up('lg')]: {
-      flexDirection: 'row'
+      flexDirection: 'row',
+      height: '100%'
     }
   },
   gridItem: {
     maxWidth: `calc(100vw - ${theme.spacing(3)}px)`,
+    height: 'auto',
 
     [theme.breakpoints.up('lg')]: {
-      maxWidth: '50%'
+      maxWidth: '50%',
+      height: '100%'
     }
   },
   paper: {
@@ -27,15 +30,21 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '500px',
 
     [theme.breakpoints.up('lg')]: {
-      height: `calc(100vh - (64px + 48px + ${theme.spacing(8)}px))`
+      height: '100%'
     }
   },
   editor: {
     height: '100%',
+    position: 'relative',
 
     '& > .CodeMirror': {
+      fontSize: '13px',
       height: '100%',
-      fontSize: '13px'
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
     }
   },
   preview: {
@@ -64,7 +73,7 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
         </Paper>
       </Grid>
       <Grid className={classes.gridItem} item xs={12} sm={6}>
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} variant="outlined" square>
           <Preview className={classes.preview} popupTheme={popupTheme} />
         </Paper>
       </Grid>

@@ -1,4 +1,4 @@
-import { Breadcrumbs } from '@material-ui/core';
+import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Layout, Link, PopupThemeEditor } from '../../components';
 
@@ -10,10 +10,17 @@ const NewPopupThemePage = () => {
   return (
     <Layout
       title={
-        <Breadcrumbs>
-          <Link href="/popup-themes">Popup Themes</Link>
-          <span>New Popup Theme</span>
-        </Breadcrumbs>
+        <>
+          <Hidden xsDown>
+            <Breadcrumbs>
+              <Link href="/popup-themes">Popup Themes</Link>
+              <span>New Popup Theme</span>
+            </Breadcrumbs>
+          </Hidden>
+          <Hidden smUp>
+            <span>New Popup Theme</span>
+          </Hidden>
+        </>
       }
       icon={<PopupThemesIcon />}
     >
