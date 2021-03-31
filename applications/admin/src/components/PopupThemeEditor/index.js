@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '500px',
 
     [theme.breakpoints.up('lg')]: {
-      height: `calc(100vh - (64px + ${theme.spacing(6)}px))`
+      height: `calc(100vh - (64px + 48px + ${theme.spacing(8)}px))`
     }
   },
   editor: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PopupThemeEditor = ({ initialValues /* onSubmit */ }) => {
+const PopupThemeEditor = ({ initialValues }) => {
   const classes = useStyles();
 
   const [popupTheme, setPopupTheme] = useState(initialValues);
@@ -75,13 +75,11 @@ const PopupThemeEditor = ({ initialValues /* onSubmit */ }) => {
 };
 
 PopupThemeEditor.propTypes = {
-  initialValues: PropTypes.object,
-  onSubmit: PropTypes.func
+  initialValues: PropTypes.object
 };
 
 PopupThemeEditor.defaultProps = {
-  initialValues: {},
-  onSubmit: () => {}
+  initialValues: {}
 };
 
 export default PopupThemeEditor;
