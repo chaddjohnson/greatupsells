@@ -60,13 +60,13 @@ const OfferPopup = ({
   renderTo,
   open,
   previewMode,
+  theme,
   offer,
-  product,
+  triggerProduct,
+  offeredProducts,
   onClose,
   onClick
 }) => {
-  const { popupTheme } = offer;
-
   const handleSubmit = (event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
@@ -96,17 +96,21 @@ const OfferPopup = ({
   // Set up template variables.
   const mappedVariables = useMemo(
     () =>
-      popupTheme.variables.reduce((map, { name, value }) => ({
-        ...map,
-        [name]: value
-      })),
-    [popupTheme.variables]
+      theme.variables.reduce(
+        (map, { name, value }) => ({
+          ...map,
+          [name]: value
+        }),
+        {}
+      ),
+    [theme.variables]
   );
 
   // Generate the markup.
-  const { markup } = useLiquid(popupTheme.template, {
+  const { markup } = useLiquid(theme.template, {
     ...mappedVariables,
-    product,
+    triggerProduct,
+    offeredProducts,
     submitHandler: 'window.OfferPopup.submit(event)',
     closeHandler: 'window.OfferPopup.close()'
   });
@@ -122,7 +126,7 @@ const OfferPopup = ({
 
   Modal.setAppElement(appRoot);
 
-  if (!offer || !product) {
+  if (!offer) {
     return null;
   }
 
@@ -142,7 +146,8 @@ const OfferPopup = ({
         overlay: {
           position: renderTo ? 'relative' : 'fixed',
           background: maskBackgroundColor,
-          zIndex: renderTo ? 'auto' : 2147483647
+          zIndex: renderTo ? 'auto' : 2147483647,
+          height: '100%'
         }
       }}
     >
@@ -153,10 +158,11 @@ const OfferPopup = ({
 };
 
 OfferPopup.propTypes = {
-  appRoot: PropTypes.string.isRequired,
+  appRoot: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   open: PropTypes.bool,
   previewMode: PropTypes.bool,
-  product: PropTypes.object.isRequired,
+  triggerProduct: PropTypes.object,
+  offeredProducts: PropTypes.arrayOf(PropTypes.object),
   offer: PropTypes.object.isRequired,
   renderTo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   onClose: PropTypes.func,

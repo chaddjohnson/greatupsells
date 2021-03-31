@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Drawer,
   AppBar,
@@ -14,6 +13,7 @@ import {
   ListItemText,
   Hidden
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Menu as MenuIcon,
   Close as MenuCloseIcon,
@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth
+    },
+
+    '& a': {
+      color: theme.palette.primary.contrastText,
+      textDecoration: 'none'
     }
   },
   menuButton: {
@@ -76,6 +81,9 @@ const useStyles = makeStyles((theme) => ({
 
   content: {
     flexGrow: 1,
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
     padding: theme.spacing(3)
   }
 }));

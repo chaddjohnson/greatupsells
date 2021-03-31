@@ -590,15 +590,14 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             themes={popupThemes}
             previewElement={
               <>
-                <OfferPopupContainer
-                  ref={(ref) => setOfferPopupContainer(ref)}
-                />
+                <OfferPopupContainer ref={setOfferPopupContainer} />
                 {offerPopupContainer && (
                   <OfferPopup
                     appRoot="#__next"
                     renderTo={!previewActive && offerPopupContainer}
                     open={true}
                     previewMode={true}
+                    theme={offer.popupTheme}
                     offer={offer}
                     product={product}
                     onClose={() => setPreviewActive(false)}
