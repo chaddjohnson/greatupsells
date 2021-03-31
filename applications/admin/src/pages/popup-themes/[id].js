@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '@material-ui/core';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Layout, Link, PopupThemeEditor } from '../../components';
 import { usePopupTheme } from '../../hooks';
@@ -15,9 +16,10 @@ const EditPopupThemePage = () => {
   return (
     <Layout
       title={
-        <>
-          <Link href="/popup-themes">Popup Themes</Link>&nbsp;/ Edit Popup Theme
-        </>
+        <Breadcrumbs>
+          <Link href="/popup-themes">Popup Themes</Link>
+          <span>Edit Popup Theme</span>
+        </Breadcrumbs>
       }
       icon={<PopupThemesIcon />}
     >

@@ -8,6 +8,18 @@ const theme = createMuiTheme({
     secondary: {
       main: '#23B5F0'
     }
+  },
+  overrides: {
+    MuiBreadcrumbs: {
+      root: {
+        '&, & a': {
+          fontSize: '20px',
+          fontWeight: 500,
+          letterSpacing: 0.15,
+          color: 'white'
+        }
+      }
+    }
   }
 });
 

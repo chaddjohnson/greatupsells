@@ -35,11 +35,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth
-    },
-
-    '& a': {
-      color: theme.palette.primary.contrastText,
-      textDecoration: 'none'
     }
   },
   menuButton: {
@@ -50,7 +45,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 500,
+    letterSpacing: 0.15
   },
   titleIcon: {
     marginRight: theme.spacing(1),
@@ -68,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth
   },
-
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -78,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar
   },
-
+  link: {
+    color: theme.palette.text.primary
+  },
   content: {
     flexGrow: 1,
     height: '100vh',
@@ -104,25 +103,40 @@ const Layout = ({ title, icon, children }) => {
     <>
       <Divider />
       <List>
-        <ListItem button component={Link} href="/">
+        <ListItem className={classes.link} button component={Link} href="/">
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
-        <ListItem button component={Link} href="/stats">
+        <ListItem
+          className={classes.link}
+          button
+          component={Link}
+          href="/stats"
+        >
           <ListItemIcon>
             <StatsIcon />
           </ListItemIcon>
           <ListItemText primary="Stats" />
         </ListItem>
-        <ListItem button component={Link} href="/shops">
+        <ListItem
+          className={classes.link}
+          button
+          component={Link}
+          href="/shops"
+        >
           <ListItemIcon>
             <ShopIcon />
           </ListItemIcon>
           <ListItemText primary="Shops" />
         </ListItem>
-        <ListItem button component={Link} href="/popup-themes">
+        <ListItem
+          className={classes.link}
+          button
+          component={Link}
+          href="/popup-themes"
+        >
           <ListItemIcon>
             <PopupThemesIcon />
           </ListItemIcon>
@@ -131,7 +145,7 @@ const Layout = ({ title, icon, children }) => {
       </List>
       <Divider />
       <List>
-        <ListItem button component={Link} href="/logs">
+        <ListItem className={classes.link} button component={Link} href="/logs">
           <ListItemIcon>
             <LogsIcon />
           </ListItemIcon>
@@ -154,7 +168,7 @@ const Layout = ({ title, icon, children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={classes.title} variant="h1" noWrap>
             {icon && <span className={classes.titleIcon}>{icon}</span>}
             {title}
           </Typography>
