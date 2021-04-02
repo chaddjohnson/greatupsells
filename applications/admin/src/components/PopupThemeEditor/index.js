@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab, Button, CardActions } from '@material-ui/core';
+import { Card, CardContent, Tabs, Tab, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import FormActions from '../FormActions';
+import DestructiveButton from '../DestructiveButton';
 import PopupTemplateEditor from './PopupTemplateEditor';
 import PopupVariablesEditor from './PopupVariablesEditor';
 import PopupFormFieldsEditor from './PopupFormFieldsEditor';
@@ -18,12 +20,26 @@ const useStyles = makeStyles((theme) => ({
   },
   tabPanel: {
     paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-
-    [theme.breakpoints.up('lg')]: {
-      flex: 1,
+    height: '100%'
+  },
+  card: {
+    flex: 1,
+    height: '100%',
+    marginTop: theme.spacing(2)
+  },
+  cardContent: {
+    '&&': {
+      paddingTop: 0,
+      paddingBottom: '0',
       height: '100%'
     }
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  actionSpacer: {
+    flexGrow: 1
   }
 }));
 
@@ -72,29 +88,40 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
         <Tab id="tab-2" label="Variables" />
         <Tab id="tab-3" label="Form Fields" />
       </Tabs>
-      <TabPanel className={classes.tabPanel} value={tabIndex} index={0}>
-        <PopupTemplateEditor popupTheme={popupTheme} onChange={handleChange} />
-      </TabPanel>
-      <TabPanel className={classes.tabPanel} value={tabIndex} index={1}>
-        <PopupVariablesEditor popupTheme={popupTheme} onChange={handleChange} />
-      </TabPanel>
-      <TabPanel className={classes.tabPanel} value={tabIndex} index={2}>
-        <PopupFormFieldsEditor
-          popupTheme={popupTheme}
-          onChange={handleChange}
-        />
-      </TabPanel>
-      <CardActions>
-        <Button variant="contained" color="secondary" onClick={() => {}}>
+      <Card className={classes.card}>
+        <CardContent className={classes.cardContent}>
+          <TabPanel className={classes.tabPanel} value={tabIndex} index={0}>
+            <PopupTemplateEditor
+              popupTheme={popupTheme}
+              onChange={handleChange}
+            />
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value={tabIndex} index={1}>
+            <PopupVariablesEditor
+              popupTheme={popupTheme}
+              onChange={handleChange}
+            />
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value={tabIndex} index={2}>
+            <PopupFormFieldsEditor
+              popupTheme={popupTheme}
+              onChange={handleChange}
+            />
+          </TabPanel>
+        </CardContent>
+      </Card>
+      <FormActions>
+        <DestructiveButton variant="contained" onClick={() => {}}>
           Delete
-        </Button>
+        </DestructiveButton>
+        <span className={classes.actionSpacer} />
         <Button variant="contained" onClick={() => {}}>
           Cancel
         </Button>
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>
-      </CardActions>
+      </FormActions>
     </form>
   );
 };
