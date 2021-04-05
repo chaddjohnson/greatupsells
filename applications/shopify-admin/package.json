@@ -9,7 +9,6 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin#readme",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^2.0.2",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
     "@neatowebsolutions/upselling-react-components": "0.0.0",
@@ -36,9 +35,7 @@
     "koa-session": "^6.0.0",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
-    "mongoose": "5.9.27",
-    "next": "^10.0.6",
-    "node-sass": "^4.14.1",
+    "next": "^10.1.1",
     "preact": "^10.4.1",
     "prop-types": "^15.7.2",
     "raf": "^3.4.1",
@@ -64,6 +61,6 @@
     "build": "NODE_ENV=production next build",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
-    "start": "node --inspect=0.0.0.0:9230 server"
+    "start": "node server"
   }
 }
