@@ -15,6 +15,9 @@ const {
 module.exports = {
   webpack: (config) => {
     if (dev) {
+      // Disable sourcemaps to speed things up.
+      config.devtool = undefined;
+
       config.module.rules.push({
         test: /\.js$/,
         exclude: /node_modules/,
@@ -75,7 +78,6 @@ module.exports = {
   trailingSlash: true,
 
   env: {
-    SHOPIFY_ADMIN_APP_URL,
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOP_API_GATEWAY_URL
   }
