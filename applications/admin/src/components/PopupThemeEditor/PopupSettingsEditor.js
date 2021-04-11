@@ -58,8 +58,9 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
             value={popupTheme.type}
             onChange={handleChange}
           >
-            <MenuItem value="text">Text</MenuItem>
-            <MenuItem value="color">Color</MenuItem>
+            <MenuItem value="UPSELL">Upsell</MenuItem>
+            <MenuItem value="CROSS_SELL">Cross-sell</MenuItem>
+            <MenuItem value="POPUP">Popup</MenuItem>
           </Select>
         </FormControl>
       </Grid>
