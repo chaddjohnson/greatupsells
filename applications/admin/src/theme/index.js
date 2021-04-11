@@ -6,7 +6,8 @@ const theme = createMuiTheme({
       main: '#F05E23'
     },
     secondary: {
-      main: '#23B5F0'
+      main: '#23B5F0',
+      contrastText: '#FFFFFF'
     }
   },
   overrides: {
@@ -17,6 +18,23 @@ const theme = createMuiTheme({
           fontWeight: 500,
           letterSpacing: 0.15,
           color: 'white'
+        }
+      }
+    },
+    MuiTextField: {
+      root: {
+        backgroundColor: '#FFFFFF'
+      }
+    },
+    MuiSelect: {
+      root: {
+        backgroundColor: '#FFFFFF'
+      }
+    },
+    MuiTableRow: {
+      root: {
+        '&:hover td, &:focus-within td': {
+          backgroundColor: 'rgba(0, 0, 0, 0.04)'
         }
       }
     }

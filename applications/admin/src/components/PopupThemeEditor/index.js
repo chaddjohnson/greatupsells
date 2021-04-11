@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { Card, CardContent, Tabs, Tab, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormActions from '../FormActions';
 import DestructiveButton from '../DestructiveButton';
+import PopupSettingsEditor from './PopupSettingsEditor';
 import PopupTemplateEditor from './PopupTemplateEditor';
 import PopupVariablesEditor from './PopupVariablesEditor';
 import PopupFormFieldsEditor from './PopupFormFieldsEditor';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  rootFullHeight: {
     display: 'block',
 
     [theme.breakpoints.up('lg')]: {
@@ -23,9 +25,14 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   card: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(1),
+    paddingBottom: theme.spacing(3)
+  },
+  cardFullHeight: {
     flex: 1,
     height: '100%',
-    marginTop: theme.spacing(2)
+    padding: 0
   },
   cardContent: {
     '&&': {
@@ -42,6 +49,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1
   }
 }));
+
+const tabIndexes = {
+  settings: 0,
+  design: 1,
+  variables: 2,
+  formFields: 3
+};
 
 const TabPanel = ({ index, value, children, ...props }) => (
   <div
@@ -82,27 +96,43 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
   };
 
   return (
-    <form className={classes.root} onValidate onSubmit={handleSubmit}>
+    <form
+      className={tabIndex === tabIndexes.design && classes.rootFullHeight}
+      onValidate
+      onSubmit={handleSubmit}
+    >
       <Tabs value={tabIndex} onChange={handleTabChange}>
-        <Tab id="tab-1" label="Design" />
-        <Tab id="tab-2" label="Variables" />
-        <Tab id="tab-3" label="Form Fields" />
+        <Tab id="tab-1" label="Settings" />
+        <Tab id="tab-2" label="Design" />
+        <Tab id="tab-3" label="Variables" />
+        <Tab id="tab-4" label="Form Fields" />
       </Tabs>
-      <Card className={classes.card}>
+      <Card
+        className={clsx(
+          classes.card,
+          tabIndex === tabIndexes.design && classes.cardFullHeight
+        )}
+      >
         <CardContent className={classes.cardContent}>
           <TabPanel className={classes.tabPanel} value={tabIndex} index={0}>
-            <PopupTemplateEditor
+            <PopupSettingsEditor
               popupTheme={popupTheme}
               onChange={handleChange}
             />
           </TabPanel>
           <TabPanel className={classes.tabPanel} value={tabIndex} index={1}>
-            <PopupVariablesEditor
+            <PopupTemplateEditor
               popupTheme={popupTheme}
               onChange={handleChange}
             />
           </TabPanel>
           <TabPanel className={classes.tabPanel} value={tabIndex} index={2}>
+            <PopupVariablesEditor
+              popupTheme={popupTheme}
+              onChange={handleChange}
+            />
+          </TabPanel>
+          <TabPanel className={classes.tabPanel} value={tabIndex} index={3}>
             <PopupFormFieldsEditor
               popupTheme={popupTheme}
               onChange={handleChange}

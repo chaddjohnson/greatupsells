@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   gridItem: {
-    maxWidth: `calc(100vw - ${theme.spacing(3)}px)`,
+    maxWidth: '100%',
     height: 'auto',
     flexBasis: '100%',
     position: 'relative',

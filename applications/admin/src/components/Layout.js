@@ -29,8 +29,13 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    height: '100%'
+    // display: 'flex',
+    height: '100%',
+    marginLeft: 0,
+
+    [theme.breakpoints.up('md')]: {
+      marginLeft: drawerWidth
+    }
   },
   appBar: {
     [theme.breakpoints.up('md')]: {

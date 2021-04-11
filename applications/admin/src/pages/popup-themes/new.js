@@ -2,6 +2,10 @@ import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Layout, Link, PopupThemeEditor } from '../../components';
 
+const initialValues = {
+  // name: ''
+};
+
 const NewPopupThemePage = () => {
   const handleSubmit = (/* values */) => {
     // TODO
@@ -24,7 +28,7 @@ const NewPopupThemePage = () => {
       }
       icon={<PopupThemesIcon />}
     >
-      <PopupThemeEditor onSubmit={handleSubmit} />
+      <PopupThemeEditor initialValues={initialValues} onSubmit={handleSubmit} />
     </Layout>
   );
 };

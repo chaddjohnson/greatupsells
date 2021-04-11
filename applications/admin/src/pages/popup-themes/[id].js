@@ -1,17 +1,24 @@
+import { useRouter } from 'next/router';
 import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Layout, Link, PopupThemeEditor } from '../../components';
 import { usePopupTheme } from '../../hooks';
 
 const EditPopupThemePage = () => {
-  // TODO: Replace with data from API.
-  const { popupTheme } = usePopupTheme();
+  const router = useRouter();
+  const popupThemeId = router.query.id;
+
+  const { popupTheme } = usePopupTheme(popupThemeId);
 
   const handleSubmit = (/* values */) => {
     // TODO
   };
 
   // TODO: Skeleton loading.
+  // TODO: Remove this.
+  if (!popupTheme) {
+    return null;
+  }
 
   return (
     <Layout
