@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: RED[600],
+    backgroundColor: RED[700],
     color: '#FFFFFF',
 
     '&:hover': {
