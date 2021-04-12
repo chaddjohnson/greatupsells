@@ -8,10 +8,10 @@ const EditPopupThemePage = () => {
   const router = useRouter();
   const popupThemeId = router.query.id;
 
-  const { popupTheme } = usePopupTheme(popupThemeId);
+  const { popupTheme, savePopupTheme } = usePopupTheme(popupThemeId);
 
-  const handleSubmit = (/* values */) => {
-    // TODO
+  const handleSubmit = async (values) => {
+    await savePopupTheme(values);
   };
 
   // TODO: Skeleton loading.

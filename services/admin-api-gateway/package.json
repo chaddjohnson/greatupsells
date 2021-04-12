@@ -1,11 +1,10 @@
 {
-  "name": "upselling-shop-api-gateway",
+  "name": "upselling-admin-api-gateway",
   "version": "0.0.0",
   "scripts": {
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint src/**/*.js",
-    "infrastructure": "./scripts/infrastructure.sh",
-    "start": "serverless offline start --tunnel=true --useChildProcesses"
+    "start": "serverless offline start --useChildProcesses"
   },
   "repository": {
     "type": "git",
@@ -13,7 +12,7 @@
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shop-api-gateway",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/admin-api-gateway",
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
@@ -30,7 +29,6 @@
     "serverless": "^2.4.0",
     "serverless-domain-manager": "^4.0.1",
     "serverless-dotenv-plugin": "^2.4.2",
-    "serverless-ngrok-tunnel": "^0.0.3",
     "serverless-offline": "^6.8.0",
     "serverless-plugin-monorepo": "^0.9.0"
   }

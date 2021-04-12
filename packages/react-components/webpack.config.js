@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -18,11 +19,7 @@ module.exports = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|dist)/,
-        use: [
-          { loader: 'cache-loader' },
-          { loader: 'babel-loader' },
-          { loader: 'eslint-loader' }
-        ]
+        use: [{ loader: 'cache-loader' }, { loader: 'babel-loader' }]
       },
       {
         test: /\.css$/,
@@ -30,6 +27,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CleanWebpackPlugin(), new webpack.NoEmitOnErrorsPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new ESLintPlugin()
+  ],
   externals: ['prop-types', 'react', 'react-dom', 'styled-components']
 };

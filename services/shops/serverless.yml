@@ -63,6 +63,13 @@ functions:
           path: /orders
           method: post
           authorizer: aws_iam
+  createPopupTheme:
+    handler: src/routes/createPopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: post
+          authorizer: aws_iam
   createProduct:
     handler: src/routes/createProduct.handler
     events:
@@ -97,6 +104,13 @@ functions:
       - http:
           path: /products/{productId}
           method: delete
+          authorizer: aws_iam
+  findPopupThemes:
+    handler: src/routes/findPopupThemes.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: get
           authorizer: aws_iam
   findOfferAcceptances:
     handler: src/routes/findOfferAcceptances.handler
@@ -166,6 +180,13 @@ functions:
     events:
       - http:
           path: /orders/shopify-order-id/{shopifyOrderId}
+          method: get
+          authorizer: aws_iam
+  findOnePopupTheme:
+    handler: src/routes/findOnePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
           method: get
           authorizer: aws_iam
   findOneProductByShopifyProductId:
@@ -255,6 +276,13 @@ functions:
     events:
       - http:
           path: /offers/{offerId}
+          method: put
+          authorizer: aws_iam
+  updatePopupTheme:
+    handler: src/routes/updatePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
           method: put
           authorizer: aws_iam
   updateProduct:

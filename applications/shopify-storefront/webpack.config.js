@@ -5,6 +5,7 @@ const dotenvExpand = require('dotenv-expand');
 const getenv = require('getenv');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 dotenvExpand(dotenv.config({ path: '../../.env' }));
 
@@ -22,11 +23,7 @@ module.exports = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|dist)/,
-        use: [
-          { loader: 'cache-loader' },
-          { loader: 'babel-loader' },
-          { loader: 'eslint-loader' }
-        ]
+        use: [{ loader: 'cache-loader' }, { loader: 'babel-loader' }]
       },
       {
         test: /\.css$/,
@@ -38,6 +35,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL']),
+    new ESLintPlugin(),
     new CompressionWebpackPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',

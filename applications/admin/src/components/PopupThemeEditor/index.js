@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   cardFullHeight: {
     flex: 1,
-    height: '100%',
     padding: 0
   },
   cardContent: {
@@ -91,13 +90,14 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     onSubmit(popupTheme);
   };
 
   return (
     <form
-      className={tabIndex === tabIndexes.design && classes.rootFullHeight}
+      className={clsx({
+        [classes.rootFullHeight]: tabIndex === tabIndexes.design
+      })}
       onValidate
       onSubmit={handleSubmit}
     >
@@ -108,10 +108,9 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
         <Tab id="tab-4" label="Form Fields" />
       </Tabs>
       <Card
-        className={clsx(
-          classes.card,
-          tabIndex === tabIndexes.design && classes.cardFullHeight
-        )}
+        className={clsx(classes.card, {
+          [classes.cardFullHeight]: tabIndex === tabIndexes.design
+        })}
       >
         <CardContent className={classes.cardContent}>
           <TabPanel className={classes.tabPanel} value={tabIndex} index={0}>

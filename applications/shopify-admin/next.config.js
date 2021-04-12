@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 dotenvExpand(dotenv.config());
 
@@ -17,16 +18,12 @@ module.exports = {
     if (dev) {
       // Disable sourcemaps to speed things up.
       config.devtool = undefined;
-
-      config.module.rules.push({
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: 'eslint-loader'
-      });
     }
 
-    // Enable compression in production. Use Brotli which is superior to gzip.
     if (!dev) {
+      config.plugins.push(new ESLintPlugin());
+
+      // Enable compression in production. Use Brotli which is superior to gzip.
       config.plugins.push(
         new CompressionWebpackPlugin({
           filename: '[path].br[query]',
@@ -62,8 +59,8 @@ module.exports = {
     // Ignore all node modules except those here.
     config.watchOptions.ignored = [
       ...config.watchOptions.ignored,
-      /node_modules\/(?!@neatowebsolutions\/.+)/,
-      /\@neatowebsolutions\/.+\/node_modules/
+      'node_modules/!(@neatowebsolutions)',
+      '@neatowebsolutions/*/node_modules'
     ];
 
     return config;
@@ -76,6 +73,10 @@ module.exports = {
   assetPrefix: dev ? '' : SHOPIFY_ADMIN_APP_URL,
 
   trailingSlash: true,
+
+  future: {
+    webpack5: true
+  },
 
   env: {
     SHOPIFY_ADMIN_APP_API_KEY,

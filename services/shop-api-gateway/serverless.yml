@@ -95,18 +95,6 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
-  updateOffer:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: put
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
   findOfferAcceptances:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
@@ -174,6 +162,18 @@ functions:
       - http:
           path: /shop
           method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  updateOffer:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: put
           cors: true
           authorizer:
             name: authorizer

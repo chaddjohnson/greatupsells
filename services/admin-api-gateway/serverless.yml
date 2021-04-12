@@ -1,0 +1,115 @@
+service: upselling-admin-api-gateway
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 10
+  endpointType: REGIONAL
+  stage: ${env:STAGE, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  versionFunctions: false
+  logRetentionInDays: 14
+  apiGateway:
+    shouldStartNameWithService: true
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
+    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    LOG_SOURCE: 'admin-api-gateway'
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+
+functions:
+  # authorizer:
+  #   handler: src/authorizer.handler
+  # health:
+  #   handler: src/routes/health.handler
+  #   events:
+  #     - http:
+  #         path: /health
+  #         method: get
+  #         cors: true
+  # region:
+  #   handler: src/routes/region.handler
+  #   events:
+  #     - http:
+  #         path: /region
+  #         method: get
+  #         cors: true
+  # findLogs:
+  createPopupTheme:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/createPopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: post
+          cors: true
+          # authorizer:
+          #   name: authorizer
+          #   type: request
+          #   identitySource: method.request.header.Authorization
+  findOnePopupTheme:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOnePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: authorizer
+          #   type: request
+          #   identitySource: method.request.header.Authorization
+  # findPopupThemes:
+  #   role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/routes/findPopupThemes.handler
+  #   events:
+  #     - http:
+  #         path: /popup-themes
+  #         method: get
+  #         cors: true
+  #         authorizer:
+  #           name: authorizer
+  #           type: request
+  #           identitySource: method.request.header.Authorization
+  # findShops:
+  # findStats:
+  updatePopupTheme:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updatePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
+          method: put
+          cors: true
+          # authorizer:
+          #   name: authorizer
+          #   type: request
+          #   identitySource: method.request.header.Authorization
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+
+custom:
+  dotenv:
+    path: .env
+    logging: false
+  serverless-offline:
+    httpPort: ${env:ADMIN_API_GATEWAY_PORT}
+    lambdaPort: 5003
+  customDomain:
+    domainName: ${ssm:/upselling/${self:provider.stage}/admin-api-gateway/endpoint/${self:provider.region}}
+    basePath: ''
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+
+package:
+  exclude:
+    - test/**
+    - node_modules/aws-sdk
+    - node_modules/**/aws-sdk
+    - node_modules/**/*.map
