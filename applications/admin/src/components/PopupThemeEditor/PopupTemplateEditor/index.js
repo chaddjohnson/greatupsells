@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     width: '100%',
     height: '50vh',
-    minHeight: '500px',
+    minHeight: 500,
 
     [theme.breakpoints.up('lg')]: {
       height: '100%'
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   editor: {
     height: '100%',
     position: 'relative',
-    minHeight: '500px',
+    minHeight: 500,
 
     '& > .CodeMirror': {
       fontSize: '13px',

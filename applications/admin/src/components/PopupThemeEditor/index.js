@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(2),
     padding: theme.spacing(1),
-    paddingBottom: theme.spacing(3)
+    paddingBottom: theme.spacing(3),
+    minHeight: 500
   },
   cardFullHeight: {
     flex: 1,
