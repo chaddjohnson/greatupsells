@@ -1,0 +1,72 @@
+{
+  "_id": "6037ffea4a754b3f99a0e843",
+  "displayOrder": 1,
+  "category": "Cross-selling",
+  "thumbnailImageUrl": "https://via.placeholder.com/800x600/f0f1f2/1c4966",
+  "description": "Nostrud qui sit culpa cupidatat officia eu elit ex quis voluptate proident aute eu.",
+  "formFields": [],
+  "variables": [
+    {
+      "name": "popupBackgroundColor",
+      "label": "Popup background",
+      "type": "color",
+      "group": "Popup",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "primaryButtonTextColor",
+      "label": "Primary button text",
+      "type": "color",
+      "group": "Buttons",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "primaryButtonBackgroundColor",
+      "label": "Primary button background",
+      "type": "color",
+      "group": "Buttons",
+      "value": "#000000"
+    },
+    {
+      "name": "primaryButtonHoverBackgroundColor",
+      "label": "Primary button hover background",
+      "type": "color",
+      "group": "Buttons",
+      "value": "#333333"
+    },
+    {
+      "name": "maskBackgroundColor",
+      "label": "Mask background",
+      "type": "color",
+      "group": "Popup",
+      "value": "rgba(0, 0, 0, 0.5)",
+      "options": {
+        "allowAlpha": true
+      }
+    },
+    {
+      "name": "bodyFont",
+      "label": "Font",
+      "type": "font",
+      "group": "Body text",
+      "value": "Roboto"
+    },
+    {
+      "name": "bodyFontSize",
+      "label": "Base size",
+      "type": "fontSize",
+      "group": "Body text",
+      "value": "16"
+    },
+    {
+      "name": "buttonsFontSize",
+      "label": "Button base size",
+      "type": "fontSize",
+      "group": "Buttons",
+      "value": "13"
+    }
+  ],
+  "template": "",
+  "type": "CROSS_SELL",
+  "name": "Multi-Product Cross-Sell 1"
+}

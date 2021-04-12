@@ -1,0 +1,164 @@
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet" />
+<style>
+  .popup-container {
+    font-family: {{ bodyFont }};
+    font-size: {{ bodyFontSize }}px;
+    color: black;
+    background-color: {{ popupBackgroundColor }};
+    width: 650px;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 2.5rem;
+    margin: auto;
+    border-radius: 6px;
+    text-align: center;
+    box-sizing: border-box;
+    position: relative;
+
+    /* Reference: https://gist.github.com/hsleonis/55712b0eafc9b25f1944 */
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-variant-ligatures: none;
+    -webkit-font-variant-ligatures: none;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
+
+    /* Reference: https://gist.github.com/chemicaloliver/1234670 */
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+  }
+  .popup-close-button {
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    font-weight: bold;
+    font-family: Garamond, 'Apple Garamond';
+    font-size: 21px;
+    padding-left: 1px;
+    line-height: 18px;
+    color: white;
+    background-color: black;
+    width: 21px;
+    height: 21px;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px #888888;
+    cursor: pointer;
+    user-select: none;
+  }
+  .popup-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 18px;
+    max-width: 450px;
+    margin: auto;
+  }
+  .popup-title {
+    font-family: {{ headingFont }};
+    font-size: {{ headingFontSize }}px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    margin: 0 0 17.5px 0;
+    color: {{ callToActionTextColor }};
+  }
+  .popup-body {
+    max-height: 50%;
+    overflow: hidden auto;
+    max-width: 450px;
+    margin: auto;
+  }
+  .popup-body a {
+    color: black;
+    text-decoration: none;
+  }
+  .popup-body img {
+    border: none;
+  }
+  .popup-footer {
+    margin-top: 24px;
+    max-width: 450px;
+    margin: auto;
+  }
+  .popup-product-title {
+    margin: 2rem 0 1rem 0;
+  }
+  .popup-product-price {
+    color: {{ priceTextColor }};
+  }
+  .popup-product-sale-price {
+    color: {{ salePriceTextColor }};
+  }
+  .popup-add-to-cart-button {
+    width: 100%;
+    max-width: 400px;
+    height: 35px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: block;
+    border: none;
+    border-radius: 3px;
+    margin: 1rem auto;
+    cursor: pointer;
+    background-color: {{ actionButtonBackgroundColor }};
+    color: {{ actionButtonTextColor }};
+  }
+  .popup-cancel-button {
+    width: auto;
+    display: block;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 1rem auto 0 auto;
+    color: {{ cancelButtonTextColor }};
+    cursor: pointer;
+  }
+</style>
+<form novalidate onsubmit="{{ submitHandler }}">
+  <div class="popup-container">
+    <div class="popup-close-button" aria-label="Close offer modal" onclick="{{ closeHandler }}">
+      &times;
+    </div>
+    <header class="popup-header">
+      <h2 class="popup-title">
+        {{ callToActionText }}
+      </h2>
+    </header>
+    <div class="popup-body">
+      <a href="{{ offeredProducts[0].url }}" target="_blank" rel="noopener noreferrer" title="Click to view this product in a new tab">
+        <figure>
+          <img src="https://via.placeholder.com/150x100" alt="{{ offeredProducts[0].title }}"/>
+          <figcaption class="popup-product-title">
+            {{ offeredProducts[0].title }}
+          </figcaption>
+        </figure>
+      </a>
+      <div>
+        <strong class="popup-product-price">
+          ${{ offeredProducts[0].price }}
+        </strong>
+        <s class="popup-product-sale-price">
+          ${{ offeredProducts[0].price }}
+        </s>
+      </div>
+    </div>
+    <footer class="popup-footer">
+      <button class="popup-add-to-cart-button" type="submit">
+        {{ actionButtonText }}
+      </button>
+      <button class="popup-cancel-button" onclick="{{ closeHandler }}">
+        {{ cancelButtonText }}
+      </button>
+    </footer>
+  </div>
+</form>

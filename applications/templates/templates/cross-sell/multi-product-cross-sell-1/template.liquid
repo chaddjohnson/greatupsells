@@ -1,0 +1,155 @@
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  .popup-container {
+    font-family: {{ bodyFont }};
+    font-size: {{ bodyFontSize }}px;
+    color: black;
+    background-color: {{ popupBackgroundColor }};
+    width: 700px;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    border-radius: 12px;
+    box-sizing: border-box;
+    position: relative;
+
+    /* Reference: https://gist.github.com/chemicaloliver/1234670 */
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+  }
+  .popup-header {
+    display: flex;
+    position: relative;
+    background-color: #F5F5F5;
+    padding: 1.5rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  .popup-close-button {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    padding: 8.5px 0 0 0.5px;
+    line-height: 0;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+  }
+  .popup-body {
+    padding: 1.5rem;
+  }
+  .popup-header-left {
+    flex: 5;
+    font-weight: 500;
+  }
+  .popup-header-right {
+    flex: 3;
+  }
+  .popup-confirmation {
+    display: flex;
+    align-items: center;
+  }
+  .popup-title {
+    font-weight: 500;
+    font-size: 1rem
+  }
+  .popup-offered-products {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 0 -1rem;
+    overflow-x: auto;
+  }
+  .popup-offered-products figure {
+    margin: 1rem;
+    max-width: 14.55rem;
+  }
+  .popup-offered-products img {
+    width: auto;
+    height: auto;
+    max-width: 66vw;
+    border: 2px solid #F0F0F0;
+    border-radius: 3px;
+  }
+  .popup-offered-products .image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; /* TODO: Figure out how to align boxes. */
+  }
+  .popup-offered-products button {
+    width: 100%;
+  }
+  @media screen and (min-width: 768px) {
+    .popup-offered-products img {
+      max-width: 100%;
+    }
+  }
+  .popup-button {
+    font-size: {{ buttonsFontSize }}px;
+    color: {{ primaryButtonTextColor }};
+    background-color: {{ primaryButtonBackgroundColor }};
+    border: none;
+    border-radius: 3px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .popup-button:hover {
+    color: {{ primaryButtonTextColor }};
+    background-color: {{ primaryButtonHoverBackgroundColor }};
+  }
+</style>
+<form novalidate onsubmit="{{ submitHandler }}">
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="popup-close-button" aria-label="Close offer modal" onclick="{{ closeHandler }}">
+        &#x2715
+      </div>
+      <div class="popup-header-left">
+        <strong class="popup-confirmation">
+          <span class="material-icons">check_circle</span>
+          <span>Added to your cart!</span>
+        </strong>
+      </div>
+      <div class="popup-header-right">
+        <div>Cart subtotal: $241.00</div>
+        <div>(2 items)</div>
+      </divc>
+      <div>
+        <a class="popup-button" href="/checkout">Checkout</a>
+      </div>
+    </header>
+    <div class="popup-body">
+      <div class="popup-title">You're $20.01 away from 10% off!</div>
+      <div class="popup-offered-products">
+        {% for offeredProduct in offeredProducts limit:3 %}
+          <figure>
+            <div class="image-container">
+              <img src="{{ offeredProduct.thumbnailImageUrl }}" alt={{ offeredProduct.title }}/>
+            </div>
+            <figcaption>
+              <div><strong>{{ offeredProduct.title }}</strong></div>
+              <div>${{ offeredProduct.salePrice }}</div>
+              <button class="popup-button" type="button">Add to cart</button>
+            </figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</form>

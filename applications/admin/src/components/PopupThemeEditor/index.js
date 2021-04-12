@@ -50,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const tabIndexes = {
-  settings: 0,
-  design: 1,
+  design: 0,
+  settings: 1,
   variables: 2,
   formFields: 3
 };
@@ -102,8 +102,8 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
       onSubmit={handleSubmit}
     >
       <Tabs value={tabIndex} onChange={handleTabChange}>
-        <Tab id="tab-1" label="Settings" />
-        <Tab id="tab-2" label="Design" />
+        <Tab id="tab-1" label="Design" />
+        <Tab id="tab-2" label="Settings" />
         <Tab id="tab-3" label="Variables" />
         <Tab id="tab-4" label="Form Fields" />
       </Tabs>
@@ -113,25 +113,41 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
         })}
       >
         <CardContent className={classes.cardContent}>
-          <TabPanel className={classes.tabPanel} value={tabIndex} index={0}>
-            <PopupSettingsEditor
-              popupTheme={popupTheme}
-              onChange={handleChange}
-            />
-          </TabPanel>
-          <TabPanel className={classes.tabPanel} value={tabIndex} index={1}>
+          <TabPanel
+            className={classes.tabPanel}
+            value={tabIndex}
+            index={tabIndexes.design}
+          >
             <PopupTemplateEditor
               popupTheme={popupTheme}
               onChange={handleChange}
             />
           </TabPanel>
-          <TabPanel className={classes.tabPanel} value={tabIndex} index={2}>
+          <TabPanel
+            className={classes.tabPanel}
+            value={tabIndex}
+            index={tabIndexes.settings}
+          >
+            <PopupSettingsEditor
+              popupTheme={popupTheme}
+              onChange={handleChange}
+            />
+          </TabPanel>
+          <TabPanel
+            className={classes.tabPanel}
+            value={tabIndex}
+            index={tabIndexes.variables}
+          >
             <PopupVariablesEditor
               popupTheme={popupTheme}
               onChange={handleChange}
             />
           </TabPanel>
-          <TabPanel className={classes.tabPanel} value={tabIndex} index={3}>
+          <TabPanel
+            className={classes.tabPanel}
+            value={tabIndex}
+            index={tabIndexes.formFields}
+          >
             <PopupFormFieldsEditor
               popupTheme={popupTheme}
               onChange={handleChange}

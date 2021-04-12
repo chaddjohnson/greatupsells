@@ -8,10 +8,10 @@ import { usePopupTheme } from '../../hooks';
 
 const LoadingComponent = () => (
   <>
-    <Typography component="div" variant="h1">
-      <Skeleton />
+    <Typography component="div" variant="h2">
+      <Skeleton animation="wave" />
     </Typography>
-    <Skeleton variant="rect" width="100%" height={200} />
+    <Skeleton variant="rect" animation="wave" width="100%" height={250} />
   </>
 );
 
