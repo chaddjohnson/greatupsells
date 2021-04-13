@@ -103,7 +103,7 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
       className={clsx({
         [classes.rootFullHeight]: tabIndex === tabIndexes.design
       })}
-      onValidate
+      noValidate
       onSubmit={handleSubmit}
     >
       <Tabs value={tabIndex} onChange={handleTabChange}>
