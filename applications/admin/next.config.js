@@ -11,11 +11,6 @@ const { ADMIN_APP_URL, ADMIN_API_GATEWAY_URL } = process.env;
 
 module.exports = {
   webpack: (config) => {
-    if (dev) {
-      // Disable sourcemaps to speed things up.
-      config.devtool = undefined;
-    }
-
     if (!dev) {
       config.plugins.push(new ESLintPlugin());
 
