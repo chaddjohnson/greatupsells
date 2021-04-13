@@ -11,6 +11,7 @@ const handler = async (event, context) => {
     const offer = await Offer.findById(offerId);
     const data = JSON.parse(event.body);
 
+    delete data.__v;
     Object.assign(offer, data);
 
     try {

@@ -19,6 +19,7 @@ const handler = async (event, context) => {
       };
     }
 
+    delete data.__v;
     Object.assign(shop, data);
 
     try {

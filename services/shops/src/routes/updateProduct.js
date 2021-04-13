@@ -11,6 +11,7 @@ const handler = async (event, context) => {
     const product = await Product.findById(productId);
     const data = JSON.parse(event.body);
 
+    delete data.__v;
     Object.assign(product, data);
 
     try {

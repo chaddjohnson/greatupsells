@@ -11,6 +11,7 @@ const handler = async (event, context) => {
     const collection = await Collection.findById(collectionId);
     const data = JSON.parse(event.body);
 
+    delete data.__v;
     Object.assign(collection, data);
 
     try {

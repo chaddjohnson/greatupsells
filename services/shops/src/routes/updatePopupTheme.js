@@ -11,6 +11,7 @@ const handler = async (event, context) => {
     const popupTheme = await PopupTheme.findById(popupThemeId);
     const data = JSON.parse(event.body);
 
+    delete data.__v;
     Object.assign(popupTheme, data);
 
     try {
@@ -23,7 +24,6 @@ const handler = async (event, context) => {
     }
 
     await popupTheme.save();
-    await logger.debug(`Popup theme updated`, popupTheme);
 
     return {
       statusCode: StatusCodes.OK,
