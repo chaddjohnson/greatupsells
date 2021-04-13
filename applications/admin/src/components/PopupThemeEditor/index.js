@@ -80,6 +80,7 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
 
   const [tabIndex, setTabIndex] = useState(0);
   const [popupTheme, setPopupTheme] = useState(initialValues);
+  const [saving, setSaving] = useState(false);
 
   const handleTabChange = (event, index) => {
     setTabIndex(index);
@@ -89,9 +90,12 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
     setPopupTheme(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onSubmit(popupTheme);
+
+    setSaving(true);
+    await onSubmit(popupTheme);
+    setSaving(false);
   };
 
   return (
@@ -164,7 +168,12 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
         <Button variant="contained" onClick={() => {}}>
           Cancel
         </Button>
-        <Button type="submit" variant="contained" color="primary">
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={saving}
+        >
           Save
         </Button>
       </FormActions>
