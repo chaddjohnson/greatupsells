@@ -7,6 +7,7 @@ import {
   HttpClient
 } from '@neatowebsolutions/upselling-react-hooks';
 import theme from '../theme';
+import { ToastProvider } from '../hooks';
 import '../theme/index.css';
 
 const httpClient = new HttpClient({
@@ -41,8 +42,10 @@ const App = ({ Component, ...pageProps }) => {
       </Head>
       <HttpClientProvider httpClient={httpClient}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <ToastProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ToastProvider>
         </ThemeProvider>
       </HttpClientProvider>
     </>

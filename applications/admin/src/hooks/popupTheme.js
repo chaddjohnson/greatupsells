@@ -1,8 +1,10 @@
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
+import { useToast } from './toast';
 
 const usePopupTheme = (id) => {
   const { httpClient } = useHttpClient();
+  const { showSuccessToast, showErrorToast } = useToast();
 
   const {
     data: popupTheme,
@@ -20,10 +22,16 @@ const usePopupTheme = (id) => {
   const savePopupTheme = async (values) => {
     const url = values._id ? `/popup-themes/${values._id}` : '/popup-themes';
 
-    if (values._id) {
-      await mutate(url, httpClient.put(url, values));
-    } else {
-      await mutate(url, httpClient.post(url, values));
+    try {
+      if (values._id) {
+        await mutate(url, httpClient.put(url, values));
+      } else {
+        await mutate(url, httpClient.post(url, values));
+      }
+
+      showSuccessToast('Popup theme saved successfully.');
+    } catch (error) {
+      showErrorToast('Error saving popup theme.');
     }
   };
 
