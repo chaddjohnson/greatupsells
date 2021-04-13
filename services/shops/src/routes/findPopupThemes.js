@@ -7,7 +7,7 @@ const handler = async (event, context) => {
 
   try {
     const PopupTheme = await models.get('PopupTheme');
-    const popupThemes = await PopupTheme.find({});
+    const popupThemes = await PopupTheme.find({}).sort({ displayOrder: 1 });
 
     return {
       statusCode: StatusCodes.OK,
