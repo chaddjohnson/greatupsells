@@ -20,7 +20,7 @@ const handler = async (event, context) => {
     }
 
     await popupTheme.save();
-    await logger.debug(`Popup theme created`, popupTheme);
+    await logger.info(`Popup theme created`, popupTheme);
 
     return {
       statusCode: StatusCodes.CREATED,
