@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200
   },
   typeField: {
-    width: 100
+    width: 150
   },
   removeButton: {
     color: RED[600],
@@ -165,6 +165,8 @@ const PopupVariablesEditor = ({ popupTheme, onChange }) => {
                       >
                         <MenuItem value="text">Text</MenuItem>
                         <MenuItem value="color">Color</MenuItem>
+                        <MenuItem value="font">Font</MenuItem>
+                        <MenuItem value="fontSize">Font Size</MenuItem>
                       </Select>
                     </FormControl>
                   </TableCell>
