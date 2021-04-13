@@ -11,7 +11,7 @@ const LoadingComponent = () => (
     <Typography component="div" variant="h2">
       <Skeleton animation="wave" />
     </Typography>
-    <Skeleton variant="rect" animation="wave" width="100%" height={250} />
+    <Skeleton variant="rect" animation="wave" width="100%" height={500} />
   </>
 );
 
