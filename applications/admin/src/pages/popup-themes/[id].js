@@ -8,9 +8,7 @@ import { usePopupTheme } from '../../hooks';
 
 const LoadingComponent = () => (
   <>
-    <Typography component="div" variant="h2">
-      <Skeleton animation="wave" />
-    </Typography>
+    <Skeleton animation="wave" height={72} />
     <Skeleton variant="rect" animation="wave" width="100%" height={500} />
   </>
 );
@@ -48,6 +46,11 @@ const EditPopupThemePage = () => {
         </>
       }
       icon={<PopupThemesIcon />}
+      contentProps={{
+        style: {
+          height: '100%'
+        }
+      }}
     >
       <Loader
         isLoading={popupThemeLoading}

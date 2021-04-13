@@ -16,9 +16,7 @@ import { Layout, Link, AddButton } from '../../components';
 import { usePopupThemes } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    overflowX: 'auto',
-    WebkitOverflowScrolling: 'touch',
+  tableContainer: {
     paddingBottom: theme.spacing(2)
   },
   nameTableCell: {
@@ -50,11 +48,11 @@ const typeMap = {
 
 const LoadingComponent = () => (
   <>
-    <Skeleton animation="wave" />
-    <Skeleton animation="wave" />
-    <Skeleton animation="wave" />
-    <Skeleton animation="wave" />
-    <Skeleton animation="wave" />
+    <Skeleton animation="wave" height={75} />
+    <Skeleton animation="wave" height={75} />
+    <Skeleton animation="wave" height={75} />
+    <Skeleton animation="wave" height={75} />
+    <Skeleton animation="wave" height={75} />
   </>
 );
 
@@ -79,7 +77,7 @@ const PopupThemesPage = () => {
       >
         <Card>
           <CardContent>
-            <TableContainer className={classes.root}>
+            <TableContainer className={classes.tableContainer}>
               <Table>
                 <TableHead>
                   <TableRow>

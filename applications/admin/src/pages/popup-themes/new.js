@@ -115,6 +115,11 @@ const NewPopupThemePage = () => {
         </>
       }
       icon={<PopupThemesIcon />}
+      contentProps={{
+        style: {
+          height: '100%'
+        }
+      }}
     >
       <PopupThemeEditor initialValues={initialValues} onSubmit={handleSubmit} />
     </Layout>

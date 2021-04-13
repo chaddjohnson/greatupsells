@@ -20,8 +20,6 @@ import RED from '@material-ui/core/colors/red';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    overflowX: 'auto',
-    WebkitOverflowScrolling: 'touch',
     paddingBottom: theme.spacing(2)
   },
   formControl: {

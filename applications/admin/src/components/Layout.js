@@ -29,7 +29,6 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // display: 'flex',
     height: '100%',
     marginLeft: 0,
 
@@ -86,14 +85,13 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(3)
   }
 }));
 
-const Layout = ({ title, icon, children }) => {
+const Layout = ({ title, icon, contentProps, children }) => {
   const classes = useStyles();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
@@ -215,7 +213,7 @@ const Layout = ({ title, icon, children }) => {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
+      <main className={classes.content} {...contentProps}>
         <div className={classes.drawerHeader} />
         {children}
       </main>
@@ -226,6 +224,7 @@ const Layout = ({ title, icon, children }) => {
 Layout.propTypes = {
   title: PropTypes.node.isRequired,
   icon: PropTypes.node,
+  contentProps: PropTypes.object,
   children: PropTypes.node.isRequired
 };
 

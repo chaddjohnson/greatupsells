@@ -31,6 +31,11 @@ const theme = createMuiTheme({
         backgroundColor: '#FFFFFF'
       }
     },
+    MuiTableContainer: {
+      root: {
+        WebkitOverflowScrolling: 'touch'
+      }
+    },
     MuiTableRow: {
       root: {
         '&:hover td, &:focus-within td': {
