@@ -11,7 +11,7 @@ const HttpClientProvider = ({ httpClient, children }) => (
 );
 
 HttpClientProvider.propTypes = {
-  client: PropTypes.object.isRequired,
+  httpClient: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired
 };
 
