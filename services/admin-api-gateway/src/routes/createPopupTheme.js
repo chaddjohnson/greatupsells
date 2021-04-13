@@ -26,13 +26,9 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { popupThemeId } = event.pathParameters;
     const data = JSON.parse(event.body);
 
-    const popupTheme = await httpClient.post(
-      `/popup-themes/${popupThemeId}`,
-      data
-    );
+    const popupTheme = await httpClient.post(`/popup-themes`, data);
 
     return {
       statusCode: StatusCodes.CREATED,
