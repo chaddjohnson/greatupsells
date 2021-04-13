@@ -26,7 +26,8 @@ const usePopupTheme = (id) => {
       if (values._id) {
         await mutate(url, httpClient.put(url, values));
       } else {
-        await mutate(url, httpClient.post(url, values));
+        // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
+        await mutate('new-popup-theme', httpClient.post(url, values));
       }
 
       showSuccessToast('Popup theme saved successfully.');
