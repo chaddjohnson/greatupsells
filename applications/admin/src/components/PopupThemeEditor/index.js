@@ -161,7 +161,11 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
         </CardContent>
       </Card>
       <FormActions>
-        <DestructiveButton variant="contained" onClick={() => {}}>
+        <DestructiveButton
+          variant="contained"
+          disabled={saving}
+          onClick={() => {}}
+        >
           Delete
         </DestructiveButton>
         <span className={classes.actionSpacer} />
