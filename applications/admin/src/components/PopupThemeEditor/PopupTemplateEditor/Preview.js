@@ -1,7 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheetManager } from 'styled-components';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -95,74 +93,30 @@ const dummyData = {
   ]
 };
 
-// Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
-const Preview = ({ popupTheme, ...props }) => {
-  const [previewRef, setPreviewRef] = useState(null);
+const Preview = ({ className, popupTheme }) => {
   const [previewActive, setPreviewActive] = useState(false);
-
-  const doc = previewRef?.contentWindow?.document;
-  const mountNode = doc?.body;
-  const insertionTarget = useMemo(() => doc?.createElement('link'), [doc]);
-
-  useEffect(() => {
-    if (insertionTarget) {
-      doc.head.append(insertionTarget);
-    }
-  }, [doc, insertionTarget]);
 
   if (!popupTheme.template) {
     return null;
   }
 
   return (
-    <iframe
-      title="Preview"
-      ref={setPreviewRef}
-      style={{
-        position: previewActive ? 'fixed' : 'static',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 2147483647
-      }}
-      {...props}
-    >
-      {mountNode &&
-        createPortal(
-          <>
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-                  body {
-                    margin: 0;
-                    padding: 0;
-                  }
-                `
-              }}
-            />
-            <StyleSheetManager target={insertionTarget}>
-              <OfferPopup
-                appRoot={mountNode}
-                renderTo={mountNode}
-                open={true}
-                designMode={!previewActive}
-                theme={popupTheme}
-                offer={dummyData.offer}
-                triggerProduct={dummyData.triggerProduct}
-                offeredProducts={dummyData.offeredProducts}
-                onClose={() => setPreviewActive(false)}
-                onClick={() => setPreviewActive(true)}
-              />
-            </StyleSheetManager>
-          </>,
-          mountNode
-        )}
-    </iframe>
+    <OfferPopup
+      className={className}
+      open={true}
+      designMode={!previewActive}
+      theme={popupTheme}
+      offer={dummyData.offer}
+      triggerProduct={dummyData.triggerProduct}
+      offeredProducts={dummyData.offeredProducts}
+      onClose={() => setPreviewActive(false)}
+      onClick={() => setPreviewActive(true)}
+    />
   );
 };
 
 Preview.propTypes = {
+  className: PropTypes.string,
   popupTheme: PropTypes.object
 };
 
