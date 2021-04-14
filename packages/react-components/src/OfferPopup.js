@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useLiquid } from 'react-liquid';
 
 const Modal = styled(ReactModal)`
-  position: ${(props) => (props.renderTo ? 'static' : 'fixed')};
+  position: ${(props) => (props.designMode ? 'static' : 'fixed')};
   background: none;
   border: none;
   margin-right: 0;
@@ -26,11 +26,11 @@ const Modal = styled(ReactModal)`
     right: auto;
     top: 30%;
     bottom: auto;
-    padding: ${(props) => (props.renderTo ? '14px' : 0)};
+    padding: ${(props) => (props.designMode ? '14px' : 0)};
     transform: initial;
-    margin-right: ${(props) => (props.renderTo ? 0 : '-50%')};
+    margin-right: ${(props) => (props.designMode ? 0 : '-50%')};
     transform: ${(props) =>
-      props.renderTo ? 'none' : 'translate(-50%, -25%)'};
+      props.designMode ? 'none' : 'translate(-50%, -25%)'};
   }
 `;
 
@@ -59,7 +59,7 @@ const OfferPopup = ({
   appRoot,
   renderTo,
   open,
-  previewMode,
+  designMode,
   theme,
   offer,
   triggerProduct,
@@ -74,7 +74,7 @@ const OfferPopup = ({
 
     event.preventDefault();
 
-    if (previewMode) {
+    if (designMode) {
       return;
     }
 
@@ -88,7 +88,7 @@ const OfferPopup = ({
   };
 
   const handleClose = () => {
-    if (!renderTo) {
+    if (!designMode) {
       onClose();
     }
   };
@@ -111,8 +111,8 @@ const OfferPopup = ({
     ...mappedVariables,
     triggerProduct,
     offeredProducts,
-    submitHandler: 'window.OfferPopup.submit(event)',
-    closeHandler: 'window.OfferPopup.close()'
+    submitHandler: 'window.top.OfferPopup.submit(event)',
+    closeHandler: 'window.top.OfferPopup.close()'
   });
 
   const maskBackgroundColor = useMemo(
@@ -121,8 +121,8 @@ const OfferPopup = ({
   );
 
   // Expose methods globally to enable themes to programmatically interface with popups.
-  window.OfferPopup.submit = handleSubmit;
-  window.OfferPopup.close = handleClose;
+  window.top.OfferPopup.submit = handleSubmit;
+  window.top.OfferPopup.close = handleClose;
 
   Modal.setAppElement(appRoot);
 
@@ -132,27 +132,27 @@ const OfferPopup = ({
 
   return (
     <Modal
-      closeTimeoutMS={!previewMode ? 200 : 0}
+      closeTimeoutMS={200}
       parentSelector={() => renderTo || document.body}
-      isOpen={open || !!renderTo}
-      shouldFocusAfterRender={!renderTo}
+      isOpen={open}
+      shouldFocusAfterRender={!designMode}
       shouldCloseOnOverlayClick={offer.enableMaskClose}
       shouldCloseOnEsc={offer.enableEscClose}
       contentLabel="Offer Modal"
       onRequestClose={handleClose}
       className="offer-popup-modal"
-      renderTo={renderTo}
+      designMode={designMode}
       style={{
         overlay: {
-          position: renderTo ? 'relative' : 'fixed',
+          position: 'fixed',
           background: maskBackgroundColor,
-          zIndex: renderTo ? 'auto' : 2147483647,
+          zIndex: 2147483647,
           height: '100%'
         }
       }}
     >
       <ModalContentContainer dangerouslySetInnerHTML={{ __html: markup }} />
-      {renderTo && <Mask onClick={onClick} />}
+      {designMode && <Mask onClick={onClick} />}
     </Modal>
   );
 };
@@ -160,18 +160,18 @@ const OfferPopup = ({
 OfferPopup.propTypes = {
   appRoot: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   open: PropTypes.bool,
-  previewMode: PropTypes.bool,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   offer: PropTypes.object.isRequired,
   renderTo: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  designMode: PropTypes.bool,
   onClose: PropTypes.func,
   onClick: PropTypes.func
 };
 
 OfferPopup.defaultProps = {
   open: false,
-  previewMode: false,
+  designMode: false,
   onClose: () => {}
 };
 

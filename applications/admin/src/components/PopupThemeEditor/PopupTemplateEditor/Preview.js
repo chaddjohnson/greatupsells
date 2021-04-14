@@ -115,7 +115,19 @@ const Preview = ({ popupTheme, ...props }) => {
   }
 
   return (
-    <iframe title="Preview" ref={setPreviewRef} {...props}>
+    <iframe
+      title="Preview"
+      ref={setPreviewRef}
+      style={{
+        position: previewActive ? 'fixed' : 'static',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 2147483647
+      }}
+      {...props}
+    >
       {mountNode &&
         createPortal(
           <>
@@ -132,9 +144,9 @@ const Preview = ({ popupTheme, ...props }) => {
             <StyleSheetManager target={insertionTarget}>
               <OfferPopup
                 appRoot={mountNode}
-                renderTo={!previewActive && mountNode}
+                renderTo={mountNode}
                 open={true}
-                previewMode={true}
+                designMode={!previewActive}
                 theme={popupTheme}
                 offer={dummyData.offer}
                 triggerProduct={dummyData.triggerProduct}

@@ -596,7 +596,6 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
                     appRoot="#__next"
                     renderTo={!previewActive && offerPopupContainer}
                     open={true}
-                    previewMode={true}
                     theme={offer.popupTheme}
                     offer={offer}
                     product={product}
