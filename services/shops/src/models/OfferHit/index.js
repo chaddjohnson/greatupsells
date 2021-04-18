@@ -26,29 +26,35 @@ const schema = new mongoose.Schema(
     },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: Number, required: true },
+    strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
     triggerEvent: {
       type: String,
       enum: ['ADD', 'CART', 'LOAD', 'EXIT'],
       required: true
     },
-    strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
-
-    // References to viewed products.
-    viewedShopifyProductIds: [{ type: Number, required: false }],
-    viewedShopifyVariantIds: [{ type: Number, required: false }],
-    viewedShopifyVariantPrices: [{ type: Number, required: false }],
-
-    // References to original accepted products.
-    originalShopifyProductIds: [{ type: Number, required: false }],
-    originalShopifyVariantIds: [{ type: Number, required: false }],
-    originalShopifyVariantPrices: [{ type: Number, required: false }],
-
-    // References to actual accepted products (copies of originals with price adjustments).
-    acceptedShopifyProductIds: [{ type: Number, required: false }],
-    acceptedShopifyVariantIds: [{ type: Number, required: false }],
-    acceptedShopifyVariantPrices: [{ type: Number, required: false }],
-    acceptedShopifyProductQuantities: [{ type: Number, required: false }],
-
+    triggerShopifyProductId: { type: Number, required: false },
+    viewedProducts: [
+      {
+        shopifyProductId: { type: Number, required: true },
+        shopifyVariantId: { type: Number, required: true },
+        price: { type: Number, required: true }
+      }
+    ],
+    originalProducts: [
+      {
+        shopifyProductId: { type: Number, required: true },
+        shopifyVariantId: { type: Number, required: true },
+        price: { type: Number, required: true }
+      }
+    ],
+    acceptedProducts: [
+      {
+        shopifyProductId: { type: Number, required: true },
+        shopifyVariantId: { type: Number, required: true },
+        price: { type: Number, required: true },
+        quantity: { type: Number, required: true }
+      }
+    ],
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',

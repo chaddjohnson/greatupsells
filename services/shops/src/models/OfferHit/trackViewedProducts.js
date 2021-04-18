@@ -56,11 +56,16 @@ const trackViewedProducts = async (
   const products = await findProducts(shopifyProductIds);
   const variants = await findVariants(products, shopifyVariantIds);
   const variantPrices = variants.map(({ price }) => parseFloat(price) || 0);
+  const productCount = shopifyProductIds.length;
 
   // Track the viewed product data for the offer hit.
-  offerHit.viewedShopifyProductIds = shopifyProductIds;
-  offerHit.viewedShopifyVariantIds = shopifyVariantIds;
-  offerHit.viewedShopifyVariantPrices = variantPrices;
+  offerHit.viewedProducts = [...Array(productCount)].map((_, index) => ({
+    shopifyProductId: shopifyProductIds[index],
+    shopifyVariantId: shopifyVariantIds[index],
+    price: variantPrices[index]
+  }));
+
+  offerHit.markModified('viewedProducts');
 
   await offerHit.save();
 };

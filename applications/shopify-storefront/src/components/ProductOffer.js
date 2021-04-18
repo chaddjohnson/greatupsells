@@ -13,7 +13,12 @@ const ProductOffer = () => {
     onProductAddedToShopifyCart
   } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, offeredProducts, offerViewed } = useRandomOffer({
+  const {
+    offer,
+    triggerProduct,
+    offeredProducts,
+    offerViewed
+  } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
@@ -53,6 +58,7 @@ const ProductOffer = () => {
       return;
     }
 
+    const triggerShopifyProductId = triggerProduct.shopifyProductId;
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -66,6 +72,7 @@ const ProductOffer = () => {
       await trackOfferView(
         offer._id,
         triggerEvent,
+        triggerShopifyProductId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
       );
@@ -91,7 +98,7 @@ const ProductOffer = () => {
       open={!!offer && popupOpen}
       theme={offer.popupTheme}
       offer={offer}
-      triggerProduct={{}}
+      triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
       onClose={handleClosePopup}

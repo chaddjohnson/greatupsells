@@ -13,6 +13,7 @@ const useOfferTracking = () => {
   const trackOfferView = async (
     offerId,
     triggerEvent,
+    triggerShopifyProductId,
     shopifyProductIds,
     shopifyVariantIds
   ) => {
@@ -32,6 +33,7 @@ const useOfferTracking = () => {
 
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
+      triggerShopifyProductId,
       shopifyProductIds,
       shopifyVariantIds
     });

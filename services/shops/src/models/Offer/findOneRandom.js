@@ -3,8 +3,8 @@ const mongodbClient = require('../mongodbClient');
 
 const findOneRandomByTriggerEvent = async (shop, triggerEvent, ipAddress) => {
   const Offer = mongodbClient.connection.model('Offer');
-  const geoData =
-    !!ipAddress && ipAddress !== '127.0.0.1' && geoip.lookup(ipAddress);
+  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
+  const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   const criteria = {
     shop: shop._id,
     triggerEvent,
@@ -52,8 +52,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
   const Collection = mongodbClient.connection.model('Collection');
   const Offer = mongodbClient.connection.model('Offer');
-  const geoData =
-    !!ipAddress && ipAddress !== '127.0.0.1' && geoip.lookup(ipAddress);
+  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
+  const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
   });

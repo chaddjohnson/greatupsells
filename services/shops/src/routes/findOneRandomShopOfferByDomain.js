@@ -2,6 +2,21 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
+const findRandomProduct = async (shopifyProductIds = []) => {
+  const Product = await models.get('Product');
+  const hasTriggerProducts = shopifyProductIds.length > 0;
+  const randomProductIndex = Math.floor(
+    Math.random() * shopifyProductIds.length
+  );
+  const triggerShopifyProductId = shopifyProductIds[randomProductIndex];
+
+  if (!hasTriggerProducts || !triggerShopifyProductId) {
+    return;
+  }
+
+  return await Product.findByShopifyProductId(triggerShopifyProductId);
+};
+
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
@@ -35,12 +50,17 @@ const handler = async (event, context) => {
       };
     }
 
-    const offeredProducts = await offer.findRandomProducts();
+    // Parallelize to minimize latency.
+    const [triggerProduct, offeredProducts] = await Promise.all([
+      findRandomProduct(shopifyProductIds),
+      offer.findRandomProducts()
+    ]);
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
         offer,
+        triggerProduct,
         offeredProducts
       })
     };

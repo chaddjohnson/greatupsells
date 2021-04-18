@@ -3,6 +3,7 @@ const mongodbClient = require('../mongodbClient');
 
 const trackView = async (
   offer,
+  triggerShopifyProductId,
   shopifyProductIds = [],
   shopifyVariantIds = [],
   ipAddress
@@ -17,8 +18,9 @@ const trackView = async (
     offer,
     shopifyShopId,
     shop,
-    triggerEvent,
     strategy,
+    triggerEvent,
+    triggerShopifyProductId,
     ipAddress
   });
 

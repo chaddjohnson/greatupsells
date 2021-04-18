@@ -19,7 +19,6 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const isExitEvent = event === 'EXIT';
   const isProductEvent = !!shopifyProductIds?.length;
   const shouldQuery = isLoadEvent || isExitEvent || isProductEvent;
-
   const params = qs.stringify(
     {
       event,
@@ -27,7 +26,6 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
     },
     { arrayFormat: 'repeat' }
   );
-
   const { data } = useSWR(
     shouldQuery ? `/offers/random?${params}` : null,
     httpClient.get.bind(httpClient),

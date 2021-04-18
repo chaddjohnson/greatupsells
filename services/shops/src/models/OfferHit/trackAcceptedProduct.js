@@ -14,7 +14,6 @@ const trackAcceptedProduct = async (
   const shopifyProductData = product && { ...product.shopifyProductData };
   const { offer } = offerHit;
   let copiedProduct = null;
-  let copiedShopifyProductData = null;
   let copiedVariant = null;
   const session = offerHit.$session();
 
@@ -22,6 +21,8 @@ const trackAcceptedProduct = async (
   const variant =
     shopifyProductData &&
     shopifyProductData.variants.find(({ id }) => id === shopifyVariantId);
+
+  const originalVariantPrice = variant.price;
 
   // Keep track of the variant position.
   const variantIndex =
@@ -62,39 +63,29 @@ const trackAcceptedProduct = async (
     throw error;
   }
 
-  copiedShopifyProductData = copiedProduct.shopifyProductData;
-  copiedVariant = copiedShopifyProductData.variants[variantIndex];
+  // Find the correct variant in the copied product.
+  copiedVariant = copiedProduct.shopifyProductData.variants[variantIndex];
 
-  offerHit.originalShopifyProductIds = offerHit.originalShopifyProductIds || [];
-  offerHit.originalShopifyVariantIds = offerHit.originalShopifyVariantIds || [];
-  offerHit.originalShopifyVariantPrices =
-    offerHit.originalShopifyVariantPrices || [];
+  offerHit.originalProducts = offerHit.originalProducts || [];
+  offerHit.acceptedProducts = offerHit.acceptedProducts || [];
 
   // Track the original product.
-  offerHit.originalShopifyProductIds.push(shopifyProductId);
-  offerHit.originalShopifyVariantIds.push(shopifyVariantId);
-  offerHit.originalShopifyVariantPrices.push(quantity);
-
-  offerHit.acceptedShopifyProductIds = offerHit.acceptedShopifyProductIds || [];
-  offerHit.acceptedShopifyVariantIds = offerHit.acceptedShopifyVariantIds || [];
-  offerHit.acceptedShopifyVariantPrices =
-    offerHit.acceptedShopifyVariantPrices || [];
-  offerHit.acceptedShopifyProductQuantities =
-    offerHit.acceptedShopifyProductQuantities || [];
+  offerHit.originalProducts.push({
+    shopifyProductId,
+    shopifyVariantId,
+    price: originalVariantPrice
+  });
 
   // Track the accepted product data for the offer hit.
-  offerHit.acceptedShopifyProductIds.push(copiedProduct.shopifyProductId);
-  offerHit.acceptedShopifyVariantIds.push(copiedVariant.id);
-  offerHit.acceptedShopifyVariantPrices.push(copiedVariant.price);
-  offerHit.acceptedShopifyProductQuantities.push(quantity);
+  offerHit.acceptedProducts.push({
+    shopifyProductId: copiedProduct.shopifyProductId,
+    shopifyVariantId: copiedVariant.id,
+    price: copiedVariant.price,
+    quantity
+  });
 
-  offerHit.markModified('originalShopifyProductIds');
-  offerHit.markModified('originalShopifyVariantIds');
-  offerHit.markModified('originalShopifyVariantPrices');
-  offerHit.markModified('acceptedShopifyProductIds');
-  offerHit.markModified('acceptedShopifyVariantIds');
-  offerHit.markModified('acceptedShopifyVariantPrices');
-  offerHit.markModified('acceptedShopifyProductQuantities');
+  offerHit.markModified('originalProducts');
+  offerHit.markModified('acceptedProducts');
 
   await offerHit.save();
 };

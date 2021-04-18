@@ -159,11 +159,18 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
 };
 
 schema.methods.trackView = function (
+  triggerShopifyProductId,
   shopifyProductIds,
   shopifyVariantIds,
   ipAddress
 ) {
-  return trackView(this, shopifyProductIds, shopifyVariantIds, ipAddress);
+  return trackView(
+    this,
+    triggerShopifyProductId,
+    shopifyProductIds,
+    shopifyVariantIds,
+    ipAddress
+  );
 };
 
 schema.methods.toString = function () {
