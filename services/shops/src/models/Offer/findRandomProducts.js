@@ -1,6 +1,6 @@
 const mongodbClient = require('../mongodbClient');
 
-const findOneRandomProduct = async (offer) => {
+const findRandomProducts = async (offer) => {
   await offer.execPopulate('shop');
 
   const { shop, offeredProducts, offeredCollections } = offer;
@@ -30,21 +30,27 @@ const findOneRandomProduct = async (offer) => {
         'shopifyProductData.published_at': { $ne: null }
       }
     },
-    { $sample: { size: 1 } },
+    {
+      $sample: {
+        size: 3
+      }
+    },
     {
       $project: {
         _id: 1
       }
     }
   ]);
-  const randomProduct = randomProducts[0];
 
-  if (!randomProduct || !randomProduct._id) {
-    return;
+  if (!randomProducts || !randomProducts[0] || !randomProducts[0]._id) {
+    return [];
   }
 
-  // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Product.findById(randomProduct._id);
+  // Aggregation only returns JSON, so query for Mongoose documents.
+  // return await Product.findById(randomProduct._id);
+  return await Promise.all(
+    randomProducts.map(async ({ _id }) => Product.findById(_id))
+  );
 };
 
-module.exports = findOneRandomProduct;
+module.exports = findRandomProducts;

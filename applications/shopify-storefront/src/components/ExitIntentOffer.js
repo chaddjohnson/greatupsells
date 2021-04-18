@@ -9,11 +9,11 @@ const ExitIntentOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product, offerViewed } = useRandomOffer({
+  const { offer, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent
   });
 
-  const handleAcceptance = async (
+  const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
     quantity
@@ -30,9 +30,6 @@ const ExitIntentOffer = () => {
     if (shopifyVariantId) {
       await addProductToShopifyCart(shopifyVariantId, quantity);
     }
-
-    // Close the popup.
-    setPopupOpen(false);
   };
 
   // References:
@@ -42,8 +39,8 @@ const ExitIntentOffer = () => {
     async (event) => {
       event = event || window.event;
 
-      // Nothing to show if there is no offer or product.
-      if (!offer || !product) {
+      // Nothing to show if there is no offer.
+      if (!offer) {
         return;
       }
 
@@ -52,9 +49,12 @@ const ExitIntentOffer = () => {
         return;
       }
 
-      const { shopifyProductData } = product;
-      const shopifyProductId = shopifyProductData?.id;
-      const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
 
       // Works on mouse exiting window and user switching active program.
       const from = event.relatedTarget || event.toElement;
@@ -88,12 +88,12 @@ const ExitIntentOffer = () => {
         await trackOfferView(
           offer._id,
           triggerEvent,
-          shopifyProductId,
-          shopifyVariantId
+          offeredShopifyProductIds,
+          offeredShopifyVariantIds
         );
       }
     },
-    [offer, product, offerViewed] // eslint-disable-line react-hooks/exhaustive-deps
+    [offer, offeredProducts, offerViewed] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   useEffect(() => {
@@ -104,18 +104,17 @@ const ExitIntentOffer = () => {
     };
   }, [handleMouseOut]);
 
-  if (!offer || !product) {
+  if (!offer) {
     return null;
   }
 
   return (
     <OfferPopup
-      appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       theme={offer.popupTheme}
       offer={offer}
-      product={product}
-      onAccept={handleAcceptance}
+      offeredProducts={offeredProducts}
+      onAddProduct={handleAddProduct}
       onClose={() => setPopupOpen(false)}
     />
   );

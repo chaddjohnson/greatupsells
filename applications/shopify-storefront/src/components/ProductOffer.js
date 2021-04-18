@@ -13,7 +13,7 @@ const ProductOffer = () => {
     onProductAddedToShopifyCart
   } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product, offerViewed } = useRandomOffer({
+  const { offer, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
@@ -23,7 +23,7 @@ const ProductOffer = () => {
     setShopifyProductIds([]);
   };
 
-  const handleAcceptance = async (
+  const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
     quantity
@@ -40,14 +40,11 @@ const ProductOffer = () => {
     if (shopifyVariantId) {
       await addProductToShopifyCart(shopifyVariantId, quantity);
     }
-
-    // Close the popup.
-    handleClosePopup();
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer || !product) {
+    if (!offer) {
       return;
     }
 
@@ -56,9 +53,12 @@ const ProductOffer = () => {
       return;
     }
 
-    const { shopifyProductData } = product;
-    const shopifyProductId = shopifyProductData?.id;
-    const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
+    const offeredShopifyVariantIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+    );
 
     (async () => {
       setPopupOpen(true);
@@ -66,11 +66,11 @@ const ProductOffer = () => {
       await trackOfferView(
         offer._id,
         triggerEvent,
-        shopifyProductId,
-        shopifyVariantId
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
       );
     })();
-  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Subscribe to product add events.
   useEffect(() => {
@@ -81,7 +81,7 @@ const ProductOffer = () => {
     });
   }, [onProductAddedToShopifyCart]);
 
-  if (!offer || !product) {
+  if (!offer) {
     return null;
   }
 
@@ -91,8 +91,9 @@ const ProductOffer = () => {
       open={!!offer && popupOpen}
       theme={offer.popupTheme}
       offer={offer}
-      product={product}
-      onAccept={handleAcceptance}
+      triggerProduct={{}}
+      offeredProducts={offeredProducts}
+      onAddProduct={handleAddProduct}
       onClose={handleClosePopup}
     />
   );

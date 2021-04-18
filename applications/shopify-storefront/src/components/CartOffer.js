@@ -10,7 +10,7 @@ const CartOffer = () => {
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product, offerViewed } = useRandomOffer({
+  const { offer, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent,
     shopifyProductIds
   });
@@ -20,7 +20,7 @@ const CartOffer = () => {
     setShopifyProductIds([]);
   };
 
-  const handleAcceptance = async (productId, variantId, quantity) => {
+  const handleAddProduct = async (productId, variantId, quantity) => {
     // Accept the offer.
     await trackOfferAcceptance(offer._id, productId, variantId, quantity);
 
@@ -28,14 +28,11 @@ const CartOffer = () => {
     if (variantId) {
       await addProductToShopifyCart(variantId, quantity);
     }
-
-    // Close the popup.
-    handleClosePopup();
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer || !product) {
+    if (!offer) {
       return;
     }
 
@@ -44,9 +41,12 @@ const CartOffer = () => {
       return;
     }
 
-    const { shopifyProductData } = product;
-    const shopifyProductId = shopifyProductData?.id;
-    const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
+    const offeredShopifyVariantIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+    );
 
     (async () => {
       setPopupOpen(true);
@@ -54,11 +54,11 @@ const CartOffer = () => {
       await trackOfferView(
         offer._id,
         triggerEvent,
-        shopifyProductId,
-        shopifyVariantId
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
       );
     })();
-  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
 
@@ -77,7 +77,7 @@ const CartOffer = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!offer || !product) {
+  if (!offer) {
     return null;
   }
 
@@ -87,8 +87,9 @@ const CartOffer = () => {
       open={!!offer && popupOpen}
       theme={offer.popupTheme}
       offer={offer}
-      product={product}
-      onAccept={handleAcceptance}
+      triggerProduct={{}}
+      offeredProducts={offeredProducts}
+      onAddProduct={handleAddProduct}
       onClose={handleClosePopup}
     />
   );

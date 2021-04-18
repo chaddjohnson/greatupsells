@@ -9,11 +9,11 @@ const ShopVisitOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, product, offerViewed } = useRandomOffer({
+  const { offer, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent
   });
 
-  const handleAcceptance = async (
+  const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
     quantity
@@ -30,14 +30,11 @@ const ShopVisitOffer = () => {
     if (shopifyVariantId) {
       await addProductToShopifyCart(shopifyProductId, quantity);
     }
-
-    // Close the popup.
-    setPopupOpen(false);
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer || !product) {
+    if (!offer) {
       return;
     }
 
@@ -46,9 +43,12 @@ const ShopVisitOffer = () => {
       return;
     }
 
-    const { shopifyProductData } = product;
-    const shopifyProductId = shopifyProductData?.id;
-    const shopifyVariantId = shopifyProductData?.variants?.[0]?.id;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
+    const offeredShopifyVariantIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+    );
 
     (async () => {
       setPopupOpen(true);
@@ -56,13 +56,13 @@ const ShopVisitOffer = () => {
       await trackOfferView(
         offer._id,
         triggerEvent,
-        shopifyProductId,
-        shopifyVariantId
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
       );
     })();
-  }, [offer, product, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!offer || !product) {
+  if (!offer) {
     return null;
   }
 
@@ -72,8 +72,8 @@ const ShopVisitOffer = () => {
       open={!!offer && popupOpen}
       theme={offer.popupTheme}
       offer={offer}
-      product={product}
-      onAccept={handleAcceptance}
+      offeredProducts={offeredProducts}
+      onAddProduct={handleAddProduct}
       onClose={() => setPopupOpen(false)}
     />
   );

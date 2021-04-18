@@ -65,11 +65,36 @@ const trackAcceptedProduct = async (
   copiedShopifyProductData = copiedProduct.shopifyProductData;
   copiedVariant = copiedShopifyProductData.variants[variantIndex];
 
+  offerHit.originalShopifyProductIds = offerHit.originalShopifyProductIds || [];
+  offerHit.originalShopifyVariantIds = offerHit.originalShopifyVariantIds || [];
+  offerHit.originalShopifyVariantPrices =
+    offerHit.originalShopifyVariantPrices || [];
+
+  // Track the original product.
+  offerHit.originalShopifyProductIds.push(shopifyProductId);
+  offerHit.originalShopifyVariantIds.push(shopifyVariantId);
+  offerHit.originalShopifyVariantPrices.push(quantity);
+
+  offerHit.acceptedShopifyProductIds = offerHit.acceptedShopifyProductIds || [];
+  offerHit.acceptedShopifyVariantIds = offerHit.acceptedShopifyVariantIds || [];
+  offerHit.acceptedShopifyVariantPrices =
+    offerHit.acceptedShopifyVariantPrices || [];
+  offerHit.acceptedShopifyProductQuantities =
+    offerHit.acceptedShopifyProductQuantities || [];
+
   // Track the accepted product data for the offer hit.
-  offerHit.acceptedShopifyProductId = copiedProduct.shopifyProductId;
-  offerHit.acceptedShopifyVariantId = copiedVariant.id;
-  offerHit.acceptedShopifyVariantPrice = copiedVariant.price;
-  offerHit.acceptedShopifyProductQuantity = quantity;
+  offerHit.acceptedShopifyProductIds.push(copiedProduct.shopifyProductId);
+  offerHit.acceptedShopifyVariantIds.push(copiedVariant.id);
+  offerHit.acceptedShopifyVariantPrices.push(copiedVariant.price);
+  offerHit.acceptedShopifyProductQuantities.push(quantity);
+
+  offerHit.markModified('originalShopifyProductIds');
+  offerHit.markModified('originalShopifyVariantIds');
+  offerHit.markModified('originalShopifyVariantPrices');
+  offerHit.markModified('acceptedShopifyProductIds');
+  offerHit.markModified('acceptedShopifyVariantIds');
+  offerHit.markModified('acceptedShopifyVariantPrices');
+  offerHit.markModified('acceptedShopifyProductQuantities');
 
   await offerHit.save();
 };

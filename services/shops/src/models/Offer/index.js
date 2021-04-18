@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const findOneRandom = require('./findOneRandom');
-const findOneRandomProduct = require('./findOneRandomProduct');
+const findRandomProducts = require('./findRandomProducts');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const trackView = require('./trackView');
 const toString = require('./toString');
@@ -120,8 +120,8 @@ schema.statics.findOneRandom = function (
   return findOneRandom(shop, triggerEvent, shopifyProductIds, ipAddress);
 };
 
-schema.methods.findOneRandomProduct = function () {
-  return findOneRandomProduct(this);
+schema.methods.findRandomProducts = function () {
+  return findRandomProducts(this);
 };
 
 schema.methods.calculateDiscountedPrice = function (price) {
@@ -159,11 +159,11 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
 };
 
 schema.methods.trackView = function (
-  shopifyProductId,
-  shopifyVariantId,
+  shopifyProductIds,
+  shopifyVariantIds,
   ipAddress
 ) {
-  return trackView(this, shopifyProductId, shopifyVariantId, ipAddress);
+  return trackView(this, shopifyProductIds, shopifyVariantIds, ipAddress);
 };
 
 schema.methods.toString = function () {

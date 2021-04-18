@@ -9,7 +9,7 @@ const handler = async (event, context) => {
     const { offerId } = event.pathParameters;
     const Offer = await models.get('Offer');
     const offer = await Offer.findById(offerId);
-    const { shopifyProductId, shopifyVariantId, ipAddress } = JSON.parse(
+    const { shopifyProductIds, shopifyVariantIds, ipAddress } = JSON.parse(
       event.body
     );
 
@@ -21,8 +21,8 @@ const handler = async (event, context) => {
     }
 
     const offerHit = await offer.trackView(
-      shopifyProductId,
-      shopifyVariantId,
+      shopifyProductIds,
+      shopifyVariantIds,
       ipAddress
     );
 

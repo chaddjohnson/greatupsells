@@ -23,7 +23,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const domain = URL.parse(event.headers.Origin).host;
+    const domain = new URL(event.headers.Origin).host;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),

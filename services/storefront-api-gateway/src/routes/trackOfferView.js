@@ -26,7 +26,7 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = URL.parse(event.headers.Origin).host;
+    const domain = new URL(event.headers.Origin).host;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
@@ -34,7 +34,7 @@ const handler = middy(async (event, context) => {
     ]);
     const shopId = shop && shop._id;
     const offerShopId = offer.shop;
-    const { shopifyProductId, shopifyVariantId } = JSON.parse(event.body);
+    const { shopifyProductIds, shopifyVariantIds } = JSON.parse(event.body);
 
     if (!shop || !offer) {
       return {
@@ -57,8 +57,8 @@ const handler = middy(async (event, context) => {
     }
 
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
-      shopifyProductId,
-      shopifyVariantId,
+      shopifyProductIds,
+      shopifyVariantIds,
       ipAddress
     });
 

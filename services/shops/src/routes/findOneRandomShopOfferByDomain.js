@@ -35,20 +35,13 @@ const handler = async (event, context) => {
       };
     }
 
-    const product = await offer.findOneRandomProduct();
-
-    if (!product) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
+    const offeredProducts = await offer.findRandomProducts();
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
         offer,
-        product
+        offeredProducts
       })
     };
   } catch (error) {

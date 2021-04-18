@@ -6,7 +6,7 @@ const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
 const findConversionsByOfferId = require('./findConversionsByOfferId');
 const findConversionRatesByOfferId = require('./findConversionRatesByOfferId');
-const trackOriginalProduct = require('./trackOriginalProduct');
+const trackViewedProducts = require('./trackViewedProducts');
 const trackAcceptedProduct = require('./trackAcceptedProduct');
 const trackAcceptance = require('./trackAcceptance');
 const trackConversion = require('./trackConversion');
@@ -32,13 +32,23 @@ const schema = new mongoose.Schema(
       required: true
     },
     strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
-    originalShopifyProductId: { type: Number, required: false },
-    originalShopifyVariantId: { type: Number, required: false },
-    originalShopifyVariantPrice: { type: Number, required: false },
-    acceptedShopifyProductId: { type: Number, required: false },
-    acceptedShopifyVariantId: { type: Number, required: false },
-    acceptedShopifyVariantPrice: { type: Number, required: false },
-    acceptedShopifyProductQuantity: { type: Number, required: false },
+
+    // References to viewed products.
+    viewedShopifyProductIds: [{ type: Number, required: false }],
+    viewedShopifyVariantIds: [{ type: Number, required: false }],
+    viewedShopifyVariantPrices: [{ type: Number, required: false }],
+
+    // References to original accepted products.
+    originalShopifyProductIds: [{ type: Number, required: false }],
+    originalShopifyVariantIds: [{ type: Number, required: false }],
+    originalShopifyVariantPrices: [{ type: Number, required: false }],
+
+    // References to actual accepted products (copies of originals with price adjustments).
+    acceptedShopifyProductIds: [{ type: Number, required: false }],
+    acceptedShopifyVariantIds: [{ type: Number, required: false }],
+    acceptedShopifyVariantPrices: [{ type: Number, required: false }],
+    acceptedShopifyProductQuantities: [{ type: Number, required: false }],
+
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',
@@ -102,11 +112,11 @@ schema.statics.findConversionRatesByOfferId = function (
   return findConversionRatesByOfferId(offerId, startAt, endAt);
 };
 
-schema.methods.trackOriginalProduct = function (
-  shopifyProductId,
-  shopifyVariantId
+schema.methods.trackViewedProducts = function (
+  shopifyProductIds,
+  shopifyVariantIds
 ) {
-  return trackOriginalProduct(this, shopifyProductId, shopifyVariantId);
+  return trackViewedProducts(this, shopifyProductIds, shopifyVariantIds);
 };
 
 schema.methods.trackAcceptedProduct = function (

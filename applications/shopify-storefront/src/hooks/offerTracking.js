@@ -13,8 +13,8 @@ const useOfferTracking = () => {
   const trackOfferView = async (
     offerId,
     triggerEvent,
-    shopifyProductId,
-    shopifyVariantId
+    shopifyProductIds,
+    shopifyVariantIds
   ) => {
     // Retrieve local event and offer tracking data.
     const offerViews = getCookie('upsellingOfferViews') || { events: [] };
@@ -32,8 +32,8 @@ const useOfferTracking = () => {
 
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
-      shopifyProductId,
-      shopifyVariantId
+      shopifyProductIds,
+      shopifyVariantIds
     });
 
     // Keep track of the newly-created offer hit.

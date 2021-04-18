@@ -3,7 +3,15 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled, { StyleSheetManager } from 'styled-components';
-import { useLiquid } from 'react-liquid';
+import { useLiquid, liquidEngine } from 'react-liquid';
+
+liquidEngine.registerFilter('addProductHandler', (offeredProduct, quantity) => {
+  const { shopifyProductData } = offeredProduct;
+  const shopifyProductId = shopifyProductData.id;
+  const shopifyVariantId = shopifyProductData.variants[0].id;
+
+  return `window.parent.OfferPopup.addProduct(${shopifyProductId}, ${shopifyVariantId}, ${quantity})`;
+});
 
 const Modal = styled(ReactModal)`
   position: ${(props) => (props.designMode ? 'static' : 'fixed')};
@@ -64,6 +72,7 @@ const OfferPopup = ({
   offer,
   triggerProduct,
   offeredProducts,
+  onAddProduct,
   onClose,
   onClick
 }) => {
@@ -73,24 +82,33 @@ const OfferPopup = ({
   const mountNode = doc?.body;
   const insertionTarget = useMemo(() => doc?.createElement('link'), [doc]);
 
-  const handleSubmit = (event) => {
+  const handleAddProduct = async (
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  ) => {
+    await onAddProduct(shopifyProductId, shopifyVariantId, quantity);
+  };
+
+  const handleSubmit = async (event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
     }
 
     event.preventDefault();
 
-    if (designMode) {
-      return;
-    }
+    // if (designMode) {
+    //   return;
+    // }
 
     // Collect form values.
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    // const form = event.target;
+    // const formData = new FormData(form);
+    // const data = Object.fromEntries(formData.entries());
 
     // TODO: Create data model for tracking submissions.
     // TODO: Save submission.
+    // await ...
   };
 
   const handleClose = () => {
@@ -127,6 +145,7 @@ const OfferPopup = ({
   );
 
   // Expose methods globally to enable themes to programmatically interface with popups.
+  window.OfferPopup.addProduct = handleAddProduct;
   window.OfferPopup.submit = handleSubmit;
   window.OfferPopup.close = handleClose;
 
@@ -209,10 +228,11 @@ const OfferPopup = ({
 OfferPopup.propTypes = {
   className: PropTypes.string,
   open: PropTypes.bool,
+  designMode: PropTypes.bool,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   offer: PropTypes.object.isRequired,
-  designMode: PropTypes.bool,
+  onAddProduct: PropTypes.func,
   onClose: PropTypes.func,
   onClick: PropTypes.func
 };
@@ -220,6 +240,9 @@ OfferPopup.propTypes = {
 OfferPopup.defaultProps = {
   open: false,
   designMode: false,
+  triggerProduct: {},
+  offeredProducts: [],
+  onAddProduct: () => {},
   onClose: () => {}
 };
 

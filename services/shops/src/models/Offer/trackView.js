@@ -3,8 +3,8 @@ const mongodbClient = require('../mongodbClient');
 
 const trackView = async (
   offer,
-  shopifyProductId,
-  shopifyVariantId,
+  shopifyProductIds = [],
+  shopifyVariantIds = [],
   ipAddress
 ) => {
   await offer.execPopulate('shop');
@@ -31,8 +31,11 @@ const trackView = async (
 
       await offerHit.save();
 
-      if (shopifyProductId && shopifyVariantId) {
-        await offerHit.trackOriginalProduct(shopifyProductId, shopifyVariantId);
+      if (shopifyProductIds.length && shopifyVariantIds.length) {
+        await offerHit.trackViewedProducts(
+          shopifyProductIds,
+          shopifyVariantIds
+        );
       }
 
       // Increment offer view count.

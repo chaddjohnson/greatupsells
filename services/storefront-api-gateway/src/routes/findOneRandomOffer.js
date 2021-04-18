@@ -31,7 +31,7 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = URL.parse(event.headers.Origin).host;
+    const domain = new URL(event.headers.Origin).host;
     const { event: triggerEvent } = event.queryStringParameters || {};
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
 
@@ -46,12 +46,12 @@ const handler = middy(async (event, context) => {
 
     // Look up offer by domain to reduce this method's latency. Offer and product
     // are combined into one response to reduce latency.
-    const [shop, { offer, product }] = await Promise.all([
+    const [shop, { offer, offeredProducts }] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
       httpClient.get(`/shops/domain/${domain}/offers/random?${offerParams}`)
     ]);
 
-    if (!shop || !offer || !product) {
+    if (!shop || !offer) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
@@ -62,7 +62,7 @@ const handler = middy(async (event, context) => {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
         offer,
-        product
+        offeredProducts
       })
     };
   } catch (error) {
