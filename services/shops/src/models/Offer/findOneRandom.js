@@ -64,16 +64,20 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   const criteria = {
     shop: shop._id,
     triggerEvent,
-    $or: [
+    $and: [
       {
-        'triggerProducts.shopifyProductId': {
-          $in: shopifyProductIds
-        }
-      },
-      {
-        'triggerCollections.shopifyCollectionId': {
-          $in: shopifyCollectionIds
-        }
+        $or: [
+          {
+            'triggerProducts.shopifyProductId': {
+              $in: shopifyProductIds
+            }
+          },
+          {
+            'triggerCollections.shopifyCollectionId': {
+              $in: shopifyCollectionIds
+            }
+          }
+        ]
       }
     ],
     enabled: true
@@ -82,10 +86,12 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData) {
-    criteria.$or = [
-      { enableGeotargeting: false },
-      { geotargetingCountries: geoData.country }
-    ];
+    criteria.$and.push({
+      $or: [
+        { enableGeotargeting: false },
+        { geotargetingCountries: geoData.country }
+      ]
+    });
   }
 
   // Randomly select an offer having the trigger event as a trigger AND [one of
