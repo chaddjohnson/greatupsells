@@ -6,7 +6,7 @@ const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
 const findConversionsByOfferId = require('./findConversionsByOfferId');
 const findConversionRatesByOfferId = require('./findConversionRatesByOfferId');
-const trackViewedProducts = require('./trackViewedProducts');
+const trackOfferedProducts = require('./trackOfferedProducts');
 const trackAcceptedProduct = require('./trackAcceptedProduct');
 const trackAcceptance = require('./trackAcceptance');
 const trackConversion = require('./trackConversion');
@@ -37,7 +37,7 @@ const schema = new mongoose.Schema(
       required: true
     },
     triggerShopifyProductId: { type: Number, required: false },
-    viewedProducts: [
+    offeredProducts: [
       {
         shopifyProductId: { type: Number, required: true },
         shopifyVariantId: { type: Number, required: true },
@@ -122,11 +122,11 @@ schema.statics.findConversionRatesByOfferId = function (
   return findConversionRatesByOfferId(offerId, startAt, endAt);
 };
 
-schema.methods.trackViewedProducts = function (
+schema.methods.trackOfferedProducts = function (
   shopifyProductIds,
   shopifyVariantIds
 ) {
-  return trackViewedProducts(this, shopifyProductIds, shopifyVariantIds);
+  return trackOfferedProducts(this, shopifyProductIds, shopifyVariantIds);
 };
 
 schema.methods.trackAcceptedProduct = function (

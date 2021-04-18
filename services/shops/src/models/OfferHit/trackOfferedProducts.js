@@ -48,7 +48,7 @@ const findVariants = async (products, shopifyVariantIds) => {
   );
 };
 
-const trackViewedProducts = async (
+const trackOfferedProducts = async (
   offerHit,
   shopifyProductIds = [],
   shopifyVariantIds = []
@@ -59,15 +59,15 @@ const trackViewedProducts = async (
   const productCount = shopifyProductIds.length;
 
   // Track the viewed product data for the offer hit.
-  offerHit.viewedProducts = [...Array(productCount)].map((_, index) => ({
+  offerHit.offeredProducts = [...Array(productCount)].map((_, index) => ({
     shopifyProductId: shopifyProductIds[index],
     shopifyVariantId: shopifyVariantIds[index],
     price: variantPrices[index]
   }));
 
-  offerHit.markModified('viewedProducts');
+  offerHit.markModified('offeredProducts');
 
   await offerHit.save();
 };
 
-module.exports = trackViewedProducts;
+module.exports = trackOfferedProducts;

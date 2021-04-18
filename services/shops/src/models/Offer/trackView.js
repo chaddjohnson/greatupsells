@@ -34,7 +34,7 @@ const trackView = async (
       await offerHit.save();
 
       if (shopifyProductIds.length && shopifyVariantIds.length) {
-        await offerHit.trackViewedProducts(
+        await offerHit.trackOfferedProducts(
           shopifyProductIds,
           shopifyVariantIds
         );
