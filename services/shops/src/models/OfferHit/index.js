@@ -26,7 +26,11 @@ const schema = new mongoose.Schema(
     },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
     shopifyShopId: { type: Number, required: true },
-    strategy: { type: String, required: true, enum: ['UPSELL', 'CROSS_SELL'] },
+    strategy: {
+      type: String,
+      required: true,
+      enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
+    },
     triggerEvent: {
       type: String,
       enum: ['ADD', 'CART', 'LOAD', 'EXIT'],
