@@ -54,12 +54,14 @@ const OfferCreatePage = () => {
   return (
     <Page title="Create offer">
       <PageTitleBar />
-      <OfferForm
-        initialValues={initialOffer}
-        currency={shop?.currency}
-        onSubmit={createOffer}
-        onCancel={handleCancel}
-      />
+      {shop && (
+        <OfferForm
+          initialValues={initialOffer}
+          shop={shop}
+          onSubmit={createOffer}
+          onCancel={handleCancel}
+        />
+      )}
     </Page>
   );
 };

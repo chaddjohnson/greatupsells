@@ -28,7 +28,6 @@ import {
   Context as AppBridgeContext,
   ResourcePicker
 } from '@shopify/app-bridge-react';
-import styled from 'styled-components';
 import moment from 'moment-timezone';
 import { usePopupThemes } from '../../hooks';
 import ManagedResourceList from './ManagedResourceList';
@@ -36,6 +35,7 @@ import DateTimePicker from '../DateTimePicker';
 import CountryAutocomplete from './CountryAutocomplete';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
+import dummyData from './dummyData.json';
 
 const { OfferPopup } =
   (typeof window !== 'undefined' &&
@@ -45,23 +45,7 @@ const { OfferPopup } =
 const timezone = moment.tz.guess();
 const timezoneAbbreviation = moment.tz(timezone).format('z');
 
-const product = {
-  title: 'Example Product',
-  price: 14.99,
-  salePrice: 12.99,
-  url: '/products/example-product'
-  // ...
-};
-
-const OfferPopupContainer = styled.div`
-  > div {
-    position: static;
-  }
-
-  min-height: 360px;
-`;
-
-const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
+const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
 
   const [submitted, setSubmitted] = useState(false);
@@ -75,10 +59,10 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
     triggerCollectionPickerOpen,
     setTriggerCollectionPickerOpen
   ] = useState(false);
-  const [offerPopupContainer, setOfferPopupContainer] = useState(null);
   const [previewActive, setPreviewActive] = useState(false);
 
   const { popupThemes } = usePopupThemes();
+  const { currency } = shop;
 
   let contextualSaveBar = null;
 
@@ -589,22 +573,19 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
             theme={offer.popupTheme}
             themes={popupThemes}
             previewElement={
-              <>
-                <OfferPopupContainer ref={setOfferPopupContainer} />
-                {offerPopupContainer && (
-                  <OfferPopup
-                    appRoot="#__next"
-                    renderTo={!previewActive && offerPopupContainer}
-                    open={true}
-                    theme={offer.popupTheme}
-                    offer={offer}
-                    product={product}
-                    onClose={() => setPreviewActive(false)}
-                    onClick={() => setPreviewActive(true)}
-                  />
-                )}
-              </>
+              <OfferPopup
+                open={true}
+                designMode={!previewActive}
+                shop={shop}
+                theme={offer.popupTheme}
+                offer={offer}
+                triggerProduct={dummyData.triggerProduct}
+                offeredProducts={dummyData.offeredProducts}
+                onClose={() => setPreviewActive(false)}
+                onClick={() => setPreviewActive(true)}
+              />
             }
+            onPreview={() => setPreviewActive(true)}
             onChange={(value) => popupTheme.onChange(value)}
           />
           <Card title="Active dates" sectioned>
@@ -819,14 +800,13 @@ const OfferForm = ({ initialValues, currency, onSubmit, onCancel }) => {
 
 OfferForm.propTypes = {
   initialValues: PropTypes.object,
-  currency: PropTypes.string,
+  shop: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func
 };
 
 OfferForm.defaultProps = {
   initialValues: {},
-  currency: 'USD',
   onSubmit: () => {},
   onCancel: () => {}
 };

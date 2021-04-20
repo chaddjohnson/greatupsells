@@ -37,7 +37,7 @@ const EditPopupThemePage = () => {
           <Hidden xsDown>
             <Breadcrumbs>
               <Link href="/popup-themes">Popup Themes</Link>
-              <span>New Popup Theme</span>
+              <span>Edit Popup Theme</span>
             </Breadcrumbs>
           </Hidden>
           <Hidden smUp>

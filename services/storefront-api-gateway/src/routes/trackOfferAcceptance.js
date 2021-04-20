@@ -1,4 +1,4 @@
-const URL = require('url');
+const { URL } = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');

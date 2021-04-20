@@ -16,6 +16,7 @@
     "style-loader": "^1.2.1"
   },
   "peerDependencies": {
+    "@neatowebsolutions/upselling-react-hooks": "^0.0.0",
     "prop-types": "^15.7.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

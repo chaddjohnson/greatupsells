@@ -23,53 +23,26 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const ipAddress =
-      event.requestContext.identity.sourceIp ||
-      event.headers['X-Forwarded-For'];
     const domain = new URL(event.headers.Origin).host;
-    const { offerId } = event.pathParameters;
-    const [shop, offer] = await Promise.all([
-      httpClient.get(`/shops/domain/${domain}`),
-      httpClient.get(`/offers/${offerId}`)
-    ]);
-    const shopId = shop && shop._id;
-    const offerShopId = offer.shop;
-    const {
-      triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds
-    } = JSON.parse(event.body);
+    const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    if (!shop || !offer) {
+    if (!shop) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    // Only allow tracking for offers belonging to the requestor domain.
-    if (shopId !== offerShopId) {
-      await logger.warn(
-        `Unauthorized view tracking attempt for offer ${offerId} from domain ${domain}`,
-        event
-      );
-
-      return {
-        statusCode: StatusCodes.FORBIDDEN,
-        body: ReasonPhrases.FORBIDDEN
-      };
-    }
-
-    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
-      triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds,
-      ipAddress
-    });
+    const { countryCode, currency, locale, timezone } = shop;
 
     return {
-      statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offerHit)
+      statusCode: StatusCodes.OK,
+      body: JSON.stringify({
+        countryCode,
+        currency,
+        locale,
+        timezone
+      })
     };
   } catch (error) {
     await logger.error(`Error requesting shop`, error, event);

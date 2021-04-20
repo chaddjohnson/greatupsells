@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { useOfferTracking, useRandomOffer, useShopifyAjaxApi } from '../hooks';
+import {
+  useOfferTracking,
+  useRandomOffer,
+  useShop,
+  useShopifyAjaxApi
+} from '../hooks';
 
 const triggerEvent = 'ADD';
 
@@ -22,6 +27,7 @@ const ProductOffer = () => {
     event: triggerEvent,
     shopifyProductIds
   });
+  const { shop } = useShop();
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -88,7 +94,7 @@ const ProductOffer = () => {
     });
   }, [onProductAddedToShopifyCart]);
 
-  if (!offer) {
+  if (!offer || !shop) {
     return null;
   }
 
@@ -96,6 +102,7 @@ const ProductOffer = () => {
     <OfferPopup
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
+      shop={shop}
       theme={offer.popupTheme}
       offer={offer}
       triggerProduct={triggerProduct}

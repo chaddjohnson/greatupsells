@@ -40,6 +40,14 @@ functions:
           path: /offers/random
           method: get
           cors: true
+  findShop:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShop.handler
+    events:
+      - http:
+          path: /shop
+          method: get
+          cors: true
   trackOfferAcceptance:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler

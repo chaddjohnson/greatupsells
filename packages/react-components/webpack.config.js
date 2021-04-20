@@ -32,5 +32,11 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new ESLintPlugin()
   ],
-  externals: ['prop-types', 'react', 'react-dom', 'styled-components']
+  externals: [
+    '@neatowebsolutions/upselling-react-hooks',
+    'prop-types',
+    'react',
+    'react-dom',
+    'styled-components'
+  ]
 };

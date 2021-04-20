@@ -1,14 +1,62 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled, { StyleSheetManager } from 'styled-components';
 import { useLiquid, liquidEngine } from 'react-liquid';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+
+const initialIframeHeight = 1000;
+
+const calculateDiscountedPrice = (offer, price) => {
+  // Shopify stores prices as strings. Ensure it is a number here.
+  price = parseFloat(price);
+
+  if (!offer) {
+    throw new Error('`offer` must be provided');
+  }
+  if (typeof price !== 'number' || Number.isNaN(price)) {
+    throw new Error('`price` must be a number');
+  }
+
+  let discountedPrice = price;
+
+  switch (offer.discountType) {
+    case 'PERCENTAGE':
+      // Reduce the price by the discount amount (a percentage).
+      discountedPrice = price - price * offer.discountAmount;
+      break;
+
+    case 'USD':
+      // Reduce the price by the discount amount (a monetary amount).
+      discountedPrice = price - offer.discountAmount;
+      break;
+
+    case 'SET_PRICE':
+      // Use the discount amount as the price.
+      discountedPrice = offer.discountAmount;
+      break;
+
+    case 'NO_DISCOUNT':
+    default:
+      // No discount, so adjust nothing.
+      break;
+  }
+
+  // Round price. Reference: https://stackoverflow.com/a/11832950/83897.
+  discountedPrice = Math.round((discountedPrice + Number.EPSILON) * 100) / 100;
+
+  // Safeguard against the calculated price being negative.
+  return Math.max(discountedPrice, 0);
+};
+
+const getThumbnailImageUrl = (url) => {
+  return url && url.replace(/\.(jpg|png)(\?|$)/i, '_400x.$1$2');
+};
 
 liquidEngine.registerFilter('addProductHandler', (offeredProduct, quantity) => {
-  const { shopifyProductData } = offeredProduct;
-  const shopifyProductId = shopifyProductData.id;
-  const shopifyVariantId = shopifyProductData.variants[0].id;
+  const shopifyProductId = offeredProduct.id;
+  const shopifyVariantId = offeredProduct.variants[0]?.id;
 
   return `window.parent.OfferPopup.addProduct(${shopifyProductId}, ${shopifyVariantId}, ${quantity})`;
 });
@@ -69,6 +117,7 @@ const OfferPopup = ({
   open,
   designMode,
   theme,
+  shop,
   offer,
   triggerProduct,
   offeredProducts,
@@ -77,10 +126,67 @@ const OfferPopup = ({
   onClick
 }) => {
   const [iframeRef, setIframeRef] = useState(null);
+  const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
+  const [modalRef, setModalRef] = useState(null);
 
-  const doc = iframeRef?.contentWindow?.document;
-  const mountNode = doc?.body;
-  const insertionTarget = useMemo(() => doc?.createElement('link'), [doc]);
+  const { locale, countryCode, currency } = shop;
+  const { formatCurrency } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+
+  const iframeDocument = iframeRef?.contentWindow?.document;
+  const mountNode = iframeDocument?.body;
+  const insertionTarget = useMemo(() => iframeDocument?.createElement('link'), [
+    iframeDocument
+  ]);
+
+  const translateProduct = useCallback(
+    (product = {}) => {
+      const { shopifyProductData } = product;
+
+      if (!shopifyProductData) {
+        return;
+      }
+
+      const imagesById =
+        shopifyProductData.images?.reduce(
+          (map, image) => ({ ...map, [image.id]: image }),
+          {}
+        ) || {};
+
+      return {
+        id: shopifyProductData.id,
+        title: shopifyProductData.title,
+        url: `/products/${shopifyProductData.handle}`,
+        image: {
+          src: getThumbnailImageUrl(shopifyProductData.image?.src),
+          alt: shopifyProductData.image?.alt || shopifyProductData.title
+        },
+        variants: shopifyProductData.variants?.map((variant) => ({
+          id: variant.id,
+          title: variant.title,
+          price: formatCurrency(variant.price),
+          salePrice: formatCurrency(
+            calculateDiscountedPrice(offer, parseFloat(variant.price))
+          ),
+          sku: variant.sku,
+          image: {
+            src: getThumbnailImageUrl(
+              imagesById[variant.image_id]?.src || shopifyProductData.image?.src
+            ),
+            alt:
+              imagesById[variant.image_id]?.alt ||
+              shopifyProductData.image?.alt ||
+              shopifyProductData.title
+          },
+          inventory: variant.inventory_quantity
+        }))
+      };
+    },
+    [offer, formatCurrency]
+  );
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -130,11 +236,22 @@ const OfferPopup = ({
     [theme.variables]
   );
 
+  const translatedTriggerProduct = useMemo(() => {
+    if (triggerProduct) {
+      return translateProduct(triggerProduct);
+    }
+  }, [translateProduct, triggerProduct]);
+  const translatedOfferedProducts = useMemo(() => {
+    if (offeredProducts) {
+      return offeredProducts.map(translateProduct);
+    }
+  }, [translateProduct, offeredProducts]);
+
   // Generate the markup.
   const { markup } = useLiquid(theme.template, {
     ...mappedVariables,
-    triggerProduct,
-    offeredProducts,
+    triggerProduct: translatedTriggerProduct,
+    offeredProducts: translatedOfferedProducts,
     submitHandler: 'window.parent.OfferPopup.submit(event)',
     closeHandler: 'window.parent.OfferPopup.close()'
   });
@@ -153,11 +270,43 @@ const OfferPopup = ({
 
   useEffect(() => {
     if (insertionTarget) {
-      doc.head.append(insertionTarget);
+      iframeDocument.head.append(insertionTarget);
     }
-  }, [doc, insertionTarget]);
+  }, [iframeDocument, insertionTarget]);
 
-  if (!offer) {
+  useEffect(() => {
+    if (!iframeDocument || !modalRef) {
+      return;
+    }
+
+    setTimeout(async () => {
+      // Wait for all images to load so that we can get an accurate measure of
+      // the content height.
+      await Promise.all(
+        Array.from(iframeDocument.images).map((image) => {
+          if (image.complete) {
+            return Promise.resolve(image.naturalHeight !== 0);
+          }
+          return new Promise((resolve) => {
+            image.addEventListener('load', () => resolve());
+            image.addEventListener('error', () => resolve());
+          });
+        })
+      );
+
+      // Workaround: Set the iframe height to some large -- taller than the content
+      // will likely actually be. Do so because `offsetHeight` does not reflect the
+      // iframe's content height unless the iframe is actualy tall enough to
+      // accommodate the content.
+      setIframeHeight(initialIframeHeight);
+
+      // Set the iframe height to approximately the modal content height. Do so via
+      // a timeout to allow the iframe height to temporarily increase per above.
+      setTimeout(() => setIframeHeight(modalRef.offsetHeight - 10), 0);
+    }, 0);
+  }, [iframeDocument, modalRef, theme.template]);
+
+  if (!offer || !markup) {
     return null;
   }
 
@@ -168,13 +317,15 @@ const OfferPopup = ({
       title="Preview"
       ref={setIframeRef}
       style={{
-        position: !designMode ? 'fixed' : 'static',
+        border: 0,
+        position: designMode ? 'static' : 'fixed',
         top: 0,
         bottom: 0,
         left: 0,
         right: 0,
-        width: '100%',
-        height: '100%',
+        width: designMode ? '100%' : '100vw',
+        height: designMode ? '100%' : '100vh',
+        minHeight: `${iframeHeight}px`,
         zIndex: 2147483647
       }}
     >
@@ -193,6 +344,7 @@ const OfferPopup = ({
             />
             <StyleSheetManager target={insertionTarget}>
               <Modal
+                contentRef={setModalRef}
                 closeTimeoutMS={200}
                 parentSelector={() => mountNode}
                 isOpen={open}
@@ -231,6 +383,7 @@ OfferPopup.propTypes = {
   designMode: PropTypes.bool,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   onAddProduct: PropTypes.func,
   onClose: PropTypes.func,

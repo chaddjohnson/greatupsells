@@ -22,7 +22,7 @@ const trackAcceptedProduct = async (
     shopifyProductData &&
     shopifyProductData.variants.find(({ id }) => id === shopifyVariantId);
 
-  const originalVariantPrice = variant.price;
+  const originalVariantPrice = parseFloat(variant.price);
 
   // Keep track of the variant position.
   const variantIndex =
@@ -43,11 +43,7 @@ const trackAcceptedProduct = async (
 
   // Calculate the price discount for the variant based on the offer. Set this
   // value prior to copying the product so it is reflected in the copy.
-  variant.price = offer.calculateDiscountedPrice(variant.price);
-
-  // Use the original variant price for the Compare At price. Set this value
-  // prior to copying the product so it is reflected in the copy.
-  variant.compare_at_price = variant.price;
+  variant.price = offer.calculateDiscountedPrice(parseFloat(variant.price));
 
   try {
     // Copy the product (in Shopify and saving locally) to allow modification of
@@ -80,7 +76,7 @@ const trackAcceptedProduct = async (
   offerHit.acceptedProducts.push({
     shopifyProductId: copiedProduct.shopifyProductId,
     shopifyVariantId: copiedVariant.id,
-    price: copiedVariant.price,
+    price: parseFloat(copiedVariant.price),
     quantity
   });
 

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { useOfferTracking, useRandomOffer, useShopifyAjaxApi } from '../hooks';
+import {
+  useOfferTracking,
+  useRandomOffer,
+  useShop,
+  useShopifyAjaxApi
+} from '../hooks';
 
 const triggerEvent = 'CART';
 
@@ -19,6 +24,7 @@ const CartOffer = () => {
     event: triggerEvent,
     shopifyProductIds
   });
+  const { shop } = useShop();
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -84,7 +90,7 @@ const CartOffer = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!offer) {
+  if (!offer || !shop) {
     return null;
   }
 
@@ -92,6 +98,7 @@ const CartOffer = () => {
     <OfferPopup
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
+      shop={shop}
       theme={offer.popupTheme}
       offer={offer}
       triggerProduct={triggerProduct}

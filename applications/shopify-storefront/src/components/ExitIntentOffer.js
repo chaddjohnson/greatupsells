@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { useOfferTracking, useRandomOffer, useShopifyAjaxApi } from '../hooks';
+import {
+  useOfferTracking,
+  useRandomOffer,
+  useShop,
+  useShopifyAjaxApi
+} from '../hooks';
 
 const triggerEvent = 'EXIT';
 
@@ -12,6 +17,7 @@ const ExitIntentOffer = () => {
   const { offer, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent
   });
+  const { shop } = useShop();
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -104,13 +110,14 @@ const ExitIntentOffer = () => {
     };
   }, [handleMouseOut]);
 
-  if (!offer) {
+  if (!offer || !shop) {
     return null;
   }
 
   return (
     <OfferPopup
       open={!!offer && popupOpen}
+      shop={shop}
       theme={offer.popupTheme}
       offer={offer}
       offeredProducts={offeredProducts}

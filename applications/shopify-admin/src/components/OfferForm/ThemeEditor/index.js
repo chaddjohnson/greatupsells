@@ -4,7 +4,14 @@ import { Card, ButtonGroup, Button, Heading, Stack } from '@shopify/polaris';
 import ThemeSelector from './ThemeSelector';
 import VariablesEditor from './VariablesEditor';
 
-const ThemeEditor = ({ type, theme, themes, previewElement, onChange }) => {
+const ThemeEditor = ({
+  type,
+  theme,
+  themes,
+  previewElement,
+  onPreview,
+  onChange
+}) => {
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
 
@@ -31,6 +38,9 @@ const ThemeEditor = ({ type, theme, themes, previewElement, onChange }) => {
               </ButtonGroup>
             </Stack>
             {previewElement}
+            <Button fullWidth onClick={onPreview}>
+              Preview
+            </Button>
           </Stack>
         </Card.Section>
       </Card>
@@ -57,12 +67,14 @@ ThemeEditor.propTypes = {
   theme: PropTypes.object,
   themes: PropTypes.arrayOf(PropTypes.object),
   previewElement: PropTypes.node,
+  onPreview: PropTypes.func,
   onChange: PropTypes.func
 };
 
 ThemeEditor.defaultProps = {
   theme: {},
   themes: [],
+  onPreview: () => {},
   onChange: () => {}
 };
 

@@ -1,0 +1,120 @@
+{
+  "triggerProduct": {
+    "shopifyProductData": {
+      "id": 4552007483437,
+      "title": "Example Shoes",
+      "handle": "example-shoes",
+      "variants": [
+        {
+          "id": 32183839457325,
+          "title": "Default Title",
+          "price": "34.99",
+          "sku": "FH-1234",
+          "image_id": null,
+          "inventory_quantity": -1
+        }
+      ],
+      "images": [
+        {
+          "id": 14485486534701,
+          "alt": null,
+          "src": "/images/shoes.jpg"
+        }
+      ],
+      "image": {
+        "id": 14485486534701,
+        "alt": null,
+        "src": "/images/shoes.jpg"
+      }
+    }
+  },
+  "offeredProducts": [
+    {
+      "shopifyProductData": {
+        "id": 4552007483437,
+        "title": "Example Shirt",
+        "handle": "example-shirt",
+        "variants": [
+          {
+            "id": 32183839457325,
+            "title": "Default Title",
+            "price": "34.99",
+            "sku": "ESH1",
+            "image_id": null,
+            "inventory_quantity": -1
+          }
+        ],
+        "images": [
+          {
+            "id": 14485486534701,
+            "alt": null,
+            "src": "/images/shirt.jpg"
+          }
+        ],
+        "image": {
+          "id": 14485486534701,
+          "alt": null,
+          "src": "/images/shirt.jpg"
+        }
+      }
+    },
+    {
+      "shopifyProductData": {
+        "id": 4474376290349,
+        "title": "Example Socks",
+        "handle": "example-socks",
+        "variants": [
+          {
+            "id": 31792799842349,
+            "title": "Default Title",
+            "price": "129.99",
+            "sku": "ESK1",
+            "image_id": null,
+            "inventory_quantity": -1
+          }
+        ],
+        "images": [
+          {
+            "id": 14484545339437,
+            "alt": null,
+            "src": "/images/socks.jpg"
+          }
+        ],
+        "image": {
+          "id": 14484545339437,
+          "alt": null,
+          "src": "/images/socks.jpg"
+        }
+      }
+    },
+    {
+      "shopifyProductData": {
+        "id": 6547332923437,
+        "title": "Example Hat",
+        "handle": "example-hat",
+        "variants": [
+          {
+            "id": 39286226485293,
+            "title": "Default Title",
+            "price": "12.34",
+            "sku": "EHT1",
+            "image_id": null,
+            "inventory_quantity": 10
+          }
+        ],
+        "images": [
+          {
+            "id": 28000928563245,
+            "alt": null,
+            "src": "/images/hat.jpg"
+          }
+        ],
+        "image": {
+          "id": 28000928563245,
+          "alt": null,
+          "src": "/images/hat.jpg"
+        }
+      }
+    }
+  ]
+}

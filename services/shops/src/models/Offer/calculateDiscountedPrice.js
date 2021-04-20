@@ -1,9 +1,11 @@
 const calculateDiscountedPrice = (offer, price) => {
+  // Shopify stores prices as strings. Ensure it is a number here.
+  price = parseFloat(price);
+
   if (!offer) {
     throw new Error('`offer` must be provided');
   }
-
-  if (typeof price !== 'number') {
+  if (typeof price !== 'number' || Number.isNaN(price)) {
     throw new Error('`price` must be a number');
   }
 
@@ -12,7 +14,7 @@ const calculateDiscountedPrice = (offer, price) => {
   switch (offer.discountType) {
     case 'PERCENTAGE':
       // Reduce the price by the discount amount (a percentage).
-      discountedPrice = price * offer.discountAmount;
+      discountedPrice = price - price * offer.discountAmount;
       break;
 
     case 'USD':
@@ -31,12 +33,11 @@ const calculateDiscountedPrice = (offer, price) => {
       break;
   }
 
-  // Safeguard against the calculated price being below zero.
-  if (discountedPrice < 0) {
-    discountedPrice = 0;
-  }
+  // Round price. Reference: https://stackoverflow.com/a/11832950/83897.
+  discountedPrice = Math.round((discountedPrice + Number.EPSILON) * 100) / 100;
 
-  return discountedPrice;
+  // Safeguard against the calculated price being negative.
+  return Math.max(discountedPrice, 0);
 };
 
 module.exports = calculateDiscountedPrice;

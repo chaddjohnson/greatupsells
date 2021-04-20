@@ -142,12 +142,14 @@ const OfferEditPage = () => {
     >
       <Page title={offer?.name} secondaryActions={secondaryActions}>
         <PageTitleBar />
-        <OfferForm
-          initialValues={offer}
-          currency={shop?.currency}
-          onSubmit={updateOffer}
-          onCancel={handleCancel}
-        />
+        {shop && offer && (
+          <OfferForm
+            initialValues={offer}
+            shop={shop}
+            onSubmit={updateOffer}
+            onCancel={handleCancel}
+          />
+        )}
       </Page>
     </Loader>
   );
