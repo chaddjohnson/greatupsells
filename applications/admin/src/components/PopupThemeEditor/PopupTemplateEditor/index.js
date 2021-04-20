@@ -20,9 +20,8 @@ const useStyles = makeStyles((theme) => ({
       height: '100%'
     }
   },
-  paper: {
+  previewPaper: {
     width: '100%',
-    height: '50vh',
     minHeight: 500,
 
     [theme.breakpoints.up('lg')]: {
@@ -68,7 +67,7 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
         />
       </Grid>
       <Grid className={classes.gridItem} item xs={12} sm={6}>
-        <Paper className={classes.paper} variant="outlined" square>
+        <Paper className={classes.previewPaper} variant="outlined" square>
           <Preview className={classes.preview} popupTheme={popupTheme} />
         </Paper>
       </Grid>
