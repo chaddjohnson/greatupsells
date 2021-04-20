@@ -279,6 +279,11 @@ const OfferPopup = ({
       return;
     }
 
+    // This only applies to design mode.
+    if (!designMode) {
+      return;
+    }
+
     setTimeout(async () => {
       // Wait for all images to load so that we can get an accurate measure of
       // the content height.
@@ -304,7 +309,7 @@ const OfferPopup = ({
       // a timeout to allow the iframe height to temporarily increase per above.
       setTimeout(() => setIframeHeight(modalRef.offsetHeight - 10), 0);
     }, 0);
-  }, [iframeDocument, modalRef, theme.template]);
+  }, [iframeDocument, modalRef, theme.template, designMode]);
 
   if (!offer || !markup) {
     return null;
