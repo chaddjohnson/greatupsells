@@ -69,7 +69,7 @@ const handler = middy(async (event, context) => {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error requesting shop`, error, event);
+    await logger.error(`Error tracking offer acceptance`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

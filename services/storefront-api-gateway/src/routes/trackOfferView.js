@@ -72,7 +72,7 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    await logger.error(`Error requesting shop`, error, event);
+    await logger.error(`Error tracking offer view`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
