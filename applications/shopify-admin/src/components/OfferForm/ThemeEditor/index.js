@@ -39,7 +39,7 @@ const ThemeEditor = ({
             </Stack>
             {previewElement}
             <Button fullWidth onClick={onPreview}>
-              Preview
+              Preview (full size)
             </Button>
           </Stack>
         </Card.Section>
