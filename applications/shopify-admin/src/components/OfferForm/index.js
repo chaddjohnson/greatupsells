@@ -29,6 +29,7 @@ import {
   ResourcePicker
 } from '@shopify/app-bridge-react';
 import moment from 'moment-timezone';
+import styled from 'styled-components';
 import { usePopupThemes } from '../../hooks';
 import ManagedResourceList from './ManagedResourceList';
 import DateTimePicker from '../DateTimePicker';
@@ -44,6 +45,10 @@ const { OfferPopup } =
 
 const timezone = moment.tz.guess();
 const timezoneAbbreviation = moment.tz(timezone).format('z');
+
+const OfferPopupContainer = styled.div`
+  min-height: 300px;
+`;
 
 const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
   const app = useContext(AppBridgeContext);
@@ -573,17 +578,19 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
             theme={offer.popupTheme}
             themes={popupThemes}
             previewElement={
-              <OfferPopup
-                open={true}
-                designMode={!previewActive}
-                shop={shop}
-                theme={offer.popupTheme}
-                offer={offer}
-                triggerProduct={dummyData.triggerProduct}
-                offeredProducts={dummyData.offeredProducts}
-                onClose={() => setPreviewActive(false)}
-                onClick={() => setPreviewActive(true)}
-              />
+              <OfferPopupContainer>
+                <OfferPopup
+                  open={true}
+                  designMode={!previewActive}
+                  shop={shop}
+                  theme={offer.popupTheme}
+                  offer={offer}
+                  triggerProduct={dummyData.triggerProduct}
+                  offeredProducts={dummyData.offeredProducts}
+                  onClose={() => setPreviewActive(false)}
+                  onClick={() => setPreviewActive(true)}
+                />
+              </OfferPopupContainer>
             }
             onPreview={() => setPreviewActive(true)}
             onChange={(value) => popupTheme.onChange(value)}
