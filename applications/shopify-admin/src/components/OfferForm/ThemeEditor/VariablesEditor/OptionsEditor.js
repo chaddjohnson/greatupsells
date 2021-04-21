@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import {
   Card,
   FormLayout,
-  TextField,
+  Checkbox,
   Subheading,
   TextStyle,
   Stack
 } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 
-const ContentEditor = ({ variables, onChange }) => {
+const OptionsEditor = ({ variables, onChange }) => {
   const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
     variables
   ]);
@@ -26,12 +26,13 @@ const ContentEditor = ({ variables, onChange }) => {
           <Card sectioned>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (
-                <TextField
+                <Checkbox
                   key={variableIndex}
-                  type="text"
                   label={variable.label}
-                  value={variable.value}
-                  onChange={(value) => onChange(variable.name, value)}
+                  checked={variable.value === 'true'}
+                  onChange={(value) =>
+                    onChange(variable.name, value.toString())
+                  }
                 />
               ))}
             </FormLayout>
@@ -42,14 +43,14 @@ const ContentEditor = ({ variables, onChange }) => {
   );
 };
 
-ContentEditor.propTypes = {
+OptionsEditor.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
 };
 
-ContentEditor.defaultProps = {
+OptionsEditor.defaultProps = {
   variables: [],
   onChange: () => {}
 };
 
-export default ContentEditor;
+export default OptionsEditor;

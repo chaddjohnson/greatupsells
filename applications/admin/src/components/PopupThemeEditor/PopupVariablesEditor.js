@@ -165,6 +165,7 @@ const PopupVariablesEditor = ({ popupTheme, onChange }) => {
                         <MenuItem value="color">Color</MenuItem>
                         <MenuItem value="font">Font</MenuItem>
                         <MenuItem value="fontSize">Font Size</MenuItem>
+                        <MenuItem value="option">Option</MenuItem>
                       </Select>
                     </FormControl>
                   </TableCell>

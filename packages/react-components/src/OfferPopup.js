@@ -227,9 +227,9 @@ const OfferPopup = ({
   const mappedVariables = useMemo(
     () =>
       theme.variables.reduce(
-        (map, { name, value }) => ({
+        (map, { name, value, type }) => ({
           ...map,
-          [name]: value
+          [name]: (type === 'option' && value === 'true') || value
         }),
         {}
       ),

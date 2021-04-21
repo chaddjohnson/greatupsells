@@ -18,6 +18,7 @@ import {
   TextBlockMajor,
   ColorsMajor,
   TypeMajor,
+  SettingsMajor,
   CodeMajor,
   ArrowLeftMinor
 } from '@shopify/polaris-icons';
@@ -25,6 +26,7 @@ import styled from 'styled-components';
 import ContentEditor from './ContentEditor';
 import ColorEditor from './ColorEditor';
 import FontEditor from './FontEditor';
+import OptionsEditor from './OptionsEditor';
 
 const sections = [
   {
@@ -44,6 +46,12 @@ const sections = [
     name: 'Typography',
     variableTypes: ['font', 'fontSize'],
     icon: TypeMajor
+  },
+  {
+    id: 'options',
+    name: 'Options',
+    variableTypes: ['option'],
+    icon: SettingsMajor
   },
   { id: 'code', name: 'Code', icon: CodeMajor }
 ];
@@ -181,6 +189,13 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'typography' && (
                   <FontEditor
+                    variables={sectionVariables}
+                    onChange={handleChange}
+                  />
+                )}
+              {sectionVariables?.length > 0 &&
+                selectedSection.id === 'options' && (
+                  <OptionsEditor
                     variables={sectionVariables}
                     onChange={handleChange}
                   />

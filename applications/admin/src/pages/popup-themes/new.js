@@ -77,6 +77,13 @@ const initialVariables = [
     type: 'fontSize',
     group: 'Body text',
     value: '16'
+  },
+  {
+    name: 'showOriginalPrice',
+    label: 'Show original price',
+    type: 'option',
+    group: 'Settings',
+    value: 'true'
   }
 ];
 
