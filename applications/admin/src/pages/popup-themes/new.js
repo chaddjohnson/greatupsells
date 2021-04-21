@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Layout, Link, PopupThemeEditor } from '../../components';
@@ -107,29 +108,37 @@ const NewPopupThemePage = () => {
   };
 
   return (
-    <Layout
-      title={
-        <>
-          <Hidden xsDown>
-            <Breadcrumbs>
-              <Link href="/popup-themes">Popup Themes</Link>
+    <>
+      <Head>
+        <title>New Popup Theme</title>
+      </Head>
+      <Layout
+        title={
+          <>
+            <Hidden xsDown>
+              <Breadcrumbs>
+                <Link href="/popup-themes">Popup Themes</Link>
+                <span>New Popup Theme</span>
+              </Breadcrumbs>
+            </Hidden>
+            <Hidden smUp>
               <span>New Popup Theme</span>
-            </Breadcrumbs>
-          </Hidden>
-          <Hidden smUp>
-            <span>New Popup Theme</span>
-          </Hidden>
-        </>
-      }
-      icon={<PopupThemesIcon />}
-      contentProps={{
-        style: {
-          height: '100%'
+            </Hidden>
+          </>
         }
-      }}
-    >
-      <PopupThemeEditor initialValues={initialValues} onSubmit={handleSubmit} />
-    </Layout>
+        icon={<PopupThemesIcon />}
+        contentProps={{
+          style: {
+            height: '100%'
+          }
+        }}
+      >
+        <PopupThemeEditor
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+        />
+      </Layout>
+    </>
   );
 };
 

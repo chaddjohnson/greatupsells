@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import {
   Card,
   CardContent,
@@ -68,64 +69,69 @@ const PopupThemesPage = () => {
   } = usePopupThemes();
 
   return (
-    <Layout title="Popup Themes" icon={<PopupThemesIcon />}>
-      <Loader
-        isLoading={popupThemesLoading}
-        isError={!!popupThemesError}
-        loadingComponent={LoadingComponent}
-        errorComponent={ErrorComponent}
-      >
-        <Card>
-          <CardContent>
-            <TableContainer className={classes.tableContainer}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Preview</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {popupThemes?.map(
-                    (
-                      { _id, name, type, category, thumbnailImageUrl },
-                      index
-                    ) => (
-                      <TableRow key={index}>
-                        <TableCell className={classes.nameTableCell}>
-                          <Link href={`/popup-themes/${_id}`}>{name}</Link>
-                        </TableCell>
-                        <TableCell className={classes.typeTableCell}>
-                          {typeMap[type] || type}
-                        </TableCell>
-                        <TableCell className={classes.categoryTableCell}>
-                          {category}
-                        </TableCell>
-                        <TableCell className={classes.thumbnailTableCell}>
-                          <img
-                            className={classes.thumbnail}
-                            src={thumbnailImageUrl}
-                            alt="Preview"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    )
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
-        <AddButton
-          color="primary"
-          aria-label="Add"
-          component={Link}
-          href="/popup-themes/new"
-        />
-      </Loader>
-    </Layout>
+    <>
+      <Head>
+        <title>Popup Themes</title>
+      </Head>
+      <Layout title="Popup Themes" icon={<PopupThemesIcon />}>
+        <Loader
+          isLoading={popupThemesLoading}
+          isError={!!popupThemesError}
+          loadingComponent={LoadingComponent}
+          errorComponent={ErrorComponent}
+        >
+          <Card>
+            <CardContent>
+              <TableContainer className={classes.tableContainer}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Type</TableCell>
+                      <TableCell>Category</TableCell>
+                      <TableCell>Preview</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {popupThemes?.map(
+                      (
+                        { _id, name, type, category, thumbnailImageUrl },
+                        index
+                      ) => (
+                        <TableRow key={index}>
+                          <TableCell className={classes.nameTableCell}>
+                            <Link href={`/popup-themes/${_id}`}>{name}</Link>
+                          </TableCell>
+                          <TableCell className={classes.typeTableCell}>
+                            {typeMap[type] || type}
+                          </TableCell>
+                          <TableCell className={classes.categoryTableCell}>
+                            {category}
+                          </TableCell>
+                          <TableCell className={classes.thumbnailTableCell}>
+                            <img
+                              className={classes.thumbnail}
+                              src={thumbnailImageUrl}
+                              alt="Preview"
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+          <AddButton
+            color="primary"
+            aria-label="Add"
+            component={Link}
+            href="/popup-themes/new"
+          />
+        </Loader>
+      </Layout>
+    </>
   );
 };
 

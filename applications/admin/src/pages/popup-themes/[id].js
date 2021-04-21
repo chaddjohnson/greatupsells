@@ -1,5 +1,6 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Breadcrumbs, Hidden, Typography } from '@material-ui/core';
+import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
@@ -31,36 +32,44 @@ const EditPopupThemePage = () => {
   };
 
   return (
-    <Layout
-      title={
-        <>
-          <Hidden xsDown>
-            <Breadcrumbs>
-              <Link href="/popup-themes">Popup Themes</Link>
+    <>
+      <Head>
+        <title>Edit Popup Theme</title>
+      </Head>
+      <Layout
+        title={
+          <>
+            <Hidden xsDown>
+              <Breadcrumbs>
+                <Link href="/popup-themes">Popup Themes</Link>
+                <span>Edit Popup Theme</span>
+              </Breadcrumbs>
+            </Hidden>
+            <Hidden smUp>
               <span>Edit Popup Theme</span>
-            </Breadcrumbs>
-          </Hidden>
-          <Hidden smUp>
-            <span>Edit Popup Theme</span>
-          </Hidden>
-        </>
-      }
-      icon={<PopupThemesIcon />}
-      contentProps={{
-        style: {
-          height: '100%'
+            </Hidden>
+          </>
         }
-      }}
-    >
-      <Loader
-        isLoading={popupThemeLoading}
-        isError={!!popupThemeError}
-        loadingComponent={LoadingComponent}
-        errorComponent={ErrorComponent}
+        icon={<PopupThemesIcon />}
+        contentProps={{
+          style: {
+            height: '100%'
+          }
+        }}
       >
-        <PopupThemeEditor initialValues={popupTheme} onSubmit={handleSubmit} />
-      </Loader>
-    </Layout>
+        <Loader
+          isLoading={popupThemeLoading}
+          isError={!!popupThemeError}
+          loadingComponent={LoadingComponent}
+          errorComponent={ErrorComponent}
+        >
+          <PopupThemeEditor
+            initialValues={popupTheme}
+            onSubmit={handleSubmit}
+          />
+        </Loader>
+      </Layout>
+    </>
   );
 };
 
