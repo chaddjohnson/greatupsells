@@ -366,6 +366,9 @@ const OfferPopup = ({
                     background: maskBackgroundColor,
                     zIndex: 2147483647,
                     height: '100%'
+                  },
+                  content: {
+                    zoom: designMode ? 0.8 : 1
                   }
                 }}
               >
