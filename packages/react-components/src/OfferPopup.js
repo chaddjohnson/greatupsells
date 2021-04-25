@@ -236,6 +236,9 @@ const OfferPopup = ({
     [theme.variables]
   );
 
+  const maskBackgroundColor =
+    mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)';
+
   const translatedTriggerProduct = useMemo(() => {
     if (triggerProduct) {
       return translateProduct(triggerProduct);
@@ -255,11 +258,6 @@ const OfferPopup = ({
     submitHandler: 'window.parent.OfferPopup.submit(event)',
     closeHandler: 'window.parent.OfferPopup.close()'
   });
-
-  const maskBackgroundColor = useMemo(
-    () => mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)',
-    [mappedVariables]
-  );
 
   // Expose methods globally to enable themes to programmatically interface with popups.
   window.OfferPopup.addProduct = handleAddProduct;
