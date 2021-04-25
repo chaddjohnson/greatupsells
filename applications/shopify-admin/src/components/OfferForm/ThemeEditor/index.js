@@ -5,7 +5,7 @@ import ThemeSelector from './ThemeSelector';
 import VariablesEditor from './VariablesEditor';
 
 const ThemeEditor = ({
-  type,
+  strategy,
   theme,
   themes,
   offerThemes,
@@ -47,7 +47,7 @@ const ThemeEditor = ({
       </Card>
       <ThemeSelector
         open={themeSelectorOpen}
-        type={type}
+        strategy={strategy}
         theme={theme}
         themes={themes}
         offerThemes={offerThemes}
@@ -66,7 +66,7 @@ const ThemeEditor = ({
 };
 
 ThemeEditor.propTypes = {
-  type: PropTypes.string.isRequired,
+  strategy: PropTypes.string.isRequired,
   theme: PropTypes.object,
   themes: PropTypes.array,
   offerThemes: PropTypes.array,

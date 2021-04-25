@@ -313,12 +313,12 @@ const OfferForm = ({
 
   const handleStrategyChange = ([value]) => {
     const firstStrategyPopupTheme = popupThemes.find(
-      (current) => current.type === value
+      (current) => current.strategy === value
     );
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
     let firstStrategyOfferPopupTheme = offerPopupThemes.find(
-      (current) => current.type === value
+      (current) => current.strategy === value
     );
 
     strategy.onChange(value);
@@ -666,7 +666,7 @@ const OfferForm = ({
             </Card>
           )}
           <ThemeEditor
-            type={offer.strategy}
+            strategy={offer.strategy}
             theme={popupTheme}
             themes={popupThemes}
             offerThemes={offerPopupThemes}

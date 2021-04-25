@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   OptionList,
@@ -61,15 +61,15 @@ const ThemeThumbnailImage = styled.img`
   height: auto;
 `;
 
-const SearchFilter = ({ type, category, onChange }) => {
+const SearchFilter = ({ strategy, category, onChange }) => {
   const [active, setActive] = useState(false);
 
   const choices = useMemo(() => {
-    if (type === 'UPSELL') {
+    if (strategy === 'UPSELL') {
       return [{ value: 'upsell', label: 'Upsell' }];
-    } else if (type === 'CROSS_SELL') {
+    } else if (strategy === 'CROSS_SELL') {
       return [{ value: 'cross-sell', label: 'Cross-sell' }];
-    } else if (type === 'POPUP') {
+    } else if (strategy === 'POPUP') {
       return [
         { value: '', label: 'All' },
         { value: 'email', label: 'Email' },
@@ -79,9 +79,9 @@ const SearchFilter = ({ type, category, onChange }) => {
     } else {
       return [];
     }
-  }, [type]);
+  }, [strategy]);
 
-  // TODO: Select the first available choice when `type` changes.
+  // TODO: Select the first available choice when `strategy` changes.
 
   const handleChange = ([value]) => {
     onChange(value);
@@ -111,7 +111,7 @@ const SearchFilter = ({ type, category, onChange }) => {
 };
 
 SearchFilter.propTypes = {
-  type: PropTypes.string.isRequired,
+  strategy: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
   onChange: PropTypes.func
 };
@@ -159,7 +159,7 @@ const tabs = [
 
 const ThemeSelector = ({
   open,
-  type,
+  strategy,
   theme,
   themes,
   offerThemes,
@@ -176,24 +176,24 @@ const ThemeSelector = ({
   const [offerThemeSelected, setOfferThemeSelected] = useState(true);
   const [category, setCategory] = useState('');
 
-  const typeThemes = useMemo(() => {
-    if (type === 'UPSELL') {
+  const strategyThemes = useMemo(() => {
+    if (strategy === 'UPSELL') {
       return themes.filter((current) => {
-        return current.type === 'UPSELL';
+        return current.strategy === 'UPSELL';
       });
-    } else if (type === 'CROSS_SELL') {
+    } else if (strategy === 'CROSS_SELL') {
       return themes.filter((current) => {
-        return current.type === 'CROSS_SELL';
+        return current.strategy === 'CROSS_SELL';
       });
-    } else if (type === 'POPUP') {
+    } else if (strategy === 'POPUP') {
       return themes.filter((current) => {
-        return current.type === 'POPUP';
+        return current.strategy === 'POPUP';
       });
     }
-  }, [type, themes]);
+  }, [strategy, themes]);
 
   const themeOptions = useMemo(() => {
-    const categoryThemes = groupBy(typeThemes, 'category');
+    const categoryThemes = groupBy(strategyThemes, 'category');
     const categoryNames = Object.keys(categoryThemes).sort();
 
     return categoryNames.map((categoryName) => ({
@@ -203,7 +203,7 @@ const ThemeSelector = ({
         label: <ThemeOption theme={categoryTheme} />
       }))
     }));
-  }, [typeThemes]);
+  }, [strategyThemes]);
 
   const offerThemeOptions = useMemo(() => {
     const sortedOfferThemes = sortBy(offerThemes, (offerTheme) => {
@@ -228,10 +228,10 @@ const ThemeSelector = ({
   const handleCategoryChange = (value) => {
     setCategory(value);
 
-    // TODO: Filter available templates within this component (`typeThemes`?).
+    // TODO: Filter available templates within this component (`strategyThemes`?).
 
-    // TODO: Set theme to first theme in available categories on type change?
-    // Maybe this doesn't make sense since categories are already filtered based on `type`.
+    // TODO: Set theme to first theme in available categories on strategy change?
+    // Maybe this doesn't make sense since categories are already filtered based on `strategy`.
   };
 
   const handleThemeSelect = (value) => {
@@ -316,7 +316,7 @@ const ThemeSelector = ({
                         prefix={<Icon source={SearchMinor} />}
                         connectedRight={
                           <SearchFilter
-                            type={type}
+                            strategy={strategy}
                             category={category}
                             onChange={handleCategoryChange}
                           />
@@ -359,7 +359,7 @@ const ThemeSelector = ({
 
 ThemeSelector.propTypes = {
   open: PropTypes.bool,
-  type: PropTypes.string.isRequired,
+  strategy: PropTypes.string.isRequired,
   theme: PropTypes.object,
   themes: PropTypes.arrayOf(PropTypes.object),
   offerThemes: PropTypes.arrayOf(PropTypes.object),

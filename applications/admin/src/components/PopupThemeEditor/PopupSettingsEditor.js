@@ -49,13 +49,13 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
           />
         </FormControl>
         <FormControl variant="outlined" margin="normal" fullWidth>
-          <InputLabel id="type-label">Type</InputLabel>
+          <InputLabel id="type-label">Strategy</InputLabel>
           <Select
-            name="type"
-            labelId="type"
-            label="Type"
+            name="strategy"
+            labelId="strategy"
+            label="Strategy"
             required
-            value={popupTheme.type}
+            value={popupTheme.strategy}
             onChange={handleChange}
           >
             <MenuItem value="UPSELL">Upsell</MenuItem>

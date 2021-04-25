@@ -44,7 +44,7 @@ const schema = new mongoose.Schema(
       required: false
     },
     displayOrder: { type: Int32, required: false },
-    type: {
+    strategy: {
       type: String,
       required: true,
       enum: ['UPSELL', 'CROSS_SELL', 'POPUP']

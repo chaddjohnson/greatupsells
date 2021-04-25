@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   nameTableCell: {
     minWidth: 400
   },
-  typeTableCell: {
+  strategyTableCell: {
     minWidth: 200
   },
   categoryTableCell: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const typeMap = {
+const strategyMap = {
   UPSELL: 'Upsell',
   CROSS_SELL: 'Cross-sell',
   POPUP: 'Popup'
@@ -87,7 +87,7 @@ const PopupThemesPage = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Name</TableCell>
-                      <TableCell>Type</TableCell>
+                      <TableCell>Strategy</TableCell>
                       <TableCell>Category</TableCell>
                       <TableCell>Preview</TableCell>
                     </TableRow>
@@ -95,15 +95,15 @@ const PopupThemesPage = () => {
                   <TableBody>
                     {popupThemes?.map(
                       (
-                        { _id, name, type, category, thumbnailImageUrl },
+                        { _id, name, strategy, category, thumbnailImageUrl },
                         index
                       ) => (
                         <TableRow key={index}>
                           <TableCell className={classes.nameTableCell}>
                             <Link href={`/popup-themes/${_id}`}>{name}</Link>
                           </TableCell>
-                          <TableCell className={classes.typeTableCell}>
-                            {typeMap[type] || type}
+                          <TableCell className={classes.strategyTableCell}>
+                            {strategyMap[strategy] || strategy}
                           </TableCell>
                           <TableCell className={classes.categoryTableCell}>
                             {category}

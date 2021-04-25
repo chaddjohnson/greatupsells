@@ -136,7 +136,7 @@ const NewOfferPage = () => {
   // the copy will have its own ID when saved.
   // const offerPopupTheme = omit(popupThemes?.[0], '_id');
   const offerPopupTheme = omit(
-    popupThemes?.find(({ type }) => type === initialOffer.strategy),
+    popupThemes?.find(({ strategy }) => strategy === initialOffer.strategy),
     ['_id', '__v', 'updatedAt', 'createdAt']
   );
 
