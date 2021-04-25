@@ -16,6 +16,13 @@ const MetadataEditor = ({ theme, onChange }) => {
           value={theme.name}
           onChange={(value) => handleChange('name', value)}
         />
+        <TextField
+          type="text"
+          label="Description"
+          multiline={4}
+          value={theme.description}
+          onChange={(value) => handleChange('description', value)}
+        />
       </FormLayout>
     </Card>
   );
