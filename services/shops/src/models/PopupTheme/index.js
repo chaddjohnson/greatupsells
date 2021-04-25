@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
+const hooks = require('./hooks');
 
 let PopupTheme = null;
 
@@ -37,6 +38,11 @@ const schema = new mongoose.Schema(
       ref: 'Shop',
       required: false
     },
+    offer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Offer',
+      required: false
+    },
     displayOrder: { type: Int32, required: false },
     type: {
       type: String,
@@ -53,14 +59,16 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.statics.findByShopId = function (shopId) {
-  return PopupTheme.find({
-    $or: [{ shop: null }, { shop: mongoose.Types.ObjectId(shopId) }]
-  });
+schema.statics.findByOfferId = function (offerId) {
+  return PopupTheme.find({ offer: mongoose.Types.ObjectId(offerId) });
 };
 
+schema.pre('validate', function (next) {
+  hooks.preValidate(this, next);
+});
+
 schema.index({ shop: 1 }, { sparse: true });
-schema.index({ shop: 1, name: 1 }, { sparse: true, unique: true });
+schema.index({ offer: 1 }, { sparse: true });
 
 PopupTheme = mongodbClient.connection.model('PopupTheme', schema);
 

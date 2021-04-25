@@ -6,11 +6,7 @@ const usePopupTheme = (id) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
-  const {
-    data: popupTheme,
-    error: popupThemeError,
-    mutate: fetchPopupTheme
-  } = useSWR(
+  const { data: popupTheme, error: popupThemeError } = useSWR(
     id ? `/popup-themes/${id}` : null,
     httpClient.get.bind(httpClient),
     {
@@ -19,20 +15,25 @@ const usePopupTheme = (id) => {
   );
   const popupThemeLoading = !popupTheme && !popupThemeError;
 
-  const savePopupTheme = async (values) => {
-    const url = values._id ? `/popup-themes/${values._id}` : '/popup-themes';
+  const savePopupTheme = async (data) => {
+    const isNew = !data._id;
+    const url = isNew ? '/popup-themes' : `/popup-themes/${data._id}`;
+    let updatedData = null;
 
     try {
-      if (values._id) {
-        await mutate(url, httpClient.put(url, values));
-      } else {
+      if (isNew) {
         // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
-        await mutate('new-popup-theme', httpClient.post(url, values));
+        updatedData = await httpClient.post(url, data);
+      } else {
+        updatedData = await mutate(url, httpClient.put(url, data));
       }
 
       showSuccessToast('Popup theme saved successfully.');
+
+      return updatedData;
     } catch (error) {
       showErrorToast('Error saving popup theme.');
+      throw error;
     }
   };
 
@@ -40,7 +41,6 @@ const usePopupTheme = (id) => {
     popupTheme,
     popupThemeLoading,
     popupThemeError,
-    fetchPopupTheme,
     savePopupTheme
   };
 };

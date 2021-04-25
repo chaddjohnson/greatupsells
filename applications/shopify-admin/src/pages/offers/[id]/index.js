@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Loading } from '@shopify/app-bridge-react';
 import {
@@ -18,7 +18,14 @@ import {
   CircleTickOutlineMinor
 } from '@shopify/polaris-icons';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { useShop, useOffer } from '../../../hooks';
+import {
+  useShop,
+  useOffer,
+  usePopupTheme,
+  usePopupThemes,
+  useOfferPopupThemes,
+  useToast
+} from '../../../hooks';
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (
@@ -72,42 +79,112 @@ const loadingComponent = () => (
   </>
 );
 
+const errorComponent = () => (
+  <Page fullWidth>
+    <Banner
+      title="Unable to load offer"
+      status="critical"
+      action={{
+        content: 'Try again',
+        onAction: () => window.location.reload()
+      }}
+    >
+      Unable to load offer. Please try again shortly.
+    </Banner>
+  </Page>
+);
+
 const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
-  const { shop } = useShop();
-  const { offer, offerLoading, offerError, updateOffer, fetchOffer } = useOffer(
-    offerId
+
+  const { showSuccessToast, showErrorToast } = useToast();
+  const { shop, shopLoading, shopError } = useShop();
+  const { offer, offerLoading, offerError, saveOffer } = useOffer(offerId);
+  const { savePopupTheme } = usePopupTheme();
+  const {
+    popupThemes,
+    popupThemesLoading,
+    popupThemesError
+  } = usePopupThemes();
+  const {
+    offerPopupThemes,
+    offerPopupThemesLoading,
+    offerPopupThemesError
+  } = useOfferPopupThemes(offerId);
+
+  // Get a reference to the offer's popup theme.
+  const offerPopupTheme = useMemo(
+    () => offerPopupThemes?.find(({ _id }) => _id === offer?.popupTheme),
+    [offerPopupThemes, offer]
   );
 
-  const errorComponent = memo(() => (
-    <Page fullWidth>
-      <Banner
-        title="Unable to load offer"
-        status="critical"
-        action={{
-          content: 'Try again',
-          onAction: () => fetchOffer(),
-          disabled: offerLoading
-        }}
-      >
-        Unable to load offer. Please try again shortly.
-      </Banner>
-    </Page>
-  ));
+  const loading =
+    shopLoading ||
+    offerLoading ||
+    popupThemesLoading ||
+    offerPopupThemesLoading;
 
-  const handleCancel = () => router.push('/offers/');
+  const error = !!(
+    shopError ||
+    offerError ||
+    popupThemesError ||
+    offerPopupThemesError
+  );
+
+  const handleSubmit = async ({
+    offer: offerData,
+    popupTheme: popupThemeData,
+    offerPopupThemes: offerPopupThemesData
+  }) => {
+    try {
+      // Save the offer.
+      const updatedOfferData = await saveOffer(offerData);
+
+      // Associate the offer popup themes with the offer.
+      popupThemeData.offer = updatedOfferData._id;
+      offerPopupThemesData = offerPopupThemesData.map((data) => ({
+        ...data,
+        offer: updatedOfferData._id
+      }));
+
+      // Save the selected popup theme and the other popup themes in parallel.
+      const [updatedPopupThemeData] = await Promise.all([
+        savePopupTheme(popupThemeData),
+        ...offerPopupThemesData
+          .filter(({ _id }) => _id !== popupThemeData._id)
+          .map(savePopupTheme)
+      ]);
+
+      if (updatedOfferData.popupTheme !== updatedPopupThemeData._id) {
+        // Associate the selected popup theme with the offer.
+        updatedOfferData.popupTheme = updatedPopupThemeData._id;
+
+        // Update the offer.
+        await saveOffer(offerData);
+      }
+
+      showSuccessToast('Offer updated.');
+    } catch (submitError) {
+      showErrorToast('Error updating offer.');
+      throw submitError;
+    }
+  };
+
+  const handleCancel = () => {
+    router.push('/offers/');
+  };
 
   const handleTest = () => {
-    // ...
+    // TODO
   };
 
   const handleDuplicate = () => {
-    // ...
+    // TODO
   };
 
   const handleToggleEnabled = () => {
-    // ...
+    // TODO
   };
 
   const secondaryActions = [
@@ -135,18 +212,23 @@ const OfferEditPage = () => {
 
   return (
     <Loader
-      isLoading={offerLoading}
-      isError={!!offerError}
+      isLoading={loading}
+      isError={error}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
     >
       <Page title={offer?.name} secondaryActions={secondaryActions}>
         <PageTitleBar />
-        {shop && offer && (
+        {!loading && !error && (
           <OfferForm
-            initialValues={offer}
+            initialValues={{
+              offer,
+              popupTheme: offerPopupTheme,
+              offerPopupThemes
+            }}
             shop={shop}
-            onSubmit={updateOffer}
+            popupThemes={popupThemes}
+            onSubmit={handleSubmit}
             onCancel={handleCancel}
           />
         )}

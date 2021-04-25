@@ -14,7 +14,7 @@ const ShopVisitOffer = () => {
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, offeredProducts, offerViewed } = useRandomOffer({
+  const { offer, popupTheme, offeredProducts, offerViewed } = useRandomOffer({
     event: triggerEvent
   });
   const { shop } = useShop();
@@ -77,7 +77,7 @@ const ShopVisitOffer = () => {
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       shop={shop}
-      theme={offer.popupTheme}
+      theme={popupTheme}
       offer={offer}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}

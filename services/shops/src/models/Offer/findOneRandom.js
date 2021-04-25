@@ -37,7 +37,7 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent, ipAddress) => {
   }
 
   // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Offer.findById(randomOffer._id).populate('popupTheme');
+  return await Offer.findById(randomOffer._id);
 };
 
 const findOneRandomByTriggerEventAndShopifyProductIds = async (
@@ -113,7 +113,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   }
 
   // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Offer.findById(randomOffer._id).populate('popupTheme');
+  return await Offer.findById(randomOffer._id);
 };
 
 const findOneRandom = async (

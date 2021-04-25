@@ -27,41 +27,16 @@ const handler = middy(async (event, context) => {
 
   try {
     const { shopId } = event.requestContext.authorizer.claims;
-    const { offerId } = event.pathParameters;
-    const offer = await httpClient.get(`/offers/${offerId}`);
-    const offerShopId = offer.shop;
+    const shop = await httpClient.get(`/shops/${shopId}`);
     const data = JSON.parse(event.body);
 
-    if (shopId !== offerShopId) {
-      await logger.warn(
-        `Unauthorized update attempt for offer ${offerId}`,
-        data,
-        event
-      );
+    data.shop = shop._id;
 
-      return {
-        statusCode: StatusCodes.FORBIDDEN,
-        body: ReasonPhrases.FORBIDDEN
-      };
-    }
-
-    // Disallow updating specific fields.
-    delete data.shop;
-    delete data.shopifyShopId;
-    delete data.viewCount;
-    delete data.acceptanceCount;
-    delete data.conversionCount;
-    delete data.conversionRate;
-    delete data.revenueIncrease;
-
-    const updatedOffer = await httpClient.put(`/offers/${offerId}`, {
-      ...offer,
-      ...data
-    });
+    const popupTheme = await httpClient.post(`/popup-themes`, data);
 
     return {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify(updatedOffer)
+      statusCode: StatusCodes.CREATED,
+      body: JSON.stringify(popupTheme)
     };
   } catch (error) {
     if (error.response && error.response.status) {
@@ -71,7 +46,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error updating offer`, error, event);
+    await logger.error(`Error creating popup theme`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

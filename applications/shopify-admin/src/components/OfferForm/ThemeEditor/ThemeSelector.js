@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   OptionList,
@@ -20,12 +20,6 @@ import {
 import { SearchMinor, MobileCancelMajor } from '@shopify/polaris-icons';
 import { sortBy, groupBy } from 'lodash';
 import styled from 'styled-components';
-
-const typeMap = {
-  UPSELL: 'Upselling',
-  CROSS_SELL: 'Cross-selling',
-  POPUP: 'Popup'
-};
 
 const InnerWrapper = styled.div`
   display: flex;
@@ -142,59 +136,64 @@ ThemeOption.propTypes = {
   })
 };
 
-const EmptyComponent = ({ type }) => (
+const EmptyComponent = () => (
   <EmptyState heading="No themes">
-    <TextContainer>
-      No {typeMap[type].toLowerCase()} themes are available.
-    </TextContainer>
+    <TextContainer>No themes are available.</TextContainer>
   </EmptyState>
 );
 
-EmptyComponent.propTypes = {
-  type: PropTypes.string
-};
-
 const tabs = [
-  {
-    id: 'explore',
-    content: 'Explore',
-    accessibilityLabel: 'Exlore',
-    panelID: 'explore'
-  },
   {
     id: 'history',
     content: 'History',
     accessibilityLabel: 'History',
     panelID: 'history'
+  },
+  {
+    id: 'explore',
+    content: 'Explore',
+    accessibilityLabel: 'Exlore',
+    panelID: 'explore'
   }
 ];
 
-const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
+const ThemeSelector = ({
+  open,
+  type,
+  theme,
+  themes,
+  offerThemes,
+  onThemeSelect,
+  onOfferThemeSelect,
+  onClose
+}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  const [selectedTheme, setSelectedTheme] = useState([theme && theme._id]);
+  const [selectedTheme, setSelectedTheme] = useState([
+    offerThemes.find(
+      (current) => current.__id_offerForm === theme?.__id_offerForm
+    )?.__id_offerForm
+  ]);
+  const [offerThemeSelected, setOfferThemeSelected] = useState(true);
   const [category, setCategory] = useState('');
 
   const typeThemes = useMemo(() => {
     if (type === 'UPSELL') {
-      return themes.filter((item) => item.type === 'UPSELL');
+      return themes.filter((current) => {
+        return current.type === 'UPSELL';
+      });
     } else if (type === 'CROSS_SELL') {
-      return themes.filter((item) => item.type === 'CROSS_SELL');
+      return themes.filter((current) => {
+        return current.type === 'CROSS_SELL';
+      });
     } else if (type === 'POPUP') {
-      return themes.filter((item) => item.type === 'POPUP');
+      return themes.filter((current) => {
+        return current.type === 'POPUP';
+      });
     }
   }, [type, themes]);
 
   const themeOptions = useMemo(() => {
-    const sortedTypeThemes = sortBy(typeThemes, (typeTheme) => {
-      // Display the current theme first.
-      if (typeTheme._id === theme?._id) {
-        return -1;
-      }
-
-      return typeTheme.displayOrder;
-    });
-
-    const categoryThemes = groupBy(sortedTypeThemes, 'category');
+    const categoryThemes = groupBy(typeThemes, 'category');
     const categoryNames = Object.keys(categoryThemes).sort();
 
     return categoryNames.map((categoryName) => ({
@@ -204,7 +203,23 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
         label: <ThemeOption theme={categoryTheme} />
       }))
     }));
-  }, [typeThemes, theme]);
+  }, [typeThemes]);
+
+  const offerThemeOptions = useMemo(() => {
+    const sortedOfferThemes = sortBy(offerThemes, (offerTheme) => {
+      // Display the current theme first.
+      if (offerTheme.__id_offerForm === theme?.__id_offerForm) {
+        return -1;
+      }
+
+      return offerTheme.displayOrder;
+    });
+
+    return sortedOfferThemes.map((offerTheme) => ({
+      value: offerTheme.__id_offerForm,
+      label: <ThemeOption theme={offerTheme} />
+    }));
+  }, [offerThemes, theme]);
 
   const handleTabChange = (index) => {
     setSelectedTabIndex(index);
@@ -220,18 +235,48 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
   };
 
   const handleThemeSelect = (value) => {
+    setOfferThemeSelected(tabs[selectedTabIndex].id === 'history');
     setSelectedTheme(value);
   };
 
   const handleSave = () => {
-    if (selectedTheme?.[0]) {
-      onChange(themes.find(({ _id }) => _id === selectedTheme[0]));
-      onClose();
+    if (offerThemeSelected) {
+      onOfferThemeSelect(
+        offerThemes.find(
+          (current) => current.__id_offerForm === selectedTheme[0]
+        )
+      );
+    } else {
+      onThemeSelect(themes.find((current) => current._id === selectedTheme[0]));
     }
+
+    onClose();
+  };
+
+  const handleEntered = () => {
+    const currentThemeId = offerThemes.find(
+      (current) => current.__id_offerForm === theme?.__id_offerForm
+    )?.__id_offerForm;
+
+    if (typeof currentThemeId === 'undefined') {
+      return;
+    }
+
+    setSelectedTheme([currentThemeId]);
+  };
+
+  const handleExit = () => {
+    setTimeout(() => setSelectedTabIndex(0), 500);
   };
 
   return (
-    <Sheet open={open} onClose={onClose} accessibilityLabel="Select theme">
+    <Sheet
+      open={open}
+      onEntered={handleEntered}
+      onExit={handleExit}
+      onClose={onClose}
+      accessibilityLabel="Select theme"
+    >
       <InnerWrapper>
         <HeaderWrapper>
           <DisplayText size="small">Select theme</DisplayText>
@@ -248,45 +293,48 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
             selected={selectedTabIndex}
             onSelect={handleTabChange}
           >
-            {/* eslint-disable indent */}
             <SearchWrapper>
+              {tabs[selectedTabIndex].id === 'history' && (
+                <>
+                  <Card>
+                    <OptionList
+                      options={offerThemeOptions}
+                      selected={selectedTheme}
+                      onChange={handleThemeSelect}
+                    />
+                  </Card>
+                  {!offerThemeOptions?.length && <EmptyComponent />}
+                </>
+              )}
               {tabs[selectedTabIndex].id === 'explore' &&
                 themeOptions?.length > 0 && (
-                  <Stack vertical spacing="tight">
-                    <TextField
-                      type="search"
-                      placeholder="Search"
-                      prefix={<Icon source={SearchMinor} />}
-                      connectedRight={
-                        <SearchFilter
-                          type={type}
-                          category={category}
-                          onChange={handleCategoryChange}
-                        />
-                      }
-                      onChange={() => {}}
-                    />
-                    <Card>
-                      <OptionList
-                        sections={themeOptions}
-                        selected={selectedTheme}
-                        onChange={handleThemeSelect}
+                  <>
+                    <Stack vertical spacing="tight">
+                      <TextField
+                        type="search"
+                        placeholder="Search"
+                        prefix={<Icon source={SearchMinor} />}
+                        connectedRight={
+                          <SearchFilter
+                            type={type}
+                            category={category}
+                            onChange={handleCategoryChange}
+                          />
+                        }
+                        onChange={() => {}}
                       />
-                    </Card>
-                  </Stack>
+                      <Card>
+                        <OptionList
+                          sections={themeOptions}
+                          selected={selectedTheme}
+                          onChange={handleThemeSelect}
+                        />
+                      </Card>
+                    </Stack>
+                    {!themeOptions?.length && <EmptyComponent />}
+                  </>
                 )}
-              {!themeOptions?.length && <EmptyComponent type={type} />}
-              {tabs[selectedTabIndex].id === 'history' && (
-                <Card>
-                  <OptionList
-                    sections={themeOptions}
-                    selected={selectedTheme}
-                    onChange={handleThemeSelect}
-                  />
-                </Card>
-              )}
             </SearchWrapper>
-            {/* eslint-enable indent */}
           </Tabs>
         </Scrollable>
         <PageActionsWrapper>
@@ -294,7 +342,7 @@ const ThemeSelector = ({ open, type, theme, themes, onChange, onClose }) => {
             primaryAction={{
               content: 'Select',
               onAction: handleSave,
-              disabled: !selectedTheme
+              disabled: !selectedTheme?.length
             }}
             secondaryActions={[
               {
@@ -314,13 +362,16 @@ ThemeSelector.propTypes = {
   type: PropTypes.string.isRequired,
   theme: PropTypes.object,
   themes: PropTypes.arrayOf(PropTypes.object),
-  onChange: PropTypes.func,
+  offerThemes: PropTypes.arrayOf(PropTypes.object),
+  onThemeSelect: PropTypes.func,
+  onOfferThemeSelect: PropTypes.func,
   onClose: PropTypes.func
 };
 
 ThemeSelector.defaultProps = {
   open: false,
-  onChange: () => {},
+  onThemeSelect: () => {},
+  onOfferThemeSelect: () => {},
   onClose: () => {}
 };
 

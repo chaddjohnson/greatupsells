@@ -60,7 +60,7 @@ const schema = new mongoose.Schema(
     popupTheme: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'PopupTheme',
-      required: true
+      required: false // false because PopupTheme requires an offer to be saved.
     },
     offeredProducts: [offerProductSchema],
     offeredCollections: [offerCollectionSchema],
@@ -156,6 +156,12 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
   const OfferHit = mongodbClient.connection.model('OfferHit');
 
   return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
+};
+
+schema.methods.findPopupThemes = async function () {
+  const PopupTheme = mongodbClient.connection.model('PopupTheme');
+
+  return PopupTheme.findByOfferId(this._id);
 };
 
 schema.methods.trackView = function (

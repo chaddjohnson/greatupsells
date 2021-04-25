@@ -27,14 +27,20 @@ const handler = middy(async (event, context) => {
 
   try {
     const { shopId } = event.requestContext.authorizer.claims;
-    const { offerId } = event.pathParameters;
     const shop = await httpClient.get(`/shops/${shopId}`);
     const data = JSON.parse(event.body);
 
     data.shop = shop._id;
     data.shopifyShopId = shop.shopifyShopId;
 
-    const offer = await httpClient.post(`/offers/${offerId}`, data);
+    // Disallow setting specific fields.
+    delete data.viewCount;
+    delete data.acceptanceCount;
+    delete data.conversionCount;
+    delete data.conversionRate;
+    delete data.revenueIncrease;
+
+    const offer = await httpClient.post(`/offers`, data);
 
     return {
       statusCode: StatusCodes.CREATED,

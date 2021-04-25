@@ -12,7 +12,7 @@ const preValidate = async (offer, next) => {
     offer.popupTheme = mongoose.Types.ObjectId(offer.popupTheme);
   }
 
-  // Set up reference to shop if missing.
+  // Set up reference to the shop if missing.
   if (offer.shopifyShopId && !offer.shop) {
     try {
       offer.shop = await Shop.findByShopifyShopId(offer.shopifyShopId);

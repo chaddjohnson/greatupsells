@@ -20,6 +20,7 @@ const ProductOffer = () => {
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const {
     offer,
+    popupTheme,
     triggerProduct,
     offeredProducts,
     offerViewed
@@ -103,7 +104,7 @@ const ProductOffer = () => {
       appRoot="#upselling-popup-root"
       open={!!offer && popupOpen}
       shop={shop}
-      theme={offer.popupTheme}
+      theme={popupTheme}
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}

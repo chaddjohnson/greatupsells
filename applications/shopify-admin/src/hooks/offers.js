@@ -3,8 +3,7 @@ import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
 
 const useOffers = () => {
   const { httpClient } = useHttpClient();
-
-  const { data: offers, error: offersError, mutate: fetchOffers } = useSWR(
+  const { data: offers, error: offersError } = useSWR(
     `/offers`,
     httpClient.get.bind(httpClient),
     {
@@ -13,7 +12,7 @@ const useOffers = () => {
   );
   const offersLoading = !offers && !offersError;
 
-  return { offers, offersLoading, offersError, fetchOffers };
+  return { offers, offersLoading, offersError };
 };
 
 export default useOffers;

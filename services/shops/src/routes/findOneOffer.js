@@ -8,7 +8,7 @@ const handler = async (event, context) => {
   try {
     const { offerId } = event.pathParameters;
     const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId).populate('popupTheme');
+    const offer = await Offer.findById(offerId);
 
     if (!offer) {
       return {

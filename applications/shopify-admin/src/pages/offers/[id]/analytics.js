@@ -85,8 +85,7 @@ const OfferAnalyticsPage = () => {
     offerRevenueIncreases,
     offerViews,
     offerAnalyticsLoading,
-    offerAnalyticsError,
-    fetchAnalytics
+    offerAnalyticsError
   } = useOfferAnalytics(offerId, startAt, endAt);
 
   const offerAcceptancesChartData = useMemo(
@@ -139,8 +138,7 @@ const OfferAnalyticsPage = () => {
         status="critical"
         action={{
           content: 'Try again',
-          onAction: fetchAnalytics,
-          disabled: offerAnalyticsLoading
+          onAction: () => window.location.reload()
         }}
       >
         Unable to load offer. Please try again shortly.

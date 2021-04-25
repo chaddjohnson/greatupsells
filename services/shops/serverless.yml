@@ -133,6 +133,13 @@ functions:
           path: /offers/{offerId}/conversions
           method: get
           authorizer: aws_iam
+  findOfferPopupThemes:
+    handler: src/routes/findOfferPopupThemes.handler
+    events:
+      - http:
+          path: /offers/{offerId}/popup-themes
+          method: get
+          authorizer: aws_iam
   findOfferRevenueIncreases:
     handler: src/routes/findOfferRevenueIncreases.handler
     events:

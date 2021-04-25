@@ -30,7 +30,7 @@ import {
 } from '@shopify/app-bridge-react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
-import { usePopupThemes } from '../../hooks';
+import { omit } from 'lodash';
 import ManagedResourceList from './ManagedResourceList';
 import DateTimePicker from '../DateTimePicker';
 import CountryAutocomplete from './CountryAutocomplete';
@@ -46,11 +46,40 @@ const { OfferPopup } =
 const timezone = moment.tz.guess();
 const timezoneAbbreviation = moment.tz(timezone).format('z');
 
+let themeCount = 0;
+
+const assignId = (object) => {
+  // Avoid redefining the property.
+  if (typeof object.__id_offerForm !== 'undefined') {
+    return object;
+  }
+
+  // Define an internal ID for unsaved popup themes.
+  return Object.defineProperty(object, '__id_offerForm', {
+    value: ++themeCount,
+    enumerable: false
+  });
+};
+
+const assignIds = (objects) => {
+  return objects.map(assignId);
+};
+
 const OfferPopupContainer = styled.div`
   min-height: 300px;
 `;
 
-const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
+const OfferForm = ({
+  initialValues: {
+    offer: initialOffer,
+    popupTheme: initialPopupTheme,
+    offerPopupThemes: initialOfferPopupThemes
+  },
+  shop,
+  popupThemes,
+  onSubmit,
+  onCancel
+}) => {
   const app = useContext(AppBridgeContext);
 
   const [submitted, setSubmitted] = useState(false);
@@ -65,26 +94,29 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     setTriggerCollectionPickerOpen
   ] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
+  const [popupTheme, setPopupTheme] = useState(assignId(initialPopupTheme));
+  const [offerPopupThemes, setOfferPopupThemes] = useState(
+    assignIds(initialOfferPopupThemes)
+  );
 
-  const { popupThemes } = usePopupThemes();
   const { currency } = shop;
 
   let contextualSaveBar = null;
 
   const name = useField({
-    value: initialValues.name,
+    value: initialOffer.name,
     validates: [notEmpty("Name can't be blank")]
   });
-  const strategy = useField(initialValues.strategy);
-  const triggerEvent = useField(initialValues.triggerEvent);
-  const discountType = useField(initialValues.discountType);
-  const offeredProducts = useList(initialValues.offeredProducts);
-  const offeredCollections = useList(initialValues.offeredCollections);
-  const triggerProducts = useList(initialValues.triggerProducts);
-  const triggerCollections = useList(initialValues.triggerCollections);
-  const enableGeotargeting = useField(initialValues.enableGeotargeting);
-  const geotargetingCountries = useField(initialValues.geotargetingCountries);
-  const actionButtonBehavior = useField(initialValues.actionButtonBehavior);
+  const strategy = useField(initialOffer.strategy);
+  const triggerEvent = useField(initialOffer.triggerEvent);
+  const discountType = useField(initialOffer.discountType);
+  const offeredProducts = useList(initialOffer.offeredProducts);
+  const offeredCollections = useList(initialOffer.offeredCollections);
+  const triggerProducts = useList(initialOffer.triggerProducts);
+  const triggerCollections = useList(initialOffer.triggerCollections);
+  const enableGeotargeting = useField(initialOffer.enableGeotargeting);
+  const geotargetingCountries = useField(initialOffer.geotargetingCountries);
+  const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
   const actionButtonLink = useField(
     {
       value: '',
@@ -97,12 +129,12 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     [actionButtonBehavior.value]
   );
   const actionButtonLinkOpenInNewTab = useField(
-    initialValues.actionButtonLinkOpenInNewTab || false
+    initialOffer.actionButtonLinkOpenInNewTab || false
   );
-  const showNotificationBanner = useField(initialValues.showNotificationBanner);
+  const showNotificationBanner = useField(initialOffer.showNotificationBanner);
   const successMessageText = useField(
     {
-      value: initialValues.successMessageText,
+      value: initialOffer.successMessageText,
       validates: (value) => {
         if (showNotificationBanner.value && !value) {
           return "Success message text can't be blank";
@@ -111,9 +143,8 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     },
     [showNotificationBanner.value]
   );
-  const popupTheme = useField(initialValues.popupTheme);
   const startAt = useField({
-    value: initialValues.startAt,
+    value: initialOffer.startAt,
     validates: [
       notEmpty("Start date can't be blank"),
       (value) => {
@@ -125,7 +156,7 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
   });
   const endAt = useField(
     {
-      value: initialValues.endAt,
+      value: initialOffer.endAt,
       validates: [
         (value) => {
           if (showEndDate && !value) {
@@ -151,18 +182,18 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     },
     [showEndDate, startAt.value]
   );
-  const enableTimer = useField(initialValues.enableTimer);
-  const enableProductLinks = useField(initialValues.enableProductLinks);
-  const hideOutOfStockProducts = useField(initialValues.hideOutOfStockProducts);
-  const enableEscClose = useField(initialValues.enableEscClose);
-  const enableMaskClose = useField(initialValues.enableMaskClose);
+  const enableTimer = useField(initialOffer.enableTimer);
+  const enableProductLinks = useField(initialOffer.enableProductLinks);
+  const hideOutOfStockProducts = useField(initialOffer.hideOutOfStockProducts);
+  const enableEscClose = useField(initialOffer.enableEscClose);
+  const enableMaskClose = useField(initialOffer.enableMaskClose);
   const enableQuantitySelection = useField(
-    initialValues.enableQuantitySelection
+    initialOffer.enableQuantitySelection
   );
-  const limitQuantitySelection = useField(initialValues.limitQuantitySelection);
+  const limitQuantitySelection = useField(initialOffer.limitQuantitySelection);
   const productQuantityLimit = useField(
     {
-      value: initialValues.productQuantityLimit,
+      value: initialOffer.productQuantityLimit,
       validates: [
         (value) => {
           if (limitQuantitySelection.value && !value) {
@@ -188,9 +219,9 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     },
     [limitQuantitySelection.value]
   );
-  const allowMultipleUpsells = useField(initialValues.allowMultipleUpsells);
-  const hideIfItemAdded = useField(initialValues.hideIfItemAdded);
-  const allowWithDiscountCodes = useField(initialValues.allowWithDiscountCodes);
+  const allowMultipleUpsells = useField(initialOffer.allowMultipleUpsells);
+  const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
+  const allowWithDiscountCodes = useField(initialOffer.allowWithDiscountCodes);
 
   const { fields, dirty, submit, submitting /* submitErrors */ } = useForm({
     fields: {
@@ -211,7 +242,6 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
       actionButtonLinkOpenInNewTab,
       showNotificationBanner,
       successMessageText,
-      popupTheme,
       startAt,
       endAt,
       enableTimer,
@@ -227,19 +257,22 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
       allowWithDiscountCodes
     },
     onSubmit: async (formValues) => {
-      // contextualSaveBar.set({ saveAction: { loading: true } });
+      // TODO: contextualSaveBar.set({ saveAction: { loading: true } });
+
       setSubmitted(true);
 
       try {
         // TODO: Handle update.
-        await onSubmit(formValues);
+        await onSubmit({
+          offer: formValues,
+          popupTheme,
+          offerPopupThemes
+        });
       } catch (error) {
         return { status: 'fail', errors: error };
       }
 
-      // contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
-
-      // TODO: Redirect to offers/:id page.
+      // TODO: contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
 
       return { status: 'success' };
     }
@@ -256,11 +289,18 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
 
   const offer = useMemo(
     () => ({
-      ...initialValues,
+      ...initialOffer,
       ...getValues(fields)
     }),
-    [initialValues, fields]
+    [initialOffer, fields]
   );
+
+  const copyTheme = (value) => {
+    return assignId({
+      ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
+      offer: offer._id
+    });
+  };
 
   // Work around focus issues.
   const handleBlur = (fieldName) => (event) => {
@@ -268,6 +308,33 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
 
     if (event && event.target && field) {
       setTimeout(() => field.onBlur(event), 0);
+    }
+  };
+
+  const handleStrategyChange = ([value]) => {
+    const firstStrategyPopupTheme = popupThemes.find(
+      (current) => current.type === value
+    );
+
+    // Determine whether there is a theme already associated with this offer for the selected strategy.
+    let firstStrategyOfferPopupTheme = offerPopupThemes.find(
+      (current) => current.type === value
+    );
+
+    strategy.onChange(value);
+
+    // If there is not yet a theme associated with the offer for the selected
+    // strategy, then copy the first available theme for that strategy.
+    if (!firstStrategyOfferPopupTheme && firstStrategyPopupTheme) {
+      firstStrategyOfferPopupTheme = copyTheme(firstStrategyPopupTheme);
+
+      // Copy over changes to the current theme to history.
+      setOfferPopupThemes([firstStrategyOfferPopupTheme, ...offerPopupThemes]);
+    }
+
+    if (firstStrategyOfferPopupTheme) {
+      // Use the copied theme.
+      setPopupTheme(firstStrategyOfferPopupTheme);
     }
   };
 
@@ -290,6 +357,31 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
     ) {
       endAt.onChange(value);
     }
+  };
+
+  const handleThemeChange = (value) => {
+    setPopupTheme(value);
+
+    setOfferPopupThemes([
+      ...offerPopupThemes.map((current) =>
+        current.__id_offerForm === value.__id_offerForm ? value : current
+      )
+    ]);
+  };
+
+  const handleThemeSelect = (value) => {
+    const copiedTheme = copyTheme(value);
+
+    // Make a copy of the theme and add it as history for the offer, and then
+    // copy over changes to the current theme to history.
+    setOfferPopupThemes([copiedTheme, ...offerPopupThemes]);
+
+    // Use the copied theme.
+    setPopupTheme(copiedTheme);
+  };
+
+  const handleOfferThemeSelect = (value) => {
+    setPopupTheme(value);
   };
 
   // Handle Contextual Save Bar behavior.
@@ -361,7 +453,7 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
                   }
                 ]}
                 selected={strategy.value}
-                onChange={([value]) => strategy.onChange(value)}
+                onChange={handleStrategyChange}
               />
             </FormLayout>
           </Card>
@@ -376,7 +468,7 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
                       'Offer is shown when a product is added to the cart.'
                   },
                   {
-                    label: 'Cart page',
+                    label: 'Cart page visit',
                     value: 'CART',
                     helpText: 'Offer is shown on the Cart page before checkout.'
                   },
@@ -453,7 +545,7 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
                 },
                 {
                   label:
-                    'Skip the cart and take customers directly to the Checkout page',
+                    'Skip the cart and redirect customers to the Checkout page',
                   value: 'CHECKOUT',
                   helpText:
                     'Immediately initiating checkout can increase conversions.'
@@ -575,15 +667,16 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
           )}
           <ThemeEditor
             type={offer.strategy}
-            theme={offer.popupTheme}
+            theme={popupTheme}
             themes={popupThemes}
+            offerThemes={offerPopupThemes}
             previewElement={
               <OfferPopupContainer>
                 <OfferPopup
                   open={true}
                   designMode={!previewActive}
                   shop={shop}
-                  theme={offer.popupTheme}
+                  theme={popupTheme}
                   offer={offer}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
@@ -593,7 +686,9 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
               </OfferPopupContainer>
             }
             onPreview={() => setPreviewActive(true)}
-            onChange={(value) => popupTheme.onChange(value)}
+            onChange={handleThemeChange}
+            onThemeSelect={handleThemeSelect}
+            onOfferThemeSelect={handleOfferThemeSelect}
           />
           <Card title="Active dates" sectioned>
             <FormLayout>
@@ -806,14 +901,23 @@ const OfferForm = ({ initialValues, shop, onSubmit, onCancel }) => {
 };
 
 OfferForm.propTypes = {
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.shape({
+    offer: PropTypes.object,
+    popupTheme: PropTypes.object,
+    offerPopupThemes: PropTypes.array
+  }),
   shop: PropTypes.object.isRequired,
+  popupThemes: PropTypes.array.isRequired,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func
 };
 
 OfferForm.defaultProps = {
-  initialValues: {},
+  initialValues: {
+    offer: {},
+    popupTheme: {},
+    offerPopupThemes: []
+  },
   onSubmit: () => {},
   onCancel: () => {}
 };

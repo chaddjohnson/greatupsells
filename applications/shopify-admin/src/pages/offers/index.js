@@ -42,7 +42,7 @@ const EmptyComponent = () => (
 
 const OffersPage = () => {
   const { shop } = useShop();
-  const { offers, offersLoading, offersError, fetchOffers } = useOffers();
+  const { offers, offersLoading, offersError } = useOffers();
 
   const ErrorComponent = memo(() => (
     <Page title="Offers" fullWidth>
@@ -51,8 +51,7 @@ const OffersPage = () => {
         status="critical"
         action={{
           content: 'Try again',
-          onAction: () => fetchOffers(),
-          disabled: offersLoading
+          onAction: () => window.location.reload()
         }}
       >
         Unable to load offers. Please try again shortly.

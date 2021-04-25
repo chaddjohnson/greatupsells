@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
 import useToast from './toast';
 
@@ -6,30 +6,34 @@ const useOffer = (offerId) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
-  const { data: offer, error: offerError, mutate: mutateOffer } = useSWR(
+  const { data: offer, error: offerError } = useSWR(
     offerId ? `/offers/${offerId}` : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    {
+      revalidateOnFocus: false
+    }
   );
   const offerLoading = !offer && !offerError;
 
-  const createOffer = async (data) => {
-    try {
-      await httpClient.post(`/offers/${offerId}`, data);
+  const saveOffer = async (data) => {
+    const isNew = !data._id;
+    const url = isNew ? '/offers' : `/offers/${data._id}`;
+    let updatedData = null;
 
-      showSuccessToast('Offer created');
-    } catch (error) {
-      showErrorToast('Error creating offer');
-    }
-  };
-
-  const updateOffer = async (data) => {
     try {
-      mutateOffer(data, false);
-      await httpClient.put(`/offers/${offerId}`, data);
-      showSuccessToast('Offer saved');
+      if (isNew) {
+        // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
+        updatedData = await httpClient.post(url, data);
+        showSuccessToast('Offer created.');
+      } else {
+        updatedData = await mutate(url, httpClient.put(url, data));
+        showSuccessToast('Offer updated.');
+      }
+
+      return updatedData;
     } catch (error) {
-      showErrorToast('Error saving offer');
+      showErrorToast(`Error ${isNew ? 'creating' : 'updating'} offer.`);
+      throw error;
     }
   };
 
@@ -37,9 +41,7 @@ const useOffer = (offerId) => {
     offer,
     offerLoading,
     offerError,
-    createOffer,
-    updateOffer,
-    fetchOffer: mutateOffer
+    saveOffer
   };
 };
 

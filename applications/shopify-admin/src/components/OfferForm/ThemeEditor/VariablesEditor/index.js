@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Sheet,
@@ -15,6 +15,7 @@ import {
 import {
   MobileCancelMajor,
   ChevronRightMinor,
+  ProductsMajor,
   TextBlockMajor,
   ColorsMajor,
   TypeMajor,
@@ -27,6 +28,7 @@ import ContentEditor from './ContentEditor';
 import ColorEditor from './ColorEditor';
 import FontEditor from './FontEditor';
 import OptionsEditor from './OptionsEditor';
+import MetadataEditor from './MetadataEditor';
 
 const sections = [
   {
@@ -52,6 +54,12 @@ const sections = [
     name: 'Options',
     variableTypes: ['option'],
     icon: SettingsMajor
+  },
+  {
+    id: 'metadata',
+    name: 'Metadata',
+    variableTypes: [],
+    icon: ProductsMajor
   },
   { id: 'code', name: 'Code', icon: CodeMajor }
 ];
@@ -94,7 +102,9 @@ const EmptyComponent = () => (
   </EmptyState>
 );
 
-const VariablesEditor = ({ open, variables, onChange, onClose }) => {
+const VariablesEditor = ({ open, theme, onChange, onClose }) => {
+  const { variables } = theme;
+
   const [selectedSection, setSelectedSection] = useState(null);
 
   const sectionVariables = useMemo(() => {
@@ -107,15 +117,24 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
     );
   }, [selectedSection, variables]);
 
-  const handleChange = (name, value) => {
+  const handleVariableChange = (name, value) => {
     const index = variables.findIndex((variable) => variable.name === name);
 
-    onChange([
-      ...variables.slice(0, index),
-      { ...variables[index], value },
-      ...variables.slice(index + 1)
-    ]);
+    onChange({
+      ...theme,
+      variables: [
+        ...variables.slice(0, index),
+        { ...variables[index], value },
+        ...variables.slice(index + 1)
+      ]
+    });
   };
+
+  useEffect(() => {
+    if (open) {
+      setSelectedSection(null);
+    }
+  }, [open]);
 
   return (
     <Sheet open={open} onClose={onClose} accessibilityLabel="Edit theme">
@@ -169,41 +188,43 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
           </ResourceListWrapper>
         )}
         {selectedSection && (
-          /* eslint-disable indent */
           <Scrollable>
             <ContentWrapper>
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'content' && (
                   <ContentEditor
                     variables={sectionVariables}
-                    onChange={handleChange}
+                    onChange={handleVariableChange}
                   />
                 )}
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'colors' && (
                   <ColorEditor
                     variables={sectionVariables}
-                    onChange={handleChange}
+                    onChange={handleVariableChange}
                   />
                 )}
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'typography' && (
                   <FontEditor
                     variables={sectionVariables}
-                    onChange={handleChange}
+                    onChange={handleVariableChange}
                   />
                 )}
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'options' && (
                   <OptionsEditor
                     variables={sectionVariables}
-                    onChange={handleChange}
+                    onChange={handleVariableChange}
                   />
                 )}
-              {!sectionVariables?.length && <EmptyComponent />}
+              {selectedSection.id === 'metadata' && (
+                <MetadataEditor theme={theme} onChange={onChange} />
+              )}
+              {!sectionVariables?.length &&
+                !!selectedSection.variableTypes?.length && <EmptyComponent />}
             </ContentWrapper>
           </Scrollable>
-          /* eslint-enable indent */
         )}
       </InnerWrapper>
     </Sheet>
@@ -212,7 +233,7 @@ const VariablesEditor = ({ open, variables, onChange, onClose }) => {
 
 VariablesEditor.propTypes = {
   open: PropTypes.bool,
-  variables: PropTypes.array,
+  theme: PropTypes.object,
   onChange: PropTypes.func,
   onClose: PropTypes.func
 };

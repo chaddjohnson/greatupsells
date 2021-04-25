@@ -89,7 +89,7 @@ const loadingComponent = () => (
 );
 
 const DashboardPage = () => {
-  const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const { shop, shopLoading, shopError } = useShop();
   const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
@@ -104,8 +104,7 @@ const DashboardPage = () => {
         status="critical"
         action={{
           content: 'Try again',
-          onAction: () => fetchShop(),
-          disabled: shopLoading
+          onAction: () => window.location.reload()
         }}
       >
         Unable to load offers. Please try again shortly.

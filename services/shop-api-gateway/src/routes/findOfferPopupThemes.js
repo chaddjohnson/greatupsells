@@ -28,14 +28,15 @@ const handler = middy(async (event, context) => {
   try {
     const { shopId } = event.requestContext.authorizer.claims;
     const { offerId } = event.pathParameters;
-    const offer = await httpClient.get(`/offers/${offerId}`);
+    const [offer, offerPopupThemes] = await Promise.all([
+      httpClient.get(`/offers/${offerId}`),
+      httpClient.get(`/offers/${offerId}/popup-themes`)
+    ]);
     const offerShopId = offer.shop;
-    const data = JSON.parse(event.body);
 
     if (shopId !== offerShopId) {
       await logger.warn(
-        `Unauthorized update attempt for offer ${offerId}`,
-        data,
+        `Unauthorized access attempt for offer ${offerId} popup themes`,
         event
       );
 
@@ -45,23 +46,9 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    // Disallow updating specific fields.
-    delete data.shop;
-    delete data.shopifyShopId;
-    delete data.viewCount;
-    delete data.acceptanceCount;
-    delete data.conversionCount;
-    delete data.conversionRate;
-    delete data.revenueIncrease;
-
-    const updatedOffer = await httpClient.put(`/offers/${offerId}`, {
-      ...offer,
-      ...data
-    });
-
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(updatedOffer)
+      body: JSON.stringify(offerPopupThemes)
     };
   } catch (error) {
     if (error.response && error.response.status) {
@@ -71,11 +58,11 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error updating offer`, error, event);
+    await logger.error(`Error requesting offer popup themes`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      body: ReasonPhrases.INTERNAL_SERVER_ERROR
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
 });

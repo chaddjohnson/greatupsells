@@ -47,6 +47,18 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
+  createPopupTheme:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/createPopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
   deleteOffer:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
@@ -54,18 +66,6 @@ functions:
       - http:
           path: /offers/{offerId}
           method: delete
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-  findOffers:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOffers.handler
-    events:
-      - http:
-          path: /offers
-          method: get
           cors: true
           authorizer:
             name: authorizer
@@ -131,12 +131,36 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
+  findOfferPopupThemes:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferPopupThemes.handler
+    events:
+      - http:
+          path: /offers/{offerId}/popup-themes
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
   findOfferRevenueIncreases:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
           path: /offers/{offerId}/revenue-increases
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  findOffers:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOffers.handler
+    events:
+      - http:
+          path: /offers
           method: get
           cors: true
           authorizer:
@@ -173,6 +197,18 @@ functions:
     events:
       - http:
           path: /offers/{offerId}
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+  updatePopupTheme:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updatePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
           method: put
           cors: true
           authorizer:

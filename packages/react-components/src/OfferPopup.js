@@ -287,6 +287,7 @@ const OfferPopup = ({
     setTimeout(async () => {
       // Wait for all images to load so that we can get an accurate measure of
       // the content height.
+      // Reference: https://stackoverflow.com/a/60949881/83897
       await Promise.all(
         Array.from(iframeDocument.images).map((image) => {
           if (image.complete) {
@@ -307,7 +308,7 @@ const OfferPopup = ({
 
       // Set the iframe height to approximately the modal content height. Do so via
       // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(() => setIframeHeight(modalRef.offsetHeight - 10), 0);
+      setTimeout(() => setIframeHeight((modalRef.offsetHeight - 10) * 0.8), 0);
     }, 0);
   }, [iframeDocument, modalRef, theme.template, designMode]);
 

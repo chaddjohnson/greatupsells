@@ -10,7 +10,7 @@ const useOfferConversions = (offerId, startAt, endAt) => {
   const {
     data: offerConversions,
     error: offerConversionsError,
-    mutate: mutateOfferConversions
+    mutate: fetchOfferConversions
   } = useSWR(
     offerId
       ? `/offers/${offerId}/conversions?startAt=${startAtDate}&endAt=${endAtDate}`
@@ -24,7 +24,7 @@ const useOfferConversions = (offerId, startAt, endAt) => {
     offerConversions,
     offerConversionsLoading,
     offerConversionsError,
-    fetchOfferConversions: mutateOfferConversions
+    fetchOfferConversions
   };
 };
 

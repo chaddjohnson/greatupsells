@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
@@ -8,7 +9,13 @@ const handler = async (event, context) => {
   try {
     const { shopId } = event.pathParameters;
     const PopupTheme = await models.get('PopupTheme');
-    const popupThemes = await PopupTheme.findByShopId(shopId);
+    const popupThemes = await PopupTheme.find({
+      offer: null, // must not belong to an offer
+      $or: [
+        { shop: null }, // shared
+        { shop: mongoose.Types.ObjectId(shopId) } // or belonging to the shop
+      ]
+    }).sort({ displayOrder: 1 });
 
     return {
       statusCode: StatusCodes.OK,

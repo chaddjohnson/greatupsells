@@ -34,9 +34,15 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
       shouldRetryOnError: false
     }
   );
-  const { offer, triggerProduct, offeredProducts } = data || {};
+  const { offer, popupTheme, triggerProduct, offeredProducts } = data || {};
 
-  return { offer, triggerProduct, offeredProducts, offerViewed };
+  return {
+    offer,
+    popupTheme,
+    triggerProduct,
+    offeredProducts,
+    offerViewed
+  };
 };
 
 export default useRandomOffer;

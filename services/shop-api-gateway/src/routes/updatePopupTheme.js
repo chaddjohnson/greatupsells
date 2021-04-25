@@ -1,4 +1,3 @@
-const { URL } = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const {
@@ -6,7 +5,6 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
-const qs = require('qs');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 const logger = require('@neatowebsolutions/upselling-logger');
@@ -28,48 +26,36 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const ipAddress =
-      event.requestContext.identity.sourceIp ||
-      event.headers['X-Forwarded-For'];
-    const domain = new URL(event.headers.Origin).host;
-    const { event: triggerEvent } = event.queryStringParameters || {};
-    const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
+    const { shopId } = event.requestContext.authorizer.claims;
+    const { popupThemeId } = event.pathParameters;
+    const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
+    const popupThemeShopId = popupTheme.shop;
+    const data = JSON.parse(event.body);
 
-    const offerParams = qs.stringify(
-      {
-        event: triggerEvent,
-        shopifyProductIds,
-        ipAddress
-      },
-      { arrayFormat: 'repeat' }
-    );
+    if (shopId !== popupThemeShopId) {
+      await logger.warn(
+        `Unauthorized update attempt for popup theme ${popupThemeId}`,
+        data,
+        event
+      );
 
-    // Look up offer by domain to minimize this method's latency. Multiple data
-    // items are combined into one response to reduce latency.
-    const {
-      offer,
-      popupTheme,
-      triggerProduct,
-      offeredProducts
-    } = await httpClient.get(
-      `/shops/domain/${domain}/offers/random?${offerParams}`
-    );
-
-    if (!offer) {
       return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
+        statusCode: StatusCodes.FORBIDDEN,
+        body: ReasonPhrases.FORBIDDEN
       };
     }
 
+    const updatedPopupTheme = await httpClient.put(
+      `/popup-themes/${popupThemeId}`,
+      {
+        ...popupTheme,
+        ...data
+      }
+    );
+
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify({
-        offer,
-        popupTheme,
-        triggerProduct,
-        offeredProducts
-      })
+      body: JSON.stringify(updatedPopupTheme)
     };
   } catch (error) {
     if (error.response && error.response.status) {
@@ -79,7 +65,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error requesting random offer for shop`, error, event);
+    await logger.error(`Error updating popup theme`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

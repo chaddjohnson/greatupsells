@@ -27,6 +27,7 @@ const handler = async (event, context) => {
     const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
     const Shop = await models.get('Shop');
     const Offer = await models.get('Offer');
+    const PopupTheme = await models.get('PopupTheme');
     const shop = await Shop.findByDomain(domain);
 
     if (!shop) {
@@ -51,7 +52,8 @@ const handler = async (event, context) => {
     }
 
     // Parallelize to minimize latency.
-    const [triggerProduct, offeredProducts] = await Promise.all([
+    const [popupTheme, triggerProduct, offeredProducts] = await Promise.all([
+      PopupTheme.findById(offer.popupTheme),
       findRandomProduct(shopifyProductIds),
       offer.findRandomProducts()
     ]);
@@ -60,6 +62,7 @@ const handler = async (event, context) => {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
         offer,
+        popupTheme,
         triggerProduct,
         offeredProducts
       })

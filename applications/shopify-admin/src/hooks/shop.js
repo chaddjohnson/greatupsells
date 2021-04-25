@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
 import useToast from './toast';
 
@@ -10,20 +10,25 @@ export const ShopProvider = ({ children }) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
-  const { data: shop, error: shopError, mutate: mutateShop } = useSWR(
+  const { data: shop, error: shopError } = useSWR(
     '/shop',
     httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
   );
   const shopLoading = !shop && !shopError;
 
-  const updateShop = async (data) => {
+  const saveShop = async (data) => {
+    const url = '/shop';
+    let updatedData = null;
+
     try {
-      mutateShop(data, false);
-      await httpClient.put('/shop', data);
-      showSuccessToast('Shop saved');
+      updatedData = await mutate(url, httpClient.put(url, data));
+      showSuccessToast('Shop updated.');
+
+      return updatedData;
     } catch (error) {
-      showErrorToast('Error updating shop');
+      showErrorToast('Error updating shop.');
+      throw error;
     }
   };
 
@@ -33,8 +38,7 @@ export const ShopProvider = ({ children }) => {
         shop,
         shopLoading,
         shopError,
-        updateShop,
-        fetchShop: mutateShop
+        saveShop
       }}
     >
       {children}
