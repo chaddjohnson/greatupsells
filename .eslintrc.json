@@ -6,10 +6,11 @@
   "extends": [
     "react-app",
     "airbnb-base",
-    "prettier",
     "eslint:recommended",
+    "plugin:prettier/recommended",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "prettier"
   ],
   "plugins": ["prettier", "jsx-a11y"],
   "rules": {
@@ -30,13 +31,6 @@
     "max-len": "off",
     "no-plusplus": "off",
     "global-require": "off",
-    "indent": [
-      "warn",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
     "class-methods-use-this": "off",
     "no-unused-vars": [
       "warn",
