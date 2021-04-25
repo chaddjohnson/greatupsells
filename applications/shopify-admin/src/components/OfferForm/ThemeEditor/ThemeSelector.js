@@ -12,6 +12,7 @@ import {
   Icon,
   Sheet,
   TextContainer,
+  Heading,
   Scrollable,
   PageActions,
   EmptyState,
@@ -53,12 +54,38 @@ const ThemeOptionWrapper = styled.div`
   padding-bottom: 0.5rem;
   margin: auto;
   background-color: #ffffff;
+  position: relative;
+
+  &:hover {
+    .preview {
+      visibility: hidden;
+    }
+    .description {
+      visibility: visible;
+    }
+  }
 `;
 
 const ThemeThumbnailImage = styled.img`
   width: 350px;
   max-width: 100%;
   height: auto;
+`;
+
+const ThemeDescription = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  visibility: hidden;
 `;
 
 const SearchFilter = ({ strategy, category, onChange }) => {
@@ -122,16 +149,25 @@ SearchFilter.defaultProps = {
 
 const ThemeOption = ({ theme }) => (
   <ThemeOptionWrapper>
-    <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
-    <Stack distribution="center">
-      <TextContainer>{theme.name}</TextContainer>
-    </Stack>
+    <div className="preview">
+      <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
+      <Stack distribution="center">
+        <TextContainer>{theme.name}</TextContainer>
+      </Stack>
+    </div>
+    <ThemeDescription className="description">
+      <TextContainer>
+        <Heading>{theme.name}</Heading>
+        <p>{theme.description}</p>
+      </TextContainer>
+    </ThemeDescription>
   </ThemeOptionWrapper>
 );
 
 ThemeOption.propTypes = {
   theme: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    description: PropTypes.string,
     thumbnailImageUrl: PropTypes.string.isRequired
   })
 };
