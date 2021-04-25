@@ -136,7 +136,10 @@ const OfferPopup = ({
     currency
   });
 
-  const iframeDocument = iframeRef?.contentWindow?.document;
+  const iframeDocument =
+    iframeRef?.contentWindow?.document ||
+    iframeRef?.contentDocument ||
+    iframeRef?.document;
   const mountNode = iframeDocument?.body;
   const insertionTarget = useMemo(() => iframeDocument?.createElement('link'), [
     iframeDocument
