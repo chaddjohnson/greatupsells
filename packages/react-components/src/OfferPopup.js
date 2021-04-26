@@ -327,7 +327,8 @@ const OfferPopup = ({
     iframeDocument,
     modalRef,
     theme.template,
-    designMode
+    designMode,
+    designModeZoom
   ]);
 
   // Fix the iframe height when scrolling occurs.
