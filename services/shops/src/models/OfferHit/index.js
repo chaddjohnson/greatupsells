@@ -86,11 +86,7 @@ schema.statics.findByOrderId = function (orderId) {
   return OfferHit.find({ order: mongoose.Types.ObjectId(orderId) });
 };
 
-schema.statics.findByShopifyOrderId = function (shopifyOrderId) {
-  return OfferHit.find({ shopifyOrderId });
-};
-
-schema.statics.findByAcceptedVariantId = function (shopifyVariantId) {
+schema.statics.findOneByAcceptedVariantId = function (shopifyVariantId) {
   return OfferHit.findOne({ acceptedShopifyVariantId: shopifyVariantId });
 };
 
