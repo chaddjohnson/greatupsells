@@ -17,7 +17,7 @@ const createShop = async (shopDomain, accessToken) => {
 
 const createOrUpdate = async (shopDomain, accessToken) => {
   const Shop = mongodbClient.connection.model('Shop');
-  let shop = await Shop.findByDomain(shopDomain);
+  let shop = await Shop.findOneByDomain(shopDomain);
 
   if (!shop) {
     shop = await createShop(shopDomain, accessToken);

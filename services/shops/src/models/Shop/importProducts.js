@@ -7,7 +7,9 @@ const importProduct = async (shop, shopifyProductData) => {
     const Product = await models.get('Product');
     const { shopifyShopId } = shop;
     const shopifyProductId = shopifyProductData.id;
-    let product = await Product.findByShopifyProductId(shopifyProductData.id);
+    let product = await Product.findOneByShopifyProductId(
+      shopifyProductData.id
+    );
 
     if (product) {
       product.shopifyProductData = shopifyProductData;

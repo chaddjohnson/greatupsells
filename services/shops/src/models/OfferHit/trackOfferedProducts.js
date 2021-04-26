@@ -7,7 +7,7 @@ const findProducts = async (shopifyProductIds) => {
 
   return await Promise.all(
     shopifyProductIds.map(async (shopifyProductId) => {
-      const product = await Product.findByShopifyProductId(shopifyProductId);
+      const product = await Product.findOneByShopifyProductId(shopifyProductId);
 
       if (!product) {
         return await logger.error(

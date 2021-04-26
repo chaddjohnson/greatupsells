@@ -15,7 +15,7 @@ const trackConversions = async (order) => {
     await Promise.all(
       lineItems.map(
         async ({ variant_id: variantId }) =>
-          variantId && OfferHit.findByAcceptedVariantId(variantId)
+          variantId && OfferHit.findOneByAcceptedVariantId(variantId)
       )
     )
   );

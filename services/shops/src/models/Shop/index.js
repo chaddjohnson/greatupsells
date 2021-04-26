@@ -92,13 +92,13 @@ schema.virtual('shopName').get(function () {
   return this.domain.replace(/^([^\.]+).*$/, '$1');
 });
 
-schema.statics.findByDomain = function (domain) {
+schema.statics.findOneByDomain = function (domain) {
   return Shop.findOne({
     $or: [{ domain }, { alternateDomain: domain }]
   });
 };
 
-schema.statics.findByShopifyShopId = function (shopifyShopId) {
+schema.statics.findOneByShopifyShopId = function (shopifyShopId) {
   return Shop.findOne({ shopifyShopId });
 };
 

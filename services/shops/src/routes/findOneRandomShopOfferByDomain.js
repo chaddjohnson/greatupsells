@@ -14,7 +14,7 @@ const findRandomProduct = async (shopifyProductIds = []) => {
     return;
   }
 
-  return await Product.findByShopifyProductId(triggerShopifyProductId);
+  return await Product.findOneByShopifyProductId(triggerShopifyProductId);
 };
 
 const handler = async (event, context) => {
@@ -28,7 +28,7 @@ const handler = async (event, context) => {
     const Shop = await models.get('Shop');
     const Offer = await models.get('Offer');
     const PopupTheme = await models.get('PopupTheme');
-    const shop = await Shop.findByDomain(domain);
+    const shop = await Shop.findOneByDomain(domain);
 
     if (!shop) {
       return {

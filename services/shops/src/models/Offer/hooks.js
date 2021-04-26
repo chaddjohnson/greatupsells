@@ -15,7 +15,7 @@ const preValidate = async (offer, next) => {
   // Set up reference to the shop if missing.
   if (offer.shopifyShopId && !offer.shop) {
     try {
-      offer.shop = await Shop.findByShopifyShopId(offer.shopifyShopId);
+      offer.shop = await Shop.findOneByShopifyShopId(offer.shopifyShopId);
     } catch (error) {
       return next(error);
     }

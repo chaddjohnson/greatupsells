@@ -33,7 +33,7 @@ schema.virtual('orderNumber').get(function () {
   return `${this.shopifyShopId}-${this.shopifyOrderNumber}`;
 });
 
-schema.statics.findByShopifyOrderId = function (shopifyOrderId) {
+schema.statics.findOneByShopifyOrderId = function (shopifyOrderId) {
   return Order.findOne({ shopifyOrderId });
 };
 

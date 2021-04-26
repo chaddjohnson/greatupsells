@@ -8,7 +8,7 @@ const handler = async (event, context) => {
   try {
     const { shopifyProductId } = event.pathParameters;
     const Product = await models.get('Product');
-    const product = await Product.findByShopifyProductId(shopifyProductId);
+    const product = await Product.findOneByShopifyProductId(shopifyProductId);
 
     if (!product) {
       return {

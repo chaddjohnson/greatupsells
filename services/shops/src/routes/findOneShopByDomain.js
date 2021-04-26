@@ -8,7 +8,7 @@ const handler = async (event, context) => {
   try {
     const { domain } = event.pathParameters;
     const Shop = await models.get('Shop');
-    const shop = await Shop.findByDomain(domain);
+    const shop = await Shop.findOneByDomain(domain);
 
     if (!shop) {
       return {

@@ -26,7 +26,7 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.statics.findByShopifyCollectionId = function (shopifyCollectionId) {
+schema.statics.findOneByShopifyCollectionId = function (shopifyCollectionId) {
   return Collection.findOne({ shopifyCollectionId });
 };
 

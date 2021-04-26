@@ -7,7 +7,7 @@ const importCollection = async (shop, shopifyCollectionData) => {
     const Collection = await models.get('Collection');
     const { shopifyShopId } = shop;
     const shopifyCollectionId = shopifyCollectionData.id;
-    let collection = await Collection.findByShopifyCollectionId(
+    let collection = await Collection.findOneByShopifyCollectionId(
       shopifyCollectionData.id
     );
 

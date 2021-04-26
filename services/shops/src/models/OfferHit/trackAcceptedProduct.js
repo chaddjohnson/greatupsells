@@ -10,7 +10,7 @@ const trackAcceptedProduct = async (
   await offerHit.execPopulate('offer');
 
   const Product = mongodbClient.connection.model('Product');
-  const product = await Product.findByShopifyProductId(shopifyProductId);
+  const product = await Product.findOneByShopifyProductId(shopifyProductId);
   const shopifyProductData = product && { ...product.shopifyProductData };
   const { offer } = offerHit;
   let copiedProduct = null;
