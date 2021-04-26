@@ -145,6 +145,44 @@ const OfferPopup = ({
     iframeDocument
   ]);
 
+  const fixIframeHeight = () => {
+    if (!iframeDocument || !modalRef) {
+      return;
+    }
+
+    // This only applies to design mode.
+    if (!designMode) {
+      return;
+    }
+
+    setTimeout(async () => {
+      // Wait for all images to load so that we can get an accurate measure of
+      // the content height.
+      // Reference: https://stackoverflow.com/a/60949881/83897
+      await Promise.all(
+        Array.from(iframeDocument.images).map((image) => {
+          if (image.complete) {
+            return Promise.resolve(image.naturalHeight !== 0);
+          }
+          return new Promise((resolve) => {
+            image.addEventListener('load', () => resolve());
+            image.addEventListener('error', () => resolve());
+          });
+        })
+      );
+
+      // Workaround: Set the iframe height to some large -- taller than the content
+      // will likely actually be. Do so because `offsetHeight` does not reflect the
+      // iframe's content height unless the iframe is actualy tall enough to
+      // accommodate the content.
+      setIframeHeight(initialIframeHeight);
+
+      // Set the iframe height to approximately the modal content height. Do so via
+      // a timeout to allow the iframe height to temporarily increase per above.
+      setTimeout(() => setIframeHeight((modalRef.offsetHeight - 10) * 0.8), 0);
+    }, 0);
+  };
+
   const translateProduct = useCallback(
     (product = {}) => {
       const { shopifyProductData } = product;
@@ -275,43 +313,22 @@ const OfferPopup = ({
     }
   }, [iframeDocument, insertionTarget]);
 
+  // Fix the iframe height as dependencies change.
+  useEffect(fixIframeHeight, [
+    iframeDocument,
+    modalRef,
+    theme.template,
+    designMode
+  ]);
+
+  // Fix the iframe height when scrolling occurs.
   useEffect(() => {
-    if (!iframeDocument || !modalRef) {
-      return;
-    }
+    window.addEventListener('scroll', fixIframeHeight);
 
-    // This only applies to design mode.
-    if (!designMode) {
-      return;
-    }
-
-    setTimeout(async () => {
-      // Wait for all images to load so that we can get an accurate measure of
-      // the content height.
-      // Reference: https://stackoverflow.com/a/60949881/83897
-      await Promise.all(
-        Array.from(iframeDocument.images).map((image) => {
-          if (image.complete) {
-            return Promise.resolve(image.naturalHeight !== 0);
-          }
-          return new Promise((resolve) => {
-            image.addEventListener('load', () => resolve());
-            image.addEventListener('error', () => resolve());
-          });
-        })
-      );
-
-      // Workaround: Set the iframe height to some large -- taller than the content
-      // will likely actually be. Do so because `offsetHeight` does not reflect the
-      // iframe's content height unless the iframe is actualy tall enough to
-      // accommodate the content.
-      setIframeHeight(initialIframeHeight);
-
-      // Set the iframe height to approximately the modal content height. Do so via
-      // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(() => setIframeHeight((modalRef.offsetHeight - 10) * 0.8), 0);
-    }, 0);
-  }, [iframeDocument, modalRef, theme.template, designMode]);
+    return () => {
+      window.removeEventListener('scroll', fixIframeHeight);
+    };
+  });
 
   if (!offer || !markup) {
     return null;
