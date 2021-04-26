@@ -302,6 +302,7 @@ const OfferForm = ({
                 <OfferPopup
                   open={true}
                   designMode={!previewActive}
+                  designModeZoom={0.8}
                   shop={shop}
                   theme={popupTheme}
                   offer={offer}

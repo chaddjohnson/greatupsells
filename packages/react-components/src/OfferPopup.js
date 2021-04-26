@@ -116,6 +116,7 @@ const OfferPopup = ({
   className,
   open,
   designMode,
+  designModeZoom,
   theme,
   shop,
   offer,
@@ -179,7 +180,10 @@ const OfferPopup = ({
 
       // Set the iframe height to approximately the modal content height. Do so via
       // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(() => setIframeHeight((modalRef.offsetHeight - 10) * 0.8), 0);
+      setTimeout(
+        () => setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom),
+        0
+      );
     }, 0);
   };
 
@@ -392,7 +396,7 @@ const OfferPopup = ({
                     height: '100%'
                   },
                   content: {
-                    zoom: designMode ? 0.8 : 1
+                    zoom: designMode ? designModeZoom : 1
                   }
                 }}
               >
@@ -425,6 +429,7 @@ OfferPopup.propTypes = {
 OfferPopup.defaultProps = {
   open: false,
   designMode: false,
+  designModeZoom: 1,
   triggerProduct: {},
   offeredProducts: [],
   onAddProduct: () => {},
