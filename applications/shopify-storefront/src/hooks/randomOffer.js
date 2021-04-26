@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import qs from 'qs';
 import useSWR from 'swr';
 import {
@@ -13,8 +14,9 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const { httpClient } = useHttpClient();
   const { getCookie } = useCookies();
 
-  const offerViews = getCookie('upsellingOfferViews') || { events: [] };
-  const offerViewed = offerViews.events.indexOf(event) > -1;
+  const [offerViews] = useState(getCookie('upsellingOfferViews') || []);
+
+  const viewedOfferIds = offerViews.map((offerView) => offerView.offerId);
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
   const isProductEvent = !!shopifyProductIds?.length;
@@ -22,10 +24,12 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const params = qs.stringify(
     {
       event,
-      shopifyProductIds
+      shopifyProductIds,
+      viewedOfferIds
     },
     { arrayFormat: 'repeat' }
   );
+
   const { data } = useSWR(
     shouldQuery ? `/offers/random?${params}` : null,
     httpClient.get.bind(httpClient),
@@ -40,8 +44,7 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
     offer,
     popupTheme,
     triggerProduct,
-    offeredProducts,
-    offerViewed
+    offeredProducts
   };
 };
 

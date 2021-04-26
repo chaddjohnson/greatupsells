@@ -10,21 +10,19 @@ import {
 const triggerEvent = 'CART';
 
 const CartOffer = () => {
-  const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [offerViewed, setOfferViewed] = useState(false);
+  const [shopifyProductIds, setShopifyProductIds] = useState([]);
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const {
-    offer,
-    popupTheme,
-    triggerProduct,
-    offeredProducts,
-    offerViewed
-  } = useRandomOffer({
-    event: triggerEvent,
-    shopifyProductIds
-  });
+  const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
+    {
+      event: triggerEvent,
+      shopifyProductIds
+    }
+  );
+  const offerId = offer?._id;
   const { shop } = useShop();
 
   const handleClosePopup = () => {
@@ -32,23 +30,32 @@ const CartOffer = () => {
     setShopifyProductIds([]);
   };
 
-  const handleAddProduct = async (productId, variantId, quantity) => {
-    // Accept the offer.
-    await trackOfferAcceptance(offer._id, productId, variantId, quantity);
-
+  const handleAddProduct = async (
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  ) => {
     // Add the product to the cart.
-    if (variantId) {
-      await addProductToShopifyCart(variantId, quantity);
+    if (shopifyVariantId) {
+      await addProductToShopifyCart(shopifyVariantId, quantity);
     }
+
+    // Accept the offer.
+    await trackOfferAcceptance({
+      offerId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    });
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer) {
+    if (!offerId) {
       return;
     }
 
-    // Do not show the offer if one has already shown.
+    // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
     }
@@ -63,16 +70,16 @@ const CartOffer = () => {
 
     (async () => {
       setPopupOpen(true);
+      setOfferViewed(true);
 
-      await trackOfferView(
-        offer._id,
-        triggerEvent,
+      await trackOfferView({
+        offerId,
         triggerShopifyProductId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
-      );
+      });
     })();
-  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offerId, triggerProduct, offeredProducts, offerViewed, trackOfferView]);
 
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
 

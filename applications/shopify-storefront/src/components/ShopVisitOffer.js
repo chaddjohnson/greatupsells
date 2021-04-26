@@ -11,12 +11,14 @@ const triggerEvent = 'LOAD';
 
 const ShopVisitOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
+  const [offerViewed, setOfferViewed] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const { offer, popupTheme, offeredProducts, offerViewed } = useRandomOffer({
+  const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent
   });
+  const offerId = offer?._id;
   const { shop } = useShop();
 
   const handleAddProduct = async (
@@ -24,27 +26,27 @@ const ShopVisitOffer = () => {
     shopifyVariantId,
     quantity
   ) => {
-    // Accept the offer.
-    await trackOfferAcceptance(
-      offer._id,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-
     // Add the product to the cart.
     if (shopifyVariantId) {
       await addProductToShopifyCart(shopifyProductId, quantity);
     }
+
+    // Accept the offer.
+    await trackOfferAcceptance({
+      offerId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    });
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer) {
+    if (!offerId) {
       return;
     }
 
-    // Do not show the offer if one has already shown.
+    // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
     }
@@ -58,15 +60,15 @@ const ShopVisitOffer = () => {
 
     (async () => {
       setPopupOpen(true);
+      setOfferViewed(true);
 
-      await trackOfferView(
-        offer._id,
-        triggerEvent,
+      await trackOfferView({
+        offerId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
-      );
+      });
     })();
-  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offerId, offeredProducts, offerViewed, trackOfferView]);
 
   if (!offer || !shop) {
     return null;

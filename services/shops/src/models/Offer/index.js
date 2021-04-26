@@ -86,7 +86,7 @@ const schema = new mongoose.Schema(
     timerText: { type: String, required: false },
     timerCountdownStart: { type: Int32, required: false },
     allowWithDiscountCodes: { type: Boolean, required: true, default: true },
-    allowMultipleUpsells: { type: Boolean, required: true, default: true },
+    allowMultipleViews: { type: Boolean, required: true, default: true },
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     showNotificationBanner: { type: Boolean, required: true, default: true },
     enableQuantitySelection: { type: Boolean, required: true, default: false },
@@ -113,11 +113,14 @@ schema.statics.findByShopId = function (shopId) {
 
 schema.statics.findOneRandom = function (
   shop,
-  triggerEvent,
-  shopifyProductIds,
-  ipAddress
+  { triggerEvent, shopifyProductIds, ipAddress, viewedOfferIds }
 ) {
-  return findOneRandom(shop, triggerEvent, shopifyProductIds, ipAddress);
+  return findOneRandom(shop, {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress,
+    viewedOfferIds
+  });
 };
 
 schema.methods.findRandomProducts = function () {
@@ -164,19 +167,18 @@ schema.methods.findPopupThemes = async function () {
   return PopupTheme.findByOfferId(this._id);
 };
 
-schema.methods.trackView = function (
+schema.methods.trackView = function ({
   triggerShopifyProductId,
   shopifyProductIds,
   shopifyVariantIds,
   ipAddress
-) {
-  return trackView(
-    this,
+}) {
+  return trackView(this, {
     triggerShopifyProductId,
     shopifyProductIds,
     shopifyVariantIds,
     ipAddress
-  );
+  });
 };
 
 schema.methods.toString = function () {

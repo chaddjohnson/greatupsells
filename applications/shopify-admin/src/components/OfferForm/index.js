@@ -102,7 +102,7 @@ const OfferForm = ({
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    allowMultipleUpsells,
+    allowMultipleViews,
     hideIfItemAdded,
     allowWithDiscountCodes
   } = useFields(initialOffer, showEndDate);
@@ -136,7 +136,7 @@ const OfferForm = ({
       enableQuantitySelection,
       limitQuantitySelection,
       productQuantityLimit,
-      allowMultipleUpsells,
+      allowMultipleViews,
       hideIfItemAdded,
       allowWithDiscountCodes
     },
@@ -354,7 +354,7 @@ const OfferForm = ({
             limitQuantitySelection={limitQuantitySelection}
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
-            allowMultipleUpsells={allowMultipleUpsells}
+            allowMultipleViews={allowMultipleViews}
             hideIfItemAdded={hideIfItemAdded}
             allowWithDiscountCodes={allowWithDiscountCodes}
             showNotificationBanner={showNotificationBanner}

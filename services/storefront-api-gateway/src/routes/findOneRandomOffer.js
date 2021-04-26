@@ -33,12 +33,14 @@ const handler = middy(async (event, context) => {
       event.headers['X-Forwarded-For'];
     const domain = new URL(event.headers.Origin).host;
     const { event: triggerEvent } = event.queryStringParameters || {};
-    const { shopifyProductIds } = event.multiValueQueryStringParameters || {};
+    const { shopifyProductIds, viewedOfferIds } =
+      event.multiValueQueryStringParameters || {};
 
     const offerParams = qs.stringify(
       {
         event: triggerEvent,
         shopifyProductIds,
+        viewedOfferIds,
         ipAddress
       },
       { arrayFormat: 'repeat' }

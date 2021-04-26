@@ -1,23 +1,41 @@
+const mongoose = require('mongoose');
 const geoip = require('geoip-country');
 const mongodbClient = require('../mongodbClient');
 
-const findOneRandomByTriggerEvent = async (shop, triggerEvent, ipAddress) => {
+const findOneRandomByTriggerEvent = async (
+  shop,
+  { triggerEvent, ipAddress = undefined, viewedOfferIds = [] }
+) => {
   const Offer = mongodbClient.connection.model('Offer');
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   const criteria = {
     shop: shop._id,
     triggerEvent,
-    enabled: true
+    enabled: true,
+    $and: [
+      {
+        $or: [
+          { allowMultipleViews: true },
+          {
+            _id: {
+              $nin: viewedOfferIds.map(mongoose.Types.ObjectId)
+            }
+          }
+        ]
+      }
+    ]
   };
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData) {
-    criteria.$or = [
-      { enableGeotargeting: false },
-      { geotargetingCountries: geoData.country }
-    ];
+    criteria.$and.push({
+      $or: [
+        { enableGeotargeting: false },
+        { geotargetingCountries: geoData.country }
+      ]
+    });
   }
 
   // Randomly find an offer having the trigger event as a trigger.
@@ -42,9 +60,12 @@ const findOneRandomByTriggerEvent = async (shop, triggerEvent, ipAddress) => {
 
 const findOneRandomByTriggerEventAndShopifyProductIds = async (
   shop,
-  triggerEvent,
-  shopifyProductIds,
-  ipAddress
+  {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress = undefined,
+    viewedOfferIds = []
+  }
 ) => {
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
     parseInt(shopifyProductId)
@@ -75,6 +96,16 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
           {
             'triggerCollections.shopifyCollectionId': {
               $in: shopifyCollectionIds
+            }
+          }
+        ]
+      },
+      {
+        $or: [
+          { allowMultipleViews: true },
+          {
+            _id: {
+              $nin: viewedOfferIds.map(mongoose.Types.ObjectId)
             }
           }
         ]
@@ -118,9 +149,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
 const findOneRandom = async (
   shop,
-  triggerEvent,
-  shopifyProductIds,
-  ipAddress
+  { triggerEvent, shopifyProductIds, ipAddress, viewedOfferIds }
 ) => {
   const shopifyProductIdsRequired =
     triggerEvent === 'ADD' || triggerEvent === 'CART';
@@ -141,14 +170,18 @@ const findOneRandom = async (
   }
 
   if (shopifyProductIdsRequired) {
-    return await findOneRandomByTriggerEventAndShopifyProductIds(
-      shop,
+    return await findOneRandomByTriggerEventAndShopifyProductIds(shop, {
       triggerEvent,
       shopifyProductIds,
-      ipAddress
-    );
+      ipAddress,
+      viewedOfferIds
+    });
   } else {
-    return await findOneRandomByTriggerEvent(shop, triggerEvent, ipAddress);
+    return await findOneRandomByTriggerEvent(shop, {
+      triggerEvent,
+      ipAddress,
+      viewedOfferIds
+    });
   }
 };
 

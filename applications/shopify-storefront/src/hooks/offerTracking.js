@@ -10,26 +10,26 @@ const useOfferTracking = () => {
   const { httpClient } = useHttpClient();
   const { getCookie, setCookie } = useCookies();
 
-  const trackOfferView = async (
+  const trackOfferView = async ({
     offerId,
-    triggerEvent,
     triggerShopifyProductId,
     shopifyProductIds,
     shopifyVariantIds
-  ) => {
+  }) => {
     // Retrieve local event and offer tracking data.
-    const offerViews = getCookie('upsellingOfferViews') || { events: [] };
+    const offerViews = getCookie('upsellingOfferViews') || [];
+    const viewedOfferIds = offerViews.map((offerView) => offerView.offerId);
+    const viewedAt = new Date().toISOString();
 
-    // Track whether an offer has shown for the event.
-    if (!offerViews.events.indexOf(triggerEvent) > -1) {
-      offerViews.events.push(triggerEvent);
-
-      // Save the offer view.
-      setCookie('upsellingOfferViews', offerViews, {
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 // 1 day
-      });
+    if (viewedOfferIds.indexOf(offerId) === -1) {
+      offerViews.push({ offerId, viewedAt });
     }
+
+    // Save the offer view.
+    setCookie('upsellingOfferViews', offerViews, {
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 // 1 day
+    });
 
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
@@ -42,12 +42,12 @@ const useOfferTracking = () => {
     setOfferHitId(offerHit._id);
   };
 
-  const trackOfferAcceptance = async (
+  const trackOfferAcceptance = async ({
     offerId,
     shopifyProductId,
     shopifyVariantId,
     quantity
-  ) => {
+  }) => {
     await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyProductId,

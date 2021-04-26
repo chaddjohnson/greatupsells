@@ -3,10 +3,12 @@ const mongodbClient = require('../mongodbClient');
 
 const trackView = async (
   offer,
-  triggerShopifyProductId,
-  shopifyProductIds = [],
-  shopifyVariantIds = [],
-  ipAddress
+  {
+    triggerShopifyProductId = undefined,
+    shopifyProductIds = [],
+    shopifyVariantIds = [],
+    ipAddress = undefined
+  }
 ) => {
   await offer.execPopulate('shop');
 

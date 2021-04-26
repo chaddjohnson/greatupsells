@@ -117,7 +117,7 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [limitQuantitySelection.value]
   );
-  const allowMultipleUpsells = useField(initialOffer.allowMultipleUpsells);
+  const allowMultipleViews = useField(initialOffer.allowMultipleViews);
   const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
   const allowWithDiscountCodes = useField(initialOffer.allowWithDiscountCodes);
 
@@ -147,7 +147,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    allowMultipleUpsells,
+    allowMultipleViews,
     hideIfItemAdded,
     allowWithDiscountCodes
   };

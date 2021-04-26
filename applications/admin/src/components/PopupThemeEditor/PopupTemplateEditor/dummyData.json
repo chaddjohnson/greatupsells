@@ -18,7 +18,7 @@
     ],
     "enableTimer": false,
     "allowWithDiscountCodes": true,
-    "allowMultipleUpsells": true,
+    "allowMultipleViews": true,
     "hideIfItemAdded": true,
     "showNotificationBanner": true,
     "enableQuantitySelection": true,

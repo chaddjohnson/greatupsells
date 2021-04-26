@@ -10,24 +10,22 @@ import {
 const triggerEvent = 'ADD';
 
 const ProductOffer = () => {
-  const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [offerViewed, setOfferViewed] = useState(false);
+  const [shopifyProductIds, setShopifyProductIds] = useState([]);
 
   const {
     addProductToShopifyCart,
     onProductAddedToShopifyCart
   } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
-  const {
-    offer,
-    popupTheme,
-    triggerProduct,
-    offeredProducts,
-    offerViewed
-  } = useRandomOffer({
-    event: triggerEvent,
-    shopifyProductIds
-  });
+  const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
+    {
+      event: triggerEvent,
+      shopifyProductIds
+    }
+  );
+  const offerId = offer?._id;
   const { shop } = useShop();
 
   const handleClosePopup = () => {
@@ -40,27 +38,27 @@ const ProductOffer = () => {
     shopifyVariantId,
     quantity
   ) => {
-    // Accept the offer.
-    await trackOfferAcceptance(
-      offer._id,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-
     // Add the product to the cart.
     if (shopifyVariantId) {
       await addProductToShopifyCart(shopifyVariantId, quantity);
     }
+
+    // Accept the offer.
+    await trackOfferAcceptance({
+      offerId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    });
   };
 
   useEffect(() => {
     // Nothing to show if there is no offer or product.
-    if (!offer) {
+    if (!offerId) {
       return;
     }
 
-    // Do not show the offer if one has already shown.
+    // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
     }
@@ -75,16 +73,16 @@ const ProductOffer = () => {
 
     (async () => {
       setPopupOpen(true);
+      setOfferViewed(true);
 
-      await trackOfferView(
-        offer._id,
-        triggerEvent,
+      await trackOfferView({
+        offerId,
         triggerShopifyProductId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
-      );
+      });
     })();
-  }, [offer, offeredProducts, offerViewed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offerId, triggerProduct, offeredProducts, offerViewed, trackOfferView]);
 
   // Subscribe to product add events.
   useEffect(() => {

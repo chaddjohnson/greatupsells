@@ -106,7 +106,7 @@ const initialOffer = {
   enableTimer: false,
   timerText: 'Ends in',
   allowWithDiscountCodes: true,
-  allowMultipleUpsells: true,
+  allowMultipleViews: true,
   hideIfItemAdded: false,
   showNotificationBanner: true,
   enableQuantitySelection: false,
