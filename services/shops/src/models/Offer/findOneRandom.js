@@ -29,7 +29,7 @@ const findOneRandomByTriggerEvent = async (
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
-  if (geoData) {
+  if (geoData && geoData.country) {
     criteria.$and.push({
       $or: [
         { enableGeotargeting: false },
@@ -116,7 +116,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
-  if (geoData) {
+  if (geoData && geoData.country) {
     criteria.$and.push({
       $or: [
         { enableGeotargeting: false },
