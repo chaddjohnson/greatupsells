@@ -267,13 +267,17 @@ const OfferPopup = ({
   // Set up template variables.
   const mappedVariables = useMemo(
     () =>
-      theme.variables.reduce(
-        (map, { name, value, type }) => ({
+      theme.variables.reduce((map, { name, value, type }) => {
+        // Cast "option" variables to boolean.
+        if (type === 'option') {
+          value = value === 'true';
+        }
+
+        return {
           ...map,
-          [name]: (type === 'option' && value === 'true') || value
-        }),
-        {}
-      ),
+          [name]: value
+        };
+      }, {}),
     [theme.variables]
   );
 
