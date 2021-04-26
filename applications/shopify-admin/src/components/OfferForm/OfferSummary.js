@@ -74,7 +74,7 @@ const OfferSummary = ({ offer }) => {
   }, [offer.startAt, offer.endAt]);
 
   return (
-    <>
+    <Card title="Summary" subdued>
       <Card.Section>
         {offer.name ? (
           <Stack vertical>
@@ -120,7 +120,7 @@ const OfferSummary = ({ offer }) => {
           </Stack>
         </Card.Section>
       )}
-    </>
+    </Card>
   );
 };
 
