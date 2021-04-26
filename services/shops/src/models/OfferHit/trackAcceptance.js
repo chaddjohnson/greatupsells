@@ -3,7 +3,9 @@ const mongodbClient = require('../mongodbClient');
 
 const trackAcceptance = async (
   offerHit,
-  { shopifyProductId, shopifyVariantId, quantity }
+  shopifyProductId = undefined,
+  shopifyVariantId = undefined,
+  quantity = 0
 ) => {
   await offerHit.populate('shop').populate('offer').execPopulate();
 

@@ -5,8 +5,8 @@ const trackView = async (
   offer,
   {
     triggerShopifyProductId = undefined,
-    shopifyProductIds = [],
-    shopifyVariantIds = [],
+    offeredShopifyProductIds = [],
+    offeredShopifyVariantIds = [],
     ipAddress = undefined
   }
 ) => {
@@ -35,10 +35,10 @@ const trackView = async (
 
       await offerHit.save();
 
-      if (shopifyProductIds.length && shopifyVariantIds.length) {
+      if (offeredShopifyProductIds.length && offeredShopifyVariantIds.length) {
         await offerHit.trackOfferedProducts(
-          shopifyProductIds,
-          shopifyVariantIds
+          offeredShopifyProductIds,
+          offeredShopifyVariantIds
         );
       }
 

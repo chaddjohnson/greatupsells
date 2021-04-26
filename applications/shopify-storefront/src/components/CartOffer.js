@@ -41,12 +41,12 @@ const CartOffer = () => {
     }
 
     // Accept the offer.
-    await trackOfferAcceptance({
+    await trackOfferAcceptance(
       offerId,
       shopifyProductId,
       shopifyVariantId,
       quantity
-    });
+    );
   };
 
   useEffect(() => {

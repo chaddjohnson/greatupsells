@@ -11,8 +11,8 @@ const handler = async (event, context) => {
     const offer = await Offer.findById(offerId);
     const {
       triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds,
+      offeredShopifyProductIds,
+      offeredShopifyVariantIds,
       ipAddress
     } = JSON.parse(event.body);
 
@@ -23,12 +23,12 @@ const handler = async (event, context) => {
       };
     }
 
-    const offerHit = await offer.trackView(
+    const offerHit = await offer.trackView({
       triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds,
+      offeredShopifyProductIds,
+      offeredShopifyVariantIds,
       ipAddress
-    );
+    });
 
     return {
       statusCode: StatusCodes.CREATED,

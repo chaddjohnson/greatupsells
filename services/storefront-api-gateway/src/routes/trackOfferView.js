@@ -36,8 +36,8 @@ const handler = middy(async (event, context) => {
     const offerShopId = offer.shop;
     const {
       triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds
+      offeredShopifyProductIds,
+      offeredShopifyVariantIds
     } = JSON.parse(event.body);
 
     if (!shop || !offer) {
@@ -62,8 +62,8 @@ const handler = middy(async (event, context) => {
 
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
       triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds,
+      offeredShopifyProductIds,
+      offeredShopifyVariantIds,
       ipAddress
     });
 

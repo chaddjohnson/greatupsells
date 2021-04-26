@@ -38,7 +38,8 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
       shouldRetryOnError: false
     }
   );
-  const { offer, popupTheme, triggerProduct, offeredProducts } = data || {};
+  const { offer, popupTheme, triggerProduct, offeredProducts = [] } =
+    data || {};
 
   return {
     offer,

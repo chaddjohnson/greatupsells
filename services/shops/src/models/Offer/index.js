@@ -169,14 +169,14 @@ schema.methods.findPopupThemes = async function () {
 
 schema.methods.trackView = function ({
   triggerShopifyProductId,
-  shopifyProductIds,
-  shopifyVariantIds,
+  offeredShopifyProductIds,
+  offeredShopifyVariantIds,
   ipAddress
 }) {
   return trackView(this, {
     triggerShopifyProductId,
-    shopifyProductIds,
-    shopifyVariantIds,
+    offeredShopifyProductIds,
+    offeredShopifyVariantIds,
     ipAddress
   });
 };

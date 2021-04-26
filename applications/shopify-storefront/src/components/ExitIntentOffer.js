@@ -32,12 +32,12 @@ const ExitIntentOffer = () => {
     }
 
     // Accept the offer.
-    await trackOfferAcceptance({
+    await trackOfferAcceptance(
       offerId,
       shopifyProductId,
       shopifyVariantId,
       quantity
-    });
+    );
   };
 
   // References:

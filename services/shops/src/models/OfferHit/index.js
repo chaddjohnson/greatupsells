@@ -138,16 +138,12 @@ schema.methods.trackAcceptedProduct = function (
   );
 };
 
-schema.methods.trackAcceptance = function ({
+schema.methods.trackAcceptance = function (
   shopifyProductId,
   shopifyVariantId,
   quantity
-}) {
-  return trackAcceptance(this, {
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  });
+) {
+  return trackAcceptance(this, shopifyProductId, shopifyVariantId, quantity);
 };
 
 schema.methods.trackConversion = function (order) {

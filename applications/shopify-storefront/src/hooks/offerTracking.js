@@ -12,9 +12,9 @@ const useOfferTracking = () => {
 
   const trackOfferView = async ({
     offerId,
-    triggerShopifyProductId,
-    shopifyProductIds,
-    shopifyVariantIds
+    triggerShopifyProductId = undefined,
+    offeredShopifyProductIds = [],
+    offeredShopifyVariantIds = []
   }) => {
     // Retrieve local event and offer tracking data.
     const offerViews = getCookie('upsellingOfferViews') || [];
@@ -34,20 +34,20 @@ const useOfferTracking = () => {
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
       triggerShopifyProductId,
-      shopifyProductIds,
-      shopifyVariantIds
+      offeredShopifyProductIds,
+      offeredShopifyVariantIds
     });
 
     // Keep track of the newly-created offer hit.
     setOfferHitId(offerHit._id);
   };
 
-  const trackOfferAcceptance = async ({
+  const trackOfferAcceptance = async (
     offerId,
     shopifyProductId,
     shopifyVariantId,
     quantity
-  }) => {
+  ) => {
     await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyProductId,
