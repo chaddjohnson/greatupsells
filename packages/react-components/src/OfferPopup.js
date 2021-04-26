@@ -183,7 +183,7 @@ const OfferPopup = ({
     }, 0);
   };
 
-  const translateProduct = useCallback(
+  const translateProductData = useCallback(
     (product = {}) => {
       const { shopifyProductData } = product;
 
@@ -282,14 +282,15 @@ const OfferPopup = ({
 
   const translatedTriggerProduct = useMemo(() => {
     if (triggerProduct) {
-      return translateProduct(triggerProduct);
+      return translateProductData(triggerProduct);
     }
-  }, [translateProduct, triggerProduct]);
+  }, [translateProductData, triggerProduct]);
+
   const translatedOfferedProducts = useMemo(() => {
     if (offeredProducts) {
-      return offeredProducts.map(translateProduct);
+      return offeredProducts.map(translateProductData);
     }
-  }, [translateProduct, offeredProducts]);
+  }, [translateProductData, offeredProducts]);
 
   // Generate the markup.
   const { markup } = useLiquid(theme.template, {
