@@ -196,8 +196,8 @@ const OfferSettingsEditor = ({
             helpText: (
               <Stack vertical spacing="tight">
                 <span>
-                  Customers may only see this offer once within the specified
-                  number of days.
+                  Customers may only see this offer once within a period of
+                  days.
                 </span>
                 {viewAllowance.value === 'DAYS' && (
                   <ViewAllowanceDaysInputWrapper>
