@@ -10,6 +10,12 @@ class HttpClient {
     client.defaults.headers.common['Content-Type'] =
       'application/json; charset=utf-8';
 
+    // Enable this if needing to serialize arrays in query strings.
+    // Note that there are difficulties with importing `qs` with webpack 5.
+    // client.defaults.paramsSerializer = (params) => {
+    //   return qs.stringify(params, { arrayFormat: 'repeat' });
+    // };
+
     client.defaults = {
       ...client.defaults,
       ...options

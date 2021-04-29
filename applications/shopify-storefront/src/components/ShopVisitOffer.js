@@ -46,6 +46,10 @@ const ShopVisitOffer = () => {
       return;
     }
 
+    if (offer.triggerEvent !== 'LOAD') {
+      return null;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -68,9 +72,13 @@ const ShopVisitOffer = () => {
         offeredShopifyVariantIds
       });
     })();
-  }, [offerId, offeredProducts, offerViewed, trackOfferView]);
+  }, [offerId, offer, offeredProducts, offerViewed, trackOfferView]);
 
   if (!offer || !shop) {
+    return null;
+  }
+
+  if (offer.triggerEvent !== 'LOAD') {
     return null;
   }
 

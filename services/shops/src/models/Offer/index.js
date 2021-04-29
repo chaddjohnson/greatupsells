@@ -57,6 +57,13 @@ const schema = new mongoose.Schema(
         return this.actionButtonBehavior === 'LINK';
       }
     },
+    viewAllowance: {
+      type: String,
+      required: true,
+      default: 'DAYS',
+      enum: ['DAYS', 'PAGE', 'SESSION', 'ONCE']
+    },
+    viewAllowanceDays: { type: Number, required: false, default: 7, min: 0 },
     popupTheme: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'PopupTheme',
@@ -86,7 +93,6 @@ const schema = new mongoose.Schema(
     timerText: { type: String, required: false },
     timerCountdownStart: { type: Int32, required: false },
     allowWithDiscountCodes: { type: Boolean, required: true, default: true },
-    allowMultipleViews: { type: Boolean, required: true, default: true },
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     showNotificationBanner: { type: Boolean, required: true, default: true },
     enableQuantitySelection: { type: Boolean, required: true, default: false },
@@ -113,13 +119,14 @@ schema.statics.findByShopId = function (shopId) {
 
 schema.statics.findOneRandom = function (
   shop,
-  { triggerEvent, shopifyProductIds, ipAddress, viewedOfferIds }
+  { triggerEvent, shopifyProductIds, ipAddress, offerViews, sessionOfferViews }
 ) {
   return findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,
     ipAddress,
-    viewedOfferIds
+    offerViews,
+    sessionOfferViews
   });
 };
 

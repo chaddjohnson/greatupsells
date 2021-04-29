@@ -55,6 +55,10 @@ const CartOffer = () => {
       return;
     }
 
+    if (offer.triggerEvent !== 'CART') {
+      return null;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -79,7 +83,14 @@ const CartOffer = () => {
         offeredShopifyVariantIds
       });
     })();
-  }, [offerId, triggerProduct, offeredProducts, offerViewed, trackOfferView]);
+  }, [
+    offerId,
+    offer,
+    triggerProduct,
+    offeredProducts,
+    offerViewed,
+    trackOfferView
+  ]);
 
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
 
@@ -99,6 +110,10 @@ const CartOffer = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!offer || !shop) {
+    return null;
+  }
+
+  if (offer.triggerEvent !== 'CART') {
     return null;
   }
 

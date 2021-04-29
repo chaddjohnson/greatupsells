@@ -90,6 +90,8 @@ const OfferForm = ({
     actionButtonBehavior,
     actionButtonLink,
     actionButtonLinkOpenInNewTab,
+    viewAllowance,
+    viewAllowanceDays,
     showNotificationBanner,
     successMessageText,
     startAt,
@@ -102,7 +104,6 @@ const OfferForm = ({
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    allowMultipleViews,
     hideIfItemAdded,
     allowWithDiscountCodes
   } = useFields(initialOffer, showEndDate);
@@ -124,6 +125,8 @@ const OfferForm = ({
       actionButtonBehavior,
       actionButtonLink,
       actionButtonLinkOpenInNewTab,
+      viewAllowance,
+      viewAllowanceDays,
       showNotificationBanner,
       successMessageText,
       startAt,
@@ -136,7 +139,6 @@ const OfferForm = ({
       enableQuantitySelection,
       limitQuantitySelection,
       productQuantityLimit,
-      allowMultipleViews,
       hideIfItemAdded,
       allowWithDiscountCodes
     },
@@ -285,6 +287,8 @@ const OfferForm = ({
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+            viewAllowance={viewAllowance}
+            viewAllowanceDays={viewAllowanceDays}
             currency={currency}
             submitted={submitted}
             onStrategyChange={handleStrategyChange}
@@ -354,7 +358,6 @@ const OfferForm = ({
             limitQuantitySelection={limitQuantitySelection}
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
-            allowMultipleViews={allowMultipleViews}
             hideIfItemAdded={hideIfItemAdded}
             allowWithDiscountCodes={allowWithDiscountCodes}
             showNotificationBanner={showNotificationBanner}

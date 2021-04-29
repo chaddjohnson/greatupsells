@@ -117,7 +117,8 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [limitQuantitySelection.value]
   );
-  const allowMultipleViews = useField(initialOffer.allowMultipleViews);
+  const viewAllowance = useField(initialOffer.viewAllowance);
+  const viewAllowanceDays = useField(initialOffer.viewAllowanceDays);
   const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
   const allowWithDiscountCodes = useField(initialOffer.allowWithDiscountCodes);
 
@@ -135,6 +136,8 @@ const useFields = (initialOffer, showEndDate) => {
     actionButtonBehavior,
     actionButtonLink,
     actionButtonLinkOpenInNewTab,
+    viewAllowance,
+    viewAllowanceDays,
     showNotificationBanner,
     successMessageText,
     startAt,
@@ -147,7 +150,6 @@ const useFields = (initialOffer, showEndDate) => {
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    allowMultipleViews,
     hideIfItemAdded,
     allowWithDiscountCodes
   };

@@ -21,8 +21,7 @@
     "aws4-axios": "^2.2.0",
     "axios": "^0.21.1",
     "http-status-codes": "^2.1.4",
-    "jsonwebtoken": "^8.5.1",
-    "qs": "^6.9.6"
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@neatowebsolutions/upselling-http-client": "0.0.0",

@@ -2,9 +2,64 @@ const mongoose = require('mongoose');
 const geoip = require('geoip-country');
 const mongodbClient = require('../mongodbClient');
 
+const buildViewAllowanceCriterias = (offerViews, sessionOfferViews) => [
+  // Where customers may view the offer every n days, and the customer
+  // has not viewed the offer.
+  {
+    _id: {
+      $nin: offerViews.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
+    },
+    viewAllowance: 'DAYS'
+  },
+
+  // Where customers may view the offev every n days, and the customer
+  // viewed the offer more than n days ago.
+  ...offerViews.map(({ offerId, viewedAt }) => ({
+    _id: mongoose.Types.ObjectId(offerId),
+    viewAllowance: 'DAYS',
+    viewAllowanceDays: {
+      $lte: Math.floor(
+        (new Date() - new Date(viewedAt)) / (1000 * 60 * 60 * 24)
+      )
+    }
+  })),
+
+  // Where customers may view the offer with every page load.
+  {
+    viewAllowance: 'PAGE'
+  },
+
+  // Where customers may view the offer once per browser tab session.
+  {
+    _id: {
+      $nin: sessionOfferViews.map(({ offerId }) =>
+        mongoose.Types.ObjectId(offerId)
+      )
+    },
+    viewAllowance: 'SESSION'
+  },
+
+  // Where customers may view the offer only once.
+  {
+    _id: {
+      $nin: offerViews.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
+    },
+    viewAllowance: 'ONCE'
+  }
+];
+
+const buildGeotargetingCriteria = (countryCode) => ({
+  $or: [{ enableGeotargeting: false }, { geotargetingCountries: countryCode }]
+});
+
 const findOneRandomByTriggerEvent = async (
   shop,
-  { triggerEvent, ipAddress = undefined, viewedOfferIds = [] }
+  {
+    triggerEvent,
+    ipAddress = undefined,
+    offerViews = [],
+    sessionOfferViews = []
+  }
 ) => {
   const Offer = mongodbClient.connection.model('Offer');
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
@@ -15,14 +70,7 @@ const findOneRandomByTriggerEvent = async (
     enabled: true,
     $and: [
       {
-        $or: [
-          { allowMultipleViews: true },
-          {
-            _id: {
-              $nin: viewedOfferIds.map(mongoose.Types.ObjectId)
-            }
-          }
-        ]
+        $or: buildViewAllowanceCriterias(offerViews, sessionOfferViews)
       }
     ]
   };
@@ -30,12 +78,7 @@ const findOneRandomByTriggerEvent = async (
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData && geoData.country) {
-    criteria.$and.push({
-      $or: [
-        { enableGeotargeting: false },
-        { geotargetingCountries: geoData.country }
-      ]
-    });
+    criteria.$and.push(buildGeotargetingCriteria(geoData.country));
   }
 
   // Randomly find an offer having the trigger event as a trigger.
@@ -64,7 +107,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     triggerEvent,
     shopifyProductIds,
     ipAddress = undefined,
-    viewedOfferIds = []
+    offerViews = [],
+    sessionOfferViews = []
   }
 ) => {
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
@@ -85,6 +129,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   const criteria = {
     shop: shop._id,
     triggerEvent,
+    enabled: true,
     $and: [
       {
         $or: [
@@ -101,28 +146,15 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
         ]
       },
       {
-        $or: [
-          { allowMultipleViews: true },
-          {
-            _id: {
-              $nin: viewedOfferIds.map(mongoose.Types.ObjectId)
-            }
-          }
-        ]
+        $or: buildViewAllowanceCriterias(offerViews, sessionOfferViews)
       }
-    ],
-    enabled: true
+    ]
   };
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData && geoData.country) {
-    criteria.$and.push({
-      $or: [
-        { enableGeotargeting: false },
-        { geotargetingCountries: geoData.country }
-      ]
-    });
+    criteria.$and.push(buildGeotargetingCriteria(geoData.country));
   }
 
   // Randomly select an offer having the trigger event as a trigger AND [one of
@@ -149,7 +181,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
 const findOneRandom = async (
   shop,
-  { triggerEvent, shopifyProductIds, ipAddress, viewedOfferIds }
+  { triggerEvent, shopifyProductIds, ipAddress, offerViews, sessionOfferViews }
 ) => {
   const shopifyProductIdsRequired =
     triggerEvent === 'ADD' || triggerEvent === 'CART';
@@ -174,13 +206,15 @@ const findOneRandom = async (
       triggerEvent,
       shopifyProductIds,
       ipAddress,
-      viewedOfferIds
+      offerViews,
+      sessionOfferViews
     });
   } else {
     return await findOneRandomByTriggerEvent(shop, {
       triggerEvent,
       ipAddress,
-      viewedOfferIds
+      offerViews,
+      sessionOfferViews
     });
   }
 };

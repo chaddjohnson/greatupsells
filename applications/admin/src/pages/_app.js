@@ -16,7 +16,7 @@ const httpClient = new HttpClient({
 
 // Add the token to each request.
 httpClient.addRequestInterceptor((config) => {
-  const token = sessionStorage.getItem('authToken');
+  const token = sessionStorage.authToken;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

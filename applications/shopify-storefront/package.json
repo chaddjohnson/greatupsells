@@ -13,7 +13,6 @@
     "@neatowebsolutions/upselling-react-components": "0.0.0",
     "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "preact": "^10.4.1",
-    "qs": "^6.9.6",
     "styled-components": "^5.2.1",
     "swr": "^0.4.2"
   },

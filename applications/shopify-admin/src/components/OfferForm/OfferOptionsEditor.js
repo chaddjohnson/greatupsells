@@ -18,7 +18,6 @@ const OfferOptionsEditor = ({
   limitQuantitySelection,
   enableEscClose,
   enableMaskClose,
-  allowMultipleViews,
   hideIfItemAdded,
   allowWithDiscountCodes,
   showNotificationBanner,
@@ -80,10 +79,6 @@ const OfferOptionsEditor = ({
     <Card.Section title="Usage">
       <FormLayout>
         <Checkbox
-          label={`Allow the same customer to view this offer multiple times`}
-          {...asChoiceField(allowMultipleViews)}
-        />
-        <Checkbox
           label={`Hide if customer already added ${
             offer.strategy === 'UPSELL' ? 'an upsell' : 'a cross-sell'
           } item`}
@@ -117,7 +112,6 @@ OfferOptionsEditor.propTypes = {
   limitQuantitySelection: PropTypes.object.isRequired,
   enableEscClose: PropTypes.object.isRequired,
   enableMaskClose: PropTypes.object.isRequired,
-  allowMultipleViews: PropTypes.object.isRequired,
   hideIfItemAdded: PropTypes.object.isRequired,
   allowWithDiscountCodes: PropTypes.object.isRequired,
   showNotificationBanner: PropTypes.object.isRequired,

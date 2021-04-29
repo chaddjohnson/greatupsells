@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import qs from 'qs';
 import useSWR from 'swr';
 import {
   useHttpClient,
@@ -14,25 +13,32 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const { httpClient } = useHttpClient();
   const { getCookie } = useCookies();
 
+  // Use state so that cookies are not re-read with every render. If cookies
+  // are re-read with every render, the API will undesirably be requeried
+  // whenever cookies are updated.
   const [offerViews] = useState(getCookie('upsellingOfferViews') || []);
+  const [sessionOfferViews] = useState(
+    sessionStorage.upsellingSessionOfferViews
+      ? JSON.parse(sessionStorage.upsellingSessionOfferViews)
+      : []
+  );
 
-  const viewedOfferIds = offerViews.map((offerView) => offerView.offerId);
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
   const isProductEvent = !!shopifyProductIds?.length;
   const shouldQuery = isLoadEvent || isExitEvent || isProductEvent;
-  const params = qs.stringify(
-    {
-      event,
-      shopifyProductIds,
-      viewedOfferIds
-    },
-    { arrayFormat: 'repeat' }
-  );
 
+  // Use POST instead of GET here to side step query string formatting
+  // weirdness and query string length issues.
   const { data } = useSWR(
-    shouldQuery ? `/offers/random?${params}` : null,
-    httpClient.get.bind(httpClient),
+    shouldQuery ? `random-${event}` : null,
+    () =>
+      httpClient.post('/offers/random', {
+        event,
+        shopifyProductIds,
+        offerViews,
+        sessionOfferViews
+      }),
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false

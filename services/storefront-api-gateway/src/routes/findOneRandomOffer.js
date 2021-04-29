@@ -6,7 +6,6 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
-const qs = require('qs');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 const logger = require('@neatowebsolutions/upselling-logger');
@@ -32,30 +31,29 @@ const handler = middy(async (event, context) => {
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
     const domain = new URL(event.headers.Origin).host;
-    const { event: triggerEvent } = event.queryStringParameters || {};
-    const { shopifyProductIds, viewedOfferIds } =
-      event.multiValueQueryStringParameters || {};
-
-    const offerParams = qs.stringify(
-      {
-        event: triggerEvent,
-        shopifyProductIds,
-        viewedOfferIds,
-        ipAddress
-      },
-      { arrayFormat: 'repeat' }
-    );
+    const {
+      event: triggerEvent,
+      shopifyProductIds,
+      offerViews,
+      sessionOfferViews
+    } = JSON.parse(event.body);
 
     // Look up offer by domain to minimize this method's latency. Multiple data
     // items are combined into one response to reduce latency.
+    // Use POST instead of GET here to side step query string formatting
+    // weirdness and query string length issues.
     const {
       offer,
       popupTheme,
       triggerProduct,
       offeredProducts
-    } = await httpClient.get(
-      `/shops/domain/${domain}/offers/random?${offerParams}`
-    );
+    } = await httpClient.post(`/shops/domain/${domain}/offers/random`, {
+      event: triggerEvent,
+      shopifyProductIds,
+      ipAddress,
+      offerViews,
+      sessionOfferViews
+    });
 
     if (!offer) {
       return {

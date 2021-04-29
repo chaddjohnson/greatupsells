@@ -19,7 +19,7 @@ const httpClient = new HttpClient({
 
 // Add the token to each request.
 httpClient.addRequestInterceptor((config) => {
-  const token = sessionStorage.getItem('authToken');
+  const token = sessionStorage.authToken;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -35,8 +35,8 @@ const App = ({ Component, pageProps }) => {
   // Copy cookie values to session storage so that multiple instances of this app may
   // be used across multiple shops simultaneously.
   if (typeof window !== 'undefined') {
-    sessionStorage.setItem('shopOrigin', shopOrigin);
-    sessionStorage.setItem('authToken', authToken);
+    sessionStorage.shopOrigin = shopOrigin;
+    sessionStorage.authToken = authToken;
   }
 
   return (

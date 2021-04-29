@@ -52,6 +52,10 @@ const ExitIntentOffer = () => {
         return;
       }
 
+      if (offer.triggerEvent !== 'EXIT') {
+        return null;
+      }
+
       // Abort if the offer was already viewed.
       if (offerViewed) {
         return;
@@ -101,7 +105,7 @@ const ExitIntentOffer = () => {
         });
       }
     },
-    [offerId, offeredProducts, offerViewed, trackOfferView]
+    [offer, offerId, offeredProducts, offerViewed, trackOfferView]
   );
 
   useEffect(() => {
@@ -113,6 +117,10 @@ const ExitIntentOffer = () => {
   }, [handleMouseOut]);
 
   if (!offer || !shop) {
+    return null;
+  }
+
+  if (offer.triggerEvent !== 'EXIT') {
     return null;
   }
 

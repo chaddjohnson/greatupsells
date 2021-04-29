@@ -22,14 +22,17 @@ const handler = async (event, context) => {
 
   try {
     const { domain } = event.pathParameters;
-    const { event: triggerEvent, ipAddress } =
-      event.queryStringParameters || {};
-    const { shopifyProductIds, viewedOfferIds } =
-      event.multiValueQueryStringParameters || {};
     const Shop = await models.get('Shop');
     const Offer = await models.get('Offer');
     const PopupTheme = await models.get('PopupTheme');
     const shop = await Shop.findOneByDomain(domain);
+    const {
+      event: triggerEvent,
+      shopifyProductIds,
+      ipAddress,
+      offerViews,
+      sessionOfferViews
+    } = JSON.parse(event.body);
 
     if (!shop) {
       return {
@@ -42,7 +45,8 @@ const handler = async (event, context) => {
       triggerEvent,
       shopifyProductIds,
       ipAddress,
-      viewedOfferIds
+      offerViews,
+      sessionOfferViews
     });
 
     if (!offer) {

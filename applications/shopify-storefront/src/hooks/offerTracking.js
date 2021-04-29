@@ -18,18 +18,39 @@ const useOfferTracking = () => {
   }) => {
     // Retrieve local event and offer tracking data.
     const offerViews = getCookie('upsellingOfferViews') || [];
-    const viewedOfferIds = offerViews.map((offerView) => offerView.offerId);
+    const sessionOfferViews = sessionStorage.upsellingSessionOfferViews
+      ? JSON.parse(sessionStorage.upsellingSessionOfferViews)
+      : [];
+    const offerView = offerViews.find((current) => current.offerId === offerId);
+    const sessionOfferView = sessionOfferViews.find(
+      (current) => current.offerId === offerId
+    );
     const viewedAt = new Date().toISOString();
 
-    if (viewedOfferIds.indexOf(offerId) === -1) {
+    // Update existing offer view tracking, or add one if it does not exist.
+    if (offerView) {
+      offerView.viewedAt = viewedAt;
+    } else {
       offerViews.push({ offerId, viewedAt });
     }
 
-    // Save the offer view.
+    // Track the offer view via cookie.
     setCookie('upsellingOfferViews', offerViews, {
       sameSite: 'Strict',
       maxAge: 60 * 60 * 24 // 1 day
     });
+
+    // Update existing offer view session tracking, or add one if it does not exist.
+    if (sessionOfferView) {
+      sessionOfferView.viewedAt = viewedAt;
+    } else {
+      sessionOfferViews.push({ offerId, viewedAt });
+    }
+
+    // Track the offer view via sessionStorage.
+    sessionStorage.upsellingSessionOfferViews = JSON.stringify(
+      sessionOfferViews
+    );
 
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/views`, {

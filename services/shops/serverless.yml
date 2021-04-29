@@ -208,7 +208,7 @@ functions:
     events:
       - http:
           path: /shops/domain/{domain}/offers/random
-          method: get
+          method: post
           authorizer: aws_iam
   findOneShop:
     handler: src/routes/findOneShop.handler

@@ -9,6 +9,11 @@ import {
   Stack
 } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
+import styled from 'styled-components';
+
+const ViewAllowanceDaysInputWrapper = styled.div`
+  max-width: 150px;
+`;
 
 const OfferSettingsEditor = ({
   name,
@@ -18,6 +23,8 @@ const OfferSettingsEditor = ({
   actionButtonBehavior,
   actionButtonLink,
   actionButtonLinkOpenInNewTab,
+  viewAllowance,
+  viewAllowanceDays,
   currency,
   submitted,
   onStrategyChange,
@@ -41,21 +48,21 @@ const OfferSettingsEditor = ({
           choices={[
             {
               label: 'Upsell',
-              value: 'UPSELL',
               helpText:
-                'Encourage customers to purchase a comparable, more expensive product.'
+                'Encourage customers to purchase a comparable, more expensive product.',
+              value: 'UPSELL'
             },
             {
               label: 'Cross-sell',
-              value: 'CROSS_SELL',
               helpText:
-                'Encourage customers to purchase a related or complementary product.'
+                'Encourage customers to purchase a related or complementary product.',
+              value: 'CROSS_SELL'
             },
             {
               label: 'Popup',
-              value: 'POPUP',
               helpText:
-                'Display a popup for email collection, newsletter signups, surveys, sales, promotions, and general information.'
+                'Display a popup for email collection, newsletter signups, surveys, sales, promotions, and general information.',
+              value: 'POPUP'
             }
           ]}
           selected={strategy.value}
@@ -69,24 +76,24 @@ const OfferSettingsEditor = ({
           choices={[
             {
               label: 'Add to cart',
-              value: 'ADD',
-              helpText: 'Offer is shown when a product is added to the cart.'
+              helpText: 'Offer is shown when a product is added to the cart.',
+              value: 'ADD'
             },
             {
               label: 'Cart page visit',
-              value: 'CART',
-              helpText: 'Offer is shown on the Cart page before checkout.'
+              helpText: 'Offer is shown on the Cart page before checkout.',
+              value: 'CART'
             },
             {
               label: 'Shop visit',
-              value: 'LOAD',
-              helpText: 'Offer is shown when your shop is first visted.'
+              helpText: 'Offer is shown when your shop is first visted.',
+              value: 'LOAD'
             },
             {
               label: 'Exit intent',
-              value: 'EXIT',
               helpText:
-                'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.'
+                'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.',
+              value: 'EXIT'
             }
           ]}
           selected={triggerEvent.value}
@@ -150,9 +157,9 @@ const OfferSettingsEditor = ({
           },
           {
             label: 'Skip the cart and redirect customers to the Checkout page',
-            value: 'CHECKOUT',
             helpText:
-              'Immediately initiating checkout can increase conversions.'
+              'Immediately initiating checkout can increase conversions.',
+            value: 'CHECKOUT'
           },
           {
             label: 'Remain on the same page',
@@ -160,7 +167,6 @@ const OfferSettingsEditor = ({
           },
           {
             label: 'Open a link',
-            value: 'LINK',
             helpText: actionButtonBehavior.value === 'LINK' && (
               <Stack vertical spacing="tight">
                 <TextField
@@ -174,11 +180,63 @@ const OfferSettingsEditor = ({
                   {...asChoiceField(actionButtonLinkOpenInNewTab)}
                 />
               </Stack>
-            )
+            ),
+            value: 'LINK'
           }
         ]}
         selected={actionButtonBehavior.value}
         onChange={([value]) => actionButtonBehavior.onChange(value)}
+      />
+    </Card>
+    <Card title="View allowance" sectioned>
+      <ChoiceList
+        choices={[
+          {
+            label: 'Once within a period of days',
+            helpText: (
+              <Stack vertical spacing="tight">
+                <span>
+                  Customers may only see this offer once within the specified
+                  number of days.
+                </span>
+                {viewAllowance.value === 'DAYS' && (
+                  <ViewAllowanceDaysInputWrapper>
+                    <TextField
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      step={1}
+                      suffix="days"
+                      {...viewAllowanceDays}
+                      error={submitted && viewAllowanceDays.error}
+                      onBlur={() => onBlur('viewAllowanceDays')}
+                    />
+                  </ViewAllowanceDaysInputWrapper>
+                )}
+              </Stack>
+            ),
+            value: 'DAYS'
+          },
+          {
+            label: 'Once every page load',
+            helpText:
+              'Customers may see this offer with every new page visited.',
+            value: 'PAGE'
+          },
+          {
+            label: 'Once per browser tab session',
+            helpText:
+              'Customers may see this offer only once per browser tab session.',
+            value: 'SESSION'
+          },
+          {
+            label: 'One time',
+            helpText: 'Customers may see this offer only one time.',
+            value: 'ONCE'
+          }
+        ]}
+        selected={viewAllowance.value}
+        onChange={([value]) => viewAllowance.onChange(value)}
       />
     </Card>
   </>
@@ -192,6 +250,8 @@ OfferSettingsEditor.propTypes = {
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,
   actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,
+  viewAllowance: PropTypes.object.isRequired,
+  viewAllowanceDays: PropTypes.object.isRequired,
   currency: PropTypes.string.isRequired,
   submitted: PropTypes.bool,
   onStrategyChange: PropTypes.func,

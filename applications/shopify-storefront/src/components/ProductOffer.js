@@ -58,6 +58,10 @@ const ProductOffer = () => {
       return;
     }
 
+    if (offer.triggerEvent !== 'ADD') {
+      return null;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -82,7 +86,14 @@ const ProductOffer = () => {
         offeredShopifyVariantIds
       });
     })();
-  }, [offerId, triggerProduct, offeredProducts, offerViewed, trackOfferView]);
+  }, [
+    offerId,
+    offer,
+    triggerProduct,
+    offeredProducts,
+    offerViewed,
+    trackOfferView
+  ]);
 
   // Subscribe to product add events.
   useEffect(() => {
@@ -94,6 +105,10 @@ const ProductOffer = () => {
   }, [onProductAddedToShopifyCart]);
 
   if (!offer || !shop) {
+    return null;
+  }
+
+  if (offer.triggerEvent !== 'ADD') {
     return null;
   }
 
