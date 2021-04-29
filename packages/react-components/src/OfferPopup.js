@@ -344,6 +344,10 @@ const OfferPopup = ({
     return null;
   }
 
+  if (!open) {
+    return null;
+  }
+
   // Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
   return (
     <iframe
@@ -381,7 +385,7 @@ const OfferPopup = ({
                 contentRef={setModalRef}
                 closeTimeoutMS={200}
                 parentSelector={() => mountNode}
-                isOpen={open}
+                isOpen={true}
                 shouldFocusAfterRender={!designMode}
                 shouldCloseOnOverlayClick={offer.enableMaskClose}
                 shouldCloseOnEsc={offer.enableEscClose}
