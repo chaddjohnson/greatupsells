@@ -12,7 +12,7 @@ import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
 const ViewAllowanceDaysInputWrapper = styled.div`
-  max-width: 150px;
+  max-width: 125px;
 `;
 
 const OfferSettingsEditor = ({

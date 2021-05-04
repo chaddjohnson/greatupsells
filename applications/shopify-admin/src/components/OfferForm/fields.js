@@ -91,7 +91,7 @@ const useFields = (initialOffer, showEndDate) => {
   const limitQuantitySelection = useField(initialOffer.limitQuantitySelection);
   const productQuantityLimit = useField(
     {
-      value: initialOffer.productQuantityLimit,
+      value: initialOffer.productQuantityLimit?.toString(),
       validates: [
         (value) => {
           if (limitQuantitySelection.value && !value) {
@@ -118,7 +118,9 @@ const useFields = (initialOffer, showEndDate) => {
     [limitQuantitySelection.value]
   );
   const viewAllowance = useField(initialOffer.viewAllowance);
-  const viewAllowanceDays = useField(initialOffer.viewAllowanceDays);
+  const viewAllowanceDays = useField(
+    initialOffer.viewAllowanceDays?.toString()
+  );
   const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
   const allowWithDiscountCodes = useField(initialOffer.allowWithDiscountCodes);
 
