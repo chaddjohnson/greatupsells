@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import {
   useHttpClient,
   useCookies,
-  usePushState
+  usePushStateListener
 } from '@neatowebsolutions/upselling-react-hooks';
 
 const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
@@ -52,8 +52,9 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const { offer, popupTheme, triggerProduct, offeredProducts = [] } =
     data || {};
 
-  usePushState(() => {
-    // Update stateful values on path change. This will trigger a re-query for a random offer.
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    // Update stateful values. This will trigger a re-query for a random offer.
     setOfferViews(getCookie('upsellingOfferViews') || []);
     setSessionOfferViews(
       sessionStorage.upsellingSessionOfferViews

@@ -15,7 +15,7 @@ const usePushState = (listener) => {
   }
 
   const handlePushState = useCallback((event) => {
-    listeners.forEach((current) => current(event));
+    listeners.forEach((current) => current.call(current, event));
   }, []);
 
   // Reference: https://stackoverflow.com/a/4585031/83897

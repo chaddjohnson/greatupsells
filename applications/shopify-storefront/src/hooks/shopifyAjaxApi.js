@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-let productAddedCallbacks = [];
+import { useHttpRequestListener } from '@neatowebsolutions/upselling-react-hooks';
 
 const useShopifyAjaxApi = () => {
   const fetchShopifyCart = async () => {
@@ -25,47 +23,20 @@ const useShopifyAjaxApi = () => {
     });
   };
 
-  const addProductAddedToShopifyCartListener = (callback) => {
-    productAddedCallbacks.push(callback);
-
-    return () => {
-      productAddedCallbacks = productAddedCallbacks.filter(
-        (productAddedCallback) => productAddedCallback !== callback
-      );
-    };
-  };
-
-  // Intercept HTTP requests.
-  useEffect(() => {
-    const originalOpen = window.XMLHttpRequest.prototype.open;
-
-    window.XMLHttpRequest.prototype.open = function (method, url, ...params) {
-      const request = this;
-
-      // Intercept Shopify's add to cart event responses.
-      if (url === '/cart/add.js') {
-        request.addEventListener('load', () => {
-          const addedProduct = JSON.parse(request?.responseText || {});
-
-          productAddedCallbacks.forEach((callback) =>
-            callback.call(callback, addedProduct)
-          );
-        });
-      }
-
-      return originalOpen.apply(this, [method, url, ...params]);
-    };
-
-    return () => {
-      window.XMLHttpRequest.prototype.open = originalOpen;
-    };
-  }, []);
-
   return {
     fetchShopifyCart,
-    addProductToShopifyCart,
-    addProductAddedToShopifyCartListener
+    addProductToShopifyCart
   };
 };
 
-export default useShopifyAjaxApi;
+const useShopifyCartProductAddListener = (listener) => {
+  useHttpRequestListener('/cart/add.js', (request) => {
+    const product = JSON.parse(request?.responseText || {});
+
+    if (listener) {
+      listener.call(listener, product);
+    }
+  });
+};
+
+export { useShopifyAjaxApi, useShopifyCartProductAddListener };

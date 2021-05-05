@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
+import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -110,7 +110,8 @@ const CartOffer = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  usePushState(() => {
+  // Listen to pushState events.
+  usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
     setShopifyProductIds([]);

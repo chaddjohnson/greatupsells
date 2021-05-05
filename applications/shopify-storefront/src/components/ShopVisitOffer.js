@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
+import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -75,7 +75,8 @@ const ShopVisitOffer = () => {
     })();
   }, [offerId, offer, offeredProducts, offerViewed, trackOfferView]);
 
-  usePushState(() => {
+  // Listen to pushState events.
+  usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
   });
