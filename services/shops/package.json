@@ -22,7 +22,7 @@
     "http-status-codes": "^2.1.4",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
-    "mongoose": "5.9.27",
+    "mongoose": "^5.12.7",
     "mongoose-int32": "^0.4.1",
     "shopify-api-node": "^3.6.5"
   },
