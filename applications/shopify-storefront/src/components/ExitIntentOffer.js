@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
+import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -114,7 +115,12 @@ const ExitIntentOffer = () => {
     return () => {
       document.removeEventListener('mouseout', handleMouseOut, true);
     };
-  }, [handleMouseOut]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  usePushState(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+  });
 
   if (!offer || !shop) {
     return null;

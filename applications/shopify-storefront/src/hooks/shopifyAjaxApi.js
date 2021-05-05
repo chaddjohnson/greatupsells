@@ -25,7 +25,7 @@ const useShopifyAjaxApi = () => {
     });
   };
 
-  const onProductAddedToShopifyCart = (callback) => {
+  const addProductAddedToShopifyCartListener = (callback) => {
     productAddedCallbacks.push(callback);
 
     return () => {
@@ -64,7 +64,7 @@ const useShopifyAjaxApi = () => {
   return {
     fetchShopifyCart,
     addProductToShopifyCart,
-    onProductAddedToShopifyCart
+    addProductAddedToShopifyCartListener
   };
 };
 

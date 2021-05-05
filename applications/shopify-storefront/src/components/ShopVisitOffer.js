@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
+import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -73,6 +74,11 @@ const ShopVisitOffer = () => {
       });
     })();
   }, [offerId, offer, offeredProducts, offerViewed, trackOfferView]);
+
+  usePushState(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+  });
 
   if (!offer || !shop) {
     return null;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
+import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -16,7 +17,7 @@ const ProductOffer = () => {
 
   const {
     addProductToShopifyCart,
-    onProductAddedToShopifyCart
+    addProductAddedToShopifyCartListener
   } = useShopifyAjaxApi();
   const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
@@ -97,12 +98,18 @@ const ProductOffer = () => {
 
   // Subscribe to product add events.
   useEffect(() => {
-    return onProductAddedToShopifyCart((addedProduct) => {
+    return addProductAddedToShopifyCartListener((addedProduct) => {
       if (addedProduct?.product_id) {
         setShopifyProductIds([addedProduct.product_id]);
       }
     });
-  }, [onProductAddedToShopifyCart]);
+  }, [addProductAddedToShopifyCartListener]);
+
+  usePushState(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+    setShopifyProductIds([]);
+  });
 
   if (!offer || !shop) {
     return null;

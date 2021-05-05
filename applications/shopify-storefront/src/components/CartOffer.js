@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
+import { usePushState } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -108,6 +109,12 @@ const CartOffer = () => {
       setShopifyProductIds(items.map((item) => item.product_id));
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  usePushState(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+    setShopifyProductIds([]);
+  });
 
   if (!offer || !shop) {
     return null;

@@ -34,18 +34,18 @@ const useOfferTracking = () => {
       offerViews.push({ offerId, viewedAt });
     }
 
-    // Track the offer view via cookie.
-    setCookie('upsellingOfferViews', offerViews, {
-      sameSite: 'Strict',
-      maxAge: 60 * 60 * 24 // 1 day
-    });
-
     // Update existing offer view session tracking, or add one if it does not exist.
     if (sessionOfferView) {
       sessionOfferView.viewedAt = viewedAt;
     } else {
       sessionOfferViews.push({ offerId, viewedAt });
     }
+
+    // Track the offer view via cookie.
+    setCookie('upsellingOfferViews', offerViews, {
+      sameSite: 'Strict',
+      maxAge: 60 * 60 * 24 // 1 day
+    });
 
     // Track the offer view via sessionStorage.
     sessionStorage.upsellingSessionOfferViews = JSON.stringify(
