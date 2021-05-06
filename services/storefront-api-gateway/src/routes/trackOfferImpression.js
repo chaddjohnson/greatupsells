@@ -50,7 +50,7 @@ const handler = middy(async (event, context) => {
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
       await logger.warn(
-        `Unauthorized view tracking attempt for offer ${offerId} from domain ${domain}`,
+        `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
         event
       );
 
@@ -60,7 +60,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
+    const offerHit = await httpClient.post(`/offers/${offerId}/impressions`, {
       triggerShopifyProductId,
       offeredShopifyProductIds,
       offeredShopifyVariantIds,
@@ -72,7 +72,7 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer view`, error, event);
+    await logger.error(`Error tracking offer impression`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

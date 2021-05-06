@@ -72,7 +72,7 @@ const schema = new mongoose.Schema(
     },
     appLastOpenedAt: { type: Date, required: false },
     uninstalledAt: { type: Date, required: false },
-    offerViewCount: { type: Int32, required: true, default: 0, min: 0 },
+    offerImpressionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerAcceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionRate: { type: Number, required: true, default: 0.0, min: 0 },

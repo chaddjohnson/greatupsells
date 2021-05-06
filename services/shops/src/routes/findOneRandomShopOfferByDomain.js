@@ -30,8 +30,8 @@ const handler = async (event, context) => {
       event: triggerEvent,
       shopifyProductIds,
       ipAddress,
-      offerViews,
-      sessionOfferViews
+      offerImpressions,
+      sessionOfferImpressions
     } = JSON.parse(event.body);
 
     if (!shop) {
@@ -45,8 +45,8 @@ const handler = async (event, context) => {
       triggerEvent,
       shopifyProductIds,
       ipAddress,
-      offerViews,
-      sessionOfferViews
+      offerImpressions,
+      sessionOfferImpressions
     });
 
     if (!offer) {

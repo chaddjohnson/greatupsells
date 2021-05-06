@@ -18,14 +18,14 @@ const handler = async (event, context) => {
       };
     }
 
-    const offerViews = await offer.findViews(startAt, endAt);
+    const offerImpressions = await offer.findImpressions(startAt, endAt);
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offerViews)
+      body: JSON.stringify(offerImpressions)
     };
   } catch (error) {
-    await logger.error(`Error retrieving offer views`, error, event);
+    await logger.error(`Error retrieving offer impressions`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

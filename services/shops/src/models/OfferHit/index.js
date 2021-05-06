@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
-const findViewsByOfferId = require('./findViewsByOfferId');
+const findImpressionsByOfferId = require('./findImpressionsByOfferId');
 const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
 const findConversionsByOfferId = require('./findConversionsByOfferId');
@@ -90,8 +90,8 @@ schema.statics.findOneByAcceptedVariantId = function (shopifyVariantId) {
   return OfferHit.findOne({ acceptedShopifyVariantId: shopifyVariantId });
 };
 
-schema.statics.findViewsByOfferId = function (offerId, startAt, endAt) {
-  return findViewsByOfferId(offerId, startAt, endAt);
+schema.statics.findImpressionsByOfferId = function (offerId, startAt, endAt) {
+  return findImpressionsByOfferId(offerId, startAt, endAt);
 };
 
 schema.statics.findAcceptancesByOfferId = function (offerId, startAt, endAt) {

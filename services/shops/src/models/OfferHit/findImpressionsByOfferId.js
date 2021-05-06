@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
-const findViewsByOfferId = async (offerId, startAt, endAt) => {
+const findImpressionsByOfferId = async (offerId, startAt, endAt) => {
   if (typeof offerId !== 'object') {
     offerId = mongoose.Types.ObjectId(offerId);
   }
@@ -26,23 +26,24 @@ const findViewsByOfferId = async (offerId, startAt, endAt) => {
     {
       $group: {
         _id: { date: '$date' },
-        views: { $sum: 1 }
+        impressions: { $sum: 1 }
       }
     },
     {
       $project: {
         date: '$_id.date',
-        views: '$views'
+        impressions: '$impressions'
       }
     }
   ];
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results = results.map(({ date, views }) => ({ date, views })) || [];
+  results =
+    results.map(({ date, impressions }) => ({ date, impressions })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
 
   return results;
 };
 
-module.exports = findViewsByOfferId;
+module.exports = findImpressionsByOfferId;

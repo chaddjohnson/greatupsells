@@ -48,7 +48,7 @@ const handler = middy(async (event, context) => {
     // Disallow updating specific fields.
     delete data.shop;
     delete data.shopifyShopId;
-    delete data.viewCount;
+    delete data.impressionCount;
     delete data.acceptanceCount;
     delete data.conversionCount;
     delete data.conversionRate;

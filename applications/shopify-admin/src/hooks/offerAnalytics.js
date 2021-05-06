@@ -2,7 +2,7 @@ import useOfferAcceptances from './offerAcceptances';
 import useOfferConversionRates from './offerConversionRates';
 import useOfferConversions from './offerConversions';
 import useOfferRevenueIncreases from './offerRevenueIncreases';
-import useOfferViews from './offerViews';
+import useOfferImpressions from './offerImpressions';
 
 const useOfferAnalytics = (offerId, startAt, endAt) => {
   const {
@@ -30,25 +30,25 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     fetchOfferRevenueIncreases
   } = useOfferRevenueIncreases(offerId, startAt, endAt);
   const {
-    offerViews,
-    offerViewsLoading,
-    offerViewsError,
-    fetchOfferViews
-  } = useOfferViews(offerId, startAt, endAt);
+    offerImpressions,
+    offerImpressionsLoading,
+    offerImpressionsError,
+    fetchOfferImpressions
+  } = useOfferImpressions(offerId, startAt, endAt);
 
   const offerAnalyticsLoading =
     offerAcceptancesLoading ||
     offerConversionsLoading ||
     offerConversionRatesLoading ||
     offerRevenueIncreasesLoading ||
-    offerViewsLoading;
+    offerImpressionsLoading;
 
   const offerAnalyticsError =
     offerAcceptancesError ||
     offerConversionsError ||
     offerConversionRatesError ||
     offerRevenueIncreasesError ||
-    offerViewsError;
+    offerImpressionsError;
 
   const fetchAnalytics = async () => {
     return Promise.allSettled([
@@ -56,7 +56,7 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
       fetchOfferConversions(),
       fetchOfferConversionRates(),
       fetchOfferRevenueIncreases(),
-      fetchOfferViews()
+      fetchOfferImpressions()
     ]);
   };
 
@@ -65,7 +65,7 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     offerConversions,
     offerConversionRates,
     offerRevenueIncreases,
-    offerViews,
+    offerImpressions,
     offerAnalyticsLoading,
     offerAnalyticsError,
     fetchAnalytics

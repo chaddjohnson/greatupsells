@@ -7,7 +7,7 @@ export { default as useOfferConversionRates } from './offerConversionRates';
 export { default as useOfferConversions } from './offerConversions';
 export { default as useOfferPopupThemes } from './offerPopupThemes';
 export { default as useOfferRevenueIncreases } from './offerRevenueIncreases';
-export { default as useOfferViews } from './offerViews';
+export { default as useOfferImpressions } from './offerImpressions';
 export { default as useOffers } from './offers';
 export { default as usePopupTheme } from './popupTheme';
 export { default as usePopupThemes } from './popupThemes';

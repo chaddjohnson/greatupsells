@@ -23,7 +23,7 @@ const handler = async (event, context) => {
       };
     }
 
-    const offerHit = await offer.trackView({
+    const offerHit = await offer.trackImpression({
       triggerShopifyProductId,
       offeredShopifyProductIds,
       offeredShopifyVariantIds,
@@ -35,7 +35,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer view`, error, event);
+    await logger.error(`Error tracking offer impression`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

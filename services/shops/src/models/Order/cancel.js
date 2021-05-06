@@ -28,7 +28,7 @@ const cancel = async (order) => {
           offerConversionCount: offerHits.length * -1
         },
         offerConversionRate:
-          (shop.offerConversionCount - 1) / shop.offerViewCount
+          (shop.offerConversionCount - 1) / shop.offerImpressionCount
       },
       { session }
     );
@@ -73,7 +73,7 @@ const cancel = async (order) => {
             revenueIncrease: offerHit.revenueIncrease * -1,
             conversionCount: -1
           },
-          conversionRate: (offer.conversionCount - 1) / offer.viewCount
+          conversionRate: (offer.conversionCount - 1) / offer.impressionCount
         },
         { session }
       );

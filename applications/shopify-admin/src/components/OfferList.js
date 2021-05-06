@@ -53,7 +53,7 @@ const OfferList = ({ offers, currency }) => {
           {
             _id,
             name,
-            viewCount,
+            impressionCount,
             conversionRate,
             acceptanceCount,
             revenueIncrease
@@ -63,7 +63,7 @@ const OfferList = ({ offers, currency }) => {
           <Link key={index} url={`/offers/${_id}/`} prefetch={false}>
             <LinkText>{name}</LinkText>
           </Link>,
-          viewCount,
+          impressionCount,
           `${Math.round(conversionRate * 100 * 10) / 10}%`,
           acceptanceCount,
           formatCurrency(revenueIncrease)
@@ -149,7 +149,7 @@ const OfferList = ({ offers, currency }) => {
             ]}
             headings={[
               <HeadingText key="0">Name</HeadingText>,
-              <HeadingText key="2">Views</HeadingText>,
+              <HeadingText key="2">Impressions</HeadingText>,
               <HeadingText key="3">Conversion rate</HeadingText>,
               <HeadingText key="1">Acceptances</HeadingText>,
               <HeadingText key="4">Revenue increase</HeadingText>
@@ -176,7 +176,7 @@ OfferList.propTypes = {
   offers: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      viewCount: PropTypes.number.isRequired,
+      impressionCount: PropTypes.number.isRequired,
       conversionRate: PropTypes.number.isRequired,
       acceptanceCount: PropTypes.number.isRequired,
       revenueIncrease: PropTypes.number.isRequired

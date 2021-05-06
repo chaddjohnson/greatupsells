@@ -15,7 +15,7 @@ const ExitIntentOffer = () => {
   const [offerViewed, setOfferViewed] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
-  const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent
   });
@@ -99,14 +99,14 @@ const ExitIntentOffer = () => {
         setPopupOpen(true);
         setOfferViewed(true);
 
-        await trackOfferView({
+        await trackOfferImpression({
           offerId,
           offeredShopifyProductIds,
           offeredShopifyVariantIds
         });
       }
     },
-    [offer, offerId, offeredProducts, offerViewed, trackOfferView]
+    [offer, offerId, offeredProducts, offerViewed, trackOfferImpression]
   );
 
   useEffect(() => {

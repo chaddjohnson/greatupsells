@@ -15,7 +15,7 @@ const ShopVisitOffer = () => {
   const [offerViewed, setOfferViewed] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
-  const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent
   });
@@ -67,13 +67,13 @@ const ShopVisitOffer = () => {
       setPopupOpen(true);
       setOfferViewed(true);
 
-      await trackOfferView({
+      await trackOfferImpression({
         offerId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
       });
     })();
-  }, [offerId, offer, offeredProducts, offerViewed, trackOfferView]);
+  }, [offerId, offer, offeredProducts, offerViewed, trackOfferImpression]);
 
   // Listen to pushState events.
   usePushStateListener(() => {

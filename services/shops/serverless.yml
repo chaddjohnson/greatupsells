@@ -155,11 +155,11 @@ functions:
           path: /offers
           method: get
           authorizer: aws_iam
-  findOfferViews:
-    handler: src/routes/findOfferViews.handler
+  findOfferImpressions:
+    handler: src/routes/findOfferImpressions.handler
     events:
       - http:
-          path: /offers/{offerId}/views
+          path: /offers/{offerId}/impressions
           method: get
           authorizer: aws_iam
   findOneCollectionByShopifyCollectionId:
@@ -265,11 +265,11 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           authorizer: aws_iam
-  trackOfferView:
-    handler: src/routes/trackOfferView.handler
+  trackOfferImpression:
+    handler: src/routes/trackOfferImpression.handler
     events:
       - http:
-          path: /offers/{offerId}/views
+          path: /offers/{offerId}/impressions
           method: post
           authorizer: aws_iam
   updateCollection:

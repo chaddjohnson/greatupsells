@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../mongodbClient');
 
-const trackView = async (
+const trackImpression = async (
   offer,
   {
     triggerShopifyProductId = undefined,
@@ -42,23 +42,23 @@ const trackView = async (
         );
       }
 
-      // Increment offer view count.
+      // Increment offer impression count.
       await Offer.findByIdAndUpdate(
         offer.id,
         {
           $inc: {
-            viewCount: 1
+            impressionCount: 1
           }
         },
         { session }
       );
 
-      // Increment shop offer view count.
+      // Increment shop offer impression count.
       await Shop.findByIdAndUpdate(
         shop.id,
         {
           $inc: {
-            offerViewCount: 1
+            offerImpressionCount: 1
           }
         },
         { session }
@@ -68,7 +68,7 @@ const trackView = async (
     return offerHit;
   } catch (error) {
     await logger.error(
-      `Error tracking offer view for offer (${
+      `Error tracking offer impression for offer (${
         offer && offer.toString()
       }) in shop (${shop && shop.toString()})`,
       error,
@@ -80,4 +80,4 @@ const trackView = async (
   }
 };
 
-module.exports = trackView;
+module.exports = trackImpression;

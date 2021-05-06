@@ -31,7 +31,7 @@ const trackConversion = async (offerHit, order) => {
             revenueIncrease: offerHit.revenueIncrease,
             conversionCount: 1
           },
-          conversionRate: (offer.conversionCount + 1) / offer.viewCount
+          conversionRate: (offer.conversionCount + 1) / offer.impressionCount
         },
         { session }
       );
@@ -45,7 +45,7 @@ const trackConversion = async (offerHit, order) => {
             offerConversionCount: 1
           },
           offerConversionRate:
-            (shop.offerConversionCount + 1) / shop.offerViewCount
+            (shop.offerConversionCount + 1) / shop.offerImpressionCount
         },
         { session }
       );

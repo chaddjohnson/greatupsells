@@ -29,17 +29,17 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer.claims;
     const { offerId } = event.pathParameters;
     const { startAt, endAt } = event.queryStringParameters || {};
-    const [offer, offerViews] = await Promise.all([
+    const [offer, offerImpressions] = await Promise.all([
       httpClient.get(`/offers/${offerId}`),
       httpClient.get(
-        `/offers/${offerId}/views?startAt=${startAt}&endAt=${endAt}`
+        `/offers/${offerId}/impressions?startAt=${startAt}&endAt=${endAt}`
       )
     ]);
     const offerShopId = offer.shop;
 
     if (shopId !== offerShopId) {
       await logger.warn(
-        `Unauthorized access attempt for offer ${offerId} views`,
+        `Unauthorized access attempt for offer ${offerId} impressions`,
         event
       );
 
@@ -51,7 +51,7 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offerViews)
+      body: JSON.stringify(offerImpressions)
     };
   } catch (error) {
     if (error.response && error.response.status) {
@@ -61,7 +61,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error requesting offer views`, error, event);
+    await logger.error(`Error requesting offer impressions`, error, event);
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

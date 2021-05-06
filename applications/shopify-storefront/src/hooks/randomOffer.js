@@ -16,12 +16,12 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
 
   // Use state so tracking data is not not re-read with every render; otherwise,
   // the API will undesirably be requeried whenever tracking data is updated.
-  const [offerViews, setOfferViews] = useState(
-    getCookie('upsellingOfferViews') || []
+  const [offerImpressions, setOfferImpressions] = useState(
+    getCookie('upsellingOfferImpressions') || []
   );
-  const [sessionOfferViews, setSessionOfferViews] = useState(
-    sessionStorage.upsellingSessionOfferViews
-      ? JSON.parse(sessionStorage.upsellingSessionOfferViews)
+  const [sessionOfferImpressions, setSessionOfferImpressions] = useState(
+    sessionStorage.upsellingSessionOfferImpressions
+      ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
       : []
   );
   const [pageUrl, setPageUrl] = useState(window.location.pathname);
@@ -35,14 +35,14 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   // weirdness and query string length issues.
   const { data } = useSWR(
     shouldQuery
-      ? [`random-${event}`, offerViews, sessionOfferViews, pageUrl]
+      ? [`random-${event}`, offerImpressions, sessionOfferImpressions, pageUrl]
       : null,
     () =>
       httpClient.post('/offers/random', {
         event,
         shopifyProductIds,
-        offerViews,
-        sessionOfferViews
+        offerImpressions,
+        sessionOfferImpressions
       }),
     {
       revalidateOnFocus: false,
@@ -55,10 +55,10 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   // Listen to pushState events.
   usePushStateListener(() => {
     // Update stateful values. This will trigger a re-query for a random offer.
-    setOfferViews(getCookie('upsellingOfferViews') || []);
-    setSessionOfferViews(
-      sessionStorage.upsellingSessionOfferViews
-        ? JSON.parse(sessionStorage.upsellingSessionOfferViews)
+    setOfferImpressions(getCookie('upsellingOfferImpressions') || []);
+    setSessionOfferImpressions(
+      sessionStorage.upsellingSessionOfferImpressions
+        ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
         : []
     );
     setPageUrl(window.location.pathname);

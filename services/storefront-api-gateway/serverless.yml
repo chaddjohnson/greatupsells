@@ -57,12 +57,12 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           cors: true
-  trackOfferView:
+  trackOfferImpression:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/trackOfferView.handler
+    handler: src/routes/trackOfferImpression.handler
     events:
       - http:
-          path: /offers/{offerId}/views
+          path: /offers/{offerId}/impressions
           method: post
           cors: true
 

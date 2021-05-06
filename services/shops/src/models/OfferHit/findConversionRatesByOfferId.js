@@ -41,14 +41,14 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
     {
       $group: {
         _id: { date: '$date' },
-        views: { $sum: 1 },
+        impressions: { $sum: 1 },
         conversions: { $sum: { $max: '$converted' } }
       }
     },
     {
       $project: {
         date: '$_id.date',
-        conversionRate: { $divide: ['$conversions', '$views'] }
+        conversionRate: { $divide: ['$conversions', '$impressions'] }
       }
     }
   ];

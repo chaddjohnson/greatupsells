@@ -10,50 +10,52 @@ const useOfferTracking = () => {
   const { httpClient } = useHttpClient();
   const { getCookie, setCookie } = useCookies();
 
-  const trackOfferView = async ({
+  const trackOfferImpression = async ({
     offerId,
     triggerShopifyProductId = undefined,
     offeredShopifyProductIds = [],
     offeredShopifyVariantIds = []
   }) => {
     // Retrieve local event and offer tracking data.
-    const offerViews = getCookie('upsellingOfferViews') || [];
-    const sessionOfferViews = sessionStorage.upsellingSessionOfferViews
-      ? JSON.parse(sessionStorage.upsellingSessionOfferViews)
+    const offerImpressions = getCookie('upsellingOfferImpressions') || [];
+    const sessionOfferImpressions = sessionStorage.upsellingSessionOfferImpressions
+      ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
       : [];
-    const offerView = offerViews.find((current) => current.offerId === offerId);
-    const sessionOfferView = sessionOfferViews.find(
+    const offerImpression = offerImpressions.find(
+      (current) => current.offerId === offerId
+    );
+    const sessionOfferImpression = sessionOfferImpressions.find(
       (current) => current.offerId === offerId
     );
     const viewedAt = new Date().toISOString();
 
-    // Update existing offer view tracking, or add one if it does not exist.
-    if (offerView) {
-      offerView.viewedAt = viewedAt;
+    // Update existing offer impression tracking, or add one if it does not exist.
+    if (offerImpression) {
+      offerImpression.viewedAt = viewedAt;
     } else {
-      offerViews.push({ offerId, viewedAt });
+      offerImpressions.push({ offerId, viewedAt });
     }
 
-    // Update existing offer view session tracking, or add one if it does not exist.
-    if (sessionOfferView) {
-      sessionOfferView.viewedAt = viewedAt;
+    // Update existing offer impression session tracking, or add one if it does not exist.
+    if (sessionOfferImpression) {
+      sessionOfferImpression.viewedAt = viewedAt;
     } else {
-      sessionOfferViews.push({ offerId, viewedAt });
+      sessionOfferImpressions.push({ offerId, viewedAt });
     }
 
-    // Track the offer view via cookie.
-    setCookie('upsellingOfferViews', offerViews, {
+    // Track the offer impression via cookie.
+    setCookie('upsellingOfferImpressions', offerImpressions, {
       sameSite: 'Strict',
       maxAge: 60 * 60 * 24 // 1 day
     });
 
-    // Track the offer view via sessionStorage.
-    sessionStorage.upsellingSessionOfferViews = JSON.stringify(
-      sessionOfferViews
+    // Track the offer impression via sessionStorage.
+    sessionStorage.upsellingSessionOfferImpressions = JSON.stringify(
+      sessionOfferImpressions
     );
 
     // Record an offer hit.
-    const offerHit = await httpClient.post(`/offers/${offerId}/views`, {
+    const offerHit = await httpClient.post(`/offers/${offerId}/impressions`, {
       triggerShopifyProductId,
       offeredShopifyProductIds,
       offeredShopifyVariantIds
@@ -79,7 +81,7 @@ const useOfferTracking = () => {
 
   // NOTE: Conversion tracking occurs in order creation webhook.
 
-  return { trackOfferView, trackOfferAcceptance };
+  return { trackOfferImpression, trackOfferAcceptance };
 };
 
 export default useOfferTracking;

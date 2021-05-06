@@ -81,7 +81,7 @@ const data = {
     [new Date('6/29/2020').getTime(), 46],
     [new Date('6/30/2020').getTime(), 82]
   ],
-  views: [
+  impressions: [
     [new Date('6/1/2020').getTime(), 17],
     [new Date('6/2/2020').getTime(), 81],
     [new Date('6/3/2020').getTime(), 188],
@@ -199,8 +199,8 @@ const AnalyticsPage = () => {
             </Card>
             <Card sectioned>
               <LineChart
-                title="Offer views"
-                subtitle="Offer views over last 90 days"
+                title="Offer impressions"
+                subtitle="Offer impressions over last 90 days"
                 rangeDescription="January to December"
                 changeValue={formatNumber(214)}
                 changePercentage={formatPercentage(0.116, 1)}

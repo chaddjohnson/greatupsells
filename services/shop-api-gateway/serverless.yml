@@ -168,12 +168,12 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
-  findOfferViews:
+  findOfferImpressions:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferViews.handler
+    handler: src/routes/findOfferImpressions.handler
     events:
       - http:
-          path: /offers/{offerId}/views
+          path: /offers/{offerId}/impressions
           method: get
           cors: true
           authorizer:

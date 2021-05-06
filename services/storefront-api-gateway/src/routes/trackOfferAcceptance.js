@@ -48,7 +48,7 @@ const handler = middy(async (event, context) => {
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
       await logger.warn(
-        `Unauthorized view tracking attempt for offer ${offerId} from domain ${domain}`,
+        `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
         event
       );
 

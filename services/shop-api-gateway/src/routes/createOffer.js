@@ -34,7 +34,7 @@ const handler = middy(async (event, context) => {
     data.shopifyShopId = shop.shopifyShopId;
 
     // Disallow setting specific fields.
-    delete data.viewCount;
+    delete data.impressionCount;
     delete data.acceptanceCount;
     delete data.conversionCount;
     delete data.conversionRate;

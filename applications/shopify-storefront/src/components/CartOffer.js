@@ -16,7 +16,7 @@ const CartOffer = () => {
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
-  const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
     {
       event: triggerEvent,
@@ -77,7 +77,7 @@ const CartOffer = () => {
       setPopupOpen(true);
       setOfferViewed(true);
 
-      await trackOfferView({
+      await trackOfferImpression({
         offerId,
         triggerShopifyProductId,
         offeredShopifyProductIds,
@@ -90,7 +90,7 @@ const CartOffer = () => {
     triggerProduct,
     offeredProducts,
     offerViewed,
-    trackOfferView
+    trackOfferImpression
   ]);
 
   // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.

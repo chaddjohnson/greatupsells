@@ -17,7 +17,7 @@ const ProductOffer = () => {
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
-  const { trackOfferView, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
     {
       event: triggerEvent,
@@ -78,7 +78,7 @@ const ProductOffer = () => {
       setPopupOpen(true);
       setOfferViewed(true);
 
-      await trackOfferView({
+      await trackOfferImpression({
         offerId,
         triggerShopifyProductId,
         offeredShopifyProductIds,
@@ -91,7 +91,7 @@ const ProductOffer = () => {
     triggerProduct,
     offeredProducts,
     offerViewed,
-    trackOfferView
+    trackOfferImpression
   ]);
 
   // Subscribe to product add events.

@@ -4,7 +4,7 @@ const mongodbClient = require('../mongodbClient');
 const findOneRandom = require('./findOneRandom');
 const findRandomProducts = require('./findRandomProducts');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
-const trackView = require('./trackView');
+const trackImpression = require('./trackImpression');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -35,7 +35,7 @@ const schema = new mongoose.Schema(
       required: true,
       enum: ['CROSS_SELL', 'UPSELL', 'POPUP']
     },
-    viewCount: { type: Int32, required: true, default: 0, min: 0 },
+    impressionCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionRate: { type: Number, required: true, default: 0.0, min: 0 },
@@ -57,13 +57,18 @@ const schema = new mongoose.Schema(
         return this.actionButtonBehavior === 'LINK';
       }
     },
-    viewAllowance: {
+    impressionAllowance: {
       type: String,
       required: true,
       default: 'DAYS',
       enum: ['DAYS', 'SESSION', 'ONCE', 'PAGE']
     },
-    viewAllowanceDays: { type: Number, required: false, default: 7, min: 0 },
+    impressionAllowanceDays: {
+      type: Number,
+      required: false,
+      default: 7,
+      min: 0
+    },
     popupTheme: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'PopupTheme',
@@ -119,14 +124,20 @@ schema.statics.findByShopId = function (shopId) {
 
 schema.statics.findOneRandom = function (
   shop,
-  { triggerEvent, shopifyProductIds, ipAddress, offerViews, sessionOfferViews }
+  {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress,
+    offerImpressions,
+    sessionOfferImpressions
+  }
 ) {
   return findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,
     ipAddress,
-    offerViews,
-    sessionOfferViews
+    offerImpressions,
+    sessionOfferImpressions
   });
 };
 
@@ -138,10 +149,10 @@ schema.methods.calculateDiscountedPrice = function (price) {
   return calculateDiscountedPrice(this, price);
 };
 
-schema.methods.findViews = async function (startAt, endAt) {
+schema.methods.findImpressions = async function (startAt, endAt) {
   const OfferHit = mongodbClient.connection.model('OfferHit');
 
-  return OfferHit.findViewsByOfferId(this._id, startAt, endAt);
+  return OfferHit.findImpressionsByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findAcceptances = async function (startAt, endAt) {
@@ -174,13 +185,13 @@ schema.methods.findPopupThemes = async function () {
   return PopupTheme.findByOfferId(this._id);
 };
 
-schema.methods.trackView = function ({
+schema.methods.trackImpression = function ({
   triggerShopifyProductId,
   offeredShopifyProductIds,
   offeredShopifyVariantIds,
   ipAddress
 }) {
-  return trackView(this, {
+  return trackImpression(this, {
     triggerShopifyProductId,
     offeredShopifyProductIds,
     offeredShopifyVariantIds,

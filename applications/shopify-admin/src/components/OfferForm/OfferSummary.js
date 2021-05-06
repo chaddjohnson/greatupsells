@@ -100,7 +100,7 @@ const OfferSummary = ({ offer }) => {
         <Card.Section title="Performance" subdued>
           <Stack vertical>
             <List>
-              <List.Item>205 views</List.Item>
+              <List.Item>205 impressions</List.Item>
               <List.Item>7 acceptances</List.Item>
               <List.Item>3.5% conversion rate</List.Item>
               <List.Item>$123.50 revenue increase</List.Item>

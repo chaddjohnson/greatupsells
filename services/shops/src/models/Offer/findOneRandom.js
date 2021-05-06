@@ -2,19 +2,24 @@ const mongoose = require('mongoose');
 const geoip = require('geoip-country');
 const mongodbClient = require('../mongodbClient');
 
-const buildViewAllowanceCriterias = (offerViews, sessionOfferViews) => [
+const buildViewAllowanceCriterias = (
+  offerImpressions,
+  sessionOfferImpressions
+) => [
   // Where customers may view the offer every n days, and the customer
   // has not viewed the offer.
   {
     _id: {
-      $nin: offerViews.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
+      $nin: offerImpressions.map(({ offerId }) =>
+        mongoose.Types.ObjectId(offerId)
+      )
     },
     viewAllowance: 'DAYS'
   },
 
   // Where customers may view the offev every n days, and the customer
   // viewed the offer more than n days ago.
-  ...offerViews.map(({ offerId, viewedAt }) => ({
+  ...offerImpressions.map(({ offerId, viewedAt }) => ({
     _id: mongoose.Types.ObjectId(offerId),
     viewAllowance: 'DAYS',
     viewAllowanceDays: {
@@ -32,7 +37,7 @@ const buildViewAllowanceCriterias = (offerViews, sessionOfferViews) => [
   // Where customers may view the offer once per browser tab session.
   {
     _id: {
-      $nin: sessionOfferViews.map(({ offerId }) =>
+      $nin: sessionOfferImpressions.map(({ offerId }) =>
         mongoose.Types.ObjectId(offerId)
       )
     },
@@ -42,7 +47,9 @@ const buildViewAllowanceCriterias = (offerViews, sessionOfferViews) => [
   // Where customers may view the offer only once.
   {
     _id: {
-      $nin: offerViews.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
+      $nin: offerImpressions.map(({ offerId }) =>
+        mongoose.Types.ObjectId(offerId)
+      )
     },
     viewAllowance: 'ONCE'
   }
@@ -57,8 +64,8 @@ const findOneRandomByTriggerEvent = async (
   {
     triggerEvent,
     ipAddress = undefined,
-    offerViews = [],
-    sessionOfferViews = []
+    offerImpressions = [],
+    sessionOfferImpressions = []
   }
 ) => {
   const Offer = mongodbClient.connection.model('Offer');
@@ -70,7 +77,10 @@ const findOneRandomByTriggerEvent = async (
     enabled: true,
     $and: [
       {
-        $or: buildViewAllowanceCriterias(offerViews, sessionOfferViews)
+        $or: buildViewAllowanceCriterias(
+          offerImpressions,
+          sessionOfferImpressions
+        )
       }
     ]
   };
@@ -107,8 +117,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     triggerEvent,
     shopifyProductIds,
     ipAddress = undefined,
-    offerViews = [],
-    sessionOfferViews = []
+    offerImpressions = [],
+    sessionOfferImpressions = []
   }
 ) => {
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
@@ -146,7 +156,10 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
         ]
       },
       {
-        $or: buildViewAllowanceCriterias(offerViews, sessionOfferViews)
+        $or: buildViewAllowanceCriterias(
+          offerImpressions,
+          sessionOfferImpressions
+        )
       }
     ]
   };
@@ -181,7 +194,13 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
 
 const findOneRandom = async (
   shop,
-  { triggerEvent, shopifyProductIds, ipAddress, offerViews, sessionOfferViews }
+  {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress,
+    offerImpressions,
+    sessionOfferImpressions
+  }
 ) => {
   const shopifyProductIdsRequired =
     triggerEvent === 'ADD' || triggerEvent === 'CART';
@@ -206,15 +225,15 @@ const findOneRandom = async (
       triggerEvent,
       shopifyProductIds,
       ipAddress,
-      offerViews,
-      sessionOfferViews
+      offerImpressions,
+      sessionOfferImpressions
     });
   } else {
     return await findOneRandomByTriggerEvent(shop, {
       triggerEvent,
       ipAddress,
-      offerViews,
-      sessionOfferViews
+      offerImpressions,
+      sessionOfferImpressions
     });
   }
 };

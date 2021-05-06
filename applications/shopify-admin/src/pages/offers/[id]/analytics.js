@@ -83,7 +83,7 @@ const OfferAnalyticsPage = () => {
     offerConversions,
     offerConversionRates,
     offerRevenueIncreases,
-    offerViews,
+    offerImpressions,
     offerAnalyticsLoading,
     offerAnalyticsError
   } = useOfferAnalytics(offerId, startAt, endAt);
@@ -124,11 +124,14 @@ const OfferAnalyticsPage = () => {
       ]),
     [offerRevenueIncreases]
   );
-  const offerViewsChartData = useMemo(
+  const offerImpressionsChartData = useMemo(
     () =>
-      offerViews &&
-      offerViews.map(({ date, views }) => [new Date(date).getTime(), views]),
-    [offerViews]
+      offerImpressions &&
+      offerImpressions.map(({ date, impressions }) => [
+        new Date(date).getTime(),
+        impressions
+      ]),
+    [offerImpressions]
   );
 
   const errorComponent = memo(() => (
@@ -182,12 +185,12 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Views"
-                  subtitle="Views over last 90 days"
+                  title="Impressions"
+                  subtitle="Impressions over last 90 days"
                   rangeDescription="January to December"
                   changeValue={formatNumber(214)}
                   changePercentage={formatPercentage(0.115, 1)}
-                  data={offerViewsChartData}
+                  data={offerImpressionsChartData}
                 />
               </Card>
               <Card sectioned>
