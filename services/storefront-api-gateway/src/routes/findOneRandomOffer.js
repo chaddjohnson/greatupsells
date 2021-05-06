@@ -62,6 +62,13 @@ const handler = middy(async (event, context) => {
       };
     }
 
+    // Exclude stats from response payload.
+    delete offer.acceptanceCount;
+    delete offer.conversionCount;
+    delete offer.conversionRate;
+    delete offer.impressionCount;
+    delete offer.revenueIncrease;
+
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
