@@ -13,6 +13,7 @@ import {
   Sheet,
   TextContainer,
   Heading,
+  Banner,
   Scrollable,
   PageActions,
   EmptyState,
@@ -331,7 +332,13 @@ const ThemeSelector = ({
           >
             <SearchWrapper>
               {tabs[selectedTabIndex].id === 'history' && (
-                <>
+                <Stack vertical>
+                  <TextContainer>
+                    <Banner>
+                      Your customizations for previously selected themes will
+                      remain available here.
+                    </Banner>
+                  </TextContainer>
                   <Card>
                     <OptionList
                       options={offerThemeOptions}
@@ -340,7 +347,7 @@ const ThemeSelector = ({
                     />
                   </Card>
                   {!offerThemeOptions?.length && <EmptyComponent />}
-                </>
+                </Stack>
               )}
               {tabs[selectedTabIndex].id === 'explore' &&
                 themeOptions?.length > 0 && (
