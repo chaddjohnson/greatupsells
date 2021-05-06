@@ -33,7 +33,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
+      enum: ['CROSS_SELL', 'UPSELL', 'POPUP']
     },
     viewCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },

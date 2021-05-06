@@ -47,16 +47,16 @@ const OfferSettingsEditor = ({
         <ChoiceList
           choices={[
             {
-              label: 'Upsell',
-              helpText:
-                'Encourage customers to purchase a comparable, more expensive product.',
-              value: 'UPSELL'
-            },
-            {
               label: 'Cross-sell',
               helpText:
                 'Encourage customers to purchase a related or complementary product.',
               value: 'CROSS_SELL'
+            },
+            {
+              label: 'Upsell',
+              helpText:
+                'Encourage customers to purchase a comparable, more expensive product.',
+              value: 'UPSELL'
             },
             {
               label: 'Popup',
