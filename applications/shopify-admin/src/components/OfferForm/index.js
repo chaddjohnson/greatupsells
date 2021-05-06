@@ -294,8 +294,12 @@ const OfferForm = ({
             onStrategyChange={handleStrategyChange}
             onBlur={handleBlur}
           />
-          <OfferProductsEditor offer={offer} />
-          <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
+          {offer.strategy !== 'POPUP' && (
+            <>
+              <OfferProductsEditor offer={offer} />
+              <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
+            </>
+          )}
           <ThemeEditor
             strategy={offer.strategy}
             theme={popupTheme}
