@@ -1,5 +1,3 @@
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
 const getenv = require('getenv');
 const Koa = require('koa');
 const connect = require('koa-connect');
@@ -15,8 +13,6 @@ const {
 } = require('@shopify/koa-shopify-auth');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
-
-dotenvExpand(dotenv.config());
 
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT');
 const dev = process.env.NODE_ENV !== 'production';

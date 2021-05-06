@@ -1,9 +1,5 @@
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-
-dotenvExpand(dotenv.config());
 
 const dev = process.env.NODE_ENV !== 'production';
 
