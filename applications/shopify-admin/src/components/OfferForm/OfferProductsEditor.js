@@ -12,9 +12,11 @@ const OfferProductsEditor = ({ offer }) => {
   return (
     <>
       <Card
-        title={`Products and collections to ${
-          offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
-        }`}
+        title={`${
+          offer.strategy === 'CROSS_SELL'
+            ? 'Products and collections'
+            : 'Products'
+        } to ${offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'}`}
       >
         <Card.Section title="Products">
           <TextField
@@ -34,26 +36,28 @@ const OfferProductsEditor = ({ offer }) => {
             // onRemoveItem={offeredProducts => setOffer({ ...offer, offeredProducts })}
           />
         </Card.Section>
-        <Card.Section title="Collections">
-          <TextField
-            helpText={`Products from selected collections will be shown at random and offered as ${
-              offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
-            }s.`}
-            placeholder="Search collections"
-            prefix={<Icon source={SearchMinor} />}
-            connectedRight={
-              <Button onClick={() => setCollectionPickerOpen(true)}>
-                Browse
-              </Button>
-            }
-            onChange={() => setCollectionPickerOpen(true)}
-          />
-          <ManagedResourceList
-            items={offer.offeredCollections}
-            // onChange={}
-            // onRemoveItem={offeredCollections => setOffer({ ...offer, offeredCollections })}
-          />
-        </Card.Section>
+        {offer.strategy === 'CROSS_SELL' && (
+          <Card.Section title="Collections">
+            <TextField
+              helpText={`Products from selected collections will be shown at random and offered as ${
+                offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
+              }s.`}
+              placeholder="Search collections"
+              prefix={<Icon source={SearchMinor} />}
+              connectedRight={
+                <Button onClick={() => setCollectionPickerOpen(true)}>
+                  Browse
+                </Button>
+              }
+              onChange={() => setCollectionPickerOpen(true)}
+            />
+            <ManagedResourceList
+              items={offer.offeredCollections}
+              // onChange={}
+              // onRemoveItem={offeredCollections => setOffer({ ...offer, offeredCollections })}
+            />
+          </Card.Section>
+        )}
       </Card>
       {productPickerOpen && (
         <ResourcePicker

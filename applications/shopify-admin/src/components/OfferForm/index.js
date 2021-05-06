@@ -294,7 +294,7 @@ const OfferForm = ({
             onStrategyChange={handleStrategyChange}
             onBlur={handleBlur}
           />
-          {offer.strategy !== 'POPUP' && (
+          {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
             <>
               <OfferProductsEditor offer={offer} />
               <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
