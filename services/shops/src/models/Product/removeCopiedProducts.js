@@ -19,17 +19,14 @@ const removeCopiedProducts = async () => {
 
   cursor.addCursorFlag('noCursorTimeout', true);
 
-  await cursor.eachAsync(
-    async (product) => {
-      const { shop, shopifyShopId } = product;
-      const shopifyApiClient = shop.getShopifyApiClient();
+  await cursor.eachAsync(async (product) => {
+    const { shop, shopifyShopId } = product;
+    const shopifyApiClient = shop.getShopifyApiClient();
 
-      // Remove the product from Shopify. The product will then be marked as
-      // deleted (but not deleted) via webhook.
-      await shopifyApiClient.product.delete(shopifyShopId);
-    },
-    { parallel: 25 }
-  );
+    // Remove the product from Shopify. The product will then be marked as
+    // deleted (but not deleted) via webhook.
+    await shopifyApiClient.product.delete(shopifyShopId);
+  });
 };
 
 module.exports = removeCopiedProducts;

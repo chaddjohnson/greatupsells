@@ -332,13 +332,13 @@ const OfferPopup = ({
   ]);
 
   // Fix the iframe height when scrolling occurs.
-  useEffect(() => {
-    window.addEventListener('scroll', fixIframeHeight);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', fixIframeHeight);
 
-    return () => {
-      window.removeEventListener('scroll', fixIframeHeight);
-    };
-  });
+  //   return () => {
+  //     window.removeEventListener('scroll', fixIframeHeight);
+  //   };
+  // });
 
   if (!offer || !markup) {
     return null;
