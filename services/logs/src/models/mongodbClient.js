@@ -14,7 +14,11 @@ const connectionOptions = {
   socketTimeoutMS: 60 * 1000,
 
   // Keep the connection alive.
-  keepAlive: true
+  keepAlive: true,
+
+  // Opt in to using the MongoDB driver's findOneAndUpdate() function.
+  // See https://mongoosejs.com/docs/deprecations.html#findandmodify.
+  useFindAndModify: false
 };
 
 const mongodbClient = new MongoDBClient(connectionUri, connectionOptions);
