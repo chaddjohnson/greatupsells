@@ -218,12 +218,6 @@ const OfferSettingsEditor = ({
             value: 'DAYS'
           },
           {
-            label: 'Once every page load',
-            helpText:
-              'Customers may see this offer with every new page visited.',
-            value: 'PAGE'
-          },
-          {
             label: 'Once per browser tab session',
             helpText:
               'Customers may see this offer only once per browser tab session.',
@@ -233,6 +227,12 @@ const OfferSettingsEditor = ({
             label: 'One time',
             helpText: 'Customers may see this offer only one time.',
             value: 'ONCE'
+          },
+          {
+            label: 'Once every page load',
+            helpText:
+              'Customers may see this offer with every new page visited.',
+            value: 'PAGE'
           }
         ]}
         selected={viewAllowance.value}

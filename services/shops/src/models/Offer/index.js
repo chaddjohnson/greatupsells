@@ -61,7 +61,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
       default: 'DAYS',
-      enum: ['DAYS', 'PAGE', 'SESSION', 'ONCE']
+      enum: ['DAYS', 'SESSION', 'ONCE', 'PAGE']
     },
     viewAllowanceDays: { type: Number, required: false, default: 7, min: 0 },
     popupTheme: {
