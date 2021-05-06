@@ -1,4 +1,5 @@
 service: upselling-admin-api-gateway
+useDotenv: true
 
 provider:
   name: aws
@@ -88,14 +89,10 @@ functions:
           #   identitySource: method.request.header.Authorization
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
   - serverless-plugin-monorepo
   - serverless-domain-manager
 
 custom:
-  dotenv:
-    path: .env
-    logging: false
   serverless-offline:
     httpPort: ${env:ADMIN_API_GATEWAY_PORT}
     lambdaPort: 5003

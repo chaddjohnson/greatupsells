@@ -1,4 +1,5 @@
 service: upselling-shops-service
+useDotenv: true
 
 provider:
   name: aws
@@ -349,12 +350,9 @@ functions:
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
   - serverless-plugin-monorepo
 
 custom:
-  dotenv:
-    path: .env
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT}
     lambdaPort: 5002

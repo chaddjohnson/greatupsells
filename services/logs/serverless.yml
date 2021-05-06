@@ -1,4 +1,5 @@
 service: upselling-logs-service
+useDotenv: true
 
 provider:
   name: aws
@@ -25,13 +26,8 @@ functions:
           maximumBatchingWindow: 60
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-plugin-monorepo
   - serverless-offline
-
-custom:
-  dotenv:
-    path: .env
 
 package:
   exclude:

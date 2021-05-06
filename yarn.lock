@@ -13963,15 +13963,6 @@ serverless-domain-manager@^4.0.1:
     aws-sdk "^2.755.0"
     chalk "^2.4.2"
 
-serverless-dotenv-plugin@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/serverless-dotenv-plugin/-/serverless-dotenv-plugin-2.4.2.tgz#b778e43f9048d8292b3823a0c83f2367c909a5ed"
-  integrity sha512-UDJmMzYJ8by2BAYoDu+TirxT65y6MNIzAk0Eszy+H6ZSJsPu1YRNRxyyTof4kaQ5bGqhGUmuZvutHoSffb1obg==
-  dependencies:
-    chalk "^3.0.0"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
-
 serverless-http@^2.4.1:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/serverless-http/-/serverless-http-2.7.0.tgz#352ca38cbbba58dc71dcfb11bb27c92c3c81fe69"

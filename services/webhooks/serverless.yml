@@ -1,4 +1,5 @@
 service: upselling-webhooks-service
+useDotenv: true
 
 provider:
   name: aws
@@ -94,12 +95,9 @@ functions:
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
   - serverless-plugin-monorepo
 
 custom:
-  dotenv:
-    path: .env
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/webhooks/endpoint/${self:provider.region}}
     basePath: ''

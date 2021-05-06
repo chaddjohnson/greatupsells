@@ -29,7 +29,6 @@
     "@neatowebsolutions/upselling-logger": "0.0.0",
     "serverless": "^2.4.0",
     "serverless-domain-manager": "^4.0.1",
-    "serverless-dotenv-plugin": "^2.4.2",
     "serverless-ngrok-tunnel": "^0.0.3",
     "serverless-offline": "^6.8.0",
     "serverless-plugin-monorepo": "^0.9.0"
