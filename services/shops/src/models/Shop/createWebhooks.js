@@ -108,7 +108,7 @@ const createWebhooks = async (shop) => {
     maxTimeout: 2 * 1000
   };
 
-  await Promise.map(definitions, async (definition) => {
+  await Promise.mapSeries(definitions, async (definition) => {
     // Sometimes webhook creation fails, so try multiple times.
     await promiseRetry(async (retry) => {
       try {
