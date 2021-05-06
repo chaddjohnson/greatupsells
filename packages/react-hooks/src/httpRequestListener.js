@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 
 const XMLHttpRequest = typeof window !== 'undefined' && window.XMLHttpRequest;
-const originalOpen = XMLHttpRequest.prototype.open;
+const originalOpen = XMLHttpRequest?.prototype?.open;
 
 // Listeners must be module-level because XMLHttpRequest is global.
 const listeners = [];
 
-const useHttpRequestListener = (listenerUrl, listener = () => {}) => {
+const useHttpRequestListener = (listenerUrl, listener) => {
   const [listenerAdded, setListenerAdded] = useState(false);
 
   if (listener && !listenerAdded) {
