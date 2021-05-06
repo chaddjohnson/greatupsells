@@ -57,13 +57,13 @@ const schema = new mongoose.Schema(
         return this.actionButtonBehavior === 'LINK';
       }
     },
-    impressionAllowance: {
+    viewAllowance: {
       type: String,
       required: true,
       default: 'DAYS',
       enum: ['DAYS', 'SESSION', 'ONCE', 'PAGE']
     },
-    impressionAllowanceDays: {
+    viewAllowanceDays: {
       type: Number,
       required: false,
       default: 7,
