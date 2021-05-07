@@ -86,7 +86,7 @@ const OfferSettingsEditor = ({
             },
             {
               label: 'Shop visit',
-              helpText: 'Offer is shown when your shop is first visted.',
+              helpText: 'Offer is shown when your shop is first visited.',
               value: 'LOAD'
             },
             {
