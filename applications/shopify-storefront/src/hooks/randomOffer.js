@@ -26,10 +26,11 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   );
   const [pageUrl, setPageUrl] = useState(window.location.pathname);
 
+  const isAddEvent = event === 'ADD' && !!shopifyProductIds?.length;
+  const isCartEvent = event === 'CART';
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
-  const isProductEvent = !!shopifyProductIds?.length;
-  const shouldQuery = isLoadEvent || isExitEvent || isProductEvent;
+  const shouldQuery = isAddEvent || isCartEvent || isLoadEvent || isExitEvent;
 
   // Use POST instead of GET here to side step query string formatting
   // weirdness and query string length issues.

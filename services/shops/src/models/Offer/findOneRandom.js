@@ -202,11 +202,9 @@ const findOneRandom = async (
     sessionOfferImpressions
   }
 ) => {
-  const shopifyProductIdsRequired =
-    triggerEvent === 'ADD' || triggerEvent === 'CART';
+  const shopifyProductIdsRequired = triggerEvent === 'ADD';
   const shopifyProductIdsMissing =
-    shopifyProductIdsRequired &&
-    (!shopifyProductIds || shopifyProductIds.length === 0);
+    !shopifyProductIds || shopifyProductIds.length === 0;
 
   if (!shop) {
     throw new Error('`shop` must be provided');
@@ -214,13 +212,13 @@ const findOneRandom = async (
   if (!triggerEvent) {
     throw new Error('`triggerEvent` must be provided');
   }
-  if (shopifyProductIdsMissing) {
+  if (shopifyProductIdsRequired && shopifyProductIdsMissing) {
     throw new Error(
       `\`shopifyProductIds\` must be provided with trigger event ${triggerEvent}`
     );
   }
 
-  if (shopifyProductIdsRequired) {
+  if (!shopifyProductIdsMissing) {
     return await findOneRandomByTriggerEventAndShopifyProductIds(shop, {
       triggerEvent,
       shopifyProductIds,

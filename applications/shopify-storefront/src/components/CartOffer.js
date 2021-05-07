@@ -65,7 +65,7 @@ const CartOffer = () => {
       return;
     }
 
-    const triggerShopifyProductId = triggerProduct.shopifyProductId;
+    const triggerShopifyProductId = triggerProduct?.shopifyProductId;
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
