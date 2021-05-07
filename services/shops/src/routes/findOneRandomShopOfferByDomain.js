@@ -2,6 +2,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
+// Looks up product data for a random product given an array of Shopify product IDs.
 const findRandomProduct = async (shopifyProductIds = []) => {
   const Product = await models.get('Product');
   const hasTriggerProducts = shopifyProductIds.length > 0;
