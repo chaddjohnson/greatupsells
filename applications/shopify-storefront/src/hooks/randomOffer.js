@@ -27,7 +27,7 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const [pageUrl, setPageUrl] = useState(window.location.pathname);
 
   const isAddEvent = event === 'ADD' && !!shopifyProductIds?.length;
-  const isCartEvent = event === 'CART';
+  const isCartEvent = event === 'CART' && window.location.pathname === '/cart';
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
   const shouldQuery = isAddEvent || isCartEvent || isLoadEvent || isExitEvent;
