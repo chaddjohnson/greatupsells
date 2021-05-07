@@ -15,13 +15,15 @@ const ProductOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
+  const [productAdded, setProductAdded] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
     {
       event: triggerEvent,
-      shopifyProductIds
+      shopifyProductIds,
+      shouldQuery: productAdded
     }
   );
   const offerId = offer?._id;
@@ -30,6 +32,7 @@ const ProductOffer = () => {
   const handleClosePopup = () => {
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setProductAdded(false);
   };
 
   const handleAddProduct = async (
@@ -98,6 +101,7 @@ const ProductOffer = () => {
   useShopifyCartProductAddListener((addedProduct) => {
     if (addedProduct?.product_id) {
       setShopifyProductIds([addedProduct.product_id]);
+      setProductAdded(true);
     }
   });
 
@@ -106,6 +110,7 @@ const ProductOffer = () => {
     setOfferViewed(false);
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setProductAdded(false);
   });
 
   if (!offer || !shop) {

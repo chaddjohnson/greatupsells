@@ -14,13 +14,15 @@ const CartOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
+  const [cartQueried, setCartQueried] = useState(false);
 
   const { fetchShopifyCart, addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
     {
       event: triggerEvent,
-      shopifyProductIds
+      shopifyProductIds,
+      shouldQuery: cartQueried
     }
   );
   const offerId = offer?._id;
@@ -29,6 +31,7 @@ const CartOffer = () => {
   const handleClosePopup = () => {
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setCartQueried(false);
   };
 
   const handleAddProduct = async (
@@ -107,14 +110,21 @@ const CartOffer = () => {
       const { items } = await fetchShopifyCart();
 
       setShopifyProductIds(items.map((item) => item.product_id));
+      setCartQueried(true);
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to pushState events.
-  usePushStateListener(() => {
+  usePushStateListener(async () => {
     setOfferViewed(false);
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setCartQueried(false);
+
+    const { items } = await fetchShopifyCart();
+
+    setShopifyProductIds(items.map((item) => item.product_id));
+    setCartQueried(true);
   });
 
   if (!offer || !shop) {

@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import useSWR from 'swr';
+import { compact } from 'lodash';
 import {
   useHttpClient,
   useCookies,
   usePushStateListener
 } from '@neatowebsolutions/upselling-react-hooks';
 
-const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
+const useRandomOffer = ({
+  event,
+  shopifyProductIds = [],
+  shouldQuery: triggerEventShouldQuery = true
+}) => {
   if (!Array.isArray(shopifyProductIds)) {
-    shopifyProductIds = [shopifyProductIds];
+    shopifyProductIds = compact([shopifyProductIds]);
   }
 
   const { httpClient } = useHttpClient();
@@ -30,7 +35,9 @@ const useRandomOffer = ({ event, shopifyProductIds = [] }) => {
   const isCartEvent = event === 'CART' && window.location.pathname === '/cart';
   const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
-  const shouldQuery = isAddEvent || isCartEvent || isLoadEvent || isExitEvent;
+  const shouldQuery =
+    (isAddEvent || isCartEvent || isLoadEvent || isExitEvent) &&
+    triggerEventShouldQuery;
 
   // Use POST instead of GET here to side step query string formatting
   // weirdness and query string length issues.
