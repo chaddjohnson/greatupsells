@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Button, TextField, Icon } from '@shopify/polaris';
+import { Card, Button, TextField, Icon, Banner } from '@shopify/polaris';
 import { SearchMinor } from '@shopify/polaris-icons';
 import { ResourcePicker } from '@shopify/app-bridge-react';
 import ManagedResourceList from './ManagedResourceList';
@@ -18,6 +18,24 @@ const OfferTriggersEditor = ({ offer, triggerEvent }) => {
     <>
       {['ADD', 'CART'].indexOf(triggerEvent.value) > -1 && (
         <Card title="Triggers">
+          {offer.triggerEvent === 'ADD' &&
+            !offer.triggerProducts.value?.length &&
+            !offer.triggerProducts?.length && (
+              <Card.Section>
+                <Banner status="warning">
+                  Offer will show regardless of products added to Cart.
+                </Banner>
+              </Card.Section>
+            )}
+          {offer.triggerEvent === 'CART' &&
+            !offer.triggerProducts.value?.length &&
+            !offer.triggerProducts?.length && (
+              <Card.Section>
+                <Banner status="warning">
+                  Offer will show regardless of products in Cart.
+                </Banner>
+              </Card.Section>
+            )}{' '}
           <Card.Section title="Products">
             <TextField
               helpText="The popup will show when any selected products are in the cart."
