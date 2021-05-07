@@ -101,6 +101,57 @@ const OfferSettingsEditor = ({
         />
       </FormLayout>
     </Card>
+    <Card title="View allowance" sectioned>
+      <ChoiceList
+        choices={[
+          {
+            label: 'Once within a period of days',
+            helpText: (
+              <Stack vertical spacing="tight">
+                <span>
+                  Customers may only see this offer once within a period of
+                  days.
+                </span>
+                {viewAllowance.value === 'DAYS' && (
+                  <ViewAllowanceDaysInputWrapper>
+                    <TextField
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      step={1}
+                      suffix="days"
+                      {...viewAllowanceDays}
+                      error={submitted && viewAllowanceDays.error}
+                      onBlur={() => onBlur('viewAllowanceDays')}
+                    />
+                  </ViewAllowanceDaysInputWrapper>
+                )}
+              </Stack>
+            ),
+            value: 'DAYS'
+          },
+          {
+            label: 'Once per browser tab session',
+            helpText:
+              'Customers may see this offer only once per browser tab session.',
+            value: 'SESSION'
+          },
+          {
+            label: 'One time',
+            helpText: 'Customers may see this offer only one time.',
+            value: 'ONCE'
+          },
+          {
+            label: 'Once every page load',
+            helpText:
+              'Customers may see this offer with every new page visited.',
+            value: 'PAGE'
+          }
+        ]}
+        selected={viewAllowance.value}
+        onChange={([value]) => viewAllowance.onChange(value)}
+      />
+    </Card>
     <Card title="Discount type" sectioned>
       <FormLayout>
         <ChoiceList
@@ -186,57 +237,6 @@ const OfferSettingsEditor = ({
         ]}
         selected={actionButtonBehavior.value}
         onChange={([value]) => actionButtonBehavior.onChange(value)}
-      />
-    </Card>
-    <Card title="View allowance" sectioned>
-      <ChoiceList
-        choices={[
-          {
-            label: 'Once within a period of days',
-            helpText: (
-              <Stack vertical spacing="tight">
-                <span>
-                  Customers may only see this offer once within a period of
-                  days.
-                </span>
-                {viewAllowance.value === 'DAYS' && (
-                  <ViewAllowanceDaysInputWrapper>
-                    <TextField
-                      type="number"
-                      inputMode="numeric"
-                      min={1}
-                      step={1}
-                      suffix="days"
-                      {...viewAllowanceDays}
-                      error={submitted && viewAllowanceDays.error}
-                      onBlur={() => onBlur('viewAllowanceDays')}
-                    />
-                  </ViewAllowanceDaysInputWrapper>
-                )}
-              </Stack>
-            ),
-            value: 'DAYS'
-          },
-          {
-            label: 'Once per browser tab session',
-            helpText:
-              'Customers may see this offer only once per browser tab session.',
-            value: 'SESSION'
-          },
-          {
-            label: 'One time',
-            helpText: 'Customers may see this offer only one time.',
-            value: 'ONCE'
-          },
-          {
-            label: 'Once every page load',
-            helpText:
-              'Customers may see this offer with every new page visited.',
-            value: 'PAGE'
-          }
-        ]}
-        selected={viewAllowance.value}
-        onChange={([value]) => viewAllowance.onChange(value)}
       />
     </Card>
   </>
