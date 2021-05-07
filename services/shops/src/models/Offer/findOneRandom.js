@@ -152,6 +152,10 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
             'triggerCollections.shopifyCollectionId': {
               $in: shopifyCollectionIds
             }
+          },
+          {
+            triggerProducts: { $size: 0 },
+            triggerCollections: { $size: 0 }
           }
         ]
       },
@@ -218,7 +222,7 @@ const findOneRandom = async (
     );
   }
 
-  if (!shopifyProductIdsMissing) {
+  if (!shopifyProductIdsMissing || triggerEvent === 'CART') {
     return await findOneRandomByTriggerEventAndShopifyProductIds(shop, {
       triggerEvent,
       shopifyProductIds,
