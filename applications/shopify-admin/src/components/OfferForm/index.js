@@ -295,11 +295,9 @@ const OfferForm = ({
             onBlur={handleBlur}
           />
           {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
-            <>
-              <OfferProductsEditor offer={offer} />
-              <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
-            </>
+            <OfferProductsEditor offer={offer} />
           )}
+          <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
           <ThemeEditor
             strategy={offer.strategy}
             theme={popupTheme}
