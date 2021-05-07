@@ -7,7 +7,7 @@ const findRandomProducts = async (offer) => {
 
   // Return no product if the offer has neither products nor collections.
   if (offeredProducts.length === 0 && offeredCollections.length === 0) {
-    return;
+    return [];
   }
 
   const Product = mongodbClient.connection.model('Product');
