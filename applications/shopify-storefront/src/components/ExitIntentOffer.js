@@ -116,7 +116,7 @@ const ExitIntentOffer = () => {
     return () => {
       document.removeEventListener('mouseout', handleMouseOut, true);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [handleMouseOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to pushState events.
   usePushStateListener(() => {
