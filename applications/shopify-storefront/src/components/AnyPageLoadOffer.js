@@ -49,7 +49,7 @@ const AnyPageLoadOffer = () => {
     }
 
     if (offer.triggerEvent !== 'LOAD') {
-      return null;
+      return;
     }
 
     // Abort if the offer was already viewed.

@@ -49,7 +49,7 @@ const SpecificPageLoadOffer = () => {
     }
 
     if (offer.triggerEvent !== triggerEvent) {
-      return null;
+      return;
     }
 
     // Abort if the offer was already viewed.
