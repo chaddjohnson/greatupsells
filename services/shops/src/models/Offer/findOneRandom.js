@@ -65,12 +65,18 @@ const findOneRandomByTriggerEvent = async (
     triggerEvent,
     ipAddress = undefined,
     offerImpressions = [],
-    sessionOfferImpressions = []
+    sessionOfferImpressions = [],
+    pagePath
   }
 ) => {
   const Offer = mongodbClient.connection.model('Offer');
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
+
+  // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
+  const pagePathSanitized =
+    pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+
   const criteria = {
     shop: shop._id,
     triggerEvent,
@@ -81,6 +87,17 @@ const findOneRandomByTriggerEvent = async (
           offerImpressions,
           sessionOfferImpressions
         )
+      },
+      {
+        $or: [
+          {
+            triggerEvent: { $ne: 'PAGE' }
+          },
+          {
+            triggerEvent: 'PAGE',
+            triggerPagePath: pagePathSanitized
+          }
+        ]
       }
     ]
   };
@@ -203,7 +220,8 @@ const findOneRandom = async (
     shopifyProductIds,
     ipAddress,
     offerImpressions,
-    sessionOfferImpressions
+    sessionOfferImpressions,
+    pagePath
   }
 ) => {
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
@@ -235,7 +253,8 @@ const findOneRandom = async (
       triggerEvent,
       ipAddress,
       offerImpressions,
-      sessionOfferImpressions
+      sessionOfferImpressions,
+      pagePath
     });
   }
 };

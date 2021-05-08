@@ -53,7 +53,7 @@ const ExitIntentOffer = () => {
         return;
       }
 
-      if (offer.triggerEvent !== 'EXIT') {
+      if (offer.triggerEvent !== triggerEvent) {
         return null;
       }
 
@@ -127,7 +127,7 @@ const ExitIntentOffer = () => {
     return null;
   }
 
-  if (offer.triggerEvent !== 'EXIT') {
+  if (offer.triggerEvent !== triggerEvent) {
     return null;
   }
 

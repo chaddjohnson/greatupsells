@@ -8,9 +8,9 @@ import {
   useShopifyAjaxApi
 } from '../hooks';
 
-const triggerEvent = 'LOAD';
+const triggerEvent = 'PAGE';
 
-const ShopVisitOffer = () => {
+const SpecificPageLoadOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
@@ -47,7 +47,7 @@ const ShopVisitOffer = () => {
       return;
     }
 
-    if (offer.triggerEvent !== 'LOAD') {
+    if (offer.triggerEvent !== triggerEvent) {
       return null;
     }
 
@@ -85,7 +85,7 @@ const ShopVisitOffer = () => {
     return null;
   }
 
-  if (offer.triggerEvent !== 'LOAD') {
+  if (offer.triggerEvent !== triggerEvent) {
     return null;
   }
 
@@ -103,4 +103,4 @@ const ShopVisitOffer = () => {
   );
 };
 
-export default ShopVisitOffer;
+export default SpecificPageLoadOffer;

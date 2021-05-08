@@ -12,7 +12,13 @@ const trackImpression = async (
 ) => {
   await offer.execPopulate('shop');
 
-  const { shop, shopifyShopId, strategy, triggerEvent } = offer;
+  const {
+    shop,
+    shopifyShopId,
+    strategy,
+    triggerEvent,
+    triggerPagePath
+  } = offer;
   const Offer = offer.constructor;
   const Shop = shop.constructor;
   const OfferHit = mongodbClient.connection.model('OfferHit');
@@ -22,6 +28,7 @@ const trackImpression = async (
     shop,
     strategy,
     triggerEvent,
+    triggerPagePath,
     triggerShopifyProductId,
     ipAddress
   });

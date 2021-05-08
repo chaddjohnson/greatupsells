@@ -80,6 +80,7 @@ const OfferForm = ({
     name,
     strategy,
     triggerEvent,
+    triggerPagePath,
     discountType,
     offeredProducts,
     offeredCollections,
@@ -113,6 +114,7 @@ const OfferForm = ({
       name,
       strategy,
       triggerEvent,
+      triggerPagePath,
       offeredProducts,
       offeredCollections,
       // minimumProductsQuantity,
@@ -283,6 +285,7 @@ const OfferForm = ({
             name={name}
             strategy={strategy}
             triggerEvent={triggerEvent}
+            triggerPagePath={triggerPagePath}
             discountType={discountType}
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
@@ -297,7 +300,7 @@ const OfferForm = ({
           {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
             <OfferProductsEditor offer={offer} />
           )}
-          <OfferTriggersEditor offer={offer} triggerEvent={triggerEvent} />
+          <OfferTriggersEditor offer={offer} />
           <ThemeEditor
             strategy={offer.strategy}
             theme={popupTheme}

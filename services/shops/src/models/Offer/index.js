@@ -85,9 +85,10 @@ const schema = new mongoose.Schema(
     discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'LOAD', 'EXIT'],
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE'],
       required: true
     },
+    triggerPagePath: { type: String, required: false },
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
     enableGeotargeting: { type: Boolean, required: true, default: false },
@@ -122,23 +123,8 @@ schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
 
-schema.statics.findOneRandom = function (
-  shop,
-  {
-    triggerEvent,
-    shopifyProductIds,
-    ipAddress,
-    offerImpressions,
-    sessionOfferImpressions
-  }
-) {
-  return findOneRandom(shop, {
-    triggerEvent,
-    shopifyProductIds,
-    ipAddress,
-    offerImpressions,
-    sessionOfferImpressions
-  });
+schema.statics.findOneRandom = function (shop, params) {
+  return findOneRandom(shop, params);
 };
 
 schema.methods.findRandomProducts = function () {
@@ -185,18 +171,8 @@ schema.methods.findPopupThemes = async function () {
   return PopupTheme.findByOfferId(this._id);
 };
 
-schema.methods.trackImpression = function ({
-  triggerShopifyProductId,
-  offeredShopifyProductIds,
-  offeredShopifyVariantIds,
-  ipAddress
-}) {
-  return trackImpression(this, {
-    triggerShopifyProductId,
-    offeredShopifyProductIds,
-    offeredShopifyVariantIds,
-    ipAddress
-  });
+schema.methods.trackImpression = function (params) {
+  return trackImpression(this, params);
 };
 
 schema.methods.toString = function () {

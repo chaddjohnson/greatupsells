@@ -29,28 +29,30 @@ const useRandomOffer = ({
       ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
       : []
   );
-  const [pageUrl, setPageUrl] = useState(window.location.pathname);
+  const [pagePath, setPagePath] = useState(window.location.pathname);
 
   const isAddEvent = event === 'ADD' && !!shopifyProductIds?.length;
   const isCartEvent = event === 'CART' && window.location.pathname === '/cart';
-  const isLoadEvent = event === 'LOAD';
   const isExitEvent = event === 'EXIT';
+  const isLoadEvent = event === 'LOAD';
+  const isPageEvent = event === 'PAGE';
   const shouldQuery =
-    (isAddEvent || isCartEvent || isLoadEvent || isExitEvent) &&
+    (isAddEvent || isCartEvent || isExitEvent || isLoadEvent || isPageEvent) &&
     triggerEventShouldQuery;
 
   // Use POST instead of GET here to side step query string formatting
   // weirdness and query string length issues.
   const { data } = useSWR(
     shouldQuery
-      ? [`random-${event}`, offerImpressions, sessionOfferImpressions, pageUrl]
+      ? [`random-${event}`, offerImpressions, sessionOfferImpressions, pagePath]
       : null,
     () =>
       httpClient.post('/offers/random', {
         event,
         shopifyProductIds,
         offerImpressions,
-        sessionOfferImpressions
+        sessionOfferImpressions,
+        pagePath
       }),
     {
       revalidateOnFocus: false,
@@ -69,7 +71,7 @@ const useRandomOffer = ({
         ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
         : []
     );
-    setPageUrl(window.location.pathname);
+    setPagePath(window.location.pathname);
   });
 
   return {

@@ -59,7 +59,7 @@ const CartOffer = () => {
       return;
     }
 
-    if (offer.triggerEvent !== 'CART') {
+    if (offer.triggerEvent !== triggerEvent) {
       return null;
     }
 
@@ -96,8 +96,6 @@ const CartOffer = () => {
     trackOfferImpression
   ]);
 
-  // TODO: Watch for location change events; see https://stackoverflow.com/a/58099300/83897.
-
   useEffect(() => {
     const path = window.location.pathname;
     const isCartPage = path === '/cart';
@@ -131,7 +129,7 @@ const CartOffer = () => {
     return null;
   }
 
-  if (offer.triggerEvent !== 'CART') {
+  if (offer.triggerEvent !== triggerEvent) {
     return null;
   }
 

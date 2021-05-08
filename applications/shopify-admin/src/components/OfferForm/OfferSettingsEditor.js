@@ -19,6 +19,7 @@ const OfferSettingsEditor = ({
   name,
   strategy,
   triggerEvent,
+  triggerPagePath,
   discountType,
   actionButtonBehavior,
   actionButtonLink,
@@ -85,15 +86,33 @@ const OfferSettingsEditor = ({
               value: 'CART'
             },
             {
-              label: 'Shop visit',
-              helpText: 'Offer is shown when your shop is first visited.',
-              value: 'LOAD'
-            },
-            {
               label: 'Exit intent',
               helpText:
                 'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.',
               value: 'EXIT'
+            },
+            {
+              label: 'Any page load',
+              helpText: 'Offer is shown when any page loads.',
+              value: 'LOAD'
+            },
+            {
+              label: 'Specific page load',
+              helpText: (
+                <Stack vertical spacing="tight">
+                  <span>Offer is shown when a specific page loads.</span>
+                  {triggerEvent.value === 'PAGE' && (
+                    <TextField
+                      value={triggerPagePath.value}
+                      placeholder="page-url/here"
+                      {...triggerPagePath}
+                      error={submitted && triggerPagePath.error}
+                      onBlur={() => onBlur('triggerPagePath')}
+                    />
+                  )}
+                </Stack>
+              ),
+              value: 'PAGE'
             }
           ]}
           selected={triggerEvent.value}
@@ -246,6 +265,7 @@ OfferSettingsEditor.propTypes = {
   name: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
   triggerEvent: PropTypes.object.isRequired,
+  triggerPagePath: PropTypes.object.isRequired,
   discountType: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,

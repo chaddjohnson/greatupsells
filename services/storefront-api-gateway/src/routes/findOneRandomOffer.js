@@ -35,7 +35,8 @@ const handler = middy(async (event, context) => {
       event: triggerEvent,
       shopifyProductIds,
       offerImpressions,
-      sessionOfferImpressions
+      sessionOfferImpressions,
+      pagePath
     } = JSON.parse(event.body);
 
     // Look up offer by domain to minimize this method's latency. Multiple data
@@ -52,7 +53,8 @@ const handler = middy(async (event, context) => {
       shopifyProductIds,
       ipAddress,
       offerImpressions,
-      sessionOfferImpressions
+      sessionOfferImpressions,
+      pagePath
     });
 
     if (!offer) {

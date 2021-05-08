@@ -5,7 +5,7 @@ import { SearchMinor } from '@shopify/polaris-icons';
 import { ResourcePicker } from '@shopify/app-bridge-react';
 import ManagedResourceList from './ManagedResourceList';
 
-const OfferTriggersEditor = ({ offer, triggerEvent }) => {
+const OfferTriggersEditor = ({ offer }) => {
   const [triggerProductPickerOpen, setTriggerProductPickerOpen] = useState(
     false
   );
@@ -16,7 +16,7 @@ const OfferTriggersEditor = ({ offer, triggerEvent }) => {
 
   return (
     <>
-      {['ADD', 'CART'].indexOf(triggerEvent.value) > -1 && (
+      {['ADD', 'CART'].indexOf(offer.triggerEvent) > -1 && (
         <Card title="Triggers">
           {offer.triggerEvent === 'ADD' &&
             !offer.triggerProducts.value?.length &&
@@ -97,8 +97,7 @@ const OfferTriggersEditor = ({ offer, triggerEvent }) => {
 };
 
 OfferTriggersEditor.propTypes = {
-  offer: PropTypes.object.isRequired,
-  triggerEvent: PropTypes.object.isRequired
+  offer: PropTypes.object.isRequired
 };
 
 export default OfferTriggersEditor;

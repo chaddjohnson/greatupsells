@@ -5,35 +5,22 @@ import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi,
-  useShopifyCartProductAddListener
+  useShopifyAjaxApi
 } from '../hooks';
 
-const triggerEvent = 'ADD';
+const triggerEvent = 'LOAD';
 
-const ProductOffer = () => {
+const AnyPageLoadOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
-  const [shopifyProductIds, setShopifyProductIds] = useState([]);
-  const [productAdded, setProductAdded] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
-  const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
-    {
-      event: triggerEvent,
-      shopifyProductIds,
-      shouldQuery: productAdded
-    }
-  );
+  const { offer, popupTheme, offeredProducts } = useRandomOffer({
+    event: triggerEvent
+  });
   const offerId = offer?._id;
   const { shop } = useShop();
-
-  const handleClosePopup = () => {
-    setPopupOpen(false);
-    setShopifyProductIds([]);
-    setProductAdded(false);
-  };
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -42,7 +29,7 @@ const ProductOffer = () => {
   ) => {
     // Add the product to the cart.
     if (shopifyVariantId) {
-      await addProductToShopifyCart(shopifyVariantId, quantity);
+      await addProductToShopifyCart(shopifyProductId, quantity);
     }
 
     // Accept the offer.
@@ -60,7 +47,7 @@ const ProductOffer = () => {
       return;
     }
 
-    if (offer.triggerEvent !== triggerEvent) {
+    if (offer.triggerEvent !== 'LOAD') {
       return null;
     }
 
@@ -69,7 +56,6 @@ const ProductOffer = () => {
       return;
     }
 
-    const triggerShopifyProductId = triggerProduct.shopifyProductId;
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -83,41 +69,23 @@ const ProductOffer = () => {
 
       await trackOfferImpression({
         offerId,
-        triggerShopifyProductId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
       });
     })();
-  }, [
-    offerId,
-    offer,
-    triggerProduct,
-    offeredProducts,
-    offerViewed,
-    trackOfferImpression
-  ]);
-
-  // Subscribe to product add events.
-  useShopifyCartProductAddListener((addedProduct) => {
-    if (addedProduct?.product_id) {
-      setShopifyProductIds([addedProduct.product_id]);
-      setProductAdded(true);
-    }
-  });
+  }, [offerId, offer, offeredProducts, offerViewed, trackOfferImpression]);
 
   // Listen to pushState events.
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
-    setShopifyProductIds([]);
-    setProductAdded(false);
   });
 
   if (!offer || !shop) {
     return null;
   }
 
-  if (offer.triggerEvent !== triggerEvent) {
+  if (offer.triggerEvent !== 'LOAD') {
     return null;
   }
 
@@ -128,12 +96,11 @@ const ProductOffer = () => {
       shop={shop}
       theme={popupTheme}
       offer={offer}
-      triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
-      onClose={handleClosePopup}
+      onClose={() => setPopupOpen(false)}
     />
   );
 };
 
-export default ProductOffer;
+export default AnyPageLoadOffer;

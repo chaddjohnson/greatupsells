@@ -21,6 +21,12 @@ const preValidate = async (offer, next) => {
     }
   }
 
+  // Sanitize `triggerPagePath`.
+  // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
+  offer.triggerPagePath =
+    offer.triggerPagePath &&
+    `/${offer.triggerPagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+
   next();
 };
 

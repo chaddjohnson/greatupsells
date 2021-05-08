@@ -7,6 +7,21 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const strategy = useField(initialOffer.strategy);
   const triggerEvent = useField(initialOffer.triggerEvent);
+  const triggerPagePath = useField(initialOffer.triggerPagePath, {
+    value: initialOffer.triggerPagePath,
+    validates: [
+      (value) => {
+        if (value.match(/^https?:\/\//)) {
+          return "Trigger page path can't contain a protocol or a domain";
+        }
+      },
+      (value) => {
+        if (value.match(/\?/)) {
+          return "Trigger page path can't contain a query string";
+        }
+      }
+    ]
+  });
   const discountType = useField(initialOffer.discountType);
   const offeredProducts = useList(initialOffer.offeredProducts);
   const offeredCollections = useList(initialOffer.offeredCollections);
@@ -17,7 +32,7 @@ const useFields = (initialOffer, showEndDate) => {
   const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
   const actionButtonLink = useField(
     {
-      value: '',
+      value: initialOffer.actionButtonLink,
       validates: (value) => {
         if (actionButtonBehavior.value === 'Link' && !value) {
           return "Action button link can't be blank";
@@ -128,6 +143,7 @@ const useFields = (initialOffer, showEndDate) => {
     name,
     strategy,
     triggerEvent,
+    triggerPagePath,
     discountType,
     offeredProducts,
     offeredCollections,
