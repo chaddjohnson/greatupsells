@@ -22,7 +22,7 @@ const CartOffer = () => {
     {
       event: triggerEvent,
       shopifyProductIds,
-      shouldQuery: cartQueried
+      shouldQuery: cartQueried && window.location.pathname === '/cart'
     }
   );
   const offerId = offer?._id;

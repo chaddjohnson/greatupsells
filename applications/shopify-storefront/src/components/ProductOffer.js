@@ -23,7 +23,7 @@ const ProductOffer = () => {
     {
       event: triggerEvent,
       shopifyProductIds,
-      shouldQuery: productAdded
+      shouldQuery: productAdded && !!setShopifyProductIds?.length
     }
   );
   const offerId = offer?._id;

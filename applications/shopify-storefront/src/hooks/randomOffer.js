@@ -10,7 +10,7 @@ import {
 const useRandomOffer = ({
   event,
   shopifyProductIds = [],
-  shouldQuery: triggerEventShouldQuery = true
+  shouldQuery = true
 }) => {
   if (!Array.isArray(shopifyProductIds)) {
     shopifyProductIds = compact([shopifyProductIds]);
@@ -30,15 +30,6 @@ const useRandomOffer = ({
       : []
   );
   const [pagePath, setPagePath] = useState(window.location.pathname);
-
-  const isAddEvent = event === 'ADD' && !!shopifyProductIds?.length;
-  const isCartEvent = event === 'CART' && window.location.pathname === '/cart';
-  const isExitEvent = event === 'EXIT';
-  const isLoadEvent = event === 'LOAD';
-  const isPageEvent = event === 'PAGE';
-  const shouldQuery =
-    (isAddEvent || isCartEvent || isExitEvent || isLoadEvent || isPageEvent) &&
-    triggerEventShouldQuery;
 
   // Use POST instead of GET here to side step query string formatting
   // weirdness and query string length issues.

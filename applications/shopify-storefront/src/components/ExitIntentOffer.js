@@ -17,7 +17,8 @@ const ExitIntentOffer = () => {
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
-    event: triggerEvent
+    event: triggerEvent,
+    shouldQuery: true
   });
   const offerId = offer?._id;
   const { shop } = useShop();

@@ -31,6 +31,14 @@ const OfferSettingsEditor = ({
   onStrategyChange,
   onBlur
 }) => {
+  const handleTriggerEventChange = ([value]) => {
+    if (triggerEvent.value !== 'PAGE') {
+      triggerPagePath.onChange(undefined);
+    }
+
+    triggerEvent.onChange(value);
+  };
+
   const handleTriggerPagePathBlur = () => {
     const hasLeadingSlash = triggerPagePath.value.match(/^\//);
 
@@ -127,7 +135,7 @@ const OfferSettingsEditor = ({
               }
             ]}
             selected={triggerEvent.value}
-            onChange={([value]) => triggerEvent.onChange(value)}
+            onChange={handleTriggerEventChange}
           />
         </FormLayout>
       </Card>
