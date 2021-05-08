@@ -40,7 +40,7 @@ const OfferSettingsEditor = ({
   };
 
   const handleTriggerPagePathBlur = () => {
-    const hasLeadingSlash = triggerPagePath.value.match(/^\//);
+    const hasLeadingSlash = !!triggerPagePath.value?.match(/^\//);
 
     if (!hasLeadingSlash) {
       triggerPagePath.onChange(`/${triggerPagePath.value}`);

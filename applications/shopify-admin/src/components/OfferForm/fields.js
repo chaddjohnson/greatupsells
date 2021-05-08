@@ -7,7 +7,7 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const strategy = useField(initialOffer.strategy);
   const triggerEvent = useField(initialOffer.triggerEvent);
-  const triggerPagePath = useField(initialOffer.triggerPagePath, {
+  const triggerPagePath = useField({
     value: initialOffer.triggerPagePath,
     validates: [
       (value) => {
