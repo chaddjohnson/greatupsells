@@ -33,7 +33,7 @@ const schema = new mongoose.Schema(
     },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE'],
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS'],
       required: true
     },
     triggerPagePath: { type: String, required: false },

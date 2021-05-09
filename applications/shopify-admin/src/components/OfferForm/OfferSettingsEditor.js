@@ -111,6 +111,12 @@ const OfferSettingsEditor = ({
                 value: 'EXIT'
               },
               {
+                label: 'Lost browser focus',
+                helpText:
+                  'Offer is shown when the browser fully loses visibility.',
+                value: 'FOCUS'
+              },
+              {
                 label: 'Any page load',
                 helpText: 'Offer is shown when any page loads.',
                 value: 'LOAD'
