@@ -107,7 +107,7 @@ const OfferSettingsEditor = ({
               {
                 label: 'Exit intent',
                 helpText:
-                  'Offer is shown on desktop when the mouse is moved above the browser window after three seconds of page load and on mobile with fast scroll up.',
+                  'Offer is shown on desktop when the mouse is moved above the browser window and on mobile with fast scroll up.',
                 value: 'EXIT'
               },
               {
