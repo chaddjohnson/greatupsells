@@ -7,6 +7,7 @@ import {
   AnyPageLoadOffer,
   CartOffer,
   ExitIntentOffer,
+  LinkClickOffer,
   LostBrowserFocusOffer,
   ProductOffer,
   SpecificPageLoadOffer
@@ -21,6 +22,7 @@ const App = () => (
     <AnyPageLoadOffer />
     <CartOffer />
     <ExitIntentOffer />
+    <LinkClickOffer />
     <LostBrowserFocusOffer />
     <ProductOffer />
     <SpecificPageLoadOffer />

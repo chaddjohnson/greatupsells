@@ -85,7 +85,7 @@ const schema = new mongoose.Schema(
     discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS'],
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'LINK'],
       required: true
     },
     triggerPagePath: { type: String, required: false },

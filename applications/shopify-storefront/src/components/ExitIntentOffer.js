@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
-import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  usePushStateListener,
+  useEventListener
+} from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
@@ -103,16 +106,11 @@ const ExitIntentOffer = () => {
         });
       }
     },
-    [offer, offerId, offeredProducts, offerViewed, trackOfferImpression]
+    [offer, offerId, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  useEffect(() => {
-    document.addEventListener('mouseout', handleMouseOut, true);
-
-    return () => {
-      document.removeEventListener('mouseout', handleMouseOut, true);
-    };
-  }, [handleMouseOut]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Listen for mouseout events.
+  useEventListener('mouseout', handleMouseOut, true);
 
   // Listen to pushState events.
   usePushStateListener(() => {

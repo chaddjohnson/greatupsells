@@ -117,6 +117,12 @@ const OfferSettingsEditor = ({
                 value: 'FOCUS'
               },
               {
+                label: 'Link click',
+                helpText:
+                  'Offer is shown when any link is clicked. Links are followed when the popup is closed.',
+                value: 'LINK'
+              },
+              {
                 label: 'Any page load',
                 helpText: 'Offer is shown when any page loads.',
                 value: 'LOAD'
