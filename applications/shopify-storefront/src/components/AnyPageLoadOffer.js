@@ -48,10 +48,6 @@ const AnyPageLoadOffer = () => {
       return;
     }
 
-    if (offer.triggerEvent !== 'LOAD') {
-      return;
-    }
-
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -83,10 +79,6 @@ const AnyPageLoadOffer = () => {
   });
 
   if (!offer || !shop) {
-    return null;
-  }
-
-  if (offer.triggerEvent !== 'LOAD') {
     return null;
   }
 

@@ -54,10 +54,6 @@ const ExitIntentOffer = () => {
         return;
       }
 
-      if (offer.triggerEvent !== triggerEvent) {
-        return;
-      }
-
       // Abort if the offer was already viewed.
       if (offerViewed) {
         return;
@@ -125,10 +121,6 @@ const ExitIntentOffer = () => {
   });
 
   if (!offer || !shop) {
-    return null;
-  }
-
-  if (offer.triggerEvent !== triggerEvent) {
     return null;
   }
 
