@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -109,8 +109,78 @@ const ExitIntentOffer = () => {
     [offer, offerId, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  // Reference: https://stackoverflow.com/a/56858467/83897
+  const getScrollDelta = useMemo(() => {
+    let lastPosition;
+    let newPosition;
+    let timer;
+    let delta;
+    const delay = 50;
+
+    return () => {
+      newPosition = window.scrollY;
+
+      if (typeof lastPosition !== 'undefined') {
+        delta = newPosition - lastPosition;
+      }
+
+      lastPosition = newPosition;
+
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        lastPosition = undefined;
+        delta = 0;
+      }, delay);
+
+      return delta;
+    };
+  }, []);
+
+  const handleScroll = useCallback(async () => {
+    // Nothing to show if there is no offer.
+    if (!offerId) {
+      return;
+    }
+
+    // Abort if the offer was already viewed.
+    if (offerViewed) {
+      return;
+    }
+
+    // Abort if screen is not mobile size.
+    if (window.width >= 768) {
+      return;
+    }
+
+    const scrollDelta = getScrollDelta();
+    const thresholdDelta = -150;
+    let offeredShopifyProductIds = null;
+    let offeredShopifyVariantIds = null;
+
+    if (scrollDelta < thresholdDelta) {
+      offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+      setOfferViewed(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }
+  }, [offer, offerId, offeredProducts, offerViewed, trackOfferImpression]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Listen for mouseout events.
   useEventListener('mouseout', handleMouseOut, true);
+
+  // Listen for scroll events.
+  useEventListener('scroll', handleScroll, true);
 
   // Listen to pushState events.
   usePushStateListener(() => {
