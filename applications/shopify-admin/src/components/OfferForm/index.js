@@ -352,7 +352,7 @@ const OfferForm = ({
             submitted={submitted}
             onBlur={handleBlur}
           />
-          <Card title="Timer" sectioned>
+          {/* <Card title="Timer" sectioned>
             <FormLayout>
               <Checkbox
                 label="Display a countdown timer"
@@ -365,7 +365,7 @@ const OfferForm = ({
                 </div>
               )}
             </FormLayout>
-          </Card>
+          </Card> */}
           <OfferOptionsEditor
             offer={offer}
             enableProductLinks={enableProductLinks}

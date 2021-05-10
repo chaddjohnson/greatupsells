@@ -202,6 +202,47 @@ const OfferSettingsEditor = ({
           onChange={([value]) => viewAllowance.onChange(value)}
         />
       </Card>
+      <Card title="Action button behavior" sectioned>
+        <ChoiceList
+          choices={[
+            {
+              label: 'Redirect customers to the Cart page',
+              value: 'CART'
+            },
+            {
+              label:
+                'Skip the cart and redirect customers to the Checkout page',
+              helpText:
+                'Immediately initiating checkout can increase conversions.',
+              value: 'CHECKOUT'
+            },
+            {
+              label: 'Remain on the same page',
+              value: 'PAGE'
+            },
+            {
+              label: 'Open a link',
+              helpText: actionButtonBehavior.value === 'LINK' && (
+                <Stack vertical spacing="tight">
+                  <TextField
+                    placeholder="https://"
+                    {...actionButtonLink}
+                    error={submitted && actionButtonLink.error}
+                    onBlur={() => onBlur('actionButtonLink')}
+                  />
+                  <Checkbox
+                    label="Open in new browser tab"
+                    {...asChoiceField(actionButtonLinkOpenInNewTab)}
+                  />
+                </Stack>
+              ),
+              value: 'LINK'
+            }
+          ]}
+          selected={actionButtonBehavior.value}
+          onChange={([value]) => actionButtonBehavior.onChange(value)}
+        />
+      </Card>
       <Card title="Discount type" sectioned>
         <FormLayout>
           <ChoiceList
@@ -248,47 +289,6 @@ const OfferSettingsEditor = ({
             selected="NONE"
           />
         </FormLayout>
-      </Card>
-      <Card title="Action button behavior" sectioned>
-        <ChoiceList
-          choices={[
-            {
-              label: 'Redirect customers to the Cart page',
-              value: 'CART'
-            },
-            {
-              label:
-                'Skip the cart and redirect customers to the Checkout page',
-              helpText:
-                'Immediately initiating checkout can increase conversions.',
-              value: 'CHECKOUT'
-            },
-            {
-              label: 'Remain on the same page',
-              value: 'PAGE'
-            },
-            {
-              label: 'Open a link',
-              helpText: actionButtonBehavior.value === 'LINK' && (
-                <Stack vertical spacing="tight">
-                  <TextField
-                    placeholder="https://"
-                    {...actionButtonLink}
-                    error={submitted && actionButtonLink.error}
-                    onBlur={() => onBlur('actionButtonLink')}
-                  />
-                  <Checkbox
-                    label="Open in new browser tab"
-                    {...asChoiceField(actionButtonLinkOpenInNewTab)}
-                  />
-                </Stack>
-              ),
-              value: 'LINK'
-            }
-          ]}
-          selected={actionButtonBehavior.value}
-          onChange={([value]) => actionButtonBehavior.onChange(value)}
-        />
       </Card>
     </>
   );
