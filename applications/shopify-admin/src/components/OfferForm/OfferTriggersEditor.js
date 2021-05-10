@@ -18,21 +18,20 @@ const OfferTriggersEditor = ({ offer }) => {
     <>
       {['ADD', 'CART'].indexOf(offer.triggerEvent) > -1 && (
         <Card title="Triggers">
-          {offer.triggerEvent === 'ADD' &&
-            !offer.triggerProducts.value?.length &&
-            !offer.triggerProducts?.length && (
-              <Card.Section>
-                <Banner status="warning">
-                  Offer will show regardless of products added to Cart.
-                </Banner>
-              </Card.Section>
-            )}
+          {offer.triggerEvent === 'ADD' && !offer.triggerProducts?.length && (
+            <Card.Section>
+              <Banner status="warning">
+                Offer will show regardless of products added to Cart unless one
+                or more triggers are selected.
+              </Banner>
+            </Card.Section>
+          )}
           {offer.triggerEvent === 'CART' &&
-            !offer.triggerProducts.value?.length &&
             !offer.triggerProducts?.length && (
               <Card.Section>
                 <Banner status="warning">
-                  Offer will show regardless of products in Cart.
+                  Offer will show regardless of products in Cart unless one or
+                  more triggers are selected.
                 </Banner>
               </Card.Section>
             )}{' '}
