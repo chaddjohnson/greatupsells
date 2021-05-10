@@ -150,6 +150,7 @@ const LinkClickOffer = () => {
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setLinkUrl('');
   });
 
   if (!offer || !shop) {

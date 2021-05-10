@@ -89,6 +89,7 @@ const LostBrowserFocusOffer = () => {
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setBrowserLostFocus(false);
   });
 
   if (!offer || !shop) {
