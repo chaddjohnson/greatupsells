@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, ButtonGroup, Button, Stack } from '@shopify/polaris';
+import { DesktopMajor, MobileMajor } from '@shopify/polaris-icons';
+import styled from 'styled-components';
 import ThemeSelector from './ThemeSelector';
 import VariablesEditor from './VariablesEditor';
+
+const DeviceToggle = styled.div`
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
+`;
 
 const ThemeEditor = ({
   strategy,
   theme,
   themes,
   offerThemes,
+  displayType,
   previewElement,
   onPreview,
   onChange,
   onThemeSelect,
-  onOfferThemeSelect
+  onOfferThemeSelect,
+  onDisplayTypeChange
 }) => {
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
@@ -23,6 +35,10 @@ const ThemeEditor = ({
       ...value,
       __id_offerForm: theme.__id_offerForm
     });
+  };
+
+  const handleDisplayTypeChange = (value) => {
+    onDisplayTypeChange(value);
   };
 
   return (
@@ -38,6 +54,26 @@ const ThemeEditor = ({
         </Card.Header>
         <Card.Section>
           <Stack vertical spacing="tight">
+            <DeviceToggle>
+              <ButtonGroup segmented>
+                <Button
+                  icon={DesktopMajor}
+                  outline
+                  pressed={displayType === 'desktop'}
+                  onClick={() => handleDisplayTypeChange('desktop')}
+                >
+                  Desktop
+                </Button>
+                <Button
+                  icon={MobileMajor}
+                  outline
+                  pressed={displayType === 'mobile'}
+                  onClick={() => handleDisplayTypeChange('mobile')}
+                >
+                  Mobile
+                </Button>
+              </ButtonGroup>
+            </DeviceToggle>
             {previewElement}
             <Button fullWidth onClick={onPreview}>
               Preview full size
@@ -70,21 +106,25 @@ ThemeEditor.propTypes = {
   theme: PropTypes.object,
   themes: PropTypes.array,
   offerThemes: PropTypes.array,
+  displayType: PropTypes.oneOf(['desktop', 'mobile']),
   previewElement: PropTypes.node,
   onPreview: PropTypes.func,
   onChange: PropTypes.func,
   onThemeSelect: PropTypes.func,
-  onOfferThemeSelect: PropTypes.func
+  onOfferThemeSelect: PropTypes.func,
+  onDisplayTypeChange: PropTypes.func
 };
 
 ThemeEditor.defaultProps = {
   theme: {},
   themes: [],
   offerThemes: [],
+  displayType: 'desktop',
   onPreview: () => {},
   onChange: () => {},
   onThemeSelect: () => {},
-  onOfferThemeSelect: () => {}
+  onOfferThemeSelect: () => {},
+  onDisplayTypeChange: () => {}
 };
 
 export default ThemeEditor;

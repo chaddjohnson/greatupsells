@@ -92,7 +92,8 @@ const Modal = styled(ReactModal)`
 `;
 
 const ModalContentContainer = styled.div`
-  max-width: 100%;
+  max-width: ${(props) =>
+    props.forceDisplayType === 'mobile' ? '375px' : '100%'};
   max-height: 100%;
   margin: auto;
   position: relative;
@@ -117,6 +118,7 @@ const OfferPopup = ({
   open,
   designMode,
   designModeZoom,
+  forceDisplayType,
   theme,
   shop,
   offer,
@@ -301,13 +303,29 @@ const OfferPopup = ({
   }, [translateProductData, offeredProducts]);
 
   // Generate the markup.
-  const { markup } = useLiquid(theme.template, {
+  let { markup } = useLiquid(theme.template, {
     ...mappedVariables,
     triggerProduct: translatedTriggerProduct,
     offeredProducts: translatedOfferedProducts,
     submitHandler: 'window.parent.OfferPopup.submit(event)',
     closeHandler: 'window.parent.OfferPopup.close()'
   });
+
+  // Replace device-specific media queries if forcing display type.
+  // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
+  if (forceDisplayType === 'desktop') {
+    // Add "device" to media queries if missing.
+    markup = markup?.replace(
+      /(\(\s*)(min|max)-(width|height)(\s*:)/,
+      '$1$2-device-$3$4'
+    );
+  } else if (forceDisplayType === 'mobile') {
+    // Remove "device" from media queries if present.
+    markup = markup?.replace(
+      /(\(\s*)(min|max)-device-(width|height)(\s*:)/,
+      '$1$2-$3$4'
+    );
+  }
 
   // Expose methods globally to enable themes to programmatically interface with popups.
   window.OfferPopup.addProduct = handleAddProduct;
@@ -406,6 +424,7 @@ const OfferPopup = ({
                 }}
               >
                 <ModalContentContainer
+                  forceDisplayType={forceDisplayType}
                   dangerouslySetInnerHTML={{ __html: markup }}
                 />
                 {designMode && <Mask onClick={onClick} />}
@@ -422,6 +441,8 @@ OfferPopup.propTypes = {
   className: PropTypes.string,
   open: PropTypes.bool,
   designMode: PropTypes.bool,
+  designModeZoom: PropTypes.number,
+  forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shop: PropTypes.object.isRequired,

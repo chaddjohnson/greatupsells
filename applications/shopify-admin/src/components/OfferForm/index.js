@@ -75,6 +75,9 @@ const OfferForm = ({
   const [offerPopupThemes, setOfferPopupThemes] = useState(
     assignIds(initialOfferPopupThemes)
   );
+  const [themeDisplayType, setThemeDisplayType] = useState(
+    window.innerWidth >= 768 ? 'desktop' : 'mobile'
+  );
 
   const {
     name,
@@ -247,6 +250,10 @@ const OfferForm = ({
     setPopupTheme(copiedTheme);
   };
 
+  const handleThemeDisplayTypeChange = (value) => {
+    setThemeDisplayType(value);
+  };
+
   // Handle Contextual Save Bar behavior.
   useEffect(
     () =>
@@ -306,12 +313,16 @@ const OfferForm = ({
             theme={popupTheme}
             themes={popupThemes}
             offerThemes={offerPopupThemes}
+            displayType={themeDisplayType}
             previewElement={
               <OfferPopupContainer>
                 <OfferPopup
                   open={true}
                   designMode={!previewActive}
                   designModeZoom={0.8}
+                  forceDisplayType={
+                    !previewActive ? themeDisplayType : undefined
+                  }
                   shop={shop}
                   theme={popupTheme}
                   offer={offer}
@@ -326,6 +337,7 @@ const OfferForm = ({
             onChange={handleThemeChange}
             onThemeSelect={handleThemeSelect}
             onOfferThemeSelect={setPopupTheme}
+            onDisplayTypeChange={handleThemeDisplayTypeChange}
           />
           <OfferDatesEditor
             offer={offer}

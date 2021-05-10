@@ -19,6 +19,7 @@ const Preview = ({ className, popupTheme }) => {
       className={className}
       open={true}
       designMode={!previewActive}
+      forceDisplayType="desktop"
       shop={dummyData.shop}
       theme={popupTheme}
       offer={dummyData.offer}
