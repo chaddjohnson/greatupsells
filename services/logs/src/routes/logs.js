@@ -19,7 +19,7 @@
 //                 fields: ['message']
 //               }
 //             }
-//             // { term: { type: 'info' } }
+//             // { term: { type: 'INFO' } }
 //           ]
 //         }
 //       }

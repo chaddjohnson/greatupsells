@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['info', 'warn', 'error'],
+    enum: ['INFO', 'WARN', 'ERROR'],
     trim: true
   },
   message: { type: String, required: true, trim: true },

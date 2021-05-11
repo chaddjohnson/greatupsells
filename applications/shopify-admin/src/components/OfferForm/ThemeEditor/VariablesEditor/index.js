@@ -34,25 +34,25 @@ const sections = [
   {
     id: 'content',
     name: 'Content',
-    variableTypes: ['text'],
+    variableTypes: ['TEXT'],
     icon: TextBlockMajor
   },
   {
     id: 'colors',
     name: 'Colors',
-    variableTypes: ['color'],
+    variableTypes: ['COLOR'],
     icon: ColorsMajor
   },
   {
     id: 'typography',
     name: 'Typography',
-    variableTypes: ['font', 'fontSize'],
+    variableTypes: ['FONT', 'FONTSIZE'],
     icon: TypeMajor
   },
   {
     id: 'options',
     name: 'Options',
-    variableTypes: ['option'],
+    variableTypes: ['OPTION'],
     icon: SettingsMajor
   },
   {

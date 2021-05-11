@@ -44,13 +44,13 @@ const FormFieldEditor = ({ formField, onRemoveItem, ...props }) => {
               label="Type"
               labelHidden
               options={[
-                { value: 'text', label: 'Text' },
-                { value: 'email', label: 'Email' },
-                { value: 'number', label: 'Number' },
-                { value: 'tel', label: 'Phone' },
-                { value: 'checkbox', label: 'Checkbox' },
-                { value: 'select', label: 'Select' },
-                { value: 'radio', label: 'Radio' }
+                { value: 'TEXT', label: 'Text' },
+                { value: 'EMAIL', label: 'Email' },
+                { value: 'NUMBER', label: 'Number' },
+                { value: 'TEL', label: 'Phone' },
+                { value: 'CHECKBOX', label: 'Checkbox' },
+                { value: 'SELECT', label: 'Select' },
+                { value: 'RADIO', label: 'Radio' }
               ]}
               value={formField.type}
               onChange={() => {}}

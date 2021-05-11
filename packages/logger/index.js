@@ -81,7 +81,7 @@ const info = async (message, ...data) => {
 
   console.info(message);
   console.info(formattedData);
-  await sendMessage('info', message, data);
+  await sendMessage('INFO', message, data);
 };
 
 const warn = async (message, ...data) => {
@@ -89,7 +89,7 @@ const warn = async (message, ...data) => {
 
   console.warn(message);
   console.warn(formattedData);
-  await sendMessage('warn', message, data);
+  await sendMessage('WARN', message, data);
 };
 
 const error = async (message, ...data) => {
@@ -97,7 +97,7 @@ const error = async (message, ...data) => {
 
   console.error(message);
   console.error(formattedData);
-  await sendMessage('error', message, data);
+  await sendMessage('ERROR', message, data);
 };
 
 module.exports = {

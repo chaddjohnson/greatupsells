@@ -51,14 +51,14 @@ const initialVariables = [
   {
     name: 'popupBackgroundColor',
     label: 'Popup background',
-    type: 'color',
+    type: 'COLOR',
     group: 'Popup',
     value: '#FFFFFF'
   },
   {
     name: 'maskBackgroundColor',
     label: 'Mask background',
-    type: 'color',
+    type: 'COLOR',
     group: 'Popup',
     value: 'rgba(0, 0, 0, 0.5)',
     options: {
@@ -68,21 +68,21 @@ const initialVariables = [
   {
     name: 'bodyFont',
     label: 'Font',
-    type: 'font',
+    type: 'FONT',
     group: 'Body text',
     value: "'Work Sans'"
   },
   {
     name: 'bodyFontSize',
     label: 'Base size',
-    type: 'fontSize',
+    type: 'FONTSIZE',
     group: 'Body text',
     value: '16'
   },
   {
     name: 'showOriginalPrice',
     label: 'Show original price',
-    type: 'option',
+    type: 'OPTION',
     group: 'Settings',
     value: 'true'
   }
