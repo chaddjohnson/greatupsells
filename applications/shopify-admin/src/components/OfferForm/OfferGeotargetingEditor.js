@@ -7,8 +7,7 @@ import CountryAutocomplete from './CountryAutocomplete';
 const OfferGeotargetingEditor = ({
   enableGeotargeting,
   geotargetingCountries,
-  submitted,
-  onBlur
+  submitted
 }) => {
   const handleEnableGeotargeting = (value) => {
     enableGeotargeting.onChange(value);
@@ -33,7 +32,6 @@ const OfferGeotargetingEditor = ({
             selected={geotargetingCountries.value}
             onChange={geotargetingCountries.onChange}
             error={submitted && geotargetingCountries.error}
-            onBlur={() => onBlur('geotargetingCountries')}
           />
         )}
       </Stack>
@@ -44,13 +42,11 @@ const OfferGeotargetingEditor = ({
 OfferGeotargetingEditor.propTypes = {
   enableGeotargeting: PropTypes.object.isRequired,
   geotargetingCountries: PropTypes.object.isRequired,
-  submitted: PropTypes.bool,
-  onBlur: PropTypes.func
+  submitted: PropTypes.bool
 };
 
 OfferGeotargetingEditor.defaultProps = {
-  submitted: false,
-  onBlur: () => {}
+  submitted: false
 };
 
 export default OfferGeotargetingEditor;

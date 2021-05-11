@@ -34,8 +34,7 @@ const OfferSettingsEditor = ({
   viewAllowanceDays,
   currency,
   submitted,
-  onStrategyChange,
-  onBlur
+  onStrategyChange
 }) => {
   const handleTriggerEventChange = ([value]) => {
     if (triggerEvent.value !== 'PAGE') {
@@ -45,14 +44,14 @@ const OfferSettingsEditor = ({
     triggerEvent.onChange(value);
   };
 
-  const handleTriggerPagePathBlur = () => {
+  const handleTriggerPagePathBlur = (event) => {
     const hasLeadingSlash = !!triggerPagePath.value?.match(/^\//);
 
     if (!hasLeadingSlash) {
       triggerPagePath.onChange(`/${triggerPagePath.value}`);
     }
 
-    onBlur('triggerPagePath');
+    triggerPagePath.onBlur(event);
   };
 
   return (
@@ -64,7 +63,6 @@ const OfferSettingsEditor = ({
             helpText="Internal name for your reference."
             {...name}
             error={submitted && name.error}
-            onBlur={() => onBlur('name')}
           />
         </FormLayout>
       </Card>
@@ -141,7 +139,6 @@ const OfferSettingsEditor = ({
                           step={1}
                           {...triggerScrollThreshold}
                           error={submitted && triggerScrollThreshold.error}
-                          onBlur={() => onBlur('triggerScrollThreshold')}
                         />
                       </TriggerScrollThresholdWrapper>
                     )}
@@ -218,7 +215,6 @@ const OfferSettingsEditor = ({
                         suffix="days"
                         {...viewAllowanceDays}
                         error={submitted && viewAllowanceDays.error}
-                        onBlur={() => onBlur('viewAllowanceDays')}
                       />
                     </ViewAllowanceDaysInputWrapper>
                   )}
@@ -274,7 +270,6 @@ const OfferSettingsEditor = ({
                     placeholder="https://"
                     {...actionButtonLink}
                     error={submitted && actionButtonLink.error}
-                    onBlur={() => onBlur('actionButtonLink')}
                   />
                   <Checkbox
                     label="Open in new browser tab"
@@ -355,14 +350,12 @@ OfferSettingsEditor.propTypes = {
   viewAllowanceDays: PropTypes.object.isRequired,
   currency: PropTypes.string.isRequired,
   submitted: PropTypes.bool,
-  onStrategyChange: PropTypes.func,
-  onBlur: PropTypes.func
+  onStrategyChange: PropTypes.func
 };
 
 OfferSettingsEditor.defaultProps = {
   submitted: false,
-  onStrategyChange: () => {},
-  onBlur: () => {}
+  onStrategyChange: () => {}
 };
 
 export default OfferSettingsEditor;

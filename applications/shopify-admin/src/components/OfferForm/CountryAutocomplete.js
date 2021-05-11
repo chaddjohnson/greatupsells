@@ -26,8 +26,7 @@ const CountryAutocomplete = ({
   placeholder,
   selected = [],
   error,
-  onChange,
-  onBlur
+  onChange
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
@@ -84,7 +83,6 @@ const CountryAutocomplete = ({
       value={inputValue}
       error={error}
       onChange={handleChange}
-      onBlur={onBlur}
     />
   );
 
@@ -119,14 +117,12 @@ CountryAutocomplete.propTypes = {
     PropTypes.string,
     PropTypes.element
   ]),
-  onChange: PropTypes.func,
-  onBlur: PropTypes.func
+  onChange: PropTypes.func
 };
 
 CountryAutocomplete.defaultProps = {
   selected: [],
-  onChange: () => {},
-  onBlur: () => {}
+  onChange: () => {}
 };
 
 export default CountryAutocomplete;

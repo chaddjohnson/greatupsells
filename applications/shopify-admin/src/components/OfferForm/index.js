@@ -199,15 +199,6 @@ const OfferForm = ({
     });
   };
 
-  // Work around focus issues.
-  const handleBlur = (fieldName) => (event) => {
-    const field = fields[fieldName];
-
-    if (event && event.target && field) {
-      setTimeout(() => field.onBlur(event), 0);
-    }
-  };
-
   const handleStrategyChange = (value) => {
     const firstStrategyPopupTheme = popupThemes.find(
       (current) => current.strategy === value
@@ -310,7 +301,6 @@ const OfferForm = ({
             currency={currency}
             submitted={submitted}
             onStrategyChange={handleStrategyChange}
-            onBlur={handleBlur}
           />
           {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
             <OfferProductsEditor offer={offer} />
@@ -358,7 +348,6 @@ const OfferForm = ({
             enableGeotargeting={enableGeotargeting}
             geotargetingCountries={geotargetingCountries}
             submitted={submitted}
-            onBlur={handleBlur}
           />
           <OfferOptionsEditor
             offer={offer}
@@ -375,7 +364,6 @@ const OfferForm = ({
             hideIfItemAdded={hideIfItemAdded}
             allowWithDiscountCodes={allowWithDiscountCodes}
             submitted={submitted}
-            onBlur={handleBlur}
           />
         </Layout.Section>
         <Layout.Section secondary>

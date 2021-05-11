@@ -28,8 +28,7 @@ const OfferOptionsEditor = ({
   productQuantityLimit,
   hideIfItemAdded,
   allowWithDiscountCodes,
-  submitted,
-  onBlur
+  submitted
 }) => {
   const [delaySecondsActive, setDelaySecondsActive] = useState(
     offer?.delaySeconds > 0
@@ -72,7 +71,6 @@ const OfferOptionsEditor = ({
                     suffix="seconds"
                     {...delaySeconds}
                     error={submitted && delaySeconds.error}
-                    onBlur={() => onBlur('delaySeconds')}
                   />
                 </SecondsInputWrapper>
               )
@@ -93,7 +91,6 @@ const OfferOptionsEditor = ({
                     suffix="seconds"
                     {...onPageRequiredSeconds}
                     error={submitted && delaySeconds.error}
-                    onBlur={() => onBlur('onPageRequiredSeconds')}
                   />
                 </SecondsInputWrapper>
               )
@@ -150,7 +147,6 @@ const OfferOptionsEditor = ({
                     offer.limitQuantitySelection &&
                     productQuantityLimit.error
                   }
-                  onBlur={() => onBlur('productQuantityLimit')}
                 />
               )
             }
@@ -190,13 +186,11 @@ OfferOptionsEditor.propTypes = {
   hideIfItemAdded: PropTypes.object.isRequired,
   allowWithDiscountCodes: PropTypes.object.isRequired,
   showNotificationBanner: PropTypes.object.isRequired,
-  submitted: PropTypes.bool,
-  onBlur: PropTypes.func
+  submitted: PropTypes.bool
 };
 
 OfferOptionsEditor.defaultProps = {
-  submitted: false,
-  onBlur: () => {}
+  submitted: false
 };
 
 export default OfferOptionsEditor;
