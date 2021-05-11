@@ -7,6 +7,26 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const strategy = useField(initialOffer.strategy);
   const triggerEvent = useField(initialOffer.triggerEvent);
+  const triggerScrollThreshold = useField({
+    value: initialOffer.triggerScrollThreshold?.toString(),
+    validates: [
+      (value) => {
+        if (!value) {
+          return "Trigger scroll threshold can't be blank";
+        }
+      },
+      (value) => {
+        if (value && Number.isNaN(value)) {
+          return 'Trigger scroll threshold must be a number';
+        }
+      },
+      (value) => {
+        if (value && Number(value) < 1) {
+          return 'Trigger scroll threshold must be a positive value';
+        }
+      }
+    ]
+  });
   const triggerPagePath = useField({
     value: initialOffer.triggerPagePath,
     validates: [
@@ -143,6 +163,7 @@ const useFields = (initialOffer, showEndDate) => {
     name,
     strategy,
     triggerEvent,
+    triggerScrollThreshold,
     triggerPagePath,
     discountType,
     offeredProducts,

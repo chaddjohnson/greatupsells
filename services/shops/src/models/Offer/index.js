@@ -85,10 +85,17 @@ const schema = new mongoose.Schema(
     discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'LINK'],
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'SCROLL', 'LINK'],
       required: true
     },
     triggerPagePath: { type: String, required: false },
+    triggerScrollThreshold: {
+      type: Number,
+      required: false,
+      default: 75,
+      min: 1,
+      max: 100
+    },
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
     enableGeotargeting: { type: Boolean, required: true, default: false },

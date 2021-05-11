@@ -9,6 +9,7 @@ import {
   ExitIntentOffer,
   LinkClickOffer,
   LostBrowserFocusOffer,
+  PageScrollOffer,
   ProductOffer,
   SpecificPageLoadOffer
 } from './components';
@@ -24,6 +25,7 @@ const App = () => (
     <ExitIntentOffer />
     <LinkClickOffer />
     <LostBrowserFocusOffer />
+    <PageScrollOffer />
     <ProductOffer />
     <SpecificPageLoadOffer />
   </HttpClientProvider>

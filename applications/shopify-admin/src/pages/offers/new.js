@@ -100,6 +100,7 @@ const initialOffer = {
   discountType: 'PERCENTAGE',
   discountAmount: 0.1,
   triggerEvent: 'ADD',
+  triggerScrollThreshold: 75,
   triggerProducts: [],
   triggerCollections: [],
   enableGeotargeting: true,

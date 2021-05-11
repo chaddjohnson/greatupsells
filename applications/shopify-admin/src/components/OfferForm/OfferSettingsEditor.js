@@ -11,6 +11,10 @@ import {
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
+const TriggerScrollThresholdWrapper = styled.div`
+  max-width: 110px;
+`;
+
 const ViewAllowanceDaysInputWrapper = styled.div`
   max-width: 125px;
 `;
@@ -19,6 +23,7 @@ const OfferSettingsEditor = ({
   name,
   strategy,
   triggerEvent,
+  triggerScrollThreshold,
   triggerPagePath,
   discountType,
   actionButtonBehavior,
@@ -115,6 +120,34 @@ const OfferSettingsEditor = ({
                 helpText:
                   'Offer is shown when the browser fully loses visibility.',
                 value: 'FOCUS'
+              },
+              {
+                label: 'Page scroll',
+                helpText: (
+                  <Stack vertical spacing="tight">
+                    <span>
+                      Offer is shown when the page is scrolled downward beyond a
+                      specified threshold.
+                    </span>
+                    {triggerEvent.value === 'SCROLL' && (
+                      <TriggerScrollThresholdWrapper>
+                        <TextField
+                          type="number"
+                          inputMode="numeric"
+                          suffix="%"
+                          min={1}
+                          max={100}
+                          step={1}
+                          {...triggerScrollThreshold}
+                          error={submitted && triggerScrollThreshold.error}
+                          onBlur={() => onBlur('triggerScrollThreshold')}
+                        />
+                      </TriggerScrollThresholdWrapper>
+                    )}
+                  </Stack>
+                ),
+
+                value: 'SCROLL'
               },
               {
                 label: 'Link click',
@@ -298,6 +331,7 @@ OfferSettingsEditor.propTypes = {
   name: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
   triggerEvent: PropTypes.object.isRequired,
+  triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
   discountType: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
