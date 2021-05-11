@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -65,33 +65,64 @@ const LinkClickOffer = () => {
     );
   };
 
-  const handleLinkClick = (event) => {
-    let target = event.target || event.srcElement;
-    let href = '';
+  const handleLinkClick = useCallback(
+    async (event) => {
+      // Nothing to show if there is no offer or product.
+      if (!offerId) {
+        return;
+      }
 
-    // Account for elements nested within links.
-    if (target.tagName.toLowerCase() !== 'a') {
-      target = target.closest('a');
-    }
+      // Abort if the offer was already viewed.
+      if (offerViewed) {
+        return;
+      }
 
-    // Ensure the element is a link.
-    if (target.tagName.toLowerCase() !== 'a') {
-      return;
-    }
+      let target = event.target || event.srcElement;
+      let href = '';
+      let offeredShopifyProductIds = null;
+      let offeredShopifyVariantIds = null;
 
-    href = target.getAttribute('href');
+      // Account for elements nested within links.
+      if (target.tagName.toLowerCase() !== 'a') {
+        target = target.closest('a');
+      }
 
-    // Ignore links without `href` attribute as well as hash links.
-    if (!href || href.substring(0, 1) === '#') {
-      return;
-    }
+      // Ensure the element is a link.
+      if (target.tagName.toLowerCase() !== 'a') {
+        return;
+      }
 
-    // Prevent the link from redirecting to the target URL.
-    event.preventDefault();
+      href = target.getAttribute('href');
 
-    // Track the URL for the clicked link.
-    setLinkUrl(href);
-  };
+      // Ignore links without `href` attribute as well as hash links.
+      if (!href || href.substring(0, 1) === '#') {
+        return;
+      }
+
+      // Prevent the link from redirecting to the target URL.
+      event.preventDefault();
+
+      // Track the URL for the clicked link.
+      setLinkUrl(href);
+
+      offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+      setOfferViewed(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    },
+    [offerId, offer, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   const handleClose = () => {
     setPopupOpen(false);
@@ -101,48 +132,6 @@ const LinkClickOffer = () => {
       window.location.href = linkUrl;
     }
   };
-
-  useEffect(() => {
-    // Nothing to show if there is no offer or product.
-    if (!offerId) {
-      return;
-    }
-
-    // Abort if the offer was already viewed.
-    if (offerViewed) {
-      return;
-    }
-
-    // Abort if no link was clicked.
-    if (!linkUrl) {
-      return;
-    }
-
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
-    const offeredShopifyVariantIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-    );
-
-    (async () => {
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
-    })();
-  }, [
-    offerId,
-    offer,
-    offeredProducts,
-    offerViewed,
-    trackOfferImpression,
-    linkUrl
-  ]);
 
   useEventListener('click', handleLinkClick);
 
