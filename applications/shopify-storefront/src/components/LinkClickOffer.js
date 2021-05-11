@@ -92,6 +92,8 @@ const LinkClickOffer = () => {
 
   const handleLinkClick = useCallback(
     (event) => {
+      event = event || window.event;
+
       const secondsSinceLoad = (new Date() - loadedAt) / 1000;
       const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
       const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
