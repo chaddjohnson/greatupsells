@@ -83,6 +83,7 @@ const OfferForm = ({
     name,
     strategy,
     triggerEvent,
+    triggerExternalLinksOnly,
     triggerScrollThreshold,
     triggerPagePath,
     discountType,
@@ -119,6 +120,7 @@ const OfferForm = ({
       name,
       strategy,
       triggerEvent,
+      triggerExternalLinksOnly,
       triggerScrollThreshold,
       triggerPagePath,
       offeredProducts,
@@ -296,6 +298,7 @@ const OfferForm = ({
             name={name}
             strategy={strategy}
             triggerEvent={triggerEvent}
+            triggerExternalLinksOnly={triggerExternalLinksOnly}
             triggerScrollThreshold={triggerScrollThreshold}
             triggerPagePath={triggerPagePath}
             discountType={discountType}

@@ -36,6 +36,7 @@ const LinkClickOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const [openLinkInNewWindow, setOpenLinkInNewWindow] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyAjaxApi();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
@@ -102,6 +103,7 @@ const LinkClickOffer = () => {
 
       let target = event.target || event.srcElement;
       let href = '';
+      let isExternal = false;
 
       // Account for elements nested within links.
       if (target.tagName.toLowerCase() !== 'a') {
@@ -114,9 +116,15 @@ const LinkClickOffer = () => {
       }
 
       href = target.getAttribute('href');
+      isExternal = target.getAttribute('target') === '_blank';
 
       // Ignore links without `href` attribute as well as hash links.
       if (!href || href.substring(0, 1) === '#') {
+        return;
+      }
+
+      // Limit to external links if the offer is configured as such.
+      if (offer.triggerExternalLinksOnly && !href.match(/^https?:\/\//)) {
         return;
       }
 
@@ -125,18 +133,36 @@ const LinkClickOffer = () => {
 
       // Track the URL for the clicked link.
       setLinkUrl(href);
+      setOpenLinkInNewWindow(isExternal);
 
+      // Finally, open the popup.
       openPopup();
     },
-    [offerId, offerViewed, openPopup]
+    [offerId, offer, offerViewed, openPopup]
   );
 
   const handleClose = () => {
+    let newWindow = null;
+
     setPopupOpen(false);
 
-    // Redirect to the original target URL after closing the popup.
-    if (linkUrl) {
+    // Redirect to the original link URL after closing the popup.
+    if (linkUrl && !openLinkInNewWindow) {
       window.location.href = linkUrl;
+    }
+
+    // Open a new window/tab to the original link URL after closing the popup if the link target is a new window.
+    if (linkUrl && openLinkInNewWindow) {
+      newWindow = window.open(linkUrl);
+
+      // Redirect to the link URL if the popup was blocked.
+      if (
+        !newWindow ||
+        newWindow.closed ||
+        typeof newWindow.closed === 'undefined'
+      ) {
+        window.location.href = linkUrl;
+      }
     }
   };
 
@@ -147,6 +173,7 @@ const LinkClickOffer = () => {
     setOfferViewed(false);
     setPopupOpen(false);
     setLinkUrl('');
+    setOpenLinkInNewWindow(false);
   });
 
   if (!offer || !shop) {

@@ -23,6 +23,7 @@ const OfferSettingsEditor = ({
   name,
   strategy,
   triggerEvent,
+  triggerExternalLinksOnly,
   triggerScrollThreshold,
   triggerPagePath,
   discountType,
@@ -151,8 +152,20 @@ const OfferSettingsEditor = ({
               },
               {
                 label: 'Link click',
-                helpText:
-                  'Offer is shown when any link is clicked. Links are followed when the popup is closed.',
+                helpText: (
+                  <Stack vertical spacing="tight">
+                    <span>
+                      Offer is shown when any link is clicked. Links are
+                      followed when the popup is closed.
+                    </span>
+                    {triggerEvent.value === 'LINK' && (
+                      <Checkbox
+                        label="Limit to external links"
+                        {...asChoiceField(triggerExternalLinksOnly)}
+                      />
+                    )}
+                  </Stack>
+                ),
                 value: 'LINK'
               },
               {
@@ -331,6 +344,7 @@ OfferSettingsEditor.propTypes = {
   name: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
   triggerEvent: PropTypes.object.isRequired,
+  triggerExternalLinksOnly: PropTypes.object.isRequired,
   triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
   discountType: PropTypes.object.isRequired,

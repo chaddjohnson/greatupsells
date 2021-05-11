@@ -48,6 +48,7 @@
     "discountType": "PERCENTAGE",
     "discountAmount": 0.1,
     "triggerEvent": "EXIT",
+    "triggerExternalLinksOnly": true,
     "triggerScrollThreshold": 75,
     "triggerProducts": [],
     "triggerCollections": [],

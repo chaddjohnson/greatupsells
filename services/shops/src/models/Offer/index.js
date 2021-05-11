@@ -88,6 +88,7 @@ const schema = new mongoose.Schema(
       enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'SCROLL', 'LINK'],
       required: true
     },
+    triggerExternalLinksOnly: { type: Boolean, required: false, default: true },
     triggerPagePath: { type: String, required: false },
     triggerScrollThreshold: {
       type: Number,

@@ -7,6 +7,9 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const strategy = useField(initialOffer.strategy);
   const triggerEvent = useField(initialOffer.triggerEvent);
+  const triggerExternalLinksOnly = useField(
+    initialOffer.triggerExternalLinksOnly
+  );
   const triggerScrollThreshold = useField({
     value: initialOffer.triggerScrollThreshold?.toString(),
     validates: [
@@ -183,6 +186,7 @@ const useFields = (initialOffer, showEndDate) => {
     name,
     strategy,
     triggerEvent,
+    triggerExternalLinksOnly,
     triggerScrollThreshold,
     triggerPagePath,
     discountType,
