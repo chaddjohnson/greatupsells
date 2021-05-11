@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -27,6 +27,29 @@ const LostBrowserFocusOffer = () => {
   const offerId = offer?._id;
   const { shop } = useShop();
 
+  const openPopup = useCallback(() => {
+    const delay = (offer?.delaySeconds || 0) * 1000;
+
+    setOfferViewed(true);
+
+    setTimeout(async () => {
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }, delay);
+  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+
   const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
@@ -46,7 +69,7 @@ const LostBrowserFocusOffer = () => {
     );
   };
 
-  useDocumentVisibility(async (visible) => {
+  useDocumentVisibility((visible) => {
     // Only activate the popup when the browser is not visible.
     if (visible) {
       return;
@@ -66,24 +89,8 @@ const LostBrowserFocusOffer = () => {
       return;
     }
 
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
-    const offeredShopifyVariantIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-    );
-
-    (async () => {
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
-    })();
-  }, [offerId, offer, offeredProducts, offerViewed, trackOfferImpression]);
+    openPopup();
+  }, [offerId, offerViewed, openPopup]);
 
   // Listen to pushState events.
   usePushStateListener(() => {

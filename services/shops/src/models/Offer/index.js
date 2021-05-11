@@ -105,6 +105,7 @@ const schema = new mongoose.Schema(
     enableTimer: { type: Boolean, required: true, default: false },
     timerText: { type: String, required: false },
     timerCountdownStart: { type: Int32, required: false },
+    delaySeconds: { type: Int32, required: false, default: 0 },
     allowWithDiscountCodes: { type: Boolean, required: true, default: true },
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     showNotificationBanner: { type: Boolean, required: true, default: true },

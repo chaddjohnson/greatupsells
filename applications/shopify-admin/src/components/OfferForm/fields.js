@@ -118,6 +118,26 @@ const useFields = (initialOffer, showEndDate) => {
   const enableTimer = useField(initialOffer.enableTimer);
   const enableProductLinks = useField(initialOffer.enableProductLinks);
   const hideOutOfStockProducts = useField(initialOffer.hideOutOfStockProducts);
+  const delaySeconds = useField({
+    value: initialOffer.delaySeconds?.toString(),
+    validates: [
+      (value) => {
+        if (!value) {
+          return "Delay seconds can't be blank";
+        }
+      },
+      (value) => {
+        if (value && Number.isNaN(value)) {
+          return 'Delay seconds must be a number';
+        }
+      },
+      (value) => {
+        if (value && Number(value) < 1) {
+          return 'Delay seconds must be a positive value';
+        }
+      }
+    ]
+  });
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
   const enableQuantitySelection = useField(
@@ -184,6 +204,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableTimer,
     enableProductLinks,
     hideOutOfStockProducts,
+    delaySeconds,
     enableEscClose,
     enableMaskClose,
     enableQuantitySelection,

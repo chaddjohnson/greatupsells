@@ -104,6 +104,7 @@ const OfferForm = ({
     enableTimer,
     enableProductLinks,
     hideOutOfStockProducts,
+    delaySeconds,
     enableEscClose,
     enableMaskClose,
     enableQuantitySelection,
@@ -141,6 +142,7 @@ const OfferForm = ({
       enableTimer,
       enableProductLinks,
       hideOutOfStockProducts,
+      delaySeconds,
       enableEscClose,
       enableMaskClose,
       enableQuantitySelection,
@@ -371,16 +373,17 @@ const OfferForm = ({
           </Card> */}
           <OfferOptionsEditor
             offer={offer}
+            delaySeconds={delaySeconds}
+            enableEscClose={enableEscClose}
+            enableMaskClose={enableMaskClose}
+            showNotificationBanner={showNotificationBanner}
             enableProductLinks={enableProductLinks}
             hideOutOfStockProducts={hideOutOfStockProducts}
             enableQuantitySelection={enableQuantitySelection}
-            productQuantityLimit={productQuantityLimit}
             limitQuantitySelection={limitQuantitySelection}
-            enableEscClose={enableEscClose}
-            enableMaskClose={enableMaskClose}
+            productQuantityLimit={productQuantityLimit}
             hideIfItemAdded={hideIfItemAdded}
             allowWithDiscountCodes={allowWithDiscountCodes}
-            showNotificationBanner={showNotificationBanner}
             submitted={submitted}
             onBlur={handleBlur}
           />

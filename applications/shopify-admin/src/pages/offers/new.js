@@ -108,6 +108,7 @@ const initialOffer = {
   startAt: new Date().toISOString(),
   enableTimer: false,
   timerText: 'Ends in',
+  delaySeconds: 0,
   allowWithDiscountCodes: true,
   hideIfItemAdded: false,
   showNotificationBanner: true,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
@@ -28,6 +28,31 @@ const ProductOffer = () => {
   );
   const offerId = offer?._id;
   const { shop } = useShop();
+
+  const openPopup = useCallback(() => {
+    const delay = (offer?.delaySeconds || 0) * 1000;
+
+    setOfferViewed(true);
+
+    setTimeout(async () => {
+      const triggerShopifyProductId = triggerProduct.shopifyProductId;
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+
+      await trackOfferImpression({
+        offerId,
+        triggerShopifyProductId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }, delay);
+  }, [offerId, offer, triggerProduct, offeredProducts, trackOfferImpression]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -65,33 +90,8 @@ const ProductOffer = () => {
       return;
     }
 
-    const triggerShopifyProductId = triggerProduct.shopifyProductId;
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
-    const offeredShopifyVariantIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-    );
-
-    (async () => {
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
-    })();
-  }, [
-    offerId,
-    offer,
-    triggerProduct,
-    offeredProducts,
-    offerViewed,
-    trackOfferImpression
-  ]);
+    openPopup();
+  }, [offerId, offer, offerViewed, openPopup]);
 
   // Subscribe to product add events.
   useShopifyCartProductAddListener((addedProduct) => {

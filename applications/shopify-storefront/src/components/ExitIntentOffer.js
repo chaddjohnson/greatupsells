@@ -26,6 +26,29 @@ const ExitIntentOffer = () => {
   const offerId = offer?._id;
   const { shop } = useShop();
 
+  const openPopup = useCallback(() => {
+    const delay = (offer?.delaySeconds || 0) * 1000;
+
+    setOfferViewed(true);
+
+    setTimeout(async () => {
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }, delay);
+  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+
   const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
@@ -49,7 +72,7 @@ const ExitIntentOffer = () => {
   //   - http://beeker.io/lab/exit-intent-popup/
   //   - https://stackoverflow.com/a/3187524/83897
   const handleMouseOut = useCallback(
-    async (event) => {
+    (event) => {
       event = event || window.event;
 
       // Nothing to show if there is no offer.
@@ -61,13 +84,6 @@ const ExitIntentOffer = () => {
       if (offerViewed) {
         return;
       }
-
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      const offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-      );
 
       // Works on mouse exiting window and user switching active program.
       const from = event.relatedTarget || event.toElement;
@@ -96,14 +112,7 @@ const ExitIntentOffer = () => {
       }
 
       if (!from || from.nodeName === 'HTML') {
-        setPopupOpen(true);
-        setOfferViewed(true);
-
-        await trackOfferImpression({
-          offerId,
-          offeredShopifyProductIds,
-          offeredShopifyVariantIds
-        });
+        openPopup();
       }
     },
     [offer, offerId, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
@@ -136,7 +145,7 @@ const ExitIntentOffer = () => {
     };
   }, []);
 
-  const handleScroll = useCallback(async () => {
+  const handleScroll = useCallback(() => {
     // Nothing to show if there is no offer.
     if (!offerId) {
       return;
@@ -154,27 +163,11 @@ const ExitIntentOffer = () => {
 
     const scrollDelta = getScrollDelta();
     const thresholdDelta = -150;
-    let offeredShopifyProductIds = null;
-    let offeredShopifyVariantIds = null;
 
     if (scrollDelta < thresholdDelta) {
-      offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-      );
-
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
+      openPopup();
     }
-  }, [offer, offerId, offeredProducts, offerViewed, trackOfferImpression]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offerId, offerViewed, getScrollDelta, openPopup]);
 
   // Listen for mouseout events.
   useEventListener('mouseout', handleMouseOut, true);

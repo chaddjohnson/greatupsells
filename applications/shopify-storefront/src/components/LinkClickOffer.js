@@ -46,6 +46,29 @@ const LinkClickOffer = () => {
   const offerId = offer?._id;
   const { shop } = useShop();
 
+  const openPopup = useCallback(() => {
+    const delay = (offer?.delaySeconds || 0) * 1000;
+
+    setOfferViewed(true);
+
+    setTimeout(async () => {
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }, delay);
+  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+
   const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
@@ -66,7 +89,7 @@ const LinkClickOffer = () => {
   };
 
   const handleLinkClick = useCallback(
-    async (event) => {
+    (event) => {
       // Nothing to show if there is no offer or product.
       if (!offerId) {
         return;
@@ -79,8 +102,6 @@ const LinkClickOffer = () => {
 
       let target = event.target || event.srcElement;
       let href = '';
-      let offeredShopifyProductIds = null;
-      let offeredShopifyVariantIds = null;
 
       // Account for elements nested within links.
       if (target.tagName.toLowerCase() !== 'a') {
@@ -105,23 +126,9 @@ const LinkClickOffer = () => {
       // Track the URL for the clicked link.
       setLinkUrl(href);
 
-      offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-      );
-
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
+      openPopup();
     },
-    [offerId, offer, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
+    [offerId, offerViewed, openPopup]
   );
 
   const handleClose = () => {

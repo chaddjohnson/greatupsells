@@ -27,6 +27,29 @@ const PageScrollOffer = () => {
   const offerId = offer?._id;
   const { shop } = useShop();
 
+  const openPopup = useCallback(() => {
+    const delay = (offer?.delaySeconds || 0) * 1000;
+
+    setOfferViewed(true);
+
+    setTimeout(async () => {
+      const offeredShopifyProductIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.id
+      );
+      const offeredShopifyVariantIds = offeredProducts.map(
+        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
+      );
+
+      setPopupOpen(true);
+
+      await trackOfferImpression({
+        offerId,
+        offeredShopifyProductIds,
+        offeredShopifyVariantIds
+      });
+    }, delay);
+  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+
   const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
@@ -46,7 +69,7 @@ const PageScrollOffer = () => {
     );
   };
 
-  const handleScroll = useCallback(async () => {
+  const handleScroll = useCallback(() => {
     // Reference: https://stackoverflow.com/a/31223774
     // Reference: https://javascript.info/size-and-scroll-window#width-height-of-the-document
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -81,27 +104,11 @@ const PageScrollOffer = () => {
 
     const defaultTriggerScrollThreshold = 75;
     const { triggerScrollThreshold = defaultTriggerScrollThreshold } = offer;
-    let offeredShopifyProductIds = null;
-    let offeredShopifyVariantIds = null;
 
     if (scrollPercentage >= triggerScrollThreshold / 100) {
-      offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
-      );
-
-      setPopupOpen(true);
-      setOfferViewed(true);
-
-      await trackOfferImpression({
-        offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
-      });
+      openPopup();
     }
-  }, [offerId, offer, offeredProducts, offerViewed, trackOfferImpression]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offerId, offer, offerViewed, openPopup]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to scroll events.
   useEventListener('scroll', handleScroll, true);
