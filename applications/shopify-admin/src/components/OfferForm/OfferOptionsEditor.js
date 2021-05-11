@@ -25,6 +25,29 @@ const OfferOptionsEditor = ({
   onBlur
 }) => (
   <Card title="Options">
+    <Card.Section title="Behavior">
+      <FormLayout>
+        <Checkbox label="Delay showing popup" />
+        <Checkbox
+          label={
+            <>
+              Allow <KeyboardKey>esc</KeyboardKey> key to close popup
+            </>
+          }
+          {...asChoiceField(enableEscClose)}
+        />
+        <Checkbox
+          label="Allow clicking outside to close popup"
+          {...asChoiceField(enableMaskClose)}
+        />
+        <Checkbox
+          label={`Show notification bar on ${
+            offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
+          }`}
+          {...asChoiceField(showNotificationBanner)}
+        />
+      </FormLayout>
+    </Card.Section>
     <Card.Section title="Products">
       <FormLayout>
         <Checkbox
@@ -61,7 +84,6 @@ const OfferOptionsEditor = ({
           }
           {...asChoiceField(limitQuantitySelection)}
         />
-        <Checkbox label="Delay showing popup" />
       </FormLayout>
     </Card.Section>
     <Card.Section title="Usage">
@@ -75,28 +97,6 @@ const OfferOptionsEditor = ({
         <Checkbox
           label="Allow use of offer with discount codes"
           {...asChoiceField(allowWithDiscountCodes)}
-        />
-      </FormLayout>
-    </Card.Section>
-    <Card.Section title="Behavior">
-      <FormLayout>
-        <Checkbox
-          label={
-            <>
-              Allow <KeyboardKey>esc</KeyboardKey> key to close popup
-            </>
-          }
-          {...asChoiceField(enableEscClose)}
-        />
-        <Checkbox
-          label="Allow clicking outside to close popup"
-          {...asChoiceField(enableMaskClose)}
-        />
-        <Checkbox
-          label={`Show notification bar on ${
-            offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
-          }`}
-          {...asChoiceField(showNotificationBanner)}
         />
       </FormLayout>
     </Card.Section>
