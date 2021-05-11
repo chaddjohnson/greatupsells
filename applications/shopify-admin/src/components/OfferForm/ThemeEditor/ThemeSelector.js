@@ -94,15 +94,15 @@ const SearchFilter = ({ strategy, category, onChange }) => {
 
   const choices = useMemo(() => {
     if (strategy === 'UPSELL') {
-      return [{ value: 'upsell', label: 'Upsell' }];
+      return [{ value: 'Upselling', label: 'Upselling' }];
     } else if (strategy === 'CROSS_SELL') {
-      return [{ value: 'cross-sell', label: 'Cross-sell' }];
+      return [{ value: 'Cross-selling', label: 'Cross-selling' }];
     } else if (strategy === 'POPUP') {
       return [
         { value: '', label: 'All' },
-        { value: 'email', label: 'Email' },
-        { value: 'newsletter', label: 'Newsletter signup' },
-        { value: 'survey', label: 'Survey' }
+        { value: 'Email', label: 'Email' },
+        { value: 'Newsletter', label: 'Newsletter signup' },
+        { value: 'Survey', label: 'Survey' }
       ];
     } else {
       return [];
