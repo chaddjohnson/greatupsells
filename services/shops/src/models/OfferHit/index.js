@@ -33,8 +33,8 @@ const schema = new mongoose.Schema(
     },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'SCROLL', 'LINK'],
-      required: true
+      required: true,
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'FOCUS', 'SCROLL', 'LINK']
     },
     triggerPagePath: { type: String, required: false },
     triggerShopifyProductId: { type: Number, required: false },

@@ -42,8 +42,8 @@ const schema = new mongoose.Schema(
     revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
     actionButtonBehavior: {
       type: String,
-      enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK'],
-      required: true
+      required: true,
+      enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK']
     },
     actionButtonLink: {
       type: String,
@@ -79,17 +79,16 @@ const schema = new mongoose.Schema(
     minimumProductsQuantity: { type: Int32, required: true },
     discountType: {
       type: String,
-      enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT'],
-      required: true
+      required: true,
+      enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT']
     },
     discountAmount: { type: Number, required: false },
     triggerEvent: {
       type: String,
-      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'PAGE', 'FOCUS', 'SCROLL', 'LINK'],
-      required: true
+      required: true,
+      enum: ['ADD', 'CART', 'EXIT', 'LOAD', 'FOCUS', 'SCROLL', 'LINK']
     },
     triggerExternalLinksOnly: { type: Boolean, required: false, default: true },
-    triggerPagePath: { type: String, required: false },
     triggerScrollThreshold: {
       type: Number,
       required: false,
@@ -97,6 +96,13 @@ const schema = new mongoose.Schema(
       min: 1,
       max: 100
     },
+    triggerPage: {
+      type: String,
+      required: true,
+      default: 'ANY',
+      enum: ['ANY', 'PAGE']
+    },
+    triggerPagePath: { type: String, required: false },
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
     enableGeotargeting: { type: Boolean, required: true, default: false },

@@ -4,14 +4,13 @@ import {
   HttpClient
 } from '@neatowebsolutions/upselling-react-hooks';
 import {
-  AnyPageLoadOffer,
   CartOffer,
   ExitIntentOffer,
   LinkClickOffer,
   LostBrowserFocusOffer,
+  PageLoadOffer,
   PageScrollOffer,
-  ProductOffer,
-  SpecificPageLoadOffer
+  ProductOffer
 } from './components';
 
 const httpClient = new HttpClient({
@@ -20,14 +19,13 @@ const httpClient = new HttpClient({
 
 const App = () => (
   <HttpClientProvider httpClient={httpClient}>
-    <AnyPageLoadOffer />
     <CartOffer />
     <ExitIntentOffer />
     <LinkClickOffer />
     <LostBrowserFocusOffer />
+    <PageLoadOffer />
     <PageScrollOffer />
     <ProductOffer />
-    <SpecificPageLoadOffer />
   </HttpClientProvider>
 );
 

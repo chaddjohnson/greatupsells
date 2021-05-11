@@ -30,6 +30,7 @@ const useFields = (initialOffer, showEndDate) => {
       }
     ]
   });
+  const triggerPage = useField(initialOffer.triggerPage);
   const triggerPagePath = useField({
     value: initialOffer.triggerPagePath,
     validates: [
@@ -207,6 +208,7 @@ const useFields = (initialOffer, showEndDate) => {
     triggerEvent,
     triggerExternalLinksOnly,
     triggerScrollThreshold,
+    triggerPage,
     triggerPagePath,
     discountType,
     offeredProducts,

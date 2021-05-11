@@ -49,6 +49,7 @@
     "triggerEvent": "EXIT",
     "triggerExternalLinksOnly": true,
     "triggerScrollThreshold": 75,
+    "triggerPage": "ANY",
     "triggerProducts": [],
     "triggerCollections": [],
     "startAt": "2021-02-11T18:57:09.431Z",

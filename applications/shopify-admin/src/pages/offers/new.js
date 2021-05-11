@@ -102,6 +102,7 @@ const initialOffer = {
   triggerEvent: 'ADD',
   triggerExternalLinksOnly: true,
   triggerScrollThreshold: 75,
+  triggerPage: 'ANY',
   triggerProducts: [],
   triggerCollections: [],
   enableGeotargeting: true,

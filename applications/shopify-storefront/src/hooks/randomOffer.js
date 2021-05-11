@@ -55,7 +55,7 @@ const useRandomOffer = ({
 
   // Listen to pushState events.
   usePushStateListener(() => {
-    // Update stateful values. This will trigger a re-query for a random offer.
+    // Update stateful values. This will automatically trigger a re-query for a random offer.
     setOfferImpressions(getCookie('upsellingOfferImpressions') || []);
     setSessionOfferImpressions(
       sessionStorage.upsellingSessionOfferImpressions

@@ -8,10 +8,10 @@ import {
   useShopifyAjaxApi
 } from '../hooks';
 
-const triggerEvent = 'PAGE';
+const triggerEvent = 'LOAD';
 const loadedAt = new Date();
 
-const SpecificPageLoadOffer = () => {
+const PageLoadOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
@@ -86,6 +86,9 @@ const SpecificPageLoadOffer = () => {
       return;
     }
 
+    // NOTE: Path (`triggerPagePath`) is tested in the API when querying for a random offer.
+    // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
+
     openPopup();
   }, [offer, offerId, offerViewed, openPopup]);
 
@@ -113,4 +116,4 @@ const SpecificPageLoadOffer = () => {
   );
 };
 
-export default SpecificPageLoadOffer;
+export default PageLoadOffer;

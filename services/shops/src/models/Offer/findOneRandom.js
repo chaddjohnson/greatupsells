@@ -59,6 +59,11 @@ const buildGeotargetingCriteria = (countryCode) => ({
   $or: [{ enableGeotargeting: false }, { geotargetingCountries: countryCode }]
 });
 
+// This removes leading slashes (and re-adds one), trailing slashes, and query strings.
+const sanitizePagePath = (pagePath) => {
+  return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+};
+
 const findOneRandomByTriggerEvent = async (
   shop,
   {
@@ -72,10 +77,7 @@ const findOneRandomByTriggerEvent = async (
   const Offer = mongodbClient.connection.model('Offer');
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
-
-  // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
-  const pagePathSanitized =
-    pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+  const pagePathSanitized = sanitizePagePath(pagePath);
 
   const criteria = {
     shop: shop._id,
@@ -91,10 +93,10 @@ const findOneRandomByTriggerEvent = async (
       {
         $or: [
           {
-            triggerEvent: { $ne: 'PAGE' }
+            triggerPage: 'ANY'
           },
           {
-            triggerEvent: 'PAGE',
+            triggerPage: 'PAGE',
             triggerPagePath: pagePathSanitized
           }
         ]
@@ -135,7 +137,8 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     shopifyProductIds,
     ipAddress = undefined,
     offerImpressions = [],
-    sessionOfferImpressions = []
+    sessionOfferImpressions = [],
+    pagePath
   }
 ) => {
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
@@ -152,6 +155,7 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
   const shopifyCollectionIds = collections.map(
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
+  const pagePathSanitized = sanitizePagePath(pagePath);
 
   const criteria = {
     shop: shop._id,
@@ -181,6 +185,17 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
           offerImpressions,
           sessionOfferImpressions
         )
+      },
+      {
+        $or: [
+          {
+            triggerPage: 'ANY'
+          },
+          {
+            triggerPage: 'PAGE',
+            triggerPagePath: pagePathSanitized
+          }
+        ]
       }
     ]
   };
@@ -246,7 +261,8 @@ const findOneRandom = async (
       shopifyProductIds,
       ipAddress,
       offerImpressions,
-      sessionOfferImpressions
+      sessionOfferImpressions,
+      pagePath
     });
   } else {
     return await findOneRandomByTriggerEvent(shop, {

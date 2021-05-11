@@ -25,6 +25,7 @@ const OfferSettingsEditor = ({
   triggerEvent,
   triggerExternalLinksOnly,
   triggerScrollThreshold,
+  triggerPage,
   triggerPagePath,
   discountType,
   actionButtonBehavior,
@@ -36,12 +37,12 @@ const OfferSettingsEditor = ({
   submitted,
   onStrategyChange
 }) => {
-  const handleTriggerEventChange = ([value]) => {
-    if (triggerEvent.value !== 'PAGE') {
+  const handleTriggerPageChange = ([value]) => {
+    if (triggerPage.value !== 'PAGE') {
       triggerPagePath.onChange(undefined);
     }
 
-    triggerEvent.onChange(value);
+    triggerPage.onChange(value);
   };
 
   const handleTriggerPagePathBlur = (event) => {
@@ -98,6 +99,11 @@ const OfferSettingsEditor = ({
         <FormLayout>
           <ChoiceList
             choices={[
+              {
+                label: 'Page load',
+                helpText: 'Offer is shown when the page loads.',
+                value: 'LOAD'
+              },
               {
                 label: 'Add to cart',
                 helpText: 'Offer is shown when a product is added to the cart.',
@@ -164,18 +170,28 @@ const OfferSettingsEditor = ({
                   </Stack>
                 ),
                 value: 'LINK'
+              }
+            ]}
+            selected={triggerEvent.value}
+            onChange={([value]) => triggerEvent.onChange(value)}
+          />
+        </FormLayout>
+      </Card>
+      <Card title="Trigger page" sectioned>
+        <FormLayout>
+          <ChoiceList
+            choices={[
+              {
+                label: 'Any page',
+                helpText: 'Offer may show on any page.',
+                value: 'ANY'
               },
               {
-                label: 'Any page load',
-                helpText: 'Offer is shown when any page loads.',
-                value: 'LOAD'
-              },
-              {
-                label: 'Specific page load',
+                label: 'Specific page',
                 helpText: (
                   <Stack vertical spacing="tight">
-                    <span>Offer is shown when a specific page loads.</span>
-                    {triggerEvent.value === 'PAGE' && (
+                    <span>Offer may show only on a specific page.</span>
+                    {triggerPage.value === 'PAGE' && (
                       <TextField
                         value={triggerPagePath.value}
                         placeholder="/page-url/here"
@@ -189,12 +205,12 @@ const OfferSettingsEditor = ({
                 value: 'PAGE'
               }
             ]}
-            selected={triggerEvent.value}
-            onChange={handleTriggerEventChange}
+            selected={triggerPage.value}
+            onChange={handleTriggerPageChange}
           />
         </FormLayout>
       </Card>
-      <Card title="View allowance" sectioned>
+      <Card title="View frequency allowance" sectioned>
         <ChoiceList
           choices={[
             {
@@ -341,6 +357,7 @@ OfferSettingsEditor.propTypes = {
   triggerEvent: PropTypes.object.isRequired,
   triggerExternalLinksOnly: PropTypes.object.isRequired,
   triggerScrollThreshold: PropTypes.object.isRequired,
+  triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
   discountType: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
