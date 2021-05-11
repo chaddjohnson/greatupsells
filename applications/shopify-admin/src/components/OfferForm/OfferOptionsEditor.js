@@ -47,7 +47,7 @@ const OfferOptionsEditor = ({
       <Card.Section title="Behavior">
         <FormLayout>
           <Checkbox
-            label="Delay showing popup"
+            label="Delay showing popup after trigger event"
             helpText={
               delayShowingPopup && (
                 <DelaySecondsWrapper>
