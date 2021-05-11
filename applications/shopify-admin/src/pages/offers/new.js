@@ -107,8 +107,6 @@ const initialOffer = {
   enableGeotargeting: true,
   geotargetingCountries: [],
   startAt: new Date().toISOString(),
-  enableTimer: false,
-  timerText: 'Ends in',
   delaySeconds: 0,
   onPageRequiredSeconds: 0,
   allowWithDiscountCodes: true,

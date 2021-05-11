@@ -118,7 +118,6 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [showEndDate, startAt.value]
   );
-  const enableTimer = useField(initialOffer.enableTimer);
   const enableProductLinks = useField(initialOffer.enableProductLinks);
   const hideOutOfStockProducts = useField(initialOffer.hideOutOfStockProducts);
   const delaySeconds = useField({
@@ -225,7 +224,6 @@ const useFields = (initialOffer, showEndDate) => {
     successMessageText,
     startAt,
     endAt,
-    enableTimer,
     enableProductLinks,
     hideOutOfStockProducts,
     delaySeconds,

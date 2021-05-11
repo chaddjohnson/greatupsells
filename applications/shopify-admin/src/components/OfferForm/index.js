@@ -102,7 +102,6 @@ const OfferForm = ({
     successMessageText,
     startAt,
     endAt,
-    enableTimer,
     enableProductLinks,
     hideOutOfStockProducts,
     delaySeconds,
@@ -142,7 +141,6 @@ const OfferForm = ({
       successMessageText,
       startAt,
       endAt,
-      enableTimer,
       enableProductLinks,
       hideOutOfStockProducts,
       delaySeconds,
@@ -362,20 +360,6 @@ const OfferForm = ({
             submitted={submitted}
             onBlur={handleBlur}
           />
-          {/* <Card title="Timer" sectioned>
-            <FormLayout>
-              <Checkbox
-                label="Display a countdown timer"
-                {...asChoiceField(enableTimer)}
-              />
-              {offer.enableTimer && (
-                <div>
-                  <p>Text</p>
-                  <p>Countdown start</p>
-                </div>
-              )}
-            </FormLayout>
-          </Card> */}
           <OfferOptionsEditor
             offer={offer}
             delaySeconds={delaySeconds}

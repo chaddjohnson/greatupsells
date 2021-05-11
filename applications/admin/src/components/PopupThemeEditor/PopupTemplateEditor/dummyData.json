@@ -16,7 +16,6 @@
       "AU",
       "US"
     ],
-    "enableTimer": false,
     "allowWithDiscountCodes": true,
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
