@@ -141,6 +141,26 @@ const useFields = (initialOffer, showEndDate) => {
       }
     ]
   });
+  const onPageRequiredSeconds = useField({
+    value: initialOffer.onPageRequiredSeconds?.toString(),
+    validates: [
+      (value) => {
+        if (!value) {
+          return "Required seconds can't be blank";
+        }
+      },
+      (value) => {
+        if (value && Number.isNaN(value)) {
+          return 'Required seconds must be a number';
+        }
+      },
+      (value) => {
+        if (value && Number(value) < 1) {
+          return 'Required seconds must be a positive value';
+        }
+      }
+    ]
+  });
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
   const enableQuantitySelection = useField(
@@ -209,6 +229,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableProductLinks,
     hideOutOfStockProducts,
     delaySeconds,
+    onPageRequiredSeconds,
     enableEscClose,
     enableMaskClose,
     enableQuantitySelection,

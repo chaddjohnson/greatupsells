@@ -10,6 +10,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'ADD';
+const loadedAt = new Date();
 
 const ProductOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -52,7 +53,7 @@ const ProductOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, triggerProduct, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, triggerProduct, offeredProducts, trackOfferImpression]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -80,6 +81,10 @@ const ProductOffer = () => {
   };
 
   useEffect(() => {
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -90,8 +95,13 @@ const ProductOffer = () => {
       return;
     }
 
+    // Abort if not on page required seconds.
+    if (!isOnPageRequiredSeconds) {
+      return;
+    }
+
     openPopup();
-  }, [offerId, offer, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup]);
 
   // Subscribe to product add events.
   useShopifyCartProductAddListener((addedProduct) => {

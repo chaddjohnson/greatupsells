@@ -9,6 +9,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'CART';
+const loadedAt = new Date();
 
 const CartOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -51,7 +52,7 @@ const CartOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, triggerProduct, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, triggerProduct, offeredProducts, trackOfferImpression]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -79,6 +80,10 @@ const CartOffer = () => {
   };
 
   useEffect(() => {
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -89,8 +94,13 @@ const CartOffer = () => {
       return;
     }
 
+    // Abort if not on page required seconds.
+    if (!isOnPageRequiredSeconds) {
+      return;
+    }
+
     openPopup();
-  }, [offerId, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup]);
 
   useEffect(() => {
     const path = window.location.pathname;

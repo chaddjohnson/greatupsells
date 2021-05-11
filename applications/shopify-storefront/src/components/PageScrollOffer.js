@@ -12,6 +12,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'SCROLL';
+const loadedAt = new Date();
 
 const PageScrollOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -48,7 +49,7 @@ const PageScrollOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -85,6 +86,10 @@ const PageScrollOffer = () => {
     const scrollPercentage = (scrollTop + windowHeight) / scrollHeight;
     const scrollingUp = lastScrollTop > scrollTop;
 
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
     setLastScrollTop(scrollTop);
 
     // Nothing to show if there is no offer or product.
@@ -94,6 +99,11 @@ const PageScrollOffer = () => {
 
     // Abort if the offer was already viewed.
     if (offerViewed) {
+      return;
+    }
+
+    // Abort if not on page required seconds.
+    if (!isOnPageRequiredSeconds) {
       return;
     }
 
@@ -108,7 +118,7 @@ const PageScrollOffer = () => {
     if (scrollPercentage >= triggerScrollThreshold / 100) {
       openPopup();
     }
-  }, [offerId, offer, offerViewed, openPopup]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offerId, offerViewed, openPopup]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to scroll events.
   useEventListener('scroll', handleScroll, true);

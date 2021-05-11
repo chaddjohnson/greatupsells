@@ -10,13 +10,14 @@ import {
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
-const DelaySecondsWrapper = styled.div`
+const SecondsInputWrapper = styled.div`
   max-width: 175px;
 `;
 
 const OfferOptionsEditor = ({
   offer,
   delaySeconds,
+  onPageRequiredSeconds,
   enableEscClose,
   enableMaskClose,
   showNotificationBanner,
@@ -30,15 +31,27 @@ const OfferOptionsEditor = ({
   submitted,
   onBlur
 }) => {
-  const [delayShowingPopup, setDelayShowingPopup] = useState(
+  const [delaySecondsActive, setDelaySecondsActive] = useState(
     offer?.delaySeconds > 0
   );
+  const [
+    onPageRequiredSecondsActive,
+    setOnPageRequiredSecondsActive
+  ] = useState(offer?.onPageRequiredSeconds > 0);
 
-  const handleDelayShowingPopupChange = (checked) => {
-    setDelayShowingPopup(checked);
+  const handleDelaySecondsActiveChange = (checked) => {
+    setDelaySecondsActive(checked);
 
     if (!checked) {
       delaySeconds.onChange('0');
+    }
+  };
+
+  const handleOnPageRequiredSecondsActiveChange = (checked) => {
+    setOnPageRequiredSecondsActive(checked);
+
+    if (!checked) {
+      onPageRequiredSeconds.onChange('0');
     }
   };
 
@@ -47,10 +60,10 @@ const OfferOptionsEditor = ({
       <Card.Section title="Behavior">
         <FormLayout>
           <Checkbox
-            label="Delay showing popup after trigger event"
+            label="Delay showing offer after trigger event"
             helpText={
-              delayShowingPopup && (
-                <DelaySecondsWrapper>
+              delaySecondsActive && (
+                <SecondsInputWrapper>
                   <TextField
                     type="number"
                     inputMode="numeric"
@@ -61,22 +74,43 @@ const OfferOptionsEditor = ({
                     error={submitted && delaySeconds.error}
                     onBlur={() => onBlur('delaySeconds')}
                   />
-                </DelaySecondsWrapper>
+                </SecondsInputWrapper>
               )
             }
-            checked={delayShowingPopup}
-            onChange={handleDelayShowingPopupChange}
+            checked={delaySecondsActive}
+            onChange={handleDelaySecondsActiveChange}
+          />
+          <Checkbox
+            label="Require customer be on page for a specified amount of time before allowing offer to show"
+            helpText={
+              onPageRequiredSecondsActive && (
+                <SecondsInputWrapper>
+                  <TextField
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    step={1}
+                    suffix="seconds"
+                    {...onPageRequiredSeconds}
+                    error={submitted && delaySeconds.error}
+                    onBlur={() => onBlur('onPageRequiredSeconds')}
+                  />
+                </SecondsInputWrapper>
+              )
+            }
+            checked={onPageRequiredSecondsActive}
+            onChange={handleOnPageRequiredSecondsActiveChange}
           />
           <Checkbox
             label={
               <>
-                Allow <KeyboardKey>esc</KeyboardKey> key to close popup
+                Allow <KeyboardKey>esc</KeyboardKey> key to close offer
               </>
             }
             {...asChoiceField(enableEscClose)}
           />
           <Checkbox
-            label="Allow clicking outside to close popup"
+            label="Allow clicking outside to close offer"
             {...asChoiceField(enableMaskClose)}
           />
           <Checkbox
@@ -150,6 +184,7 @@ OfferOptionsEditor.propTypes = {
   productQuantityLimit: PropTypes.object.isRequired,
   limitQuantitySelection: PropTypes.object.isRequired,
   delaySeconds: PropTypes.object.isRequired,
+  onPageRequiredSeconds: PropTypes.object.isRequired,
   enableEscClose: PropTypes.object.isRequired,
   enableMaskClose: PropTypes.object.isRequired,
   hideIfItemAdded: PropTypes.object.isRequired,

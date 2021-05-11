@@ -9,6 +9,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'PAGE';
+const loadedAt = new Date();
 
 const SpecificPageLoadOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -44,7 +45,7 @@ const SpecificPageLoadOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -66,6 +67,10 @@ const SpecificPageLoadOffer = () => {
   };
 
   useEffect(() => {
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -76,8 +81,13 @@ const SpecificPageLoadOffer = () => {
       return;
     }
 
+    // Abort if not on page required seconds.
+    if (!isOnPageRequiredSeconds) {
+      return;
+    }
+
     openPopup();
-  }, [offerId, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup]);
 
   // Listen to pushState events.
   usePushStateListener(() => {

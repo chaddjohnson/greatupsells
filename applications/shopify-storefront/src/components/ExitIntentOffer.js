@@ -12,6 +12,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'EXIT';
+const loadedAt = new Date();
 
 const ExitIntentOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -47,7 +48,7 @@ const ExitIntentOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -75,6 +76,10 @@ const ExitIntentOffer = () => {
     (event) => {
       event = event || window.event;
 
+      const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+      const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+      const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
       // Nothing to show if there is no offer.
       if (!offerId) {
         return;
@@ -82,6 +87,11 @@ const ExitIntentOffer = () => {
 
       // Abort if the offer was already viewed.
       if (offerViewed) {
+        return;
+      }
+
+      // Abort if not on page required seconds.
+      if (!isOnPageRequiredSeconds) {
         return;
       }
 

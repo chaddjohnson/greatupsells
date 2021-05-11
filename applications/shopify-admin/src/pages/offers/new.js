@@ -110,6 +110,7 @@ const initialOffer = {
   enableTimer: false,
   timerText: 'Ends in',
   delaySeconds: 0,
+  onPageRequiredSeconds: 0,
   allowWithDiscountCodes: true,
   hideIfItemAdded: false,
   showNotificationBanner: true,

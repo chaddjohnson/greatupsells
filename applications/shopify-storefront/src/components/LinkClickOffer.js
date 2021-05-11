@@ -31,6 +31,7 @@ if (!Element.prototype.closest) {
 }
 
 const triggerEvent = 'LINK';
+const loadedAt = new Date();
 
 const LinkClickOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -68,7 +69,7 @@ const LinkClickOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -91,6 +92,10 @@ const LinkClickOffer = () => {
 
   const handleLinkClick = useCallback(
     (event) => {
+      const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+      const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+      const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
       // Nothing to show if there is no offer or product.
       if (!offerId) {
         return;
@@ -98,6 +103,11 @@ const LinkClickOffer = () => {
 
       // Abort if the offer was already viewed.
       if (offerViewed) {
+        return;
+      }
+
+      // Abort if not on page required seconds.
+      if (!isOnPageRequiredSeconds) {
         return;
       }
 
@@ -138,7 +148,7 @@ const LinkClickOffer = () => {
       // Finally, open the popup.
       openPopup();
     },
-    [offerId, offer, offerViewed, openPopup]
+    [offer, offerId, offerViewed, openPopup]
   );
 
   const handleClose = () => {

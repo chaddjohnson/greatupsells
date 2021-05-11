@@ -12,6 +12,7 @@ import {
 } from '../hooks';
 
 const triggerEvent = 'FOCUS';
+const loadedAt = new Date();
 
 const LostBrowserFocusOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -48,7 +49,7 @@ const LostBrowserFocusOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offerId, offer, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -79,6 +80,10 @@ const LostBrowserFocusOffer = () => {
   });
 
   useEffect(() => {
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -89,8 +94,13 @@ const LostBrowserFocusOffer = () => {
       return;
     }
 
+    // Abort if not on page required seconds.
+    if (!isOnPageRequiredSeconds) {
+      return;
+    }
+
     openPopup();
-  }, [offerId, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup]);
 
   // Listen to pushState events.
   usePushStateListener(() => {
