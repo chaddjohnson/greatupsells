@@ -10,6 +10,7 @@ import {
   Button,
   Heading,
   TextContainer,
+  TextStyle,
   Stack
 } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
@@ -169,6 +170,47 @@ const OfferSettingsEditor = ({
                       {...asChoiceField(triggerExternalLinksOnly)}
                     />
                   )
+              },
+              {
+                label: 'Combination',
+                helpText: (
+                  <span>
+                    Offer is shown with some or all trigger events:{' '}
+                    <em>
+                      Exit intent, Lost browser focus, Page scroll, Link click
+                    </em>
+                    .
+                  </span>
+                ),
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <TextStyle variation="subdued">
+                      <ChoiceList
+                        allowMultiple
+                        choices={[
+                          {
+                            label: 'Exit intent',
+                            value: 'EXIT'
+                          },
+                          {
+                            label: 'Lost browser focus',
+                            value: 'FOCUS'
+                          },
+                          {
+                            label: 'Page scroll',
+                            value: 'SCROLL'
+                          },
+                          {
+                            label: 'External link click',
+                            value: 'LINK'
+                          }
+                        ]}
+                        selected={[]}
+                        onChange={() => {}}
+                      />
+                    </TextStyle>
+                  ),
+                value: 'COMBINATION'
               }
             ]}
             selected={triggerEvent.value}
