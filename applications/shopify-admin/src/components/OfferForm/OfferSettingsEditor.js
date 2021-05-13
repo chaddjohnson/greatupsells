@@ -187,7 +187,7 @@ const OfferSettingsEditor = ({
           />
         </FormLayout>
       </Card>
-      <Card title="Trigger page" sectioned>
+      <Card title="Trigger page(s)" sectioned>
         <FormLayout>
           <ChoiceList
             choices={[
@@ -197,10 +197,12 @@ const OfferSettingsEditor = ({
                 value: 'ANY'
               },
               {
-                label: 'Specific page',
+                label: 'Specific page(s)',
                 helpText: (
                   <Stack vertical spacing="tight">
-                    <span>Offer may show only on a specific page.</span>
+                    <span>
+                      Offer may show only on one or more specific pages.
+                    </span>
                     {triggerPage.value === 'PAGE' && (
                       <TextField
                         value={triggerPagePath.value}
@@ -211,16 +213,21 @@ const OfferSettingsEditor = ({
                               sectioned
                               active={triggerPagePathPopoverActive}
                               activator={
-                                <Button
-                                  plain
-                                  onClick={() =>
-                                    setTriggerPagePathPopoverActive(
-                                      !triggerPagePathPopoverActive
-                                    )
-                                  }
-                                >
-                                  Glob syntax may be used.
-                                </Button>
+                                <>
+                                  Use{' '}
+                                  <Button
+                                    plain
+                                    monochrome
+                                    onClick={() =>
+                                      setTriggerPagePathPopoverActive(
+                                        !triggerPagePathPopoverActive
+                                      )
+                                    }
+                                  >
+                                    glob syntax
+                                  </Button>{' '}
+                                  to reference multiple pages.
+                                </>
                               }
                               onClose={() =>
                                 setTriggerPagePathPopoverActive(false)
