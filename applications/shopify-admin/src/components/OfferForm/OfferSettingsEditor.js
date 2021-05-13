@@ -138,48 +138,37 @@ const OfferSettingsEditor = ({
               },
               {
                 label: 'Page scroll',
-                helpText: (
-                  <Stack vertical spacing="tight">
-                    <span>
-                      Offer is shown when the page is scrolled downward beyond a
-                      specified threshold.
-                    </span>
-                    {triggerEvent.value === 'SCROLL' && (
-                      <TriggerScrollThresholdWrapper>
-                        <TextField
-                          type="number"
-                          inputMode="numeric"
-                          suffix="%"
-                          min={1}
-                          max={100}
-                          step={1}
-                          {...triggerScrollThreshold}
-                          error={submitted && triggerScrollThreshold.error}
-                        />
-                      </TriggerScrollThresholdWrapper>
-                    )}
-                  </Stack>
-                ),
-
-                value: 'SCROLL'
+                helpText:
+                  'Offer is shown when the page is scrolled downward beyond a specified threshold.',
+                value: 'SCROLL',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <TriggerScrollThresholdWrapper>
+                      <TextField
+                        type="number"
+                        inputMode="numeric"
+                        suffix="%"
+                        min={1}
+                        max={100}
+                        step={1}
+                        {...triggerScrollThreshold}
+                        error={submitted && triggerScrollThreshold.error}
+                      />
+                    </TriggerScrollThresholdWrapper>
+                  )
               },
               {
                 label: 'Link click',
-                helpText: (
-                  <Stack vertical spacing="tight">
-                    <span>
-                      Offer is shown when any link is clicked. Links are
-                      followed when the popup is closed.
-                    </span>
-                    {triggerEvent.value === 'LINK' && (
-                      <Checkbox
-                        label="Limit to external links"
-                        {...asChoiceField(triggerExternalLinksOnly)}
-                      />
-                    )}
-                  </Stack>
-                ),
-                value: 'LINK'
+                helpText:
+                  'Offer is shown when any link is clicked. Links are followed when the popup is closed.',
+                value: 'LINK',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <Checkbox
+                      label="Limit to external links"
+                      {...asChoiceField(triggerExternalLinksOnly)}
+                    />
+                  )
               }
             ]}
             selected={triggerEvent.value}
@@ -198,84 +187,79 @@ const OfferSettingsEditor = ({
               },
               {
                 label: 'Specific page(s)',
-                helpText: (
-                  <Stack vertical spacing="tight">
-                    <span>
-                      Offer may show only on one or more specific pages.
-                    </span>
-                    {triggerPage.value === 'PAGE' && (
-                      <TextField
-                        value={triggerPagePath.value}
-                        placeholder="/page-url/here"
-                        helpText={
-                          <>
-                            <Popover
-                              sectioned
-                              active={triggerPagePathPopoverActive}
-                              activator={
-                                <>
-                                  Use{' '}
-                                  <Button
-                                    plain
-                                    monochrome
-                                    onClick={() =>
-                                      setTriggerPagePathPopoverActive(
-                                        !triggerPagePathPopoverActive
-                                      )
-                                    }
-                                  >
-                                    glob syntax
-                                  </Button>{' '}
-                                  to reference multiple pages.
-                                </>
-                              }
-                              onClose={() =>
-                                setTriggerPagePathPopoverActive(false)
-                              }
-                            >
-                              <TextContainer spacing="loose">
-                                <Heading>Glob syntax</Heading>
-                                <p>The path</p>
-                                <p>
-                                  <code>*/products/*</code>
-                                </p>
-                                <p>will match all product page URLs such as</p>
-                                <p>
-                                  <code>/products/fancy-shoes</code>
-                                  <br />
-                                  <code>/products/silly-socks</code>
-                                  <br />
-                                  <code>
-                                    /collections/shoes/products/fancy-shoes
-                                  </code>
-                                  <br />
-                                  <code>
-                                    /collections/shoes/products/silly-socks
-                                  </code>
-                                </p>
-                                <p>
-                                  <Link
-                                    url="https://en.wikipedia.org/wiki/Glob_(programming)"
-                                    external
-                                  >
-                                    More information
-                                  </Link>
-                                </p>
-                                <p>
-                                  Please note that extended glob support is
-                                  enabled, and globstar support is disabled.
-                                </p>
-                              </TextContainer>
-                            </Popover>
-                          </>
-                        }
-                        {...triggerPagePath}
-                        error={submitted && triggerPagePath.error}
-                        onBlur={handleTriggerPagePathBlur}
-                      />
-                    )}
-                  </Stack>
-                ),
+                helpText: 'Offer may show only on one or more specific pages.',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <TextField
+                      value={triggerPagePath.value}
+                      placeholder="/page-url/here"
+                      helpText={
+                        <>
+                          <Popover
+                            sectioned
+                            active={triggerPagePathPopoverActive}
+                            activator={
+                              <>
+                                Use{' '}
+                                <Button
+                                  plain
+                                  monochrome
+                                  onClick={() =>
+                                    setTriggerPagePathPopoverActive(
+                                      !triggerPagePathPopoverActive
+                                    )
+                                  }
+                                >
+                                  glob syntax
+                                </Button>{' '}
+                                to reference multiple pages.
+                              </>
+                            }
+                            onClose={() =>
+                              setTriggerPagePathPopoverActive(false)
+                            }
+                          >
+                            <TextContainer spacing="loose">
+                              <Heading>Glob syntax</Heading>
+                              <p>The path</p>
+                              <p>
+                                <code>*/products/*</code>
+                              </p>
+                              <p>will match all product page URLs such as</p>
+                              <p>
+                                <code>/products/fancy-shoes</code>
+                                <br />
+                                <code>/products/silly-socks</code>
+                                <br />
+                                <code>
+                                  /collections/shoes/products/fancy-shoes
+                                </code>
+                                <br />
+                                <code>
+                                  /collections/shoes/products/silly-socks
+                                </code>
+                              </p>
+                              <p>
+                                <Link
+                                  url="https://en.wikipedia.org/wiki/Glob_(programming)"
+                                  external
+                                >
+                                  More information
+                                </Link>
+                              </p>
+                              <p>
+                                Please note that extended glob support is
+                                enabled, and globstar support is disabled.
+                              </p>
+                            </TextContainer>
+                          </Popover>
+                        </>
+                      }
+                      {...triggerPagePath}
+                      error={submitted && triggerPagePath.error}
+                      onBlur={handleTriggerPagePathBlur}
+                    />
+                  ),
                 value: 'PAGE'
               }
             ]}
@@ -289,27 +273,22 @@ const OfferSettingsEditor = ({
           choices={[
             {
               label: 'Once within a period of days',
-              helpText: (
-                <Stack vertical spacing="tight">
-                  <span>
-                    Customers may only see this offer once within a period of
-                    days.
-                  </span>
-                  {viewAllowance.value === 'DAYS' && (
-                    <ViewAllowanceDaysInputWrapper>
-                      <TextField
-                        type="number"
-                        inputMode="numeric"
-                        min={1}
-                        step={1}
-                        suffix="days"
-                        {...viewAllowanceDays}
-                        error={submitted && viewAllowanceDays.error}
-                      />
-                    </ViewAllowanceDaysInputWrapper>
-                  )}
-                </Stack>
-              ),
+              helpText:
+                'Customers may only see this offer once within a period of days.',
+              renderChildren: (isSelected) =>
+                isSelected && (
+                  <ViewAllowanceDaysInputWrapper>
+                    <TextField
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      step={1}
+                      suffix="days"
+                      {...viewAllowanceDays}
+                      error={submitted && viewAllowanceDays.error}
+                    />
+                  </ViewAllowanceDaysInputWrapper>
+                ),
               value: 'DAYS'
             },
             {
@@ -354,19 +333,20 @@ const OfferSettingsEditor = ({
             },
             {
               label: 'Open a link',
-              helpText: actionButtonBehavior.value === 'LINK' && (
-                <Stack vertical spacing="tight">
-                  <TextField
-                    placeholder="https://"
-                    {...actionButtonLink}
-                    error={submitted && actionButtonLink.error}
-                  />
-                  <Checkbox
-                    label="Open in new browser tab"
-                    {...asChoiceField(actionButtonLinkOpenInNewTab)}
-                  />
-                </Stack>
-              ),
+              renderChildren: (isSelected) =>
+                isSelected && (
+                  <Stack vertical spacing="tight">
+                    <TextField
+                      placeholder="https://"
+                      {...actionButtonLink}
+                      error={submitted && actionButtonLink.error}
+                    />
+                    <Checkbox
+                      label="Open in new browser tab"
+                      {...asChoiceField(actionButtonLinkOpenInNewTab)}
+                    />
+                  </Stack>
+                ),
               value: 'LINK'
             }
           ]}
