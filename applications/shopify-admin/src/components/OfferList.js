@@ -5,11 +5,11 @@ import {
   Card,
   DataTable,
   Filters,
-  Link,
   ChoiceList,
   Pagination
 } from '@shopify/polaris';
 import styled from 'styled-components';
+import Link from './Link';
 
 const isEmpty = (value) => {
   if (Array.isArray(value)) {

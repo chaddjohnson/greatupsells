@@ -19,6 +19,7 @@
     "@neatowebsolutions/upselling-logger": "0.0.0",
     "bluebird": "^3.7.2",
     "geoip-country": "^4.0.56",
+    "glob-to-regexp": "^0.4.1",
     "http-status-codes": "^2.1.4",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",

@@ -35,12 +35,12 @@ const useFields = (initialOffer, showEndDate) => {
     value: initialOffer.triggerPagePath,
     validates: [
       (value) => {
-        if (value.match(/^https?:\/\//)) {
+        if (value && value.match(/^https?:\/\//)) {
           return "Trigger page path can't contain a protocol or a domain";
         }
       },
       (value) => {
-        if (value.match(/\?/)) {
+        if (value && value.match(/\?/)) {
           return "Trigger page path can't contain a query string";
         }
       }

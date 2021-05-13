@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 
-const Link = ({ url, external, children, ...props }) => {
+const Link = ({ url, external, prefetch, children, ...props }) => {
   if (external || url.match(/^https?:/)) {
     return (
       <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
@@ -11,7 +11,7 @@ const Link = ({ url, external, children, ...props }) => {
     );
   } else {
     return (
-      <NextLink href={url} prefetch={false}>
+      <NextLink href={url} prefetch={prefetch}>
         <a {...props}>{children}</a>
       </NextLink>
     );
@@ -21,11 +21,13 @@ const Link = ({ url, external, children, ...props }) => {
 Link.propTypes = {
   url: PropTypes.string.isRequired,
   external: PropTypes.bool,
-  children: PropTypes.element.isRequired
+  prefetch: PropTypes.bool,
+  children: PropTypes.node.isRequired
 };
 
 Link.defaultProps = {
-  external: false
+  external: false,
+  prefetch: false
 };
 
 export default Link;

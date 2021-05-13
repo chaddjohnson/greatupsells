@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const geoip = require('geoip-country');
+const globToRegExp = require('glob-to-regexp');
 const mongodbClient = require('../mongodbClient');
 
 const buildViewAllowanceCriterias = (
@@ -89,17 +90,6 @@ const findOneRandomByTriggerEvent = async (
           offerImpressions,
           sessionOfferImpressions
         )
-      },
-      {
-        $or: [
-          {
-            triggerPage: 'ANY'
-          },
-          {
-            triggerPage: 'PAGE',
-            triggerPagePath: pagePathSanitized
-          }
-        ]
       }
     ]
   };
@@ -110,24 +100,28 @@ const findOneRandomByTriggerEvent = async (
     criteria.$and.push(buildGeotargetingCriteria(geoData.country));
   }
 
-  // Randomly find an offer having the trigger event as a trigger.
-  const randomOffers = await Offer.aggregate([
-    { $match: criteria },
-    { $sample: { size: 1 } },
-    {
-      $project: {
-        _id: 1
-      }
+  // Randomly find an offer.
+  let offers = await Offer.find(criteria);
+
+  // Filter trigger path based on regex if trigger page is a specific page.
+  offers = offers.filter((offer) => {
+    if (offer.triggerPage !== 'PAGE') {
+      return true;
     }
-  ]);
-  const randomOffer = randomOffers[0];
 
-  if (!randomOffer || !randomOffer._id) {
-    return;
-  }
+    return (
+      offer.triggerPagePath &&
+      pagePathSanitized.match(
+        globToRegExp(offer.triggerPagePath, {
+          extended: true,
+          globstar: false
+        })
+      )
+    );
+  });
 
-  // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Offer.findById(randomOffer._id);
+  // Return a random offer from the found offers.
+  return offers[Math.floor(Math.random() * offers.length)];
 };
 
 const findOneRandomByTriggerEventAndShopifyProductIds = async (
@@ -185,17 +179,6 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
           offerImpressions,
           sessionOfferImpressions
         )
-      },
-      {
-        $or: [
-          {
-            triggerPage: 'ANY'
-          },
-          {
-            triggerPage: 'PAGE',
-            triggerPagePath: pagePathSanitized
-          }
-        ]
       }
     ]
   };
@@ -206,26 +189,28 @@ const findOneRandomByTriggerEventAndShopifyProductIds = async (
     criteria.$and.push(buildGeotargetingCriteria(geoData.country));
   }
 
-  // Randomly select an offer having the trigger event as a trigger AND [one of
-  // the Shopify products as a trigger OR a collection to which one or more
-  // of the products belong as a trigger].
-  const randomOffers = await Offer.aggregate([
-    { $match: criteria },
-    { $sample: { size: 1 } },
-    {
-      $project: {
-        _id: 1
-      }
+  // Randomly find an offer.
+  let offers = await Offer.find(criteria);
+
+  // Filter trigger path based on regex if trigger page is a specific page.
+  offers = offers.filter((offer) => {
+    if (offer.triggerPage !== 'PAGE') {
+      return true;
     }
-  ]);
-  const randomOffer = randomOffers[0];
 
-  if (!randomOffer || !randomOffer._id) {
-    return;
-  }
+    return (
+      offer.triggerPagePath &&
+      pagePathSanitized.match(
+        globToRegExp(offer.triggerPagePath, {
+          extended: true,
+          globstar: false
+        })
+      )
+    );
+  });
 
-  // Aggregation only returns JSON, so query for a Mongoose document.
-  return await Offer.findById(randomOffer._id);
+  // Return a random offer from the found offers.
+  return offers[Math.floor(Math.random() * offers.length)];
 };
 
 const findOneRandom = async (

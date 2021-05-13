@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -6,10 +6,15 @@ import {
   TextField,
   Checkbox,
   ChoiceList,
+  Popover,
+  Button,
+  Heading,
+  TextContainer,
   Stack
 } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
+import Link from '../Link';
 
 const TriggerScrollThresholdWrapper = styled.div`
   max-width: 110px;
@@ -37,6 +42,11 @@ const OfferSettingsEditor = ({
   submitted,
   onStrategyChange
 }) => {
+  const [
+    triggerPagePathPopoverActive,
+    setTriggerPagePathPopoverActive
+  ] = useState(false);
+
   const handleTriggerPageChange = ([value]) => {
     if (triggerPage.value !== 'PAGE') {
       triggerPagePath.onChange(undefined);
@@ -195,6 +205,63 @@ const OfferSettingsEditor = ({
                       <TextField
                         value={triggerPagePath.value}
                         placeholder="/page-url/here"
+                        helpText={
+                          <>
+                            <Popover
+                              sectioned
+                              active={triggerPagePathPopoverActive}
+                              activator={
+                                <Button
+                                  plain
+                                  onClick={() =>
+                                    setTriggerPagePathPopoverActive(
+                                      !triggerPagePathPopoverActive
+                                    )
+                                  }
+                                >
+                                  Glob syntax may be used.
+                                </Button>
+                              }
+                              onClose={() =>
+                                setTriggerPagePathPopoverActive(false)
+                              }
+                            >
+                              <TextContainer spacing="loose">
+                                <Heading>Glob syntax</Heading>
+                                <p>The path</p>
+                                <p>
+                                  <code>*/products/*</code>
+                                </p>
+                                <p>will match all product page URLs such as</p>
+                                <p>
+                                  <code>/products/fancy-shoes</code>
+                                  <br />
+                                  <code>/products/silly-socks</code>
+                                  <br />
+                                  <code>
+                                    /collections/shoes/products/fancy-shoes
+                                  </code>
+                                  <br />
+                                  <code>
+                                    /collections/shoes/products/silly-socks
+                                  </code>
+                                </p>
+                                <p>
+                                  <Link
+                                    url="https://en.wikipedia.org/wiki/Glob_(programming)"
+                                    external
+                                  >
+                                    More information
+                                  </Link>
+                                </p>
+                                <p>
+                                  Please note that extended glob support is
+                                  enabled, and globstar support is disabled.
+                                </p>
+                              </TextContainer>
+                            </Popover>
+                          </>
+                        }
                         {...triggerPagePath}
                         error={submitted && triggerPagePath.error}
                         onBlur={handleTriggerPagePathBlur}
