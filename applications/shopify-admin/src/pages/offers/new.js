@@ -99,7 +99,7 @@ const initialOffer = {
   minimumProductsQuantity: 1,
   discountType: 'PERCENTAGE',
   discountAmount: 0.1,
-  triggerEvent: 'ADD',
+  triggerEvent: 'LOAD',
   triggerExternalLinksOnly: true,
   triggerScrollThreshold: 75,
   triggerPage: 'ANY',
