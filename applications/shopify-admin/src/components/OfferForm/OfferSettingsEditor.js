@@ -10,10 +10,15 @@ import {
   Button,
   Heading,
   TextContainer,
+  Icon,
+  Banner,
   Stack
 } from '@shopify/polaris';
+import { SearchMinor } from '@shopify/polaris-icons';
+import { ResourcePicker } from '@shopify/app-bridge-react';
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
+import ManagedResourceList from './ManagedResourceList';
 import Link from '../Link';
 
 const TriggerScrollThresholdWrapper = styled.div`
@@ -25,6 +30,7 @@ const ViewAllowanceDaysInputWrapper = styled.div`
 `;
 
 const OfferSettingsEditor = ({
+  offer,
   name,
   strategy,
   triggerEvent,
@@ -32,6 +38,8 @@ const OfferSettingsEditor = ({
   triggerScrollThreshold,
   triggerPage,
   triggerPagePath,
+  triggerProducts,
+  triggerCollections,
   discountType,
   actionButtonBehavior,
   actionButtonLink,
@@ -42,6 +50,13 @@ const OfferSettingsEditor = ({
   submitted,
   onStrategyChange
 }) => {
+  const [triggerProductPickerOpen, setTriggerProductPickerOpen] = useState(
+    false
+  );
+  const [
+    triggerCollectionPickerOpen,
+    setTriggerCollectionPickerOpen
+  ] = useState(false);
   const [
     triggerPagePathPopoverActive,
     setTriggerPagePathPopoverActive
@@ -105,168 +120,250 @@ const OfferSettingsEditor = ({
           />
         </FormLayout>
       </Card>
-      <Card title="Trigger event" sectioned>
-        <FormLayout>
-          <ChoiceList
-            choices={[
-              {
-                label: 'Page load',
-                helpText: 'Offer is shown when the page loads.',
-                value: 'LOAD'
-              },
-              {
-                label: 'Add to cart',
-                helpText: 'Offer is shown when a product is added to the cart.',
-                value: 'ADD'
-              },
-              {
-                label: 'Cart page visit',
-                helpText: 'Offer is shown on the Cart page before checkout.',
-                value: 'CART'
-              },
-              {
-                label: 'Exit intent',
-                helpText:
-                  'Offer is shown on desktop when the mouse is moved above the browser window and on mobile with fast scroll up.',
-                value: 'EXIT'
-              },
-              {
-                label: 'Lost browser focus',
-                helpText:
-                  'Offer is shown when the browser fully loses visibility.',
-                value: 'FOCUS'
-              },
-              {
-                label: 'Page scroll',
-                helpText:
-                  'Offer is shown when the page is scrolled downward beyond a specified threshold.',
-                value: 'SCROLL',
-                renderChildren: (isSelected) =>
-                  isSelected && (
-                    <TriggerScrollThresholdWrapper>
-                      <TextField
-                        type="number"
-                        inputMode="numeric"
-                        suffix="%"
-                        min={1}
-                        max={100}
-                        step={1}
-                        {...triggerScrollThreshold}
-                        error={submitted && triggerScrollThreshold.error}
+      <Card title="Triggers">
+        <Card.Section title="Event">
+          <FormLayout>
+            <ChoiceList
+              choices={[
+                {
+                  label: 'Page load',
+                  helpText: 'Offer is shown when the page loads.',
+                  value: 'LOAD'
+                },
+                {
+                  label: 'Add to cart',
+                  helpText:
+                    'Offer is shown when a product is added to the cart.',
+                  value: 'ADD'
+                },
+                {
+                  label: 'Exit intent',
+                  helpText:
+                    'Offer is shown on desktop when the mouse is moved above the browser window and on mobile with fast scroll up.',
+                  value: 'EXIT'
+                },
+                {
+                  label: 'Lost browser focus',
+                  helpText:
+                    'Offer is shown when the browser tab fully loses visibility or another browser tab is selected.',
+                  value: 'FOCUS'
+                },
+                {
+                  label: 'Page scroll',
+                  helpText:
+                    'Offer is shown when the page is scrolled downward beyond a specified threshold.',
+                  value: 'SCROLL',
+                  renderChildren: (isSelected) =>
+                    isSelected && (
+                      <TriggerScrollThresholdWrapper>
+                        <TextField
+                          type="number"
+                          inputMode="numeric"
+                          suffix="%"
+                          min={1}
+                          max={100}
+                          step={1}
+                          {...triggerScrollThreshold}
+                          error={submitted && triggerScrollThreshold.error}
+                        />
+                      </TriggerScrollThresholdWrapper>
+                    )
+                },
+                {
+                  label: 'Link click',
+                  helpText:
+                    'Offer is shown when any link is clicked. Links are followed when the popup is closed.',
+                  value: 'LINK',
+                  renderChildren: (isSelected) =>
+                    isSelected && (
+                      <Checkbox
+                        label="Limit to external links"
+                        {...asChoiceField(triggerExternalLinksOnly)}
                       />
-                    </TriggerScrollThresholdWrapper>
-                  )
-              },
-              {
-                label: 'Link click',
-                helpText:
-                  'Offer is shown when any link is clicked. Links are followed when the popup is closed.',
-                value: 'LINK',
-                renderChildren: (isSelected) =>
-                  isSelected && (
-                    <Checkbox
-                      label="Limit to external links"
-                      {...asChoiceField(triggerExternalLinksOnly)}
-                    />
-                  )
-              }
-            ]}
-            selected={triggerEvent.value}
-            onChange={([value]) => triggerEvent.onChange(value)}
-          />
-        </FormLayout>
-      </Card>
-      <Card title="Trigger page(s)" sectioned>
-        <FormLayout>
-          <ChoiceList
-            choices={[
-              {
-                label: 'Any page',
-                helpText: 'Offer may show on any page.',
-                value: 'ANY'
-              },
-              {
-                label: 'Specific page(s)',
-                helpText: 'Offer may show only on one or more specific pages.',
-                renderChildren: (isSelected) =>
-                  isSelected && (
-                    <TextField
-                      value={triggerPagePath.value}
-                      placeholder="/page-url/here"
-                      helpText={
-                        <>
-                          <Popover
-                            sectioned
-                            active={triggerPagePathPopoverActive}
-                            activator={
-                              <>
-                                Use{' '}
-                                <Button
-                                  plain
-                                  monochrome
-                                  onClick={() =>
-                                    setTriggerPagePathPopoverActive(
-                                      !triggerPagePathPopoverActive
-                                    )
-                                  }
-                                >
-                                  glob syntax
-                                </Button>{' '}
-                                to reference multiple pages.
-                              </>
-                            }
-                            onClose={() =>
-                              setTriggerPagePathPopoverActive(false)
-                            }
-                          >
-                            <TextContainer spacing="loose">
-                              <Heading>Glob syntax</Heading>
-                              <p>The path</p>
-                              <p>
-                                <code>*/products/*</code>
-                              </p>
-                              <p>will match all product page URLs such as</p>
-                              <p>
-                                <code>/products/fancy-shoes</code>
-                                <br />
-                                <code>/products/silly-socks</code>
-                                <br />
-                                <code>
-                                  /collections/shoes/products/fancy-shoes
-                                </code>
-                                <br />
-                                <code>
-                                  /collections/shoes/products/silly-socks
-                                </code>
-                              </p>
-                              <p>
-                                <Link
-                                  url="https://en.wikipedia.org/wiki/Glob_(programming)"
-                                  external
-                                >
-                                  More information
-                                </Link>
-                              </p>
-                              <p>
-                                Please note that extended glob support is
-                                enabled, and globstar support is disabled.
-                              </p>
-                            </TextContainer>
-                          </Popover>
-                        </>
-                      }
-                      {...triggerPagePath}
-                      error={submitted && triggerPagePath.error}
-                      onBlur={handleTriggerPagePathBlur}
-                    />
-                  ),
-                value: 'PAGE'
-              }
-            ]}
-            selected={triggerPage.value}
-            onChange={handleTriggerPageChange}
-          />
-        </FormLayout>
+                    )
+                }
+              ]}
+              selected={triggerEvent.value}
+              onChange={([value]) => triggerEvent.onChange(value)}
+            />
+          </FormLayout>
+        </Card.Section>
+        <Card.Section title="Pages">
+          <FormLayout>
+            <ChoiceList
+              choices={[
+                {
+                  label: 'Any page',
+                  helpText: 'Offer may show on any page.',
+                  value: 'ANY'
+                },
+                {
+                  label: 'Specific pages',
+                  helpText:
+                    'Offer may show only on one or more specific pages.',
+                  renderChildren: (isSelected) =>
+                    isSelected && (
+                      <TextField
+                        value={triggerPagePath.value}
+                        placeholder="/page-url/here"
+                        helpText={
+                          <>
+                            <Popover
+                              sectioned
+                              active={triggerPagePathPopoverActive}
+                              activator={
+                                <>
+                                  Use{' '}
+                                  <Button
+                                    plain
+                                    monochrome
+                                    onClick={() =>
+                                      setTriggerPagePathPopoverActive(
+                                        !triggerPagePathPopoverActive
+                                      )
+                                    }
+                                  >
+                                    glob syntax
+                                  </Button>{' '}
+                                  to reference multiple pages.
+                                </>
+                              }
+                              onClose={() =>
+                                setTriggerPagePathPopoverActive(false)
+                              }
+                            >
+                              <TextContainer spacing="loose">
+                                <Heading>Glob syntax</Heading>
+                                <p>The path</p>
+                                <p>
+                                  <code>*/products/*</code>
+                                </p>
+                                <p>will match all product page URLs such as</p>
+                                <p>
+                                  <code>/products/fancy-shoes</code>
+                                  <br />
+                                  <code>/products/silly-socks</code>
+                                  <br />
+                                  <code>
+                                    /collections/shoes/products/fancy-shoes
+                                  </code>
+                                  <br />
+                                  <code>
+                                    /collections/shoes/products/silly-socks
+                                  </code>
+                                </p>
+                                <p>
+                                  <Link
+                                    url="https://en.wikipedia.org/wiki/Glob_(programming)"
+                                    external
+                                  >
+                                    More information
+                                  </Link>
+                                </p>
+                                <p>
+                                  Please note that extended glob support is
+                                  enabled, and globstar support is disabled.
+                                </p>
+                              </TextContainer>
+                            </Popover>
+                          </>
+                        }
+                        {...triggerPagePath}
+                        error={submitted && triggerPagePath.error}
+                        onBlur={handleTriggerPagePathBlur}
+                      />
+                    ),
+                  value: 'PAGE'
+                }
+              ]}
+              selected={triggerPage.value}
+              onChange={handleTriggerPageChange}
+            />
+          </FormLayout>
+        </Card.Section>
+        <>
+          <Card.Section title="Products and collections">
+            <FormLayout>
+              {offer.triggerEvent === 'ADD' &&
+                !offer.triggerProducts?.length &&
+                !offer.triggerCollections?.length && (
+                  <Banner status="info">
+                    Offer will show when <em>any</em> product is added to the
+                    cart. Select triggers below to only show the offer when
+                    specific products or products in collections are added.
+                  </Banner>
+                )}
+              {offer.triggerEvent !== 'ADD' &&
+                !offer.triggerProducts?.length &&
+                !offer.triggerCollections?.length && (
+                  <Banner status="info">
+                    Offer will show regardless of products in the cart. Select
+                    triggers below to only show the offer when specific products
+                    or products in collections have been added.
+                  </Banner>
+                )}
+              {(!!offer.triggerProducts?.length ||
+                !!offer.triggerCollections?.length) && (
+                <Banner status="info">
+                  Offer will show only when a product or product in a collection
+                  below has been added to the cart.
+                </Banner>
+              )}
+              <TextField
+                label="Trigger products"
+                helpText="The popup will show when any selected products have been added to the cart."
+                placeholder="Search products"
+                prefix={<Icon source={SearchMinor} />}
+                connectedRight={
+                  <Button onClick={() => setTriggerProductPickerOpen(true)}>
+                    Browse
+                  </Button>
+                }
+                onChange={() => setTriggerProductPickerOpen(true)}
+              />
+              <ManagedResourceList
+                items={offer.triggerProducts}
+                // onChange={triggerProducts.onChange}
+                // onRemoveItem={triggerProducts => setOffer({ ...offer, triggerProducts })}
+              />
+              <TextField
+                label="Trigger collections"
+                helpText="The popup will show when any products from selected collections have been added to the cart."
+                placeholder="Search collections"
+                prefix={<Icon source={SearchMinor} />}
+                connectedRight={
+                  <Button onClick={() => setTriggerCollectionPickerOpen(true)}>
+                    Browse
+                  </Button>
+                }
+                onChange={() => setTriggerCollectionPickerOpen(true)}
+              />
+              <ManagedResourceList
+                items={offer.triggerCollections}
+                // onChange={triggerCollections.onChange}
+                // onRemoveItem={triggerCollections => setOffer({ ...offer, triggerCollections })}
+              />
+            </FormLayout>
+          </Card.Section>
+          {triggerProductPickerOpen && (
+            <ResourcePicker
+              resourceType="Product"
+              allowMultiple={true}
+              open={triggerProductPickerOpen}
+              onSelection={() => setTriggerProductPickerOpen(false)}
+              onCancel={() => setTriggerProductPickerOpen(false)}
+            />
+          )}
+          {triggerCollectionPickerOpen && (
+            <ResourcePicker
+              resourceType="Collection"
+              allowMultiple={true}
+              open={triggerCollectionPickerOpen}
+              onSelection={() => setTriggerCollectionPickerOpen(false)}
+              onCancel={() => setTriggerCollectionPickerOpen(false)}
+            />
+          )}
+        </>
       </Card>
       <Card title="View frequency allowance" sectioned>
         <ChoiceList
@@ -406,6 +503,7 @@ const OfferSettingsEditor = ({
 };
 
 OfferSettingsEditor.propTypes = {
+  offer: PropTypes.object.isRequired,
   name: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
   triggerEvent: PropTypes.object.isRequired,
@@ -413,6 +511,8 @@ OfferSettingsEditor.propTypes = {
   triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
+  triggerProducts: PropTypes.array.isRequired,
+  triggerCollections: PropTypes.array.isRequired,
   discountType: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,

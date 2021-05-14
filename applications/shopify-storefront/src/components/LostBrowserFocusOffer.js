@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -8,7 +8,7 @@ import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi
+  useShopifyCart
 } from '../hooks';
 
 const triggerEvent = 'FOCUS';
@@ -19,11 +19,21 @@ const LostBrowserFocusOffer = () => {
   const [offerViewed, setOfferViewed] = useState(false);
   const [browserLostFocus, setBrowserLostFocus] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const {
+    shopifyCartItems,
+    shopifyCartItemsLoading,
+    addProductToShopifyCart
+  } = useShopifyCart();
+  const shopifyProductIds = useMemo(
+    () => shopifyCartItems?.map((item) => item.product_id),
+    [shopifyCartItems]
+  );
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent,
-    shouldQuery: browserLostFocus
+    shopifyProductIds,
+    shouldQuery:
+      !!shopifyCartItems && !shopifyCartItemsLoading && browserLostFocus
   });
   const offerId = offer?._id;
   const { shop } = useShop();
@@ -50,6 +60,10 @@ const LostBrowserFocusOffer = () => {
       });
     }, delay);
   }, [offer, offerId, offeredProducts, trackOfferImpression]);
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -79,6 +93,13 @@ const LostBrowserFocusOffer = () => {
     setBrowserLostFocus(true);
   });
 
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+    setBrowserLostFocus(false);
+  });
+
   useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
     const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -102,13 +123,6 @@ const LostBrowserFocusOffer = () => {
     openPopup();
   }, [offer, offerId, offerViewed, openPopup]);
 
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setOfferViewed(false);
-    setPopupOpen(false);
-    setBrowserLostFocus(false);
-  });
-
   if (!offer || !shop) {
     return null;
   }
@@ -121,7 +135,7 @@ const LostBrowserFocusOffer = () => {
       offer={offer}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
-      onClose={() => setPopupOpen(false)}
+      onClose={handleClosePopup}
     />
   );
 };

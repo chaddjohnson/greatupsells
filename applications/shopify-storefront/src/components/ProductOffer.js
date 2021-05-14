@@ -5,7 +5,7 @@ import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi,
+  useShopifyCart,
   useShopifyCartProductAddListener
 } from '../hooks';
 
@@ -18,7 +18,7 @@ const ProductOffer = () => {
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const { addProductToShopifyCart } = useShopifyCart();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
     {

@@ -1,7 +1,8 @@
 export {
-  useShopifyAjaxApi,
+  CartProvider,
+  useShopifyCart,
   useShopifyCartProductAddListener
-} from './shopifyAjaxApi';
+} from './shopifyCart';
 
 export { default as useOfferTracking } from './offerTracking';
 export { default as useRandomOffer } from './randomOffer';

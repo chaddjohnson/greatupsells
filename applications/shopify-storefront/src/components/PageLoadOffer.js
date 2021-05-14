@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi
+  useShopifyCart
 } from '../hooks';
 
 const triggerEvent = 'LOAD';
@@ -15,11 +15,20 @@ const PageLoadOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const {
+    shopifyCartItems,
+    shopifyCartItemsLoading,
+    addProductToShopifyCart
+  } = useShopifyCart();
+  const shopifyProductIds = useMemo(
+    () => shopifyCartItems?.map((item) => item.product_id),
+    [shopifyCartItems]
+  );
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent,
-    shouldQuery: true
+    shopifyProductIds,
+    shouldQuery: !!shopifyCartItems && !shopifyCartItemsLoading
   });
   const offerId = offer?._id;
   const { shop } = useShop();
@@ -47,6 +56,10 @@ const PageLoadOffer = () => {
     }, delay);
   }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
+
   const handleAddProduct = async (
     shopifyProductId,
     shopifyVariantId,
@@ -65,6 +78,12 @@ const PageLoadOffer = () => {
       quantity
     );
   };
+
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+  });
 
   useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
@@ -92,12 +111,6 @@ const PageLoadOffer = () => {
     openPopup();
   }, [offer, offerId, offerViewed, openPopup]);
 
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setOfferViewed(false);
-    setPopupOpen(false);
-  });
-
   if (!offer || !shop) {
     return null;
   }
@@ -111,7 +124,7 @@ const PageLoadOffer = () => {
       offer={offer}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
-      onClose={() => setPopupOpen(false)}
+      onClose={handleClosePopup}
     />
   );
 };

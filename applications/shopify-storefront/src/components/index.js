@@ -1,4 +1,3 @@
-export { default as CartOffer } from './CartOffer';
 export { default as ExitIntentOffer } from './ExitIntentOffer';
 export { default as LinkClickOffer } from './LinkClickOffer';
 export { default as LostBrowserFocusOffer } from './LostBrowserFocusOffer';

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -8,7 +8,7 @@ import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi
+  useShopifyCart
 } from '../hooks';
 
 const triggerEvent = 'EXIT';
@@ -18,11 +18,20 @@ const ExitIntentOffer = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const {
+    shopifyCartItems,
+    shopifyCartItemsLoading,
+    addProductToShopifyCart
+  } = useShopifyCart();
+  const shopifyProductIds = useMemo(
+    () => shopifyCartItems?.map((item) => item.product_id),
+    [shopifyCartItems]
+  );
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent,
-    shouldQuery: true
+    shopifyProductIds,
+    shouldQuery: !!shopifyCartItems && !shopifyCartItemsLoading
   });
   const offerId = offer?._id;
   const { shop } = useShop();
@@ -49,6 +58,10 @@ const ExitIntentOffer = () => {
       });
     }, delay);
   }, [offer, offerId, offeredProducts, trackOfferImpression]);
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -203,7 +216,7 @@ const ExitIntentOffer = () => {
       offer={offer}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
-      onClose={() => setPopupOpen(false)}
+      onClose={handleClosePopup}
     />
   );
 };

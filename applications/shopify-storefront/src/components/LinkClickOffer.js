@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
@@ -8,7 +8,7 @@ import {
   useOfferTracking,
   useRandomOffer,
   useShop,
-  useShopifyAjaxApi
+  useShopifyCart
 } from '../hooks';
 
 // IE9+ polyfill for `.closest()`.
@@ -39,11 +39,20 @@ const LinkClickOffer = () => {
   const [linkUrl, setLinkUrl] = useState('');
   const [openLinkInNewWindow, setOpenLinkInNewWindow] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyAjaxApi();
+  const {
+    shopifyCartItems,
+    shopifyCartItemsLoading,
+    addProductToShopifyCart
+  } = useShopifyCart();
+  const shopifyProductIds = useMemo(
+    () => shopifyCartItems?.map((item) => item.product_id),
+    [shopifyCartItems]
+  );
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
   const { offer, popupTheme, offeredProducts } = useRandomOffer({
     event: triggerEvent,
-    shouldQuery: true
+    shopifyProductIds,
+    shouldQuery: !!shopifyCartItems && !shopifyCartItemsLoading
   });
   const offerId = offer?._id;
   const { shop } = useShop();
@@ -153,7 +162,7 @@ const LinkClickOffer = () => {
     [offer, offerId, offerViewed, openPopup]
   );
 
-  const handleClose = () => {
+  const handleClosePopup = () => {
     let newWindow = null;
 
     setPopupOpen(false);
@@ -200,7 +209,7 @@ const LinkClickOffer = () => {
       offer={offer}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
-      onClose={handleClose}
+      onClose={handleClosePopup}
     />
   );
 };

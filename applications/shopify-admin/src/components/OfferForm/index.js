@@ -18,7 +18,6 @@ import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
 import OfferSettingsEditor from './OfferSettingsEditor';
 import OfferProductsEditor from './OfferProductsEditor';
-import OfferTriggersEditor from './OfferTriggersEditor';
 import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
@@ -288,6 +287,7 @@ const OfferForm = ({
       <Layout>
         <Layout.Section>
           <OfferSettingsEditor
+            offer={offer}
             name={name}
             strategy={strategy}
             triggerEvent={triggerEvent}
@@ -295,6 +295,8 @@ const OfferForm = ({
             triggerScrollThreshold={triggerScrollThreshold}
             triggerPage={triggerPage}
             triggerPagePath={triggerPagePath}
+            triggerProducts={triggerProducts}
+            triggerCollections={triggerCollections}
             discountType={discountType}
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
@@ -308,7 +310,6 @@ const OfferForm = ({
           {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
             <OfferProductsEditor offer={offer} />
           )}
-          <OfferTriggersEditor offer={offer} />
           <ThemeEditor
             strategy={offer.strategy}
             theme={popupTheme}

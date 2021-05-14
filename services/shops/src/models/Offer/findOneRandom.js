@@ -56,171 +56,55 @@ const buildViewAllowanceCriterias = (
   }
 ];
 
-const buildGeotargetingCriteria = (countryCode) => ({
-  $or: [{ enableGeotargeting: false }, { geotargetingCountries: countryCode }]
-});
-
-// This removes leading slashes (and re-adds one), trailing slashes, and query strings.
-const sanitizePagePath = (pagePath) => {
-  return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
-};
-
-const findOneRandomByTriggerEvent = async (
-  shop,
-  {
-    triggerEvent,
-    ipAddress = undefined,
-    offerImpressions = [],
-    sessionOfferImpressions = [],
-    pagePath
-  }
-) => {
-  const Offer = mongodbClient.connection.model('Offer');
-  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
-  const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
-  const pagePathSanitized = sanitizePagePath(pagePath);
-
-  const criteria = {
-    shop: shop._id,
-    triggerEvent,
-    enabled: true,
-    $and: [
-      {
-        $or: buildViewAllowanceCriterias(
-          offerImpressions,
-          sessionOfferImpressions
-        )
-      }
-    ]
-  };
-
-  // Limit to offers with no geotargeting AND offers targeting the country that
-  // the IP address resolves to.
-  if (geoData && geoData.country) {
-    criteria.$and.push(buildGeotargetingCriteria(geoData.country));
-  }
-
-  // Randomly find an offer.
-  let offers = await Offer.find(criteria);
-
-  // Filter trigger path based on regex if trigger page is a specific page.
-  offers = offers.filter((offer) => {
-    if (offer.triggerPage !== 'PAGE') {
-      return true;
-    }
-
-    return (
-      offer.triggerPagePath &&
-      pagePathSanitized.match(
-        globToRegExp(offer.triggerPagePath, {
-          extended: true,
-          globstar: false
-        })
-      )
-    );
-  });
-
-  // Return a random offer from the found offers.
-  return offers[Math.floor(Math.random() * offers.length)];
-};
-
-const findOneRandomByTriggerEventAndShopifyProductIds = async (
-  shop,
-  {
-    triggerEvent,
-    shopifyProductIds,
-    ipAddress = undefined,
-    offerImpressions = [],
-    sessionOfferImpressions = [],
-    pagePath
-  }
-) => {
-  shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
-    parseInt(shopifyProductId)
-  );
-
+const buildProductsCriteria = async (shopifyProductIds) => {
   const Collection = mongodbClient.connection.model('Collection');
-  const Offer = mongodbClient.connection.model('Offer');
-  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
-  const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
   });
   const shopifyCollectionIds = collections.map(
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
-  const pagePathSanitized = sanitizePagePath(pagePath);
 
-  const criteria = {
-    shop: shop._id,
-    triggerEvent,
-    enabled: true,
-    $and: [
-      {
-        $or: [
-          {
-            'triggerProducts.shopifyProductId': {
-              $in: shopifyProductIds
-            }
-          },
-          {
-            'triggerCollections.shopifyCollectionId': {
-              $in: shopifyCollectionIds
-            }
-          },
-          {
-            triggerProducts: { $size: 0 },
-            triggerCollections: { $size: 0 }
-          }
-        ]
-      },
-      {
-        $or: buildViewAllowanceCriterias(
-          offerImpressions,
-          sessionOfferImpressions
-        )
+  return [
+    {
+      'triggerProducts.shopifyProductId': {
+        $in: shopifyProductIds
       }
-    ]
-  };
-
-  // Limit to offers with no geotargeting AND offers targeting the country that
-  // the IP address resolves to.
-  if (geoData && geoData.country) {
-    criteria.$and.push(buildGeotargetingCriteria(geoData.country));
-  }
-
-  // Randomly find an offer.
-  let offers = await Offer.find(criteria);
-
-  // Filter trigger path based on regex if trigger page is a specific page.
-  offers = offers.filter((offer) => {
-    if (offer.triggerPage !== 'PAGE') {
-      return true;
+    },
+    {
+      'triggerCollections.shopifyCollectionId': {
+        $in: shopifyCollectionIds
+      }
+    },
+    {
+      triggerProducts: { $size: 0 },
+      triggerCollections: { $size: 0 }
     }
+  ];
+};
 
-    return (
-      offer.triggerPagePath &&
-      pagePathSanitized.match(
-        globToRegExp(offer.triggerPagePath, {
-          extended: true,
-          globstar: false
-        })
-      )
-    );
-  });
+const buildGeotargetingCriteria = (countryCode) => [
+  {
+    enableGeotargeting: false
+  },
+  {
+    geotargetingCountries: countryCode
+  }
+];
 
-  // Return a random offer from the found offers.
-  return offers[Math.floor(Math.random() * offers.length)];
+// This removes leading slashes (and re-adds one), trailing slashes, and query strings.
+const sanitizePagePath = (pagePath) => {
+  return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
 };
 
 const findOneRandom = async (
   shop,
   {
     triggerEvent,
-    shopifyProductIds,
-    ipAddress,
-    offerImpressions,
-    sessionOfferImpressions,
+    shopifyProductIds = [],
+    ipAddress = undefined,
+    offerImpressions = [],
+    sessionOfferImpressions = [],
     pagePath
   }
 ) => {
@@ -228,9 +112,6 @@ const findOneRandom = async (
   const shopifyProductIdsMissing =
     !shopifyProductIds || shopifyProductIds.length === 0;
 
-  if (!shop) {
-    throw new Error('`shop` must be provided');
-  }
   if (!triggerEvent) {
     throw new Error('`triggerEvent` must be provided');
   }
@@ -240,24 +121,64 @@ const findOneRandom = async (
     );
   }
 
-  if (!shopifyProductIdsMissing || triggerEvent === 'CART') {
-    return await findOneRandomByTriggerEventAndShopifyProductIds(shop, {
-      triggerEvent,
-      shopifyProductIds,
-      ipAddress,
-      offerImpressions,
-      sessionOfferImpressions,
-      pagePath
-    });
-  } else {
-    return await findOneRandomByTriggerEvent(shop, {
-      triggerEvent,
-      ipAddress,
-      offerImpressions,
-      sessionOfferImpressions,
-      pagePath
+  const Offer = mongodbClient.connection.model('Offer');
+  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
+  const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
+  const pagePathSanitized = sanitizePagePath(pagePath);
+
+  const criteria = {
+    shop: shop._id,
+    triggerEvent,
+    enabled: true,
+    $and: [
+      {
+        $or: buildViewAllowanceCriterias(
+          offerImpressions,
+          sessionOfferImpressions
+        )
+      }
+    ]
+  };
+
+  // Ensure Shopify product IDs are numeric prior to querying.
+  shopifyProductIds =
+    shopifyProductIds &&
+    shopifyProductIds.map((shopifyProductId) => parseInt(shopifyProductId));
+
+  criteria.$and.push({
+    $or: await buildProductsCriteria(shopifyProductIds)
+  });
+
+  // Limit to offers with no geotargeting AND offers targeting the country that
+  // the IP address resolves to.
+  if (geoData && geoData.country) {
+    criteria.$and.push({
+      $or: buildGeotargetingCriteria(geoData.country)
     });
   }
+
+  // Randomly find an offer.
+  let offers = await Offer.find(criteria);
+
+  // Filter trigger path based on regex if trigger page is a specific page.
+  offers = offers.filter((offer) => {
+    if (offer.triggerPage !== 'PAGE') {
+      return true;
+    }
+
+    return (
+      offer.triggerPagePath &&
+      pagePathSanitized.match(
+        globToRegExp(offer.triggerPagePath, {
+          extended: true,
+          globstar: false
+        })
+      )
+    );
+  });
+
+  // Return a random offer from the found offers.
+  return offers[Math.floor(Math.random() * offers.length)];
 };
 
 module.exports = findOneRandom;
