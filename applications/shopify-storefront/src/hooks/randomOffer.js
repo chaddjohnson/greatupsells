@@ -35,7 +35,13 @@ const useRandomOffer = ({
   // weirdness and query string length issues.
   const { data } = useSWR(
     shouldQuery
-      ? [`random-${event}`, offerImpressions, sessionOfferImpressions, pagePath]
+      ? [
+          event,
+          shopifyProductIds,
+          offerImpressions,
+          sessionOfferImpressions,
+          pagePath
+        ]
       : null,
     () =>
       httpClient.post('/offers/random', {

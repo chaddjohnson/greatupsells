@@ -8,6 +8,16 @@ import {
 
 const CartContext = createContext(null);
 
+const useShopifyCartProductAddListener = (listener) => {
+  useHttpRequestListener('/cart/add.js', (request) => {
+    const product = JSON.parse(request?.responseText || {});
+
+    if (listener) {
+      listener.call(listener, product);
+    }
+  });
+};
+
 const CartProvider = ({ children }) => {
   const {
     data: shopifyCartItems,
@@ -42,6 +52,10 @@ const CartProvider = ({ children }) => {
     });
   };
 
+  useShopifyCartProductAddListener(() => {
+    fetchShopifyCartItems();
+  });
+
   usePushStateListener(() => {
     fetchShopifyCartItems();
   });
@@ -66,15 +80,5 @@ CartProvider.propTypes = {
 };
 
 const useShopifyCart = () => useContext(CartContext);
-
-const useShopifyCartProductAddListener = (listener) => {
-  useHttpRequestListener('/cart/add.js', (request) => {
-    const product = JSON.parse(request?.responseText || {});
-
-    if (listener) {
-      listener.call(listener, product);
-    }
-  });
-};
 
 export { CartProvider, useShopifyCart, useShopifyCartProductAddListener };
