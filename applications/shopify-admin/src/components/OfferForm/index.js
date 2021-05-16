@@ -1,14 +1,7 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Form,
-  Layout,
-  Card,
-  FormLayout,
-  Checkbox,
-  PageActions
-} from '@shopify/polaris';
-import { useForm, asChoiceField, getValues } from '@shopify/react-form';
+import { Form, Layout, PageActions } from '@shopify/polaris';
+import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { Context as AppBridgeContext } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
