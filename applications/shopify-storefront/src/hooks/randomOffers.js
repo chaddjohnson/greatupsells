@@ -7,14 +7,20 @@ import {
   usePushStateListener
 } from '@neatowebsolutions/upselling-react-hooks';
 
-const useRandomOffer = ({
-  event,
+const useRandomOffers = ({
+  events,
   shopifyProductIds = [],
   shouldQuery = true
 }) => {
+  // Ensure Shopify product IDs is an array.
   if (!Array.isArray(shopifyProductIds)) {
     shopifyProductIds = compact([shopifyProductIds]);
   }
+
+  // Ensure Shopify product IDs are numeric.
+  shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
+    parseInt(shopifyProductId)
+  );
 
   const { httpClient } = useHttpClient();
   const { getCookie } = useCookies();
@@ -33,19 +39,19 @@ const useRandomOffer = ({
 
   // Use POST instead of GET here to side step query string formatting
   // weirdness and query string length issues.
-  const { data } = useSWR(
+  const { data: offersData } = useSWR(
     shouldQuery
-      ? [
-          event,
+      ? JSON.stringify([
+          events,
           shopifyProductIds,
           offerImpressions,
           sessionOfferImpressions,
           pagePath
-        ]
+        ])
       : null,
     () =>
       httpClient.post('/offers/random', {
-        event,
+        events,
         shopifyProductIds,
         offerImpressions,
         sessionOfferImpressions,
@@ -56,8 +62,6 @@ const useRandomOffer = ({
       shouldRetryOnError: false
     }
   );
-  const { offer, popupTheme, triggerProduct, offeredProducts = [] } =
-    data || {};
 
   // Listen to pushState events.
   usePushStateListener(() => {
@@ -71,12 +75,7 @@ const useRandomOffer = ({
     setPagePath(window.location.pathname);
   });
 
-  return {
-    offer,
-    popupTheme,
-    triggerProduct,
-    offeredProducts
-  };
+  return { offersData };
 };
 
-export default useRandomOffer;
+export default useRandomOffers;

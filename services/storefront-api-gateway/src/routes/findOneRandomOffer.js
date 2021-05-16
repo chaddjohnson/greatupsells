@@ -32,7 +32,7 @@ const handler = middy(async (event, context) => {
       event.headers['X-Forwarded-For'];
     const domain = new URL(event.headers.Origin).host;
     const {
-      event: triggerEvent,
+      events: triggerEvents,
       shopifyProductIds,
       offerImpressions,
       sessionOfferImpressions,
@@ -43,42 +43,32 @@ const handler = middy(async (event, context) => {
     // items are combined into one response to reduce latency.
     // Use POST instead of GET here to side step query string formatting
     // weirdness and query string length issues.
-    const {
-      offer,
-      popupTheme,
-      triggerProduct,
-      offeredProducts
-    } = await httpClient.post(`/shops/domain/${domain}/offers/random`, {
-      event: triggerEvent,
-      shopifyProductIds,
-      ipAddress,
-      offerImpressions,
-      sessionOfferImpressions,
-      pagePath
+    const offersData = await httpClient.post(
+      `/shops/domain/${domain}/offers/random`,
+      {
+        events: triggerEvents,
+        shopifyProductIds,
+        ipAddress,
+        offerImpressions,
+        sessionOfferImpressions,
+        pagePath
+      }
+    );
+
+    offersData.forEach(({ offer }) => {
+      if (offer) {
+        // Exclude stats from the offer response payload.
+        delete offer.acceptanceCount;
+        delete offer.conversionCount;
+        delete offer.conversionRate;
+        delete offer.impressionCount;
+        delete offer.revenueIncrease;
+      }
     });
-
-    if (!offer) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
-    // Exclude stats from response payload.
-    delete offer.acceptanceCount;
-    delete offer.conversionCount;
-    delete offer.conversionRate;
-    delete offer.impressionCount;
-    delete offer.revenueIncrease;
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify({
-        offer,
-        popupTheme,
-        triggerProduct,
-        offeredProducts
-      })
+      body: JSON.stringify(offersData)
     };
   } catch (error) {
     if (error.response && error.response.status) {

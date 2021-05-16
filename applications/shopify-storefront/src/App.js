@@ -4,14 +4,7 @@ import {
   HttpClient
 } from '@neatowebsolutions/upselling-react-hooks';
 import { CartProvider } from './hooks';
-import {
-  ExitIntentOffer,
-  LinkClickOffer,
-  LostBrowserFocusOffer,
-  PageLoadOffer,
-  PageScrollOffer,
-  ProductOffer
-} from './components';
+import { Offers } from './components';
 
 const httpClient = new HttpClient({
   baseUrl: process.env.STOREFRONT_API_GATEWAY_URL
@@ -20,12 +13,7 @@ const httpClient = new HttpClient({
 const App = () => (
   <HttpClientProvider httpClient={httpClient}>
     <CartProvider>
-      <ExitIntentOffer />
-      <LinkClickOffer />
-      <LostBrowserFocusOffer />
-      <PageLoadOffer />
-      <PageScrollOffer />
-      <ProductOffer />
+      <Offers />
     </CartProvider>
   </HttpClientProvider>
 );

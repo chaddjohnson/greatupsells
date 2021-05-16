@@ -1,42 +1,23 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
   usePushStateListener,
   useDocumentVisibility
 } from '@neatowebsolutions/upselling-react-hooks';
-import {
-  useOfferTracking,
-  useRandomOffer,
-  useShop,
-  useShopifyCart
-} from '../hooks';
+import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
-const triggerEvent = 'FOCUS';
 const loadedAt = new Date();
 
-const LostBrowserFocusOffer = () => {
+const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
-  const [browserLostFocus, setBrowserLostFocus] = useState(false);
 
-  const {
-    shopifyCartItems,
-    shopifyCartItemsLoading,
-    addProductToShopifyCart
-  } = useShopifyCart();
-  const shopifyProductIds = useMemo(
-    () => shopifyCartItems?.map((item) => item.product_id),
-    [shopifyCartItems]
-  );
+  const { addProductToShopifyCart } = useShopifyCart();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
-  const { offer, popupTheme, offeredProducts } = useRandomOffer({
-    event: triggerEvent,
-    shopifyProductIds,
-    shouldQuery:
-      !!shopifyCartItems && !shopifyCartItemsLoading && browserLostFocus
-  });
-  const offerId = offer?._id;
   const { shop } = useShop();
+
+  const offerId = offer?._id;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -85,22 +66,11 @@ const LostBrowserFocusOffer = () => {
   };
 
   useDocumentVisibility((visible) => {
-    // Only activate the popup when the browser is not visible.
-    if (visible) {
+    // Only activate the popup when the browser becomes visible again after being hidden.
+    if (!visible) {
       return;
     }
 
-    setBrowserLostFocus(true);
-  });
-
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setOfferViewed(false);
-    setPopupOpen(false);
-    setBrowserLostFocus(false);
-  });
-
-  useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
     const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
     const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
@@ -121,7 +91,13 @@ const LostBrowserFocusOffer = () => {
     }
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup]);
+  });
+
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+  });
 
   if (!offer || !shop) {
     return null;
@@ -138,6 +114,12 @@ const LostBrowserFocusOffer = () => {
       onClose={handleClosePopup}
     />
   );
+};
+
+LostBrowserFocusOffer.propTypes = {
+  offer: PropTypes.object.isRequired,
+  popupTheme: PropTypes.object.isRequired,
+  offeredProducts: PropTypes.array.isRequired
 };
 
 export default LostBrowserFocusOffer;

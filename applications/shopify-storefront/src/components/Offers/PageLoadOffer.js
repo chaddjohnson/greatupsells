@@ -1,34 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
-import {
-  useOfferTracking,
-  useRandomOffer,
-  useShop,
-  useShopifyCart,
-  useShopifyCartProductAddListener
-} from '../hooks';
+import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
-const triggerEvent = 'ADD';
 const loadedAt = new Date();
 
-const ProductOffer = () => {
+const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
-  const [shopifyProductIds, setShopifyProductIds] = useState([]);
-  const [productAdded, setProductAdded] = useState(false);
 
   const { addProductToShopifyCart } = useShopifyCart();
   const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
-  const { offer, popupTheme, triggerProduct, offeredProducts } = useRandomOffer(
-    {
-      event: triggerEvent,
-      shopifyProductIds,
-      shouldQuery: productAdded && !!setShopifyProductIds?.length
-    }
-  );
-  const offerId = offer?._id;
   const { shop } = useShop();
+
+  const offerId = offer?._id;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -36,7 +22,6 @@ const ProductOffer = () => {
     setOfferViewed(true);
 
     setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct.shopifyProductId;
       const offeredShopifyProductIds = offeredProducts.map(
         ({ shopifyProductData }) => shopifyProductData?.id
       );
@@ -48,17 +33,14 @@ const ProductOffer = () => {
 
       await trackOfferImpression({
         offerId,
-        triggerShopifyProductId,
         offeredShopifyProductIds,
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, triggerProduct, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
-    setShopifyProductIds([]);
-    setProductAdded(false);
   };
 
   const handleAddProduct = async (
@@ -68,7 +50,7 @@ const ProductOffer = () => {
   ) => {
     // Add the product to the cart.
     if (shopifyVariantId) {
-      await addProductToShopifyCart(shopifyVariantId, quantity);
+      await addProductToShopifyCart(shopifyProductId, quantity);
     }
 
     // Accept the offer.
@@ -79,6 +61,12 @@ const ProductOffer = () => {
       quantity
     );
   };
+
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+  });
 
   useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
@@ -100,24 +88,11 @@ const ProductOffer = () => {
       return;
     }
 
+    // NOTE: Path (`triggerPagePath`) is tested in the API when querying for a random offer.
+    // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
+
     openPopup();
   }, [offer, offerId, offerViewed, openPopup]);
-
-  // Subscribe to product add events.
-  useShopifyCartProductAddListener((addedProduct) => {
-    if (addedProduct?.product_id) {
-      setShopifyProductIds([addedProduct.product_id]);
-      setProductAdded(true);
-    }
-  });
-
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setOfferViewed(false);
-    setPopupOpen(false);
-    setShopifyProductIds([]);
-    setProductAdded(false);
-  });
 
   if (!offer || !shop) {
     return null;
@@ -130,7 +105,6 @@ const ProductOffer = () => {
       shop={shop}
       theme={popupTheme}
       offer={offer}
-      triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       onAddProduct={handleAddProduct}
       onClose={handleClosePopup}
@@ -138,4 +112,10 @@ const ProductOffer = () => {
   );
 };
 
-export default ProductOffer;
+PageLoadOffer.propTypes = {
+  offer: PropTypes.object.isRequired,
+  popupTheme: PropTypes.object.isRequired,
+  offeredProducts: PropTypes.array.isRequired
+};
+
+export default PageLoadOffer;

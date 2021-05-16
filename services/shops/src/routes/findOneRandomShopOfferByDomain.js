@@ -1,4 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { compact } = require('lodash');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
@@ -18,17 +19,56 @@ const findRandomProduct = async (shopifyProductIds = []) => {
   return await Product.findOneByShopifyProductId(triggerShopifyProductId);
 };
 
+const findPopupData = async (
+  shop,
+  {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress,
+    offerImpressions,
+    sessionOfferImpressions,
+    pagePath
+  }
+) => {
+  const Offer = await models.get('Offer');
+  const PopupTheme = await models.get('PopupTheme');
+  const offer = await Offer.findOneRandom(shop, {
+    triggerEvent,
+    shopifyProductIds,
+    ipAddress,
+    offerImpressions,
+    sessionOfferImpressions,
+    pagePath
+  });
+
+  if (!offer) {
+    return;
+  }
+
+  // Parallelize to minimize latency.
+  const [popupTheme, triggerProduct, offeredProducts] = await Promise.all([
+    PopupTheme.findById(offer.popupTheme),
+    findRandomProduct(shopifyProductIds),
+    offer.findRandomProducts()
+  ]);
+
+  return {
+    offer,
+    popupTheme,
+    triggerProduct,
+    offeredProducts
+  };
+};
+
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
     const { domain } = event.pathParameters;
     const Shop = await models.get('Shop');
-    const Offer = await models.get('Offer');
-    const PopupTheme = await models.get('PopupTheme');
     const shop = await Shop.findOneByDomain(domain);
     const {
-      event: triggerEvent,
+      events: triggerEvents,
       shopifyProductIds,
       ipAddress,
       offerImpressions,
@@ -43,37 +83,26 @@ const handler = async (event, context) => {
       };
     }
 
-    const offer = await Offer.findOneRandom(shop, {
-      triggerEvent,
-      shopifyProductIds,
-      ipAddress,
-      offerImpressions,
-      sessionOfferImpressions,
-      pagePath
-    });
+    // Find popup data for each trigger event. Parallelize to minimize latency.
+    let offersData = await Promise.all(
+      triggerEvents.map(async (triggerEvent) =>
+        findPopupData(shop, {
+          triggerEvent,
+          shopifyProductIds,
+          ipAddress,
+          offerImpressions,
+          sessionOfferImpressions,
+          pagePath
+        })
+      )
+    );
 
-    if (!offer) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
-    // Parallelize to minimize latency.
-    const [popupTheme, triggerProduct, offeredProducts] = await Promise.all([
-      PopupTheme.findById(offer.popupTheme),
-      findRandomProduct(shopifyProductIds),
-      offer.findRandomProducts()
-    ]);
+    // Remove non-results.
+    offersData = compact(offersData);
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify({
-        offer,
-        popupTheme,
-        triggerProduct,
-        offeredProducts
-      })
+      body: JSON.stringify(offersData)
     };
   } catch (error) {
     await logger.error(`Error retrieving random offer for shop`, error, event);
