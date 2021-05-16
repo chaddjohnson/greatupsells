@@ -75,8 +75,8 @@ const LostBrowserFocusOffer = ({
   };
 
   useDocumentVisibility((visible) => {
-    // Only activate the popup when the browser becomes visible again after being hidden.
-    if (!visible) {
+    // Only activate the popup when the browser becomes hidden.
+    if (visible) {
       return;
     }
 

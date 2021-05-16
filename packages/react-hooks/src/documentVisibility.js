@@ -60,8 +60,8 @@ const useDocumentVisibility = (callback) => {
     }
 
     // All others
-    window.onpageshow = window.onfocus = focused; // eslint-disable-line no-multi-assign
-    window.onpagehide = window.onblur = unfocused; // eslint-disable-line no-multi-assign
+    window.onpageshow = focused; // eslint-disable-line no-multi-assign
+    window.onpagehide = unfocused; // eslint-disable-line no-multi-assign
 
     return () => {
       // Standards
@@ -85,8 +85,8 @@ const useDocumentVisibility = (callback) => {
       }
 
       // All others
-      window.onpageshow = window.onfocus = undefined; // eslint-disable-line no-multi-assign
-      window.onpagehide = window.onblur = undefined; // eslint-disable-line no-multi-assign
+      window.onpageshow = undefined; // eslint-disable-line no-multi-assign
+      window.onpagehide = undefined; // eslint-disable-line no-multi-assign
     };
   }, [focused, unfocused, listener]);
 };
