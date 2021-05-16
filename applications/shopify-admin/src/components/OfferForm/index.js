@@ -24,6 +24,10 @@ const { OfferPopup } =
 let themeCount = 0;
 
 const assignId = (object) => {
+  if (!object) {
+    return object;
+  }
+
   // Avoid redefining the property.
   if (typeof object.__id_offerForm !== 'undefined') {
     return object;
@@ -59,7 +63,6 @@ const OfferForm = ({
   let contextualSaveBar = null;
 
   const app = useContext(AppBridgeContext);
-
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
