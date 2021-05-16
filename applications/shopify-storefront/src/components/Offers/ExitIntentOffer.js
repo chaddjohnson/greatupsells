@@ -9,7 +9,14 @@ import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
 const loadedAt = new Date();
 
-const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
+const ExitIntentOffer = ({
+  offer,
+  popupTheme,
+  offeredProducts,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
@@ -23,6 +30,7 @@ const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const offeredShopifyProductIds = offeredProducts.map(
@@ -40,10 +48,11 @@ const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    onClose();
   };
 
   const handleAddProduct = async (
@@ -91,6 +100,11 @@ const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
         return;
       }
 
+      // Abort if another offer is open.
+      if (viewingOffer) {
+        return;
+      }
+
       // Works on mouse exiting window and user switching active program.
       const from = event.relatedTarget || event.toElement;
 
@@ -121,7 +135,7 @@ const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
         openPopup();
       }
     },
-    [offer, offerId, offeredProducts, offerViewed, trackOfferImpression] // eslint-disable-line react-hooks/exhaustive-deps
+    [offer, offerId, offerViewed, openPopup, viewingOffer] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   // Reference: https://stackoverflow.com/a/56858467/83897
@@ -207,7 +221,16 @@ const ExitIntentOffer = ({ offer, popupTheme, offeredProducts }) => {
 ExitIntentOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.array.isRequired
+  offeredProducts: PropTypes.array.isRequired,
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+ExitIntentOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default ExitIntentOffer;

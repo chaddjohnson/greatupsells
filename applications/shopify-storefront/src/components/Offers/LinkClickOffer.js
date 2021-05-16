@@ -28,7 +28,14 @@ if (!Element.prototype.closest) {
 
 const loadedAt = new Date();
 
-const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
+const LinkClickOffer = ({
+  offer,
+  popupTheme,
+  offeredProducts,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
@@ -44,6 +51,7 @@ const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const offeredShopifyProductIds = offeredProducts.map(
@@ -61,7 +69,7 @@ const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleAddProduct = async (
     shopifyProductId,
@@ -105,6 +113,11 @@ const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
         return;
       }
 
+      // Abort if another offer is open.
+      if (viewingOffer) {
+        return;
+      }
+
       let target = event.target || event.srcElement;
       let href = '';
       let isExternal = false;
@@ -142,13 +155,14 @@ const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
       // Finally, open the popup.
       openPopup();
     },
-    [offer, offerId, offerViewed, openPopup]
+    [offer, offerId, offerViewed, openPopup, viewingOffer]
   );
 
   const handleClosePopup = () => {
     let newWindow = null;
 
     setPopupOpen(false);
+    onClose();
 
     // Redirect to the original link URL after closing the popup.
     if (linkUrl && !openLinkInNewWindow) {
@@ -200,7 +214,16 @@ const LinkClickOffer = ({ offer, popupTheme, offeredProducts }) => {
 LinkClickOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.array.isRequired
+  offeredProducts: PropTypes.array.isRequired,
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+LinkClickOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default LinkClickOffer;

@@ -9,7 +9,14 @@ import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
 const loadedAt = new Date();
 
-const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
+const PageScrollOffer = ({
+  offer,
+  popupTheme,
+  offeredProducts,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(
@@ -26,6 +33,7 @@ const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const offeredShopifyProductIds = offeredProducts.map(
@@ -43,10 +51,11 @@ const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    onClose();
   };
 
   const handleAddProduct = async (
@@ -105,6 +114,11 @@ const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
       return;
     }
 
+    // Abort if another offer is open.
+    if (viewingOffer) {
+      return;
+    }
+
     // Ignore scroll up.
     if (scrollingUp) {
       return;
@@ -116,7 +130,7 @@ const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
     if (scrollPercentage >= triggerScrollThreshold / 100) {
       openPopup();
     }
-  }, [offer, offerId, offerViewed, openPopup]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to scroll events.
   useEventListener('scroll', handleScroll, true);
@@ -148,7 +162,16 @@ const PageScrollOffer = ({ offer, popupTheme, offeredProducts }) => {
 PageScrollOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.array.isRequired
+  offeredProducts: PropTypes.array.isRequired,
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+PageScrollOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default PageScrollOffer;

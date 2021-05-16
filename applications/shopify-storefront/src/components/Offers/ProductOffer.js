@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
@@ -12,7 +13,7 @@ import {
 const triggerEvent = 'ADD';
 const loadedAt = new Date();
 
-const ProductOffer = () => {
+const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
@@ -35,6 +36,7 @@ const ProductOffer = () => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const triggerShopifyProductId = triggerProduct.shopifyProductId;
@@ -54,12 +56,20 @@ const ProductOffer = () => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, triggerProduct, offeredProducts, trackOfferImpression]);
+  }, [
+    offer,
+    offerId,
+    triggerProduct,
+    offeredProducts,
+    trackOfferImpression,
+    onOpen
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
     setShopifyProductIds([]);
     setProductAdded(false);
+    onClose();
   };
 
   const handleAddProduct = async (
@@ -101,8 +111,13 @@ const ProductOffer = () => {
       return;
     }
 
+    // Abort if another offer is open.
+    if (viewingOffer) {
+      return;
+    }
+
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
 
   // Subscribe to product add events.
   useShopifyCartProductAddListener((addedProduct) => {
@@ -137,6 +152,18 @@ const ProductOffer = () => {
       onClose={handleClosePopup}
     />
   );
+};
+
+ProductOffer.propTypes = {
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+ProductOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default ProductOffer;

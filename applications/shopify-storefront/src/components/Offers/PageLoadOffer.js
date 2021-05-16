@@ -6,7 +6,14 @@ import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
 const loadedAt = new Date();
 
-const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
+const PageLoadOffer = ({
+  offer,
+  popupTheme,
+  offeredProducts,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
@@ -20,6 +27,7 @@ const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const offeredShopifyProductIds = offeredProducts.map(
@@ -37,10 +45,11 @@ const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    onClose();
   };
 
   const handleAddProduct = async (
@@ -88,11 +97,16 @@ const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
       return;
     }
 
+    // Abort if another offer is open.
+    if (viewingOffer) {
+      return;
+    }
+
     // NOTE: Path (`triggerPagePath`) is tested in the API when querying for a random offer.
     // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
 
   if (!offer || !shop) {
     return null;
@@ -115,7 +129,16 @@ const PageLoadOffer = ({ offer, popupTheme, offeredProducts }) => {
 PageLoadOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.array.isRequired
+  offeredProducts: PropTypes.array.isRequired,
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+PageLoadOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default PageLoadOffer;

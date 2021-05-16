@@ -9,7 +9,14 @@ import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
 
 const loadedAt = new Date();
 
-const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
+const LostBrowserFocusOffer = ({
+  offer,
+  popupTheme,
+  offeredProducts,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
@@ -23,6 +30,7 @@ const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
     const delay = (offer?.delaySeconds || 0) * 1000;
 
     setOfferViewed(true);
+    onOpen();
 
     setTimeout(async () => {
       const offeredShopifyProductIds = offeredProducts.map(
@@ -40,10 +48,11 @@ const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
         offeredShopifyVariantIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression]);
+  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+    onClose();
   };
 
   const handleAddProduct = async (
@@ -90,6 +99,11 @@ const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
       return;
     }
 
+    // Abort if another offer is open.
+    if (viewingOffer) {
+      return;
+    }
+
     openPopup();
   });
 
@@ -119,7 +133,16 @@ const LostBrowserFocusOffer = ({ offer, popupTheme, offeredProducts }) => {
 LostBrowserFocusOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.array.isRequired
+  offeredProducts: PropTypes.array.isRequired,
+  viewingOffer: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
+};
+
+LostBrowserFocusOffer.defaultProps = {
+  viewingOffer: false,
+  onOpen: () => {},
+  onClose: () => {}
 };
 
 export default LostBrowserFocusOffer;
