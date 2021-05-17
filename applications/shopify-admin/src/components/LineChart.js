@@ -93,9 +93,9 @@ const LineChart = ({
           const date = new Date(this.x);
           const month = date.toLocaleString('default', { month: 'long' });
 
-          return `<div style="font-weight: 500">${month} ${date.getDate()}</div><div style="margin-top: 5px">${
+          return `<div style="font-weight: 500">${month} ${date.getDate()}</div><div style="margin-top: 5px">${formatNumber(
             this.y
-          } ${(
+          )} ${(
             tooltipText ||
             (typeof title === 'string' && title) ||
             ''
