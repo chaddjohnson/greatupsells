@@ -10,7 +10,7 @@ export const ShopProvider = ({ children }) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
-  const { data: shop, error: shopError } = useSWR(
+  const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
     '/shop',
     httpClient.get.bind(httpClient),
     { revalidateOnFocus: false }
@@ -38,6 +38,7 @@ export const ShopProvider = ({ children }) => {
         shop,
         shopLoading,
         shopError,
+        fetchShop,
         saveShop
       }}
     >

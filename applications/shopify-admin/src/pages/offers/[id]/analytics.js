@@ -10,6 +10,7 @@ import {
   Banner,
   SkeletonPage
 } from '@shopify/polaris';
+import moment from 'moment-timezone';
 import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
@@ -72,11 +73,11 @@ const OfferAnalyticsPage = () => {
 
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const { formatNumber, formatPercentage } = useNumberFormatter(
-    locale,
-    countryCode,
-    currency
-  );
+  const {
+    formatNumber,
+    formatCurrency,
+    formatPercentage
+  } = useNumberFormatter({ locale, countryCode, currency });
   const { offer } = useOffer(offerId);
   const {
     offerAcceptances,
@@ -92,7 +93,7 @@ const OfferAnalyticsPage = () => {
     () =>
       offerAcceptances &&
       offerAcceptances.map(({ date, acceptances }) => [
-        new Date(date).getTime(),
+        moment(date).startOf('day').valueOf(),
         acceptances
       ]),
     [offerAcceptances]
@@ -101,7 +102,7 @@ const OfferAnalyticsPage = () => {
     () =>
       offerConversions &&
       offerConversions.map(({ date, conversions }) => [
-        new Date(date).getTime(),
+        moment(date).startOf('day').valueOf(),
         conversions
       ]),
     [offerConversions]
@@ -110,7 +111,7 @@ const OfferAnalyticsPage = () => {
     () =>
       offerConversionRates &&
       offerConversionRates.map(({ date, conversionRate }) => [
-        new Date(date).getTime(),
+        moment(date).startOf('day').valueOf(),
         conversionRate
       ]),
     [offerConversionRates]
@@ -119,7 +120,7 @@ const OfferAnalyticsPage = () => {
     () =>
       offerRevenueIncreases &&
       offerRevenueIncreases.map(({ date, revenueIncrease }) => [
-        new Date(date).getTime(),
+        moment(date).startOf('day').valueOf(),
         revenueIncrease
       ]),
     [offerRevenueIncreases]
@@ -128,7 +129,7 @@ const OfferAnalyticsPage = () => {
     () =>
       offerImpressions &&
       offerImpressions.map(({ date, impressions }) => [
-        new Date(date).getTime(),
+        moment(date).startOf('day').valueOf(),
         impressions
       ]),
     [offerImpressions]
@@ -178,9 +179,11 @@ const OfferAnalyticsPage = () => {
                   title="Acceptances"
                   subtitle="Acceptances over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={formatNumber(85)}
-                  changePercentage={formatPercentage(0.01, 1)}
                   data={offerAcceptancesChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
                 />
               </Card>
               <Card sectioned>
@@ -188,9 +191,11 @@ const OfferAnalyticsPage = () => {
                   title="Impressions"
                   subtitle="Impressions over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={formatNumber(214)}
-                  changePercentage={formatPercentage(0.115, 1)}
                   data={offerImpressionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
                 />
               </Card>
               <Card sectioned>
@@ -198,9 +203,11 @@ const OfferAnalyticsPage = () => {
                   title="Conversion rate"
                   subtitle="Conversion rate over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={formatNumber(0.75)}
-                  changePercentage={formatPercentage(0.012, 1)}
                   data={offerConversionRatesChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
                 />
               </Card>
             </Layout.Section>
@@ -210,9 +217,11 @@ const OfferAnalyticsPage = () => {
                   title="Revenue increase"
                   subtitle="Revenue increase over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={'$364'}
-                  changePercentage={0.06}
                   data={offerRevenueIncreasesChartData}
+                  formatters={{
+                    number: formatCurrency,
+                    percentage: formatPercentage
+                  }}
                 />
               </Card>
               <Card sectioned>
@@ -220,9 +229,11 @@ const OfferAnalyticsPage = () => {
                   title="Conversions"
                   subtitle="Conversions over last 90 days"
                   rangeDescription="January to December"
-                  changeValue={14}
-                  changePercentage={0.04}
                   data={offerConversionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
                 />
               </Card>
             </Layout.Section>

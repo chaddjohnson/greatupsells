@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import noData from 'highcharts/modules/no-data-to-display';
 import {
   Stack,
   Heading,
@@ -10,16 +11,20 @@ import {
   TextStyle,
   Icon
 } from '@shopify/polaris';
-import { ArrowUpMinor } from '@shopify/polaris-icons';
+import { ArrowUpMinor, ArrowDownMinor } from '@shopify/polaris-icons';
+
+if (typeof window !== 'undefined') {
+  noData(Highcharts);
+}
 
 const LineChart = ({
   title,
   subtitle,
   rangeDescription,
-  changeValue,
-  changePercentage,
   tooltipText,
-  data
+  data,
+  emptyMessage,
+  formatters: { number: formatNumber, percentage: formatPercentage }
 }) => {
   const options = useMemo(
     () => ({
@@ -29,7 +34,7 @@ const LineChart = ({
       xAxis: {
         type: 'datetime',
         crosshair: {
-          color: 'rgba(155, 110, 219, 0.5)',
+          color: 'rgba(0, 128, 96, 0.5)',
           width: 3
         },
         accessibility: {
@@ -49,7 +54,7 @@ const LineChart = ({
           label: {
             connectorAllowed: false
           },
-          color: '#9C6ADE',
+          color: '#008060',
           lineWidth: 3,
           marker: {
             enabled: false
@@ -97,6 +102,16 @@ const LineChart = ({
           ).toLowerCase()}</div>`;
         }
       },
+      lang: {
+        noData: emptyMessage
+      },
+      noData: {
+        style: {
+          fontWeight: '400',
+          fontSize: '15px',
+          color: '#6D7175'
+        }
+      },
       exporting: {
         enabled: false
       },
@@ -104,8 +119,30 @@ const LineChart = ({
         enabled: false
       }
     }),
-    [title, rangeDescription, tooltipText, data]
+    [title, rangeDescription, tooltipText, data, emptyMessage]
   );
+
+  const changeValue = useMemo(() => {
+    if (!data?.length) {
+      return 0;
+    }
+
+    const latest = data[data.length - 1][1];
+    const earliest = data[0][1];
+
+    return latest - earliest;
+  }, [data]);
+
+  const changePercentage = useMemo(() => {
+    if (!data?.length) {
+      return 0;
+    }
+
+    const latest = data[data.length - 1][1];
+    const earliest = data[0][1];
+
+    return latest / earliest - 1;
+  }, [data]);
 
   return (
     <>
@@ -117,14 +154,26 @@ const LineChart = ({
             <Stack alignment="center" spacing="tight">
               {changeValue && (
                 <DisplayText size="medium" element="div">
-                  {changeValue}
+                  {formatNumber(changeValue)}
                 </DisplayText>
               )}
-              {changePercentage && (
+              {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
                 <DisplayText size="small" element="div">
                   <Stack spacing="none" alignment="center">
-                    <Icon source={ArrowUpMinor} color="green" />
-                    <span style={{ color: '#50b83c' }}>{changePercentage}</span>
+                    <Icon source={ArrowUpMinor} color="success" />
+                    <TextStyle variation="positive">
+                      {formatPercentage(changePercentage, 0)}
+                    </TextStyle>
+                  </Stack>
+                </DisplayText>
+              )}
+              {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
+                <DisplayText size="small" element="div">
+                  <Stack spacing="none" alignment="center">
+                    <Icon source={ArrowDownMinor} color="critical" />
+                    <TextStyle variation="negative">
+                      {formatPercentage(changePercentage, 0)}
+                    </TextStyle>
                   </Stack>
                 </DisplayText>
               )}
@@ -146,14 +195,23 @@ LineChart.propTypes = {
   title: PropTypes.node.isRequired,
   subtitle: PropTypes.node,
   rangeDescription: PropTypes.node,
-  changeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  changePercentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  changeValueFormatter: PropTypes.func,
   tooltipText: PropTypes.string,
-  data: PropTypes.array
+  data: PropTypes.array,
+  emptyMessage: PropTypes.string,
+  formatters: PropTypes.shape({
+    number: PropTypes.func,
+    percentage: PropTypes.func
+  })
 };
 
 LineChart.defaultProps = {
-  data: []
+  data: [],
+  emptyMessage: 'No data available.',
+  formatters: {
+    number: (value) => value,
+    percentage: (value) => `${value}%`
+  }
 };
 
 export default LineChart;

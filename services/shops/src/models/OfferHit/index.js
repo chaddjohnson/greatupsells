@@ -3,6 +3,7 @@ const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const findImpressionsByOfferId = require('./findImpressionsByOfferId');
 const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
+const findAcceptancesByShopId = require('./findAcceptancesByShopId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
 const findConversionsByOfferId = require('./findConversionsByOfferId');
 const findConversionRatesByOfferId = require('./findConversionRatesByOfferId');
@@ -97,6 +98,10 @@ schema.statics.findImpressionsByOfferId = function (offerId, startAt, endAt) {
 
 schema.statics.findAcceptancesByOfferId = function (offerId, startAt, endAt) {
   return findAcceptancesByOfferId(offerId, startAt, endAt);
+};
+
+schema.statics.findAcceptancesByShopId = function (shopId, startAt, endAt) {
+  return findAcceptancesByShopId(shopId, startAt, endAt);
 };
 
 schema.statics.findRevenueIncreasesByOfferId = function (

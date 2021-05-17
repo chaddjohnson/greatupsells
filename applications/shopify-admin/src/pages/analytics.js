@@ -10,6 +10,7 @@ import {
   TextStyle
 } from '@shopify/polaris';
 import { CalendarMajor } from '@shopify/polaris-icons';
+import moment from 'moment-timezone';
 import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { useShop } from '../hooks';
 import { TitleBar, LineChart } from '../components';
@@ -18,132 +19,132 @@ const PageTitleBar = memo(() => <TitleBar title="Analytics" />);
 
 const data = {
   acceptedOffers: [
-    [new Date('6/1/2020').getTime(), 91],
-    [new Date('6/2/2020').getTime(), 33],
-    [new Date('6/3/2020').getTime(), 72],
-    [new Date('6/4/2020').getTime(), 35],
-    [new Date('6/5/2020').getTime(), 187],
-    [new Date('6/6/2020').getTime(), 180],
-    [new Date('6/7/2020').getTime(), 160],
-    [new Date('6/8/2020').getTime(), 21],
-    [new Date('6/9/2020').getTime(), 101],
-    [new Date('6/10/2020').getTime(), 113],
-    [new Date('6/11/2020').getTime(), 97],
-    [new Date('6/12/2020').getTime(), 43],
-    [new Date('6/13/2020').getTime(), 30],
-    [new Date('6/14/2020').getTime(), 75],
-    [new Date('6/15/2020').getTime(), 87],
-    [new Date('6/16/2020').getTime(), 118],
-    [new Date('6/17/2020').getTime(), 159],
-    [new Date('6/18/2020').getTime(), 180],
-    [new Date('6/19/2020').getTime(), 146],
-    [new Date('6/20/2020').getTime(), 166],
-    [new Date('6/21/2020').getTime(), 192],
-    [new Date('6/22/2020').getTime(), 116],
-    [new Date('6/23/2020').getTime(), 193],
-    [new Date('6/24/2020').getTime(), 121],
-    [new Date('6/25/2020').getTime(), 28],
-    [new Date('6/26/2020').getTime(), 83],
-    [new Date('6/27/2020').getTime(), 66],
-    [new Date('6/28/2020').getTime(), 66],
-    [new Date('6/29/2020').getTime(), 7],
-    [new Date('6/30/2020').getTime(), 171]
+    [moment('2020-06-01').startOf('day').valueOf(), 91],
+    [moment('2020-06-02').startOf('day').valueOf(), 33],
+    [moment('2020-06-03').startOf('day').valueOf(), 72],
+    [moment('2020-06-04').startOf('day').valueOf(), 35],
+    [moment('2020-06-05').startOf('day').valueOf(), 187],
+    [moment('2020-06-06').startOf('day').valueOf(), 180],
+    [moment('2020-06-07').startOf('day').valueOf(), 160],
+    [moment('2020-06-08').startOf('day').valueOf(), 21],
+    [moment('2020-06-09').startOf('day').valueOf(), 101],
+    [moment('2020-06-10').startOf('day').valueOf(), 113],
+    [moment('2020-06-11').startOf('day').valueOf(), 97],
+    [moment('2020-06-12').startOf('day').valueOf(), 43],
+    [moment('2020-06-13').startOf('day').valueOf(), 30],
+    [moment('2020-06-14').startOf('day').valueOf(), 75],
+    [moment('2020-06-15').startOf('day').valueOf(), 87],
+    [moment('2020-06-16').startOf('day').valueOf(), 118],
+    [moment('2020-06-17').startOf('day').valueOf(), 159],
+    [moment('2020-06-18').startOf('day').valueOf(), 180],
+    [moment('2020-06-19').startOf('day').valueOf(), 146],
+    [moment('2020-06-20').startOf('day').valueOf(), 166],
+    [moment('2020-06-21').startOf('day').valueOf(), 192],
+    [moment('2020-06-22').startOf('day').valueOf(), 116],
+    [moment('2020-06-23').startOf('day').valueOf(), 193],
+    [moment('2020-06-24').startOf('day').valueOf(), 121],
+    [moment('2020-06-25').startOf('day').valueOf(), 28],
+    [moment('2020-06-26').startOf('day').valueOf(), 83],
+    [moment('2020-06-27').startOf('day').valueOf(), 66],
+    [moment('2020-06-28').startOf('day').valueOf(), 66],
+    [moment('2020-06-29').startOf('day').valueOf(), 7],
+    [moment('2020-06-30').startOf('day').valueOf(), 171]
   ],
   revenueIncrease: [
-    [new Date('6/1/2020').getTime(), 90],
-    [new Date('6/2/2020').getTime(), 162],
-    [new Date('6/3/2020').getTime(), 153],
-    [new Date('6/4/2020').getTime(), 82],
-    [new Date('6/5/2020').getTime(), 166],
-    [new Date('6/6/2020').getTime(), 100],
-    [new Date('6/7/2020').getTime(), 146],
-    [new Date('6/8/2020').getTime(), 61],
-    [new Date('6/9/2020').getTime(), 163],
-    [new Date('6/10/2020').getTime(), 168],
-    [new Date('6/11/2020').getTime(), 127],
-    [new Date('6/12/2020').getTime(), 1],
-    [new Date('6/13/2020').getTime(), 191],
-    [new Date('6/14/2020').getTime(), 96],
-    [new Date('6/15/2020').getTime(), 1],
-    [new Date('6/16/2020').getTime(), 141],
-    [new Date('6/17/2020').getTime(), 151],
-    [new Date('6/18/2020').getTime(), 167],
-    [new Date('6/19/2020').getTime(), 73],
-    [new Date('6/20/2020').getTime(), 116],
-    [new Date('6/21/2020').getTime(), 193],
-    [new Date('6/22/2020').getTime(), 107],
-    [new Date('6/23/2020').getTime(), 59],
-    [new Date('6/24/2020').getTime(), 21],
-    [new Date('6/25/2020').getTime(), 124],
-    [new Date('6/26/2020').getTime(), 171],
-    [new Date('6/27/2020').getTime(), 11],
-    [new Date('6/28/2020').getTime(), 37],
-    [new Date('6/29/2020').getTime(), 46],
-    [new Date('6/30/2020').getTime(), 82]
+    [moment('2020-06-01').startOf('day').valueOf(), 90],
+    [moment('2020-06-02').startOf('day').valueOf(), 162],
+    [moment('2020-06-03').startOf('day').valueOf(), 153],
+    [moment('2020-06-04').startOf('day').valueOf(), 82],
+    [moment('2020-06-05').startOf('day').valueOf(), 166],
+    [moment('2020-06-06').startOf('day').valueOf(), 100],
+    [moment('2020-06-07').startOf('day').valueOf(), 146],
+    [moment('2020-06-08').startOf('day').valueOf(), 61],
+    [moment('2020-06-09').startOf('day').valueOf(), 163],
+    [moment('2020-06-10').startOf('day').valueOf(), 168],
+    [moment('2020-06-11').startOf('day').valueOf(), 127],
+    [moment('2020-06-12').startOf('day').valueOf(), 1],
+    [moment('2020-06-13').startOf('day').valueOf(), 191],
+    [moment('2020-06-14').startOf('day').valueOf(), 96],
+    [moment('2020-06-15').startOf('day').valueOf(), 1],
+    [moment('2020-06-16').startOf('day').valueOf(), 141],
+    [moment('2020-06-17').startOf('day').valueOf(), 151],
+    [moment('2020-06-18').startOf('day').valueOf(), 167],
+    [moment('2020-06-19').startOf('day').valueOf(), 73],
+    [moment('2020-06-20').startOf('day').valueOf(), 116],
+    [moment('2020-06-21').startOf('day').valueOf(), 193],
+    [moment('2020-06-22').startOf('day').valueOf(), 107],
+    [moment('2020-06-23').startOf('day').valueOf(), 59],
+    [moment('2020-06-24').startOf('day').valueOf(), 21],
+    [moment('2020-06-25').startOf('day').valueOf(), 124],
+    [moment('2020-06-26').startOf('day').valueOf(), 171],
+    [moment('2020-06-27').startOf('day').valueOf(), 11],
+    [moment('2020-06-28').startOf('day').valueOf(), 37],
+    [moment('2020-06-29').startOf('day').valueOf(), 46],
+    [moment('2020-06-30').startOf('day').valueOf(), 82]
   ],
   impressions: [
-    [new Date('6/1/2020').getTime(), 17],
-    [new Date('6/2/2020').getTime(), 81],
-    [new Date('6/3/2020').getTime(), 188],
-    [new Date('6/4/2020').getTime(), 192],
-    [new Date('6/5/2020').getTime(), 5],
-    [new Date('6/6/2020').getTime(), 193],
-    [new Date('6/7/2020').getTime(), 42],
-    [new Date('6/8/2020').getTime(), 55],
-    [new Date('6/9/2020').getTime(), 112],
-    [new Date('6/10/2020').getTime(), 104],
-    [new Date('6/11/2020').getTime(), 174],
-    [new Date('6/12/2020').getTime(), 175],
-    [new Date('6/13/2020').getTime(), 76],
-    [new Date('6/14/2020').getTime(), 131],
-    [new Date('6/15/2020').getTime(), 30],
-    [new Date('6/16/2020').getTime(), 158],
-    [new Date('6/17/2020').getTime(), 72],
-    [new Date('6/18/2020').getTime(), 147],
-    [new Date('6/19/2020').getTime(), 165],
-    [new Date('6/20/2020').getTime(), 109],
-    [new Date('6/21/2020').getTime(), 100],
-    [new Date('6/22/2020').getTime(), 72],
-    [new Date('6/23/2020').getTime(), 163],
-    [new Date('6/24/2020').getTime(), 137],
-    [new Date('6/25/2020').getTime(), 99],
-    [new Date('6/26/2020').getTime(), 165],
-    [new Date('6/27/2020').getTime(), 126],
-    [new Date('6/28/2020').getTime(), 173],
-    [new Date('6/29/2020').getTime(), 172],
-    [new Date('6/30/2020').getTime(), 93]
+    [moment('2020-06-01').startOf('day').valueOf(), 17],
+    [moment('2020-06-02').startOf('day').valueOf(), 81],
+    [moment('2020-06-03').startOf('day').valueOf(), 188],
+    [moment('2020-06-04').startOf('day').valueOf(), 192],
+    [moment('2020-06-05').startOf('day').valueOf(), 5],
+    [moment('2020-06-06').startOf('day').valueOf(), 193],
+    [moment('2020-06-07').startOf('day').valueOf(), 42],
+    [moment('2020-06-08').startOf('day').valueOf(), 55],
+    [moment('2020-06-09').startOf('day').valueOf(), 112],
+    [moment('2020-06-10').startOf('day').valueOf(), 104],
+    [moment('2020-06-11').startOf('day').valueOf(), 174],
+    [moment('2020-06-12').startOf('day').valueOf(), 175],
+    [moment('2020-06-13').startOf('day').valueOf(), 76],
+    [moment('2020-06-14').startOf('day').valueOf(), 131],
+    [moment('2020-06-15').startOf('day').valueOf(), 30],
+    [moment('2020-06-16').startOf('day').valueOf(), 158],
+    [moment('2020-06-17').startOf('day').valueOf(), 72],
+    [moment('2020-06-18').startOf('day').valueOf(), 147],
+    [moment('2020-06-19').startOf('day').valueOf(), 165],
+    [moment('2020-06-20').startOf('day').valueOf(), 109],
+    [moment('2020-06-21').startOf('day').valueOf(), 100],
+    [moment('2020-06-22').startOf('day').valueOf(), 72],
+    [moment('2020-06-23').startOf('day').valueOf(), 163],
+    [moment('2020-06-24').startOf('day').valueOf(), 137],
+    [moment('2020-06-25').startOf('day').valueOf(), 99],
+    [moment('2020-06-26').startOf('day').valueOf(), 165],
+    [moment('2020-06-27').startOf('day').valueOf(), 126],
+    [moment('2020-06-28').startOf('day').valueOf(), 173],
+    [moment('2020-06-29').startOf('day').valueOf(), 172],
+    [moment('2020-06-30').startOf('day').valueOf(), 93]
   ],
   conversions: [
-    [new Date('6/1/2020').getTime(), 171],
-    [new Date('6/2/2020').getTime(), 195],
-    [new Date('6/3/2020').getTime(), 124],
-    [new Date('6/4/2020').getTime(), 27],
-    [new Date('6/5/2020').getTime(), 107],
-    [new Date('6/6/2020').getTime(), 124],
-    [new Date('6/7/2020').getTime(), 104],
-    [new Date('6/8/2020').getTime(), 53],
-    [new Date('6/9/2020').getTime(), 92],
-    [new Date('6/10/2020').getTime(), 185],
-    [new Date('6/11/2020').getTime(), 168],
-    [new Date('6/12/2020').getTime(), 146],
-    [new Date('6/13/2020').getTime(), 59],
-    [new Date('6/14/2020').getTime(), 25],
-    [new Date('6/15/2020').getTime(), 117],
-    [new Date('6/16/2020').getTime(), 144],
-    [new Date('6/17/2020').getTime(), 180],
-    [new Date('6/18/2020').getTime(), 41],
-    [new Date('6/19/2020').getTime(), 96],
-    [new Date('6/20/2020').getTime(), 59],
-    [new Date('6/21/2020').getTime(), 117],
-    [new Date('6/22/2020').getTime(), 69],
-    [new Date('6/23/2020').getTime(), 10],
-    [new Date('6/24/2020').getTime(), 95],
-    [new Date('6/25/2020').getTime(), 68],
-    [new Date('6/26/2020').getTime(), 99],
-    [new Date('6/27/2020').getTime(), 71],
-    [new Date('6/28/2020').getTime(), 74],
-    [new Date('6/29/2020').getTime(), 92],
-    [new Date('6/30/2020').getTime(), 16]
+    [moment('2020-06-01').startOf('day').valueOf(), 171],
+    [moment('2020-06-02').startOf('day').valueOf(), 195],
+    [moment('2020-06-03').startOf('day').valueOf(), 124],
+    [moment('2020-06-04').startOf('day').valueOf(), 27],
+    [moment('2020-06-05').startOf('day').valueOf(), 107],
+    [moment('2020-06-06').startOf('day').valueOf(), 124],
+    [moment('2020-06-07').startOf('day').valueOf(), 104],
+    [moment('2020-06-08').startOf('day').valueOf(), 53],
+    [moment('2020-06-09').startOf('day').valueOf(), 92],
+    [moment('2020-06-10').startOf('day').valueOf(), 185],
+    [moment('2020-06-11').startOf('day').valueOf(), 168],
+    [moment('2020-06-12').startOf('day').valueOf(), 146],
+    [moment('2020-06-13').startOf('day').valueOf(), 59],
+    [moment('2020-06-14').startOf('day').valueOf(), 25],
+    [moment('2020-06-15').startOf('day').valueOf(), 117],
+    [moment('2020-06-16').startOf('day').valueOf(), 144],
+    [moment('2020-06-17').startOf('day').valueOf(), 180],
+    [moment('2020-06-18').startOf('day').valueOf(), 41],
+    [moment('2020-06-19').startOf('day').valueOf(), 96],
+    [moment('2020-06-20').startOf('day').valueOf(), 59],
+    [moment('2020-06-21').startOf('day').valueOf(), 117],
+    [moment('2020-06-22').startOf('day').valueOf(), 69],
+    [moment('2020-06-23').startOf('day').valueOf(), 10],
+    [moment('2020-06-24').startOf('day').valueOf(), 95],
+    [moment('2020-06-25').startOf('day').valueOf(), 68],
+    [moment('2020-06-26').startOf('day').valueOf(), 99],
+    [moment('2020-06-27').startOf('day').valueOf(), 71],
+    [moment('2020-06-28').startOf('day').valueOf(), 74],
+    [moment('2020-06-29').startOf('day').valueOf(), 92],
+    [moment('2020-06-30').startOf('day').valueOf(), 16]
   ]
 };
 
@@ -192,9 +193,11 @@ const AnalyticsPage = () => {
                 title="Accepted offers"
                 subtitle="Accepted offers over last 90 days"
                 rangeDescription="January to December"
-                changeValue={formatNumber(85)}
-                changePercentage={formatPercentage(0.01, 1)}
                 data={data.acceptedOffers}
+                formatters={{
+                  number: formatNumber,
+                  percentage: formatPercentage
+                }}
               />
             </Card>
             <Card sectioned>
@@ -202,9 +205,11 @@ const AnalyticsPage = () => {
                 title="Offer impressions"
                 subtitle="Offer impressions over last 90 days"
                 rangeDescription="January to December"
-                changeValue={formatNumber(214)}
-                changePercentage={formatPercentage(0.116, 1)}
-                data={data.acceptedOffers}
+                data={data.impressions}
+                formatters={{
+                  number: formatNumber,
+                  percentage: formatPercentage
+                }}
               />
             </Card>
           </Layout.Section>
@@ -214,9 +219,11 @@ const AnalyticsPage = () => {
                 title="Revenue increase"
                 subtitle="Revenue increase over last 90 days"
                 rangeDescription="January to December"
-                changeValue={formatCurrency(364)}
-                changePercentage={formatPercentage(0.06, 1)}
                 data={data.revenueIncrease}
+                formatters={{
+                  number: formatCurrency,
+                  percentage: formatPercentage
+                }}
               />
             </Card>
             <Card sectioned>
@@ -224,9 +231,11 @@ const AnalyticsPage = () => {
                 title="Conversion rate"
                 subtitle="Conversion rate over last 90 days"
                 rangeDescription="January to December"
-                changeValue={formatNumber(14)}
-                changePercentage={formatPercentage(0.04, 1)}
-                data={data.acceptedOffers}
+                data={data.conversions}
+                formatters={{
+                  number: formatNumber,
+                  percentage: formatPercentage
+                }}
               />
             </Card>
           </Layout.Section>

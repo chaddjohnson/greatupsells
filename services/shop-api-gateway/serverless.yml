@@ -96,6 +96,18 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
+  findShopAcceptances:
+    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopAcceptances.handler
+    events:
+      - http:
+          path: /shop/acceptances
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
   findOfferAcceptances:
     role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler

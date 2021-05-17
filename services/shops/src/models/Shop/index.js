@@ -122,6 +122,12 @@ schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
 };
 
+schema.methods.findAcceptances = async function (startAt, endAt) {
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+
+  return OfferHit.findAcceptancesByShopId(this._id, startAt, endAt);
+};
+
 schema.methods.getShopifyApiClient = function () {
   return getShopifyApiClient(this);
 };

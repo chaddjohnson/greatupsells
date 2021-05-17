@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState, useMemo, useEffect } from 'react';
 import {
   Page,
   Layout,
@@ -17,51 +17,25 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import styled from 'styled-components';
+import moment from 'moment-timezone';
 import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { useShop } from '../hooks';
+import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 
 const Stats = styled.div`
   text-align: center;
 `;
 
-const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
+const TutorialsImage = styled.img`
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 200px;
+  margin: 1rem auto;
+`;
 
-const data = {
-  acceptedOffers: [
-    [new Date('6/1/2020').getTime(), 91],
-    [new Date('6/2/2020').getTime(), 33],
-    [new Date('6/3/2020').getTime(), 72],
-    [new Date('6/4/2020').getTime(), 35],
-    [new Date('6/5/2020').getTime(), 187],
-    [new Date('6/6/2020').getTime(), 180],
-    [new Date('6/7/2020').getTime(), 160],
-    [new Date('6/8/2020').getTime(), 21],
-    [new Date('6/9/2020').getTime(), 101],
-    [new Date('6/10/2020').getTime(), 113],
-    [new Date('6/11/2020').getTime(), 97],
-    [new Date('6/12/2020').getTime(), 43],
-    [new Date('6/13/2020').getTime(), 30],
-    [new Date('6/14/2020').getTime(), 75],
-    [new Date('6/15/2020').getTime(), 87],
-    [new Date('6/16/2020').getTime(), 118],
-    [new Date('6/17/2020').getTime(), 159],
-    [new Date('6/18/2020').getTime(), 180],
-    [new Date('6/19/2020').getTime(), 146],
-    [new Date('6/20/2020').getTime(), 166],
-    [new Date('6/21/2020').getTime(), 192],
-    [new Date('6/22/2020').getTime(), 116],
-    [new Date('6/23/2020').getTime(), 193],
-    [new Date('6/24/2020').getTime(), 121],
-    [new Date('6/25/2020').getTime(), 28],
-    [new Date('6/26/2020').getTime(), 83],
-    [new Date('6/27/2020').getTime(), 66],
-    [new Date('6/28/2020').getTime(), 66],
-    [new Date('6/29/2020').getTime(), 7],
-    [new Date('6/30/2020').getTime(), 171]
-  ]
-};
+const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
 
 const loadingComponent = () => (
   <SkeletonPage title="Overview dashboard">
@@ -89,13 +63,36 @@ const loadingComponent = () => (
 );
 
 const DashboardPage = () => {
-  const { shop, shopLoading, shopError } = useShop();
+  const [chartStartAt, setChartStartAt] = useState(
+    moment().subtract(90, 'days').toDate()
+  );
+  const [chartEndAt, setChartEndAt] = useState(new Date());
+
+  const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const {
+    shopAcceptances,
+    shopAcceptancesLoading,
+    shopAcceptancesError,
+    fetchShopAcceptances
+  } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
   const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
     formatCurrency,
     formatPercentage
   } = useNumberFormatter({ locale, countryCode, currency });
+
+  const shopAcceptancesChartData = useMemo(
+    () =>
+      shopAcceptances?.map(({ date, acceptances }) => [
+        moment(date).startOf('day').valueOf(),
+        acceptances
+      ]),
+    [shopAcceptances]
+  );
+
+  const loading = shopLoading || shopAcceptancesLoading;
+  const error = !!shopError || !!shopAcceptancesError;
 
   const errorComponent = memo(() => (
     <Page title="Overview dashboard">
@@ -112,10 +109,22 @@ const DashboardPage = () => {
     </Page>
   ));
 
+  // Refresh data at an interval.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchShop();
+      fetchShopAcceptances();
+    }, 30 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [fetchShop, fetchShopAcceptances]);
+
   return (
     <Loader
-      isLoading={shopLoading}
-      isError={!!shopError}
+      isLoading={loading}
+      isError={error}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
     >
@@ -125,7 +134,7 @@ const DashboardPage = () => {
           <Layout.Section>
             <Card sectioned>
               <Stats>
-                <Stack distribution="fillEvenly" wrap>
+                <Stack distribution="fillEvenly" alignment="trailing" wrap>
                   <Stack spacing="tight" vertical>
                     <DisplayText size="extraLarge">
                       {formatNumber(shop?.offerAcceptanceCount)}
@@ -169,10 +178,13 @@ const DashboardPage = () => {
                 }
                 subtitle="Offers over last 90 days"
                 rangeDescription="January to December"
-                changeValue={formatNumber(85)}
-                changePercentage={formatPercentage(0.01, 1)}
                 tooltipText="accepted offers"
-                data={data.acceptedOffers}
+                data={shopAcceptancesChartData}
+                emptyMessage="No acceptance data available."
+                formatters={{
+                  number: formatNumber,
+                  percentage: formatPercentage
+                }}
               />
             </Card>
           </Layout.Section>
@@ -199,16 +211,7 @@ const DashboardPage = () => {
               }}
               description="Learn how upselling and cross-selling can boost your sales and revenue."
             >
-              <img
-                alt="Tutorials"
-                width="100%"
-                height="100%"
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center'
-                }}
-                src="/images/tutorials.svg"
-              />
+              <TutorialsImage alt="Tutorials" src="/images/tutorials.svg" />
             </MediaCard>
           </Layout.Section>
         </Layout>

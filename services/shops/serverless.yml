@@ -113,6 +113,13 @@ functions:
           path: /popup-themes
           method: get
           authorizer: aws_iam
+  findShopAcceptances:
+    handler: src/routes/findShopAcceptances.handler
+    events:
+      - http:
+          path: /shops/{shopId}/acceptances
+          method: get
+          authorizer: aws_iam
   findOfferAcceptances:
     handler: src/routes/findOfferAcceptances.handler
     events:
