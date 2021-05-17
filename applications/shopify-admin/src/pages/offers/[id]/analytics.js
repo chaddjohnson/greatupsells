@@ -173,10 +173,10 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Acceptances"
-                  subtitle="Acceptances over last 90 days"
+                  title="Impressions"
+                  subtitle="Impressions over last 90 days"
                   rangeDescription="January to December"
-                  data={offerAcceptancesChartData}
+                  data={offerImpressionsChartData}
                   formatters={{
                     number: formatNumber,
                     percentage: formatPercentage
@@ -185,10 +185,10 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Impressions"
-                  subtitle="Impressions over last 90 days"
+                  title="Conversions"
+                  subtitle="Conversions over last 90 days"
                   rangeDescription="January to December"
-                  data={offerImpressionsChartData}
+                  data={offerConversionsChartData}
                   formatters={{
                     number: formatNumber,
                     percentage: formatPercentage
@@ -211,24 +211,24 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Revenue increase"
-                  subtitle="Revenue increase from offers over last 90 days"
+                  title="Acceptances"
+                  subtitle="Acceptances over last 90 days"
                   rangeDescription="January to December"
-                  data={offerRevenueIncreasesChartData}
+                  data={offerAcceptancesChartData}
                   formatters={{
-                    number: formatCurrency,
+                    number: formatNumber,
                     percentage: formatPercentage
                   }}
                 />
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversions"
-                  subtitle="Conversions over last 90 days"
+                  title="Revenue increase"
+                  subtitle="Revenue increase from offers over last 90 days"
                   rangeDescription="January to December"
-                  data={offerConversionsChartData}
+                  data={offerRevenueIncreasesChartData}
                   formatters={{
-                    number: formatNumber,
+                    number: formatCurrency,
                     percentage: formatPercentage
                   }}
                 />

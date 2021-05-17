@@ -92,7 +92,7 @@ const AnalyticsPage = () => {
   const {
     shopAcceptances,
     shopConversions,
-    // shopConversionRates,
+    shopConversionRates,
     shopRevenueIncreases,
     shopImpressions,
     shopAnalyticsLoading,
@@ -116,14 +116,14 @@ const AnalyticsPage = () => {
       ]),
     [shopConversions]
   );
-  // const shopConversionRatesChartData = useMemo(
-  //   () =>
-  //     shopConversionRates?.map(({ date, conversionRate }) => [
-  //       moment(date).startOf('day').valueOf(),
-  //       conversionRate
-  //     ]),
-  //   [shopConversionRates]
-  // );
+  const shopConversionRatesChartData = useMemo(
+    () =>
+      shopConversionRates?.map(({ date, conversionRate }) => [
+        moment(date).startOf('day').valueOf(),
+        conversionRate
+      ]),
+    [shopConversionRates]
+  );
   const shopRevenueIncreasesChartData = useMemo(
     () =>
       shopRevenueIncreases?.map(({ date, revenueIncrease }) => [
@@ -187,6 +187,44 @@ const AnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
+                  title="Offer impressions"
+                  subtitle="Offer impressions over last 90 days"
+                  rangeDescription="January to December"
+                  data={shopImpressionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversions"
+                  subtitle="Conversions over last 90 days"
+                  rangeDescription="January to December"
+                  data={shopConversionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversion rate"
+                  subtitle="Conversion rate over last 90 days"
+                  rangeDescription="January to December"
+                  data={shopConversionRatesChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
                   title="Accepted offers"
                   subtitle="Accepted offers over last 90 days"
                   rangeDescription="January to December"
@@ -199,38 +237,12 @@ const AnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Offer impressions"
-                  subtitle="Offer impressions over last 90 days"
-                  rangeDescription="January to December"
-                  data={shopImpressionsChartData}
-                  formatters={{
-                    number: formatNumber,
-                    percentage: formatPercentage
-                  }}
-                />
-              </Card>
-            </Layout.Section>
-            <Layout.Section oneHalf>
-              <Card sectioned>
-                <LineChart
                   title="Revenue increase"
                   subtitle="Revenue increase from offers over last 90 days"
                   rangeDescription="January to December"
                   data={shopRevenueIncreasesChartData}
                   formatters={{
                     number: formatCurrency,
-                    percentage: formatPercentage
-                  }}
-                />
-              </Card>
-              <Card sectioned>
-                <LineChart
-                  title="Conversion rate"
-                  subtitle="Conversion rate over last 90 days"
-                  rangeDescription="January to December"
-                  data={shopConversionsChartData}
-                  formatters={{
-                    number: formatNumber,
                     percentage: formatPercentage
                   }}
                 />
