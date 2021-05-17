@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
-const findImpressionsByOfferId = require('./findImpressionsByOfferId');
 const findAcceptancesByOfferId = require('./findAcceptancesByOfferId');
 const findAcceptancesByShopId = require('./findAcceptancesByShopId');
+const findImpressionsByOfferId = require('./findImpressionsByOfferId');
+const findImpressionsByShopId = require('./findImpressionsByShopId');
 const findRevenueIncreasesByOfferId = require('./findRevenueIncreasesByOfferId');
+const findRevenueIncreasesByShopId = require('./findRevenueIncreasesByShopId');
 const findConversionsByOfferId = require('./findConversionsByOfferId');
+const findConversionsByShopId = require('./findConversionsByShopId');
 const findConversionRatesByOfferId = require('./findConversionRatesByOfferId');
+const findConversionRatesByShopId = require('./findConversionRatesByShopId');
 const trackOfferedProducts = require('./trackOfferedProducts');
 const trackAcceptedProduct = require('./trackAcceptedProduct');
 const trackAcceptance = require('./trackAcceptance');
@@ -96,6 +100,10 @@ schema.statics.findImpressionsByOfferId = function (offerId, startAt, endAt) {
   return findImpressionsByOfferId(offerId, startAt, endAt);
 };
 
+schema.statics.findImpressionsByShopId = function (shopId, startAt, endAt) {
+  return findImpressionsByShopId(shopId, startAt, endAt);
+};
+
 schema.statics.findAcceptancesByOfferId = function (offerId, startAt, endAt) {
   return findAcceptancesByOfferId(offerId, startAt, endAt);
 };
@@ -112,8 +120,20 @@ schema.statics.findRevenueIncreasesByOfferId = function (
   return findRevenueIncreasesByOfferId(offerId, startAt, endAt);
 };
 
+schema.statics.findRevenueIncreasesByShopId = function (
+  shopId,
+  startAt,
+  endAt
+) {
+  return findRevenueIncreasesByShopId(shopId, startAt, endAt);
+};
+
 schema.statics.findConversionsByOfferId = function (offerId, startAt, endAt) {
   return findConversionsByOfferId(offerId, startAt, endAt);
+};
+
+schema.statics.findConversionsByShopId = function (shopId, startAt, endAt) {
+  return findConversionsByShopId(shopId, startAt, endAt);
 };
 
 schema.statics.findConversionRatesByOfferId = function (
@@ -122,6 +142,10 @@ schema.statics.findConversionRatesByOfferId = function (
   endAt
 ) {
   return findConversionRatesByOfferId(offerId, startAt, endAt);
+};
+
+schema.statics.findConversionRatesByShopId = function (shopId, startAt, endAt) {
+  return findConversionRatesByShopId(shopId, startAt, endAt);
 };
 
 schema.methods.trackOfferedProducts = function (
@@ -161,10 +185,10 @@ schema.methods.trackConversion = function (order) {
 //   hooks.preValidate(this, next);
 // });
 
+schema.index({ shop: 1 });
 schema.index({ offer: 1 });
-schema.index({ shop: 1, ipAddress: 1 });
-schema.index({ acceptedShopifyVariantId: 1 });
 schema.index({ order: 1 });
+schema.index({ acceptedShopifyVariantId: 1 });
 
 OfferHit = mongodbClient.connection.model('OfferHit', schema);
 

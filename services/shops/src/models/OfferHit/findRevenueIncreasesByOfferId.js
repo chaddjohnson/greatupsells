@@ -21,7 +21,10 @@ const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
     {
       $project: {
         date: {
-          $dateToString: { format: '%Y-%m-%d', date: '$convertedAt' }
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$convertedAt'
+          }
         },
         revenueIncrease: '$revenueIncrease'
       }

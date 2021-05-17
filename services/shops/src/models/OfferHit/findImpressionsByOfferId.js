@@ -20,7 +20,12 @@ const findImpressionsByOfferId = async (offerId, startAt, endAt) => {
     },
     {
       $project: {
-        date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }
+        date: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$createdAt'
+          }
+        }
       }
     },
     {

@@ -5,5 +5,6 @@ export { default as useDateFormatter } from './dateFormatter';
 export { default as useDocumentVisibility } from './documentVisibility';
 export { default as useEventListener } from './eventListener';
 export { default as useHttpRequestListener } from './httpRequestListener';
+export { default as useInterval } from './interval';
 export { default as useNumberFormatter } from './numberFormatter';
 export { default as usePushStateListener } from './pushStateListener';

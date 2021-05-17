@@ -152,7 +152,7 @@ const LineChart = ({
           {(typeof changeValue !== 'undefined' ||
             typeof changePercentage !== 'undefined') && (
             <Stack alignment="center" spacing="tight">
-              {changeValue && (
+              {typeof changeValue !== 'undefined' && (
                 <DisplayText size="medium" element="div">
                   {formatNumber(changeValue)}
                 </DisplayText>

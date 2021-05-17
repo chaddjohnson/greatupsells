@@ -63,12 +63,29 @@ const loadingComponent = () => (
   </>
 );
 
+const errorComponent = memo(() => (
+  <Page fullWidth>
+    <Banner
+      title="Unable to load analytics"
+      status="critical"
+      action={{
+        content: 'Try again',
+        onAction: () => window.location.reload()
+      }}
+    >
+      Unable to load offer. Please try again shortly.
+    </Banner>
+  </Page>
+));
+
 const OfferAnalyticsPage = () => {
   // TODO: Remove hardcoding.
   const offerId = '5f0f49a53058fb0e19df8358';
-  const startAt = new Date('2020-08-01T12:00:00.000+0000');
-  const endAt = new Date('2020-08-30T12:00:00.000+0000');
 
+  const [chartStartAt, setChartStartAt] = useState(
+    moment().subtract(90, 'days').toDate()
+  );
+  const [chartEndAt, setChartEndAt] = useState(new Date());
   const [datePickerActive, setDatePickerActive] = useState(false);
 
   const { shop } = useShop();
@@ -87,12 +104,11 @@ const OfferAnalyticsPage = () => {
     offerImpressions,
     offerAnalyticsLoading,
     offerAnalyticsError
-  } = useOfferAnalytics(offerId, startAt, endAt);
+  } = useOfferAnalytics(offerId, chartStartAt, chartEndAt);
 
   const offerAcceptancesChartData = useMemo(
     () =>
-      offerAcceptances &&
-      offerAcceptances.map(({ date, acceptances }) => [
+      offerAcceptances?.map(({ date, acceptances }) => [
         moment(date).startOf('day').valueOf(),
         acceptances
       ]),
@@ -100,8 +116,7 @@ const OfferAnalyticsPage = () => {
   );
   const offerConversionsChartData = useMemo(
     () =>
-      offerConversions &&
-      offerConversions.map(({ date, conversions }) => [
+      offerConversions?.map(({ date, conversions }) => [
         moment(date).startOf('day').valueOf(),
         conversions
       ]),
@@ -109,8 +124,7 @@ const OfferAnalyticsPage = () => {
   );
   const offerConversionRatesChartData = useMemo(
     () =>
-      offerConversionRates &&
-      offerConversionRates.map(({ date, conversionRate }) => [
+      offerConversionRates?.map(({ date, conversionRate }) => [
         moment(date).startOf('day').valueOf(),
         conversionRate
       ]),
@@ -118,8 +132,7 @@ const OfferAnalyticsPage = () => {
   );
   const offerRevenueIncreasesChartData = useMemo(
     () =>
-      offerRevenueIncreases &&
-      offerRevenueIncreases.map(({ date, revenueIncrease }) => [
+      offerRevenueIncreases?.map(({ date, revenueIncrease }) => [
         moment(date).startOf('day').valueOf(),
         revenueIncrease
       ]),
@@ -127,28 +140,12 @@ const OfferAnalyticsPage = () => {
   );
   const offerImpressionsChartData = useMemo(
     () =>
-      offerImpressions &&
-      offerImpressions.map(({ date, impressions }) => [
+      offerImpressions?.map(({ date, impressions }) => [
         moment(date).startOf('day').valueOf(),
         impressions
       ]),
     [offerImpressions]
   );
-
-  const errorComponent = memo(() => (
-    <Page fullWidth>
-      <Banner
-        title="Unable to load analytics"
-        status="critical"
-        action={{
-          content: 'Try again',
-          onAction: () => window.location.reload()
-        }}
-      >
-        Unable to load offer. Please try again shortly.
-      </Banner>
-    </Page>
-  ));
 
   return (
     <Loader

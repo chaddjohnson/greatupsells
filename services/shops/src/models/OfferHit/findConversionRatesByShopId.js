@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
-const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
-  if (typeof offerId !== 'object') {
-    offerId = mongoose.Types.ObjectId(offerId);
+const findConversionRatesByShopId = async (shopId, startAt, endAt) => {
+  if (typeof shopId !== 'object') {
+    shopId = mongoose.Types.ObjectId(shopId);
   }
 
   const OfferHit = mongodbClient.connection.model('OfferHit');
   const pipelines = [
     {
       $match: {
-        offer: offerId,
+        shop: shopId,
         $or: [
           {
             createdAt: {
@@ -65,4 +65,4 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
   return results;
 };
 
-module.exports = findConversionRatesByOfferId;
+module.exports = findConversionRatesByShopId;

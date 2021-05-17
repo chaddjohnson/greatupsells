@@ -50,8 +50,8 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     offerRevenueIncreasesError ||
     offerImpressionsError;
 
-  const fetchAnalytics = async () => {
-    return Promise.allSettled([
+  const fetchOfferAnalytics = async () => {
+    return await Promise.all([
       fetchOfferAcceptances(),
       fetchOfferConversions(),
       fetchOfferConversionRates(),
@@ -68,7 +68,7 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     offerImpressions,
     offerAnalyticsLoading,
     offerAnalyticsError,
-    fetchAnalytics
+    fetchOfferAnalytics
   };
 };
 

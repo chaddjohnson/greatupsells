@@ -122,10 +122,34 @@ schema.methods.findRecentOfferHit = function (ipAddress) {
   return findRecentOfferHit(this, ipAddress);
 };
 
+schema.methods.findImpressions = async function (startAt, endAt) {
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+
+  return OfferHit.findImpressionsByShopId(this._id, startAt, endAt);
+};
+
 schema.methods.findAcceptances = async function (startAt, endAt) {
   const OfferHit = mongodbClient.connection.model('OfferHit');
 
   return OfferHit.findAcceptancesByShopId(this._id, startAt, endAt);
+};
+
+schema.methods.findRevenueIncreases = async function (startAt, endAt) {
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+
+  return OfferHit.findRevenueIncreasesByShopId(this._id, startAt, endAt);
+};
+
+schema.methods.findConversions = async function (startAt, endAt) {
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+
+  return OfferHit.findConversionsByShopId(this._id, startAt, endAt);
+};
+
+schema.methods.findConversionRates = async function (startAt, endAt) {
+  const OfferHit = mongodbClient.connection.model('OfferHit');
+
+  return OfferHit.findConversionRatesByShopId(this._id, startAt, endAt);
 };
 
 schema.methods.getShopifyApiClient = function () {

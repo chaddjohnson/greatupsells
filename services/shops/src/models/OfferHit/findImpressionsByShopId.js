@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
-const findConversionsByOfferId = async (offerId, startAt, endAt) => {
-  if (typeof offerId !== 'object') {
-    offerId = mongoose.Types.ObjectId(offerId);
+const findImpressionsByShopId = async (shopId, startAt, endAt) => {
+  if (typeof shopId !== 'object') {
+    shopId = mongoose.Types.ObjectId(shopId);
   }
 
   const OfferHit = mongodbClient.connection.model('OfferHit');
   const pipelines = [
     {
       $match: {
-        offer: offerId,
-        convertedAt: {
+        shop: shopId,
+        createdAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
         }
@@ -23,7 +23,7 @@ const findConversionsByOfferId = async (offerId, startAt, endAt) => {
         date: {
           $dateToString: {
             format: '%Y-%m-%d',
-            date: '$convertedAt'
+            date: '$createdAt'
           }
         }
       }
@@ -31,13 +31,13 @@ const findConversionsByOfferId = async (offerId, startAt, endAt) => {
     {
       $group: {
         _id: { date: '$date' },
-        conversions: { $sum: 1 }
+        impressions: { $sum: 1 }
       }
     },
     {
       $project: {
         date: '$_id.date',
-        conversions: '$conversions'
+        impressions: '$impressions'
       }
     }
   ];
@@ -45,10 +45,10 @@ const findConversionsByOfferId = async (offerId, startAt, endAt) => {
 
   results = await OfferHit.aggregate(pipelines);
   results =
-    results.map(({ date, conversions }) => ({ date, conversions })) || [];
+    results.map(({ date, impressions }) => ({ date, impressions })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
 
   return results;
 };
 
-module.exports = findConversionsByOfferId;
+module.exports = findImpressionsByShopId;

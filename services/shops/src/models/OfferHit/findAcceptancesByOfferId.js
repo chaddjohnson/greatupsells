@@ -20,7 +20,12 @@ const findAcceptancesByOfferId = async (offerId, startAt, endAt) => {
     },
     {
       $project: {
-        date: { $dateToString: { format: '%Y-%m-%d', date: '$acceptedAt' } }
+        date: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$acceptedAt'
+          }
+        }
       }
     },
     {

@@ -1,4 +1,4 @@
-import { memo, useState, useMemo, useEffect } from 'react';
+import { memo, useState, useMemo } from 'react';
 import {
   Page,
   Layout,
@@ -18,7 +18,10 @@ import {
 } from '@shopify/polaris';
 import styled from 'styled-components';
 import moment from 'moment-timezone';
-import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useNumberFormatter,
+  useInterval
+} from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
@@ -69,18 +72,18 @@ const DashboardPage = () => {
   const [chartEndAt, setChartEndAt] = useState(new Date());
 
   const { shop, shopLoading, shopError, fetchShop } = useShop();
-  const {
-    shopAcceptances,
-    shopAcceptancesLoading,
-    shopAcceptancesError,
-    fetchShopAcceptances
-  } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
   const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
     formatCurrency,
     formatPercentage
   } = useNumberFormatter({ locale, countryCode, currency });
+  const {
+    shopAcceptances,
+    shopAcceptancesLoading,
+    shopAcceptancesError,
+    fetchShopAcceptances
+  } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
 
   const shopAcceptancesChartData = useMemo(
     () =>
@@ -110,16 +113,10 @@ const DashboardPage = () => {
   ));
 
   // Refresh data at an interval.
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchShop();
-      fetchShopAcceptances();
-    }, 30 * 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [fetchShop, fetchShopAcceptances]);
+  useInterval(() => {
+    fetchShop();
+    fetchShopAcceptances();
+  }, 30);
 
   return (
     <Loader

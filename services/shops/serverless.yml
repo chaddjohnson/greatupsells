@@ -106,20 +106,6 @@ functions:
           path: /products/{productId}
           method: delete
           authorizer: aws_iam
-  findPopupThemes:
-    handler: src/routes/findPopupThemes.handler
-    events:
-      - http:
-          path: /popup-themes
-          method: get
-          authorizer: aws_iam
-  findShopAcceptances:
-    handler: src/routes/findShopAcceptances.handler
-    events:
-      - http:
-          path: /shops/{shopId}/acceptances
-          method: get
-          authorizer: aws_iam
   findOfferAcceptances:
     handler: src/routes/findOfferAcceptances.handler
     events:
@@ -134,18 +120,18 @@ functions:
           path: /offers/{offerId}/conversion-rates
           method: get
           authorizer: aws_iam
+  findOfferImpressions:
+    handler: src/routes/findOfferImpressions.handler
+    events:
+      - http:
+          path: /offers/{offerId}/impressions
+          method: get
+          authorizer: aws_iam
   findOfferConversions:
     handler: src/routes/findOfferConversions.handler
     events:
       - http:
           path: /offers/{offerId}/conversions
-          method: get
-          authorizer: aws_iam
-  findOfferPopupThemes:
-    handler: src/routes/findOfferPopupThemes.handler
-    events:
-      - http:
-          path: /offers/{offerId}/popup-themes
           method: get
           authorizer: aws_iam
   findOfferRevenueIncreases:
@@ -155,18 +141,60 @@ functions:
           path: /offers/{offerId}/revenue-increases
           method: get
           authorizer: aws_iam
+  findPopupThemes:
+    handler: src/routes/findPopupThemes.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: get
+          authorizer: aws_iam
+  findShopAcceptances:
+    handler: src/routes/findShopAcceptances.handler
+    events:
+      - http:
+          path: /shops/{shopId}/acceptances
+          method: get
+          authorizer: aws_iam
+  findShopConversionRates:
+    handler: src/routes/findShopConversionRates.handler
+    events:
+      - http:
+          path: /shops/{shopId}/conversion-rates
+          method: get
+          authorizer: aws_iam
+  findShopConversions:
+    handler: src/routes/findShopConversions.handler
+    events:
+      - http:
+          path: /shops/{shopId}/conversions
+          method: get
+          authorizer: aws_iam
+  findShopImpressions:
+    handler: src/routes/findShopImpressions.handler
+    events:
+      - http:
+          path: /shops/{shopId}/impressions
+          method: get
+          authorizer: aws_iam
+  findShopRevenueIncreases:
+    handler: src/routes/findShopRevenueIncreases.handler
+    events:
+      - http:
+          path: /shops/{shopId}/revenue-increases
+          method: get
+          authorizer: aws_iam
+  findOfferPopupThemes:
+    handler: src/routes/findOfferPopupThemes.handler
+    events:
+      - http:
+          path: /offers/{offerId}/popup-themes
+          method: get
+          authorizer: aws_iam
   findOffers:
     handler: src/routes/findOffers.handler
     events:
       - http:
           path: /offers
-          method: get
-          authorizer: aws_iam
-  findOfferImpressions:
-    handler: src/routes/findOfferImpressions.handler
-    events:
-      - http:
-          path: /offers/{offerId}/impressions
           method: get
           authorizer: aws_iam
   findOneCollectionByShopifyCollectionId:
