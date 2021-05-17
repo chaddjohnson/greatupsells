@@ -212,7 +212,7 @@ const OfferAnalyticsPage = () => {
               <Card sectioned>
                 <LineChart
                   title="Revenue increase"
-                  subtitle="Revenue increase over last 90 days"
+                  subtitle="Revenue increase from offers over last 90 days"
                   rangeDescription="January to December"
                   data={offerRevenueIncreasesChartData}
                   formatters={{
