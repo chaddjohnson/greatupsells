@@ -173,7 +173,7 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Impressions"
+                  title="Impressions growth"
                   subtitle="Impressions over last 90 days"
                   rangeDescription="January to December"
                   data={offerImpressionsChartData}
@@ -185,7 +185,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversions"
+                  title="Conversions growth"
                   subtitle="Conversions over last 90 days"
                   rangeDescription="January to December"
                   data={offerConversionsChartData}
@@ -197,7 +197,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversion rate"
+                  title="Conversion rate growth"
                   subtitle="Conversion rate over last 90 days"
                   rangeDescription="January to December"
                   data={offerConversionRatesChartData}
@@ -211,7 +211,7 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Acceptances"
+                  title="Acceptances growth"
                   subtitle="Acceptances over last 90 days"
                   rangeDescription="January to December"
                   data={offerAcceptancesChartData}
@@ -223,7 +223,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Revenue increase"
+                  title="Revenue increase growth"
                   subtitle="Revenue increase from offers over last 90 days"
                   rangeDescription="January to December"
                   data={offerRevenueIncreasesChartData}
