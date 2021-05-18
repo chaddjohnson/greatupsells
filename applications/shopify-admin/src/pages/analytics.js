@@ -189,6 +189,7 @@ const AnalyticsPage = () => {
                 <LineChart
                   title="Offer impressions growth"
                   subtitle="Offer impressions over last 90 days"
+                  tooltipText="offer impressions"
                   rangeDescription="January to December"
                   data={shopImpressionsChartData}
                   formatters={{
@@ -201,6 +202,7 @@ const AnalyticsPage = () => {
                 <LineChart
                   title="Conversions growth"
                   subtitle="Conversions over last 90 days"
+                  tooltipText="conversions"
                   rangeDescription="January to December"
                   data={shopConversionsChartData}
                   formatters={{
@@ -213,6 +215,7 @@ const AnalyticsPage = () => {
                 <LineChart
                   title="Conversion rate growth"
                   subtitle="Conversion rate over last 90 days"
+                  tooltipText="conversion rate"
                   rangeDescription="January to December"
                   data={shopConversionRatesChartData}
                   formatters={{
@@ -227,6 +230,7 @@ const AnalyticsPage = () => {
                 <LineChart
                   title="Accepted offers growth"
                   subtitle="Accepted offers over last 90 days"
+                  tooltipText="accepted offers"
                   rangeDescription="January to December"
                   data={shopAcceptancesChartData}
                   formatters={{
@@ -239,6 +243,7 @@ const AnalyticsPage = () => {
                 <LineChart
                   title="Revenue increase growth"
                   subtitle="Revenue increase from offers over last 90 days"
+                  tooltipText="revenue increase from offers"
                   rangeDescription="January to December"
                   data={shopRevenueIncreasesChartData}
                   formatters={{
