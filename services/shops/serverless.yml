@@ -321,6 +321,13 @@ functions:
           path: /offers/{offerId}
           method: put
           authorizer: aws_iam
+  updateOrder:
+    handler: src/routes/updateOrder.handler
+    events:
+      - http:
+          path: /orders/{orderId}
+          method: put
+          authorizer: aws_iam
   updatePopupTheme:
     handler: src/routes/updatePopupTheme.handler
     events:

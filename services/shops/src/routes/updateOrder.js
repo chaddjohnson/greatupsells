@@ -1,0 +1,45 @@
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const logger = require('@neatowebsolutions/upselling-logger');
+const models = require('../models');
+
+const handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  try {
+    const { orderId } = event.pathParameters;
+    const Order = await models.get('Order');
+    const order = await Order.findById(orderId);
+    const data = JSON.parse(event.body);
+
+    delete data.__v;
+    Object.assign(order, data);
+
+    try {
+      await order.validate();
+    } catch (error) {
+      return {
+        statusCode: StatusCodes.BAD_REQUEST,
+        body: ReasonPhrases.BAD_REQUEST
+      };
+    }
+
+    await order.save();
+    await order.execPopulate('shop');
+
+    await logger.info(`Order updated (${order.toString()})`, order);
+
+    return {
+      statusCode: StatusCodes.OK,
+      body: JSON.stringify(order)
+    };
+  } catch (error) {
+    await logger.error(`Error updating order`, error, event);
+
+    return {
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      body: ReasonPhrases.INTERNAL_SERVER_ERROR
+    };
+  }
+};
+
+module.exports.handler = handler;
