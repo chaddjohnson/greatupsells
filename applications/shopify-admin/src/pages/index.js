@@ -1,4 +1,5 @@
 import { memo, useState, useMemo } from 'react';
+import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -41,28 +42,31 @@ const TutorialsImage = styled.img`
 const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
 
 const loadingComponent = () => (
-  <SkeletonPage title="Overview dashboard">
-    <Layout>
-      <Layout.Section>
-        <Card sectioned>
-          <SkeletonBodyText lines={3} />
-        </Card>
-      </Layout.Section>
-      <Layout.Section>
-        <Card sectioned>
-          <SkeletonChart />
-        </Card>
-      </Layout.Section>
-      <Layout.Section>
-        <Card sectioned>
-          <TextContainer>
-            <SkeletonDisplayText size="small" />
-            <SkeletonBodyText lines={4} />
-          </TextContainer>
-        </Card>
-      </Layout.Section>
-    </Layout>
-  </SkeletonPage>
+  <>
+    <Loading />
+    <SkeletonPage title="Overview dashboard">
+      <Layout>
+        <Layout.Section>
+          <Card sectioned>
+            <SkeletonBodyText lines={3} />
+          </Card>
+        </Layout.Section>
+        <Layout.Section>
+          <Card sectioned>
+            <SkeletonChart />
+          </Card>
+        </Layout.Section>
+        <Layout.Section>
+          <Card sectioned>
+            <TextContainer>
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={4} />
+            </TextContainer>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </SkeletonPage>
+  </>
 );
 
 const DashboardPage = () => {
