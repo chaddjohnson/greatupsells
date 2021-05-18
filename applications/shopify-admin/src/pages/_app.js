@@ -2,6 +2,7 @@ import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
 import Cookies from 'universal-cookie';
+import styled from 'styled-components';
 import { ErrorBoundary } from '@neatowebsolutions/upselling-react-components';
 import {
   HttpClientProvider,
@@ -28,6 +29,10 @@ httpClient.addRequestInterceptor((config) => {
   return config;
 });
 
+const Main = styled.main`
+  padding-bottom: 120px;
+`;
+
 const App = ({ Component, pageProps }) => {
   const shopOrigin = cookies.get('shopOrigin');
   const authToken = cookies.get('authToken');
@@ -53,9 +58,9 @@ const App = ({ Component, pageProps }) => {
             <RoutePropagator />
             {typeof window !== 'undefined' && window.top !== window.self && (
               <ErrorBoundary>
-                <main style={{ paddingBottom: '120px' }}>
+                <Main>
                   <Component {...pageProps} />
-                </main>
+                </Main>
               </ErrorBoundary>
             )}
             {typeof window !== 'undefined' && window.top === window.self && (
