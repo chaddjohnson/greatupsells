@@ -167,7 +167,7 @@ const DashboardPage = () => {
               <LineChart
                 title={
                   <Stack distribution="equalSpacing">
-                    <Heading>Accepted offers</Heading>
+                    <Heading>Accepted offers growth</Heading>
                     <Button plain url="/analytics/">
                       View all analytics
                     </Button>
