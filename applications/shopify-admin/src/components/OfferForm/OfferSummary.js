@@ -108,11 +108,11 @@ const OfferSummary = ({ offer }) => {
             </List>
             <TextStyle variation="subdued">
               View{' '}
-              <Button plain url="/offers/602d83ce6e555811fa75e378/analytics/">
+              <Button plain url={`/offers/${offer._id}/analytics/`}>
                 analytics
               </Button>{' '}
               and{' '}
-              <Button plain url="/602d83ce6e555811fa75e378/data/">
+              <Button plain url={`/offers/${offer._id}/data/`}>
                 data submissions
               </Button>{' '}
               for this offer

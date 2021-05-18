@@ -1,4 +1,5 @@
 import { memo, useState, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
@@ -79,8 +80,8 @@ const errorComponent = memo(() => (
 ));
 
 const OfferAnalyticsPage = () => {
-  // TODO: Remove hardcoding.
-  const offerId = '5f0f49a53058fb0e19df8358';
+  const router = useRouter();
+  const offerId = router.query.id;
 
   const [chartStartAt, setChartStartAt] = useState(
     moment().subtract(90, 'days').toDate()
