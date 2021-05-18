@@ -80,7 +80,7 @@ const LineChart = ({
         borderRadius: 5,
         borderWidth: 0,
         shadow: false,
-        padding: 16,
+        padding: 12,
         style: {
           color: 'white',
           fontFamily:
