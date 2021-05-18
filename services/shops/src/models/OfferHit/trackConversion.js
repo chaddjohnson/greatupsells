@@ -9,55 +9,58 @@ const trackConversion = async (offerHit, order) => {
   const Offer = offer.constructor;
   const Product = mongodbClient.connection.model('Product');
 
-  const session = await mongodbClient.connection.startSession();
+  const session = order.$session();
 
   try {
-    // Use a transaction.
-    await session.withTransaction(async () => {
-      offerHit.$session(session);
+    offerHit.$session(session);
 
-      offerHit.convertedAt = Date.now();
-      offerHit.order = order;
-      offerHit.shopifyOrderId = order.shopifyOrderId;
-      offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
-      offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
+    offerHit.convertedAt = Date.now();
+    offerHit.order = order;
+    offerHit.shopifyOrderId = order.shopifyOrderId;
+    offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
+    offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
 
-      await offerHit.save();
+    await offerHit.save();
 
-      // Update offer stats.
-      await Offer.findByIdAndUpdate(
-        offer.id,
-        {
-          $inc: {
-            revenueIncrease: offerHit.revenueIncrease,
-            conversionCount: 1
-          },
-          conversionRate: (offer.conversionCount + 1) / offer.impressionCount
+    // Update offer stats.
+    await Offer.findByIdAndUpdate(
+      offer.id,
+      {
+        $inc: {
+          revenueIncrease: offerHit.revenueIncrease,
+          conversionCount: 1
         },
-        { session }
-      );
+        conversionRate: (offer.conversionCount + 1) / offer.impressionCount
+      },
+      { session }
+    );
 
-      // Update shop stats.
-      await shop.findByIdAndUpdate(
-        shop.id,
-        {
-          $inc: {
-            revenueIncrease: offerHit.revenueIncrease,
-            offerConversionCount: 1
-          },
-          offerConversionRate:
-            (shop.offerConversionCount + 1) / shop.offerImpressionCount
+    // Update shop stats.
+    await shop.findByIdAndUpdate(
+      shop.id,
+      {
+        $inc: {
+          revenueIncrease: offerHit.revenueIncrease,
+          offerConversionCount: 1
         },
-        { session }
-      );
+        offerConversionRate:
+          (shop.offerConversionCount + 1) / shop.offerImpressionCount
+      },
+      { session }
+    );
 
-      // Remove copied products associated with this order.
-      await Promise.all(
-        offerHit.acceptedProducts.map(async ({ shopifyProductId }) => {
-          await Product.findOneAndDelete({ shopifyProductId }, { session });
-        })
-      );
-    });
+    // Remove copied products associated with this order.
+    await Promise.allSettled(
+      offerHit.acceptedProducts.map(async ({ shopifyProductId }) => {
+        await Product.findOneAndDelete(
+          {
+            shopifyProductId,
+            originalShopifyProductId: { $ne: null } // Require this field, just to be safe.
+          },
+          { session }
+        );
+      })
+    );
   } catch (error) {
     await logger.error(
       `Error tracking offer conversion for offer hit (${
