@@ -37,6 +37,10 @@ const LineChart = ({
           color: 'rgba(0, 128, 96, 0.5)',
           width: 3
         },
+        dateTimeLabelFormats: {
+          millisecond: '%b %e', // Necessary for when chart only has one day of data.
+          day: '%b %e'
+        },
         accessibility: {
           rangeDescription: rangeDescription && `Range: ${rangeDescription}`
         }
