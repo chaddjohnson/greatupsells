@@ -4,7 +4,7 @@
 
 This monorepo is a collection of applications, services, packages, and infrastructure as code comprising the entirety of a Shopify app.
 
-This application plugs into existing Shopify shops and enables shop owners to upsell, cross-sell, and display general offers to customers in order to boost sales and revenue.
+This application plugs into existing Shopify shops and enables shop owners to upsell, cross-sell, and display general popups to customers in order to boost sales and revenue.
 
 ## Dependencies
 
@@ -12,7 +12,7 @@ If you are struggling and need help setting anything up, please ask for help.
 
 ### Node.js
 
-The Node version is specified in .node-version files. As of 2020, AWS Lambda only supports up to Node 12.x, and so we cannot use features from higher versions. For example, optional chaining cannot be used.
+The Node version is specified in the top-level `.node-version` file; please install and use this version on your system. We are currently using Node 12.x, so we cannot use features from higher versions. For example, optional chaining cannot be used in our Node code.
 
 [nvm](https://github.com/nvm-sh/nvm) and [avn](https://github.com/wbyoung/avn) are recommended for easily managing and using Node versions.
 
@@ -50,37 +50,38 @@ Please note that server infrastructure is managed at the organization level and 
 1. Create a top-level `.env` file by copying `.env.example` and filling in values.
 1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
 1. Run `yarn start`. This automatically does the following:
-    1. Installs dependencies.
-    1. Runs Lerna bootstrapping.
-    1. Builds packages.
-    1. Starts all applications, services, and package build watching.
+   1. Installs dependencies.
+   1. Runs Lerna bootstrapping.
+   1. Builds packages.
+   1. Starts all applications, services, and package build watching.
 
 ### Tooling
 
 The following are used:
 
-* Node.js
-* React (with Hooks)
-* Next.js
-* REST
-* Apollo Server (AWS Lambda integration)
-* Lerna
-* webpack (v4)
-* Emotion
-* Mongoose
-* Serverless
-* Shopify Polaris
-* Material UI
+- Node.js
+- React (with Hooks)
+- Next.js
+- REST
+- Lerna
+- webpack (v4)
+- Emotion
+- Mongoose
+- Serverless
+- Shopify Polaris
+- Material UI
 
 ### Coding Conventions
 
-* kebab-case for names of repositories, applications, packages, and services.
-* PascalCase for names of component file and exported components.
-* camelCase for variable names.
-* camelCase for code file names (except for pages, which must use hyphens).
-* Prettier and ESLint for code formatting.
-* Hyphens for image and media file names.
-* Default exports are used for modules and components (with the exception of index.js files).
+- Prettier and ESLint for automatic code formatting.
+- kebab-case for names of repositories, applications, packages, and services.
+- PascalCase for names of component file and exported components.
+- camelCase for variable names.
+- camelCase for code file names (except for pages, which must use hyphens).
+- Hyphens for image and media file names.
+- Default exports are used for modules and components (with the exception of index.js files).
+
+Code consistency is important. In order to maintain consistency, convention changes should be discussed and decisions should be made as a team.
 
 ## Deployment
 
@@ -94,9 +95,9 @@ Simply push to the appropriate branch.
 
 CircleCI is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
 
-* `master` = development environment
-* `test` = test environment
-* `production` = production environment
+- `master` = development environment
+- `test` = test environment
+- `production` = production environment
 
 All infrastructure will be setup and updated via Terraform with each deployment.
 
@@ -104,19 +105,19 @@ All infrastructure will be setup and updated via Terraform with each deployment.
 
 Hosting is with AWS. The following AWS services are used:
 
-* API Gateway
-* Lambda
-* EventBridge
-* EC2
-* SNS
-* SQS
-* S3
-* CloudFront
-* CloudWatch Events
-* SES
-* SSM
-* ACM
-* Elasticsearch
+- API Gateway
+- Lambda
+- EventBridge
+- EC2
+- SNS
+- SQS
+- S3
+- CloudFront
+- CloudWatch Events
+- SES
+- SSM
+- ACM
+- Elasticsearch
 
 All infrastructure is managed via Serverless, Terraform, and Ansible.
 
@@ -130,23 +131,25 @@ A microservice architecture is used. Please refer to [this diagram](https://docs
 
 ### Internationalization and Localization
 
-Internationalization and localization are used for currencies and dates. Language localization is not used as we only provide support in English.
+Internationalization and localization are used for currencies and dates.
+
+Language localization is not used as we only provide support in English.
 
 ### Accessibility
 
 We should always aim for a Lighthouse (Chrome audit) score of >= 90 for accessibility.
 
-All images *must* have `alt` tags with non-empty values.
+_All_ images _must_ have `alt` tags with non-empty values.
 
 ### Browser Support
 
 We support the following browsers:
 
-* Google Chrome
-* Firefox
-* Edge
-* Safari
-* iOS Safari
+- Google Chrome
+- Firefox
+- Edge
+- Safari
+- iOS Safari
 
 We do not support Internet Explorer.
 
