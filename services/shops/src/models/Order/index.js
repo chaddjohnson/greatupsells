@@ -3,6 +3,7 @@ const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const trackConversions = require('./trackConversions');
 const cancel = require('./cancel');
+const toString = require('./toString');
 
 let Order = null;
 
@@ -43,6 +44,10 @@ schema.methods.trackConversions = function () {
 
 schema.methods.cancel = function () {
   return cancel(this);
+};
+
+schema.methods.toString = function () {
+  return toString(this);
 };
 
 schema.index({ shopifyShopId: 1, shopifyOrderNumber: 1 }, { unique: true });
