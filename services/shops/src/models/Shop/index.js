@@ -3,7 +3,6 @@ const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
-const findRecentOfferHit = require('./findRecentOfferHit');
 const createWebhooks = require('./createWebhooks');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
@@ -116,10 +115,6 @@ schema.statics.fixWebhooks = function () {
 
 schema.statics.updateActiveStatuses = function () {
   return updateActiveStatuses();
-};
-
-schema.methods.findRecentOfferHit = function (ipAddress) {
-  return findRecentOfferHit(this, ipAddress);
 };
 
 schema.methods.findImpressions = async function (startAt, endAt) {
