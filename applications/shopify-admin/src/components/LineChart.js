@@ -119,7 +119,7 @@ const LineChart = ({
         enabled: false
       }
     }),
-    [title, rangeDescription, tooltipText, data, emptyMessage]
+    [title, rangeDescription, tooltipText, data, emptyMessage, formatNumber]
   );
 
   const changeValue = useMemo(() => {
