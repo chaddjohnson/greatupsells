@@ -202,7 +202,7 @@ const OfferAnalyticsPage = () => {
                   rangeDescription="January to December"
                   data={offerConversionRatesChartData}
                   formatters={{
-                    number: formatNumber,
+                    number: formatPercentage,
                     percentage: formatPercentage
                   }}
                 />

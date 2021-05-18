@@ -216,7 +216,7 @@ const AnalyticsPage = () => {
                   rangeDescription="January to December"
                   data={shopConversionRatesChartData}
                   formatters={{
-                    number: formatNumber,
+                    number: formatPercentage,
                     percentage: formatPercentage
                   }}
                 />
