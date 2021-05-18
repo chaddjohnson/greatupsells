@@ -20,11 +20,30 @@ const addProductTypeRule = async (shop) => {
   const rule = {
     column: 'type',
     relation: 'not_equals',
-    condition: 'upsellcrosssell'
+    condition: 'greatappsoffer_DO_NOT_DELETE'
   };
 
-  if (smartAllCollection) {
-    // Add a rule to the existing smart collection.
+  const smartCollectionRuleExists =
+    smartAllCollection &&
+    smartAllCollection.rules.find(
+      ({ column, relation, condition }) =>
+        column === rule.column &&
+        relation === rule.relation &&
+        condition === rule.condition
+    );
+
+  // Add a rule to the existing "all" smart collection if the collection
+  // exists and no custom "all" collection exists.
+  if (smartAllCollection && !customAllCollection) {
+    if (smartCollectionRuleExists) {
+      await logger.info(
+        `Skipped adding rule to existing smart collection as rule already exists for shop (${shop.toString()})`,
+        rule,
+        smartAllCollection
+      );
+      return;
+    }
+
     smartAllCollection = await shopifyApiClient.smartCollection.update(
       smartAllCollection.id,
       {
@@ -40,10 +59,10 @@ const addProductTypeRule = async (shop) => {
     );
   }
 
+  // Create a smart "all" collection if no "all" collection exists.
   if (!smartAllCollection && !customAllCollection) {
-    // No collection exists, so create a smart collection.
     smartAllCollection = await shopifyApiClient.smartCollection.create({
-      title: 'Products (DO NOT DELETE)',
+      title: 'Products',
       handle: 'all',
       published_scope: 'web',
       rules: [rule]

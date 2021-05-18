@@ -1,7 +1,8 @@
 const copyShopifyProductData = (shopifyProductData) => {
   const newShopifyProductData = { ...shopifyProductData };
 
-  // Remove identifiers used by the original product.
+  // Remove identifiers and dates used by the original product.
+
   delete newShopifyProductData.id;
   delete newShopifyProductData.created_at;
   delete newShopifyProductData.updated_at;
@@ -38,7 +39,7 @@ const copyShopifyProductData = (shopifyProductData) => {
   }
 
   // Use a special type identifier to ensure this product is not displayed in the live store.
-  newShopifyProductData.product_type = 'upsellcrosssell';
+  newShopifyProductData.product_type = 'greatappsoffer_DO_NOT_DELETE';
 
   // Make it clear this is a copy.
   newShopifyProductData.title = `${newShopifyProductData.title} (discounted)`;
