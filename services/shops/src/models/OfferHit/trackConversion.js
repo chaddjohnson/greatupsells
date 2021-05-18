@@ -7,6 +7,7 @@ const trackConversion = async (offerHit, order) => {
 
   const { shop, offer } = offerHit;
   const Offer = offer.constructor;
+  const Product = mongodbClient.connection.model('Product');
 
   const session = await mongodbClient.connection.startSession();
 
@@ -49,6 +50,13 @@ const trackConversion = async (offerHit, order) => {
         },
         { session }
       );
+
+      // Remove copied products associated with this order.
+      await Promise.all(
+        offerHit.acceptedProducts.map(async ({ shopifyProductId }) => {
+          await Product.findOneAndDelete({ shopifyProductId }, { session });
+        })
+      );
     });
   } catch (error) {
     await logger.error(
@@ -59,6 +67,7 @@ const trackConversion = async (offerHit, order) => {
       offer,
       offerHit
     );
+    throw error;
   }
 };
 
