@@ -58,7 +58,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await httpClient.post(`/offers/${offerId}/acceptances`, {
+    const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyProductId,
       shopifyVariantId,
@@ -66,7 +66,8 @@ const handler = middy(async (event, context) => {
     });
 
     return {
-      statusCode: StatusCodes.NO_CONTENT
+      statusCode: StatusCodes.CREATED,
+      body: JSON.stringify(offerHit)
     };
   } catch (error) {
     await logger.error(`Error tracking offer acceptance`, error, event);
