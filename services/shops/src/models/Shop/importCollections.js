@@ -21,7 +21,7 @@ const importCollection = async (shop, shopifyCollectionData) => {
         shopifyCollectionData
       });
 
-      logger.info(
+      await logger.info(
         `Imported collection from Shopify (${collection.toString()})`,
         shopifyCollectionData
       );
@@ -30,7 +30,7 @@ const importCollection = async (shop, shopifyCollectionData) => {
     await collection.save();
     await collection.trackShopifyProducts();
   } catch (error) {
-    logger.warn(
+    await logger.warn(
       `Error importing Shopify collection ${
         shopifyCollectionData.id
       } for shop (${shop.toString()})`,

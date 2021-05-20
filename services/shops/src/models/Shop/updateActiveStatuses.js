@@ -12,7 +12,7 @@ const updateActiveStatuses = async () => {
       try {
         await shop.updateActiveStatus();
       } catch (error) {
-        logger.warn(
+        await logger.warn(
           `Error updating shop active status (${shop.toString()})`,
           error
         );

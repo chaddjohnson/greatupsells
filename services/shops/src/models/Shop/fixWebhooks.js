@@ -15,7 +15,10 @@ const fixWebhooks = async () => {
       try {
         await shop.createWebhooks();
       } catch (error) {
-        logger.warn(`Error updating shop webhooks (${shop.toString()})`, error);
+        await logger.warn(
+          `Error updating shop webhooks (${shop.toString()})`,
+          error
+        );
       }
     },
     { parallel: 50 }
