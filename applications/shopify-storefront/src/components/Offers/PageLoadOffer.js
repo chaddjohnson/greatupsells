@@ -57,18 +57,23 @@ const PageLoadOffer = ({
     shopifyVariantId,
     quantity
   ) => {
-    // Add the product to the cart.
-    if (shopifyVariantId) {
-      await addProductToShopifyCart(shopifyProductId, quantity);
-    }
-
     // Accept the offer.
-    await trackOfferAcceptance(
+    const offerHit = await trackOfferAcceptance(
       offerId,
       shopifyProductId,
       shopifyVariantId,
       quantity
     );
+    const variantIndex = offerHit.originalProducts.findIndex(
+      (originalProduct) => originalProduct.shopifyVariantId === shopifyVariantId
+    );
+    const copiedShopifyVariantId =
+      offerHit.acceptedProducts[variantIndex].shopifyVariantId;
+
+    // Add the copied product variant to the cart.
+    if (shopifyVariantId) {
+      await addProductToShopifyCart(copiedShopifyVariantId, quantity);
+    }
   };
 
   // Listen to pushState events.

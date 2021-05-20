@@ -71,12 +71,14 @@ const useOfferTracking = () => {
     shopifyVariantId,
     quantity
   ) => {
-    await httpClient.post(`/offers/${offerId}/acceptances`, {
+    const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyProductId,
       shopifyVariantId,
       quantity
     });
+
+    return offerHit;
   };
 
   // NOTE: Conversion tracking occurs in order creation webhook.

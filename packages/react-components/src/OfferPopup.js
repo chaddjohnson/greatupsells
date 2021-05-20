@@ -55,6 +55,11 @@ const getThumbnailImageUrl = (url) => {
 };
 
 liquidEngine.registerFilter('addProductHandler', (offeredProduct, quantity) => {
+  // Unfortunately there is nothing to do if no offered product is available.
+  if (!offeredProduct) {
+    return '';
+  }
+
   const shopifyProductId = offeredProduct.id;
   const shopifyVariantId = offeredProduct.variants[0]?.id;
 
