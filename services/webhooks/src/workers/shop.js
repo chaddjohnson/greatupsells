@@ -52,7 +52,7 @@ const processRecord = async (record) => {
 
     shop.shopifyShopData = shopifyShopData;
 
-    await httpClient.put(`/shops/${shop._id}`);
+    await httpClient.put(`/shops/${shop._id}`, shop);
   } catch (error) {
     await logger.error(`Error updating shop via webhook`, error, record);
   }
