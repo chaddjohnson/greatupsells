@@ -13,8 +13,6 @@ const processRecord = async (record) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await logger.info(`Running job updateShopifyTheme`);
-
   try {
     await Promise.all(event.Records.map(processRecord));
   } catch (error) {

@@ -4,8 +4,6 @@ const models = require('../models');
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await logger.info(`Running job calculateStats`);
-
   try {
     const Stats = await models.get('Stats');
 
