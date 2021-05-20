@@ -1,5 +1,7 @@
 const mongodbClient = require('../mongodbClient');
 
+const { COPIED_PRODUCT_IDENTIFIER } = process.env;
+
 const findRandomProducts = async (offer) => {
   await offer.execPopulate('shop');
 
@@ -23,11 +25,15 @@ const findRandomProducts = async (offer) => {
     {
       $match: {
         shop: shop._id,
+        originalShopifyProductId: null, // Must not be a copied product.
         $or: [
           { shopifyProductId: { $in: offeredShopifyProductIds } },
           { shopifyCollectionIds: { $in: offeredShopifyCollectionIds } }
         ],
-        'shopifyProductData.published_at': { $ne: null }
+        'shopifyProductData.published_at': { $ne: null },
+        'shopifyProductData.product_type': {
+          $ne: COPIED_PRODUCT_IDENTIFIER
+        }
       }
     },
     {
@@ -47,7 +53,6 @@ const findRandomProducts = async (offer) => {
   }
 
   // Aggregation only returns JSON, so query for Mongoose documents.
-  // return await Product.findById(randomProduct._id);
   return await Promise.all(
     randomProducts.map(async ({ _id }) => Product.findById(_id))
   );

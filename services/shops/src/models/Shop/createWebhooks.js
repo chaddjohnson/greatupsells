@@ -16,7 +16,8 @@ const definitions = [
   { topic: 'products/create', address: WEBHOOKS_ARN, format: 'json' },
   { topic: 'products/update', address: WEBHOOKS_ARN, format: 'json' },
   { topic: 'products/delete', address: WEBHOOKS_ARN, format: 'json' },
-  { topic: 'shop/update', address: WEBHOOKS_ARN, format: 'json' }
+  { topic: 'shop/update', address: WEBHOOKS_ARN, format: 'json' },
+  { topic: 'themes/publish', address: WEBHOOKS_ARN, format: 'json' }
 ];
 
 const createWebhook = async (shop, existingWebhooks, definition) => {

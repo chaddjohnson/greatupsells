@@ -69,9 +69,13 @@ const createServer = () => {
       scopes: [
         'read_products',
         'read_orders',
-        'write_products',
+        'read_inventory',
         'read_script_tags',
-        'write_script_tags'
+        'read_themes',
+        'write_products',
+        'write_inventory',
+        'write_script_tags',
+        'write_themes'
       ],
       accessMode: 'offline',
       afterAuth: async (ctx) => {

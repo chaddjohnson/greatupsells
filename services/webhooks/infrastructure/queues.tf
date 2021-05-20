@@ -30,6 +30,10 @@ resource "aws_sqs_queue" "shop_update" {
   name = "shop-update-${terraform.workspace}"
 }
 
+resource "aws_sqs_queue" "theme_publish" {
+  name = "theme-publish-${terraform.workspace}"
+}
+
 resource "aws_ssm_parameter" "app_uninstall_queue_arn" {
   name  = "/upselling/${terraform.workspace}/queues/app-uninstall/arn"
   type  = "String"
@@ -82,4 +86,10 @@ resource "aws_ssm_parameter" "shop_update_queue_arn" {
   name  = "/upselling/${terraform.workspace}/queues/shop-update/arn"
   type  = "String"
   value = aws_sqs_queue.shop_update.arn
+}
+
+resource "aws_ssm_parameter" "theme_publish_queue_arn" {
+  name  = "/upselling/${terraform.workspace}/queues/theme-publish/arn"
+  type  = "String"
+  value = aws_sqs_queue.theme_publish.arn
 }

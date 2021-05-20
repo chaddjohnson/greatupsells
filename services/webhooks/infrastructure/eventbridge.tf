@@ -207,6 +207,25 @@ resource "aws_cloudwatch_event_rule" "shop_update" {
 EOF
 }
 
+resource "aws_cloudwatch_event_rule" "theme_publish" {
+  name           = "theme-publish-webhook"
+  event_bus_name = var.event_bus_name
+  event_pattern  = <<EOF
+{
+  "detail-type": [
+    "shopifyWebhook"
+  ],
+  "detail": {
+    "metadata": {
+      "X-Shopify-Topic": [
+        "themes/publish"
+      ]
+    }
+  }
+}
+EOF
+}
+
 resource "aws_cloudwatch_event_target" "app_uninstall" {
   target_id = "app-uninstall"
   rule      = aws_cloudwatch_event_rule.app_uninstall
@@ -271,4 +290,10 @@ resource "aws_cloudwatch_event_target" "shop_update" {
   target_id = "shop-update"
   rule      = aws_cloudwatch_event_rule.shop_update
   arn       = aws_sqs_queue.shop_update.arn
+}
+
+resource "aws_cloudwatch_event_target" "theme_publish" {
+  target_id = "theme-publish"
+  rule      = aws_cloudwatch_event_rule.theme_publish
+  arn       = aws_sqs_queue.theme_publish.arn
 }

@@ -32,6 +32,7 @@ provider:
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
+    SHOP_THEME_UPDATE_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-theme-update/url}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
     WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
 
@@ -348,6 +349,13 @@ functions:
       - http:
           path: /shops/{shopId}
           method: put
+          authorizer: aws_iam
+  updateShopTheme:
+    handler: src/routes/updateShopTheme.handler
+    events:
+      - http:
+          path: /shops/{shopId}/shopify-theme-update
+          method: post
           authorizer: aws_iam
 
   calculateStats:

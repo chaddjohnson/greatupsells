@@ -1,7 +1,7 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 const createWebhooks = require('./createWebhooks');
 const addScripts = require('./addScripts');
-const addProductTypeRule = require('./addProductTypeRule');
+const enqueueUpdateShopifyTheme = require('./enqueueUpdateShopifyTheme');
 const enqueueCollectionImport = require('./enqueueCollectionImport');
 const enqueueProductImport = require('./enqueueProductImport');
 
@@ -10,7 +10,7 @@ const initialize = async (shop) => {
 
   await createWebhooks(shop);
   await addScripts(shop);
-  await addProductTypeRule(shop);
+  await enqueueUpdateShopifyTheme(shop);
   await enqueueCollectionImport(shop);
   await enqueueProductImport(shop);
 };
