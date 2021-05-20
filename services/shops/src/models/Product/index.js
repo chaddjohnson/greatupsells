@@ -32,8 +32,12 @@ schema.statics.findOneByShopifyProductId = function (shopifyProductId) {
   return Product.findOne({ shopifyProductId });
 };
 
-schema.methods.copy = function (shopifyProductDataOverrides) {
-  return copy(this, shopifyProductDataOverrides);
+schema.methods.copy = function (
+  shopifyProductDataOverrides,
+  variant,
+  quantity
+) {
+  return copy(this, shopifyProductDataOverrides, variant, quantity);
 };
 
 schema.statics.removeCopiedProducts = function () {
@@ -49,7 +53,7 @@ schema.methods.toString = function () {
 };
 
 schema.pre('validate', function (next) {
-  hooks.prevalidate(this, next);
+  hooks.preValidate(this, next);
 });
 
 schema.index({ shopifyShopId: 1 });

@@ -24,11 +24,6 @@ const trackAcceptedProduct = async (
 
   const originalVariantPrice = parseFloat(variant.price);
 
-  // Keep track of the variant position.
-  const variantIndex =
-    shopifyProductData &&
-    shopifyProductData.variants.findIndex(({ id }) => id === shopifyVariantId);
-
   if (!product) {
     throw new Error(`Unable to find Shopify product ${shopifyProductId}`);
   }
@@ -46,10 +41,10 @@ const trackAcceptedProduct = async (
   variant.price = offer.calculateDiscountedPrice(parseFloat(variant.price));
 
   try {
-    // Copy the product (in Shopify and saving locally) to allow modification of
+    // Copy the product (in Shopify and save locally) to allow modification of
     // the variant price. This seems to be the only feasible method of adjusting
     // the price of a cart item without using a discount code.
-    copiedProduct = await product.copy(shopifyProductData);
+    copiedProduct = await product.copy(shopifyProductData, variant, quantity);
   } catch (error) {
     await logger.error(
       `Error copying product ${shopifyProductId}`,
@@ -59,8 +54,9 @@ const trackAcceptedProduct = async (
     throw error;
   }
 
-  // Find the correct variant in the copied product.
-  copiedVariant = copiedProduct.shopifyProductData.variants[variantIndex];
+  // Use the first variant as copying removes all variants except the target one.
+  // eslint-disable-next-line prefer-destructuring
+  copiedVariant = copiedProduct.shopifyProductData.variants[0];
 
   offerHit.originalProducts = offerHit.originalProducts || [];
   offerHit.acceptedProducts = offerHit.acceptedProducts || [];
