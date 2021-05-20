@@ -6,7 +6,7 @@ import useToast from './toast';
 
 const ShopContext = createContext(null);
 
-export const ShopProvider = ({ children }) => {
+const ShopProvider = ({ children }) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
@@ -51,4 +51,6 @@ ShopProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export const useShop = () => useContext(ShopContext);
+const useShop = () => useContext(ShopContext);
+
+export { ShopProvider, useShop };
