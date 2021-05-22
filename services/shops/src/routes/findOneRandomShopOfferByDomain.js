@@ -52,6 +52,9 @@ const findPopupData = async (
     offer.findRandomProducts()
   ]);
 
+  // Reduce payload size.
+  delete popupTheme.thumbnailImageUrl;
+
   return {
     offer,
     popupTheme,
