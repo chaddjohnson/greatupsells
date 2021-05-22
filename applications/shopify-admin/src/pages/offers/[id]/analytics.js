@@ -12,7 +12,10 @@ import {
   SkeletonPage
 } from '@shopify/polaris';
 import moment from 'moment-timezone';
-import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useNumberFormatter,
+  useInterval
+} from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
 import {
@@ -87,6 +90,7 @@ const OfferAnalyticsPage = () => {
     moment().subtract(90, 'days').toDate()
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
+  const [chartDateChanged, setChartDateChanged] = useState(false);
   const [datePickerActive, setDatePickerActive] = useState(false);
 
   const { shop } = useShop();
@@ -104,7 +108,8 @@ const OfferAnalyticsPage = () => {
     offerRevenueIncreases,
     offerImpressions,
     offerAnalyticsLoading,
-    offerAnalyticsError
+    offerAnalyticsError,
+    fetchOfferAnalytics
   } = useOfferAnalytics(offerId, chartStartAt, chartEndAt);
 
   const offerAcceptancesChartData = useMemo(
@@ -147,6 +152,16 @@ const OfferAnalyticsPage = () => {
       ]),
     [offerImpressions]
   );
+
+  // Refresh data at an interval.
+  useInterval(() => {
+    if (!chartDateChanged) {
+      setChartStartAt(moment().subtract(90, 'days').toDate());
+      setChartEndAt(new Date());
+    }
+
+    fetchOfferAnalytics();
+  }, 30);
 
   return (
     <Loader

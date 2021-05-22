@@ -74,6 +74,7 @@ const DashboardPage = () => {
     moment().subtract(90, 'days').toDate()
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
+  const [chartDateChanged, setChartDateChanged] = useState(false);
 
   const { shop, shopLoading, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
@@ -118,6 +119,11 @@ const DashboardPage = () => {
 
   // Refresh data at an interval.
   useInterval(() => {
+    if (!chartDateChanged) {
+      setChartStartAt(moment().subtract(90, 'days').toDate());
+      setChartEndAt(new Date());
+    }
+
     fetchShop();
     fetchShopAcceptances();
   }, 30);
