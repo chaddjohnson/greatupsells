@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Tabs, Tab } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/monokai.css';
 
@@ -8,11 +10,69 @@ const { Controlled: CodeMirror } =
 
 if (typeof window !== 'undefined') {
   require('codemirror/mode/htmlmixed/htmlmixed');
+  require('codemirror/mode/css/css');
+  require('codemirror/mode/javascript/javascript');
 }
 
-const CodeEditor = ({ value, onChange, ...props }) => {
-  const handleChange = (editor, data, newValue) => {
-    onChange(newValue);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'block',
+
+    [theme.breakpoints.up('lg')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%'
+    }
+  },
+  tabPanel: {
+    paddingTop: theme.spacing(1),
+    height: '100%'
+  }
+}));
+
+const tabIndexes = {
+  html: 0,
+  css: 1,
+  javascript: 2
+};
+
+const TabPanel = ({ index, value, children, ...props }) => (
+  <div
+    role="tabpanel"
+    hidden={value !== index}
+    id={`code-tabpanel-${index}`}
+    aria-labelledby={`code-tab-${index}`}
+    {...props}
+  >
+    {value === index && children}
+  </div>
+);
+
+TabPanel.propTypes = {
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+  children: PropTypes.node.isRequired
+};
+
+const CodeEditor = ({ template, onChange, ...props }) => {
+  const classes = useStyles();
+
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleTabChange = (event, index) => {
+    setTabIndex(index);
+  };
+
+  const handleHtmlChange = (editor, data, newValue) => {
+    onChange({ ...template, html: newValue });
+  };
+
+  const handleCssChange = (editor, data, newValue) => {
+    onChange({ ...template, css: newValue });
+  };
+
+  const handleJavaScriptChange = (editor, data, newValue) => {
+    onChange({ ...template, javascript: newValue });
   };
 
   if (!CodeMirror) {
@@ -20,26 +80,79 @@ const CodeEditor = ({ value, onChange, ...props }) => {
   }
 
   return (
-    <CodeMirror
-      value={value}
-      options={{
-        mode: 'htmlmixed',
-        theme: 'monokai',
-        lineNumbers: true
-      }}
-      onBeforeChange={handleChange}
-      {...props}
-    />
+    <div className={classes.root}>
+      <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Tab id="code-tab-1" label="HTML" />
+        <Tab id="code-tab-2" label="CSS" />
+        <Tab id="code-tab-3" label="JavaScript" />
+      </Tabs>
+      <TabPanel
+        className={classes.tabPanel}
+        value={tabIndex}
+        index={tabIndexes.html}
+      >
+        <CodeMirror
+          value={template.html}
+          options={{
+            mode: 'htmlmixed',
+            theme: 'monokai',
+            lineNumbers: true
+          }}
+          onBeforeChange={handleHtmlChange}
+          {...props}
+        />
+      </TabPanel>
+      <TabPanel
+        className={classes.tabPanel}
+        value={tabIndex}
+        index={tabIndexes.css}
+      >
+        <CodeMirror
+          value={template.css}
+          options={{
+            mode: 'css',
+            theme: 'monokai',
+            lineNumbers: true
+          }}
+          onBeforeChange={handleCssChange}
+          {...props}
+        />
+      </TabPanel>
+      <TabPanel
+        className={classes.tabPanel}
+        value={tabIndex}
+        index={tabIndexes.javascript}
+      >
+        <CodeMirror
+          value={template.javascript}
+          options={{
+            mode: 'javascript',
+            theme: 'monokai',
+            lineNumbers: true
+          }}
+          onBeforeChange={handleJavaScriptChange}
+          {...props}
+        />
+      </TabPanel>
+    </div>
   );
 };
 
 CodeEditor.propTypes = {
-  value: PropTypes.string,
+  template: PropTypes.shape({
+    html: PropTypes.string,
+    css: PropTypes.string,
+    javascript: PropTypes.string
+  }),
   onChange: PropTypes.func
 };
 
 CodeEditor.defaultProps = {
-  value: '',
+  template: {
+    html: '',
+    css: '',
+    javascript: ''
+  },
   onChange: () => {}
 };
 

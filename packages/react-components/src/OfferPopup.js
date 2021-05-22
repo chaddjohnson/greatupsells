@@ -308,7 +308,15 @@ const OfferPopup = ({
   }, [translateProductData, offeredProducts]);
 
   // Generate the markup.
-  let { markup } = useLiquid(theme.template, {
+  let { markup: html } = useLiquid(theme.template.html, {
+    ...mappedVariables,
+    triggerProduct: translatedTriggerProduct,
+    offeredProducts: translatedOfferedProducts,
+    submitHandler: 'window.parent.OfferPopup.submit(event)',
+    closeHandler: 'window.parent.OfferPopup.close()'
+  });
+  const { markup: css } = useLiquid(theme.template.css, mappedVariables);
+  const { markup: javascript } = useLiquid(theme.template.javascript, {
     ...mappedVariables,
     triggerProduct: translatedTriggerProduct,
     offeredProducts: translatedOfferedProducts,
@@ -320,13 +328,13 @@ const OfferPopup = ({
   // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
   if (forceDisplayType === 'desktop') {
     // Add "device" to media queries if missing.
-    markup = markup?.replace(
+    html = html?.replace(
       /(\(\s*)(min|max)-(width|height)(\s*:)/,
       '$1$2-device-$3$4'
     );
   } else if (forceDisplayType === 'mobile') {
     // Remove "device" from media queries if present.
-    markup = markup?.replace(
+    html = html?.replace(
       /(\(\s*)(min|max)-device-(width|height)(\s*:)/,
       '$1$2-$3$4'
     );
@@ -341,6 +349,7 @@ const OfferPopup = ({
 
   useEffect(() => {
     if (insertionTarget) {
+      // Inject Styled Components styling.
       iframeDocument.head.append(insertionTarget);
     }
   }, [iframeDocument, insertionTarget]);
@@ -363,7 +372,7 @@ const OfferPopup = ({
   //   };
   // });
 
-  if (!offer || !markup) {
+  if (!offer || !html) {
     return null;
   }
 
@@ -400,7 +409,13 @@ const OfferPopup = ({
                     margin: 0;
                     padding: 0;
                   }
+                  ${css}
                 `
+              }}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: javascript
               }}
             />
             <StyleSheetManager target={insertionTarget}>
@@ -430,7 +445,7 @@ const OfferPopup = ({
               >
                 <ModalContentContainer
                   forceDisplayType={forceDisplayType}
-                  dangerouslySetInnerHTML={{ __html: markup }}
+                  dangerouslySetInnerHTML={{ __html: html }}
                 />
                 {designMode && <Mask onClick={onClick} />}
               </Modal>

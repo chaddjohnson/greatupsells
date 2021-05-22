@@ -52,7 +52,11 @@ const schema = new mongoose.Schema(
     category: { type: String, required: true },
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
-    template: { type: String, required: true },
+    template: {
+      html: { type: String, required: true },
+      css: { type: String, required: true },
+      javascript: { type: String, required: true }
+    },
     variables: [variablesSchema],
     formFields: [formFieldsSchema]
   },

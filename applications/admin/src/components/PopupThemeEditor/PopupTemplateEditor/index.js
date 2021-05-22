@@ -62,7 +62,7 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
       <Grid className={classes.gridItem} item xs={12} sm={6}>
         <CodeEditor
           className={classes.editor}
-          value={popupTheme.template}
+          template={popupTheme.template}
           onChange={handleChange}
         />
       </Grid>

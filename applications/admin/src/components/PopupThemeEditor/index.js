@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   tabPanel: {
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(1),
     height: '100%'
   },
   card: {
@@ -61,8 +61,8 @@ const TabPanel = ({ index, value, children, ...props }) => (
   <div
     role="tabpanel"
     hidden={value !== index}
-    id={`tabpanel-${index}`}
-    aria-labelledby={`tab-${index}`}
+    id={`theme-tabpanel-${index}`}
+    aria-labelledby={`theme-tab-${index}`}
     {...props}
   >
     {value === index && children}
@@ -107,10 +107,10 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
       onSubmit={handleSubmit}
     >
       <Tabs value={tabIndex} onChange={handleTabChange}>
-        <Tab id="tab-1" label="Design" />
-        <Tab id="tab-2" label="Settings" />
-        <Tab id="tab-3" label="Variables" />
-        <Tab id="tab-4" label="Form Fields" />
+        <Tab id="theme-tab-1" label="Design" />
+        <Tab id="theme-tab-2" label="Settings" />
+        <Tab id="theme-tab-3" label="Variables" />
+        <Tab id="theme-tab-4" label="Form Fields" />
       </Tabs>
       <Card
         className={clsx(classes.card, {
