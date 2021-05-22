@@ -5,7 +5,7 @@ class HttpClient {
     const client = axios.create();
 
     client.defaults.baseURL = baseUrl;
-    client.defaults.timeout = 10 * 1000;
+    client.defaults.timeout = 20 * 1000;
     client.defaults.responseType = 'json';
     client.defaults.headers.common['Content-Type'] =
       'application/json; charset=utf-8';
