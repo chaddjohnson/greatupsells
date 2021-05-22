@@ -53,9 +53,9 @@ const schema = new mongoose.Schema(
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     template: {
-      html: { type: String, required: true },
-      css: { type: String, required: true },
-      javascript: { type: String, required: true }
+      html: { type: String, required: false },
+      css: { type: String, required: false },
+      javascript: { type: String, required: false }
     },
     variables: [variablesSchema],
     formFields: [formFieldsSchema]
