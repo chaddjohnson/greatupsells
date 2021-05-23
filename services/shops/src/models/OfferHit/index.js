@@ -93,7 +93,9 @@ schema.statics.findByOrderId = function (orderId) {
 };
 
 schema.statics.findOneByAcceptedVariantId = function (shopifyVariantId) {
-  return OfferHit.findOne({ acceptedShopifyVariantId: shopifyVariantId });
+  return OfferHit.findOne({
+    'acceptedProducts.shopifyVariantId': shopifyVariantId
+  });
 };
 
 schema.statics.findImpressionsByOfferId = function (offerId, startAt, endAt) {

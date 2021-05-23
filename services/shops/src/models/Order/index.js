@@ -35,7 +35,7 @@ schema.virtual('orderNumber').get(function () {
 });
 
 schema.statics.findOneByShopifyOrderId = function (shopifyOrderId) {
-  return Order.findOne({ shopifyOrderId });
+  return Order.findOne({ shopifyOrderId: parseInt(shopifyOrderId) });
 };
 
 schema.methods.trackConversions = function () {

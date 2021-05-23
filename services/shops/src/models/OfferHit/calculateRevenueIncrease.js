@@ -38,4 +38,4 @@ const calculateRevenueIncrease = (offerHit) => {
   return revenueIncrease;
 };
 
-module.export = calculateRevenueIncrease;
+module.exports = calculateRevenueIncrease;

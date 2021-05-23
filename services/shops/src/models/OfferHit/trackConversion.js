@@ -7,7 +7,9 @@ const trackConversion = async (offerHit, order) => {
 
   const { shop, offer } = offerHit;
   const Offer = offer.constructor;
+  const Shop = shop.constructor;
   const Product = mongodbClient.connection.model('Product');
+  const shopifyApiClient = shop.getShopifyApiClient();
 
   const session = order.$session();
 
@@ -19,6 +21,13 @@ const trackConversion = async (offerHit, order) => {
     offerHit.shopifyOrderId = order.shopifyOrderId;
     offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
     offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
+
+    logger.info(
+      `Tracking conversion for order ${
+        order.orderNumber
+      } for shop (${shop.toString()})`,
+      offerHit
+    );
 
     await offerHit.save();
 
@@ -36,7 +45,7 @@ const trackConversion = async (offerHit, order) => {
     );
 
     // Update shop stats.
-    await shop.findByIdAndUpdate(
+    await Shop.findByIdAndUpdate(
       shop.id,
       {
         $inc: {
@@ -52,6 +61,7 @@ const trackConversion = async (offerHit, order) => {
     // Remove copied products associated with this order.
     await Promise.allSettled(
       offerHit.acceptedProducts.map(async ({ shopifyProductId }) => {
+        // Delete the product locally.
         await Product.findOneAndDelete(
           {
             shopifyProductId,
@@ -59,6 +69,9 @@ const trackConversion = async (offerHit, order) => {
           },
           { session }
         );
+
+        // Delete the product from Shopify.
+        await shopifyApiClient.product.delete(shopifyProductId);
       })
     );
   } catch (error) {
