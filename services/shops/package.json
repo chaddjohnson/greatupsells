@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
-    "migrate": "",
+    "migration": "migrate-mongo",
     "start": "serverless offline start --useChildProcesses"
   },
   "repository": {

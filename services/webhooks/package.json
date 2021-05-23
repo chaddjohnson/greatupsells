@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "lint": "eslint src/**/*.js",
-    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
-    "migrate": "",
-    "start": "nodemon src/app --watch src --watch ../../packages/models --ignore node_modules"
+    "format": "find src -type f -iname '*.js' -exec eslint --fix {} +"
   },
   "repository": {
     "type": "git",
@@ -19,6 +17,7 @@
     "@middy/http-cors": "^1.0.0",
     "@neatowebsolutions/upselling-http-client": "0.0.0",
     "@neatowebsolutions/upselling-logger": "0.0.0",
+    "aws4-axios": "^2.2.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
