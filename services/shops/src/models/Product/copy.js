@@ -160,7 +160,7 @@ const copy = async (
         inventory_policy: 'deny'
       }
     );
-  }, 1.5 * 1000);
+  }, 8 * 1000);
 
   return copiedProduct;
 };
