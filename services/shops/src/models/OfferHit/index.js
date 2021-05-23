@@ -80,14 +80,6 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.statics.findByShopifyShopId = function (shopifyShopId) {
-  return OfferHit.find({ shopifyShopId: parseInt(shopifyShopId) });
-};
-
-schema.statics.findByOfferId = function (offerId) {
-  return OfferHit.find({ offer: mongoose.Types.ObjectId(offerId) });
-};
-
 schema.statics.findByOrderId = function (orderId) {
   return OfferHit.find({ order: mongoose.Types.ObjectId(orderId) });
 };

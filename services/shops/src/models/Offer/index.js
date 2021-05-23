@@ -128,10 +128,6 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.statics.findByShopifyShopId = function (shopifyShopId) {
-  return Offer.find({ shopifyShopId });
-};
-
 schema.statics.findByShopId = function (shopId) {
   return Offer.find({ shop: mongoose.Types.ObjectId(shopId) });
 };
