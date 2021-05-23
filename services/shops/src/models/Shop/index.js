@@ -100,7 +100,7 @@ schema.statics.findOneByDomain = function (domain) {
 };
 
 schema.statics.findOneByShopifyShopId = function (shopifyShopId) {
-  return Shop.findOne({ shopifyShopId });
+  return Shop.findOne({ shopifyShopId: parseInt(shopifyShopId) });
 };
 
 schema.statics.createOrUpdate = function (shopDomain, accessToken) {

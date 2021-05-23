@@ -27,7 +27,9 @@ const schema = new mongoose.Schema(
 );
 
 schema.statics.findOneByShopifyCollectionId = function (shopifyCollectionId) {
-  return Collection.findOne({ shopifyCollectionId });
+  return Collection.findOne({
+    shopifyCollectionId: parseInt(shopifyCollectionId)
+  });
 };
 
 schema.methods.trackShopifyProducts = function () {

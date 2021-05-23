@@ -81,7 +81,7 @@ const schema = new mongoose.Schema(
 );
 
 schema.statics.findByShopifyShopId = function (shopifyShopId) {
-  return OfferHit.find({ shopifyShopId });
+  return OfferHit.find({ shopifyShopId: parseInt(shopifyShopId) });
 };
 
 schema.statics.findByOfferId = function (offerId) {
@@ -94,7 +94,7 @@ schema.statics.findByOrderId = function (orderId) {
 
 schema.statics.findOneByAcceptedVariantId = function (shopifyVariantId) {
   return OfferHit.findOne({
-    'acceptedProducts.shopifyVariantId': shopifyVariantId
+    'acceptedProducts.shopifyVariantId': parseInt(shopifyVariantId)
   });
 };
 

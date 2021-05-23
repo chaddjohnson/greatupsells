@@ -29,7 +29,7 @@ schema.statics.findByShopId = function (shopId) {
 };
 
 schema.statics.findOneByShopifyProductId = function (shopifyProductId) {
-  return Product.findOne({ shopifyProductId });
+  return Product.findOne({ shopifyProductId: parseInt(shopifyProductId) });
 };
 
 schema.methods.copy = function (
