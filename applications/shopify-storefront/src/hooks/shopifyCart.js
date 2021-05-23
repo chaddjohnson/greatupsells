@@ -42,7 +42,7 @@ const CartProvider = ({ children }) => {
   const shopifyCartItemsLoading = !shopifyCartItems && !shopifyCartItemsError;
 
   const addProductToShopifyCart = async (variantId, quantity, attempts = 1) => {
-    if (attempts > 5) {
+    if (attempts > 7) {
       return;
     }
 
