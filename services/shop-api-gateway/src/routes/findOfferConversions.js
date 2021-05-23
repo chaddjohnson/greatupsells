@@ -35,7 +35,14 @@ const handler = middy(async (event, context) => {
         `/offers/${offerId}/conversions?startAt=${startAt}&endAt=${endAt}`
       )
     ]);
-    const offerShopId = offer.shop;
+    const offerShopId = offer && offer.shop;
+
+    if (!offer) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
 
     if (shopId !== offerShopId) {
       await logger.warn(

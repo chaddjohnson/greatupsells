@@ -33,7 +33,7 @@ const handler = middy(async (event, context) => {
       httpClient.get(`/offers/${offerId}`)
     ]);
     const shopId = shop && shop._id;
-    const offerShopId = offer.shop;
+    const offerShopId = offer && offer.shop;
     const {
       triggerShopifyProductId,
       offeredShopifyProductIds,

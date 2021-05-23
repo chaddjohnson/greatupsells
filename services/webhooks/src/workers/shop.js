@@ -48,6 +48,10 @@ const processRecord = async (record) => {
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
+    if (!shop) {
+      return;
+    }
+
     await logger.info(`Updating shop ${shop.domain} via webhook`, record);
 
     shop.shopifyShopData = shopifyShopData;

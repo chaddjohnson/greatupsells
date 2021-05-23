@@ -29,8 +29,15 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer.claims;
     const { popupThemeId } = event.pathParameters;
     const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
-    const popupThemeShopId = popupTheme.shop;
+    const popupThemeShopId = popupTheme && popupTheme.shop;
     const data = JSON.parse(event.body);
+
+    if (!popupTheme) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
 
     if (shopId !== popupThemeShopId) {
       await logger.warn(

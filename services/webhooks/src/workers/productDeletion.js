@@ -54,6 +54,10 @@ const processRecord = async (record) => {
       `/products/shopify-product-id/${shopifyProductId}`
     );
 
+    if (!product) {
+      return;
+    }
+
     await logger.debug(`Deleting product via webhook`, record);
 
     await httpClient.delete(`/products/${product._id}`);

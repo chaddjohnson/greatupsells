@@ -32,7 +32,14 @@ const handler = middy(async (event, context) => {
       httpClient.get(`/offers/${offerId}`),
       httpClient.get(`/offers/${offerId}/popup-themes`)
     ]);
-    const offerShopId = offer.shop;
+    const offerShopId = offer && offer.shop;
+
+    if (!offer) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
 
     if (shopId !== offerShopId) {
       await logger.warn(

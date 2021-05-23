@@ -29,6 +29,13 @@ const handler = middy(async (event, context) => {
     const { popupThemeId } = event.pathParameters;
     const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
 
+    if (!popupTheme) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(popupTheme)

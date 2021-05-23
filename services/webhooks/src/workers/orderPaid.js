@@ -53,26 +53,22 @@ const processRecord = async (record) => {
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
-    let order = null;
+    const order = await httpClient.get(
+      `/orders/shopify-order-id/${shopifyOrderId}`
+    );
 
-    try {
-      order = await httpClient.get(
-        `/orders/shopify-order-id/${shopifyOrderId}`
-      );
-    } catch (error) {
-      // Track the order as it is not already tracked. ONLY track paid orders
-      // as unpaid orders are not counted as conversions.
-      if (!order) {
-        await logger.debug(`Creating order via webhook`, record);
+    // Track the order if it is not already tracked. We ONLY track paid orders;
+    // unpaid orders are not counted as conversions.
+    if (!order) {
+      await logger.debug(`Creating order via webhook`, record);
 
-        await httpClient.post(`/orders`, {
-          shop: shop._id,
-          shopifyShopId,
-          shopifyOrderId,
-          shopifyOrderNumber: shopifyOrderData.order_number,
-          shopifyOrderData
-        });
-      }
+      await httpClient.post(`/orders`, {
+        shop: shop._id,
+        shopifyShopId,
+        shopifyOrderId,
+        shopifyOrderNumber: shopifyOrderData.order_number,
+        shopifyOrderData
+      });
     }
   } catch (error) {
     await logger.error(`Error handling order paid webhook`, error, record);

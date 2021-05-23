@@ -29,6 +29,13 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer.claims;
     const shop = await httpClient.get(`/shops/${shopId}`);
 
+    if (!shop) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(shop)
