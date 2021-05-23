@@ -20,7 +20,7 @@ const trackAcceptance = async (
     await session.withTransaction(async () => {
       offerHit.$session(session);
 
-      offerHit.acceptedAt = Date.now();
+      offerHit.acceptedAt = offerHit.acceptedAt || Date.now();
 
       await offerHit.save();
 
