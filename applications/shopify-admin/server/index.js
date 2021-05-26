@@ -71,11 +71,11 @@ const createServer = () => {
         'read_orders',
         'read_inventory',
         'read_script_tags',
-        'read_themes',
+        'read_draft_orders',
         'write_products',
         'write_inventory',
         'write_script_tags',
-        'write_themes'
+        'write_draft_orders'
       ],
       accessMode: 'offline',
       afterAuth: async (ctx) => {
