@@ -20,9 +20,13 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     });
   }, [locale, countryCode, currency]);
 
-  const formatNumber = (value) => {
+  const formatNumber = (value, decimals = 2) => {
     if (numberFormatter?.format) {
-      return numberFormatter.format(value) || value;
+      return (
+        numberFormatter.format(
+          Math.round(value * 10 ** decimals) / 10 ** decimals
+        ) || value
+      );
     }
 
     return value;
