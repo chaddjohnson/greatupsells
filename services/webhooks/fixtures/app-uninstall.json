@@ -72,7 +72,7 @@
       "Content-Type": "application/json",
       "X-Shopify-Topic": "app/uninstalled",
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
-      "X-Shopify-Hmac-SHA256": "twX8NtWT2+7rY3rAc9+QkhGcS8HVZ7uqCq4522W3z/0=",
+      "X-Shopify-Hmac-Sha256": "twX8NtWT2+7rY3rAc9+QkhGcS8HVZ7uqCq4522W3z/0=",
       "X-Shopify-Webhook-Id": "af53a3a1-f2c4-42cf-84b4-b4287a776290",
       "X-Shopify-API-Version": "2020-01"
     }

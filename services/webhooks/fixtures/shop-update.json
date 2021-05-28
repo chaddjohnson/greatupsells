@@ -72,7 +72,7 @@
       "Content-Type": "application/json",
       "X-Shopify-Topic": "shop/update",
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
-      "X-Shopify-Hmac-SHA256": "twX8NtWT2+7rY3rAc9+QkhGcS8HVZ7uqCq4522W3z/0=",
+      "X-Shopify-Hmac-Sha256": "twX8NtWT2+7rY3rAc9+QkhGcS8HVZ7uqCq4522W3z/0=",
       "X-Shopify-Webhook-Id": "cb13af00-d8c2-4eaf-bf8f-9d4797e8ff46",
       "X-Shopify-API-Version": "2020-04"
     }

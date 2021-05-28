@@ -33,7 +33,7 @@
       "X-Shopify-Topic": "collections/create",
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
       "X-Shopify-Collection-Id": "207371436077",
-      "X-Shopify-Hmac-SHA256": "pEZlxBXrCzfxARYib9JZluNBu/8/8N5rI+fD7Jv6wwI=",
+      "X-Shopify-Hmac-Sha256": "pEZlxBXrCzfxARYib9JZluNBu/8/8N5rI+fD7Jv6wwI=",
       "X-Shopify-Webhook-Id": "b83c53f1-5a15-4ac3-adad-9613f8da3732",
       "X-Shopify-API-Version": "2020-04"
     }

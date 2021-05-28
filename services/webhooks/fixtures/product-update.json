@@ -97,7 +97,7 @@
       "X-Shopify-Topic": "products/update",
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
       "X-Shopify-Product-Id": "4552007483437",
-      "X-Shopify-Hmac-SHA256": "1rm4vOp5BtkZxIxP9ZTdbFjvArqubJUn5Fsc/8WB9Nw=",
+      "X-Shopify-Hmac-Sha256": "1rm4vOp5BtkZxIxP9ZTdbFjvArqubJUn5Fsc/8WB9Nw=",
       "X-Shopify-Webhook-Id": "722d0c74-d48d-410e-830d-625003b209d8",
       "X-Shopify-API-Version": "2020-01"
     }

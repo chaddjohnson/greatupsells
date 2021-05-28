@@ -16,7 +16,7 @@
       "X-Shopify-Topic": "products/delete",
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
       "X-Shopify-Product-Id": "5287329529901",
-      "X-Shopify-Hmac-SHA256": "Jk0XBcXEPZXPQgy/Op0WQEOv3uZxRpTb0ZhaLnflDbc=",
+      "X-Shopify-Hmac-Sha256": "Jk0XBcXEPZXPQgy/Op0WQEOv3uZxRpTb0ZhaLnflDbc=",
       "X-Shopify-Webhook-Id": "27b31ab7-6b3f-4c67-86f8-b8bad67b1838",
       "X-Shopify-API-Version": "2020-04"
     }

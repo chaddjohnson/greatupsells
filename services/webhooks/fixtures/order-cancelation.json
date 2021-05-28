@@ -429,7 +429,7 @@
       "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
       "X-Shopify-Order-Id": "2404359143469",
       "X-Shopify-Test": "false",
-      "X-Shopify-Hmac-SHA256": "0q5qu88FSX+HJ5n2XnHRuxqSPQNd99xV0P5jexYjtxc=",
+      "X-Shopify-Hmac-Sha256": "0q5qu88FSX+HJ5n2XnHRuxqSPQNd99xV0P5jexYjtxc=",
       "X-Shopify-Webhook-Id": "68f3d120-e4a2-4ad4-9b6b-9bffb1ee437e",
       "X-Shopify-API-Version": "2020-04"
     }
