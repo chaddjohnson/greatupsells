@@ -131,6 +131,10 @@ const LineChart = ({
       return 0;
     }
 
+    if (data?.length === 1) {
+      return data[0][1];
+    }
+
     const latest = data[data.length - 1][1];
     const earliest = data[0][1];
 
