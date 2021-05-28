@@ -9,6 +9,7 @@ const cancel = async (order) => {
 
   await order.execPopulate('shop');
 
+  const Order = order.constructor;
   const OfferHit = mongodbClient.connection.model('OfferHit');
   const Offer = mongodbClient.connection.model('Offer');
   const Shop = mongodbClient.connection.model('Shop');
@@ -34,7 +35,7 @@ const cancel = async (order) => {
     );
 
     // Update stats for the order. Use one round trip to prevent write conflicts.
-    await order.findByIdAndUpdate(
+    await Order.findByIdAndUpdate(
       order.id,
       {
         // Zero out revenue increase for the order.

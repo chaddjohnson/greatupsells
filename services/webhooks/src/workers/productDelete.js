@@ -24,6 +24,8 @@ httpClient.addRequestInterceptor(
 );
 
 const processData = async (metadata, data, rawData) => {
+  let product = null;
+
   try {
     const hmac = metadata['X-Shopify-Hmac-Sha256'];
     const hmacValid = checkWebhookHmacValidity(
@@ -33,20 +35,25 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', metadata, data);
+      await logger.error('Invalid HMAC for webhook', data);
     }
 
-    const domain = metadata['X-Shopify-Shop-Domain'];
-    const shop = await httpClient.get(`/shops/domain/${domain}`);
+    const shopifyProductData = data;
+    const shopifyProductId = shopifyProductData.id;
 
-    await logger.info(`Deactivating shop ${shop.domain} via webhook`, data);
+    product = await httpClient.get(
+      `/products/shopify-product-id/${shopifyProductId}`
+    );
 
-    await httpClient.post(`/shops/${shop._id}/deactivation`);
+    await httpClient.delete(`/products/${product._id}`);
   } catch (error) {
+    if (!product) {
+      return;
+    }
+
     await logger.error(
-      `Error processing app uninstall webhook data`,
+      `Error processing product deletion webhook data`,
       error,
-      metadata,
       data
     );
   }
@@ -59,7 +66,7 @@ const processRecord = async (record) => {
 
   if (errors) {
     return await logger.error(
-      `Error processing app uninstall webhook record`,
+      `Error processing product deletion webhook record`,
       errors,
       record
     );

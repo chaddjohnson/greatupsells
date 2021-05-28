@@ -42,6 +42,35 @@ During development, a local replica set is required as transactions are used. Pl
 
 Please note that server infrastructure is managed at the organization level and therefore potentially used by other applications.
 
+### ngrok
+
+A paid ngrok account is necessary (please bill us, and include your receipt). Alternatively, if you can quickly figure out how to use another local tunneling mechanism, go for it, and please add to this README if you have success.
+
+If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is an example of how your `~/.ngrok2/ngrok.yml` file should look:
+
+    authtoken: tokenhere
+    region: us
+    tunnels:
+      upselling-shop-api-gateway:
+        addr: 4000
+        proto: http
+        subdomain: chaddjohnson-api
+        host_header: localhost:4000
+      upselling-shopify-admin:
+        addr: 4001
+        proto: http
+        subdomain: chaddjohnson-shopify-app
+        host_header: localhost:4001
+      upselling-webhooks-service:
+        addr: 4008
+        proto: http
+        subdomain: chaddjohnson-webhooks
+        host_header: localhost:4008
+
+Note that the tunnel names (e.g., `upselling-shop-api-gateway`) must remain unchanged.
+
+Please install the `ngrok` binary. Once installed and configured, ngrok will start automatically via `yarn start`.
+
 ## Development
 
 ### Setup
@@ -119,9 +148,7 @@ Hosting is with AWS. The following AWS services are used:
 - ACM
 - Elasticsearch
 
-All infrastructure is managed via Serverless, Terraform, and Ansible.
-
-Linux is used for hosting.
+All infrastructure is managed via Serverless, Terraform, and Ansible. Linux is used for hosting.
 
 ## Architecture
 

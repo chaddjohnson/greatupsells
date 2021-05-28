@@ -4,7 +4,6 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
-const enqueueUpdateShopifyTheme = require('./enqueueUpdateShopifyTheme');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
 const deactivate = require('./deactivate');
@@ -155,10 +154,6 @@ schema.methods.getShopifyApiClient = function () {
 
 schema.methods.createWebhooks = function () {
   return createWebhooks(this);
-};
-
-schema.methods.enqueueUpdateShopifyTheme = function () {
-  return enqueueUpdateShopifyTheme(this);
 };
 
 schema.methods.importCollections = function () {

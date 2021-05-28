@@ -32,7 +32,7 @@ const handler = async (event, context) => {
       { $pull: { triggerProducts: { shopifyProductId } } }
     );
 
-    await logger.info(`Product deleted (${product.toString()})`);
+    await logger.info(`Product deleted (${product.toString()})`, product);
 
     return {
       statusCode: StatusCodes.NO_CONTENT

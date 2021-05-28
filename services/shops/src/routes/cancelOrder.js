@@ -18,7 +18,7 @@ const handler = async (event, context) => {
     }
 
     await order.cancel();
-    await logger.info(`Order canceled (${order.toString()})`);
+    await logger.info(`Order canceled (${order.toString()})`, order);
 
     return {
       statusCode: StatusCodes.NO_CONTENT

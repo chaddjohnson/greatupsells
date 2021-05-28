@@ -23,45 +23,30 @@ httpClient.addRequestInterceptor(
   })
 );
 
-const processRecord = async (record) => {
+const processData = async (metadata, data, rawData) => {
   try {
-    const body = JSON.parse(record.body);
-    const { detail } = body;
-    const { payload, metadata, errors } = detail;
-
-    if (errors) {
-      return await logger.error(
-        `Error handling order paid webhook`,
-        errors,
-        record
-      );
-    }
-
-    const hmac = metadata['X-Shopify-Hmac-SHA256'];
+    const hmac = metadata['X-Shopify-Hmac-Sha256'];
     const hmacValid = checkWebhookHmacValidity(
       SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-      createRawBody(payload),
+      rawData,
       hmac
     );
 
     if (!hmacValid) {
-      return await logger.error('Invalid HMAC for webhook', record);
+      await logger.error('Invalid HMAC for webhook', data);
     }
 
-    const shopifyOrderData = payload;
+    const shopifyOrderData = data;
     const shopifyOrderId = shopifyOrderData.id;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
-    const order = await httpClient.get(
-      `/orders/shopify-order-id/${shopifyOrderId}`
-    );
 
     // Track the order if it is not already tracked. We ONLY track paid orders;
     // unpaid orders are not counted as conversions.
-    if (!order) {
-      await logger.debug(`Creating order via webhook`, record);
-
+    try {
+      await httpClient.get(`/orders/shopify-order-id/${shopifyOrderId}`);
+    } catch (error) {
       await httpClient.post(`/orders`, {
         shop: shop._id,
         shopifyShopId,
@@ -71,12 +56,36 @@ const processRecord = async (record) => {
       });
     }
   } catch (error) {
-    await logger.error(`Error handling order paid webhook`, error, record);
+    await logger.error(`Error processing order paid webhook data`, error, data);
   }
 };
 
-const handler = async (event) => {
-  await Promise.all(event.Records.map(processRecord));
+const processRecord = async (record) => {
+  const body = JSON.parse(record.body);
+  const { detail } = body;
+  const { payload, metadata, errors } = detail;
+
+  if (errors) {
+    return await logger.error(
+      `Error processing order paid webhook record`,
+      errors,
+      record
+    );
+  }
+
+  await processData(metadata, payload, createRawBody(payload));
+};
+
+const handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  if (event.Records) {
+    // SQS (production).
+    await Promise.allSettled(event.Records.map(processRecord));
+  } else {
+    // HTTP (development).
+    await processData(event.headers, JSON.parse(event.body), event.body);
+  }
 };
 
 module.exports.handler = handler;

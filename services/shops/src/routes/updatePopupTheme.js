@@ -11,6 +11,13 @@ const handler = async (event, context) => {
     const popupTheme = await PopupTheme.findById(popupThemeId);
     const data = JSON.parse(event.body);
 
+    if (!popupTheme) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     delete data.__v;
     Object.assign(popupTheme, data);
 

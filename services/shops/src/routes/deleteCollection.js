@@ -1,7 +1,6 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
-const Product = require('../models/Product');
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -10,6 +9,7 @@ const handler = async (event, context) => {
     const { collectionId } = event.pathParameters;
     const Collection = await models.get('Collection');
     const Offer = await models.get('Offer');
+    const Product = await models.get('Product');
     const collection = await Collection.findById(collectionId);
     const { shopifyCollectionId } = collection;
 

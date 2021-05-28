@@ -11,6 +11,13 @@ const handler = async (event, context) => {
     const offer = await Offer.findById(offerId);
     const data = JSON.parse(event.body);
 
+    if (!offer) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     delete data.__v;
     Object.assign(offer, data);
 

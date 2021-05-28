@@ -11,6 +11,13 @@ const handler = async (event, context) => {
     const collection = await Collection.findById(collectionId);
     const data = JSON.parse(event.body);
 
+    if (!collection) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     delete data.__v;
     Object.assign(collection, data);
 

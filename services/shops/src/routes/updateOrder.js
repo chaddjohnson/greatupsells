@@ -11,6 +11,13 @@ const handler = async (event, context) => {
     const order = await Order.findById(orderId);
     const data = JSON.parse(event.body);
 
+    if (!order) {
+      return {
+        statusCode: StatusCodes.NOT_FOUND,
+        body: ReasonPhrases.NOT_FOUND
+      };
+    }
+
     delete data.__v;
     Object.assign(order, data);
 

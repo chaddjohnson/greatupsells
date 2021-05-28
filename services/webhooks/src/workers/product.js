@@ -23,68 +23,85 @@ httpClient.addRequestInterceptor(
   })
 );
 
-const processRecord = async (record) => {
+const processData = async (metadata, data, rawData) => {
   try {
-    const body = JSON.parse(record.body);
-    const { detail } = body;
-    const { payload, metadata, errors } = detail;
-
-    if (errors) {
-      return await logger.error(
-        `Error handling product webhook`,
-        errors,
-        record
-      );
-    }
-
-    const hmac = metadata['X-Shopify-Hmac-SHA256'];
+    const hmac = metadata['X-Shopify-Hmac-Sha256'];
     const hmacValid = checkWebhookHmacValidity(
       SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-      createRawBody(payload),
+      rawData,
       hmac
     );
 
     if (!hmacValid) {
-      return await logger.error('Invalid HMAC for webhook', record);
+      await logger.error('Invalid HMAC for webhook', metadata, data);
     }
 
-    const shopifyProductData = payload;
+    const shopifyProductData = data;
     const shopifyProductId = shopifyProductData.id;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
-    const product = await httpClient.get(
-      `/products/shopify-product-id/${shopifyProductId}`
-    );
-    const dataIsNewer =
-      !product ||
-      !product.shopifyProductData ||
-      new Date(shopifyProductData.updated_at) >
-        new Date(product.shopifyProductData.updated_at);
+    let product = null;
+    let dataIsNewer = false;
 
-    if (!product) {
-      await logger.debug(`Creating product via webhook`, record);
+    try {
+      product = await httpClient.get(
+        `/products/shopify-product-id/${shopifyProductId}`
+      );
+      dataIsNewer =
+        !product.shopifyProductData ||
+        new Date(shopifyProductData.updated_at) >
+          new Date(product.shopifyProductData.updated_at);
 
+      if (dataIsNewer) {
+        product.shopifyProductData = shopifyProductData;
+
+        await httpClient.put(`/products/${product._id}`, product);
+      }
+    } catch (error) {
       await httpClient.post(`/products`, {
         shop: shop._id,
         shopifyShopId,
         shopifyProductId,
         shopifyProductData
       });
-    } else if (dataIsNewer) {
-      await logger.debug(`Updating product via webhook`, record);
-
-      product.shopifyProductData = shopifyProductData;
-
-      await httpClient.put(`/products/${product._id}`, product);
     }
   } catch (error) {
-    await logger.error(`Error handling product webhook`, error, record);
+    await logger.error(
+      `Error processing product webhook data`,
+      error,
+      metadata,
+      data
+    );
   }
 };
 
-const handler = async (event) => {
-  await Promise.all(event.Records.map(processRecord));
+const processRecord = async (record) => {
+  const body = JSON.parse(record.body);
+  const { detail } = body;
+  const { payload, metadata, errors } = detail;
+
+  if (errors) {
+    return await logger.error(
+      `Error processing product webhook record`,
+      errors,
+      record
+    );
+  }
+
+  await processData(metadata, payload, createRawBody(payload));
+};
+
+const handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  if (event.Records) {
+    // SQS (production).
+    await Promise.allSettled(event.Records.map(processRecord));
+  } else {
+    // HTTP (development).
+    await processData(event.headers, JSON.parse(event.body), event.body);
+  }
 };
 
 module.exports.handler = handler;
