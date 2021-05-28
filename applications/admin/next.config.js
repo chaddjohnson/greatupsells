@@ -46,18 +46,14 @@ module.exports = {
     return config;
   },
 
-  // SSR instead of SSG is used as OAuth is handled within this app.
-  target: 'serverless',
-
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
   assetPrefix: dev ? '' : ADMIN_APP_URL,
 
+  target: 'serverless',
   trailingSlash: true,
-
   future: {
     webpack5: true
   },
-
   env: {
     ADMIN_API_GATEWAY_URL
   }

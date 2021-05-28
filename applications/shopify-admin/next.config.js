@@ -57,18 +57,14 @@ module.exports = {
     return config;
   },
 
-  // SSR instead of SSG is used as OAuth is handled within this app.
-  target: 'serverless',
-
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
   assetPrefix: dev ? '' : SHOPIFY_ADMIN_APP_URL,
 
+  target: 'serverless',
   trailingSlash: true,
-
   future: {
     webpack5: true
   },
-
   env: {
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOP_API_GATEWAY_URL
