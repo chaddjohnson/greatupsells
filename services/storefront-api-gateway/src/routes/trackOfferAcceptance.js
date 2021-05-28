@@ -29,21 +29,14 @@ const handler = middy(async (event, context) => {
       httpClient.get(`/shops/domain/${domain}`),
       httpClient.get(`/offers/${offerId}`)
     ]);
-    const shopId = shop && shop._id;
-    const offerShopId = offer && offer.shop;
+    const shopId = shop._id;
+    const offerShopId = offer.shop;
     const {
       offerHitId,
       shopifyProductId,
       shopifyVariantId,
       quantity
     } = JSON.parse(event.body);
-
-    if (!shop || !offer) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
 
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {

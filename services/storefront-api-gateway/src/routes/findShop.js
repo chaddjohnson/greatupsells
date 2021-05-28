@@ -25,14 +25,6 @@ const handler = middy(async (event, context) => {
   try {
     const domain = new URL(event.headers.Origin).host;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
-
-    if (!shop) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
     const { countryCode, currency, locale, timezone } = shop;
 
     return {

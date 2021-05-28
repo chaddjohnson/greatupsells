@@ -10,13 +10,6 @@ class HttpClient {
     client.defaults.headers.common['Content-Type'] =
       'application/json; charset=utf-8';
 
-    client.defaults.validateStatus = (status) => {
-      return (
-        (status >= 200 && status < 300) || // default
-        status === 404 // don't throw an error on 404
-      );
-    };
-
     // Enable this if needing to serialize arrays in query strings.
     // Note that there are difficulties with importing `qs` with webpack 5.
     // client.defaults.paramsSerializer = (params) => {

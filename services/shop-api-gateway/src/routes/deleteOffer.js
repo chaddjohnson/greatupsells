@@ -31,13 +31,6 @@ const handler = middy(async (event, context) => {
     const offer = await httpClient.get(`/offers/${offerId}`);
     const offerShopId = offer && offer.shop;
 
-    if (!offer) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized access attempt for offer ${offerId}`,

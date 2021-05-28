@@ -32,13 +32,6 @@ const handler = middy(async (event, context) => {
     const offerShopId = offer && offer.shop;
     const data = JSON.parse(event.body);
 
-    if (!offer) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized update attempt for offer ${offerId}`,

@@ -30,13 +30,6 @@ const handler = middy(async (event, context) => {
     const shop = await httpClient.get(`/shops/${shopId}`);
     const data = JSON.parse(event.body);
 
-    if (!shop) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
     if (data.appLastOpenedAt) {
       // Set the actual time server-side.
       shop.appLastOpenedAt = Date.now();
