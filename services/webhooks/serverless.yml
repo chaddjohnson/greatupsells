@@ -29,89 +29,105 @@ functions:
           cors: true
   appUninstall:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/appUninstall.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn}
+          arn: ${env:APP_UNINSTALL_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn}
+      - http:
+          path: /shopify/app-uninstall
+          method: post
   collection:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/collection.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn}
-  collectionDeletion:
+          arn: ${env:COLLECTION_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection/arn}
+      - http:
+          path: /shopify/collection
+          method: post
+  collectionDelete:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/collectionDeletion.handler
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/collectionDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn}
-  orderCancelation:
+          arn: ${env:COLLECTION_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection-delete/arn}
+      - http:
+          path: /shopify/collection-delete
+          method: post
+  orderCancel:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/orderCancelation.handler
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/orderCancel.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn}
+          arn: ${env:ORDER_CANCEL_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-cancel/arn}
+      - http:
+          path: /shopify/order-cancel
+          method: post
   orderPaid:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderPaid.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn}
+          arn: ${env:ORDER_PAID_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-paid/arn}
+      - http:
+          path: /shopify/order-paid
+          method: post
   orderUpdate:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn}
+          arn: ${env:ORDER_UPDATE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-update/arn}
+      - http:
+          path: /shopify/order-update
+          method: post
   product:
     reservedConcurrency: 2
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/product.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn}
+          arn: ${env:PRODUCT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product/arn}
           batchSize: 10
           maximumBatchingWindow: 10
-  productDeletion:
+      - http:
+          path: /shopify/product
+          method: post
+  productDelete:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/productDeletion.handler
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/productDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn}
+          arn: ${env:PRODUCT_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product-delete/arn}
+      - http:
+          path: /shopify/product-delete
+          method: post
   shop:
     reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/shop.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn}
-  themePublish:
-    reservedConcurrency: 1
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/themePublish.handler
-    events:
-      - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/theme-publish/arn}
+          arn: ${env:SHOP_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-update/arn}
+      - http:
+          path: /shopify/shop
+          method: post
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
 
 custom:
-  customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/webhooks/endpoint/${self:provider.region}}
-    basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
-    createRoute53Record: true
-    endpointType: regional
-    securityPolicy: tls_1_2
+  serverless-offline:
+    httpPort: ${env:WEBHOOK_PORT}
+    lambdaPort: 5004
 
 package:
   exclude:

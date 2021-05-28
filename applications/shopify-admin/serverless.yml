@@ -1,4 +1,5 @@
 service: upselling-shopify-admin
+useDotenv: true
 
 provider:
   name: aws
@@ -39,7 +40,7 @@ functions:
           method: get
           cors: true
   server:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: server/index.handler
     events:
       - http:
@@ -57,7 +58,7 @@ custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/endpoint/${self:provider.region}}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2

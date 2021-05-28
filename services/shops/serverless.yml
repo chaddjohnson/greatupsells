@@ -15,15 +15,9 @@ provider:
     resourcePolicy: # https://www.serverless.com/framework/docs/deprecations/#AWS_API_GATEWAY_SPECIFIC_KEYS
       - Effect: Allow
         Principal:
-          AWS: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+          AWS: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
         Action: execute-api:Invoke
         Resource: "*"
-  resourcePolicy:
-    - Effect: Allow
-      Principal:
-        AWS: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-      Action: execute-api:Invoke
-      Resource: "*"
   environment:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
     LOG_SOURCE: 'shops-service'
@@ -31,17 +25,16 @@ provider:
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
-    SHOP_THEME_UPDATE_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-theme-update/url}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
-    WEBHOOKS_ARN: ${env:WEBHOOKS_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
+    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${env:SHOP_COLLECTION_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
+    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${env:SHOP_PRODUCT_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
+    WEBHOOK_ARN: ${env:WEBHOOK_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
 
 functions:
   cancelOrder:
     handler: src/routes/cancelOrder.handler
     events:
       - http:
-          path: /order/{orderId}/cancelation
+          path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
   createCollection:
@@ -237,7 +230,7 @@ functions:
     handler: src/routes/findOneProductByShopifyProductId.handler
     events:
       - http:
-          path: /orders/shopify-product-id/{shopifyProductId}
+          path: /products/shopify-product-id/{shopifyProductId}
           method: get
           authorizer: aws_iam
   findOneRandomShopOfferByDomain:
@@ -350,14 +343,6 @@ functions:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam
-  updateShopTheme:
-    handler: src/routes/updateShopTheme.handler
-    events:
-      - http:
-          path: /shops/{shopId}/shopify-theme-update
-          method: post
-          authorizer: aws_iam
-
   calculateStats:
     handler: src/workers/calculateStats.handler
     events:
@@ -378,14 +363,14 @@ functions:
     handler: src/workers/importShopCollections.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
+          arn: ${env:SHOP_COLLECTION_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
     timeout: 900
   importShopProducts:
     reservedConcurrency: 5
     handler: src/workers/importShopProducts.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
+          arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
     timeout: 900
   updateShopActiveStatuses:
     handler: src/workers/updateShopActiveStatuses.handler
@@ -407,9 +392,9 @@ custom:
     httpPort: ${env:SHOPS_API_PORT}
     lambdaPort: 5002
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shops-service-api/endpoint/${self:provider.region}}
+    domainName: ${env:SHOPS_SERVICE_API_ENDPOINT, ssm:/upselling/${self:provider.stage}/shops-service-api/endpoint/${self:provider.region}}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2

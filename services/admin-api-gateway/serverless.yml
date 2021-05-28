@@ -38,7 +38,7 @@ functions:
   #         cors: true
   # findLogs:
   createPopupTheme:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
     events:
       - http:
@@ -50,7 +50,7 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
   findOnePopupTheme:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
     events:
       - http:
@@ -62,7 +62,7 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
   findPopupThemes:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
     events:
       - http:
@@ -76,7 +76,7 @@ functions:
   # findShops:
   # findStats:
   updatePopupTheme:
-    role: ${ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
     events:
       - http:
@@ -97,9 +97,9 @@ custom:
     httpPort: ${env:ADMIN_API_GATEWAY_PORT}
     lambdaPort: 5003
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/admin-api-gateway/endpoint/${self:provider.region}}
+    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/admin-api-gateway/endpoint/${self:provider.region}}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2
