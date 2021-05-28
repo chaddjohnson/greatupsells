@@ -11,7 +11,7 @@ const connectionOptions = {
   poolSize: 5,
 
   // How long the MongoDB driver will wait before killing a socket due to inactivity after initial connection.
-  socketTimeoutMS: 60 * 1000,
+  socketTimeoutMS: 2000000,
 
   // Keep the connection alive.
   keepAlive: true,
