@@ -154,7 +154,7 @@ const AnalyticsPage = () => {
 
     fetchShop();
     fetchShopAnalytics();
-  }, 30);
+  }, 60);
 
   return (
     <Loader

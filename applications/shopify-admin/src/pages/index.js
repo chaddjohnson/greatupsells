@@ -126,7 +126,7 @@ const DashboardPage = () => {
 
     fetchShop();
     fetchShopAcceptances();
-  }, 30);
+  }, 60);
 
   return (
     <Loader

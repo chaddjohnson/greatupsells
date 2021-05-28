@@ -161,7 +161,7 @@ const OfferAnalyticsPage = () => {
     }
 
     fetchOfferAnalytics();
-  }, 30);
+  }, 60);
 
   return (
     <Loader
