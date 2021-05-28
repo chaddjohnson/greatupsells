@@ -17,7 +17,7 @@ const useShopAcceptances = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false
+      revalidateOnFocus: true
     }
   );
   const shopAcceptancesLoading = !shopAcceptances && !shopAcceptancesError;

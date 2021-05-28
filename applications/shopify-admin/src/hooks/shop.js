@@ -13,7 +13,7 @@ const ShopProvider = ({ children }) => {
   const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
     '/shop',
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true }
   );
   const shopLoading = !shop && !shopError;
 

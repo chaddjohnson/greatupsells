@@ -16,7 +16,7 @@ const useOfferConversionRates = (offerId, startAt, endAt) => {
       ? `/offers/${offerId}/conversion-rates?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true }
   );
   const offerConversionRatesLoading =
     !offerConversionRates && !offerConversionRatesError;

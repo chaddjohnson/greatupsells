@@ -16,7 +16,7 @@ const useOfferImpressions = (offerId, startAt, endAt) => {
       ? `/offers/${offerId}/impressions?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true }
   );
   const offerImpressionsLoading = !offerImpressions && !offerImpressionsError;
 

@@ -17,7 +17,7 @@ const useShopConversionRates = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false
+      revalidateOnFocus: true
     }
   );
   const shopConversionRatesLoading =

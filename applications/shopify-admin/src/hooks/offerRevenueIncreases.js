@@ -16,7 +16,7 @@ const useOfferRevenueIncreases = (offerId, startAt, endAt) => {
       ? `/offers/${offerId}/revenue-increases?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true }
   );
   const offerRevenueIncreasesLoading =
     !offerRevenueIncreases && !offerRevenueIncreasesError;

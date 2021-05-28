@@ -16,7 +16,7 @@ const useOfferConversions = (offerId, startAt, endAt) => {
       ? `/offers/${offerId}/conversions?startAt=${startAtDate}&endAt=${endAtDate}`
       : null,
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: true }
   );
   const offerConversionsLoading = !offerConversions && !offerConversionsError;
 
