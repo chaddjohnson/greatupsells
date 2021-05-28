@@ -14,10 +14,9 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/email",
-  "dependencies": {},
   "devDependencies": {
-    "serverless": "^2.4.0",
-    "serverless-offline": "^6.8.0",
+    "serverless": "^2.43.1",
+    "serverless-offline": "^7.0.0",
     "serverless-plugin-monorepo": "^0.9.0"
   }
 }

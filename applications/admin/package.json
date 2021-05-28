@@ -35,7 +35,7 @@
     "@neatowebsolutions/upselling-react-components": "0.0.0",
     "@neatowebsolutions/upselling-react-hooks": "0.0.0",
     "babel-plugin-transform-imports": "^2.0.0",
-    "serverless": "^2.4.0",
+    "serverless": "^2.43.1",
     "serverless-domain-manager": "^4.0.1",
     "serverless-plugin-monorepo": "^0.9.0"
   },
