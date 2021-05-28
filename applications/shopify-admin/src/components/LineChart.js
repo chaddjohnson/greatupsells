@@ -48,6 +48,11 @@ const LineChart = ({
       yAxis: {
         title: {
           text: ''
+        },
+        labels: {
+          formatter(item) {
+            return formatNumber(item.value);
+          }
         }
       },
       legend: {
