@@ -50,6 +50,14 @@ const getAll = async () => ({
 // Use Bluebird for promises.
 mongoose.Promise = Promise;
 
+// Set serialization options.
+mongoose.set('toObject', {
+  depopulate: true
+});
+mongoose.set('toJSON', {
+  depopulate: true
+});
+
 module.exports = {
   get,
   getAll
