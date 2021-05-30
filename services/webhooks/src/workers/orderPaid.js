@@ -1,3 +1,4 @@
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const {
   checkWebhookHmacValidity,
   createRawBody
@@ -85,6 +86,11 @@ const handler = async (event, context) => {
   } else {
     // HTTP (development).
     await processData(event.headers, JSON.parse(event.body), event.body);
+
+    return {
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
+    };
   }
 };
 
