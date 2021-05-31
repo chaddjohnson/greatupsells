@@ -45,7 +45,7 @@ const formatData = (data = {}) =>
               null,
               2
             )
-          : { ...map, [key]: data[key] }
+          : data[key]
     }),
     {}
   );
