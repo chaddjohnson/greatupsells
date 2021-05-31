@@ -11,9 +11,12 @@ const {
 
 module.exports = {
   webpack: (config) => {
-    if (!dev) {
+    if (dev) {
+      // Enable ESLint checking during development.
       config.plugins.push(new ESLintPlugin());
+    }
 
+    if (!dev) {
       // Enable compression in production. Use Brotli which is superior to gzip.
       config.plugins.push(
         new CompressionWebpackPlugin({
