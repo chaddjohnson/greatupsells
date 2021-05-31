@@ -35,8 +35,8 @@ const handler = middy(async (event, context) => {
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized update attempt for offer ${offerId}`,
-        data,
-        event
+        null,
+        { data, event }
       );
 
       return {
@@ -71,7 +71,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error updating offer`, error, event);
+    await logger.error(`Error updating offer`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -1,17 +1,16 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const PopupTheme = await models.get('PopupTheme');
-    const data = JSON.parse(event.body);
-    const popupTheme = new PopupTheme(data);
+    const Log = await models.get('Log');
+    const { source, type, message, stackTrace, data } = JSON.parse(event.body);
+    const log = new Log({ source, type, message, stackTrace, data });
 
     try {
-      await popupTheme.validate();
+      await log.validate();
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
@@ -19,15 +18,18 @@ const handler = async (event, context) => {
       };
     }
 
-    await popupTheme.save();
-    await logger.info(`Popup theme created`, { popupTheme });
+    await log.save();
 
     return {
-      statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(popupTheme)
+      statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error creating popup theme`, error, { event });
+    // eslint-disable-next-line no-console
+    console.error(
+      `Error creating log`,
+      error.stack,
+      JSON.stringify(event.body, null, 2)
+    );
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

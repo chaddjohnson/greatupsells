@@ -34,7 +34,8 @@ const handler = middy(async (event, context) => {
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized access attempt for offer ${offerId}`,
-        event
+        null,
+        { event }
       );
 
       return {
@@ -56,7 +57,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error deleting offer`, error, event);
+    await logger.error(`Error deleting offer`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

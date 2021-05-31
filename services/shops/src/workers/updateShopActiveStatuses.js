@@ -9,7 +9,7 @@ const handler = async (event, context) => {
 
     await Shop.updateActiveStatuses();
   } catch (error) {
-    await logger.error(`Job updateShopActiveStatuses failed`, error, event);
+    await logger.error(`Job updateShopActiveStatuses failed`, error, { event });
     throw error;
   }
 };

@@ -33,14 +33,14 @@ const handler = async (event, context) => {
     await offer.save();
     await offer.execPopulate('shop');
 
-    await logger.info(`Offer updated (${offer.toString()})`, offer);
+    await logger.info(`Offer updated (${offer.toString()})`, { offer });
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(offer)
     };
   } catch (error) {
-    await logger.error(`Error updating offer`, error, event);
+    await logger.error(`Error updating offer`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

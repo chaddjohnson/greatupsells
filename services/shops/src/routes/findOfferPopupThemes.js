@@ -24,7 +24,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerPopupThemes)
     };
   } catch (error) {
-    await logger.error(`Error retrieving offer popup themes`, error, event);
+    await logger.error(`Error retrieving offer popup themes`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

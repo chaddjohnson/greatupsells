@@ -54,7 +54,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error creating offer`, error, event);
+    await logger.error(`Error creating offer`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

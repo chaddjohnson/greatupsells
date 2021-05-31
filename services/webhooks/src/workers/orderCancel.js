@@ -36,7 +36,7 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', metadata);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyOrderData = data;
@@ -51,11 +51,10 @@ const processData = async (metadata, data, rawData) => {
 
     // Only cancel if the order is not marked as canceled.
     if (order && !order.canceledAt) {
-      await logger.info(
-        `Canceling order ${order.orderNumber} via webhook`,
+      await logger.info(`Canceling order ${order.orderNumber} via webhook`, {
         metadata,
         data
-      );
+      });
 
       await httpClient.post(`/orders/${order._id}/cancelation`);
     }
@@ -64,12 +63,10 @@ const processData = async (metadata, data, rawData) => {
       return;
     }
 
-    await logger.error(
-      `Error processing order cancel webhook data`,
-      error,
+    await logger.error(`Error processing order cancel webhook data`, error, {
       metadata,
       data
-    );
+    });
   }
 };
 
@@ -81,8 +78,8 @@ const processRecord = async (record) => {
   if (errors) {
     return await logger.error(
       `Error processing order cancelation webhook record`,
-      errors,
-      record
+      null,
+      { errors, record }
     );
   }
 

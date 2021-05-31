@@ -33,14 +33,14 @@ const handler = async (event, context) => {
     await order.save();
     await order.execPopulate('shop');
 
-    await logger.info(`Order updated (${order.toString()})`, order);
+    await logger.info(`Order updated (${order.toString()})`, { order });
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(order)
     };
   } catch (error) {
-    await logger.error(`Error updating order`, error, event);
+    await logger.error(`Error updating order`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

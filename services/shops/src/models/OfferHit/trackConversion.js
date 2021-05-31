@@ -26,7 +26,7 @@ const trackConversion = async (offerHit, order) => {
       `Tracking conversion for order ${
         order.orderNumber
       } for shop (${shop.toString()})`,
-      offerHit
+      { offerHit }
     );
 
     await offerHit.save();
@@ -80,8 +80,7 @@ const trackConversion = async (offerHit, order) => {
         offerHit && offerHit.toString()
       }) in shop (${shop && shop.toString()})`,
       error,
-      offer,
-      offerHit
+      { offer, offerHit }
     );
     throw error;
   }

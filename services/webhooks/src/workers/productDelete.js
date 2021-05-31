@@ -36,7 +36,7 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', data);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyProductData = data;
@@ -55,7 +55,7 @@ const processData = async (metadata, data, rawData) => {
     await logger.error(
       `Error processing product deletion webhook data`,
       error,
-      data
+      { metadata, data }
     );
   }
 };
@@ -68,8 +68,8 @@ const processRecord = async (record) => {
   if (errors) {
     return await logger.error(
       `Error processing product deletion webhook record`,
-      errors,
-      record
+      null,
+      { errors, record }
     );
   }
 

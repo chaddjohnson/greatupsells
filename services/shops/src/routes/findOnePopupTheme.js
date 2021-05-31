@@ -22,7 +22,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(popupTheme)
     };
   } catch (error) {
-    await logger.error(`Error retrieving popup theme`, error, event);
+    await logger.error(`Error retrieving popup theme`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

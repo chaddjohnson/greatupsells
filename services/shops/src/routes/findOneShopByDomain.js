@@ -22,7 +22,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(shop)
     };
   } catch (error) {
-    await logger.error(`Error retrieving shop`, error, event);
+    await logger.error(`Error retrieving shop`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

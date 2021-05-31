@@ -36,7 +36,7 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', data);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyCollectionData = data;
@@ -49,7 +49,7 @@ const processData = async (metadata, data, rawData) => {
 
     await logger.info(
       `Deleting collection "${collection.title}" for shop ${shop.domain} via webhook`,
-      data
+      { data }
     );
 
     await httpClient.delete(`/collections/${collection._id}`);
@@ -61,7 +61,7 @@ const processData = async (metadata, data, rawData) => {
     await logger.error(
       `Error processing collection deletion webhook data`,
       error,
-      data
+      { metadata, data }
     );
   }
 };
@@ -74,8 +74,8 @@ const processRecord = async (record) => {
   if (errors) {
     return await logger.error(
       `Error processing collection deletion webhook record`,
-      errors,
-      record
+      null,
+      { errors, record }
     );
   }
 

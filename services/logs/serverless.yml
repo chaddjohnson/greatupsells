@@ -15,6 +15,21 @@ provider:
     MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri~true}
 
 functions:
+  createLog:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/routes/createLog.handler
+    events:
+      - http:
+          path: /logs
+          method: post
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
   log:
     memorySize: 128
     reservedConcurrency: 1
@@ -24,6 +39,15 @@ functions:
           arn: ${ssm:/upselling/${self:provider.stage}/log-queue-arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 10
           maximumBatchingWindow: 60
+  findLogs:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/routes/findLogs.handler
+    events:
+      - http:
+          path: /logs
+          method: get
+          cors: true
 
 plugins:
   - serverless-plugin-monorepo

@@ -25,7 +25,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerImpressions)
     };
   } catch (error) {
-    await logger.error(`Error retrieving offer impressions`, error, event);
+    await logger.error(`Error retrieving offer impressions`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

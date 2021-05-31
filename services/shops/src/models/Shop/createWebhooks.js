@@ -78,7 +78,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         `Created Shopify webhook "${
           definition.topic
         }" for shop (${shop.toString()})`,
-        definition
+        { definition }
       );
     } catch (error) {
       await logger.warn(
@@ -86,7 +86,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
           definition.topic
         }" for shop (${shop.toString()})`,
         error,
-        definition
+        { definition }
       );
 
       throw error;
@@ -107,7 +107,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         `Updated Shopify webhook "${
           definition.topic
         }" for shop (${shop.toString()})`,
-        webhook
+        { webhook }
       );
     } catch (error) {
       const ignoredHttpStatuses = [
@@ -129,7 +129,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
           definition.topic
         } for shop ${shop.toString()}`,
         error,
-        webhook
+        { webhook }
       );
 
       throw error;

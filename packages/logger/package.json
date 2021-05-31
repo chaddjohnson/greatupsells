@@ -11,9 +11,14 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/logger",
   "dependencies": {
-    "aws-sdk": "^2.802.0"
+    "@neatowebsolutions/upselling-http-client": "0.0.0",
+    "aws-sdk": "^2.802.0",
+    "aws4-axios": "^2.2.0",
+    "axios": "^0.21.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@neatowebsolutions/upselling-http-client": "0.0.0"
+  },
   "scripts": {
     "format": "eslint --fix index.js",
     "lint": "eslint index.js"

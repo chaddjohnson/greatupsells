@@ -1,5 +1,3 @@
-const Promise = require('bluebird');
-const mongoose = require('mongoose'); // eslint-disable-line import/no-unresolved
 const path = require('path');
 const mongodbClient = require('./mongodbClient');
 
@@ -45,17 +43,6 @@ const get = async (modelName) => {
 
 const getAll = async () => ({
   Log: await get('Log')
-});
-
-// Use Bluebird for promises.
-mongoose.Promise = Promise;
-
-// Set serialization options.
-mongoose.set('toObject', {
-  depopulate: true
-});
-mongoose.set('toJSON', {
-  depopulate: true
 });
 
 module.exports = {

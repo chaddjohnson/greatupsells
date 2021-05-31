@@ -1,4 +1,6 @@
-const MongoDBClient = require('@chaddjohnson/mongodb-client-lambda');
+const Promise = require('bluebird');
+const mongoose = require('mongoose');
+const MongodbClientLambda = require('@chaddjohnson/mongodb-client-lambda');
 
 const { MONGODB_URI_LOGS } = process.env;
 
@@ -21,6 +23,13 @@ const connectionOptions = {
   useFindAndModify: false
 };
 
-const mongodbClient = new MongoDBClient(connectionUri, connectionOptions);
+const mongodbClient = new MongodbClientLambda(connectionUri, connectionOptions);
+
+// Use Bluebird for promises.
+mongoose.Promise = Promise;
+
+// Set serialization options.
+mongoose.set('toObject', { depopulate: true });
+mongoose.set('toJSON', { depopulate: true });
 
 module.exports = mongodbClient;

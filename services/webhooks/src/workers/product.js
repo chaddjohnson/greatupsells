@@ -34,7 +34,7 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', metadata, data);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyProductData = data;
@@ -68,12 +68,10 @@ const processData = async (metadata, data, rawData) => {
       });
     }
   } catch (error) {
-    await logger.error(
-      `Error processing product webhook data`,
-      error,
+    await logger.error(`Error processing product webhook data`, error, {
       metadata,
       data
-    );
+    });
   }
 };
 
@@ -83,11 +81,10 @@ const processRecord = async (record) => {
   const { payload, metadata, errors } = detail;
 
   if (errors) {
-    return await logger.error(
-      `Error processing product webhook record`,
+    return await logger.error(`Error processing product webhook record`, null, {
       errors,
       record
-    );
+    });
   }
 
   await processData(metadata, payload, createRawBody(payload));

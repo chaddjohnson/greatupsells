@@ -16,7 +16,7 @@ const handler = async (event, context) => {
   try {
     await Promise.all(event.Records.map(processRecord));
   } catch (error) {
-    await logger.error(`Job importShopProducts failed`, error, event);
+    await logger.error(`Job importShopProducts failed`, error, { event });
     throw error;
   }
 };

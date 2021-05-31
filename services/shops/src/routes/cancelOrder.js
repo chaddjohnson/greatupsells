@@ -18,13 +18,13 @@ const handler = async (event, context) => {
     }
 
     await order.cancel();
-    await logger.info(`Order canceled (${order.toString()})`, order);
+    await logger.info(`Order canceled (${order.toString()})`, { order });
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error canceling order`, error, event);
+    await logger.error(`Error canceling order`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

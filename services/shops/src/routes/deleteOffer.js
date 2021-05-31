@@ -24,7 +24,7 @@ const handler = async (event, context) => {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error deleting offer`, error, event);
+    await logger.error(`Error deleting offer`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

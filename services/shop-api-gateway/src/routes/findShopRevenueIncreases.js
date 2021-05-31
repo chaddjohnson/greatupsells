@@ -44,7 +44,9 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error requesting shop revenue increases`, error, event);
+    await logger.error(`Error requesting shop revenue increases`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -43,7 +43,7 @@ const handler = async (event, context) => {
   const { methodArn } = event;
 
   if (!token || !methodArn) {
-    await logger.warn('Unauthorized access attempt', event);
+    await logger.warn('Unauthorized access attempt', null, { event });
 
     return {
       statusCode: StatusCodes.UNAUTHORIZED,
@@ -65,7 +65,7 @@ const handler = async (event, context) => {
       throw new Error('Cannot decode JWT');
     }
   } catch (error) {
-    await logger.warn('Invalid access attempt', event);
+    await logger.warn('Invalid access attempt', null, { event });
 
     return generateAuthResponse('user', 'Deny', methodArn);
   }

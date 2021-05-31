@@ -1,58 +1,61 @@
 const AWS = require('aws-sdk');
+const { aws4Interceptor } = require('aws4-axios');
+const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
 // TODO: Use bunyan? Use winston?
 
-const { LOG_QUEUE_URL, LOG_SOURCE } = process.env;
+const { AWS_REGION, LOG_QUEUE_URL, LOGS_API_URL, LOG_SOURCE } = process.env;
 
-const formatErrorData = (error) => {
-  if (!(error instanceof Error)) {
-    return '';
+const httpClient = new HttpClient({
+  baseUrl: LOGS_API_URL
+});
+
+httpClient.addRequestInterceptor(
+  aws4Interceptor({
+    region: AWS_REGION,
+    service: 'execute-api'
+  })
+);
+
+const extractErrorData = (error) => {
+  const data = {};
+
+  // Include response error.
+  if (error && error.errors) {
+    data.errors = error.errors;
   }
 
-  // Include stack trace.
-  let string = `${error.stack}\n\n`;
-
-  // Include validation errors.
-  if (error.errors) {
-    string += `${JSON.stringify(error.errors, null, 2)}\n\n`;
+  // Include request error response body.
+  if (error && error.response.body) {
+    data.responseBody = error.response.body;
   }
 
-  // Include request errors.
-  if (error.response && error.response.body) {
-    string += JSON.stringify(error.response.body, null, 2);
-  }
-
-  return string.trim();
+  return data;
 };
 
-const formatObjectData = (data) => {
-  if (typeof data === 'object') {
-    if (data.toObject) {
-      // For easy compatibility with Mongoose.
-      return JSON.stringify(data.toObject(), null, 2);
-    } else {
-      return JSON.stringify(data, null, 2);
-    }
-  }
+// Stringify and format each object data value.
+const formatData = (data = {}) =>
+  Object.keys(data).reduce(
+    (map, key) => ({
+      ...map,
+      [key]:
+        typeof data[key] === 'object'
+          ? JSON.stringify(
+              data[key].toObject ? data[key].toObject() : data[key],
+              null,
+              2
+            )
+          : { ...map, [key]: data[key] }
+    }),
+    {}
+  );
 
-  return data || '';
-};
-
-const format = (data) =>
-  data
-    .reduce(
-      (string, item) =>
-        `${string}\n${formatErrorData(item)}\n${formatObjectData(item)}\n\n`,
-      ''
-    )
-    .trim();
-
-const sendMessage = async (type, message, data) => {
+const sendMessage = async (type, message, stackTrace, data) => {
   const source = LOG_SOURCE;
 
   try {
     const sqs = new AWS.SQS();
-    const body = { source, type, message, data };
+    const body = { source, type, message, stackTrace, data };
 
     if (LOG_QUEUE_URL) {
       await sqs
@@ -61,6 +64,8 @@ const sendMessage = async (type, message, data) => {
           MessageBody: JSON.stringify(body)
         })
         .promise();
+    } else if (LOGS_API_URL) {
+      await httpClient.post('/logs', body);
     }
   } catch (error) {
     console.error(
@@ -69,40 +74,51 @@ const sendMessage = async (type, message, data) => {
   }
 };
 
-const debug = async (message, ...data) => {
-  const formattedData = format(data);
-
-  console.debug(message);
-  console.debug(formattedData);
-};
-
-const info = async (message, ...data) => {
-  const formattedData = format(data);
-
+const logDebug = async (message) => {
   console.info(message);
-  console.info(formattedData);
-  await sendMessage('INFO', message, data);
 };
 
-const warn = async (message, ...data) => {
-  const formattedData = format(data);
+const logInfo = async (message, data = {}) => {
+  console.info(message);
+
+  data = formatData(data);
+
+  await sendMessage('INFO', message, undefined, data);
+};
+
+const logWarning = async (message, error, data = {}) => {
+  const stackTrace = error instanceof Error && error.stack;
 
   console.warn(message);
-  console.warn(formattedData);
-  await sendMessage('WARN', message, data);
+
+  if (error) {
+    console.warn(error.stack);
+  }
+
+  data = { ...data, ...extractErrorData(error) };
+  data = formatData(data);
+
+  await sendMessage('WARN', message, stackTrace, data);
 };
 
-const error = async (message, ...data) => {
-  const formattedData = format(data);
+const logError = async (message, error, data = {}) => {
+  const stackTrace = error instanceof Error && error.stack;
 
   console.error(message);
-  console.error(formattedData);
-  await sendMessage('ERROR', message, data);
+
+  if (error) {
+    console.error(error.stack);
+  }
+
+  data = { ...data, ...extractErrorData(error) };
+  data = formatData(data);
+
+  await sendMessage('ERROR', message, stackTrace, data);
 };
 
 module.exports = {
-  debug,
-  info,
-  warn,
-  error
+  debug: logDebug,
+  info: logInfo,
+  warn: logWarning,
+  error: logError
 };

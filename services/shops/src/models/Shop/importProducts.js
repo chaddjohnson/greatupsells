@@ -23,7 +23,7 @@ const importProduct = async (shop, shopifyProductData) => {
 
       await logger.info(
         `Imported product from Shopify (${product.toString()})`,
-        shopifyProductData
+        { shopifyProductData }
       );
     }
 

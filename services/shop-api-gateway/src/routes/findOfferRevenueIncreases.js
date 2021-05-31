@@ -40,7 +40,8 @@ const handler = middy(async (event, context) => {
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized access attempt for offer ${offerId} revenue increases`,
-        event
+        null,
+        { event }
       );
 
       return {
@@ -61,11 +62,9 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(
-      `Error requesting offer revenue increases`,
-      error,
+    await logger.error(`Error requesting offer revenue increases`, error, {
       event
-    );
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

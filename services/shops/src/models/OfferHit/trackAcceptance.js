@@ -61,8 +61,7 @@ const trackAcceptance = async (
         offerHit && offerHit.toString()
       }) in shop (${shop && shop.toString()})`,
       error,
-      offer,
-      offerHit
+      { offer, offerHit }
     );
 
     throw error;

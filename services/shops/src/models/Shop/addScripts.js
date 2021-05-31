@@ -17,7 +17,9 @@ const addScripts = async (shop) => {
       display_scope: 'all'
     });
 
-    await logger.info(`Added script tag for shop (${shop.toString()})`, src);
+    await logger.info(`Added script tag for shop (${shop.toString()})`, {
+      src
+    });
   }
 };
 

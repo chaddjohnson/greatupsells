@@ -79,8 +79,7 @@ const trackImpression = async (
         offer && offer.toString()
       }) in shop (${shop && shop.toString()})`,
       error,
-      offerHit,
-      ipAddress
+      { offerHit, ipAddress }
     );
 
     throw error;

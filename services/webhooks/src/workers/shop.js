@@ -34,20 +34,23 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', data);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyShopData = data;
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    await logger.info(`Updating shop ${shop.domain} via webhook`, data);
+    await logger.info(`Updating shop ${shop.domain} via webhook`, { data });
 
     shop.shopifyShopData = shopifyShopData;
 
     await httpClient.put(`/shops/${shop._id}`, shop);
   } catch (error) {
-    await logger.error(`Error processing shop webhook data`, error, data);
+    await logger.error(`Error processing shop webhook data`, error, {
+      metadata,
+      data
+    });
   }
 };
 
@@ -57,11 +60,10 @@ const processRecord = async (record) => {
   const { payload, metadata, errors } = detail;
 
   if (errors) {
-    return await logger.error(
-      `Error processing shop webhook record`,
+    return await logger.error(`Error processing shop webhook record`, null, {
       errors,
       record
-    );
+    });
   }
 
   await processData(metadata, payload, createRawBody(payload));

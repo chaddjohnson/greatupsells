@@ -108,7 +108,9 @@ const handler = async (event, context) => {
       body: JSON.stringify(offersData)
     };
   } catch (error) {
-    await logger.error(`Error retrieving random offer for shop`, error, event);
+    await logger.error(`Error retrieving random offer for shop`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

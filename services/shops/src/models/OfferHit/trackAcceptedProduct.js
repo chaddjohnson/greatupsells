@@ -46,11 +46,9 @@ const trackAcceptedProduct = async (
     // the price of a cart item without using a discount code.
     copiedProduct = await product.copy(shopifyProductData, variant, quantity);
   } catch (error) {
-    await logger.error(
-      `Error copying product ${shopifyProductId}`,
-      error,
-      `Variant = ${shopifyVariantId}`
-    );
+    await logger.error(`Error copying product ${shopifyProductId}`, error, {
+      variant: shopifyVariantId
+    });
     throw error;
   }
 

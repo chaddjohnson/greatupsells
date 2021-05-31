@@ -9,7 +9,7 @@ const handler = async (event, context) => {
 
     await Stats.calculateToday();
   } catch (error) {
-    await logger.error(`Error alculating status for today`, error, event);
+    await logger.error(`Error alculating status for today`, error, { event });
     throw error;
   }
 };

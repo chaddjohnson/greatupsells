@@ -14,7 +14,7 @@ const patchHideCopiedProductsFromCollectionDisplay = async (
   if (patched) {
     await logger.info(
       `Aborting theme patch "hideCopiedProductsFromCollectionDisplay" as asset "${assetKey}" is already patched in shop (${shop.toString()})`,
-      assetValue
+      { assetValue }
     );
     return assetValue;
   }
@@ -49,9 +49,7 @@ const patchAsset = async (shop, theme, asset) => {
     if (originalValue !== newValue) {
       await logger.info(
         `Patching asset "${key}" for shop (${shop.toString()})`,
-        originalValue,
-        '---',
-        newValue
+        { originalValue, newValue }
       );
       await shopifyApiClient.asset.update(theme.id, { key, value: newValue });
     }

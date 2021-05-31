@@ -34,22 +34,20 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', metadata, data);
+      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const domain = metadata['X-Shopify-Shop-Domain'];
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    await logger.info(`Deactivating shop ${shop.domain} via webhook`, data);
+    await logger.info(`Deactivating shop ${shop.domain} via webhook`, { data });
 
     await httpClient.post(`/shops/${shop._id}/deactivation`);
   } catch (error) {
-    await logger.error(
-      `Error processing app uninstall webhook data`,
-      error,
+    await logger.error(`Error processing app uninstall webhook data`, error, {
       metadata,
       data
-    );
+    });
   }
 };
 
@@ -61,8 +59,8 @@ const processRecord = async (record) => {
   if (errors) {
     return await logger.error(
       `Error processing app uninstall webhook record`,
-      errors,
-      record
+      null,
+      { errors, record }
     );
   }
 

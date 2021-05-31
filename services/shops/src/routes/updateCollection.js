@@ -34,14 +34,16 @@ const handler = async (event, context) => {
     await collection.trackShopifyProducts();
     await collection.execPopulate('shop');
 
-    await logger.info(`Collection updated (${collection.toString()})`, data);
+    await logger.info(`Collection updated (${collection.toString()})`, {
+      data
+    });
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(collection)
     };
   } catch (error) {
-    await logger.error(`Error updating collection`, error, event);
+    await logger.error(`Error updating collection`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

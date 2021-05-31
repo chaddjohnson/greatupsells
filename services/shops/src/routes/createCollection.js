@@ -23,14 +23,16 @@ const handler = async (event, context) => {
     await collection.trackShopifyProducts();
     await collection.execPopulate('shop');
 
-    await logger.info(`Collection created (${collection.toString()})`, data);
+    await logger.info(`Collection created (${collection.toString()})`, {
+      data
+    });
 
     return {
       statusCode: StatusCodes.CREATED,
       body: JSON.stringify(collection)
     };
   } catch (error) {
-    await logger.error(`Error creating collection`, error, event);
+    await logger.error(`Error creating collection`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

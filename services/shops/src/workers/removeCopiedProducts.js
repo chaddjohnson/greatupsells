@@ -9,7 +9,7 @@ const handler = async (event, context) => {
 
     await Product.removeCopiedProducts();
   } catch (error) {
-    await logger.error(`Job removeCopiedProducts failed`, error, event);
+    await logger.error(`Job removeCopiedProducts failed`, error, { event });
     throw error;
   }
 };

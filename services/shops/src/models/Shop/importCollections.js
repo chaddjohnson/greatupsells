@@ -23,7 +23,7 @@ const importCollection = async (shop, shopifyCollectionData) => {
 
       await logger.info(
         `Imported collection from Shopify (${collection.toString()})`,
-        shopifyCollectionData
+        { shopifyCollectionData }
       );
     }
 

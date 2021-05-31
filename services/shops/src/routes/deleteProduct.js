@@ -32,13 +32,13 @@ const handler = async (event, context) => {
       { $pull: { triggerProducts: { shopifyProductId } } }
     );
 
-    await logger.info(`Product deleted (${product.toString()})`, product);
+    await logger.info(`Product deleted (${product.toString()})`, { product });
 
     return {
       statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error deleting product`, error, event);
+    await logger.error(`Error deleting product`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

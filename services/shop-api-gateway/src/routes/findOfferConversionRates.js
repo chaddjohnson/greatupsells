@@ -40,7 +40,8 @@ const handler = middy(async (event, context) => {
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized access attempt for offer ${offerId} conversion rates`,
-        event
+        null,
+        { event }
       );
 
       return {
@@ -61,7 +62,9 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error requesting offer conversion rates`, error, event);
+    await logger.error(`Error requesting offer conversion rates`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -53,7 +53,7 @@ const activatePlanUpgrade = async (shop) => {
 
     await logger.info(
       `Activated recurring charge ${shop.plan.chargeId} for shop ${shop.domain} and set plan to ${shop.plan.level}`,
-      recurringChargeData
+      { recurringChargeData }
     );
   } catch (error) {
     await logger.error(

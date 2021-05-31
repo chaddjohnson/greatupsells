@@ -28,11 +28,9 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerRevenueIncreases)
     };
   } catch (error) {
-    await logger.error(
-      `Error retrieving offer revenue increases`,
-      error,
+    await logger.error(`Error retrieving offer revenue increases`, error, {
       event
-    );
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

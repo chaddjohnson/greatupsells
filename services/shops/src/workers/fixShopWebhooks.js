@@ -9,7 +9,7 @@ const handler = async (event, context) => {
 
     await Shop.fixWebhooks();
   } catch (error) {
-    await logger.warn(`Job fixShopWebhooks failed`, error, event);
+    await logger.warn(`Job fixShopWebhooks failed`, error, { event });
     throw error;
   }
 };

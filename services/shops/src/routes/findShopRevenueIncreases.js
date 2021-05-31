@@ -28,7 +28,9 @@ const handler = async (event, context) => {
       body: JSON.stringify(shopRevenueIncreases)
     };
   } catch (error) {
-    await logger.error(`Error retrieving shop revenue increases`, error, event);
+    await logger.error(`Error retrieving shop revenue increases`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
