@@ -55,17 +55,14 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
         addr: 4000
         proto: http
         subdomain: chaddjohnson-api
-        host_header: localhost:4000
       upselling-shopify-admin:
         addr: 4001
         proto: http
         subdomain: chaddjohnson-shopify-app
-        host_header: localhost:4001
       upselling-webhooks-service:
         addr: 4008
         proto: http
         subdomain: chaddjohnson-webhooks
-        host_header: localhost:4008
 
 Note that the tunnel names (e.g., `upselling-shop-api-gateway`) must remain unchanged.
 
