@@ -13,7 +13,7 @@ module.exports = {
   webpack: (config) => {
     if (dev) {
       // Enable ESLint checking during development.
-      config.plugins.push(new ESLintPlugin());
+      config.plugins.push(new ESLintPlugin({ cache: true }));
     }
 
     if (!dev) {

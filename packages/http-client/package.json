@@ -19,7 +19,6 @@
     "build": "webpack",
     "format": "eslint --fix index.js",
     "lint": "eslint index.js",
-    "start": "webpack --watch",
-    "postinstall": "NODE_ENV=production yarn build"
+    "start": "webpack --watch"
   }
 }

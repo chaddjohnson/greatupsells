@@ -11,5 +11,6 @@ build
 .next
 *.save
 *.bak
+.eslintcache
 pm2.json
 /archive

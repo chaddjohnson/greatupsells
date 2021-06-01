@@ -3,15 +3,22 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
+const dev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   target: 'web',
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: dev ? 'development' : 'production',
   entry: './src/index.js',
+  devtool: false,
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
     libraryTarget: 'umd',
-    globalObject: 'this'
+    globalObject: 'this',
+    publicPath: '/'
+  },
+  cache: {
+    type: 'filesystem'
   },
   module: {
     rules: [
@@ -19,14 +26,18 @@ module.exports = {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|dist)/,
-        use: [{ loader: 'cache-loader' }, { loader: 'babel-loader' }]
+        loader: 'babel-loader',
+        options: {
+          cacheCompression: false,
+          cacheDirectory: true
+        }
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new ESLintPlugin()
+    dev && new ESLintPlugin({ cache: true })
   ],
   stats: 'errors-warnings',
   externals: ['moment-timezone', 'prop-types', 'react', 'react-dom']

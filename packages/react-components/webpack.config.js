@@ -3,23 +3,34 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
+const dev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  target: 'web',
+  mode: dev ? 'development' : 'production',
   entry: './src/index.js',
+  devtool: false,
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
     libraryTarget: 'umd',
-    globalObject: 'this'
+    globalObject: 'this',
+    publicPath: '/'
   },
-  stats: 'errors-warnings',
+  cache: {
+    type: 'filesystem'
+  },
   module: {
     rules: [
       {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
         exclude: /(node_modules|dist)/,
-        use: [{ loader: 'cache-loader' }, { loader: 'babel-loader' }]
+        loader: 'babel-loader',
+        options: {
+          cacheCompression: false,
+          cacheDirectory: true
+        }
       },
       {
         test: /\.css$/,
@@ -30,8 +41,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new ESLintPlugin()
+    dev && new ESLintPlugin({ cache: true })
   ],
+  stats: 'errors-warnings',
   externals: [
     '@neatowebsolutions/upselling-react-hooks',
     'prop-types',
