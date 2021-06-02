@@ -19,7 +19,6 @@
     "compression-webpack-plugin": "^4.0.0",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "lodash": "^4.17.15",
     "moment-timezone": "^0.5.28",
     "next": "^10.2.3",
     "prop-types": "^15.7.2",
