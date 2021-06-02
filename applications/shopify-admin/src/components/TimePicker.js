@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
 import { ClockMajor } from '@shopify/polaris-icons';
 import moment from 'moment-timezone';
-import { flatten, times } from 'lodash';
+import { flatten } from 'lodash';
 
 const validateValue = (test) => test && !!test.match(/^\d{1,2}:\d{2} ?[AP]M$/);
 
@@ -31,7 +31,7 @@ const toFormattedTime = (date) => {
 
 const buildTimeOptions = () =>
   flatten(
-    times(24).map((_, index) => [
+    [...Array(24)].map((_, index) => [
       {
         value: `${index.toString().padStart(2, '0')}:00`,
         label: `${(index % 12 > 0 ? index % 12 : 12)
