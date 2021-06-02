@@ -1,5 +1,4 @@
 const logger = require('@neatowebsolutions/upselling-logger');
-const { compact } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
 const findProducts = async (shopifyProductIds) => {
@@ -21,31 +20,31 @@ const findProducts = async (shopifyProductIds) => {
 };
 
 const findVariants = async (products, shopifyVariantIds) => {
-  return compact(
-    await Promise.all(
-      products.map(async (product, productIndex) => {
-        if (!product) {
-          return;
-        }
+  const variants = await Promise.all(
+    products.map(async (product, productIndex) => {
+      if (!product) {
+        return;
+      }
 
-        const shopifyVariants =
-          product.shopifyProductData && product.shopifyProductData.variants;
-        const shopifyVariantId = shopifyVariantIds[productIndex];
+      const shopifyVariants =
+        product.shopifyProductData && product.shopifyProductData.variants;
+      const shopifyVariantId = shopifyVariantIds[productIndex];
 
-        const shopifyVariant =
-          shopifyVariants &&
-          shopifyVariants.find(({ id }) => id === shopifyVariantId);
+      const shopifyVariant =
+        shopifyVariants &&
+        shopifyVariants.find(({ id }) => id === shopifyVariantId);
 
-        if (!shopifyVariant) {
-          return await logger.error(
-            `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
-          );
-        }
+      if (!shopifyVariant) {
+        return await logger.error(
+          `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
+        );
+      }
 
-        return shopifyVariant;
-      })
-    )
+      return shopifyVariant;
+    })
   );
+
+  return variants.filter(Boolean);
 };
 
 const trackOfferedProducts = async (

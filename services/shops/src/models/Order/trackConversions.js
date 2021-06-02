@@ -1,5 +1,4 @@
 const Promise = require('bluebird');
-const { compact } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
 const trackConversions = async (order) => {
@@ -11,14 +10,14 @@ const trackConversions = async (order) => {
   const lineItems = order.shopifyOrderData.line_items || [];
 
   // Find all offer hits associated with line items.
-  const offerHits = compact(
-    await Promise.all(
-      lineItems.map(
-        async ({ variant_id: variantId }) =>
-          variantId && OfferHit.findOneByAcceptedVariantId(variantId)
-      )
+  let offerHits = await Promise.all(
+    lineItems.map(
+      async ({ variant_id: variantId }) =>
+        variantId && OfferHit.findOneByAcceptedVariantId(variantId)
     )
   );
+
+  offerHits = offerHits.filter(Boolean);
 
   if (offerHits.length === 0) {
     return offerHits;

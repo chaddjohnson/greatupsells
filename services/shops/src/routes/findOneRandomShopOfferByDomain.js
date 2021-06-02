@@ -101,7 +101,7 @@ const handler = async (event, context) => {
     );
 
     // Remove non-results.
-    offersData = compact(offersData);
+    offersData = offersData.filter(Boolean);
 
     return {
       statusCode: StatusCodes.OK,
