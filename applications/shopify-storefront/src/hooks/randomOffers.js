@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import useSWR from 'swr';
-import { compact } from 'lodash';
 import {
   useHttpClient,
   useCookies,
@@ -14,7 +13,7 @@ const useRandomOffers = ({
 }) => {
   // Ensure Shopify product IDs is an array.
   if (!Array.isArray(shopifyProductIds)) {
-    shopifyProductIds = compact([shopifyProductIds]);
+    shopifyProductIds = [shopifyProductIds].filter(Boolean);
   }
 
   // Ensure Shopify product IDs are numeric.
