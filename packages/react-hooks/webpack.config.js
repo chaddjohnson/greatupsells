@@ -40,5 +40,5 @@ module.exports = {
     dev && new ESLintPlugin({ cache: true })
   ],
   stats: 'errors-warnings',
-  externals: ['moment-timezone', 'prop-types', 'react', 'react-dom']
+  externals: ['prop-types', 'react', 'react-dom']
 };

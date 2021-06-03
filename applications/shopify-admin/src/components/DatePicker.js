@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import {
   Popover,
   TextField,
@@ -8,9 +7,7 @@ import {
   Icon
 } from '@shopify/polaris';
 import { CalendarMajor } from '@shopify/polaris-icons';
-
-const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
-const toIsoStartOfDay = (date) => date && moment(date).startOf('day').toDate();
+import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
 
 const DatePicker = ({
   name,
@@ -20,14 +17,16 @@ const DatePicker = ({
   error,
   onChange
 }) => {
-  const [text, setText] = useState(toIsoDate(selected));
+  const { formatDateISO, startOfDay } = useDateTime();
+
+  const [text, setText] = useState(formatDateISO(selected));
   const [month, setMonth] = useState(new Date(selected).getMonth());
   const [year, setYear] = useState(new Date(selected).getFullYear());
   const [popoverShown, setPopoverShown] = useState(false);
 
   const disableDatesBeforeFormatted = useMemo(
-    () => disableDatesBefore && toIsoStartOfDay(disableDatesBefore),
-    [disableDatesBefore]
+    () => disableDatesBefore && startOfDay(disableDatesBefore),
+    [disableDatesBefore, startOfDay]
   );
 
   const handleTextChange = useCallback(
@@ -46,21 +45,21 @@ const DatePicker = ({
 
   const handleChange = useCallback(
     ({ start: date }) => {
-      setText(toIsoDate(date));
+      setText(formatDateISO(date));
       setPopoverShown(false);
-      onChange(toIsoStartOfDay(date));
+      onChange(startOfDay(date));
     },
-    [onChange]
+    [onChange, formatDateISO, startOfDay]
   );
 
   // Update state values when selected prop changes.
   useEffect(() => {
     const selectedDate = new Date(selected);
 
-    setText(toIsoDate(selectedDate));
+    setText(formatDateISO(selectedDate));
     setMonth(selectedDate.getMonth());
     setYear(selectedDate.getFullYear());
-  }, [selected]);
+  }, [selected, formatDateISO]);
 
   return (
     <Popover
@@ -112,7 +111,7 @@ DatePicker.propTypes = {
 };
 
 DatePicker.defaultProps = {
-  selected: toIsoStartOfDay(new Date()), // default to the current day local time
+  selected: new Date(), // default to the current day local time
   error: false,
   onChange: () => {}
 };

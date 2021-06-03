@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import { Card, FormLayout, Checkbox } from '@shopify/polaris';
+import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
 import DateTimePicker from '../DateTimePicker';
-
-const timezone = moment.tz.guess();
-const timezoneAbbreviation = moment.tz(timezone).format('z');
 
 const OfferDatesEditor = ({
   offer,
@@ -14,6 +11,10 @@ const OfferDatesEditor = ({
   showEndDate,
   onShowEndDateChange
 }) => {
+  const { formatDate } = useDateTime();
+
+  const timezoneAbbreviation = formatDate(new Date(), 'ZZZZ');
+
   const handleStartAtChange = (value) => {
     startAt.onChange(value);
 

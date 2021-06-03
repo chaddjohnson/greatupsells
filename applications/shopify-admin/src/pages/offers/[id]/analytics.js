@@ -11,11 +11,12 @@ import {
   Banner,
   SkeletonPage
 } from '@shopify/polaris';
-import moment from 'moment-timezone';
 import {
   useNumberFormatter,
+  useDateTime,
   useInterval
 } from '@neatowebsolutions/upselling-react-hooks';
+
 import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
 import {
@@ -86,8 +87,10 @@ const OfferAnalyticsPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
 
+  const { startOfDay, subtractTime } = useDateTime();
+
   const [chartStartAt, setChartStartAt] = useState(
-    moment().subtract(90, 'days').toDate()
+    subtractTime(new Date(), 90, 'days')
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
@@ -115,48 +118,48 @@ const OfferAnalyticsPage = () => {
   const offerAcceptancesChartData = useMemo(
     () =>
       offerAcceptances?.map(({ date, acceptances }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         acceptances
       ]),
-    [offerAcceptances]
+    [offerAcceptances, startOfDay]
   );
   const offerConversionsChartData = useMemo(
     () =>
       offerConversions?.map(({ date, conversions }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         conversions
       ]),
-    [offerConversions]
+    [offerConversions, startOfDay]
   );
   const offerConversionRatesChartData = useMemo(
     () =>
       offerConversionRates?.map(({ date, conversionRate }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         conversionRate
       ]),
-    [offerConversionRates]
+    [offerConversionRates, startOfDay]
   );
   const offerRevenueIncreasesChartData = useMemo(
     () =>
       offerRevenueIncreases?.map(({ date, revenueIncrease }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         revenueIncrease
       ]),
-    [offerRevenueIncreases]
+    [offerRevenueIncreases, startOfDay]
   );
   const offerImpressionsChartData = useMemo(
     () =>
       offerImpressions?.map(({ date, impressions }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         impressions
       ]),
-    [offerImpressions]
+    [offerImpressions, startOfDay]
   );
 
   // Refresh data at an interval.
   useInterval(() => {
     if (!chartDateChanged) {
-      setChartStartAt(moment().subtract(90, 'days').toDate());
+      setChartStartAt(subtractTime(new Date(), 90, 'days'));
       setChartEndAt(new Date());
     }
 

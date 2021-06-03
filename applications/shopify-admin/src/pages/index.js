@@ -18,9 +18,9 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import moment from 'moment-timezone';
 import {
   useNumberFormatter,
+  useDateTime,
   useInterval
 } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
@@ -70,8 +70,9 @@ const loadingComponent = () => (
 );
 
 const DashboardPage = () => {
+  const { subtractTime, startOfDay } = useDateTime();
   const [chartStartAt, setChartStartAt] = useState(
-    moment().subtract(90, 'days').toDate()
+    subtractTime(new Date(), 90, 'days')
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
@@ -93,10 +94,10 @@ const DashboardPage = () => {
   const shopAcceptancesChartData = useMemo(
     () =>
       shopAcceptances?.map(({ date, acceptances }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         acceptances
       ]),
-    [shopAcceptances]
+    [shopAcceptances, startOfDay]
   );
 
   const loading = shopLoading || shopAcceptancesLoading;
@@ -120,7 +121,7 @@ const DashboardPage = () => {
   // Refresh data at an interval.
   useInterval(() => {
     if (!chartDateChanged) {
-      setChartStartAt(moment().subtract(90, 'days').toDate());
+      setChartStartAt(subtractTime(new Date(), 90, 'days'));
       setChartEndAt(new Date());
     }
 

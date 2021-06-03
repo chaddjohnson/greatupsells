@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const { DateTime } = require('luxon');
 const mongodbClient = require('../mongodbClient');
 
 const removeCopiedProducts = async () => {
@@ -9,7 +9,7 @@ const removeCopiedProducts = async () => {
   const criteria = {
     originalShopifyProductId: { $ne: null },
     createdAt: {
-      $lte: moment().utc().subtract(3, 'months').toDate()
+      $lte: DateTime.utc().minus({ months: 3 }).toJSDate()
     }
   };
 

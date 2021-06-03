@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
 import { ClockMajor } from '@shopify/polaris-icons';
-import moment from 'moment-timezone';
 import { flatten } from 'lodash';
+import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
 
 const validateValue = (test) => test && !!test.match(/^\d{1,2}:\d{2} ?[AP]M$/);
 
@@ -14,20 +14,6 @@ const sanitizeValue = (unsanitized) =>
     .toUpperCase()
     .replace(/^(\d{1,2}:\d{2})\s*([AP]M)$/, '$1 $2')
     .padStart(8, '0');
-
-const toFormattedTime = (date) => {
-  if (!date) {
-    return date;
-  }
-
-  const isDate = !Number.isNaN(new Date(date));
-
-  if (isDate) {
-    return moment(date).format('hh:mm A');
-  } else {
-    return date;
-  }
-};
 
 const buildTimeOptions = () =>
   flatten(
@@ -47,10 +33,27 @@ const buildTimeOptions = () =>
     ])
   );
 
-const TimePicker = (props) => {
-  const { label, placeholder, onChange } = props;
+const TimePicker = ({ label, placeholder, onChange, ...props }) => {
+  const { formatDate } = useDateTime();
 
   const timeOptions = buildTimeOptions();
+
+  const toFormattedTime = useCallback(
+    (date) => {
+      if (!date) {
+        return date;
+      }
+
+      const isDate = !Number.isNaN(new Date(date));
+
+      if (isDate) {
+        return formatDate(date, 't');
+      } else {
+        return date;
+      }
+    },
+    [formatDate]
+  );
 
   const [value, setValue] = useState(toFormattedTime(props.value));
   const [lastValidValue, setLastValidValue] = useState(value);
@@ -115,7 +118,7 @@ const TimePicker = (props) => {
 
     setValue(formattedTime);
     setLastValidValue(formattedTime);
-  }, [props.value]);
+  }, [props.value, toFormattedTime]);
 
   return (
     <Autocomplete
@@ -146,7 +149,7 @@ TimePicker.propTypes = {
 };
 
 TimePicker.defaultProps = {
-  value: toFormattedTime(new Date()), // default to current local time
+  value: new Date(), // default to current local time
   onChange: () => {}
 };
 

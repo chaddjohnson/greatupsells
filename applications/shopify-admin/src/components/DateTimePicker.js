@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import styled from 'styled-components';
 import { FormLayout } from '@shopify/polaris';
+import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 
@@ -15,8 +15,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const toIsoDate = (date) => date && moment(date).format('YYYY-MM-DD');
-
 const DateTimePicker = ({
   value,
   disableDatesBefore,
@@ -24,12 +22,14 @@ const DateTimePicker = ({
   timePickerProps,
   onChange
 }) => {
+  const { formatDate, formatDateISO } = useDateTime();
+
   const [date, setDate] = useState(value);
-  const [time, setTime] = useState(moment(value).format('hh:mm A'));
+  const [time, setTime] = useState(formatDate(value, 't'));
 
   const handleDateChange = useCallback(
     (newDate) => {
-      const newValue = new Date(`${toIsoDate(newDate)} ${time}`);
+      const newValue = new Date(`${formatDateISO(newDate)} ${time}`);
       const isValid = !Number.isNaN(newValue);
 
       setDate(newDate);
@@ -38,12 +38,12 @@ const DateTimePicker = ({
         onChange(newValue);
       }
     },
-    [onChange, time]
+    [onChange, time, formatDateISO]
   );
 
   const handleTimeChange = useCallback(
     (newTime) => {
-      const newValue = new Date(`${toIsoDate(date)} ${newTime}`);
+      const newValue = new Date(`${formatDateISO(date)} ${newTime}`);
       const isValid = !Number.isNaN(newValue);
 
       setTime(newTime);
@@ -52,7 +52,7 @@ const DateTimePicker = ({
         onChange(newValue);
       }
     },
-    [date, onChange]
+    [date, onChange, formatDateISO]
   );
 
   return (

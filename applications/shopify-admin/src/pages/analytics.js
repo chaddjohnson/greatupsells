@@ -13,9 +13,9 @@ import {
   SkeletonPage
 } from '@shopify/polaris';
 import { CalendarMajor } from '@shopify/polaris-icons';
-import moment from 'moment-timezone';
 import {
   useNumberFormatter,
+  useDateTime,
   useInterval
 } from '@neatowebsolutions/upselling-react-hooks';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
@@ -76,8 +76,9 @@ const errorComponent = memo(() => (
 ));
 
 const AnalyticsPage = () => {
+  const { subtractTime, startOfDay } = useDateTime();
   const [chartStartAt, setChartStartAt] = useState(
-    moment().subtract(90, 'days').toDate()
+    subtractTime(new Date(), 90, 'days')
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
@@ -104,42 +105,42 @@ const AnalyticsPage = () => {
   const shopAcceptancesChartData = useMemo(
     () =>
       shopAcceptances?.map(({ date, acceptances }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         acceptances
       ]),
-    [shopAcceptances]
+    [shopAcceptances, startOfDay]
   );
   const shopConversionsChartData = useMemo(
     () =>
       shopConversions?.map(({ date, conversions }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         conversions
       ]),
-    [shopConversions]
+    [shopConversions, startOfDay]
   );
   const shopConversionRatesChartData = useMemo(
     () =>
       shopConversionRates?.map(({ date, conversionRate }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         conversionRate
       ]),
-    [shopConversionRates]
+    [shopConversionRates, startOfDay]
   );
   const shopRevenueIncreasesChartData = useMemo(
     () =>
       shopRevenueIncreases?.map(({ date, revenueIncrease }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         revenueIncrease
       ]),
-    [shopRevenueIncreases]
+    [shopRevenueIncreases, startOfDay]
   );
   const shopImpressionsChartData = useMemo(
     () =>
       shopImpressions?.map(({ date, impressions }) => [
-        moment(date).startOf('day').valueOf(),
+        startOfDay(date).getTime(),
         impressions
       ]),
-    [shopImpressions]
+    [shopImpressions, startOfDay]
   );
 
   const loading = shopLoading || shopAnalyticsLoading;
@@ -148,7 +149,7 @@ const AnalyticsPage = () => {
   // Refresh data at an interval.
   useInterval(() => {
     if (!chartDateChanged) {
-      setChartStartAt(moment().subtract(90, 'days').toDate());
+      setChartStartAt(subtractTime(new Date(), 90, 'days'));
       setChartEndAt(new Date());
     }
 

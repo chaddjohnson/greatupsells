@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
 import styled from 'styled-components';
 import {
   Card,
@@ -11,6 +10,7 @@ import {
   Button,
   Badge
 } from '@shopify/polaris';
+import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
 
 const HeadingWrapper = styled.div`
   .Polaris-Stack {
@@ -53,25 +53,28 @@ StatusBadge.propTypes = {
 const OfferSummary = ({ offer }) => {
   const [items, setItems] = useState([]);
 
+  const { formatDate } = useDateTime();
+
   useEffect(() => {
     const buildItems = () => {
       const newItems = [];
 
       if (offer.startAt && offer.endAt) {
         newItems.push(
-          `Active from ${moment(offer.startAt).format('MMM D')} to ${moment(
-            offer.endAt
-          ).format('MMM D')}`
+          `Active from ${formatDate(offer.startAt, 'MMM d')} to ${formatDate(
+            offer.endAt,
+            'MMM d'
+          )}`
         );
       } else if (offer.startAt) {
-        newItems.push(`Active from ${moment(offer.startAt).format('MMM D')}`);
+        newItems.push(`Active from ${formatDate(offer.startAt, 'MMM d')}`);
       }
 
       return newItems;
     };
 
     setItems(buildItems());
-  }, [offer.startAt, offer.endAt]);
+  }, [offer.startAt, offer.endAt, formatDate]);
 
   return (
     <Card title="Summary" subdued>
