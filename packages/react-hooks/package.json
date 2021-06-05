@@ -15,9 +15,6 @@
     "luxon": "^1.27.0",
     "universal-cookie": "^4.0.4"
   },
-  "devDependencies": {
-    "@neatowebsolutions/upselling-http-client": "0.0.0"
-  },
   "peerDependencies": {
     "prop-types": "^15.7.0",
     "react": "^17.0.0",

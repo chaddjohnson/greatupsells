@@ -4,7 +4,7 @@
   "scripts": {
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint src/**/*.js",
-    "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache\" --watch src"
+    "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,6 @@
     "qs": "^6.10.1"
   },
   "devDependencies": {
-    "@neatowebsolutions/upselling-http-client": "0.0.0",
-    "@neatowebsolutions/upselling-logger": "0.0.0",
     "serverless": "^2.43.1",
     "serverless-domain-manager": "^4.0.1",
     "serverless-offline": "^7.0.0",

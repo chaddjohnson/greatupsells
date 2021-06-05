@@ -16,9 +16,6 @@
     "aws4-axios": "^2.2.0",
     "axios": "^0.21.1"
   },
-  "devDependencies": {
-    "@neatowebsolutions/upselling-http-client": "0.0.0"
-  },
   "scripts": {
     "format": "eslint --fix index.js",
     "lint": "eslint index.js"
