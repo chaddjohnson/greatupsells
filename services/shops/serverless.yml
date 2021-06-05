@@ -20,6 +20,7 @@ provider:
         Resource: "*"
   environment:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    LOGS_API_URL: ${env:LOGS_API_URL}
     LOG_SOURCE: 'shops-service'
     MONGODB_URI_SHOPS: ${env:MONGODB_URI_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/uri~true}
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}

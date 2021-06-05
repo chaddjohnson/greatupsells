@@ -23,14 +23,9 @@ const schema = new mongoose.Schema({
   createdAt: { type: Date, required: true, default: Date.now }
 });
 
-schema.pre('validate', function (next) {
-  this.data = this.data.toString();
-  next();
-});
-
-schema.post('save', async function (next) {
-  const { id, type, message } = this;
-  const date = this.createdAt.toISOString();
+schema.post('save', async function (log, next) {
+  const { id, type, message } = log;
+  const date = log.createdAt.toISOString();
 
   // Index log data (minus data) in Elasticsearch. Note that Elasticsearch is
   // ONLY used as an index into the MongoDB "logs" collection and `data` is NOT

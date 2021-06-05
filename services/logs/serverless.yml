@@ -53,6 +53,11 @@ plugins:
   - serverless-plugin-monorepo
   - serverless-offline
 
+custom:
+  serverless-offline:
+    httpPort: ${env:LOGS_API_PORT}
+    lambdaPort: 5005
+
 package:
   exclude:
     - test/**
