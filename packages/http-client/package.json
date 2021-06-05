@@ -9,9 +9,7 @@
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/http-client",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
-  "dependencies": {
-    "qs": "^6.10.1"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "axios": "^0.21.0"
   },

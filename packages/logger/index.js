@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
 // TODO: Use bunyan? Use winston?
@@ -19,7 +18,7 @@ const extractErrorData = (error) => {
   }
 
   // Include request error response body.
-  if (error && error.response.body) {
+  if (error && error.response && error.response.body) {
     data.responseBody = error.response.body;
   }
 
