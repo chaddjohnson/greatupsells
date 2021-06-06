@@ -17,7 +17,6 @@ const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
 const fixWebhooks = require('./fixWebhooks');
 const updateActiveStatuses = require('./updateActiveStatuses');
-const updateShopifyTheme = require('./updateShopifyTheme');
 const initialize = require('./initialize');
 const toString = require('./toString');
 const hooks = require('./hooks');
@@ -198,10 +197,6 @@ schema.methods.updatePlan = function () {
 
 schema.methods.initialize = function () {
   return initialize(this);
-};
-
-schema.methods.updateShopifyTheme = function () {
-  return updateShopifyTheme(this);
 };
 
 schema.methods.toString = function () {
