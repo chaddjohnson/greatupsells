@@ -31,6 +31,13 @@ provider:
     WEBHOOK_ARN: ${env:WEBHOOK_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
 
 functions:
+  addDraftOrderLineItem:
+    handler: src/routes/addDraftOrderLineItem.handler
+    events:
+      - http:
+          path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
+          method: post
+          authorizer: aws_iam
   cancelOrder:
     handler: src/routes/cancelOrder.handler
     events:
@@ -43,6 +50,13 @@ functions:
     events:
       - http:
           path: /collections
+          method: post
+          authorizer: aws_iam
+  createDraftOrder:
+    handler: src/routes/createDraftOrder.handler
+    events:
+      - http:
+          path: /shops/{shopId}/draft-orders
           method: post
           authorizer: aws_iam
   createOffer:

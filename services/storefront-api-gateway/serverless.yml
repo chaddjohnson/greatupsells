@@ -33,6 +33,22 @@ functions:
           path: /region
           method: get
           cors: true
+  addDraftOrderLineItem:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/addDraftOrderLineItem.handler
+    events:
+      - http:
+          path: /draft-orders/{draftOrderId}/line-items
+          method: post
+          cors: true
+  createDraftOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/createDraftOrder.handler
+    events:
+      - http:
+          path: /draft-orders
+          method: post
+          cors: true
   findOneRandomOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler

@@ -5,8 +5,8 @@ import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import {
   useOfferTracking,
   useRandomOffers,
+  useOfferAcceptance,
   useShop,
-  useShopifyCart,
   useShopifyCartProductAddListener
 } from '../../hooks';
 
@@ -19,13 +19,13 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyCart();
-  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
     shopifyProductIds,
     shouldQuery: productAdded && !!shopifyProductIds?.length
   });
+  const { handleAddProduct } = useOfferAcceptance();
 
   const { offer, popupTheme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
@@ -72,30 +72,6 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
     onClose();
   };
 
-  const handleAddProduct = async (
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
-    // Accept the offer.
-    const offerHit = await trackOfferAcceptance(
-      offerId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-    const variantIndex = offerHit.originalProducts.findIndex(
-      (originalProduct) => originalProduct.shopifyVariantId === shopifyVariantId
-    );
-    const copiedShopifyVariantId =
-      offerHit.acceptedProducts[variantIndex].shopifyVariantId;
-
-    // Add the copied product variant to the cart.
-    if (shopifyVariantId) {
-      await addProductToShopifyCart(copiedShopifyVariantId, quantity);
-    }
-  };
-
   useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
     const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -124,7 +100,7 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
     openPopup();
   }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
 
-  // Subscribe to product add events.
+  // Subscribe to product add events for triggering the popup to show.
   useShopifyCartProductAddListener((addedProduct) => {
     if (!productAdded && addedProduct?.product_id) {
       setShopifyProductIds([addedProduct.product_id]);

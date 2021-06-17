@@ -245,7 +245,7 @@ const OfferPopup = ({
     shopifyVariantId,
     quantity
   ) => {
-    await onAddProduct(shopifyProductId, shopifyVariantId, quantity);
+    await onAddProduct(offer._id, shopifyProductId, shopifyVariantId, quantity);
   };
 
   const handleSubmit = async (event) => {

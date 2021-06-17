@@ -28,6 +28,12 @@ schema.statics.findOneByShopifyProductId = function (shopifyProductId) {
   return Product.findOne({ shopifyProductId: parseInt(shopifyProductId) });
 };
 
+schema.statics.findOneByShopifyVariantId = function (shopifyVariantId) {
+  return Product.findOne({
+    'shopifyProductData.variants.id': shopifyVariantId
+  });
+};
+
 schema.methods.copy = function (
   shopifyProductDataOverrides,
   variant,
@@ -55,6 +61,7 @@ schema.pre('validate', function (next) {
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyProductId: 1 }, { unique: true });
 schema.index({ shop: 1, shopifyProductId: 1, shopifyCollectionIds: 1 });
+schema.index({ 'shopifyProductData.variants.id': 1 });
 
 Product = mongodbClient.connection.model('Product', schema);
 

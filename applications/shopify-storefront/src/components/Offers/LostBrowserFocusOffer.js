@@ -5,7 +5,7 @@ import {
   usePushStateListener,
   useDocumentVisibility
 } from '@neatowebsolutions/upselling-react-hooks';
-import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
 const loadedAt = new Date();
 
@@ -20,8 +20,8 @@ const LostBrowserFocusOffer = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyCart();
-  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression } = useOfferTracking();
+  const { handleAddProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -53,30 +53,6 @@ const LostBrowserFocusOffer = ({
   const handleClosePopup = () => {
     setPopupOpen(false);
     onClose();
-  };
-
-  const handleAddProduct = async (
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
-    // Accept the offer.
-    const offerHit = await trackOfferAcceptance(
-      offerId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-    const variantIndex = offerHit.originalProducts.findIndex(
-      (originalProduct) => originalProduct.shopifyVariantId === shopifyVariantId
-    );
-    const copiedShopifyVariantId =
-      offerHit.acceptedProducts[variantIndex].shopifyVariantId;
-
-    // Add the copied product variant to the cart.
-    if (shopifyVariantId) {
-      await addProductToShopifyCart(copiedShopifyVariantId, quantity);
-    }
   };
 
   useDocumentVisibility((visible) => {

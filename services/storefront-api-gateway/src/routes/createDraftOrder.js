@@ -24,24 +24,21 @@ const handler = middy(async (event, context) => {
 
   try {
     const domain = new URL(event.headers.Origin).host;
-    const { offerId } = event.pathParameters;
-    const [shop, offer] = await Promise.all([
-      httpClient.get(`/shops/domain/${domain}`),
-      httpClient.get(`/offers/${offerId}`)
-    ]);
+    const shop = await httpClient.get(`/shops/domain/${domain}`);
     const shopId = shop._id;
-    const offerShopId = offer.shop;
-    const {
-      offerHitId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    } = JSON.parse(event.body);
+    const data = JSON.parse(event.body);
+    const { lineItems } = data;
 
-    // Only allow tracking for offers belonging to the requestor domain.
-    if (shopId !== offerShopId) {
+    // Verify offers associated with line items belong to the shop.
+    const offerIds = lineItems.map(({ offerId }) => offerId);
+    const offers = await Promise.all(
+      offerIds.map(async (offerId) => httpClient.get(`/offers/${offerId}`))
+    );
+    const offersBelongToShop = offers.every((offer) => offer.shop === shopId);
+
+    if (!offersBelongToShop) {
       await logger.warn(
-        `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
+        `Unauthorized usage attempt for offer from domain ${domain}`,
         null,
         { event }
       );
@@ -52,19 +49,17 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
-      offerHitId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    });
+    const draftOrder = await httpClient.post(
+      `/shops/${shopId}/draft-orders`,
+      data
+    );
 
     return {
       statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offerHit)
+      body: JSON.stringify(draftOrder)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer acceptance`, error, { event });
+    await logger.error(`Error creating draft order`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

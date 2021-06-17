@@ -18,6 +18,8 @@ const updatePlans = require('./updatePlans');
 const fixWebhooks = require('./fixWebhooks');
 const updateActiveStatuses = require('./updateActiveStatuses');
 const initialize = require('./initialize');
+const createDraftOrder = require('./createDraftOrder');
+const addDraftOrderLineItem = require('./addDraftOrderLineItem');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -197,6 +199,21 @@ schema.methods.updatePlan = function () {
 
 schema.methods.initialize = function () {
   return initialize(this);
+};
+
+schema.methods.createDraftOrder = function (data) {
+  return createDraftOrder(this, data);
+};
+
+schema.methods.addDraftOrderLineItem = function (
+  draftOrderId,
+  { offerId, shopifyVariantId, quantity }
+) {
+  return addDraftOrderLineItem(this, draftOrderId, {
+    offerId,
+    shopifyVariantId,
+    quantity
+  });
 };
 
 schema.methods.toString = function () {

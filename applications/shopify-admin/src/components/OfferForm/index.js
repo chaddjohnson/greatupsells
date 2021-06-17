@@ -83,6 +83,7 @@ const OfferForm = ({
     triggerPage,
     triggerPagePath,
     discountType,
+    discountTitle,
     offeredProducts,
     offeredCollections,
     triggerProducts,
@@ -125,6 +126,7 @@ const OfferForm = ({
       // minimumProductsQuantity,
       discountType,
       // discountAmount,
+      discountTitle,
       triggerProducts,
       triggerCollections,
       enableGeotargeting,
@@ -294,6 +296,7 @@ const OfferForm = ({
             triggerProducts={triggerProducts}
             triggerCollections={triggerCollections}
             discountType={discountType}
+            discountTitle={discountTitle}
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}

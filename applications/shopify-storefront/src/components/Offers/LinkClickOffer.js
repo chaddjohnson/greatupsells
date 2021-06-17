@@ -5,7 +5,7 @@ import {
   usePushStateListener,
   useEventListener
 } from '@neatowebsolutions/upselling-react-hooks';
-import { useOfferTracking, useShop, useShopifyCart } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
 // IE9+ polyfill for `.closest()`.
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
@@ -41,8 +41,8 @@ const LinkClickOffer = ({
   const [linkUrl, setLinkUrl] = useState('');
   const [openLinkInNewWindow, setOpenLinkInNewWindow] = useState(false);
 
-  const { addProductToShopifyCart } = useShopifyCart();
-  const { trackOfferImpression, trackOfferAcceptance } = useOfferTracking();
+  const { trackOfferImpression } = useOfferTracking();
+  const { handleAddProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -70,30 +70,6 @@ const LinkClickOffer = ({
       });
     }, delay);
   }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
-
-  const handleAddProduct = async (
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
-    // Accept the offer.
-    const offerHit = await trackOfferAcceptance(
-      offerId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-    const variantIndex = offerHit.originalProducts.findIndex(
-      (originalProduct) => originalProduct.shopifyVariantId === shopifyVariantId
-    );
-    const copiedShopifyVariantId =
-      offerHit.acceptedProducts[variantIndex].shopifyVariantId;
-
-    // Add the copied product variant to the cart.
-    if (shopifyVariantId) {
-      await addProductToShopifyCart(copiedShopifyVariantId, quantity);
-    }
-  };
 
   const handleLinkClick = useCallback(
     (event) => {

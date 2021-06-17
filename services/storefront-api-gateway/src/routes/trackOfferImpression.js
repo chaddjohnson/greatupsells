@@ -44,7 +44,8 @@ const handler = middy(async (event, context) => {
     if (shopId !== offerShopId) {
       await logger.warn(
         `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
-        event
+        null,
+        { event }
       );
 
       return {

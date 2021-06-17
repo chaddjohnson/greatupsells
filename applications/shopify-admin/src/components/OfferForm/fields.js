@@ -47,6 +47,17 @@ const useFields = (initialOffer, showEndDate) => {
     ]
   });
   const discountType = useField(initialOffer.discountType);
+  const discountTitle = useField(
+    {
+      value: initialOffer.discountTitle,
+      validates: (value) => {
+        if (discountType.value !== 'NO_DISCOUNT' && !value) {
+          return "Discount title can't be blank";
+        }
+      }
+    },
+    [discountType.value]
+  );
   const offeredProducts = useList(initialOffer.offeredProducts);
   const offeredCollections = useList(initialOffer.offeredCollections);
   const triggerProducts = useList(initialOffer.triggerProducts);
@@ -211,6 +222,7 @@ const useFields = (initialOffer, showEndDate) => {
     triggerPage,
     triggerPagePath,
     discountType,
+    discountTitle,
     offeredProducts,
     offeredCollections,
     triggerProducts,

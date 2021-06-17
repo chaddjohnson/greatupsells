@@ -83,6 +83,7 @@ const schema = new mongoose.Schema(
       enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT']
     },
     discountAmount: { type: Number, required: false },
+    discountTitle: { type: String, required: false },
     triggerEvent: {
       type: String,
       required: true,

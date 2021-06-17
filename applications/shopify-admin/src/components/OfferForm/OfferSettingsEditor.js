@@ -41,6 +41,7 @@ const OfferSettingsEditor = ({
   triggerProducts,
   triggerCollections,
   discountType,
+  discountTitle,
   actionButtonBehavior,
   actionButtonLink,
   actionButtonLinkOpenInNewTab,
@@ -453,6 +454,12 @@ const OfferSettingsEditor = ({
       </Card>
       <Card title="Discount type" sectioned>
         <FormLayout>
+          <TextField
+            placeholder="10% off"
+            helpText="This will show as a discount description for the order line item."
+            {...discountTitle}
+            error={submitted && discountTitle.error}
+          />
           <ChoiceList
             choices={[
               {
@@ -514,6 +521,7 @@ OfferSettingsEditor.propTypes = {
   triggerProducts: PropTypes.array.isRequired,
   triggerCollections: PropTypes.array.isRequired,
   discountType: PropTypes.object.isRequired,
+  discountTitle: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,
   actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,
