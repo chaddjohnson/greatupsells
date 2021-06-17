@@ -41,34 +41,6 @@ const CartProvider = ({ children }) => {
   );
   const shopifyCartItemsLoading = !shopifyCartItems && !shopifyCartItemsError;
 
-  const addProductToShopifyCart = async (variantId, quantity, attempts = 1) => {
-    if (attempts > 7) {
-      return;
-    }
-
-    try {
-      await httpClient.post(
-        '/cart/add.js',
-        {
-          items: [
-            {
-              id: variantId,
-              quantity
-            }
-          ]
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-    } catch (error) {
-      await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
-      await addProductToShopifyCart(variantId, quantity, ++attempts);
-    }
-  };
-
   useShopifyCartProductAddListener(() => {
     fetchShopifyCartItems();
   });
@@ -83,8 +55,7 @@ const CartProvider = ({ children }) => {
         shopifyCartItems,
         shopifyCartItemsError,
         shopifyCartItemsLoading,
-        fetchShopifyCartItems,
-        addProductToShopifyCart
+        fetchShopifyCartItems
       }}
     >
       {children}
