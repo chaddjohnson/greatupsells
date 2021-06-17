@@ -1,6 +1,6 @@
 import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
 import useOfferTracking from './offerTracking';
-import useShopifyCart from './shopifyCart';
+import { useShopifyCart } from './shopifyCart';
 import useShopifyDraftOrder from './shopifyDraftOrder';
 
 const useOfferAcceptance = () => {
