@@ -66,10 +66,6 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error adding line item to draft order`, error, {
-      event
-    });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: ReasonPhrases.INTERNAL_SERVER_ERROR

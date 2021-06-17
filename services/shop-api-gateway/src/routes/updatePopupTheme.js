@@ -65,8 +65,6 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error updating popup theme`, error, { event });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: ReasonPhrases.INTERNAL_SERVER_ERROR

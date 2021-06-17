@@ -62,8 +62,6 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error requesting offer acceptances`, error, { event });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR

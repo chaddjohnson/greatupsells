@@ -59,8 +59,6 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(draftOrder)
     };
   } catch (error) {
-    await logger.error(`Error creating draft order`, error, { event });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: ReasonPhrases.INTERNAL_SERVER_ERROR

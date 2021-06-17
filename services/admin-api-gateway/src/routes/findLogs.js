@@ -8,7 +8,6 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const qs = require('qs');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
-const logger = require('@neatowebsolutions/upselling-logger');
 
 const { AWS_REGION, LOGS_API_URL } = process.env;
 
@@ -43,8 +42,6 @@ const handler = middy(async (event, context) => {
         body: error.response.data || getReasonPhrase(error.response.status)
       };
     }
-
-    await logger.error(`Error requesting logs`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

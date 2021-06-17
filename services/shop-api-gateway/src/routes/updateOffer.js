@@ -71,8 +71,6 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    await logger.error(`Error updating offer`, error, { event });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: ReasonPhrases.INTERNAL_SERVER_ERROR

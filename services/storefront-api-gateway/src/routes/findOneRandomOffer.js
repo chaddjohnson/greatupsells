@@ -8,7 +8,6 @@ const {
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
-const logger = require('@neatowebsolutions/upselling-logger');
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
 
@@ -77,10 +76,6 @@ const handler = middy(async (event, context) => {
         body: error.response.data || getReasonPhrase(error.response.status)
       };
     }
-
-    await logger.error(`Error requesting random offer for shop`, error, {
-      event
-    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

@@ -66,8 +66,6 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer impression`, error, { event });
-
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: ReasonPhrases.INTERNAL_SERVER_ERROR
