@@ -26,28 +26,35 @@ const buildDraftOrderLineItem = async ({
   };
 
   // Apply a discount if there is a discount type offer.
+  // Amount is rounded. Reference: https://stackoverflow.com/a/11832950/83897.
   if (offer && offer.discountType === 'PERCENTAGE') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
       value: offer.discountAmount,
       value_type: 'percentage',
-      amount: Math.round(
-        (price * quantity * (offer.discountAmount * 100)) / 100
-      )
+      amount:
+        Math.round(
+          (price * quantity * offer.discountAmount + Number.EPSILON) * 100
+        ) / 100
     };
   } else if (offer && offer.discountType === 'USD') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
       value: offer.discountAmount,
       value_type: 'fixed_amount',
-      amount: Math.round(quantity * offer.discountAmount * 100) / 100
+      amount:
+        Math.round((quantity * offer.discountAmount + Number.EPSILON) * 100) /
+        100
     };
   } else if (offer && offer.discountType === 'SET_PRICE') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
       value: price - offer.discountAmount,
       value_type: 'fixed_amount',
-      amount: Math.round((price - offer.discountAmount) * quantity * 100) / 100
+      amount:
+        Math.round(
+          ((price - offer.discountAmount) * quantity + Number.EPSILON) * 100
+        ) / 100
     };
   }
 
