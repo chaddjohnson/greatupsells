@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
-const copy = require('./copy');
-const removeCopiedProducts = require('./removeCopiedProducts');
 const trackShopifyCollections = require('./trackShopifyCollections');
 const toString = require('./toString');
 const hooks = require('./hooks');
@@ -18,8 +16,7 @@ const schema = new mongoose.Schema(
     shopifyProductId: { type: Number, required: true },
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
     shopifyCollectionIds: [{ type: Number, required: true }],
-    title: { type: String, required: true },
-    originalShopifyProductId: { type: Number, required: false }
+    title: { type: String, required: true }
   },
   schemaOptions
 );
@@ -32,18 +29,6 @@ schema.statics.findOneByShopifyVariantId = function (shopifyVariantId) {
   return Product.findOne({
     'shopifyProductData.variants.id': shopifyVariantId
   });
-};
-
-schema.methods.copy = function (
-  shopifyProductDataOverrides,
-  variant,
-  quantity
-) {
-  return copy(this, shopifyProductDataOverrides, variant, quantity);
-};
-
-schema.statics.removeCopiedProducts = function () {
-  return removeCopiedProducts();
 };
 
 schema.methods.trackShopifyCollections = function () {

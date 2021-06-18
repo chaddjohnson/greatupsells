@@ -22,9 +22,6 @@ const handler = async (event, context) => {
     // Delete the product.
     await Product.findByIdAndDelete(productId);
 
-    // Delete copied products based on originalShopifyProductId.
-    await Product.deleteMany({ originalShopifyProductId: shopifyProductId });
-
     // Remove product association from offers.
     await Offer.updateMany(
       {},

@@ -42,8 +42,7 @@ const trackProductCollections = async (collection) => {
   const Product = mongodbClient.connection.model('Product');
   const { shopifyCollectionId } = collection;
   const products = await Product.find({
-    shopifyProductId: { $in: collection.shopifyProductIds },
-    originalShopifyProductId: null // Must not be a copied product.
+    shopifyProductId: { $in: collection.shopifyProductIds }
   });
 
   await Promise.all(

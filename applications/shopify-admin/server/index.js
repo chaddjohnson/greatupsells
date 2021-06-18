@@ -69,11 +69,8 @@ const createServer = () => {
       scopes: [
         'read_products',
         'read_orders',
-        'read_inventory',
         'read_script_tags',
         'read_draft_orders',
-        'write_products',
-        'write_inventory',
         'write_script_tags',
         'write_draft_orders'
       ],

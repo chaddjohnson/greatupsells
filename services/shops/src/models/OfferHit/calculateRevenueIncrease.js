@@ -1,11 +1,13 @@
 const calculateUpsellRevenueIncrease = (offerHit) => {
-  const { originalProducts, acceptedProducts } = offerHit;
+  const { acceptedProducts } = offerHit;
 
   // Sum all accepted variant prices accounting for quantities.
-  return acceptedProducts.reduce((sum, acceptedProduct, index) => {
-    const acceptedPrice = acceptedProduct.price || 0;
-    const originalPrice = originalProducts[index].price || 0;
-    const quantity = acceptedProduct.quantity || 0;
+  return acceptedProducts.reduce((sum, acceptedProduct) => {
+    const {
+      originalPrice = 0,
+      acceptedPrice = 0,
+      quantity = 0
+    } = acceptedProduct;
 
     return sum + (acceptedPrice - originalPrice) * quantity;
   }, 0);
@@ -16,10 +18,9 @@ const calculateCrossSellRevenueIncrease = (offerHit) => {
 
   // Sum all accepted variant prices accounting for quantities.
   return acceptedProducts.reduce((sum, acceptedProduct) => {
-    const price = acceptedProduct.price || 0;
-    const quantity = acceptedProduct.quantity || 0;
+    const { acceptedPrice = 0, quantity = 0 } = acceptedProduct;
 
-    return sum + price * quantity;
+    return sum + acceptedPrice * quantity;
   }, 0);
 };
 

@@ -57,23 +57,6 @@ const trackConversion = async (offerHit, order) => {
       },
       { session }
     );
-
-    // Remove copied products associated with this order.
-    await Promise.allSettled(
-      offerHit.acceptedProducts.map(async ({ shopifyProductId }) => {
-        // Delete the product locally.
-        await Product.findOneAndDelete(
-          {
-            shopifyProductId,
-            originalShopifyProductId: { $ne: null } // Require this field, just to be safe.
-          },
-          { session }
-        );
-
-        // Delete the product from Shopify.
-        await shopifyApiClient.product.delete(shopifyProductId);
-      })
-    );
   } catch (error) {
     await logger.error(
       `Error tracking offer conversion for offer hit (${

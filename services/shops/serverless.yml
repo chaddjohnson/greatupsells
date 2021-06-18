@@ -368,11 +368,6 @@ functions:
     events:
       - schedule: rate(1 day)
     timeout: 900
-  removeCopiedProducts:
-    handler: src/workers/removeCopiedProducts.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
   importShopCollections:
     reservedConcurrency: 5
     handler: src/workers/importShopCollections.handler

@@ -50,18 +50,12 @@ const schema = new mongoose.Schema(
         price: { type: Number, required: true }
       }
     ],
-    originalProducts: [
-      {
-        shopifyProductId: { type: Number, required: true },
-        shopifyVariantId: { type: Number, required: true },
-        price: { type: Number, required: true }
-      }
-    ],
     acceptedProducts: [
       {
         shopifyProductId: { type: Number, required: true },
         shopifyVariantId: { type: Number, required: true },
-        price: { type: Number, required: true },
+        originalPrice: { type: Number, required: false },
+        acceptedPrice: { type: Number, required: true },
         quantity: { type: Number, required: true }
       }
     ],

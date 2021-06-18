@@ -78,11 +78,6 @@ const addProductToCollections = async (product, collections) => {
 };
 
 const trackShopifyCollections = async (product) => {
-  // Ignore copied products.
-  if (product.originalShopifyProductId) {
-    return;
-  }
-
   await product.execPopulate('shop');
 
   const Collection = mongodbClient.connection.model('Collection');

@@ -5,6 +5,8 @@ const calculateDiscountedPrice = (offer, price) => {
   if (!offer) {
     throw new Error('`offer` must be provided');
   }
+
+  // Ensure the price is a number (and ensure the number zero is allowed).
   if (typeof price !== 'number' || Number.isNaN(price)) {
     throw new Error('`price` must be a number');
   }
