@@ -4,9 +4,11 @@ import {
   useCookies
 } from '@neatowebsolutions/upselling-react-hooks';
 
-const useOfferTracking = () => {
-  const [offerHitId, setOfferHitId] = useState(null);
+// Intentionally track offer hit ID at module level as this hook may be used in
+// multiple places, and state won't be shared.
+let offerHitId = '';
 
+const useOfferTracking = () => {
   const { httpClient } = useHttpClient();
   const { getCookie, setCookie } = useCookies();
 
@@ -62,7 +64,7 @@ const useOfferTracking = () => {
     });
 
     // Keep track of the newly-created offer hit.
-    setOfferHitId(offerHit._id);
+    offerHitId = offerHit._id;
   };
 
   const trackOfferAcceptance = async (

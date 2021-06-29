@@ -6,7 +6,7 @@ import useShopifyDraftOrder from './shopifyDraftOrder';
 const useOfferAcceptance = () => {
   const { getCookie, setCookie } = useCookies();
   const { trackOfferAcceptance } = useOfferTracking();
-  const { shopifyCartItems } = useShopifyCart();
+  const { shopifyCartItems, addProductToShopifyCart } = useShopifyCart();
   const {
     createShopifyDraftOrder,
     addProductToShopifyDraftOrder
@@ -28,6 +28,9 @@ const useOfferAcceptance = () => {
       shopifyVariantId,
       quantity
     );
+
+    // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
+    await addProductToShopifyCart(shopifyVariantId, quantity);
 
     // Add the variant to the existing draft order if one exists.
     if (shopifyVariantId && draftOrderId) {
@@ -63,7 +66,7 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie('upsellingDraftOrderUrl', draftOrder.invoice_url, {
+      setCookie('upsellingDraftOrderCheckoutUrl', draftOrder.invoice_url, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });

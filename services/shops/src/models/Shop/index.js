@@ -20,6 +20,7 @@ const updateActiveStatuses = require('./updateActiveStatuses');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItem = require('./addDraftOrderLineItem');
+const updateDraftOrderLineItemQuantity = require('./updateDraftOrderLineItemQuantity');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -214,6 +215,19 @@ schema.methods.addDraftOrderLineItem = function (
     shopifyVariantId,
     quantity
   });
+};
+
+schema.methods.updateDraftOrderLineItemQuantity = function (
+  draftOrderId,
+  shopifyVariantId,
+  quantity
+) {
+  return updateDraftOrderLineItemQuantity(
+    this,
+    draftOrderId,
+    shopifyVariantId,
+    quantity
+  );
 };
 
 schema.methods.toString = function () {

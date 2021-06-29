@@ -7,7 +7,7 @@ import {
   useRandomOffers,
   useOfferAcceptance,
   useShop,
-  useShopifyCartProductAddListener
+  useShopifyCartAddListener
 } from '../../hooks';
 
 const triggerEvent = 'ADD';
@@ -101,7 +101,7 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
   }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
 
   // Subscribe to product add events for triggering the popup to show.
-  useShopifyCartProductAddListener((addedProduct) => {
+  useShopifyCartAddListener((addedProduct) => {
     if (!productAdded && addedProduct?.product_id) {
       setShopifyProductIds([addedProduct.product_id]);
       setProductAdded(true);

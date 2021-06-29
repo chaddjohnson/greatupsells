@@ -81,6 +81,14 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           cors: true
+  updateDraftOrderLineItemQuantity:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateDraftOrderLineItemQuantity.handler
+    events:
+      - http:
+          path: /draft-orders/{draftOrderId}/line-items/{shopifyVariantId}
+          method: post
+          cors: true
 
 plugins:
   - serverless-offline

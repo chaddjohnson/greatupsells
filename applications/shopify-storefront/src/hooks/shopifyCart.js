@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import useSWR from 'swr';
+import qs from 'querystringify';
 import {
   useHttpRequestListener,
   usePushStateListener,
@@ -9,12 +10,24 @@ import {
 
 const CartContext = createContext(null);
 
-const useShopifyCartProductAddListener = (listener) => {
+const useShopifyCartAddListener = (listener) => {
   useHttpRequestListener('/cart/add.js', (request) => {
     const product = JSON.parse(request?.responseText || {});
 
     if (listener) {
       listener.call(listener, product);
+    }
+  });
+};
+
+const useShopifyCartQuantityListener = (listener) => {
+  useHttpRequestListener('/cart/change.js', (request) => {
+    const params = qs.parse(request._data);
+    const lineItemNumber = parseInt(params.line);
+    const quantity = parseInt(params.quantity);
+
+    if (listener) {
+      listener.call(listener, lineItemNumber, quantity);
     }
   });
 };
@@ -41,7 +54,24 @@ const CartProvider = ({ children }) => {
   );
   const shopifyCartItemsLoading = !shopifyCartItems && !shopifyCartItemsError;
 
-  useShopifyCartProductAddListener(() => {
+  const addProductToShopifyCart = async (variantId, quantity) => {
+    await httpClient.post('/cart/add.js', {
+      items: [
+        {
+          id: variantId,
+          quantity
+        }
+      ]
+    });
+  };
+
+  // Refresh the cart when an item is added.
+  useShopifyCartAddListener(() => {
+    fetchShopifyCartItems();
+  });
+
+  // Refresh the cart when a item's quantity changes.
+  useShopifyCartQuantityListener(() => {
     fetchShopifyCartItems();
   });
 
@@ -55,7 +85,8 @@ const CartProvider = ({ children }) => {
         shopifyCartItems,
         shopifyCartItemsError,
         shopifyCartItemsLoading,
-        fetchShopifyCartItems
+        fetchShopifyCartItems,
+        addProductToShopifyCart
       }}
     >
       {children}
@@ -69,4 +100,9 @@ CartProvider.propTypes = {
 
 const useShopifyCart = () => useContext(CartContext);
 
-export { CartProvider, useShopifyCart, useShopifyCartProductAddListener };
+export {
+  CartProvider,
+  useShopifyCart,
+  useShopifyCartAddListener,
+  useShopifyCartQuantityListener
+};

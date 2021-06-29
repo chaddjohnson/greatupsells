@@ -1,22 +1,86 @@
-import React from 'react';
-import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
+  useCookies,
+  usePushStateListener
+} from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useShopifyCart,
   useShopifyDraftOrder,
-  useShopifyCartProductAddListener
+  useShopifyCartAddListener,
+  useShopifyCartQuantityListener
 } from '../hooks';
 
 const CartInterceptor = () => {
-  const { getCookie } = useCookies();
-  const { addProductToShopifyDraftOrder } = useShopifyDraftOrder();
+  const [cartFormOverridden, setCartFormOverridden] = useState(false);
 
-  // Intercept add to cart HTTP requests, and add products to the draft order
-  // on add to cart if there is a draft order being tracked.
-  useShopifyCartProductAddListener(async (addedProduct) => {
+  const { getCookie, removeCookie } = useCookies();
+  const { shopifyCartItems } = useShopifyCart();
+  const {
+    addProductToShopifyDraftOrder,
+    updateDraftOrderLineItemQuantity
+  } = useShopifyDraftOrder();
+
+  const handleCartFormSubmit = useCallback((event) => {
+    // Prevent default form handling (which redirects to the normal cart page).
+    event.preventDefault();
+
+    const draftOrderId = getCookie('upsellingDraftOrderId');
+    const draftOrderCheckoutUrl = getCookie('upsellingDraftOrderCheckoutUrl');
+
+    if (!draftOrderId || !draftOrderCheckoutUrl) {
+      return;
+    }
+
+    // Redirect to the draft order checkout URL.
+    window.location.href = draftOrderCheckoutUrl;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const overrideCartForm = useCallback(() => {
+    const draftOrderId = getCookie('upsellingDraftOrderId');
+    const draftOrderCheckoutUrl = getCookie('upsellingDraftOrderCheckoutUrl');
+    const cartForms = Array.from(document.forms).filter((form) =>
+      form.action.match(/\/cart$/)
+    );
+
+    // Abort if already overridden.
+    if (cartFormOverridden) {
+      return;
+    }
+
+    // Abort the override if no draft order is in place.
+    if (!draftOrderId || !draftOrderCheckoutUrl) {
+      return;
+    }
+
+    // Replace event handlers for cart forms.
+    cartForms.forEach((cartForm) => {
+      cartForm.addEventListener('submit', handleCartFormSubmit);
+    });
+
+    // Mark override as done.
+    setCartFormOverridden(true);
+  }, [cartFormOverridden]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const removeCartFormOverrides = useCallback(() => {
+    const cartForms = Array.from(document.forms).filter((form) =>
+      form.action.match(/\/cart$/)
+    );
+
+    // Remove event handlers for cart forms.
+    cartForms.forEach((cartForm) => {
+      cartForm.removeEventListener('submit', handleCartFormSubmit);
+    });
+
+    // Mark override as not done.
+    setCartFormOverridden(false);
+  }, [handleCartFormSubmit]);
+
+  const shopifyCartAddListener = async (addedProduct) => {
     if (!addedProduct) {
       return;
     }
 
-    const { variant_id: shopifyVariantId, quantity } = addedProduct;
+    const { variant_id: shopifyVariantId } = addedProduct;
     const draftOrderId = getCookie('upsellingDraftOrderId');
 
     // Only add to an existing draft order. Do not create a new draft order
@@ -24,11 +88,64 @@ const CartInterceptor = () => {
     // have been accepted.
     if (shopifyVariantId && draftOrderId) {
       await addProductToShopifyDraftOrder(draftOrderId, {
+        shopifyVariantId
+      });
+
+      // Override event handling for cart forms.
+      overrideCartForm();
+    }
+  };
+
+  const shopifyCartQuantityListener = async (lineItemNumber, quantity) => {
+    const draftOrderId = getCookie('upsellingDraftOrderId');
+    const lineItem = shopifyCartItems[lineItemNumber - 1];
+    const shopifyVariantId = parseInt(lineItem.variant_id);
+    let draftOrder = null;
+
+    if (draftOrderId) {
+      draftOrder = await updateDraftOrderLineItemQuantity(
+        draftOrderId,
         shopifyVariantId,
         quantity
-      });
+      );
+
+      if (draftOrder) {
+        // Override event handling for cart forms.
+        overrideCartForm();
+      } else {
+        // Remove cookies as draft order no longer exists.
+        removeCookie('upsellingDraftOrderId');
+        removeCookie('upsellingDraftOrderCheckoutUrl');
+
+        // Refresh in order to undo cart form overrides.
+        // window.location.reload();
+        removeCartFormOverrides();
+      }
     }
+  };
+
+  // Intercept add to cart HTTP requests, and add products to the draft order
+  // on add to cart if there is a draft order being tracked.
+  useShopifyCartAddListener(shopifyCartAddListener);
+
+  // Intercept cart quantity change HTTP requests, and update products in the
+  // draft order on cart quantity change if there is a draft order being tracked.
+  useShopifyCartQuantityListener(shopifyCartQuantityListener);
+
+  // Override event handling for cart forms on pushState.
+  usePushStateListener(() => {
+    setCartFormOverridden(false);
   });
+
+  // This is related to pushState handling above.
+  useEffect(() => {
+    overrideCartForm();
+  }, [cartFormOverridden]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Override event handling for cart forms on load.
+  useEffect(() => {
+    overrideCartForm();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };

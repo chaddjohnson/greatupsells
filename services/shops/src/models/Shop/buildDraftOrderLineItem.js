@@ -30,7 +30,7 @@ const buildDraftOrderLineItem = async ({
   if (offer && offer.discountType === 'PERCENTAGE') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
-      value: offer.discountAmount,
+      value: offer.discountAmount * 100,
       value_type: 'percentage',
       amount:
         Math.round(

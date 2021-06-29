@@ -28,6 +28,7 @@ const usePushState = (listener) => {
       }
       return pushState.apply(history, [state, ...args]);
     };
+
     return () => {
       window.removeEventListener('popstate', handlePushState, true);
       history.onpushstate = undefined;

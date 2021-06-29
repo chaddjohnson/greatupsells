@@ -1,43 +1,46 @@
-import useSWR from 'swr';
 import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
 
 const useShopifyDraftOrder = () => {
   const { httpClient } = useHttpClient();
 
-  const { data: draftOrder, error: draftOrderError } = useSWR(
-    '',
-    httpClient.get.bind(httpClient),
-    { revalidateOnFocus: false }
-  );
-  const draftOrderLoading = !draftOrder && !draftOrderError;
-
   const createShopifyDraftOrder = async (data) => {
     const url = `/draft-orders`;
-    const newDraftOrder = await httpClient.post(url, data);
+    const draftOrder = await httpClient.post(url, data);
 
-    return newDraftOrder;
+    return draftOrder;
   };
 
   const addProductToShopifyDraftOrder = async (
     draftOrderId,
-    { offerId, shopifyVariantId, quantity }
+    { offerId, shopifyVariantId, quantity = 1 }
   ) => {
     const url = `/draft-orders/${draftOrderId}/line-items`;
-    const updatedDraftOrder = await httpClient.post(url, {
+    const draftOrder = await httpClient.post(url, {
       offerId,
       shopifyVariantId,
-      quantity
+      quantity: parseInt(quantity)
     });
 
-    return updatedDraftOrder;
+    return draftOrder;
+  };
+
+  const updateDraftOrderLineItemQuantity = async (
+    draftOrderId,
+    shopifyVariantId,
+    quantity
+  ) => {
+    const url = `/draft-orders/${draftOrderId}/line-items/${shopifyVariantId}`;
+    const draftOrder = await httpClient.post(url, {
+      quantity: parseInt(quantity)
+    });
+
+    return draftOrder;
   };
 
   return {
-    draftOrder,
-    draftOrderError,
-    draftOrderLoading,
     createShopifyDraftOrder,
-    addProductToShopifyDraftOrder
+    addProductToShopifyDraftOrder,
+    updateDraftOrderLineItemQuantity
   };
 };
 

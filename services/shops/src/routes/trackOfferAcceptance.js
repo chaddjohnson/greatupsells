@@ -28,9 +28,6 @@ const handler = async (event, context) => {
       quantity
     );
 
-    // Delay returning to let everything settle with Shopify.
-    await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
-
     return {
       statusCode: StatusCodes.CREATED,
       body: JSON.stringify(offerHit)
