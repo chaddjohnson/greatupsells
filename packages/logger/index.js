@@ -13,12 +13,12 @@ const extractErrorData = (error) => {
   const data = {};
 
   // Include response error.
-  if (error && error.errors) {
+  if (error?.errors) {
     data.errors = error.errors;
   }
 
   // Include request error response body.
-  if (error && error.response && error.response.body) {
+  if (error?.response?.body) {
     data.responseBody = error.response.body;
   }
 
@@ -86,6 +86,12 @@ const logWarning = async (message, error, data = {}) => {
   if (error) {
     console.warn(error.stack);
   }
+  if (error?.errors) {
+    console.error(error.errors);
+  }
+  if (error?.response?.body) {
+    console.error(error.response.body);
+  }
 
   data = { ...data, ...extractErrorData(error) };
   data = formatData(data);
@@ -100,6 +106,12 @@ const logError = async (message, error, data = {}) => {
 
   if (error) {
     console.error(error.stack);
+  }
+  if (error?.errors) {
+    console.error(error.errors);
+  }
+  if (error?.response?.body) {
+    console.error(error.response.body);
   }
 
   data = { ...data, ...extractErrorData(error) };
