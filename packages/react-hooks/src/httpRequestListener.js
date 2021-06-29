@@ -28,30 +28,28 @@ XMLHttpRequest.prototype.send = function (data) {
   return originalSend.call(this, data);
 };
 
-const useHttpRequestListener = (listenerUrl, listener) => {
+const useHttpRequestListener = (url, listener) => {
   useEffect(() => {
     if (!listener) {
       return;
     }
 
-    listeners[listenerUrl] = listeners[listenerUrl] || [];
-    listeners[listenerUrl].push(listener);
+    listeners[url] = listeners[url] || [];
+    listeners[url].push(listener);
 
     return () => {
-      if (!listeners[listenerUrl]) {
+      if (!listeners[url]) {
         return;
       }
 
-      const index = listeners[listenerUrl].findIndex(
-        (current) => current === listener
-      );
+      const index = listeners[url].findIndex((current) => current === listener);
 
-      listeners[listenerUrl] = [
-        ...listeners[listenerUrl].slice(0, index),
-        ...listeners[listenerUrl].slice(index + 1)
+      listeners[url] = [
+        ...listeners[url].slice(0, index),
+        ...listeners[url].slice(index + 1)
       ];
     };
-  }, [listenerUrl, listener]);
+  }, [url, listener]);
 };
 
 export default useHttpRequestListener;
