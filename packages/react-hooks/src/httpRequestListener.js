@@ -8,25 +8,27 @@ const originalSend = XMLHttpRequest?.prototype?.send;
 // Listeners are keyed by URL.
 const listeners = {};
 
-XMLHttpRequest.prototype.open = function (method, url, ...params) {
-  const request = this;
+if (XMLHttpRequest) {
+  XMLHttpRequest.prototype.open = function (method, url, ...params) {
+    const request = this;
 
-  // Intercept Shopify's add to cart event responses.
-  if (listeners[url]) {
-    request.addEventListener('load', () => {
-      listeners[url].forEach((current) => {
-        current.call(current, request);
+    // Intercept Shopify's add to cart event responses.
+    if (listeners[url]) {
+      request.addEventListener('load', () => {
+        listeners[url].forEach((current) => {
+          current.call(current, request);
+        });
       });
-    });
-  }
+    }
 
-  return originalOpen.apply(this, [method, url, ...params]);
-};
+    return originalOpen.apply(this, [method, url, ...params]);
+  };
 
-XMLHttpRequest.prototype.send = function (data) {
-  this._data = data;
-  return originalSend.call(this, data);
-};
+  XMLHttpRequest.prototype.send = function (data) {
+    this._data = data;
+    return originalSend.call(this, data);
+  };
+}
 
 const useHttpRequestListener = (url, listener) => {
   useEffect(() => {
