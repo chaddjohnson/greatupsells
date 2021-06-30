@@ -57,7 +57,7 @@ const CartInterceptor = () => {
 
     // Replace event handlers for cart forms.
     cartForms.forEach((cartForm) => {
-      cartForm.addEventListener('submit', handleCartFormSubmit);
+      cartForm.addEventListener('submit', handleCartFormSubmit, true);
     });
 
     // Hide additional checkout buttons.
@@ -77,7 +77,7 @@ const CartInterceptor = () => {
 
     // Remove event handlers for cart forms.
     cartForms.forEach((cartForm) => {
-      cartForm.removeEventListener('submit', handleCartFormSubmit);
+      cartForm.removeEventListener('submit', handleCartFormSubmit, true);
     });
 
     // Show additional checkout buttons.
