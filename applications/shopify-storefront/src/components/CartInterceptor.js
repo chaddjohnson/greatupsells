@@ -41,6 +41,9 @@ const CartInterceptor = () => {
     const cartForms = Array.from(document.forms).filter((form) =>
       form.action.match(/\/cart$/)
     );
+    const additionalCheckoutButtons = document.querySelector(
+      '.additional-checkout-buttons'
+    );
 
     // Abort if already overridden.
     if (cartFormOverridden) {
@@ -57,6 +60,9 @@ const CartInterceptor = () => {
       cartForm.addEventListener('submit', handleCartFormSubmit);
     });
 
+    // Hide additional checkout buttons.
+    additionalCheckoutButtons.style.display = 'none';
+
     // Mark override as done.
     setCartFormOverridden(true);
   }, [cartFormOverridden]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -65,11 +71,17 @@ const CartInterceptor = () => {
     const cartForms = Array.from(document.forms).filter((form) =>
       form.action.match(/\/cart$/)
     );
+    const additionalCheckoutButtons = document.querySelector(
+      '.additional-checkout-buttons'
+    );
 
     // Remove event handlers for cart forms.
     cartForms.forEach((cartForm) => {
       cartForm.removeEventListener('submit', handleCartFormSubmit);
     });
+
+    // Show additional checkout buttons.
+    additionalCheckoutButtons.style.display = 'block';
 
     // Mark override as not done.
     setCartFormOverridden(false);
