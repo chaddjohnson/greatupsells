@@ -61,7 +61,9 @@ const CartInterceptor = () => {
     });
 
     // Hide additional checkout buttons.
-    additionalCheckoutButtons.style.display = 'none';
+    if (additionalCheckoutButtons) {
+      additionalCheckoutButtons.style.display = 'none';
+    }
 
     // Mark override as done.
     setCartFormOverridden(true);
@@ -81,7 +83,9 @@ const CartInterceptor = () => {
     });
 
     // Show additional checkout buttons.
-    additionalCheckoutButtons.style.display = 'block';
+    if (additionalCheckoutButtons) {
+      additionalCheckoutButtons.style.display = 'block';
+    }
 
     // Mark override as not done.
     setCartFormOverridden(false);
