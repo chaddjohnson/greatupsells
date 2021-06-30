@@ -62,8 +62,7 @@ const useRandomOffers = ({
     }
   );
 
-  // Listen to pushState events.
-  usePushStateListener(() => {
+  const pushStateListener = () => {
     // Update stateful values. This will automatically trigger a re-query for a random offer.
     setOfferImpressions(getCookie('upsellingOfferImpressions') || []);
     setSessionOfferImpressions(
@@ -72,7 +71,10 @@ const useRandomOffers = ({
         : []
     );
     setPagePath(window.location.pathname);
-  });
+  };
+
+  // Listen to pushState events.
+  usePushStateListener(pushStateListener);
 
   return { offersData };
 };
