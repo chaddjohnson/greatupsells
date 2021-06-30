@@ -14,7 +14,7 @@ const handlePushState = (event) => {
   }, 0);
 };
 
-if (typeof window !== 'undefined') {
+if (history) {
   // Reference: https://stackoverflow.com/a/4585031/83897
   window.addEventListener('popstate', handlePushState);
   history.onpushstate = handlePushState;
