@@ -1,40 +1,49 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const history = typeof window !== 'undefined' && window.history;
 const pushState = history?.pushState;
 
 // Listeners must be module-level because history is global.
-const listeners = [];
+let listeners = [];
 
-const usePushState = (listener) => {
-  const [listenerAdded, setListenerAdded] = useState(false);
-
-  if (listener && !listenerAdded) {
-    listeners.push(listener);
-    setListenerAdded(true);
-  }
-
-  const handlePushState = useCallback((event) => {
+const handlePushState = (event) => {
+  // If a timeout is not used, window.location will not reflect the new location
+  // in listeners.
+  setTimeout(() => {
     listeners.forEach((current) => current.call(current, event));
-  }, []);
-
-  // Reference: https://stackoverflow.com/a/4585031/83897
-  useEffect(() => {
-    window.addEventListener('popstate', handlePushState, true);
-    history.onpushstate = handlePushState;
-    history.pushState = (state, ...args) => {
-      if (typeof history.onpushstate === 'function') {
-        history.onpushstate({ state });
-      }
-      return pushState.apply(history, [state, ...args]);
-    };
-
-    return () => {
-      window.removeEventListener('popstate', handlePushState, true);
-      history.onpushstate = undefined;
-      history.pushState = pushState;
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, 0);
 };
 
-export default usePushState;
+if (typeof window !== 'undefined') {
+  // Reference: https://stackoverflow.com/a/4585031/83897
+  window.addEventListener('popstate', handlePushState);
+  history.onpushstate = handlePushState;
+  history.pushState = (state, ...args) => {
+    if (typeof history.onpushstate === 'function') {
+      history.onpushstate({ state });
+    }
+    return pushState.apply(history, [state, ...args]);
+  };
+}
+
+const usePushStateListener = (listener) => {
+  useEffect(() => {
+    if (!listener) {
+      return;
+    }
+
+    listeners.push(listener);
+
+    return () => {
+      if (!listener) {
+        return;
+      }
+
+      const index = listeners.findIndex((current) => current === listener);
+
+      listeners = [...listeners.slice(0, index), ...listeners.slice(index + 1)];
+    };
+  }, [listener]);
+};
+
+export default usePushStateListener;
