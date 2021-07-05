@@ -25,7 +25,7 @@ class HttpClient {
   }
 
   // Axios options may be passed for `options`. See https://www.npmjs.com/package/axios#request-config.
-  async request(method, url, data = {}, options = {}) {
+  async request(method, url, data = null, options = {}) {
     const response = await this.client({ method, url, data, ...options });
 
     return response && response.data;
@@ -35,7 +35,7 @@ class HttpClient {
     return this.request('GET', url, {}, options);
   }
 
-  async post(url, data = {}, options = {}) {
+  async post(url, data = null, options = {}) {
     return this.request('POST', url, data, options);
   }
 
