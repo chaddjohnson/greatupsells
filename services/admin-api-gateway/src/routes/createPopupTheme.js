@@ -26,7 +26,6 @@ const handler = middy(async (event, context) => {
 
   try {
     const data = JSON.parse(event.body);
-
     const popupTheme = await httpClient.post(`/popup-themes`, data);
 
     return {
@@ -37,7 +36,9 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body: error.response.data || getReasonPhrase(error.response.status)
+        body:
+          JSON.stringify(error.response.data) ||
+          getReasonPhrase(error.response.status)
       };
     }
 

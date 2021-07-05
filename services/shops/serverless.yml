@@ -45,6 +45,13 @@ functions:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
+  clonePopupTheme:
+    handler: src/routes/clonePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}/clone
+          method: post
+          authorizer: aws_iam
   createCollection:
     handler: src/routes/createCollection.handler
     events:

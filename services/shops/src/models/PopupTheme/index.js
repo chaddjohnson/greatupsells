@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
+const clone = require('./clone');
 const hooks = require('./hooks');
 
 let PopupTheme = null;
@@ -58,13 +59,18 @@ const schema = new mongoose.Schema(
       javascript: { type: String, required: false }
     },
     variables: [variablesSchema],
-    formFields: [formFieldsSchema]
+    formFields: [formFieldsSchema],
+    referenceUrls: [String]
   },
   schemaOptions
 );
 
 schema.statics.findByOfferId = function (offerId) {
   return PopupTheme.find({ offer: mongoose.Types.ObjectId(offerId) });
+};
+
+schema.methods.clone = function () {
+  return clone(this);
 };
 
 schema.pre('validate', function (next) {

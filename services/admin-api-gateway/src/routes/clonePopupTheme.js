@@ -7,7 +7,6 @@ const {
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
-const logger = require('@neatowebsolutions/upselling-logger');
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
 
@@ -26,36 +25,14 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.requestContext.authorizer.claims;
     const { popupThemeId } = event.pathParameters;
-    const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
-    const popupThemeShopId = popupTheme && popupTheme.shop;
-    const data = JSON.parse(event.body);
-
-    if (shopId !== popupThemeShopId) {
-      await logger.warn(
-        `Unauthorized update attempt for popup theme ${popupThemeId}`,
-        null,
-        { data, event }
-      );
-
-      return {
-        statusCode: StatusCodes.FORBIDDEN,
-        body: ReasonPhrases.FORBIDDEN
-      };
-    }
-
-    const updatedPopupTheme = await httpClient.put(
-      `/popup-themes/${popupThemeId}`,
-      {
-        ...popupTheme,
-        ...data
-      }
+    const clonedPopupTheme = await httpClient.post(
+      `/popup-themes/${popupThemeId}/clone`
     );
 
     return {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify(updatedPopupTheme)
+      statusCode: StatusCodes.CREATED,
+      body: JSON.stringify(clonedPopupTheme)
     };
   } catch (error) {
     if (error.response && error.response.status) {

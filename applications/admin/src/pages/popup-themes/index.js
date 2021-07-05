@@ -1,51 +1,10 @@
 import Head from 'next/head';
-import {
-  Card,
-  CardContent,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell
-} from '@material-ui/core';
+import { useRouter } from 'next/router';
 import { Skeleton } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import { Layout, Link, AddButton } from '../../components';
-import { usePopupThemes } from '../../hooks';
-
-const useStyles = makeStyles((theme) => ({
-  tableContainer: {
-    paddingBottom: theme.spacing(2)
-  },
-  nameTableCell: {
-    minWidth: 400
-  },
-  strategyTableCell: {
-    minWidth: 200
-  },
-  categoryTableCell: {
-    minWidth: 200
-  },
-  thumbnailTableCell: {
-    minWidth: 100
-  },
-  thumbnail: {
-    width: 'auto',
-    height: 'auto',
-    maxWidth: 80,
-    maxHeight: 80,
-    border: `1px solid ${theme.palette.action.selected}`
-  }
-}));
-
-const strategyMap = {
-  UPSELL: 'Upsell',
-  CROSS_SELL: 'Cross-sell',
-  POPUP: 'Popup'
-};
+import { Layout, PopupThemeList } from '../../components';
+import { usePopupThemes, usePopupTheme } from '../../hooks';
 
 const LoadingComponent = () => (
   <>
@@ -60,13 +19,19 @@ const LoadingComponent = () => (
 const ErrorComponent = () => <p>Unable to load popup themes.</p>;
 
 const PopupThemesPage = () => {
-  const classes = useStyles();
+  const router = useRouter();
 
   const {
     popupThemes,
     popupThemesLoading,
     popupThemesError
   } = usePopupThemes();
+  const { clonePopupTheme } = usePopupTheme();
+
+  const handleClonePopupTheme = async (popupTheme) => {
+    const clonedPopupTheme = await clonePopupTheme(popupTheme);
+    router.push(`/popup-themes/${clonedPopupTheme._id}`);
+  };
 
   return (
     <>
@@ -80,54 +45,9 @@ const PopupThemesPage = () => {
           loadingComponent={LoadingComponent}
           errorComponent={ErrorComponent}
         >
-          <Card>
-            <CardContent>
-              <TableContainer className={classes.tableContainer}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Strategy</TableCell>
-                      <TableCell>Category</TableCell>
-                      <TableCell>Preview</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {popupThemes?.map(
-                      (
-                        { _id, name, strategy, category, thumbnailImageUrl },
-                        index
-                      ) => (
-                        <TableRow key={index}>
-                          <TableCell className={classes.nameTableCell}>
-                            <Link href={`/popup-themes/${_id}`}>{name}</Link>
-                          </TableCell>
-                          <TableCell className={classes.strategyTableCell}>
-                            {strategyMap[strategy] || strategy}
-                          </TableCell>
-                          <TableCell className={classes.categoryTableCell}>
-                            {category}
-                          </TableCell>
-                          <TableCell className={classes.thumbnailTableCell}>
-                            <img
-                              className={classes.thumbnail}
-                              src={thumbnailImageUrl}
-                              alt="Preview"
-                            />
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-          <AddButton
-            color="primary"
-            aria-label="Add"
-            component={Link}
-            href="/popup-themes/new"
+          <PopupThemeList
+            popupThemes={popupThemes}
+            onClonePopupTheme={handleClonePopupTheme}
           />
         </Loader>
       </Layout>

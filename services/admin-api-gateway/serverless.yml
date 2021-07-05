@@ -38,6 +38,18 @@ functions:
   #         method: get
   #         cors: true
   # findLogs:
+  clonePopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/clonePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}/clone
+          method: post
+          cors: true
+          # authorizer:
+          #   name: authorizer
+          #   type: request
+          #   identitySource: method.request.header.Authorization
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler

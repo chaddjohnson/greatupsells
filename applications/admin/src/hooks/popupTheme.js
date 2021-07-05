@@ -37,11 +37,27 @@ const usePopupTheme = (id) => {
     }
   };
 
+  const clonePopupTheme = async (sourcePopupTheme) => {
+    try {
+      const clonedPopupTheme = await httpClient.post(
+        `/popup-themes/${sourcePopupTheme._id}/clone`
+      );
+
+      showSuccessToast(`Popup theme cloned successfully.`);
+
+      return clonedPopupTheme;
+    } catch (error) {
+      showErrorToast('Error cloning popup theme.');
+      throw error;
+    }
+  };
+
   return {
     popupTheme,
     popupThemeLoading,
     popupThemeError,
-    savePopupTheme
+    savePopupTheme,
+    clonePopupTheme
   };
 };
 

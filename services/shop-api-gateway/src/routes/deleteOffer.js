@@ -53,7 +53,9 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body: error.response.data || getReasonPhrase(error.response.status)
+        body:
+          JSON.stringify(error.response.data) ||
+          getReasonPhrase(error.response.status)
       };
     }
 
