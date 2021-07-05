@@ -63,6 +63,16 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
             <MenuItem value="POPUP">Popup</MenuItem>
           </Select>
         </FormControl>
+        <FormControl fullWidth>
+          <TextField
+            name="referenceUrl"
+            label="Reference URL"
+            margin="normal"
+            variant="outlined"
+            value={popupTheme.referenceUrl}
+            onChange={handleChange}
+          />
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>

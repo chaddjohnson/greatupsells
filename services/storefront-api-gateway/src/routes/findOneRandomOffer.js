@@ -54,7 +54,7 @@ const handler = middy(async (event, context) => {
       }
     );
 
-    offersData.forEach(({ offer }) => {
+    offersData.forEach(({ offer, popupTheme }) => {
       if (offer) {
         // Exclude stats from the offer response payload.
         delete offer.acceptanceCount;
@@ -62,6 +62,10 @@ const handler = middy(async (event, context) => {
         delete offer.conversionRate;
         delete offer.impressionCount;
         delete offer.revenueIncrease;
+      }
+
+      if (popupTheme) {
+        delete popupTheme.referenceUrl;
       }
     });
 
