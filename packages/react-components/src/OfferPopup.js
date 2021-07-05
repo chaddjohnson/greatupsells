@@ -339,7 +339,11 @@ const OfferPopup = ({
       offeredProducts: translatedOfferedProducts,
       submitHandler: 'window.parent.OfferPopup.submit(event)',
       closeHandler: 'window.parent.OfferPopup.close()',
-      checkoutUrl
+      checkoutUrl,
+      enableQuantitySelection: offer.enableQuantitySelection,
+      productQuantityLimit: offer.productQuantityLimit,
+      enableProductLinks: offer.enableProductLinks,
+      hideOutOfStockProducts: offer.hideOutOfStockProducts
     }),
     [
       checkoutUrl,
