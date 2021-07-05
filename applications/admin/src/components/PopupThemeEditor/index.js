@@ -94,7 +94,13 @@ const PopupThemeEditor = ({ initialValues, onSubmit }) => {
     event.preventDefault();
 
     setSaving(true);
-    await onSubmit(popupTheme);
+
+    try {
+      await onSubmit(popupTheme);
+    } catch (error) {
+      setSaving(false);
+    }
+
     setSaving(false);
   };
 
