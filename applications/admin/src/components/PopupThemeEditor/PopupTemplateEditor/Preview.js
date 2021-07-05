@@ -10,7 +10,7 @@ const { OfferPopup } =
 const Preview = ({ className, popupTheme }) => {
   const [previewActive, setPreviewActive] = useState(false);
 
-  if (!popupTheme.template) {
+  if (!popupTheme.template || !OfferPopup) {
     return null;
   }
 
