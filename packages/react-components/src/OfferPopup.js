@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled, { StyleSheetManager } from 'styled-components';
 import { useLiquid, liquidEngine } from 'react-liquid';
-import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useCookies,
+  useNumberFormatter
+} from '@neatowebsolutions/upselling-react-hooks';
 
 const initialIframeHeight = 1000;
 
@@ -133,9 +136,14 @@ const OfferPopup = ({
   onClose,
   onClick
 }) => {
+  const { getCookie } = useCookies();
+
   const [iframeRef, setIframeRef] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
+  const [checkoutUrl, setCheckoutUrl] = useState(
+    getCookie('upsellingDraftOrderCheckoutUrl')
+  );
 
   const { locale, countryCode, currency } = shop;
   const { formatCurrency } = useNumberFormatter({
@@ -187,10 +195,9 @@ const OfferPopup = ({
 
       // Set the iframe height to approximately the modal content height. Do so via
       // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(
-        () => setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom),
-        0
-      );
+      setTimeout(() => {
+        setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom);
+      }, 0);
     }, 0);
   };
 
@@ -246,6 +253,7 @@ const OfferPopup = ({
     quantity
   ) => {
     await onAddProduct(offer._id, shopifyProductId, shopifyVariantId, quantity);
+    setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
   };
 
   const handleSubmit = async (event) => {
@@ -280,7 +288,7 @@ const OfferPopup = ({
     () =>
       theme.variables.reduce((map, { name, value, type }) => {
         // Cast "option" variables to boolean.
-        if (type === 'option') {
+        if (type === 'OPTION') {
           value = value === 'true';
         }
 
@@ -307,22 +315,48 @@ const OfferPopup = ({
     }
   }, [translateProductData, offeredProducts]);
 
+  const htmlVariables = useMemo(
+    () => ({
+      ...mappedVariables,
+      triggerProduct: translatedTriggerProduct,
+      offeredProducts: translatedOfferedProducts,
+      submitHandler: 'window.parent.OfferPopup.submit(event)',
+      closeHandler: 'window.parent.OfferPopup.close()',
+      checkoutUrl
+    }),
+    [
+      mappedVariables,
+      translatedTriggerProduct,
+      translatedOfferedProducts,
+      checkoutUrl
+    ]
+  );
+
+  const javascriptVariables = useMemo(
+    () => ({
+      ...mappedVariables,
+      triggerProduct: translatedTriggerProduct,
+      offeredProducts: translatedOfferedProducts,
+      submitHandler: 'window.parent.OfferPopup.submit(event)',
+      closeHandler: 'window.parent.OfferPopup.close()',
+      checkoutUrl
+    }),
+    [
+      checkoutUrl,
+      mappedVariables,
+      offer,
+      translatedOfferedProducts,
+      translatedTriggerProduct
+    ]
+  );
+
   // Generate the markup.
-  let { markup: html } = useLiquid(theme.template.html, {
-    ...mappedVariables,
-    triggerProduct: translatedTriggerProduct,
-    offeredProducts: translatedOfferedProducts,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
+  let { markup: html } = useLiquid(theme.template.html, htmlVariables);
   const { markup: css } = useLiquid(theme.template.css, mappedVariables);
-  const { markup: javascript } = useLiquid(theme.template.javascript, {
-    ...mappedVariables,
-    triggerProduct: translatedTriggerProduct,
-    offeredProducts: translatedOfferedProducts,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
+  const { markup: javascript } = useLiquid(
+    theme.template.javascript,
+    javascriptVariables
+  );
 
   // Replace device-specific media queries if forcing display type.
   // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
@@ -416,6 +450,15 @@ const OfferPopup = ({
             <script
               dangerouslySetInnerHTML={{
                 __html: javascript
+              }}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                window.parent.OfferPopup.offeredProducts = ${JSON.stringify(
+                  translatedOfferedProducts
+                )};
+                `
               }}
             />
             <StyleSheetManager target={insertionTarget}>
