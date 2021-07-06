@@ -6,8 +6,11 @@ import {
   TextField,
   Select,
   InputLabel,
-  MenuItem
+  MenuItem,
+  InputAdornment,
+  IconButton
 } from '@material-ui/core';
+import { OpenInNew as OpenInNewIcon } from '@material-ui/icons';
 
 const PopupSettingsEditor = ({ popupTheme, onChange }) => {
   const handleChange = (event) => {
@@ -17,6 +20,19 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
       ...popupTheme,
       [name]: value
     });
+  };
+
+  const handleReferenceUrlButtonClick = () => {
+    const newWindow = window.open('');
+    const image = new Image();
+
+    image.src = popupTheme.referenceUrl;
+    newWindow.document.write(image.outerHTML);
+
+    // Fit the image.
+    newWindow.document.body.style.height = '100%';
+    newWindow.document.querySelector('img').style.maxWidth = '100%';
+    newWindow.document.querySelector('img').style.maxHeight = '100%';
   };
 
   return (
@@ -118,6 +134,15 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
             margin="normal"
             variant="outlined"
             value={popupTheme.referenceUrl}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleReferenceUrlButtonClick}>
+                    <OpenInNewIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
             onChange={handleChange}
           />
         </FormControl>
