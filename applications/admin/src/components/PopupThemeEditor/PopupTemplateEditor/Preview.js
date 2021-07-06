@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import dummyData from './dummyData.json';
 
@@ -7,9 +7,13 @@ const { OfferPopup } =
     require('@neatowebsolutions/upselling-react-components')) ||
   {};
 
-const Preview = ({ className, popupTheme }) => {
-  const [previewActive, setPreviewActive] = useState(false);
-
+const Preview = ({
+  className,
+  popupTheme,
+  previewActive,
+  onClosePreview,
+  onPreview
+}) => {
   if (!popupTheme.template || !OfferPopup) {
     return null;
   }
@@ -25,15 +29,24 @@ const Preview = ({ className, popupTheme }) => {
       offer={dummyData.offer}
       triggerProduct={dummyData.triggerProduct}
       offeredProducts={dummyData.offeredProducts}
-      onClose={() => setPreviewActive(false)}
-      onClick={() => setPreviewActive(true)}
+      onClose={onClosePreview}
+      onClick={onPreview}
     />
   );
 };
 
 Preview.propTypes = {
   className: PropTypes.string,
-  popupTheme: PropTypes.object
+  popupTheme: PropTypes.object,
+  previewActive: PropTypes.bool,
+  onClosePreview: PropTypes.func,
+  onPreview: PropTypes.func
+};
+
+Preview.defaultProps = {
+  previewActive: false,
+  onClosePreview: () => {},
+  onPreview: () => {}
 };
 
 export default Preview;

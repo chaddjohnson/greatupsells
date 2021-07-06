@@ -1,36 +1,28 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { MoreVert as MoreVertIcon } from '@material-ui/icons';
-import clsx from 'clsx';
 import Link from '../Link';
-import Preview from '../PopupThemeEditor/PopupTemplateEditor/Preview';
 
 const useStyles = makeStyles((theme) => ({
   link: {
     color: theme.palette.text.primary
-  },
-  preview: {
-    display: 'none'
   }
 }));
 
-const PopupThemeMenu = ({ popupTheme, onClonePopupTheme }) => {
+const PopupThemeMenu = ({
+  popupTheme,
+  popupThemeExportUrl,
+  onClonePopupTheme,
+  onPreviewPopupTheme
+}) => {
   const classes = useStyles();
 
   const [menuAnchorElement, setMenuAnchorElement] = useState(null);
-  const [popupThemeHtml, setPopupThemeHtml] = useState();
-
   const menuOpen = Boolean(menuAnchorElement);
 
-  const previewContainerElement = useRef(null);
-
   const handleMenuOpen = (event) => {
-    const iframe = previewContainerElement.current.querySelector('.preview');
-    const html = iframe?.contentWindow.document.documentElement.outerHTML;
-
-    setPopupThemeHtml(encodeURIComponent(html));
     setMenuAnchorElement(event.currentTarget);
   };
 
@@ -38,8 +30,13 @@ const PopupThemeMenu = ({ popupTheme, onClonePopupTheme }) => {
     setMenuAnchorElement(null);
   };
 
+  const handlePreviewTheme = () => {
+    handleMenuClose();
+    onPreviewPopupTheme();
+  };
+
   const handleCloneTheme = async () => {
-    setMenuAnchorElement(null);
+    handleMenuClose();
     await onClonePopupTheme(popupTheme);
   };
 
@@ -69,34 +66,33 @@ const PopupThemeMenu = ({ popupTheme, onClonePopupTheme }) => {
           }
         }}
       >
+        <MenuItem onClick={handlePreviewTheme}>Preview</MenuItem>
         <MenuItem onClick={handleCloneTheme}>Clone</MenuItem>
         <MenuItem
           className={classes.link}
           component={Link}
-          href={`data:text/html;charset=utf-8,${popupThemeHtml}`}
+          href={popupThemeExportUrl}
           download={exportFileName}
           onClick={handleMenuClose}
         >
           Export HTML
         </MenuItem>
       </Menu>
-      <div ref={previewContainerElement}>
-        <Preview
-          className={clsx(classes.preview, 'preview')}
-          popupTheme={popupTheme}
-        />
-      </div>
     </>
   );
 };
 
 PopupThemeMenu.propTypes = {
   popupTheme: PropTypes.object,
-  onClonePopupTheme: PropTypes.func
+  popupThemeExportUrl: PropTypes.string,
+  onClonePopupTheme: PropTypes.func,
+  onPreviewPopupTheme: PropTypes.func
 };
 
 PopupThemeMenu.defaultProps = {
-  onClonePopupTheme: () => {}
+  popupThemeExportUrl: '',
+  onClonePopupTheme: () => {},
+  onPreviewPopupTheme: () => {}
 };
 
 export default PopupThemeMenu;

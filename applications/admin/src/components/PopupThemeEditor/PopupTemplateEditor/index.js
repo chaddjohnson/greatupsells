@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,8 +53,18 @@ const useStyles = makeStyles((theme) => ({
 const PopupTemplateEditor = ({ popupTheme, onChange }) => {
   const classes = useStyles();
 
+  const [previewActive, setPreviewActive] = useState(false);
+
   const handleChange = (template) => {
     onChange({ ...popupTheme, template });
+  };
+
+  const handleClosePreview = () => {
+    setPreviewActive(false);
+  };
+
+  const handlePreview = () => {
+    setPreviewActive(true);
   };
 
   return (
@@ -68,7 +78,13 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
       </Grid>
       <Grid className={classes.gridItem} item xs={12} sm={6}>
         <Paper className={classes.previewPaper} variant="outlined" square>
-          <Preview className={classes.preview} popupTheme={popupTheme} />
+          <Preview
+            className={classes.preview}
+            popupTheme={popupTheme}
+            previewActive={previewActive}
+            onClosePreview={handleClosePreview}
+            onPreview={handlePreview}
+          />
         </Paper>
       </Grid>
     </Grid>
