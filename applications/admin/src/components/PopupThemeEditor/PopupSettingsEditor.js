@@ -70,7 +70,7 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
             margin="normal"
             variant="outlined"
             multiline
-            rows={5}
+            rows={12}
             required
             value={popupTheme.notes}
             onChange={handleChange}
