@@ -23,16 +23,25 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
   };
 
   const handleReferenceUrlButtonClick = () => {
-    const newWindow = window.open('');
-    const image = new Image();
+    const isExternal = !!popupTheme.referenceUrl?.match(/^https?:\/\//);
+    const isDataUrl = !!popupTheme.referenceUrl?.match(/^data:/);
 
-    image.src = popupTheme.referenceUrl;
-    newWindow.document.write(image.outerHTML);
+    if (isExternal) {
+      window.open(popupTheme.referenceUrl);
+    }
 
-    // Fit the image.
-    newWindow.document.body.style.height = '100%';
-    newWindow.document.querySelector('img').style.maxWidth = '100%';
-    newWindow.document.querySelector('img').style.maxHeight = '100%';
+    if (isDataUrl) {
+      const newWindow = window.open('');
+      const image = new Image();
+
+      image.src = popupTheme.referenceUrl;
+      newWindow.document.write(image.outerHTML);
+
+      // Fit the image.
+      newWindow.document.body.style.height = '100%';
+      newWindow.document.querySelector('img').style.maxWidth = '100%';
+      newWindow.document.querySelector('img').style.maxHeight = '100%';
+    }
   };
 
   return (
