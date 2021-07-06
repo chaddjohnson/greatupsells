@@ -60,7 +60,8 @@ const schema = new mongoose.Schema(
     },
     variables: [variablesSchema],
     formFields: [formFieldsSchema],
-    referenceUrl: { type: String, required: false }
+    referenceUrl: { type: String, required: false },
+    notes: { type: String, required: false }
   },
   schemaOptions
 );

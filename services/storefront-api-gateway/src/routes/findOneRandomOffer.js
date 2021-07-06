@@ -66,6 +66,7 @@ const handler = middy(async (event, context) => {
 
       if (popupTheme) {
         delete popupTheme.referenceUrl;
+        delete popupTheme.notes;
       }
     });
 

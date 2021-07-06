@@ -65,11 +65,14 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
         </FormControl>
         <FormControl fullWidth>
           <TextField
-            name="referenceUrl"
-            label="Reference URL"
+            name="notes"
+            label="Notes"
             margin="normal"
             variant="outlined"
-            value={popupTheme.referenceUrl}
+            multiline
+            rows={5}
+            required
+            value={popupTheme.notes}
             onChange={handleChange}
           />
         </FormControl>
@@ -105,6 +108,16 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
             variant="outlined"
             required
             value={popupTheme.description}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <TextField
+            name="referenceUrl"
+            label="Reference URL"
+            margin="normal"
+            variant="outlined"
+            value={popupTheme.referenceUrl}
             onChange={handleChange}
           />
         </FormControl>
