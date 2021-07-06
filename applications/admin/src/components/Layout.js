@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Drawer,
@@ -93,7 +93,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Layout = ({ title, icon, contentProps, children }) => {
   const classes = useStyles();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleToggleMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
