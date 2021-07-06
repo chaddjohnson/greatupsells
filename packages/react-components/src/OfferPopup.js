@@ -386,6 +386,14 @@ const OfferPopup = ({
   Modal.setAppElement(mountNode);
 
   useEffect(() => {
+    let charsetMetaTag;
+
+    if (iframeDocument) {
+      charsetMetaTag = iframeDocument.createElement('meta');
+      charsetMetaTag.setAttribute('charset', 'UTF-8');
+      iframeDocument.head.append(charsetMetaTag);
+    }
+
     if (insertionTarget) {
       // Inject Styled Components styling.
       iframeDocument.head.append(insertionTarget);
