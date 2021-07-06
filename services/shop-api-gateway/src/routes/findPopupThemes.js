@@ -28,6 +28,11 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer.claims;
     const popupThemes = await httpClient.get(`/shops/${shopId}/popup-themes`);
 
+    popupThemes.forEach((popupTheme) => {
+      delete popupTheme.referenceUrl;
+      delete popupTheme.notes;
+    });
+
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(popupThemes)
