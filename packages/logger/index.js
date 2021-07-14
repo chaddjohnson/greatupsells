@@ -49,15 +49,15 @@ const sendMessage = async (type, message, stackTrace, data) => {
     const sqs = new AWS.SQS();
     const body = { source, type, message, stackTrace, data };
 
-    if (LOG_QUEUE_URL) {
+    if (LOGS_API_URL) {
+      await httpClient.post('/logs', body);
+    } else if (LOG_QUEUE_URL) {
       await sqs
         .sendMessage({
           QueueUrl: LOG_QUEUE_URL,
           MessageBody: JSON.stringify(body)
         })
         .promise();
-    } else if (LOGS_API_URL) {
-      await httpClient.post('/logs', body);
     }
   } catch (error) {
     console.error(
