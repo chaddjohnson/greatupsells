@@ -23,6 +23,7 @@ const OfferOptionsEditor = ({
   showNotificationBanner,
   enableProductLinks,
   hideOutOfStockProducts,
+  enableVariantSelection,
   enableQuantitySelection,
   limitQuantitySelection,
   productQuantityLimit,
@@ -125,11 +126,16 @@ const OfferOptionsEditor = ({
             {...asChoiceField(enableProductLinks)}
           />
           <Checkbox
-            label="Hide out of stock products"
+            label="Exclude out of stock products"
             {...asChoiceField(hideOutOfStockProducts)}
           />
           <Checkbox
-            label="Allow customers to change quantities"
+            label="Allow customers to select variants (if supported by theme)"
+            helptext={!enableVariantSelection.value}
+            {...asChoiceField(enableVariantSelection)}
+          />
+          <Checkbox
+            label="Allow customers to change quantities (if supported by theme)"
             {...asChoiceField(enableQuantitySelection)}
           />
           <Checkbox
@@ -176,6 +182,7 @@ OfferOptionsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
   enableProductLinks: PropTypes.object.isRequired,
   hideOutOfStockProducts: PropTypes.object.isRequired,
+  enableVariantSelection: PropTypes.object.isRequired,
   enableQuantitySelection: PropTypes.object.isRequired,
   productQuantityLimit: PropTypes.object.isRequired,
   limitQuantitySelection: PropTypes.object.isRequired,

@@ -113,6 +113,7 @@ const initialOffer = {
   allowWithDiscountCodes: true,
   hideIfItemAdded: false,
   showNotificationBanner: true,
+  enableVariantSelection: false,
   enableQuantitySelection: false,
   limitQuantitySelection: false,
   enableProductLinks: true,

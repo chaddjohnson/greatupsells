@@ -105,6 +105,7 @@ const OfferForm = ({
     onPageRequiredSeconds,
     enableEscClose,
     enableMaskClose,
+    enableVariantSelection,
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
@@ -146,6 +147,7 @@ const OfferForm = ({
       onPageRequiredSeconds,
       enableEscClose,
       enableMaskClose,
+      enableVariantSelection,
       enableQuantitySelection,
       limitQuantitySelection,
       productQuantityLimit,
@@ -361,6 +363,7 @@ const OfferForm = ({
             showNotificationBanner={showNotificationBanner}
             enableProductLinks={enableProductLinks}
             hideOutOfStockProducts={hideOutOfStockProducts}
+            enableVariantSelection={enableVariantSelection}
             enableQuantitySelection={enableQuantitySelection}
             limitQuantitySelection={limitQuantitySelection}
             productQuantityLimit={productQuantityLimit}

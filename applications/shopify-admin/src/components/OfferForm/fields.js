@@ -174,6 +174,7 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
+  const enableVariantSelection = useField(initialOffer.enableVariantSelection);
   const enableQuantitySelection = useField(
     initialOffer.enableQuantitySelection
   );
@@ -244,6 +245,7 @@ const useFields = (initialOffer, showEndDate) => {
     onPageRequiredSeconds,
     enableEscClose,
     enableMaskClose,
+    enableVariantSelection,
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
