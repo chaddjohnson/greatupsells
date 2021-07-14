@@ -1,5 +1,4 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { compact } = require('lodash');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
