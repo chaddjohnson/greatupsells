@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,10 +53,22 @@ const useStyles = makeStyles((theme) => ({
 const PopupTemplateEditor = ({ popupTheme, onChange }) => {
   const classes = useStyles();
 
+  const [template, setTemplate] = useState(popupTheme.template);
   const [previewActive, setPreviewActive] = useState(false);
+  const debounceChange = useRef();
 
-  const handleChange = (template) => {
-    onChange({ ...popupTheme, template });
+  // Use debouncing to delay updating the preview.
+  const handleChange = (newTemplate) => {
+    setTemplate(newTemplate);
+
+    if (debounceChange.current) {
+      clearTimeout(debounceChange.current);
+    }
+
+    debounceChange.current = setTimeout(
+      () => onChange({ ...popupTheme, template: newTemplate }),
+      1.5 * 1000
+    );
   };
 
   const handleClosePreview = () => {
@@ -72,7 +84,7 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
       <Grid className={classes.gridItem} item xs={12} sm={6}>
         <CodeEditor
           className={classes.editor}
-          template={popupTheme.template}
+          template={template}
           onChange={handleChange}
         />
       </Grid>
