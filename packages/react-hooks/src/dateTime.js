@@ -25,7 +25,7 @@ const useDateTime = (locale = 'en-us') => {
         }).toLocaleString(format)
       );
     },
-    []
+    [locale]
   );
 
   const formatDateRelative = useCallback((date) => {
