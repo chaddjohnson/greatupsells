@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 
 const useNumberFormatter = ({ locale, countryCode, currency }) => {
   const numberFormatter = useMemo(() => {
@@ -20,38 +20,47 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     });
   }, [locale, countryCode, currency]);
 
-  const formatNumber = (value, decimals = 2) => {
-    if (numberFormatter?.format) {
-      return (
-        numberFormatter.format(
-          Math.round(value * 10 ** decimals) / 10 ** decimals
-        ) || value
-      );
-    }
+  const formatNumber = useCallback(
+    (value, decimals = 2) => {
+      if (numberFormatter?.format) {
+        return (
+          numberFormatter.format(
+            Math.round(value * 10 ** decimals) / 10 ** decimals
+          ) || value
+        );
+      }
 
-    return value;
-  };
+      return value;
+    },
+    [numberFormatter]
+  );
 
-  const formatCurrency = (value) => {
-    if (currencyFormatter?.format) {
-      return currencyFormatter.format(value) || value;
-    }
+  const formatCurrency = useCallback(
+    (value) => {
+      if (currencyFormatter?.format) {
+        return currencyFormatter.format(value) || value;
+      }
 
-    return value;
-  };
+      return value;
+    },
+    [currencyFormatter]
+  );
 
-  const formatPercentage = (value, decimals = 2) => {
-    if (numberFormatter?.format) {
-      const formattedValue =
-        Math.round(value * 100 * 10 ** decimals) / 10 ** decimals;
+  const formatPercentage = useCallback(
+    (value, decimals = 2) => {
+      if (numberFormatter?.format) {
+        const formattedValue =
+          Math.round(value * 100 * 10 ** decimals) / 10 ** decimals;
 
-      return typeof formattedValue === 'number'
-        ? `${numberFormatter.format(formattedValue)}%`
-        : value;
-    }
+        return typeof formattedValue === 'number'
+          ? `${numberFormatter.format(formattedValue)}%`
+          : value;
+      }
 
-    return value;
-  };
+      return value;
+    },
+    [numberFormatter]
+  );
 
   return { formatNumber, formatCurrency, formatPercentage };
 };
