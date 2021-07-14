@@ -11,6 +11,8 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
     "css-loader": "^3.5.3",
+    "dangerously-set-html-content": "^1.0.8",
+    "knockout": "^3.5.1",
     "react-liquid": "^2.0.1",
     "react-modal": "^3.12.1",
     "style-loader": "^1.2.1"

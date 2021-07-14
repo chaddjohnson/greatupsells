@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled, { StyleSheetManager } from 'styled-components';
 import { useLiquid, liquidEngine } from 'react-liquid';
+import InnerHTML from 'dangerously-set-html-content';
+import Knockout from 'knockout';
 import {
   useCookies,
   useNumberFormatter
@@ -157,9 +159,6 @@ const OfferPopup = ({
     iframeRef?.contentDocument ||
     iframeRef?.document;
   const mountNode = iframeDocument?.body;
-  const insertionTarget = useMemo(() => iframeDocument?.createElement('link'), [
-    iframeDocument
-  ]);
 
   const fixIframeHeight = () => {
     if (!iframeDocument || !modalRef) {
@@ -215,7 +214,10 @@ const OfferPopup = ({
           {}
         ) || {};
 
-      return {
+      const randomVariantIndex = Math.floor(
+        Math.random() * shopifyProductData.variants.length
+      );
+      const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
         url: `/products/${shopifyProductData.handle}`,
@@ -243,6 +245,11 @@ const OfferPopup = ({
           inventory: variant.inventory_quantity
         }))
       };
+
+      translatedData.randomVariant =
+        translatedData.variants[randomVariantIndex];
+
+      return translatedData;
     },
     [offer, formatCurrency]
   );
@@ -307,32 +314,15 @@ const OfferPopup = ({
     if (triggerProduct) {
       return translateProductData(triggerProduct);
     }
-  }, [translateProductData, triggerProduct]);
+  }, [triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const translatedOfferedProducts = useMemo(() => {
     if (offeredProducts) {
       return offeredProducts.map(translateProductData);
     }
-  }, [translateProductData, offeredProducts]);
+  }, [offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const htmlVariables = useMemo(
-    () => ({
-      ...mappedVariables,
-      triggerProduct: translatedTriggerProduct,
-      offeredProducts: translatedOfferedProducts,
-      submitHandler: 'window.parent.OfferPopup.submit(event)',
-      closeHandler: 'window.parent.OfferPopup.close()',
-      checkoutUrl
-    }),
-    [
-      mappedVariables,
-      translatedTriggerProduct,
-      translatedOfferedProducts,
-      checkoutUrl
-    ]
-  );
-
-  const javascriptVariables = useMemo(
+  const templateVariables = useMemo(
     () => ({
       ...mappedVariables,
       triggerProduct: translatedTriggerProduct,
@@ -340,26 +330,27 @@ const OfferPopup = ({
       submitHandler: 'window.parent.OfferPopup.submit(event)',
       closeHandler: 'window.parent.OfferPopup.close()',
       checkoutUrl,
+      enableVariantSelection: offer.enableVariantSelection,
       enableQuantitySelection: offer.enableQuantitySelection,
       productQuantityLimit: offer.productQuantityLimit,
       enableProductLinks: offer.enableProductLinks,
       hideOutOfStockProducts: offer.hideOutOfStockProducts
     }),
     [
-      checkoutUrl,
       mappedVariables,
-      offer,
+      translatedTriggerProduct,
       translatedOfferedProducts,
-      translatedTriggerProduct
+      offer,
+      checkoutUrl
     ]
   );
 
   // Generate the markup.
-  let { markup: html } = useLiquid(theme.template.html, htmlVariables);
+  let { markup: html } = useLiquid(theme.template.html, templateVariables);
   const { markup: css } = useLiquid(theme.template.css, mappedVariables);
   const { markup: javascript } = useLiquid(
     theme.template.javascript,
-    javascriptVariables
+    templateVariables
   );
 
   // Replace device-specific media queries if forcing display type.
@@ -385,6 +376,7 @@ const OfferPopup = ({
 
   Modal.setAppElement(mountNode);
 
+  // Inject meta tags.
   useEffect(() => {
     let charsetMetaTag;
 
@@ -393,12 +385,61 @@ const OfferPopup = ({
       charsetMetaTag.setAttribute('charset', 'UTF-8');
       iframeDocument.head.append(charsetMetaTag);
     }
+  }, [iframeDocument]);
 
-    if (insertionTarget) {
-      // Inject Styled Components styling.
-      iframeDocument.head.append(insertionTarget);
+  // Inject JavaScript.
+  useEffect(() => {
+    let customScript;
+    let dataScript;
+
+    if (iframeDocument) {
+      customScript = iframeDocument.createElement('script');
+      dataScript = iframeDocument.createElement('script');
+
+      customScript.type = 'text/javascript';
+      customScript.text = javascript;
+      dataScript.type = 'text/javascript';
+      dataScript.text = `
+        window.parent.OfferPopup.offeredProducts = ${JSON.stringify(
+          translatedOfferedProducts
+        )};
+      `;
+
+      iframeDocument.head.append(customScript);
+      iframeDocument.head.append(dataScript);
     }
-  }, [iframeDocument, insertionTarget]);
+  }, [
+    iframeRef,
+    iframeDocument,
+    mountNode,
+    translatedOfferedProducts,
+    javascript
+  ]);
+
+  // Set up data binding.
+  useEffect(() => {
+    if (!iframeRef) {
+      return;
+    }
+
+    // Add references.
+    iframeRef.contentWindow.ko = Knockout;
+
+    // Define context.
+    iframeRef.contentWindow.context = {
+      firstName: 'Bert',
+      lastName: 'Bertington'
+    };
+
+    // Initialize data bindings.
+    // TODO: Figure out why a timeout is necessary and remove it if possible.
+    setTimeout(() => {
+      iframeRef.contentWindow.ko.applyBindings(
+        iframeRef.contentWindow.context,
+        mountNode
+      );
+    }, 0);
+  }, [iframeRef, mountNode]);
 
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
@@ -459,21 +500,7 @@ const OfferPopup = ({
                 `
               }}
             />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: javascript
-              }}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                window.parent.OfferPopup.offeredProducts = ${JSON.stringify(
-                  translatedOfferedProducts
-                )};
-                `
-              }}
-            />
-            <StyleSheetManager target={insertionTarget}>
+            <StyleSheetManager target={iframeDocument.head}>
               <Modal
                 contentRef={setModalRef}
                 closeTimeoutMS={200}
@@ -499,9 +526,11 @@ const OfferPopup = ({
                 }}
               >
                 <ModalContentContainer
+                  id="modal-content-container"
                   forceDisplayType={forceDisplayType}
-                  dangerouslySetInnerHTML={{ __html: html }}
-                />
+                >
+                  <InnerHTML html={html} />
+                </ModalContentContainer>
                 {designMode && <Mask onClick={onClick} />}
               </Modal>
             </StyleSheetManager>
