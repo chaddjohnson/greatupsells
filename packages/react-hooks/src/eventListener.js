@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
 
-const useEventListener = (event, listener, options) => {
+const useEventListener = (event, listener, options, context = document) => {
   useEffect(() => {
-    if (document.addEventListener) {
-      document.addEventListener(event, listener, options);
-    } else if (document.attachEvent) {
-      document.attachEvent(event, listener);
+    if (context.addEventListener) {
+      context.addEventListener(event, listener, options);
+    } else if (context.attachEvent) {
+      context.attachEvent(event, listener);
     }
 
     return () => {
-      if (document.removeEventListener) {
-        document.removeEventListener(event, listener, options);
-      } else if (document.detachEvent) {
-        document.detachEvent(event, listener);
+      if (context.removeEventListener) {
+        context.removeEventListener(event, listener, options);
+      } else if (context.detachEvent) {
+        context.detachEvent(event, listener);
       }
     };
-  }, [event, listener, options]);
+  }, [event, listener, options, context]);
 };
 
 export default useEventListener;
