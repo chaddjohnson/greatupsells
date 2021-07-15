@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
 const tabIndexes = {
   html: 0,
   css: 1,
-  javascript: 2
+  javascript: 2,
+  scripts: 3
 };
 
 const TabPanel = ({ index, value, children, ...props }) => (
@@ -85,6 +86,7 @@ const CodeEditor = ({ template, onChange, ...props }) => {
         <Tab id="code-tab-1" label="HTML" />
         <Tab id="code-tab-2" label="CSS" />
         <Tab id="code-tab-3" label="JavaScript" />
+        <Tab id="code-tab-4" label="Scripts" />
       </Tabs>
       <TabPanel
         className={classes.tabPanel}
@@ -133,6 +135,13 @@ const CodeEditor = ({ template, onChange, ...props }) => {
           onBeforeChange={handleJavaScriptChange}
           {...props}
         />
+      </TabPanel>
+      <TabPanel
+        className={classes.tabPanel}
+        value={tabIndex}
+        index={tabIndexes.scripts}
+      >
+        TODO
       </TabPanel>
     </div>
   );

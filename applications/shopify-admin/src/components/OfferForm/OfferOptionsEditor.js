@@ -130,7 +130,7 @@ const OfferOptionsEditor = ({
             {...asChoiceField(hideOutOfStockProducts)}
           />
           <Checkbox
-            label="Allow customers to select variants (if supported by theme)"
+            label="Allow customers to select variants (if supported by theme, and when variants are available)"
             helptext={!enableVariantSelection.value}
             {...asChoiceField(enableVariantSelection)}
           />

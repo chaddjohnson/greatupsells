@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import styled, { StyleSheetManager } from 'styled-components';
 import { useLiquid, liquidEngine } from 'react-liquid';
-import InnerHTML from 'dangerously-set-html-content';
-import Knockout from 'knockout';
+import knockout from 'knockout';
 import {
   useCookies,
   useNumberFormatter
@@ -143,6 +142,9 @@ const OfferPopup = ({
   const [iframeRef, setIframeRef] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
+  const [modalContentContainerRef, setModalContentContainerRef] = useState(
+    null
+  );
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('upsellingDraftOrderCheckoutUrl')
   );
@@ -383,63 +385,121 @@ const OfferPopup = ({
     if (iframeDocument) {
       charsetMetaTag = iframeDocument.createElement('meta');
       charsetMetaTag.setAttribute('charset', 'UTF-8');
-      iframeDocument.head.append(charsetMetaTag);
+      iframeDocument.head.appendChild(charsetMetaTag);
     }
   }, [iframeDocument]);
 
-  // Inject JavaScript.
+  // Inject code.
   useEffect(() => {
-    let customScript;
+    const externalScripts = [];
+    let externalScript;
     let dataScript;
+    let customScript;
 
     if (iframeDocument) {
-      customScript = iframeDocument.createElement('script');
-      dataScript = iframeDocument.createElement('script');
+      // Link to external scripts.
+      theme.template.scripts?.forEach((scriptUrl) => {
+        externalScript = iframeDocument.createElement('script');
+        externalScript.type = 'text/javascript';
+        externalScript.src = scriptUrl;
+        externalScripts.push(externalScript);
+        iframeDocument.head.appendChild(externalScript);
+      });
 
-      customScript.type = 'text/javascript';
-      customScript.text = javascript;
+      // Inject product data.
+      dataScript = iframeDocument.createElement('script');
       dataScript.type = 'text/javascript';
       dataScript.text = `
         window.parent.OfferPopup.offeredProducts = ${JSON.stringify(
           translatedOfferedProducts
         )};
       `;
+      iframeDocument.head.appendChild(dataScript);
 
-      iframeDocument.head.append(customScript);
-      iframeDocument.head.append(dataScript);
+      // Inject custom JavaScript.
+      customScript = iframeDocument.createElement('script');
+      customScript.type = 'text/javascript';
+      customScript.text = javascript;
+      iframeDocument.head.appendChild(customScript);
     }
+
+    return () => {
+      if (iframeDocument) {
+        externalScripts.forEach((current) =>
+          iframeDocument.head.removeChild(current)
+        );
+        iframeDocument.head.removeChild(dataScript);
+        iframeDocument.head.removeChild(customScript);
+      }
+    };
   }, [
     iframeRef,
     iframeDocument,
     mountNode,
     translatedOfferedProducts,
-    javascript
+    javascript,
+    theme.template.scripts
   ]);
 
   // Set up data binding.
   useEffect(() => {
-    if (!iframeRef) {
+    if (!iframeRef?.contentWindow) {
       return;
     }
 
-    // Add references.
-    iframeRef.contentWindow.ko = Knockout;
-
-    // Define context.
-    iframeRef.contentWindow.context = {
-      firstName: 'Bert',
-      lastName: 'Bertington'
+    // Define an object to track state within the popup.
+    const Bindings = function () {
+      this.offeredProducts = () => translatedOfferedProducts;
+      this.selectedVariantIds = knockout.observableArray(
+        translatedOfferedProducts.map(({ variants }) =>
+          knockout.observable(variants[0].id)
+        )
+      );
+      this.selectedVariants = () =>
+        translatedOfferedProducts.map(
+          ({ variants }, index) =>
+            variants.find(
+              ({ id }) => id === this.selectedVariantIds()[index]()
+            ) || variants[0]
+        );
+      this.selectedQuantities = knockout.observableArray(
+        [...Array(3).keys()].map(() => knockout.observable(1))
+      );
     };
 
+    // Add a reference to the data binding library.
+    iframeRef.contentWindow.ko = knockout;
+
     // Initialize data bindings.
-    // TODO: Figure out why a timeout is necessary and remove it if possible.
+    // TODO: Figure out why a timeout is necessary, and remove it if possible.
     setTimeout(() => {
+      // Workaround for issue https://github.com/knockout/knockout/issues/912.
+      if (modalContentContainerRef) {
+        modalContentContainerRef.innerHTML = html;
+      }
+
+      iframeRef.contentWindow.viewModel = new Bindings();
+      iframeRef.contentWindow.ko.cleanNode(mountNode);
       iframeRef.contentWindow.ko.applyBindings(
-        iframeRef.contentWindow.context,
+        iframeRef.contentWindow.viewModel,
         mountNode
       );
-    }, 0);
-  }, [iframeRef, mountNode]);
+    });
+
+    return () => {
+      if (iframeRef?.contentWindow?.ko) {
+        iframeRef.contentWindow.ko.cleanNode(mountNode);
+      }
+    };
+  }, [
+    iframeRef,
+    mountNode,
+    translatedOfferedProducts,
+    modalContentContainerRef,
+    html,
+    css,
+    javascript
+  ]);
 
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
@@ -527,10 +587,10 @@ const OfferPopup = ({
               >
                 <ModalContentContainer
                   id="modal-content-container"
+                  ref={setModalContentContainerRef}
                   forceDisplayType={forceDisplayType}
-                >
-                  <InnerHTML html={html} />
-                </ModalContentContainer>
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
                 {designMode && <Mask onClick={onClick} />}
               </Modal>
             </StyleSheetManager>
