@@ -160,7 +160,8 @@ const OfferPopup = ({
     iframeRef?.contentWindow?.document ||
     iframeRef?.contentDocument ||
     iframeRef?.document;
-  const mountNode = iframeDocument?.body;
+  const iframeHeadNode = iframeDocument?.head;
+  const iframeBodyNode = iframeDocument?.body;
 
   const fixIframeHeight = () => {
     if (!iframeDocument || !modalRef) {
@@ -376,20 +377,9 @@ const OfferPopup = ({
   window.OfferPopup.submit = handleSubmit;
   window.OfferPopup.close = handleClose;
 
-  Modal.setAppElement(mountNode);
+  Modal.setAppElement(iframeBodyNode);
 
-  // Inject meta tags.
-  useEffect(() => {
-    let charsetMetaTag;
-
-    if (iframeDocument) {
-      charsetMetaTag = iframeDocument.createElement('meta');
-      charsetMetaTag.setAttribute('charset', 'UTF-8');
-      iframeDocument.head.appendChild(charsetMetaTag);
-    }
-  }, [iframeDocument]);
-
-  // Inject code.
+  // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.
   useEffect(() => {
     const externalScripts = [];
     let externalScript;
@@ -403,7 +393,7 @@ const OfferPopup = ({
         externalScript.type = 'text/javascript';
         externalScript.src = scriptUrl;
         externalScripts.push(externalScript);
-        iframeDocument.head.appendChild(externalScript);
+        iframeHeadNode.appendChild(externalScript);
       });
 
       // Inject product data.
@@ -414,28 +404,28 @@ const OfferPopup = ({
           translatedOfferedProducts
         )};
       `;
-      iframeDocument.head.appendChild(dataScript);
+      iframeHeadNode.appendChild(dataScript);
 
       // Inject custom JavaScript.
       customScript = iframeDocument.createElement('script');
       customScript.type = 'text/javascript';
       customScript.text = javascript;
-      iframeDocument.head.appendChild(customScript);
+      iframeHeadNode.appendChild(customScript);
     }
 
     return () => {
       if (iframeDocument) {
         externalScripts.forEach((current) =>
-          iframeDocument.head.removeChild(current)
+          iframeHeadNode.removeChild(current)
         );
-        iframeDocument.head.removeChild(dataScript);
-        iframeDocument.head.removeChild(customScript);
+        iframeHeadNode.removeChild(dataScript);
+        iframeHeadNode.removeChild(customScript);
       }
     };
   }, [
     iframeRef,
     iframeDocument,
-    mountNode,
+    iframeHeadNode,
     translatedOfferedProducts,
     javascript,
     theme.template.scripts
@@ -479,21 +469,21 @@ const OfferPopup = ({
       }
 
       iframeRef.contentWindow.viewModel = new Bindings();
-      iframeRef.contentWindow.ko.cleanNode(mountNode);
+      iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
       iframeRef.contentWindow.ko.applyBindings(
         iframeRef.contentWindow.viewModel,
-        mountNode
+        iframeBodyNode
       );
     });
 
     return () => {
       if (iframeRef?.contentWindow?.ko) {
-        iframeRef.contentWindow.ko.cleanNode(mountNode);
+        iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
       }
     };
   }, [
     iframeRef,
-    mountNode,
+    iframeBodyNode,
     translatedOfferedProducts,
     modalContentContainerRef,
     html,
@@ -546,9 +536,16 @@ const OfferPopup = ({
         zIndex: 2147483647
       }}
     >
-      {mountNode &&
+      {iframeHeadNode &&
         createPortal(
           <>
+            <meta charset="UTF-8" />
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link
+              rel="preconnect"
+              href="https://fonts.gstatic.com"
+              crossOrigin
+            />
             <style
               dangerouslySetInnerHTML={{
                 __html: `
@@ -560,11 +557,17 @@ const OfferPopup = ({
                 `
               }}
             />
-            <StyleSheetManager target={iframeDocument.head}>
+          </>,
+          iframeHeadNode
+        )}
+      {iframeBodyNode &&
+        createPortal(
+          <>
+            <StyleSheetManager target={iframeHeadNode}>
               <Modal
                 contentRef={setModalRef}
                 closeTimeoutMS={200}
-                parentSelector={() => mountNode}
+                parentSelector={() => iframeBodyNode}
                 isOpen={true}
                 shouldFocusAfterRender={!designMode}
                 shouldCloseOnOverlayClick={offer.enableMaskClose}
@@ -595,7 +598,7 @@ const OfferPopup = ({
               </Modal>
             </StyleSheetManager>
           </>,
-          mountNode
+          iframeBodyNode
         )}
     </iframe>
   );
