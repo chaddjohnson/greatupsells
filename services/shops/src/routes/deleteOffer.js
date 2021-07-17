@@ -17,7 +17,12 @@ const handler = async (event, context) => {
       };
     }
 
+    // Delete themes associated with the offer.
+    await Offer.deleteMany({ offer: offer._id });
+
+    // Delete the offer.
     await Offer.findByIdAndDelete(offerId);
+
     await logger.info(`Offer deleted (${offer.toString()})`);
 
     return {
