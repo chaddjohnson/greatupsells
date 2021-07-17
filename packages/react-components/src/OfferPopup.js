@@ -257,15 +257,6 @@ const OfferPopup = ({
     [offer, formatCurrency]
   );
 
-  const handleAddProduct = async (
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
-    await onAddProduct(offer._id, shopifyProductId, shopifyVariantId, quantity);
-    setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
-  };
-
   const handleSubmit = async (event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
@@ -462,6 +453,7 @@ const OfferPopup = ({
       this.handleAddProduct = async (event, productIndex) => {
         const { viewModel } = iframeRef.contentWindow;
         const productButton = event.target;
+        const offerId = offer._id;
         const productId = viewModel.offeredProducts()[productIndex].id;
         const variantId = viewModel.selectedVariants()[productIndex].id;
         const quantity = parseInt(
@@ -472,7 +464,9 @@ const OfferPopup = ({
         productButton.classList.add('loading');
 
         try {
-          await handleAddProduct(productId, variantId, quantity);
+          await onAddProduct(offerId, productId, variantId, quantity);
+
+          setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
 
           productButton.removeAttribute('disabled');
           productButton.classList.remove('loading');
@@ -516,7 +510,9 @@ const OfferPopup = ({
     html,
     css,
     javascript,
-    handleAddProduct
+    offer,
+    getCookie,
+    onAddProduct
   ]);
 
   // Fix the iframe height as dependencies change.
