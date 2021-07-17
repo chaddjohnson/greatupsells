@@ -199,8 +199,8 @@ const OfferPopup = ({
       // a timeout to allow the iframe height to temporarily increase per above.
       setTimeout(() => {
         setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom);
-      }, 0);
-    }, 0);
+      });
+    });
   };
 
   const translateProductData = useCallback(
