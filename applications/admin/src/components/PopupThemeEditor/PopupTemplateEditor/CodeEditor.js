@@ -23,6 +23,7 @@ if (typeof window !== 'undefined') {
   require('codemirror/addon/edit/matchtags');
   require('codemirror/addon/comment/comment');
   require('codemirror/addon/selection/active-line');
+  require('codemirror/addon/display/autorefresh');
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +57,7 @@ const TabPanel = ({ index, value, children, ...props }) => (
     aria-labelledby={`code-tab-${index}`}
     {...props}
   >
-    {value === index && children}
+    {children}
   </div>
 );
 
@@ -117,7 +118,8 @@ const CodeEditor = ({ template, onChange, ...props }) => {
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
-            styleActiveLine: true
+            styleActiveLine: true,
+            autoRefresh: true
           }}
           onBeforeChange={handleHtmlChange}
           {...props}
@@ -141,7 +143,8 @@ const CodeEditor = ({ template, onChange, ...props }) => {
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
-            styleActiveLine: true
+            styleActiveLine: true,
+            autoRefresh: true
           }}
           onBeforeChange={handleCssChange}
           {...props}
@@ -165,7 +168,8 @@ const CodeEditor = ({ template, onChange, ...props }) => {
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
-            styleActiveLine: true
+            styleActiveLine: true,
+            autoRefresh: true
           }}
           onBeforeChange={handleJavaScriptChange}
           {...props}
