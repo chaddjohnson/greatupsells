@@ -539,7 +539,7 @@ const OfferPopup = ({
       {iframeHeadNode &&
         createPortal(
           <>
-            <meta charset="UTF-8" />
+            <meta charSet="UTF-8" />
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link
               rel="preconnect"
