@@ -21,6 +21,7 @@ if (typeof window !== 'undefined') {
   require('codemirror/addon/edit/matchbrackets');
   require('codemirror/addon/edit/closebrackets');
   require('codemirror/addon/edit/matchtags');
+  require('codemirror/addon/comment/comment');
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -110,7 +111,11 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             lineNumbers: true,
             matchBrackets: true,
             autoCloseBrackets: true,
-            matchTags: true
+            matchTags: true,
+            extraKeys: {
+              'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
+              'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
+            }
           }}
           onBeforeChange={handleHtmlChange}
           {...props}
@@ -129,7 +134,11 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             lineNumbers: true,
             matchBrackets: true,
             autoCloseBrackets: true,
-            matchTags: true
+            matchTags: true,
+            extraKeys: {
+              'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
+              'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
+            }
           }}
           onBeforeChange={handleCssChange}
           {...props}
@@ -148,7 +157,11 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             lineNumbers: true,
             matchBrackets: true,
             autoCloseBrackets: true,
-            matchTags: true
+            matchTags: true,
+            extraKeys: {
+              'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
+              'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
+            }
           }}
           onBeforeChange={handleJavaScriptChange}
           {...props}
