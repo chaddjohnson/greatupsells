@@ -65,6 +65,7 @@ const handler = middy(async (event, context) => {
       }
 
       if (popupTheme) {
+        // Exclude internal data.
         delete popupTheme.referenceUrl;
         delete popupTheme.notes;
       }
