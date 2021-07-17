@@ -6,11 +6,9 @@ import { Layout, Link, PopupThemeEditor } from '../../components';
 import { usePopupTheme } from '../../hooks';
 
 const initialHtmlTemplate = `
-<form novalidate onsubmit="{{ submitHandler }}">
-  <div class="container">
-    Hello World
-  </div>
-</form>
+<div class="container">
+  Hello World
+</div>
 `.trim();
 
 const initialCssTemplate = `
