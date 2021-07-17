@@ -494,7 +494,7 @@ const OfferPopup = ({
         iframeRef.contentWindow.viewModel,
         iframeBodyNode
       );
-    });
+    }, 100);
 
     // Remove bindings on cleanup.
     return () => {
