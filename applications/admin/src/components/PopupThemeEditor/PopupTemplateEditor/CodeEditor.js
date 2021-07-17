@@ -12,6 +12,15 @@ if (typeof window !== 'undefined') {
   require('codemirror/mode/htmlmixed/htmlmixed');
   require('codemirror/mode/css/css');
   require('codemirror/mode/javascript/javascript');
+  require('codemirror/addon/search/search');
+  require('codemirror/addon/dialog/dialog');
+  require('codemirror/addon/dialog/dialog.css');
+  require('codemirror/addon/search/jump-to-line');
+  require('codemirror/addon/search/match-highlighter');
+  require('codemirror/addon/search/searchcursor');
+  require('codemirror/addon/edit/matchbrackets');
+  require('codemirror/addon/edit/closebrackets');
+  require('codemirror/addon/edit/matchtags');
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -98,7 +107,10 @@ const CodeEditor = ({ template, onChange, ...props }) => {
           options={{
             mode: 'htmlmixed',
             theme: 'monokai',
-            lineNumbers: true
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            matchTags: true
           }}
           onBeforeChange={handleHtmlChange}
           {...props}
@@ -114,7 +126,10 @@ const CodeEditor = ({ template, onChange, ...props }) => {
           options={{
             mode: 'css',
             theme: 'monokai',
-            lineNumbers: true
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            matchTags: true
           }}
           onBeforeChange={handleCssChange}
           {...props}
@@ -130,7 +145,10 @@ const CodeEditor = ({ template, onChange, ...props }) => {
           options={{
             mode: 'javascript',
             theme: 'monokai',
-            lineNumbers: true
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            matchTags: true
           }}
           onBeforeChange={handleJavaScriptChange}
           {...props}
