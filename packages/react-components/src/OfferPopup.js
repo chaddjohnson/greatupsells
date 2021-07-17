@@ -436,9 +436,9 @@ const OfferPopup = ({
       return;
     }
 
-    // Define Knockout bindings for the popup.
+    // Define Knockout bindings for use within the popup.
     const ViewModel = function () {
-      // Make data available.
+      // Provide data.
       this.offeredProducts = () => translatedOfferedProducts;
 
       // Track state.
@@ -458,7 +458,7 @@ const OfferPopup = ({
         [...Array(3).keys()].map(() => knockout.observable(1))
       );
 
-      // Provide event handlers.
+      // Provide a handler for products being added to the cart.
       this.handleAddProduct = async (event, productIndex) => {
         const { viewModel } = iframeRef.contentWindow;
         const productButton = event.target;
@@ -493,7 +493,7 @@ const OfferPopup = ({
         modalContentContainerRef.innerHTML = html;
       }
 
-      // Initialize data bindings.
+      // (Re)initialize data bindings.
       iframeRef.contentWindow.viewModel = new ViewModel();
       iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
       iframeRef.contentWindow.ko.applyBindings(
@@ -502,6 +502,7 @@ const OfferPopup = ({
       );
     });
 
+    // Remove bindings on cleanup.
     return () => {
       if (iframeRef?.contentWindow?.ko) {
         iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
