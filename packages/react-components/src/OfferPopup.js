@@ -373,7 +373,6 @@ const OfferPopup = ({
   }
 
   // Expose methods globally to enable themes to programmatically interface with popups.
-  window.OfferPopup.addProduct = handleAddProduct;
   window.OfferPopup.submit = handleSubmit;
   window.OfferPopup.close = handleClose;
 
@@ -437,9 +436,12 @@ const OfferPopup = ({
       return;
     }
 
-    // Define an object to track state within the popup.
-    const Bindings = function () {
+    // Define Knockout bindings for the popup.
+    const ViewModel = function () {
+      // Make data available.
       this.offeredProducts = () => translatedOfferedProducts;
+
+      // Track state.
       this.selectedVariantIds = knockout.observableArray(
         translatedOfferedProducts.map(({ variants }) =>
           knockout.observable(variants[0].id)
@@ -455,12 +457,35 @@ const OfferPopup = ({
       this.selectedQuantities = knockout.observableArray(
         [...Array(3).keys()].map(() => knockout.observable(1))
       );
+
+      // Provide event handlers.
+      this.handleAddProduct = async (event, productIndex) => {
+        const { viewModel } = iframeRef.contentWindow;
+        const productButton = event.target;
+        const productId = viewModel.offeredProducts()[productIndex].id;
+        const variantId = viewModel.selectedVariants()[productIndex].id;
+        const quantity = parseInt(
+          iframeRef.contentWindow.viewModel.selectedQuantities()[productIndex]()
+        );
+
+        productButton.setAttribute('disabled', 'disabled');
+        productButton.classList.add('loading');
+
+        try {
+          await handleAddProduct(productId, variantId, quantity);
+
+          productButton.removeAttribute('disabled');
+          productButton.classList.remove('loading');
+        } catch (error) {
+          productButton.removeAttribute('disabled');
+          productButton.classList.remove('loading');
+        }
+      };
     };
 
     // Add a reference to the data binding library.
     iframeRef.contentWindow.ko = knockout;
 
-    // Initialize data bindings.
     // TODO: Figure out why a timeout is necessary, and remove it if possible.
     setTimeout(() => {
       // Workaround for issue https://github.com/knockout/knockout/issues/912.
@@ -468,7 +493,8 @@ const OfferPopup = ({
         modalContentContainerRef.innerHTML = html;
       }
 
-      iframeRef.contentWindow.viewModel = new Bindings();
+      // Initialize data bindings.
+      iframeRef.contentWindow.viewModel = new ViewModel();
       iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
       iframeRef.contentWindow.ko.applyBindings(
         iframeRef.contentWindow.viewModel,
@@ -488,7 +514,8 @@ const OfferPopup = ({
     modalContentContainerRef,
     html,
     css,
-    javascript
+    javascript,
+    handleAddProduct
   ]);
 
   // Fix the iframe height as dependencies change.
