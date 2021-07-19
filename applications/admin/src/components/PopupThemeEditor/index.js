@@ -65,7 +65,7 @@ const TabPanel = ({ index, value, children, ...props }) => (
     aria-labelledby={`theme-tab-${index}`}
     {...props}
   >
-    {value === index && children}
+    {children}
   </div>
 );
 
