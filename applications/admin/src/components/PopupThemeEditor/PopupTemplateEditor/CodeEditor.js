@@ -111,10 +111,12 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             mode: 'htmlmixed',
             theme: 'monokai',
             lineNumbers: true,
+            tabSize: 2,
             matchBrackets: true,
             autoCloseBrackets: true,
             matchTags: true,
             extraKeys: {
+              Tab: 'indentMore',
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
@@ -136,10 +138,12 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             mode: 'css',
             theme: 'monokai',
             lineNumbers: true,
+            tabSize: 2,
             matchBrackets: true,
             autoCloseBrackets: true,
             matchTags: true,
             extraKeys: {
+              Tab: 'indentMore',
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
@@ -161,10 +165,12 @@ const CodeEditor = ({ template, onChange, ...props }) => {
             mode: 'javascript',
             theme: 'monokai',
             lineNumbers: true,
+            tabSize: 2,
             matchBrackets: true,
             autoCloseBrackets: true,
             matchTags: true,
             extraKeys: {
+              Tab: 'indentMore',
               'Cmd-/': (editor) => editor.toggleComment({ indent: true }),
               'Ctrl-/': (editor) => editor.toggleComment({ indent: true })
             },
