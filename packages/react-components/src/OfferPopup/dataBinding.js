@@ -1,17 +1,27 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import knockout from 'knockout';
 import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
 
-const useViewModel = ({
-  knockout,
+const useDataBinding = ({
   iframe,
   offer,
   offeredProducts,
   addedQuantity,
+  html,
+  css,
+  javascript,
+  modalContentContainer,
   onAddProduct,
   onCheckoutUrlUpdate,
   onQuantityAdd
 }) => {
   const { getCookie } = useCookies();
+
+  const iframeDocument =
+    iframe?.contentWindow?.document ||
+    iframe?.contentDocument ||
+    iframe?.document;
+  const iframeBodyNode = iframeDocument?.body;
 
   // Define Knockout bindings for use within the popup.
   const ViewModel = useCallback(
@@ -97,7 +107,6 @@ const useViewModel = ({
       };
     },
     [
-      knockout,
       iframe,
       offer,
       offeredProducts,
@@ -109,7 +118,46 @@ const useViewModel = ({
     ]
   );
 
-  return ViewModel;
+  // Set up data binding.
+  useEffect(() => {
+    if (!iframe?.contentWindow) {
+      return;
+    }
+
+    // Add a reference to the data binding library.
+    iframe.contentWindow.ko = knockout;
+
+    // TODO: Figure out why a timeout is necessary, and remove it if possible.
+    setTimeout(() => {
+      // Workaround for issue https://github.com/knockout/knockout/issues/912.
+      if (modalContentContainer) {
+        modalContentContainer.innerHTML = html;
+      }
+
+      // (Re)initialize data bindings.
+      iframe.contentWindow.viewModel = new ViewModel();
+      iframe.contentWindow.ko.cleanNode(iframeBodyNode);
+      iframe.contentWindow.ko.applyBindings(
+        iframe.contentWindow.viewModel,
+        iframeBodyNode
+      );
+    }, 100);
+
+    // Remove bindings on cleanup.
+    return () => {
+      if (iframe?.contentWindow?.ko) {
+        iframe.contentWindow.ko.cleanNode(iframeBodyNode);
+      }
+    };
+  }, [
+    ViewModel,
+    iframe,
+    iframeBodyNode,
+    modalContentContainer,
+    html,
+    css,
+    javascript
+  ]);
 };
 
-export default useViewModel;
+export default useDataBinding;

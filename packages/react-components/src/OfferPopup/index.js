@@ -3,10 +3,9 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { StyleSheetManager } from 'styled-components';
 import { useLiquid } from 'react-liquid';
-import knockout from 'knockout';
 import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
 import useDataTranslation from './dataTranslation';
-import useViewModel from './viewModel';
+import useDataBinding from './dataBinding';
 import Modal from './Modal';
 import ModalContentContainer from './ModalContentContainer';
 import Mask from './Mask';
@@ -172,17 +171,6 @@ const OfferPopup = ({
     ]
   );
 
-  const ViewModel = useViewModel({
-    knockout,
-    iframe: iframeRef,
-    offer,
-    offeredProducts: translatedOfferedProducts,
-    addedQuantity,
-    onAddProduct,
-    onCheckoutUrlUpdate: setCheckoutUrl,
-    onQuantityAdd: (quantity) => setAddedQuantity(addedQuantity + quantity)
-  });
-
   // Generate the markup.
   let { markup: html } = useLiquid(theme.template.html, templateVariables);
   const { markup: css } = useLiquid(theme.template.css, mappedVariables);
@@ -212,6 +200,21 @@ const OfferPopup = ({
   window.OfferPopup.close = handleClose;
 
   Modal.setAppElement(iframeBodyNode);
+
+  // Set up data binding for popup.
+  useDataBinding({
+    iframe: iframeRef,
+    offer,
+    offeredProducts: translatedOfferedProducts,
+    addedQuantity,
+    html,
+    css,
+    javascript,
+    modalContentContainer: modalContentContainerRef,
+    onAddProduct,
+    onCheckoutUrlUpdate: setCheckoutUrl,
+    onQuantityAdd: (quantity) => setAddedQuantity(addedQuantity + quantity)
+  });
 
   // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.
   useEffect(() => {
@@ -251,47 +254,6 @@ const OfferPopup = ({
     translatedOfferedProducts,
     javascript,
     theme.template.scripts
-  ]);
-
-  // Set up data binding.
-  useEffect(() => {
-    if (!iframeRef?.contentWindow) {
-      return;
-    }
-
-    // Add a reference to the data binding library.
-    iframeRef.contentWindow.ko = knockout;
-
-    // TODO: Figure out why a timeout is necessary, and remove it if possible.
-    setTimeout(() => {
-      // Workaround for issue https://github.com/knockout/knockout/issues/912.
-      if (modalContentContainerRef) {
-        modalContentContainerRef.innerHTML = html;
-      }
-
-      // (Re)initialize data bindings.
-      iframeRef.contentWindow.viewModel = new ViewModel();
-      iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
-      iframeRef.contentWindow.ko.applyBindings(
-        iframeRef.contentWindow.viewModel,
-        iframeBodyNode
-      );
-    }, 100);
-
-    // Remove bindings on cleanup.
-    return () => {
-      if (iframeRef?.contentWindow?.ko) {
-        iframeRef.contentWindow.ko.cleanNode(iframeBodyNode);
-      }
-    };
-  }, [
-    ViewModel,
-    iframeRef,
-    iframeBodyNode,
-    modalContentContainerRef,
-    html,
-    css,
-    javascript
   ]);
 
   // Fix the iframe height as dependencies change.
