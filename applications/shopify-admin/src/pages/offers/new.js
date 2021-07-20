@@ -116,7 +116,6 @@ const initialOffer = {
   enableVariantSelection: true,
   enableQuantitySelection: true,
   limitQuantitySelection: false,
-  enableProductLinks: true,
   hideOutOfStockProducts: true,
   enableEscClose: false,
   enableMaskClose: false,

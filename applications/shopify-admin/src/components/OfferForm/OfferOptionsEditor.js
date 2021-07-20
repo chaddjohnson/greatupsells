@@ -21,7 +21,6 @@ const OfferOptionsEditor = ({
   enableEscClose,
   enableMaskClose,
   showNotificationBanner,
-  enableProductLinks,
   hideOutOfStockProducts,
   enableVariantSelection,
   enableQuantitySelection,
@@ -122,10 +121,6 @@ const OfferOptionsEditor = ({
       <Card.Section title="Products">
         <FormLayout>
           <Checkbox
-            label="Enable product links"
-            {...asChoiceField(enableProductLinks)}
-          />
-          <Checkbox
             label="Exclude out of stock products"
             {...asChoiceField(hideOutOfStockProducts)}
           />
@@ -181,7 +176,6 @@ const OfferOptionsEditor = ({
 
 OfferOptionsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
-  enableProductLinks: PropTypes.object.isRequired,
   hideOutOfStockProducts: PropTypes.object.isRequired,
   enableVariantSelection: PropTypes.object.isRequired,
   enableQuantitySelection: PropTypes.object.isRequired,

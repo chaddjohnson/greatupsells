@@ -119,7 +119,6 @@ const schema = new mongoose.Schema(
     enableQuantitySelection: { type: Boolean, required: false, default: true },
     limitQuantitySelection: { type: Boolean, required: false, default: false }, // TODO: Remove this and usages.
     productQuantityLimit: { type: Int32, required: false, min: 1 },
-    enableProductLinks: { type: Boolean, required: true, default: true },
     hideOutOfStockProducts: { type: Boolean, required: true, default: true },
     enableEscClose: { type: Boolean, required: false, default: false },
     enableMaskClose: { type: Boolean, required: false, default: false },

@@ -159,7 +159,6 @@ const OfferPopup = ({
       enableVariantSelection: offer.enableVariantSelection,
       enableQuantitySelection: offer.enableQuantitySelection,
       productQuantityLimit: offer.productQuantityLimit,
-      enableProductLinks: offer.enableProductLinks,
       hideOutOfStockProducts: offer.hideOutOfStockProducts
     }),
     [

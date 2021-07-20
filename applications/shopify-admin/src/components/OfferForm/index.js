@@ -99,7 +99,6 @@ const OfferForm = ({
     successMessageText,
     startAt,
     endAt,
-    enableProductLinks,
     hideOutOfStockProducts,
     delaySeconds,
     onPageRequiredSeconds,
@@ -141,7 +140,6 @@ const OfferForm = ({
       successMessageText,
       startAt,
       endAt,
-      enableProductLinks,
       hideOutOfStockProducts,
       delaySeconds,
       onPageRequiredSeconds,
@@ -361,7 +359,6 @@ const OfferForm = ({
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
             showNotificationBanner={showNotificationBanner}
-            enableProductLinks={enableProductLinks}
             hideOutOfStockProducts={hideOutOfStockProducts}
             enableVariantSelection={enableVariantSelection}
             enableQuantitySelection={enableQuantitySelection}
