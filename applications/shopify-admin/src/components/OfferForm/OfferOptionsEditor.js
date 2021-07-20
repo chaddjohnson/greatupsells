@@ -147,6 +147,7 @@ const OfferOptionsEditor = ({
                   inputMode="numeric"
                   min={1}
                   step={1}
+                  helpText="Product quantity will be limited each time this offer is shown and not for the whole cart."
                   {...productQuantityLimit}
                   error={
                     submitted &&

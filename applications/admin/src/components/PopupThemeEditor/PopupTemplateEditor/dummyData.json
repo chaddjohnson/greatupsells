@@ -24,6 +24,7 @@
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "limitQuantitySelection": true,
+    "productQuantityLimit": 2,
     "enableProductLinks": true,
     "hideOutOfStockProducts": true,
     "delaySeconds": 0,

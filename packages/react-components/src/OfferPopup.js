@@ -148,6 +148,7 @@ const OfferPopup = ({
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('upsellingDraftOrderCheckoutUrl')
   );
+  const [addedQuantity, setAddedQuantity] = useState(0);
 
   const { locale, countryCode, currency } = shop;
   const { formatCurrency } = useNumberFormatter({
@@ -431,8 +432,36 @@ const OfferPopup = ({
     const ViewModel = function () {
       // Provide data.
       this.offeredProducts = () => translatedOfferedProducts;
+      this.productQuantityLimit = offer.productQuantityLimit;
 
-      // Track state.
+      // Provide state.
+      this.remainingQuantity = knockout.computed(() => {
+        const hasQuantityLimit = !!offer.productQuantityLimit;
+        const remainingQuantity =
+          hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
+
+        if (!hasQuantityLimit) {
+          return;
+        }
+
+        return remainingQuantity;
+      }, this);
+      this.addingEnabled = (index) =>
+        knockout.computed(() => {
+          const hasQuantityLimit = !!offer.productQuantityLimit;
+          const addedQuantityBelowLimit =
+            addedQuantity < offer.productQuantityLimit;
+          const remainingQuantity =
+            hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
+          const selectedQuantity = parseInt(this.selectedQuantities()[index]());
+          const selectedQuantityBelowLimit =
+            !hasQuantityLimit || selectedQuantity <= remainingQuantity;
+
+          return (
+            !hasQuantityLimit ||
+            (addedQuantityBelowLimit && selectedQuantityBelowLimit)
+          );
+        }, this);
       this.selectedVariantIds = knockout.observableArray(
         translatedOfferedProducts.map(({ variants }) =>
           knockout.observable(variants[0].id)
@@ -449,7 +478,7 @@ const OfferPopup = ({
         [...Array(3).keys()].map(() => knockout.observable(1))
       );
 
-      // Provide a handler for products being added to the cart.
+      // Provide a handler for adding products to the cart.
       this.handleAddProduct = async (event, productIndex) => {
         const { viewModel } = iframeRef.contentWindow;
         const productButton = event.target;
@@ -467,13 +496,14 @@ const OfferPopup = ({
           await onAddProduct(offerId, productId, variantId, quantity);
 
           setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
+          setAddedQuantity(addedQuantity + quantity);
 
           productButton.removeAttribute('disabled');
-          productButton.classList.remove('loading');
         } catch (error) {
           productButton.removeAttribute('disabled');
-          productButton.classList.remove('loading');
         }
+
+        productButton.classList.remove('loading');
       };
     };
 
@@ -511,6 +541,7 @@ const OfferPopup = ({
     css,
     javascript,
     offer,
+    addedQuantity,
     getCookie,
     onAddProduct
   ]);
@@ -569,6 +600,10 @@ const OfferPopup = ({
               rel="preconnect"
               href="https://fonts.gstatic.com"
               crossOrigin
+            />
+            <link
+              href="https://fonts.googleapis.com/icon?family=Material+Icons"
+              rel="stylesheet"
             />
             <style
               dangerouslySetInnerHTML={{
