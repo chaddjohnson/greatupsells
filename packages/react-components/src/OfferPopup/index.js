@@ -1,126 +1,17 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
-import styled, { StyleSheetManager } from 'styled-components';
-import { useLiquid, liquidEngine } from 'react-liquid';
+import { StyleSheetManager } from 'styled-components';
+import { useLiquid } from 'react-liquid';
 import knockout from 'knockout';
-import {
-  useCookies,
-  useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
+import useDataTranslation from './dataTranslation';
+import useViewModel from './viewModel';
+import Modal from './Modal';
+import ModalContentContainer from './ModalContentContainer';
+import Mask from './Mask';
 
 const initialIframeHeight = 1000;
-
-const calculateDiscountedPrice = (offer, price) => {
-  // Shopify stores prices as strings. Ensure it is a number here.
-  price = parseFloat(price);
-
-  if (!offer) {
-    throw new Error('`offer` must be provided');
-  }
-  if (typeof price !== 'number' || Number.isNaN(price)) {
-    throw new Error('`price` must be a number');
-  }
-
-  let discountedPrice = price;
-
-  switch (offer.discountType) {
-    case 'PERCENTAGE':
-      // Reduce the price by the discount amount (a percentage).
-      discountedPrice = price - price * offer.discountAmount;
-      break;
-
-    case 'USD':
-      // Reduce the price by the discount amount (a monetary amount).
-      discountedPrice = price - offer.discountAmount;
-      break;
-
-    case 'SET_PRICE':
-      // Use the discount amount as the price.
-      discountedPrice = offer.discountAmount;
-      break;
-
-    case 'NO_DISCOUNT':
-    default:
-      // No discount, so adjust nothing.
-      break;
-  }
-
-  // Round price. Reference: https://stackoverflow.com/a/11832950/83897.
-  discountedPrice = Math.round((discountedPrice + Number.EPSILON) * 100) / 100;
-
-  // Safeguard against the calculated price being negative.
-  return Math.max(discountedPrice, 0);
-};
-
-const getThumbnailImageUrl = (url) => {
-  return url && url.replace(/\.(jpg|png)(\?|$)/i, '_400x.$1$2');
-};
-
-liquidEngine.registerFilter('addProductHandler', (offeredProduct, quantity) => {
-  // Unfortunately there is nothing to do if no offered product is available.
-  if (!offeredProduct) {
-    return '';
-  }
-
-  const shopifyProductId = offeredProduct.id;
-  const shopifyVariantId = offeredProduct.variants[0]?.id;
-
-  return `window.parent.OfferPopup.addProduct(${shopifyProductId}, ${shopifyVariantId}, ${quantity})`;
-});
-
-const Modal = styled(ReactModal)`
-  position: ${(props) => (props.designMode ? 'static' : 'fixed')};
-  background: none;
-  border: none;
-  margin-right: 0;
-  outline: none;
-
-  @media screen and (min-width: 320px) {
-    left: 0;
-    right: 0;
-    top: 15%;
-    bottom: 0;
-    padding: 14px;
-    margin-right: 0;
-    transform: none;
-  }
-
-  @media screen and (min-width: 1024px) {
-    left: 50%;
-    right: auto;
-    top: 30%;
-    bottom: auto;
-    padding: ${(props) => (props.designMode ? '14px' : 0)};
-    transform: initial;
-    margin-right: ${(props) => (props.designMode ? 0 : '-50%')};
-    transform: ${(props) =>
-      props.designMode ? 'none' : 'translate(-50%, -25%)'};
-  }
-`;
-
-const ModalContentContainer = styled.div`
-  max-width: ${(props) =>
-    props.forceDisplayType === 'mobile' ? '375px' : '100%'};
-  max-height: 100%;
-  margin: auto;
-  position: relative;
-  z-index: 100;
-`;
-
-// This is an invisible layer that shows over the popup in design mode to prevent direct interactions.
-const Mask = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  z-index: 101;
-  cursor: ${(props) => (props.onClick ? 'zoom-in' : 'auto')};
-`;
 
 const OfferPopup = ({
   className,
@@ -150,12 +41,7 @@ const OfferPopup = ({
   );
   const [addedQuantity, setAddedQuantity] = useState(0);
 
-  const { locale, countryCode, currency } = shop;
-  const { formatCurrency } = useNumberFormatter({
-    locale,
-    countryCode,
-    currency
-  });
+  const { translateProductData } = useDataTranslation(shop, offer);
 
   const iframeDocument =
     iframeRef?.contentWindow?.document ||
@@ -203,60 +89,6 @@ const OfferPopup = ({
       });
     });
   };
-
-  const translateProductData = useCallback(
-    (product = {}) => {
-      const { shopifyProductData } = product;
-
-      if (!shopifyProductData) {
-        return;
-      }
-
-      const imagesById =
-        shopifyProductData.images?.reduce(
-          (map, image) => ({ ...map, [image.id]: image }),
-          {}
-        ) || {};
-
-      const randomVariantIndex = Math.floor(
-        Math.random() * shopifyProductData.variants.length
-      );
-      const translatedData = {
-        id: shopifyProductData.id,
-        title: shopifyProductData.title,
-        url: `/products/${shopifyProductData.handle}`,
-        image: {
-          src: getThumbnailImageUrl(shopifyProductData.image?.src),
-          alt: shopifyProductData.image?.alt || shopifyProductData.title
-        },
-        variants: shopifyProductData.variants?.map((variant) => ({
-          id: variant.id,
-          title: variant.title,
-          price: formatCurrency(variant.price),
-          salePrice: formatCurrency(
-            calculateDiscountedPrice(offer, parseFloat(variant.price))
-          ),
-          sku: variant.sku,
-          image: {
-            src: getThumbnailImageUrl(
-              imagesById[variant.image_id]?.src || shopifyProductData.image?.src
-            ),
-            alt:
-              imagesById[variant.image_id]?.alt ||
-              shopifyProductData.image?.alt ||
-              shopifyProductData.title
-          },
-          inventory: variant.inventory_quantity
-        }))
-      };
-
-      translatedData.randomVariant =
-        translatedData.variants[randomVariantIndex];
-
-      return translatedData;
-    },
-    [offer, formatCurrency]
-  );
 
   const handleSubmit = async (event) => {
     if (!event) {
@@ -340,6 +172,17 @@ const OfferPopup = ({
     ]
   );
 
+  const ViewModel = useViewModel({
+    knockout,
+    iframe: iframeRef,
+    offer,
+    offeredProducts: translatedOfferedProducts,
+    addedQuantity,
+    onAddProduct,
+    onCheckoutUrlUpdate: setCheckoutUrl,
+    onQuantityAdd: (quantity) => setAddedQuantity(addedQuantity + quantity)
+  });
+
   // Generate the markup.
   let { markup: html } = useLiquid(theme.template.html, templateVariables);
   const { markup: css } = useLiquid(theme.template.css, mappedVariables);
@@ -374,7 +217,6 @@ const OfferPopup = ({
   useEffect(() => {
     const externalScripts = [];
     let externalScript;
-    let dataScript;
     let customScript;
 
     if (iframeDocument) {
@@ -386,16 +228,6 @@ const OfferPopup = ({
         externalScripts.push(externalScript);
         iframeHeadNode.appendChild(externalScript);
       });
-
-      // Inject product data.
-      dataScript = iframeDocument.createElement('script');
-      dataScript.type = 'text/javascript';
-      dataScript.text = `
-        window.parent.OfferPopup.offeredProducts = ${JSON.stringify(
-          translatedOfferedProducts
-        )};
-      `;
-      iframeHeadNode.appendChild(dataScript);
 
       // Inject custom JavaScript.
       customScript = iframeDocument.createElement('script');
@@ -409,7 +241,6 @@ const OfferPopup = ({
         externalScripts.forEach((current) =>
           iframeHeadNode.removeChild(current)
         );
-        iframeHeadNode.removeChild(dataScript);
         iframeHeadNode.removeChild(customScript);
       }
     };
@@ -427,85 +258,6 @@ const OfferPopup = ({
     if (!iframeRef?.contentWindow) {
       return;
     }
-
-    // Define Knockout bindings for use within the popup.
-    const ViewModel = function () {
-      // Provide data.
-      this.offeredProducts = () => translatedOfferedProducts;
-      this.productQuantityLimit = offer.productQuantityLimit;
-
-      // Provide state.
-      this.remainingQuantity = knockout.computed(() => {
-        const hasQuantityLimit = !!offer.productQuantityLimit;
-        const remainingQuantity =
-          hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
-
-        if (!hasQuantityLimit) {
-          return;
-        }
-
-        return remainingQuantity;
-      }, this);
-      this.addingEnabled = (index) =>
-        knockout.computed(() => {
-          const hasQuantityLimit = !!offer.productQuantityLimit;
-          const addedQuantityBelowLimit =
-            addedQuantity < offer.productQuantityLimit;
-          const remainingQuantity =
-            hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
-          const selectedQuantity = parseInt(this.selectedQuantities()[index]());
-          const selectedQuantityBelowLimit =
-            !hasQuantityLimit || selectedQuantity <= remainingQuantity;
-
-          return (
-            !hasQuantityLimit ||
-            (addedQuantityBelowLimit && selectedQuantityBelowLimit)
-          );
-        }, this);
-      this.selectedVariantIds = knockout.observableArray(
-        translatedOfferedProducts.map(({ variants }) =>
-          knockout.observable(variants[0].id)
-        )
-      );
-      this.selectedVariants = () =>
-        translatedOfferedProducts.map(
-          ({ variants }, index) =>
-            variants.find(
-              ({ id }) => id === this.selectedVariantIds()[index]()
-            ) || variants[0]
-        );
-      this.selectedQuantities = knockout.observableArray(
-        [...Array(3).keys()].map(() => knockout.observable(1))
-      );
-
-      // Provide a handler for adding products to the cart.
-      this.handleAddProduct = async (event, productIndex) => {
-        const { viewModel } = iframeRef.contentWindow;
-        const productButton = event.target;
-        const offerId = offer._id;
-        const productId = viewModel.offeredProducts()[productIndex].id;
-        const variantId = viewModel.selectedVariants()[productIndex].id;
-        const quantity = parseInt(
-          iframeRef.contentWindow.viewModel.selectedQuantities()[productIndex]()
-        );
-
-        productButton.setAttribute('disabled', 'disabled');
-        productButton.classList.add('loading');
-
-        try {
-          await onAddProduct(offerId, productId, variantId, quantity);
-
-          setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
-          setAddedQuantity(addedQuantity + quantity);
-
-          productButton.removeAttribute('disabled');
-        } catch (error) {
-          productButton.removeAttribute('disabled');
-        }
-
-        productButton.classList.remove('loading');
-      };
-    };
 
     // Add a reference to the data binding library.
     iframeRef.contentWindow.ko = knockout;
@@ -533,17 +285,13 @@ const OfferPopup = ({
       }
     };
   }, [
+    ViewModel,
     iframeRef,
     iframeBodyNode,
-    translatedOfferedProducts,
     modalContentContainerRef,
     html,
     css,
-    javascript,
-    offer,
-    addedQuantity,
-    getCookie,
-    onAddProduct
+    javascript
   ]);
 
   // Fix the iframe height as dependencies change.
