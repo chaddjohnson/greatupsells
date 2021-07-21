@@ -120,28 +120,25 @@ const useDataBinding = ({
 
   // Set up data binding.
   useEffect(() => {
-    if (!iframe?.contentWindow) {
+    if (!iframe?.contentWindow || !iframeBodyNode) {
       return;
     }
 
     // Add a reference to the data binding library.
     iframe.contentWindow.ko = knockout;
 
-    // TODO: Figure out why a timeout is necessary, and remove it if possible.
-    setTimeout(() => {
-      // Workaround for issue https://github.com/knockout/knockout/issues/912.
-      if (modalContentContainer) {
-        modalContentContainer.innerHTML = html;
-      }
+    // Workaround for issue https://github.com/knockout/knockout/issues/912.
+    if (modalContentContainer) {
+      modalContentContainer.innerHTML = html;
+    }
 
-      // (Re)initialize data bindings.
-      iframe.contentWindow.viewModel = new ViewModel();
-      iframe.contentWindow.ko.cleanNode(iframeBodyNode);
-      iframe.contentWindow.ko.applyBindings(
-        iframe.contentWindow.viewModel,
-        iframeBodyNode
-      );
-    }, 100);
+    // (Re)initialize data bindings.
+    iframe.contentWindow.viewModel = new ViewModel();
+    iframe.contentWindow.ko.cleanNode(iframeBodyNode);
+    iframe.contentWindow.ko.applyBindings(
+      iframe.contentWindow.viewModel,
+      iframeBodyNode
+    );
 
     // Remove bindings on cleanup.
     return () => {
