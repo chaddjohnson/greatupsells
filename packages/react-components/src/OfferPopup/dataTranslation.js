@@ -28,9 +28,6 @@ const useDataTranslation = (shop, offer) => {
           {}
         ) || {};
 
-      const randomVariantIndex = Math.floor(
-        Math.random() * shopifyProductData.variants.length
-      );
       const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
@@ -59,9 +56,6 @@ const useDataTranslation = (shop, offer) => {
           inventory: variant.inventory_quantity
         }))
       };
-
-      translatedData.randomVariant =
-        translatedData.variants[randomVariantIndex];
 
       return translatedData;
     },
