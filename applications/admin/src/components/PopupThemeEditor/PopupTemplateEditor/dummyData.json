@@ -20,7 +20,6 @@
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
     "hideIfItemAdded": true,
-    "showNotificationBanner": true,
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "limitQuantitySelection": true,
