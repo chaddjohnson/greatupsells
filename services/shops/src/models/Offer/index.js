@@ -112,7 +112,6 @@ const schema = new mongoose.Schema(
     endAt: { type: Date, required: false },
     delaySeconds: { type: Number, required: false, default: 0 },
     onPageRequiredSeconds: { type: Number, required: false, default: 0 },
-    allowWithDiscountCodes: { type: Boolean, required: true, default: true },
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },

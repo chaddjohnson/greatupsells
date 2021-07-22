@@ -16,7 +16,6 @@
       "AU",
       "US"
     ],
-    "allowWithDiscountCodes": true,
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
     "hideIfItemAdded": true,

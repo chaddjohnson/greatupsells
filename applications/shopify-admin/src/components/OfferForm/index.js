@@ -106,8 +106,7 @@ const OfferForm = ({
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    hideIfItemAdded,
-    allowWithDiscountCodes
+    hideIfItemAdded
   } = useFields(initialOffer, showEndDate);
 
   const { fields, dirty, submit, submitting /* submitErrors */ } = useForm({
@@ -145,8 +144,7 @@ const OfferForm = ({
       enableQuantitySelection,
       limitQuantitySelection,
       productQuantityLimit,
-      hideIfItemAdded,
-      allowWithDiscountCodes
+      hideIfItemAdded
     },
     onSubmit: async (formValues) => {
       // TODO: contextualSaveBar.set({ saveAction: { loading: true } });
@@ -360,7 +358,6 @@ const OfferForm = ({
             limitQuantitySelection={limitQuantitySelection}
             productQuantityLimit={productQuantityLimit}
             hideIfItemAdded={hideIfItemAdded}
-            allowWithDiscountCodes={allowWithDiscountCodes}
             submitted={submitted}
           />
         </Layout.Section>

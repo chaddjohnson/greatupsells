@@ -110,7 +110,6 @@ const initialOffer = {
   startAt: new Date().toISOString(),
   delaySeconds: 0,
   onPageRequiredSeconds: 0,
-  allowWithDiscountCodes: true,
   hideIfItemAdded: false,
   enableVariantSelection: true,
   enableQuantitySelection: true,

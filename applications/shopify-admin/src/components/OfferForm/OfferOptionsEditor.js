@@ -26,7 +26,6 @@ const OfferOptionsEditor = ({
   limitQuantitySelection,
   productQuantityLimit,
   hideIfItemAdded,
-  allowWithDiscountCodes,
   submitted
 }) => {
   const [delaySecondsActive, setDelaySecondsActive] = useState(
@@ -157,10 +156,6 @@ const OfferOptionsEditor = ({
             } item`}
             {...asChoiceField(hideIfItemAdded)}
           />
-          <Checkbox
-            label="Allow use of offer with discount codes"
-            {...asChoiceField(allowWithDiscountCodes)}
-          />
         </FormLayout>
       </Card.Section>
     </Card>
@@ -179,7 +174,6 @@ OfferOptionsEditor.propTypes = {
   enableEscClose: PropTypes.object.isRequired,
   enableMaskClose: PropTypes.object.isRequired,
   hideIfItemAdded: PropTypes.object.isRequired,
-  allowWithDiscountCodes: PropTypes.object.isRequired,
   submitted: PropTypes.bool
 };
 

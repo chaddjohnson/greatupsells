@@ -199,7 +199,6 @@ const useFields = (initialOffer, showEndDate) => {
     initialOffer.viewAllowanceDays?.toString()
   );
   const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
-  const allowWithDiscountCodes = useField(initialOffer.allowWithDiscountCodes);
 
   return {
     name,
@@ -233,8 +232,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableQuantitySelection,
     limitQuantitySelection,
     productQuantityLimit,
-    hideIfItemAdded,
-    allowWithDiscountCodes
+    hideIfItemAdded
   };
 };
 
