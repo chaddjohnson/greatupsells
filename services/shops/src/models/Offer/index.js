@@ -114,7 +114,6 @@ const schema = new mongoose.Schema(
     onPageRequiredSeconds: { type: Number, required: false, default: 0 },
     allowWithDiscountCodes: { type: Boolean, required: true, default: true },
     hideIfItemAdded: { type: Boolean, required: true, default: false },
-    showNotificationBanner: { type: Boolean, required: true, default: true },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
     limitQuantitySelection: { type: Boolean, required: false, default: false }, // TODO: Remove this and usages.

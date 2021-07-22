@@ -95,8 +95,6 @@ const OfferForm = ({
     actionButtonLinkOpenInNewTab,
     viewAllowance,
     viewAllowanceDays,
-    showNotificationBanner,
-    successMessageText,
     startAt,
     endAt,
     hideOutOfStockProducts,
@@ -136,8 +134,6 @@ const OfferForm = ({
       actionButtonLinkOpenInNewTab,
       viewAllowance,
       viewAllowanceDays,
-      showNotificationBanner,
-      successMessageText,
       startAt,
       endAt,
       hideOutOfStockProducts,
@@ -358,7 +354,6 @@ const OfferForm = ({
             onPageRequiredSeconds={onPageRequiredSeconds}
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
-            showNotificationBanner={showNotificationBanner}
             hideOutOfStockProducts={hideOutOfStockProducts}
             enableVariantSelection={enableVariantSelection}
             enableQuantitySelection={enableQuantitySelection}

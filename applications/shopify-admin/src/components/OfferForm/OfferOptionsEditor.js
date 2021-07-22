@@ -20,7 +20,6 @@ const OfferOptionsEditor = ({
   onPageRequiredSeconds,
   enableEscClose,
   enableMaskClose,
-  showNotificationBanner,
   hideOutOfStockProducts,
   enableVariantSelection,
   enableQuantitySelection,
@@ -110,12 +109,6 @@ const OfferOptionsEditor = ({
             label="Allow clicking outside to close offer"
             {...asChoiceField(enableMaskClose)}
           />
-          <Checkbox
-            label={`Show notification bar on ${
-              offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
-            }`}
-            {...asChoiceField(showNotificationBanner)}
-          />
         </FormLayout>
       </Card.Section>
       <Card.Section title="Products">
@@ -187,7 +180,6 @@ OfferOptionsEditor.propTypes = {
   enableMaskClose: PropTypes.object.isRequired,
   hideIfItemAdded: PropTypes.object.isRequired,
   allowWithDiscountCodes: PropTypes.object.isRequired,
-  showNotificationBanner: PropTypes.object.isRequired,
   submitted: PropTypes.bool
 };
 

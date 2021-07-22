@@ -112,7 +112,6 @@ const initialOffer = {
   onPageRequiredSeconds: 0,
   allowWithDiscountCodes: true,
   hideIfItemAdded: false,
-  showNotificationBanner: true,
   enableVariantSelection: true,
   enableQuantitySelection: true,
   limitQuantitySelection: false,

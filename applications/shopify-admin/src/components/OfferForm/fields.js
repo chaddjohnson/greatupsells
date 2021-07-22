@@ -79,18 +79,6 @@ const useFields = (initialOffer, showEndDate) => {
   const actionButtonLinkOpenInNewTab = useField(
     initialOffer.actionButtonLinkOpenInNewTab || false
   );
-  const showNotificationBanner = useField(initialOffer.showNotificationBanner);
-  const successMessageText = useField(
-    {
-      value: initialOffer.successMessageText,
-      validates: (value) => {
-        if (showNotificationBanner.value && !value) {
-          return "Success message text can't be blank";
-        }
-      }
-    },
-    [showNotificationBanner.value]
-  );
   const startAt = useField({
     value: initialOffer.startAt,
     validates: [
@@ -234,8 +222,6 @@ const useFields = (initialOffer, showEndDate) => {
     actionButtonLinkOpenInNewTab,
     viewAllowance,
     viewAllowanceDays,
-    showNotificationBanner,
-    successMessageText,
     startAt,
     endAt,
     hideOutOfStockProducts,
