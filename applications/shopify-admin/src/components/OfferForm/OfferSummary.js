@@ -10,7 +10,11 @@ import {
   Button,
   Badge
 } from '@shopify/polaris';
-import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useNumberFormatter,
+  useDateTime
+} from '@neatowebsolutions/upselling-react-hooks';
+import { useShop } from '../../hooks';
 
 const HeadingWrapper = styled.div`
   .Polaris-Stack {
@@ -53,6 +57,13 @@ StatusBadge.propTypes = {
 const OfferSummary = ({ offer }) => {
   const [items, setItems] = useState([]);
 
+  const { shop } = useShop();
+  const { locale, countryCode, currency } = shop || {};
+  const {
+    formatNumber,
+    formatCurrency,
+    formatPercentage
+  } = useNumberFormatter({ locale, countryCode, currency });
   const { formatDate } = useDateTime();
 
   useEffect(() => {
@@ -103,10 +114,18 @@ const OfferSummary = ({ offer }) => {
         <Card.Section title="Performance" subdued>
           <Stack vertical>
             <List>
-              <List.Item>205 impressions</List.Item>
-              <List.Item>7 acceptances</List.Item>
-              <List.Item>3.5% conversion rate</List.Item>
-              <List.Item>$123.50 revenue increase</List.Item>
+              <List.Item>
+                {formatNumber(offer?.impressionCount)} impressions
+              </List.Item>
+              <List.Item>
+                {formatNumber(offer?.acceptanceCount)} acceptances
+              </List.Item>
+              <List.Item>
+                {formatPercentage(offer?.conversionRate, 1)} conversion rate
+              </List.Item>
+              <List.Item>
+                {formatCurrency(offer?.revenueIncrease)} revenue increase
+              </List.Item>
               {/* <List.Item>44 data submissions</List.Item> */}
             </List>
             <TextStyle variation="subdued">
