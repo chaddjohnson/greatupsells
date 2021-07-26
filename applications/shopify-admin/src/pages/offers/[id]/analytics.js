@@ -9,7 +9,8 @@ import {
   DisplayText,
   TextStyle,
   Banner,
-  SkeletonPage
+  SkeletonPage,
+  SkeletonBodyText
 } from '@shopify/polaris';
 import {
   useNumberFormatter,
@@ -44,6 +45,11 @@ const loadingComponent = () => (
     <Loading />
     <SkeletonPage title="Analytics for offer" fullWidth>
       <Layout>
+        <Layout.Section fullWidth>
+          <Card sectioned>
+            <SkeletonBodyText lines={3} />
+          </Card>
+        </Layout.Section>
         <Layout.Section oneHalf>
           <Card sectioned>
             <SkeletonChart />

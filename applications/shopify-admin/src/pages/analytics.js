@@ -10,7 +10,8 @@ import {
   DisplayText,
   TextStyle,
   Banner,
-  SkeletonPage
+  SkeletonPage,
+  SkeletonBodyText
 } from '@shopify/polaris';
 import { CalendarMajor } from '@shopify/polaris-icons';
 import {
@@ -35,6 +36,11 @@ const loadingComponent = () => (
           </TextStyle>
         </DisplayText>
         <Layout>
+          <Layout.Section fullWidth>
+            <Card sectioned>
+              <SkeletonBodyText lines={3} />
+            </Card>
+          </Layout.Section>
           <Layout.Section oneHalf>
             <Card sectioned>
               <SkeletonChart />
