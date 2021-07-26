@@ -20,7 +20,7 @@ import {
   ColorsMajor,
   TypeMajor,
   SettingsMajor,
-  CodeMajor,
+  // CodeMajor,
   ArrowLeftMinor
 } from '@shopify/polaris-icons';
 import styled from 'styled-components';
@@ -60,8 +60,8 @@ const sections = [
     name: 'Metadata',
     variableTypes: [],
     icon: ProductsMajor
-  },
-  { id: 'code', name: 'Code', icon: CodeMajor }
+  }
+  // { id: 'code', name: 'Code', icon: CodeMajor }
 ];
 
 const InnerWrapper = styled.div`
@@ -130,11 +130,11 @@ const VariablesEditor = ({ open, theme, onChange, onClose }) => {
     });
   };
 
-  useEffect(() => {
-    if (open) {
-      setSelectedSection(null);
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (open) {
+  //     setSelectedSection(null);
+  //   }
+  // }, [open]);
 
   return (
     <Sheet open={open} onClose={onClose} accessibilityLabel="Edit theme">
