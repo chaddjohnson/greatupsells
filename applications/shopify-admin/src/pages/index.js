@@ -27,10 +27,6 @@ import { Loader } from '@neatowebsolutions/upselling-react-components';
 import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 
-const Stats = styled.div`
-  text-align: center;
-`;
-
 const TutorialsImage = styled.img`
   display: block;
   width: auto;
@@ -141,36 +137,32 @@ const DashboardPage = () => {
         <Layout>
           <Layout.Section>
             <Card sectioned>
-              <Stats>
-                <Stack distribution="fillEvenly" alignment="trailing" wrap>
-                  <Stack spacing="tight" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatNumber(shop?.offerAcceptanceCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Accepted offers</TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatCurrency(shop?.revenueIncrease)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">
-                        Revenue increase
-                      </TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatPercentage(shop?.offerConversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
-                    </TextStyle>
-                  </Stack>
+              <Stack distribution="fillEvenly" wrap>
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatNumber(shop?.offerAcceptanceCount)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Accepted offers</TextStyle>
+                  </TextStyle>
                 </Stack>
-              </Stats>
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatCurrency(shop?.revenueIncrease)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Revenue increase</TextStyle>
+                  </TextStyle>
+                </Stack>
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatPercentage(shop?.offerConversionRate, 1)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Conversion rate</TextStyle>
+                  </TextStyle>
+                </Stack>
+              </Stack>
             </Card>
           </Layout.Section>
           <Layout.Section>

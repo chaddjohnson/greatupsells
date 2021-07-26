@@ -189,6 +189,46 @@ const OfferAnalyticsPage = () => {
             />
           </Stack>
           <Layout>
+            <Layout.Section fullWidth>
+              <Card sectioned>
+                <Stack distribution="fillEvenly" wrap>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(offer?.impressionCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Impressions</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(offer?.acceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Acceptances</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(offer?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(offer?.conversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Layout.Section>
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
