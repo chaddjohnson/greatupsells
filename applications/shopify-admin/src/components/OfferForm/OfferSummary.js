@@ -107,17 +107,17 @@ const OfferSummary = ({ offer }) => {
               <List.Item>7 acceptances</List.Item>
               <List.Item>3.5% conversion rate</List.Item>
               <List.Item>$123.50 revenue increase</List.Item>
-              <List.Item>44 data submissions</List.Item>
+              {/* <List.Item>44 data submissions</List.Item> */}
             </List>
             <TextStyle variation="subdued">
               View{' '}
               <Button plain url={`/offers/${offer._id}/analytics/`}>
                 analytics
               </Button>{' '}
-              and{' '}
+              {/* and{' '}
               <Button plain url={`/offers/${offer._id}/data/`}>
                 data submissions
-              </Button>{' '}
+              </Button>{' '} */}
               for this offer
             </TextStyle>
           </Stack>
