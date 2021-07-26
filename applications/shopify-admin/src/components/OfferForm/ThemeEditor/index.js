@@ -46,7 +46,9 @@ const ThemeEditor = ({
       <Card>
         <Card.Header title="Theme">
           <ButtonGroup>
-            <Button onClick={() => setThemeSelectorOpen(true)}>Select</Button>
+            <Button onClick={() => setThemeSelectorOpen(true)}>
+              Select theme
+            </Button>
             <Button primary onClick={() => setVariablesEditorOpen(true)}>
               Customize
             </Button>
