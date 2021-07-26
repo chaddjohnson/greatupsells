@@ -55,7 +55,8 @@ const trackImpression = async (
         {
           $inc: {
             impressionCount: 1
-          }
+          },
+          conversionRate: offer.conversionCount / (offer.impressionCount + 1)
         },
         { session }
       );
@@ -66,7 +67,9 @@ const trackImpression = async (
         {
           $inc: {
             offerImpressionCount: 1
-          }
+          },
+          offerConversionRate:
+            shop.offerConversionCount / (shop.offerImpressionCount + 1)
         },
         { session }
       );
