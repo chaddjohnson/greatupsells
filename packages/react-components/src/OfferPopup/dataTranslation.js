@@ -28,6 +28,10 @@ const useDataTranslation = (shop, offer) => {
           {}
         ) || {};
 
+      const offeredProduct = offer.offeredProducts.find(
+        (current) => current.shopifyProductId === product.shopifyProductId
+      );
+
       const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
@@ -39,8 +43,11 @@ const useDataTranslation = (shop, offer) => {
         variants: shopifyProductData.variants?.map((variant) => ({
           id: variant.id,
           title: variant.title,
-          price: formatCurrency(variant.price),
-          salePrice: formatCurrency(
+          url: `/products/${shopifyProductData.handle}?variant=${variant.id}`,
+          price: variant.price,
+          salePrice: calculateDiscountedPrice(offer, parseFloat(variant.price)),
+          priceFormatted: formatCurrency(variant.price),
+          salePriceFormatted: formatCurrency(
             calculateDiscountedPrice(offer, parseFloat(variant.price))
           ),
           sku: variant.sku,
@@ -54,7 +61,9 @@ const useDataTranslation = (shop, offer) => {
               shopifyProductData.title
           },
           inventory: variant.inventory_quantity
-        }))
+        })),
+        minQuantity: offeredProduct?.minQuantity || 1,
+        maxQuantity: offeredProduct?.maxQuantity
       };
 
       return translatedData;

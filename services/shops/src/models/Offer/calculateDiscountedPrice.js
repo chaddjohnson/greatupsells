@@ -16,17 +16,17 @@ const calculateDiscountedPrice = (offer, price) => {
   switch (offer.discountType) {
     case 'PERCENTAGE':
       // Reduce the price by the discount amount (a percentage).
-      discountedPrice = price - price * offer.discountAmount;
+      discountedPrice = price - price * offer.discountValue;
       break;
 
-    case 'USD':
-      // Reduce the price by the discount amount (a monetary amount).
-      discountedPrice = price - offer.discountAmount;
+    case 'AMOUNT':
+      // Reduce the price by the discount value (a monetary amount).
+      discountedPrice = price - offer.discountValue;
       break;
 
     case 'SET_PRICE':
       // Use the discount amount as the price.
-      discountedPrice = offer.discountAmount;
+      discountedPrice = offer.discountValue;
       break;
 
     case 'NO_DISCOUNT':

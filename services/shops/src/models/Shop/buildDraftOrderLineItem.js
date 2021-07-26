@@ -30,30 +30,30 @@ const buildDraftOrderLineItem = async ({
   if (offer && offer.discountType === 'PERCENTAGE') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
-      value: offer.discountAmount * 100,
+      value: offer.discountValue * 100,
       value_type: 'percentage',
       amount:
         Math.round(
-          (price * quantity * offer.discountAmount + Number.EPSILON) * 100
+          (price * quantity * offer.discountValue + Number.EPSILON) * 100
         ) / 100
     };
-  } else if (offer && offer.discountType === 'USD') {
+  } else if (offer && offer.discountType === 'AMOUNT') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
-      value: offer.discountAmount,
+      value: offer.discountValue,
       value_type: 'fixed_amount',
       amount:
-        Math.round((quantity * offer.discountAmount + Number.EPSILON) * 100) /
+        Math.round((quantity * offer.discountValue + Number.EPSILON) * 100) /
         100
     };
   } else if (offer && offer.discountType === 'SET_PRICE') {
     lineItem.applied_discount = {
       title: offer.discountTitle || 'Discount',
-      value: price - offer.discountAmount,
+      value: price - offer.discountValue,
       value_type: 'fixed_amount',
       amount:
         Math.round(
-          ((price - offer.discountAmount) * quantity + Number.EPSILON) * 100
+          ((price - offer.discountValue) * quantity + Number.EPSILON) * 100
         ) / 100
     };
   }

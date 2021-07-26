@@ -102,10 +102,9 @@ const OfferForm = ({
     onPageRequiredSeconds,
     enableEscClose,
     enableMaskClose,
+    enableBundling,
     enableVariantSelection,
     enableQuantitySelection,
-    limitQuantitySelection,
-    productQuantityLimit,
     hideIfItemAdded
   } = useFields(initialOffer, showEndDate);
 
@@ -122,7 +121,7 @@ const OfferForm = ({
       offeredCollections,
       // minimumProductsQuantity,
       discountType,
-      // discountAmount,
+      // discountValue,
       discountTitle,
       triggerProducts,
       triggerCollections,
@@ -140,10 +139,9 @@ const OfferForm = ({
       onPageRequiredSeconds,
       enableEscClose,
       enableMaskClose,
+      enableBundling,
       enableVariantSelection,
       enableQuantitySelection,
-      limitQuantitySelection,
-      productQuantityLimit,
       hideIfItemAdded
     },
     onSubmit: async (formValues) => {
@@ -217,6 +215,11 @@ const OfferForm = ({
       // Use the copied theme.
       setPopupTheme(firstStrategyOfferPopupTheme);
     }
+
+    // Bundling is only available with cross-selling.
+    if (value !== 'CROSS_SELL') {
+      enableBundling.onChange(false);
+    }
   };
 
   const handleThemeChange = (value) => {
@@ -279,6 +282,7 @@ const OfferForm = ({
       <Layout>
         <Layout.Section>
           <OfferSettingsEditor
+            shop={shop}
             offer={offer}
             name={name}
             strategy={strategy}
@@ -287,8 +291,6 @@ const OfferForm = ({
             triggerScrollThreshold={triggerScrollThreshold}
             triggerPage={triggerPage}
             triggerPagePath={triggerPagePath}
-            triggerProducts={triggerProducts}
-            triggerCollections={triggerCollections}
             discountType={discountType}
             discountTitle={discountTitle}
             actionButtonBehavior={actionButtonBehavior}
@@ -296,12 +298,20 @@ const OfferForm = ({
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
             viewAllowance={viewAllowance}
             viewAllowanceDays={viewAllowanceDays}
-            currency={currency}
             submitted={submitted}
             onStrategyChange={handleStrategyChange}
           />
           {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
-            <OfferProductsEditor offer={offer} />
+            <OfferProductsEditor
+              offer={offer}
+              offeredProducts={offeredProducts}
+              offeredCollections={offeredCollections}
+              hideOutOfStockProducts={hideOutOfStockProducts}
+              enableBundling={enableBundling}
+              enableVariantSelection={enableVariantSelection}
+              enableQuantitySelection={enableQuantitySelection}
+              submitted={submitted}
+            />
           )}
           <ThemeEditor
             strategy={offer.strategy}
@@ -352,11 +362,6 @@ const OfferForm = ({
             onPageRequiredSeconds={onPageRequiredSeconds}
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
-            hideOutOfStockProducts={hideOutOfStockProducts}
-            enableVariantSelection={enableVariantSelection}
-            enableQuantitySelection={enableQuantitySelection}
-            limitQuantitySelection={limitQuantitySelection}
-            productQuantityLimit={productQuantityLimit}
             hideIfItemAdded={hideIfItemAdded}
             submitted={submitted}
           />

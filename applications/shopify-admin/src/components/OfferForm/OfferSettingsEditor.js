@@ -18,8 +18,13 @@ import { SearchMinor } from '@shopify/polaris-icons';
 import { ResourcePicker } from '@shopify/app-bridge-react';
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
-import ManagedResourceList from './ManagedResourceList';
+import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
+import ProductResourceList from './ProductResourceList';
 import Link from '../Link';
+
+const DiscountValueInputWrapper = styled.div`
+  max-width: 170px;
+`;
 
 const TriggerScrollThresholdWrapper = styled.div`
   max-width: 110px;
@@ -30,6 +35,7 @@ const ViewAllowanceDaysInputWrapper = styled.div`
 `;
 
 const OfferSettingsEditor = ({
+  shop,
   offer,
   name,
   strategy,
@@ -38,8 +44,6 @@ const OfferSettingsEditor = ({
   triggerScrollThreshold,
   triggerPage,
   triggerPagePath,
-  triggerProducts,
-  triggerCollections,
   discountType,
   discountTitle,
   actionButtonBehavior,
@@ -47,7 +51,6 @@ const OfferSettingsEditor = ({
   actionButtonLinkOpenInNewTab,
   viewAllowance,
   viewAllowanceDays,
-  currency,
   submitted,
   onStrategyChange
 }) => {
@@ -62,6 +65,14 @@ const OfferSettingsEditor = ({
     triggerPagePathPopoverActive,
     setTriggerPagePathPopoverActive
   ] = useState(false);
+
+  const { locale, countryCode, currency } = shop || {};
+  const { getCurrencySymbol } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const currencySymbol = getCurrencySymbol();
 
   const handleTriggerPageChange = ([value]) => {
     if (triggerPage.value !== 'PAGE') {
@@ -127,15 +138,15 @@ const OfferSettingsEditor = ({
             <ChoiceList
               choices={[
                 {
-                  label: 'Page load',
-                  helpText: 'Offer is shown when the page loads.',
-                  value: 'LOAD'
-                },
-                {
                   label: 'Add to cart',
                   helpText:
                     'Offer is shown when a product is added to the cart.',
                   value: 'ADD'
+                },
+                {
+                  label: 'Page load',
+                  helpText: 'Offer is shown when the page loads.',
+                  value: 'LOAD'
                 },
                 {
                   label: 'Exit intent',
@@ -300,7 +311,7 @@ const OfferSettingsEditor = ({
                   <Banner status="info">
                     Offer will show regardless of products in the cart. Select
                     triggers below to only show the offer when specific products
-                    or products in collections have been added.
+                    or products in collections have been added to the cart.
                   </Banner>
                 )}
               {(!!offer.triggerProducts?.length ||
@@ -322,7 +333,7 @@ const OfferSettingsEditor = ({
                 }
                 onChange={() => setTriggerProductPickerOpen(true)}
               />
-              <ManagedResourceList
+              <ProductResourceList
                 items={offer.triggerProducts}
                 // onChange={triggerProducts.onChange}
                 // onRemoveItem={triggerProducts => setOffer({ ...offer, triggerProducts })}
@@ -339,7 +350,7 @@ const OfferSettingsEditor = ({
                 }
                 onChange={() => setTriggerCollectionPickerOpen(true)}
               />
-              <ManagedResourceList
+              <ProductResourceList
                 items={offer.triggerCollections}
                 // onChange={triggerCollections.onChange}
                 // onRemoveItem={triggerCollections => setOffer({ ...offer, triggerCollections })}
@@ -349,6 +360,7 @@ const OfferSettingsEditor = ({
           {triggerProductPickerOpen && (
             <ResourcePicker
               resourceType="Product"
+              showVariants={false}
               allowMultiple={true}
               open={triggerProductPickerOpen}
               onSelection={() => setTriggerProductPickerOpen(false)}
@@ -452,38 +464,64 @@ const OfferSettingsEditor = ({
           onChange={([value]) => actionButtonBehavior.onChange(value)}
         />
       </Card>
-      <Card title="Discount type" sectioned>
-        <FormLayout>
-          <TextField
-            placeholder="10% off"
-            helpText="This will show as a discount description for the order line item."
-            {...discountTitle}
-            error={submitted && discountTitle.error}
-          />
-          <ChoiceList
-            choices={[
-              {
-                label: 'Percentage off',
-                value: 'PERCENTAGE'
-              },
-              {
-                label: `${currency} off`,
-                value: currency
-              },
-              {
-                label: 'Set price',
-                value: 'SET_PRICE'
-              },
-              {
-                label: 'No discount',
-                value: 'NO_DISCOUNT'
-              }
-            ]}
-            selected={discountType.value}
-            onChange={([value]) => discountType.onChange(value)}
-          />
-        </FormLayout>
-      </Card>
+      {offer.strategy !== 'POPUP' && (
+        <Card title="Discount" sectioned>
+          <FormLayout>
+            <ChoiceList
+              choices={[
+                {
+                  label: 'Percentage off',
+                  value: 'PERCENTAGE'
+                },
+                {
+                  label: `${currency} off`,
+                  value: 'AMOUNT'
+                },
+                {
+                  label: 'Set price',
+                  value: 'SET_PRICE'
+                },
+                {
+                  label: 'No discount',
+                  value: 'NO_DISCOUNT'
+                }
+              ]}
+              selected={discountType.value}
+              onChange={([value]) => discountType.onChange(value)}
+            />
+            {discountType.value !== 'NO_DISCOUNT' && (
+              <DiscountValueInputWrapper>
+                <TextField
+                  label="Discount value"
+                  prefix={
+                    (discountType.value === 'AMOUNT' && currencySymbol) ||
+                    (discountType.value === 'SET_PRICE' && currencySymbol)
+                  }
+                  suffix={discountType.value === 'PERCENTAGE' && '%'}
+                  placeholder={
+                    (discountType.value === 'AMOUNT' && '0.00') ||
+                    (discountType.value === 'SET_PRICE' && '0.00')
+                  }
+                  // {...discountValue}
+                />
+              </DiscountValueInputWrapper>
+            )}
+            {discountType.value !== 'NO_DISCOUNT' && (
+              <TextField
+                label="Discount description"
+                placeholder={
+                  (discountType.value === 'PERCENTAGE' && '10% off') ||
+                  (discountType.value === 'AMOUNT' && '$10 off') ||
+                  (discountType.value === 'SET_PRICE' && 'Discounted price')
+                }
+                helpText="This will show as a discount description for order line items."
+                {...discountTitle}
+                error={submitted && discountTitle.error}
+              />
+            )}
+          </FormLayout>
+        </Card>
+      )}
       <Card title="Minimum requirements" sectioned>
         <FormLayout>
           <ChoiceList
@@ -510,6 +548,7 @@ const OfferSettingsEditor = ({
 };
 
 OfferSettingsEditor.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   name: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
@@ -518,8 +557,6 @@ OfferSettingsEditor.propTypes = {
   triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
-  triggerProducts: PropTypes.array.isRequired,
-  triggerCollections: PropTypes.array.isRequired,
   discountType: PropTypes.object.isRequired,
   discountTitle: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
@@ -527,7 +564,6 @@ OfferSettingsEditor.propTypes = {
   actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,
   viewAllowance: PropTypes.object.isRequired,
   viewAllowanceDays: PropTypes.object.isRequired,
-  currency: PropTypes.string.isRequired,
   submitted: PropTypes.bool,
   onStrategyChange: PropTypes.func
 };

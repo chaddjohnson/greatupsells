@@ -46,6 +46,14 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     [currencyFormatter]
   );
 
+  const getCurrencySymbol = useCallback(() => {
+    const parts = currencyFormatter?.formatToParts(currency);
+    const currencyPart = parts?.find(({ type }) => type === 'currenct');
+    const currencySymbol = currencyPart?.value;
+
+    return currencySymbol || '$';
+  }, [currency, currencyFormatter]);
+
   const formatPercentage = useCallback(
     (value, decimals = 2) => {
       if (numberFormatter?.format) {
@@ -62,7 +70,7 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     [numberFormatter]
   );
 
-  return { formatNumber, formatCurrency, formatPercentage };
+  return { formatNumber, formatCurrency, getCurrencySymbol, formatPercentage };
 };
 
 export default useNumberFormatter;

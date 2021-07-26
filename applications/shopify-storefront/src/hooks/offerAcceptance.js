@@ -73,7 +73,11 @@ const useOfferAcceptance = () => {
     }
   };
 
-  return { handleAddProduct };
+  const handleAddProductBundle = (offerId, bundle) => {
+    // TODO
+  };
+
+  return { handleAddProduct, handleAddProductBundle };
 };
 
 export default useOfferAcceptance;

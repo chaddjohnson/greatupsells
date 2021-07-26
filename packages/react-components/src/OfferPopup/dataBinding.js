@@ -1,12 +1,16 @@
 import { useCallback, useEffect } from 'react';
 import knockout from 'knockout';
-import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useCookies,
+  useNumberFormatter
+} from '@neatowebsolutions/upselling-react-hooks';
 
 const useDataBinding = ({
   iframe,
+  shop,
   offer,
   offeredProducts,
-  addedQuantity,
+  addedQuantities,
   html,
   css,
   javascript,
@@ -16,6 +20,12 @@ const useDataBinding = ({
   onQuantityAdd
 }) => {
   const { getCookie } = useCookies();
+  const { locale, countryCode, currency } = shop;
+  const { formatCurrency } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
 
   const iframeDocument =
     iframe?.contentWindow?.document ||
@@ -28,36 +38,23 @@ const useDataBinding = ({
     function () {
       this.offeredProducts = () => offeredProducts;
 
-      this.productQuantityLimit = offer.productQuantityLimit;
+      this.subtotalFormatted = () => {
+        const subtotal = this.selectedVariants().reduce(
+          (sum, { salePrice }) => sum + salePrice,
+          0
+        );
 
-      this.remainingQuantity = knockout.computed(() => {
-        const hasQuantityLimit = !!offer.productQuantityLimit;
-        const remainingQuantity =
-          hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
+        return formatCurrency(subtotal);
+      };
 
-        if (!hasQuantityLimit) {
-          return;
-        }
+      this.savingsFormatted = () => {
+        const savings = this.selectedVariants().reduce(
+          (sum, { price, salePrice }) => sum + (price - salePrice),
+          0
+        );
 
-        return remainingQuantity;
-      }, this);
-
-      this.addingEnabled = (index) =>
-        knockout.computed(() => {
-          const hasQuantityLimit = !!offer.productQuantityLimit;
-          const addedQuantityBelowLimit =
-            addedQuantity < offer.productQuantityLimit;
-          const remainingQuantity =
-            hasQuantityLimit && offer.productQuantityLimit - addedQuantity;
-          const selectedQuantity = parseInt(this.selectedQuantities()[index]());
-          const selectedQuantityBelowLimit =
-            !hasQuantityLimit || selectedQuantity <= remainingQuantity;
-
-          return (
-            !hasQuantityLimit ||
-            (addedQuantityBelowLimit && selectedQuantityBelowLimit)
-          );
-        }, this);
+        return formatCurrency(savings);
+      };
 
       this.selectedVariantIds = knockout.observableArray(
         offeredProducts.map(({ variants }) =>
@@ -74,7 +71,116 @@ const useDataBinding = ({
         );
 
       this.selectedQuantities = knockout.observableArray(
-        [...Array(3).keys()].map(() => knockout.observable(1))
+        [...Array(offeredProducts.length).keys()].map((_, index) => {
+          const offeredProduct = offeredProducts[index];
+          const { minQuantity } = offeredProduct;
+          const addedQuantity = addedQuantities[index] || 0;
+
+          // Set selected quantity to 1 if an item has been added to the cart
+          // (and thus the minimum quantity has been achieved).
+          if (addedQuantity > 0) {
+            return knockout.observable(1);
+          }
+
+          // Set initial quantity to minimum with a default of 1.
+          return knockout.observable(minQuantity || 1);
+        })
+      );
+
+      this.minQuantity = (index) =>
+        knockout.computed(() => {
+          const { minQuantity } = offeredProducts[index];
+          const hasMinQuantity = typeof minQuantity === 'number';
+          const addedQuantity = addedQuantities[index] || 0;
+
+          // Allow 1 if an item has been added to the cart (and thus the
+          // minimum quantity has been achieved).
+          if (addedQuantity > 0) {
+            return 1;
+          }
+
+          if (hasMinQuantity) {
+            return minQuantity;
+          }
+
+          // Default
+          return 1;
+        }, this);
+
+      this.maxQuantity = (index) =>
+        knockout.computed(() => {
+          const { maxQuantity } = offeredProducts[index];
+          const hasMaxQuantity = typeof maxQuantity === 'number';
+          const addedQuantity = addedQuantities[index] || 0;
+          const remainingQuantity =
+            hasMaxQuantity && maxQuantity - addedQuantity;
+
+          if (hasMaxQuantity) {
+            return remainingQuantity;
+          }
+        }, this);
+
+      this.addingProductEnabled = (index) =>
+        knockout.computed(() => {
+          const { minQuantity, maxQuantity } = offeredProducts[index];
+          const hasMinQuantity = typeof minQuantity === 'number';
+          const hasMaxQuantity = typeof maxQuantity === 'number';
+          const addedQuantity = addedQuantities[index] || 0;
+          const remainingQuantity =
+            hasMaxQuantity && maxQuantity - addedQuantity;
+          const selectedQuantity = parseInt(this.selectedQuantities()[index]());
+          const selectedQuantityValid =
+            typeof selectedQuantity === 'number' &&
+            !Number.isNaN(selectedQuantity) &&
+            selectedQuantity > 0 &&
+            selectedQuantity % 1 === 0;
+          const selectedQuantityAtOrAboveMin =
+            !hasMinQuantity ||
+            (selectedQuantityValid &&
+              (selectedQuantity >= minQuantity ||
+                (addedQuantity > 0 && selectedQuantity >= 1)));
+          const selectedQuantityAtOrBelowRemaining =
+            !hasMaxQuantity ||
+            (selectedQuantityValid && selectedQuantity <= remainingQuantity);
+          const addedQuantityBelowMax =
+            !hasMaxQuantity || addedQuantity < maxQuantity;
+
+          return (
+            addedQuantityBelowMax &&
+            selectedQuantityAtOrAboveMin &&
+            selectedQuantityAtOrBelowRemaining &&
+            selectedQuantityValid
+          );
+        }, this);
+
+      this.addingProductBundleEnabled = knockout.computed(
+        () =>
+          this.selectedQuantities().every((selectedQuantity, index) => {
+            const { minQuantity, maxQuantity } = offeredProducts[index];
+            const hasMinQuantity = typeof minQuantity === 'number';
+            const hasMaxQuantity = typeof maxQuantity === 'number';
+            const selectedQuantityValue = parseInt(
+              this.selectedQuantities()[index]()
+            );
+            const selectedQuantityValid =
+              typeof selectedQuantityValue === 'number' &&
+              !Number.isNaN(selectedQuantity) &&
+              selectedQuantityValue > 0 &&
+              selectedQuantityValue % 1 === 0;
+            const selectedQuantityAtOrAboveMin =
+              !hasMinQuantity ||
+              (selectedQuantityValid && selectedQuantity >= minQuantity);
+            const selectedQuantityAtOrBelowMax =
+              !hasMaxQuantity ||
+              (selectedQuantityValid && selectedQuantityValue <= maxQuantity);
+
+            return (
+              selectedQuantityValid &&
+              selectedQuantityAtOrAboveMin &&
+              selectedQuantityAtOrBelowMax
+            );
+          }),
+        this
       );
 
       this.handleAddProduct = async (event, productIndex) => {
@@ -93,10 +199,8 @@ const useDataBinding = ({
         try {
           await onAddProduct(offerId, productId, variantId, quantity);
 
-          // setCheckoutUrl(getCookie('upsellingDraftOrderCheckoutUrl'));
-          // setAddedQuantity(addedQuantity + quantity);
           onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
-          onQuantityAdd(addedQuantity + quantity);
+          onQuantityAdd(productIndex, quantity);
 
           productButton.removeAttribute('disabled');
         } catch (error) {
@@ -105,16 +209,23 @@ const useDataBinding = ({
 
         productButton.classList.remove('loading');
       };
+
+      this.handleAddProductBundle = async (event) => {
+        // TODO
+
+        console.log('TODO');
+      };
     },
     [
       iframe,
       offer,
       offeredProducts,
-      addedQuantity,
+      addedQuantities,
       getCookie,
       onAddProduct,
       onCheckoutUrlUpdate,
-      onQuantityAdd
+      onQuantityAdd,
+      formatCurrency
     ]
   );
 

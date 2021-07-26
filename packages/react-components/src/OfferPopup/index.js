@@ -38,7 +38,9 @@ const OfferPopup = ({
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('upsellingDraftOrderCheckoutUrl')
   );
-  const [addedQuantity, setAddedQuantity] = useState(0);
+  const [addedQuantities, setAddedQuantities] = useState(
+    [...Array(offeredProducts.length).keys()].map(() => 0)
+  );
 
   const { translateProductData } = useDataTranslation(shop, offer);
 
@@ -116,6 +118,15 @@ const OfferPopup = ({
     }
   };
 
+  const handleQuantityAdd = (index, quantity) =>
+    setAddedQuantities(
+      addedQuantities.map((addedQuantity, addedQuantityIndex) => {
+        return addedQuantityIndex === index
+          ? addedQuantity + quantity
+          : addedQuantity;
+      })
+    );
+
   // Set up template variables.
   const mappedVariables = useMemo(
     () =>
@@ -153,12 +164,10 @@ const OfferPopup = ({
       ...mappedVariables,
       triggerProduct: translatedTriggerProduct,
       offeredProducts: translatedOfferedProducts,
-      submitHandler: 'window.parent.OfferPopup.submit(event)',
-      closeHandler: 'window.parent.OfferPopup.close()',
       checkoutUrl,
+      enableBundling: offer.enableBundling,
       enableVariantSelection: offer.enableVariantSelection,
       enableQuantitySelection: offer.enableQuantitySelection,
-      productQuantityLimit: offer.productQuantityLimit,
       hideOutOfStockProducts: offer.hideOutOfStockProducts
     }),
     [
@@ -172,11 +181,12 @@ const OfferPopup = ({
 
   // Generate the markup.
   let { markup: html } = useLiquid(theme.template.html, templateVariables);
-  const { markup: css } = useLiquid(theme.template.css, mappedVariables);
-  const { markup: javascript } = useLiquid(
-    theme.template.javascript,
-    templateVariables
-  );
+  const { markup: css } = useLiquid(theme.template.css, templateVariables);
+  const { markup: javascript } = useLiquid(theme.template.javascript, {
+    ...templateVariables,
+    submitHandler: 'window.parent.OfferPopup.submit(event)',
+    closeHandler: 'window.parent.OfferPopup.close()'
+  });
 
   // Replace device-specific media queries if forcing display type.
   // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
@@ -203,16 +213,17 @@ const OfferPopup = ({
   // Set up data binding for popup.
   useDataBinding({
     iframe: iframeRef,
+    shop,
     offer,
     offeredProducts: translatedOfferedProducts,
-    addedQuantity,
+    addedQuantities,
     html,
     css,
     javascript,
     modalContentContainer: modalContentContainerRef,
     onAddProduct,
     onCheckoutUrlUpdate: setCheckoutUrl,
-    onQuantityAdd: (quantity) => setAddedQuantity(addedQuantity + quantity)
+    onQuantityAdd: handleQuantityAdd
   });
 
   // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.

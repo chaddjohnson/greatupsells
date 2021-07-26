@@ -58,7 +58,37 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [discountType.value]
   );
-  const offeredProducts = useList(initialOffer.offeredProducts);
+  const offeredProducts = useList({
+    list: initialOffer.offeredProducts.map((offeredProduct) => ({
+      ...offeredProduct,
+      minQuantity: offeredProduct.minQuantity?.toString(),
+      maxQuantity: offeredProduct.maxQuantity?.toString()
+    })),
+    validates: {
+      minQuantity: (value) => {
+        if (value && Number.isNaN(value)) {
+          return 'Minumum quantity must be valid';
+        }
+        if (value && Number(value) < 0) {
+          return 'Minumum quantity must be zero or greater';
+        }
+        if (value && Number(value) % 1 !== 0) {
+          return 'Minumum quantity must be a whole number';
+        }
+      },
+      maxQuantity: (value) => {
+        if (value && Number.isNaN(value)) {
+          return 'Maximum quantity must be valid';
+        }
+        if (value && Number(value) < 1) {
+          return 'Maximum quantity must be 1 or greater';
+        }
+        if (value && Number(value) % 1 !== 0) {
+          return 'Maximum quantity must be a whole number';
+        }
+      }
+    }
+  });
   const offeredCollections = useList(initialOffer.offeredCollections);
   const triggerProducts = useList(initialOffer.triggerProducts);
   const triggerCollections = useList(initialOffer.triggerCollections);
@@ -161,38 +191,10 @@ const useFields = (initialOffer, showEndDate) => {
   });
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
+  const enableBundling = useField(initialOffer.enableBundling);
   const enableVariantSelection = useField(initialOffer.enableVariantSelection);
   const enableQuantitySelection = useField(
     initialOffer.enableQuantitySelection
-  );
-  const limitQuantitySelection = useField(initialOffer.limitQuantitySelection);
-  const productQuantityLimit = useField(
-    {
-      value: initialOffer.productQuantityLimit?.toString(),
-      validates: [
-        (value) => {
-          if (limitQuantitySelection.value && !value) {
-            return "Product quantity limit can't be blank";
-          }
-        },
-        (value) => {
-          if (value && Number.isNaN(value)) {
-            return 'Product quantity limit must be a number';
-          }
-        },
-        (value) => {
-          if (value && Number(value) < 1) {
-            return 'Product quantity limit must be a positive value';
-          }
-        },
-        (value) => {
-          if (value && Number(value) % 1 !== 0) {
-            return 'Invalid value.';
-          }
-        }
-      ]
-    },
-    [limitQuantitySelection.value]
   );
   const viewAllowance = useField(initialOffer.viewAllowance);
   const viewAllowanceDays = useField(
@@ -228,10 +230,9 @@ const useFields = (initialOffer, showEndDate) => {
     onPageRequiredSeconds,
     enableEscClose,
     enableMaskClose,
+    enableBundling,
     enableVariantSelection,
     enableQuantitySelection,
-    limitQuantitySelection,
-    productQuantityLimit,
     hideIfItemAdded
   };
 };

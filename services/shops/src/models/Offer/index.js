@@ -13,7 +13,9 @@ let Offer = null;
 const offerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
   imageUrl: { type: String, required: false },
-  shopifyProductId: { type: Number, required: true }
+  shopifyProductId: { type: Number, required: true },
+  minQuantity: { type: Int32, required: false, min: 0 },
+  maxQuantity: { type: Int32, required: false, min: 1 }
 });
 
 const offerCollectionSchema = new mongoose.Schema({
@@ -80,9 +82,9 @@ const schema = new mongoose.Schema(
     discountType: {
       type: String,
       required: true,
-      enum: ['PERCENTAGE', 'USD', 'SET_PRICE', 'NO_DISCOUNT']
+      enum: ['PERCENTAGE', 'AMOUNT', 'SET_PRICE', 'NO_DISCOUNT']
     },
-    discountAmount: { type: Number, required: false },
+    discountValue: { type: Number, required: false },
     discountTitle: { type: String, required: false },
     triggerEvent: {
       type: String,
@@ -106,6 +108,7 @@ const schema = new mongoose.Schema(
     triggerPagePath: { type: String, required: false },
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
+    enableBundling: { type: Boolean, required: true, default: false },
     enableGeotargeting: { type: Boolean, required: true, default: false },
     geotargetingCountries: [{ type: String, required: true }],
     startAt: { type: Date, required: true },
@@ -115,8 +118,6 @@ const schema = new mongoose.Schema(
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
-    limitQuantitySelection: { type: Boolean, required: false, default: false }, // TODO: Remove this and usages.
-    productQuantityLimit: { type: Int32, required: false, min: 1 },
     hideOutOfStockProducts: { type: Boolean, required: true, default: true },
     enableEscClose: { type: Boolean, required: false, default: false },
     enableMaskClose: { type: Boolean, required: false, default: false },

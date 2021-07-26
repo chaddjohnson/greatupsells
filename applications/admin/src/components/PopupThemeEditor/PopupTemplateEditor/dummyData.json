@@ -11,18 +11,14 @@
     "conversionCount": 0,
     "conversionRate": 0,
     "revenueIncrease": 0,
-    "enableGeotargeting": true,
-    "geotargetingCountries": [
-      "AU",
-      "US"
-    ],
+    "enableGeotargeting": false,
+    "geotargetingCountries": [],
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
     "hideIfItemAdded": true,
+    "enableBundling": true,
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
-    "limitQuantitySelection": true,
-    "productQuantityLimit": 2,
     "enableProductLinks": true,
     "hideOutOfStockProducts": true,
     "delaySeconds": 0,
@@ -37,16 +33,31 @@
     "actionButtonBehavior": "CART",
     "offeredProducts": [
       {
-        "title": "Fancy Ass Hat",
+        "title": "Fancy Fuckin' Shoes",
         "imageUrl": "/images/hat.jpg",
-        "shopifyProductId": 4552007483437
+        "shopifyProductId": 4474376290349,
+        "minQuantity": 2,
+        "maxQuantity": 5
+      },
+      {
+        "title": "Fancy Ass Hat",
+        "imageUrl": "/images/shoes.jpg",
+        "shopifyProductId": 4552007483437,
+        "minQuantity": 1,
+        "maxQuantity": 5
+      },
+      {
+        "title": "Fancy Socks",
+        "imageUrl": "/images/socks.jpg",
+        "shopifyProductId": 6547332923437,
+        "maxQuantity": 5
       }
     ],
     "offeredCollections": [],
     "minimumProductsQuantity": 1,
     "discountType": "PERCENTAGE",
-    "discountAmount": 0.1,
-    "triggerEvent": "LOAD",
+    "discountValue": 0.1,
+    "triggerEvent": "ADD",
     "triggerExternalLinksOnly": true,
     "triggerScrollThreshold": 75,
     "triggerPage": "ANY",
