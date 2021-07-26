@@ -130,12 +130,6 @@ const VariablesEditor = ({ open, theme, onChange, onClose }) => {
     });
   };
 
-  // useEffect(() => {
-  //   if (open) {
-  //     setSelectedSection(null);
-  //   }
-  // }, [open]);
-
   return (
     <Sheet open={open} onClose={onClose} accessibilityLabel="Edit theme">
       <InnerWrapper>
