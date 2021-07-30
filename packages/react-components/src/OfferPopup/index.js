@@ -42,6 +42,11 @@ const OfferPopup = ({
     [...Array(offeredProducts.length).keys()].map(() => 0)
   );
 
+  // Internal flag for controling whether the actual modal is open. Exists to
+  // ensure that close transitions happen.
+  // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
+  const [modalOpen, setModalOpen] = useState(true);
+
   const { translateProductData } = useDataTranslation(shop, offer);
 
   const iframeDocument =
@@ -113,9 +118,15 @@ const OfferPopup = ({
   };
 
   const handleClose = () => {
-    if (!designMode) {
-      onClose();
+    if (designMode) {
+      return;
     }
+
+    setModalOpen(false);
+
+    setTimeout(() => {
+      onClose();
+    }, 225);
   };
 
   const handleQuantityAdd = (index, quantity) =>
@@ -180,7 +191,11 @@ const OfferPopup = ({
   );
 
   // Generate the markup.
-  let { markup: html } = useLiquid(theme.template.html, templateVariables);
+  let { markup: html } = useLiquid(theme.template.html, {
+    ...templateVariables,
+    submitHandler: 'window.parent.OfferPopup.submit(event)',
+    closeHandler: 'window.parent.OfferPopup.close()'
+  });
   const { markup: css } = useLiquid(theme.template.css, templateVariables);
   const { markup: javascript } = useLiquid(theme.template.javascript, {
     ...templateVariables,
@@ -332,6 +347,16 @@ const OfferPopup = ({
                     margin: 0;
                     padding: 0;
                   }
+                  .ReactModal__Overlay {
+                    opacity: 0;
+                    transition: opacity 200ms ease-in-out;
+                  }
+                  .ReactModal__Overlay--after-open {
+                    opacity: 1;
+                  }
+                  .ReactModal__Overlay--before-close {
+                    opacity: 0;
+                  }
                   ${css}
                 `
               }}
@@ -347,7 +372,7 @@ const OfferPopup = ({
                 contentRef={setModalRef}
                 closeTimeoutMS={200}
                 parentSelector={() => iframeBodyNode}
-                isOpen={true}
+                isOpen={modalOpen}
                 shouldFocusAfterRender={!designMode}
                 shouldCloseOnOverlayClick={offer.enableMaskClose}
                 shouldCloseOnEsc={offer.enableEscClose}
