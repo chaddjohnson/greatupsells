@@ -87,15 +87,15 @@ const OfferProductsEditor = ({
               <ChoiceList
                 choices={[
                   {
-                    label: 'No bundling',
+                    label: 'Offer products individually',
                     helpText:
                       'Products will not be bundled and may be added to the cart individually.',
                     value: 'false'
                   },
                   {
-                    label: 'Bundle presented products',
+                    label: 'Offer products in a bundle',
                     helpText:
-                      'Bundling helps increase average order value. All products presented in the offer will be bundled and added to the cart together on acceptance.',
+                      'All products presented in the offer will be bundled and added to the cart together on acceptance. Bundling helps increase average order value.',
                     value: 'true'
                   }
                 ]}
