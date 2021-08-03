@@ -40,7 +40,11 @@ const useDataBinding = ({
 
       this.subtotalFormatted = () => {
         const subtotal = this.selectedVariants().reduce(
-          (sum, { salePrice }) => sum + salePrice,
+          (sum, { salePrice }, index) => {
+            const quantity = parseInt(this.selectedQuantities()[index]());
+
+            return sum + salePrice * quantity;
+          },
           0
         );
 
@@ -49,7 +53,11 @@ const useDataBinding = ({
 
       this.savingsFormatted = () => {
         const savings = this.selectedVariants().reduce(
-          (sum, { price, salePrice }) => sum + (price - salePrice),
+          (sum, { price, salePrice }, index) => {
+            const quantity = parseInt(this.selectedQuantities()[index]());
+
+            return sum + (price - salePrice) * quantity;
+          },
           0
         );
 
