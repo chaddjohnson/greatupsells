@@ -6,6 +6,7 @@ import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { Context as AppBridgeContext } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
+import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
@@ -15,11 +16,6 @@ import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
 import dummyData from './dummyData.json';
-
-const { OfferPopup } =
-  (typeof window !== 'undefined' &&
-    require('@neatowebsolutions/upselling-react-components')) ||
-  {};
 
 let themeCount = 0;
 
@@ -59,12 +55,12 @@ const OfferForm = ({
   onSubmit,
   onCancel
 }) => {
-  const { currency } = shop;
   let contextualSaveBar = null;
 
   const app = useContext(AppBridgeContext);
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
+  const [designMode, setDesignMode] = useState(true);
   const [previewActive, setPreviewActive] = useState(false);
   const [popupTheme, setPopupTheme] = useState(assignId(initialPopupTheme));
   const [offerPopupThemes, setOfferPopupThemes] = useState(
@@ -90,6 +86,7 @@ const OfferForm = ({
     triggerCollections,
     enableGeotargeting,
     geotargetingCountries,
+    animation,
     actionButtonBehavior,
     actionButtonLink,
     actionButtonLinkOpenInNewTab,
@@ -127,6 +124,7 @@ const OfferForm = ({
       triggerCollections,
       enableGeotargeting,
       geotargetingCountries,
+      animation,
       actionButtonBehavior,
       actionButtonLink,
       actionButtonLinkOpenInNewTab,
@@ -247,6 +245,16 @@ const OfferForm = ({
     setThemeDisplayType(value);
   };
 
+  const handleClosePreview = () => {
+    setPreviewActive(false);
+    setTimeout(() => setDesignMode(true));
+  };
+
+  const handlePreview = () => {
+    setDesignMode(false);
+    setTimeout(() => setPreviewActive(true));
+  };
+
   // Handle Contextual Save Bar behavior.
   useEffect(
     () =>
@@ -322,8 +330,8 @@ const OfferForm = ({
             previewElement={
               <OfferPopupContainer>
                 <OfferPopup
-                  open={true}
-                  designMode={!previewActive}
+                  open={designMode || previewActive}
+                  designMode={designMode}
                   designModeZoom={0.8}
                   forceDisplayType={
                     !previewActive ? themeDisplayType : undefined
@@ -333,12 +341,12 @@ const OfferForm = ({
                   offer={offer}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
-                  onClose={() => setPreviewActive(false)}
-                  onClick={() => setPreviewActive(true)}
+                  onClose={handleClosePreview}
+                  onClick={handlePreview}
                 />
               </OfferPopupContainer>
             }
-            onPreview={() => setPreviewActive(true)}
+            onPreview={handlePreview}
             onChange={handleThemeChange}
             onThemeSelect={handleThemeSelect}
             onOfferThemeSelect={setPopupTheme}
@@ -362,8 +370,10 @@ const OfferForm = ({
             onPageRequiredSeconds={onPageRequiredSeconds}
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
+            animation={animation}
             hideIfItemAdded={hideIfItemAdded}
             submitted={submitted}
+            onPreview={handlePreview}
           />
         </Layout.Section>
         <Layout.Section secondary>

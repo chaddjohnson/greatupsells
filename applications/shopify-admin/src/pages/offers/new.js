@@ -107,6 +107,7 @@ const initialOffer = {
   triggerCollections: [],
   enableGeotargeting: false,
   geotargetingCountries: [],
+  animation: 'effect-slide-in-scale',
   startAt: new Date().toISOString(),
   delaySeconds: 0,
   onPageRequiredSeconds: 0,

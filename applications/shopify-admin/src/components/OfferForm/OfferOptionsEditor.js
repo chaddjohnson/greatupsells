@@ -5,6 +5,8 @@ import {
   FormLayout,
   TextField,
   Checkbox,
+  Select,
+  Button,
   KeyboardKey
 } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
@@ -14,14 +16,29 @@ const SecondsInputWrapper = styled.div`
   max-width: 165px;
 `;
 
+const AnimationSelectWrapper = styled.div`
+  max-width: 225px;
+  flex: 1;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  margin: -0.25rem;
+  > * {
+    margin: 0.25rem;
+  }
+`;
+
 const OfferOptionsEditor = ({
   offer,
   delaySeconds,
   onPageRequiredSeconds,
   enableEscClose,
   enableMaskClose,
+  animation,
   hideIfItemAdded,
-  submitted
+  submitted,
+  onPreview
 }) => {
   const [delaySecondsActive, setDelaySecondsActive] = useState(
     offer?.delaySeconds > 0
@@ -30,6 +47,7 @@ const OfferOptionsEditor = ({
     onPageRequiredSecondsActive,
     setOnPageRequiredSecondsActive
   ] = useState(offer?.onPageRequiredSeconds > 0);
+  const [animationActive, setAnimationActive] = useState(!!animation.value);
 
   const handleDelaySecondsActiveChange = (checked) => {
     setDelaySecondsActive(checked);
@@ -44,6 +62,14 @@ const OfferOptionsEditor = ({
 
     if (!checked) {
       onPageRequiredSeconds.onChange('0');
+    }
+  };
+
+  const handleAnimationActiveChange = (checked) => {
+    setAnimationActive(checked);
+
+    if (!checked) {
+      animation.onChange('');
     }
   };
 
@@ -103,6 +129,76 @@ const OfferOptionsEditor = ({
           {...asChoiceField(enableMaskClose)}
         />
         <Checkbox
+          label="Use an animation when showing and hiding the offer"
+          helpText={
+            animationActive && (
+              <Flex>
+                <AnimationSelectWrapper>
+                  <Select
+                    label="Animation"
+                    labelHidden
+                    options={[
+                      {
+                        value: 'effect-slide-in-scale',
+                        label: 'Fade in & scale'
+                      },
+                      {
+                        value: 'effect-slide-in-right',
+                        label: 'Slide in (right)'
+                      },
+                      {
+                        value: 'effect-slide-in-bottom',
+                        label: 'Slide in (bottom)'
+                      },
+                      {
+                        value: 'effect-fall',
+                        label: 'Fall'
+                      },
+                      {
+                        value: 'effect-sticky-up',
+                        label: 'Sticky up'
+                      },
+                      {
+                        value: 'effect-3d-flip-horizontal',
+                        label: '3D flip (horizontal)'
+                      },
+                      {
+                        value: 'effect-3d-flip-vertical',
+                        label: '3D flip (vertical)'
+                      },
+                      {
+                        value: 'effect-3d-sign',
+                        label: '3D sign'
+                      },
+                      {
+                        value: 'effect-super-scaled',
+                        label: 'Super scaled'
+                      },
+                      {
+                        value: 'effect-3d-slit',
+                        label: '3D slit'
+                      },
+                      {
+                        value: 'effect-3d-rotate-bottom',
+                        label: '3D rotate bottom'
+                      },
+                      {
+                        value: 'effect-3d-rotate-in-left',
+                        label: '3D rotate in left'
+                      }
+                    ]}
+                    {...animation}
+                    error={submitted && animation.error}
+                  />
+                </AnimationSelectWrapper>
+                <Button onClick={onPreview}>Preview</Button>
+              </Flex>
+            )
+          }
+          checked={animationActive}
+          onChange={handleAnimationActiveChange}
+        />
+        <Checkbox
           label={`Hide if customer already added ${
             offer.strategy === 'UPSELL' ? 'an upsell' : 'a cross-sell'
           } item`}
@@ -119,12 +215,15 @@ OfferOptionsEditor.propTypes = {
   onPageRequiredSeconds: PropTypes.object.isRequired,
   enableEscClose: PropTypes.object.isRequired,
   enableMaskClose: PropTypes.object.isRequired,
+  animation: PropTypes.object.isRequired,
   hideIfItemAdded: PropTypes.object.isRequired,
-  submitted: PropTypes.bool
+  submitted: PropTypes.bool,
+  onPreview: PropTypes.func
 };
 
 OfferOptionsEditor.defaultProps = {
-  submitted: false
+  submitted: false,
+  onPreview: () => {}
 };
 
 export default OfferOptionsEditor;

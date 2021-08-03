@@ -96,7 +96,7 @@ const PageLoadOffer = ({
   return (
     <OfferPopup
       appRoot="#upselling-popup-root"
-      open={!!offer && popupOpen}
+      open={popupOpen}
       shop={shop}
       theme={popupTheme}
       offer={offer}

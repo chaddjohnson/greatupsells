@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
+    "clsx": "^1.1.1",
     "css-loader": "^3.5.3",
     "knockout": "^3.5.1",
     "react-liquid": "^2.0.1",

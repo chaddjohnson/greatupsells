@@ -188,7 +188,7 @@ const ExitIntentOffer = ({
 
   return (
     <OfferPopup
-      open={!!offer && popupOpen}
+      open={popupOpen}
       shop={shop}
       theme={popupTheme}
       offer={offer}

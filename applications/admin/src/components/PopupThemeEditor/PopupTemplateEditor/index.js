@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import CodeEditor from './CodeEditor';
-import Preview from './Preview';
+import dummyData from '../../dummyData.json';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,7 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
   const classes = useStyles();
 
   const [template, setTemplate] = useState(popupTheme.template);
+  const [designMode, setDesignMode] = useState(true);
   const [previewActive, setPreviewActive] = useState(false);
   const debounceChange = useRef();
 
@@ -73,10 +75,12 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
 
   const handleClosePreview = () => {
     setPreviewActive(false);
+    setTimeout(() => setDesignMode(true));
   };
 
   const handlePreview = () => {
-    setPreviewActive(true);
+    setDesignMode(false);
+    setTimeout(() => setPreviewActive(true));
   };
 
   return (
@@ -90,12 +94,18 @@ const PopupTemplateEditor = ({ popupTheme, onChange }) => {
       </Grid>
       <Grid className={classes.gridItem} item xs={12} sm={6}>
         <Paper className={classes.previewPaper} variant="outlined" square>
-          <Preview
+          <OfferPopup
             className={classes.preview}
-            popupTheme={popupTheme}
-            previewActive={previewActive}
-            onClosePreview={handleClosePreview}
-            onPreview={handlePreview}
+            open={designMode || previewActive}
+            designMode={designMode}
+            forceDisplayType="desktop"
+            shop={dummyData.shop}
+            theme={popupTheme}
+            offer={dummyData.offer}
+            triggerProduct={dummyData.triggerProduct}
+            offeredProducts={dummyData.offeredProducts}
+            onClose={handleClosePreview}
+            onClick={handlePreview}
           />
         </Paper>
       </Grid>

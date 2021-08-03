@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TableRow, TableCell, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import Link from '../Link';
-import Preview from '../PopupThemeEditor/PopupTemplateEditor/Preview';
 import PopupThemeMenu from './PopupThemeMenu';
+import dummyData from '../dummyData.json';
 
 const strategyMap = {
   UPSELL: 'Upsell',
@@ -37,8 +38,9 @@ const useStyles = makeStyles((theme) => ({
 const PopupThemeListRow = ({ popupTheme, onClonePopupTheme, ...props }) => {
   const classes = useStyles();
 
-  const [popupThemeHtml, setPopupThemeHtml] = useState();
+  const [popupThemeExportHtml, setPopupThemeExportHtml] = useState();
   const [previewActive, setPreviewActive] = useState(false);
+  const [popupInitialized, setPopupInitialized] = useState(false);
 
   const previewContainerElement = useRef(null);
 
@@ -56,9 +58,11 @@ const PopupThemeListRow = ({ popupTheme, onClonePopupTheme, ...props }) => {
       const html = iframe?.contentWindow.document.documentElement.outerHTML;
 
       if (html) {
-        setPopupThemeHtml(encodeURIComponent(html));
+        setPopupThemeExportHtml(encodeURIComponent(html));
       }
-    }, 0);
+
+      setPopupInitialized(true);
+    }, 500);
   }, [previewContainerElement]);
 
   return (
@@ -84,7 +88,7 @@ const PopupThemeListRow = ({ popupTheme, onClonePopupTheme, ...props }) => {
       <TableCell>
         <PopupThemeMenu
           popupTheme={popupTheme}
-          popupThemeExportUrl={`data:text/html;charset=utf-8,${popupThemeHtml}`}
+          popupThemeExportUrl={`data:text/html;charset=utf-8,${popupThemeExportHtml}`}
           onClonePopupTheme={onClonePopupTheme}
           onPreviewPopupTheme={handlePreview}
         />
@@ -94,12 +98,17 @@ const PopupThemeListRow = ({ popupTheme, onClonePopupTheme, ...props }) => {
             display: previewActive ? 'block' : 'none'
           }}
         >
-          <Preview
+          <OfferPopup
             className="preview"
-            popupTheme={popupTheme}
-            previewActive={previewActive}
-            onClosePreview={handleClosePreview}
-            onPreview={handlePreview}
+            open={previewActive || !popupInitialized}
+            forceDisplayType="desktop"
+            shop={dummyData.shop}
+            theme={popupTheme}
+            offer={dummyData.offer}
+            triggerProduct={dummyData.triggerProduct}
+            offeredProducts={dummyData.offeredProducts}
+            onClose={handleClosePreview}
+            onClick={handlePreview}
           />
         </div>
       </TableCell>

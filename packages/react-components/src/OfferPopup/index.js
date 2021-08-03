@@ -1,13 +1,16 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
+import clsx from 'clsx';
 import { StyleSheetManager } from 'styled-components';
 import { useLiquid } from 'react-liquid';
 import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
-import Modal from './Modal';
-import ModalContentContainer from './ModalContentContainer';
+import Overlay from './Overlay';
+import Content from './Content';
+import ContentContainer from './ContentContainer';
 import Mask from './Mask';
 
 const initialIframeHeight = 1000;
@@ -42,10 +45,10 @@ const OfferPopup = ({
     [...Array(offeredProducts.length).keys()].map(() => 0)
   );
 
-  // Internal flag for controling whether the actual modal is open. Exists to
-  // ensure that close transitions happen.
+  // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(designMode);
+  const [modalAfterOpen, setModalAfterOpen] = useState(false);
 
   const { translateProductData } = useDataTranslation(shop, offer);
 
@@ -123,10 +126,20 @@ const OfferPopup = ({
     }
 
     setModalOpen(false);
+    setModalAfterOpen(false);
 
+    // Delay calling the onClose callback (which unmounts this component) until
+    // the modal within the iframe has a chance to close. Animations will not
+    // work without this.
     setTimeout(() => {
       onClose();
-    }, 225);
+    }, 350);
+  };
+
+  const handleAfterOpen = () => {
+    if (!designMode) {
+      setModalAfterOpen(true);
+    }
   };
 
   const handleQuantityAdd = (index, quantity) =>
@@ -223,7 +236,7 @@ const OfferPopup = ({
   window.OfferPopup.submit = handleSubmit;
   window.OfferPopup.close = handleClose;
 
-  Modal.setAppElement(iframeBodyNode);
+  ReactModal.setAppElement(iframeBodyNode);
 
   // Set up data binding for popup.
   useDataBinding({
@@ -290,6 +303,18 @@ const OfferPopup = ({
     designModeZoom
   ]);
 
+  useEffect(() => {
+    if (open) {
+      setModalOpen(true);
+
+      if (!designMode) {
+        requestAnimationFrame(() => {
+          setModalAfterOpen(true);
+        });
+      }
+    }
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Fix the iframe height when scrolling occurs.
   // useEffect(() => {
   //   window.addEventListener('scroll', fixIframeHeight);
@@ -347,16 +372,6 @@ const OfferPopup = ({
                     margin: 0;
                     padding: 0;
                   }
-                  .ReactModal__Overlay {
-                    opacity: 0;
-                    transition: opacity 200ms ease-in-out;
-                  }
-                  .ReactModal__Overlay--after-open {
-                    opacity: 1;
-                  }
-                  .ReactModal__Overlay--before-close {
-                    opacity: 0;
-                  }
                   ${css}
                 `
               }}
@@ -368,38 +383,60 @@ const OfferPopup = ({
         createPortal(
           <>
             <StyleSheetManager target={iframeHeadNode}>
-              <Modal
+              <ReactModal
                 contentRef={setModalRef}
-                closeTimeoutMS={200}
+                closeTimeoutMS={333}
                 parentSelector={() => iframeBodyNode}
                 isOpen={modalOpen}
                 shouldFocusAfterRender={!designMode}
                 shouldCloseOnOverlayClick={offer.enableMaskClose}
                 shouldCloseOnEsc={offer.enableEscClose}
                 contentLabel="Offer Modal"
+                className={clsx(
+                  designMode && 'design-mode',
+                  modalOpen && designMode && 'open',
+                  modalAfterOpen && 'open',
+                  !!offer.animation && !designMode && offer.animation
+                )}
+                overlayClassName={clsx(
+                  'overlay',
+                  !!offer.animation && !designMode && 'animated'
+                )}
+                overlayElement={(overlayProps, contentElement) => (
+                  <>
+                    {contentElement}
+                    <Overlay
+                      {...overlayProps}
+                      style={{
+                        background: maskBackgroundColor
+                      }}
+                    />
+                  </>
+                )}
+                contentElement={(contentProps, children) => (
+                  <Content
+                    {...contentProps}
+                    style={{
+                      zoom: designMode ? designModeZoom : 1
+                    }}
+                  >
+                    {children}
+                  </Content>
+                )}
                 onRequestClose={handleClose}
-                className="offer-popup-modal"
-                designMode={designMode}
-                style={{
-                  overlay: {
-                    position: 'fixed',
-                    background: maskBackgroundColor,
-                    zIndex: 2147483647,
-                    height: '100%'
-                  },
-                  content: {
-                    zoom: designMode ? designModeZoom : 1
-                  }
-                }}
+                onAfterOpen={handleAfterOpen}
               >
-                <ModalContentContainer
-                  id="modal-content-container"
+                <ContentContainer
+                  className="content-container"
                   ref={setModalContentContainerRef}
                   forceDisplayType={forceDisplayType}
                   dangerouslySetInnerHTML={{ __html: html }}
+                  style={{
+                    maxWidth: forceDisplayType === 'mobile' ? '375px' : '100%'
+                  }}
                 />
                 {designMode && <Mask onClick={onClick} />}
-              </Modal>
+              </ReactModal>
             </StyleSheetManager>
           </>,
           iframeBodyNode

@@ -94,6 +94,7 @@ const useFields = (initialOffer, showEndDate) => {
   const triggerCollections = useList(initialOffer.triggerCollections);
   const enableGeotargeting = useField(initialOffer.enableGeotargeting);
   const geotargetingCountries = useField(initialOffer.geotargetingCountries);
+  const animation = useField(initialOffer.animation);
   const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
   const actionButtonLink = useField(
     {
@@ -218,6 +219,7 @@ const useFields = (initialOffer, showEndDate) => {
     triggerCollections,
     enableGeotargeting,
     geotargetingCountries,
+    animation,
     actionButtonBehavior,
     actionButtonLink,
     actionButtonLinkOpenInNewTab,
