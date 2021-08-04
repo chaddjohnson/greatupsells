@@ -102,7 +102,7 @@ const EmptyComponent = () => (
   </EmptyState>
 );
 
-const VariablesEditor = ({ open, theme, onChange, onClose }) => {
+const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
   const { variables } = theme;
 
   const [selectedSection, setSelectedSection] = useState(null);
@@ -112,10 +112,20 @@ const VariablesEditor = ({ open, theme, onChange, onClose }) => {
       return [];
     }
 
-    return variables.filter(
+    let filteredVariables = variables;
+
+    // Filter by variable types handled by the section.
+    filteredVariables = filteredVariables.filter(
       ({ type }) => selectedSection.variableTypes.indexOf(type) > -1
     );
-  }, [selectedSection, variables]);
+
+    // Optionally filter by strategy.
+    filteredVariables = filteredVariables.filter(
+      ({ options = {} }) => !options.strategy || options.strategy === strategy
+    );
+
+    return filteredVariables;
+  }, [selectedSection, variables, strategy]);
 
   const handleVariableChange = (name, value) => {
     const index = variables.findIndex((variable) => variable.name === name);
@@ -228,6 +238,7 @@ const VariablesEditor = ({ open, theme, onChange, onClose }) => {
 VariablesEditor.propTypes = {
   open: PropTypes.bool,
   theme: PropTypes.object,
+  strategy: PropTypes.string,
   onChange: PropTypes.func,
   onClose: PropTypes.func
 };

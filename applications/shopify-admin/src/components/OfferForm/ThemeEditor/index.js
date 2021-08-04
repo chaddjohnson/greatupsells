@@ -96,6 +96,7 @@ const ThemeEditor = ({
       <VariablesEditor
         open={variablesEditorOpen}
         theme={theme}
+        strategy={strategy}
         onChange={handleChange}
         onClose={() => setVariablesEditorOpen(false)}
       />

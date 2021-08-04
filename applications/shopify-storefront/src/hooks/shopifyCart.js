@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import useSWR from 'swr';
 import qs from 'querystringify';
@@ -38,21 +38,29 @@ const httpClient = new HttpClient({
 
 const CartProvider = ({ children }) => {
   const {
-    data: shopifyCartItems,
-    error: shopifyCartItemsError,
-    mutate: fetchShopifyCartItems
+    data: shopifyCart,
+    error: shopifyCartError,
+    mutate: fetchShopifyCart
   } = useSWR(
     '/cart.js',
     async () => {
-      const data = await httpClient.get('/cart.js');
-
-      return data?.items || [];
+      return await httpClient.get('/cart.js');
     },
     {
       revalidateOnFocus: false
     }
   );
-  const shopifyCartItemsLoading = !shopifyCartItems && !shopifyCartItemsError;
+  const shopifyCartLoading = !shopifyCart && !shopifyCartError;
+  const shopifyCartItems = useMemo(() => shopifyCart?.items || [], [
+    shopifyCart
+  ]);
+  const shopifyCartSubtotal =
+    shopifyCart?.items_subtotal_price &&
+    shopifyCart?.items_subtotal_price / 100;
+  const shopifyCartItemCount = useMemo(
+    () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
+    [shopifyCartItems]
+  );
 
   const addProductToShopifyCart = async (variantId, quantity) => {
     await httpClient.post('/cart/add.js', {
@@ -67,25 +75,27 @@ const CartProvider = ({ children }) => {
 
   // Refresh the cart when an item is added.
   useShopifyCartAddListener(() => {
-    fetchShopifyCartItems();
+    fetchShopifyCart();
   });
 
   // Refresh the cart when a item's quantity changes.
   useShopifyCartQuantityListener(() => {
-    fetchShopifyCartItems();
+    fetchShopifyCart();
   });
 
   usePushStateListener(() => {
-    fetchShopifyCartItems();
+    fetchShopifyCart();
   });
 
   return (
     <CartContext.Provider
       value={{
         shopifyCartItems,
-        shopifyCartItemsError,
-        shopifyCartItemsLoading,
-        fetchShopifyCartItems,
+        shopifyCartSubtotal,
+        shopifyCartItemCount,
+        shopifyCartError,
+        shopifyCartLoading,
+        fetchShopifyCart,
         addProductToShopifyCart
       }}
     >

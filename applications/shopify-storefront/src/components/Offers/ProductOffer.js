@@ -13,7 +13,13 @@ import {
 const triggerEvent = 'ADD';
 const loadedAt = new Date();
 
-const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
+const ProductOffer = ({
+  shopifyCartSubtotal,
+  shopifyCartItemCount,
+  viewingOffer,
+  onOpen,
+  onClose
+}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
@@ -25,7 +31,7 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
     shopifyProductIds,
     shouldQuery: productAdded && !!shopifyProductIds?.length
   });
-  const { handleAddProduct } = useOfferAcceptance();
+  const { addProduct } = useOfferAcceptance();
 
   const { offer, popupTheme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
@@ -129,13 +135,17 @@ const ProductOffer = ({ viewingOffer, onOpen, onClose }) => {
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
-      onAddProduct={handleAddProduct}
+      shopifyCartSubtotal={shopifyCartSubtotal}
+      shopifyCartItemCount={shopifyCartItemCount}
+      onAddProduct={addProduct}
       onClose={handleClosePopup}
     />
   );
 };
 
 ProductOffer.propTypes = {
+  shopifyCartSubtotal: PropTypes.number,
+  shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func

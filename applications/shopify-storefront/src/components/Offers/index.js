@@ -1,5 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { useRandomOffers, useShopifyCart } from '../../hooks';
+import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useRandomOffers,
+  useShopifyCart,
+  useShopifyCartAddListener
+} from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
 import LinkClickOffer from './LinkClickOffer';
 import LostBrowserFocusOffer from './LostBrowserFocusOffer';
@@ -9,8 +14,14 @@ import ProductOffer from './ProductOffer';
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
+  const [productAdded, setProductAdded] = useState(false);
 
-  const { shopifyCartItems, shopifyCartItemsLoading } = useShopifyCart();
+  const {
+    shopifyCartItems,
+    shopifyCartSubtotal,
+    shopifyCartItemCount,
+    shopifyCartLoading
+  } = useShopifyCart();
 
   const shopifyProductIds = useMemo(
     () => shopifyCartItems?.map((item) => item.product_id),
@@ -21,7 +32,7 @@ const Offers = () => {
   const { offersData = [] } = useRandomOffers({
     events: ['EXIT', 'LINK', 'FOCUS', 'LOAD', 'SCROLL'],
     shopifyProductIds,
-    shouldQuery: !!shopifyCartItems && !shopifyCartItemsLoading
+    shouldQuery: !!shopifyCartItems && !shopifyCartLoading
   });
 
   // Group data by trigger event.
@@ -50,12 +61,27 @@ const Offers = () => {
     setViewingOffer(false);
   };
 
+  // Subscribe to product add events.
+  useShopifyCartAddListener((addedProduct) => {
+    if (addedProduct?.product_id) {
+      setProductAdded(true);
+    }
+  });
+
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setProductAdded(false);
+  });
+
   return (
     <>
       <ExitIntentOffer
         offer={offerDataByTriggerEvent.EXIT?.offer}
         popupTheme={offerDataByTriggerEvent.EXIT?.popupTheme}
+        triggerProduct={offerDataByTriggerEvent.EXIT?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.EXIT?.offeredProducts}
+        shopifyCartSubtotal={shopifyCartSubtotal}
+        shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
@@ -63,7 +89,10 @@ const Offers = () => {
       <LinkClickOffer
         offer={offerDataByTriggerEvent.LINK?.offer}
         popupTheme={offerDataByTriggerEvent.LINK?.popupTheme}
+        triggerProduct={offerDataByTriggerEvent.LINK?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.LINK?.offeredProducts}
+        shopifyCartSubtotal={shopifyCartSubtotal}
+        shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
@@ -71,28 +100,45 @@ const Offers = () => {
       <LostBrowserFocusOffer
         offer={offerDataByTriggerEvent.FOCUS?.offer}
         popupTheme={offerDataByTriggerEvent.FOCUS?.popupTheme}
+        triggerProduct={offerDataByTriggerEvent.FOCUS?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.FOCUS?.offeredProducts}
+        shopifyCartSubtotal={shopifyCartSubtotal}
+        shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      <PageLoadOffer
-        offer={offerDataByTriggerEvent.LOAD?.offer}
-        popupTheme={offerDataByTriggerEvent.LOAD?.popupTheme}
-        offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
-        viewingOffer={viewingOffer}
-        onOpen={handleOfferOpen}
-        onClose={handleOfferClose}
-      />
+      {!productAdded && (
+        <PageLoadOffer
+          offer={offerDataByTriggerEvent.LOAD?.offer}
+          popupTheme={offerDataByTriggerEvent.LOAD?.popupTheme}
+          triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
+          offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
+          shopifyCartSubtotal={shopifyCartSubtotal}
+          shopifyCartItemCount={shopifyCartItemCount}
+          viewingOffer={viewingOffer}
+          onOpen={handleOfferOpen}
+          onClose={handleOfferClose}
+        />
+      )}
       <PageScrollOffer
         offer={offerDataByTriggerEvent.SCROLL?.offer}
         popupTheme={offerDataByTriggerEvent.SCROLL?.popupTheme}
+        triggerProduct={offerDataByTriggerEvent.SCROLL?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.SCROLL?.offeredProducts}
+        shopifyCartSubtotal={shopifyCartSubtotal}
+        shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      <ProductOffer />
+      <ProductOffer
+        shopifyCartSubtotal={shopifyCartSubtotal}
+        shopifyCartItemCount={shopifyCartItemCount}
+        viewingOffer={viewingOffer}
+        onOpen={handleOfferOpen}
+        onClose={handleOfferClose}
+      />
     </>
   );
 };

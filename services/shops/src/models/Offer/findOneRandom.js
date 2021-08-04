@@ -65,22 +65,35 @@ const buildProductsCriteria = async (shopifyProductIds) => {
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
 
-  return [
-    {
-      'triggerProducts.shopifyProductId': {
-        $in: shopifyProductIds
-      }
-    },
-    {
-      'triggerCollections.shopifyCollectionId': {
-        $in: shopifyCollectionIds
-      }
-    },
-    {
-      triggerProducts: { $size: 0 },
-      triggerCollections: { $size: 0 }
+  // An upsell offer requires a specific trigger product.
+  const upsellCriteria = {
+    strategy: 'UPSELL',
+    'triggerProducts.shopifyProductId': {
+      $in: shopifyProductIds
     }
-  ];
+  };
+
+  const nonUpsellCriteria = {
+    strategy: { $ne: 'UPSELL' },
+    $or: [
+      {
+        'triggerProducts.shopifyProductId': {
+          $in: shopifyProductIds
+        }
+      },
+      {
+        'triggerCollections.shopifyCollectionId': {
+          $in: shopifyCollectionIds
+        }
+      },
+      {
+        triggerProducts: { $size: 0 },
+        triggerCollections: { $size: 0 }
+      }
+    ]
+  };
+
+  return [upsellCriteria, nonUpsellCriteria];
 };
 
 const buildGeotargetingCriteria = (countryCode) => [

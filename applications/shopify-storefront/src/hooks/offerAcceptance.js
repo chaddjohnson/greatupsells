@@ -12,7 +12,7 @@ const useOfferAcceptance = () => {
     addProductToShopifyDraftOrder
   } = useShopifyDraftOrder();
 
-  const handleAddProduct = async (
+  const addProduct = async (
     offerId,
     shopifyProductId,
     shopifyVariantId,
@@ -73,11 +73,11 @@ const useOfferAcceptance = () => {
     }
   };
 
-  const handleAddProductBundle = (offerId, bundle) => {
+  const addProductBundle = (offerId, bundle) => {
     // TODO
   };
 
-  return { handleAddProduct, handleAddProductBundle };
+  return { addProduct, addProductBundle };
 };
 
 export default useOfferAcceptance;

@@ -95,12 +95,13 @@ const PopupVariablesEditor = ({ popupTheme, onChange }) => {
               <TableCell>Value</TableCell>
               <TableCell>Group</TableCell>
               <TableCell>Type</TableCell>
+              <TableCell>Options</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {popupTheme.variables.map(
-              ({ name, label, value, group, type }, index) => (
+              ({ name, label, type, value, group, options = {} }, index) => (
                 <TableRow key={index}>
                   <TableCell>
                     <FormControl className={classes.formControl}>
@@ -168,6 +169,13 @@ const PopupVariablesEditor = ({ popupTheme, onChange }) => {
                         <MenuItem value="OPTION">Option</MenuItem>
                       </Select>
                     </FormControl>
+                  </TableCell>
+                  <TableCell>
+                    {Object.keys(options).map((key, optionIndex) => (
+                      <div key={optionIndex}>
+                        {key}: <em>{options[key]?.toString()}</em>
+                      </div>
+                    ))}
                   </TableCell>
                   <TableCell>
                     <IconButton

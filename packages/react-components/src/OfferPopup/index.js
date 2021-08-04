@@ -5,7 +5,10 @@ import ReactModal from 'react-modal';
 import clsx from 'clsx';
 import { StyleSheetManager } from 'styled-components';
 import { useLiquid } from 'react-liquid';
-import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
+import {
+  useCookies,
+  useNumberFormatter
+} from '@neatowebsolutions/upselling-react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 import Overlay from './Overlay';
@@ -26,11 +29,20 @@ const OfferPopup = ({
   offer,
   triggerProduct,
   offeredProducts,
+  shopifyCartSubtotal,
+  shopifyCartItemCount,
   onAddProduct,
   onClose,
   onClick
 }) => {
   const { getCookie } = useCookies();
+
+  const { locale, countryCode, currency } = shop;
+  const { formatCurrency } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
 
   const [iframeRef, setIframeRef] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
@@ -39,7 +51,7 @@ const OfferPopup = ({
     null
   );
   const [checkoutUrl, setCheckoutUrl] = useState(
-    getCookie('upsellingDraftOrderCheckoutUrl')
+    getCookie('upsellingDraftOrderCheckoutUrl') || '/checkout'
   );
   const [addedQuantities, setAddedQuantities] = useState(
     [...Array(offeredProducts.length).keys()].map(() => 0)
@@ -99,6 +111,82 @@ const OfferPopup = ({
     });
   };
 
+  // Set up template variables.
+  const mappedVariables = useMemo(
+    () =>
+      theme.variables.reduce((map, { name, type, value, options = {} }) => {
+        // Optionally filter by strategy.
+        if (options.strategy && options.strategy !== offer.strategy) {
+          return map;
+        }
+
+        // Cast "option" variables to boolean.
+        if (type === 'OPTION') {
+          value = value === 'true';
+        }
+
+        return {
+          ...map,
+          [name]: value
+        };
+      }, {}),
+    [theme.variables, offer]
+  );
+
+  const maskBackgroundColor =
+    mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)';
+
+  const translatedTriggerProduct = useMemo(() => {
+    if (triggerProduct) {
+      return translateProductData(triggerProduct);
+    }
+  }, [triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const translatedOfferedProducts = useMemo(() => {
+    if (offeredProducts) {
+      return offeredProducts.map(translateProductData);
+    }
+  }, [offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const templateVariables = useMemo(
+    () => ({
+      ...mappedVariables,
+      triggerProduct: translatedTriggerProduct,
+      offeredProducts: translatedOfferedProducts,
+      checkoutUrl,
+      shopifyCartSubtotal: formatCurrency(shopifyCartSubtotal || 0),
+      shopifyCartItemCount: shopifyCartItemCount || 0,
+      strategy: offer.strategy,
+      enableBundling: offer.enableBundling,
+      enableVariantSelection: offer.enableVariantSelection,
+      enableQuantitySelection: offer.enableQuantitySelection,
+      hideOutOfStockProducts: offer.hideOutOfStockProducts
+    }),
+    [
+      mappedVariables,
+      translatedTriggerProduct,
+      translatedOfferedProducts,
+      offer,
+      checkoutUrl,
+      shopifyCartSubtotal,
+      shopifyCartItemCount,
+      formatCurrency
+    ]
+  );
+
+  // Generate the markup.
+  let { markup: html } = useLiquid(theme.template.html, {
+    ...templateVariables,
+    submitHandler: 'window.parent.OfferPopup.submit(event)',
+    closeHandler: 'window.parent.OfferPopup.close()'
+  });
+  const { markup: css } = useLiquid(theme.template.css, templateVariables);
+  const { markup: javascript } = useLiquid(theme.template.javascript, {
+    ...templateVariables,
+    submitHandler: 'window.parent.OfferPopup.submit(event)',
+    closeHandler: 'window.parent.OfferPopup.close()'
+  });
+
   const handleSubmit = async (event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
@@ -151,71 +239,6 @@ const OfferPopup = ({
       })
     );
 
-  // Set up template variables.
-  const mappedVariables = useMemo(
-    () =>
-      theme.variables.reduce((map, { name, value, type }) => {
-        // Cast "option" variables to boolean.
-        if (type === 'OPTION') {
-          value = value === 'true';
-        }
-
-        return {
-          ...map,
-          [name]: value
-        };
-      }, {}),
-    [theme.variables]
-  );
-
-  const maskBackgroundColor =
-    mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)';
-
-  const translatedTriggerProduct = useMemo(() => {
-    if (triggerProduct) {
-      return translateProductData(triggerProduct);
-    }
-  }, [triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const translatedOfferedProducts = useMemo(() => {
-    if (offeredProducts) {
-      return offeredProducts.map(translateProductData);
-    }
-  }, [offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const templateVariables = useMemo(
-    () => ({
-      ...mappedVariables,
-      triggerProduct: translatedTriggerProduct,
-      offeredProducts: translatedOfferedProducts,
-      checkoutUrl,
-      enableBundling: offer.enableBundling,
-      enableVariantSelection: offer.enableVariantSelection,
-      enableQuantitySelection: offer.enableQuantitySelection,
-      hideOutOfStockProducts: offer.hideOutOfStockProducts
-    }),
-    [
-      mappedVariables,
-      translatedTriggerProduct,
-      translatedOfferedProducts,
-      offer,
-      checkoutUrl
-    ]
-  );
-
-  // Generate the markup.
-  let { markup: html } = useLiquid(theme.template.html, {
-    ...templateVariables,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
-  const { markup: css } = useLiquid(theme.template.css, templateVariables);
-  const { markup: javascript } = useLiquid(theme.template.javascript, {
-    ...templateVariables,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
-
   // Replace device-specific media queries if forcing display type.
   // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
   if (forceDisplayType === 'desktop') {
@@ -251,7 +274,8 @@ const OfferPopup = ({
     modalContentContainer: modalContentContainerRef,
     onAddProduct,
     onCheckoutUrlUpdate: setCheckoutUrl,
-    onQuantityAdd: handleQuantityAdd
+    onQuantityAdd: handleQuantityAdd,
+    onClose: handleClose
   });
 
   // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.
@@ -453,6 +477,8 @@ OfferPopup.propTypes = {
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
+  shopifyCartSubtotal: PropTypes.number,
+  shopifyCartItemCount: PropTypes.number,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   onAddProduct: PropTypes.func,

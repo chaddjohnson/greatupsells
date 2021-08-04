@@ -12,7 +12,10 @@ const loadedAt = new Date();
 const LostBrowserFocusOffer = ({
   offer,
   popupTheme,
+  triggerProduct,
   offeredProducts,
+  shopifyCartSubtotal,
+  shopifyCartItemCount,
   viewingOffer,
   onOpen,
   onClose
@@ -21,7 +24,7 @@ const LostBrowserFocusOffer = ({
   const [offerViewed, setOfferViewed] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
-  const { handleAddProduct } = useOfferAcceptance();
+  const { addProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -104,8 +107,11 @@ const LostBrowserFocusOffer = ({
       shop={shop}
       theme={popupTheme}
       offer={offer}
+      triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
-      onAddProduct={handleAddProduct}
+      shopifyCartSubtotal={shopifyCartSubtotal}
+      shopifyCartItemCount={shopifyCartItemCount}
+      onAddProduct={addProduct}
       onClose={handleClosePopup}
     />
   );
@@ -114,7 +120,10 @@ const LostBrowserFocusOffer = ({
 LostBrowserFocusOffer.propTypes = {
   offer: PropTypes.object.isRequired,
   popupTheme: PropTypes.object.isRequired,
+  triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
+  shopifyCartSubtotal: PropTypes.number,
+  shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func

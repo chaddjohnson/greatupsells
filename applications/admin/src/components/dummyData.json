@@ -16,7 +16,7 @@
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
     "hideIfItemAdded": true,
-    "enableBundling": true,
+    "enableBundling": false,
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableProductLinks": true,
@@ -29,7 +29,7 @@
     "shop": "60394d65bbf915b947ae9abc",
     "shopifyShopId": 27708653613,
     "name": "Test Offer 2",
-    "strategy": "CROSS_SELL",
+    "strategy": "UPSELL",
     "actionButtonBehavior": "CART",
     "offeredProducts": [
       {

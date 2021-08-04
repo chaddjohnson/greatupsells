@@ -10,27 +10,33 @@ const schemaOptions = {
   timestamps: true,
   collection: 'popupThemes'
 };
-const variablesSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  label: { type: String, required: true },
-  type: {
-    type: String,
-    required: true,
-    enum: ['TEXT', 'COLOR', 'FONT', 'FONTSIZE', 'OPTION']
+const variablesSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    label: { type: String, required: true },
+    type: {
+      type: String,
+      required: true,
+      enum: ['TEXT', 'COLOR', 'FONT', 'FONTSIZE', 'OPTION']
+    },
+    group: { type: String, required: false },
+    value: { type: mongoose.Schema.Types.Mixed, required: true },
+    options: { type: mongoose.Schema.Types.Mixed, required: false }
   },
-  group: { type: String, required: false },
-  value: { type: mongoose.Schema.Types.Mixed, required: true },
-  options: { type: mongoose.Schema.Types.Mixed, required: false }
-});
-const formFieldsSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  type: {
-    type: String,
-    required: true,
-    enum: ['TEXT', 'EMAIL', 'NUMBER', 'TEL', 'CHECKBOX', 'SELECT']
+  { _id: false }
+);
+const formFieldsSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    type: {
+      type: String,
+      required: true,
+      enum: ['TEXT', 'EMAIL', 'NUMBER', 'TEL', 'CHECKBOX', 'SELECT']
+    },
+    options: [{ type: String, required: true }]
   },
-  options: [{ type: String, required: true }]
-});
+  { _id: false }
+);
 const schema = new mongoose.Schema(
   {
     name: { type: String, required: false },
