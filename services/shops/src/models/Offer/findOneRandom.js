@@ -56,7 +56,7 @@ const buildViewAllowanceCriterias = (
   }
 ];
 
-const buildProductsCriteria = async (shopifyProductIds) => {
+const buildProductsCriterias = async (shopifyProductIds) => {
   const Collection = mongodbClient.connection.model('Collection');
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
@@ -96,7 +96,7 @@ const buildProductsCriteria = async (shopifyProductIds) => {
   return [upsellCriteria, nonUpsellCriteria];
 };
 
-const buildGeotargetingCriteria = (countryCode) => [
+const buildGeotargetingCriterias = (countryCode) => [
   {
     enableGeotargeting: false
   },
@@ -159,14 +159,14 @@ const findOneRandom = async (
     shopifyProductIds.map((shopifyProductId) => parseInt(shopifyProductId));
 
   criteria.$and.push({
-    $or: await buildProductsCriteria(shopifyProductIds)
+    $or: await buildProductsCriterias(shopifyProductIds)
   });
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData && geoData.country) {
     criteria.$and.push({
-      $or: buildGeotargetingCriteria(geoData.country)
+      $or: buildGeotargetingCriterias(geoData.country)
     });
   }
 
