@@ -38,6 +38,7 @@ const useDataBinding = ({
   const ViewModel = useCallback(
     function () {
       this.offeredProducts = () => offeredProducts;
+      this.addedQuantities = () => addedQuantities;
 
       this.subtotalFormatted = () => {
         const subtotal = this.selectedVariants().reduce(
@@ -162,6 +163,14 @@ const useDataBinding = ({
           );
         }, this);
 
+      this.replacingProductEnabled = () => {
+        const itemReplaced = !!Object.values(addedQuantities || {}).find(
+          (quantity) => quantity > 0
+        );
+
+        return !itemReplaced;
+      };
+
       this.addingProductBundleEnabled = knockout.computed(
         () =>
           this.selectedQuantities().every((selectedQuantity, index) => {
@@ -208,8 +217,8 @@ const useDataBinding = ({
         try {
           await onAddProduct(offerId, productId, variantId, quantity);
 
-          onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
           onQuantityAdd(productIndex, quantity);
+          onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
 
           productButton.removeAttribute('disabled');
         } catch (error) {
@@ -245,6 +254,7 @@ const useDataBinding = ({
             variantId
           );
 
+          onQuantityAdd(productIndex, 1);
           onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
 
           productButton.removeAttribute('disabled');
