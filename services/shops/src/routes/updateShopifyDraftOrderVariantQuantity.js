@@ -11,7 +11,7 @@ const handler = async (event, context) => {
     const shop = await Shop.findById(shopId);
     const { quantity } = JSON.parse(event.body);
 
-    const draftOrder = await shop.updateDraftOrderLineItemQuantity(
+    const draftOrder = await shop.updateShopifyDraftOrderVariantQuantity(
       draftOrderId,
       shopifyVariantId,
       quantity

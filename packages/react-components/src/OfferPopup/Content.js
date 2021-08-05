@@ -10,7 +10,7 @@ const Modal = styled.div`
   visibility: hidden;
   left: 0;
   right: 0;
-  top: 15%;
+  top: 8%;
   bottom: 0;
   padding: 14px;
   margin-right: 0;

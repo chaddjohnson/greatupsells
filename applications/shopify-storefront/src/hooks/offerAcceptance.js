@@ -8,13 +8,13 @@ const useOfferAcceptance = () => {
   const { trackOfferAcceptance } = useOfferTracking();
   const {
     shopifyCartItems,
-    addProductToShopifyCart,
-    replaceProductInShopifyCart
+    addVariantToShopifyCart,
+    replaceVariantInShopifyCart
   } = useShopifyCart();
   const {
     createShopifyDraftOrder,
-    addProductToShopifyDraftOrder,
-    removeDraftOrderLineItem
+    addVariantToShopifyDraftOrder,
+    removeShopifyDraftOrderVariant
   } = useShopifyDraftOrder();
 
   const addProduct = async (
@@ -35,11 +35,11 @@ const useOfferAcceptance = () => {
     );
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
-    await addProductToShopifyCart(shopifyVariantId, quantity);
+    await addVariantToShopifyCart(shopifyVariantId, quantity);
 
     // Add the variant to the existing draft order if one exists.
     if (draftOrderId) {
-      await addProductToShopifyDraftOrder(draftOrderId, {
+      await addVariantToShopifyDraftOrder(draftOrderId, {
         offerId,
         shopifyVariantId,
         quantity
@@ -116,7 +116,7 @@ const useOfferAcceptance = () => {
     );
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
-    await replaceProductInShopifyCart(
+    await replaceVariantInShopifyCart(
       triggerShopifyVariantId,
       shopifyVariantId,
       quantity
@@ -124,10 +124,13 @@ const useOfferAcceptance = () => {
 
     if (draftOrderId) {
       // Remove the trigger product from draft order.
-      await removeDraftOrderLineItem(draftOrderId, triggerShopifyVariantId);
+      await removeShopifyDraftOrderVariant(
+        draftOrderId,
+        triggerShopifyVariantId
+      );
 
       // Add the new variant to the existing draft order if one exists.
-      await addProductToShopifyDraftOrder(draftOrderId, {
+      await addVariantToShopifyDraftOrder(draftOrderId, {
         offerId,
         shopifyVariantId,
         quantity

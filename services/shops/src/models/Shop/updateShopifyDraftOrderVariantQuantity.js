@@ -1,4 +1,4 @@
-const updateDraftOrderLineItemQuantity = async (
+const updateShopifyDraftOrderVariantQuantity = async (
   shop,
   draftOrderId,
   shopifyVariantId,
@@ -85,4 +85,4 @@ const updateDraftOrderLineItemQuantity = async (
   return draftOrder;
 };
 
-module.exports = updateDraftOrderLineItemQuantity;
+module.exports = updateShopifyDraftOrderVariantQuantity;

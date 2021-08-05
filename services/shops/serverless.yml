@@ -331,8 +331,8 @@ functions:
           path: /collections/{collectionId}
           method: put
           authorizer: aws_iam
-  updateDraftOrderLineItemQuantity:
-    handler: src/routes/updateDraftOrderLineItemQuantity.handler
+  updateShopifyDraftOrderVariantQuantity:
+    handler: src/routes/updateShopifyDraftOrderVariantQuantity.handler
     events:
       - http:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items/{shopifyVariantId}

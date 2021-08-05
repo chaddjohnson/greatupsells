@@ -10,7 +10,7 @@ const useShopifyDraftOrder = () => {
     return draftOrder;
   };
 
-  const addProductToShopifyDraftOrder = async (
+  const addVariantToShopifyDraftOrder = async (
     draftOrderId,
     { offerId, shopifyVariantId, quantity = 1 }
   ) => {
@@ -24,7 +24,7 @@ const useShopifyDraftOrder = () => {
     return draftOrder;
   };
 
-  const updateDraftOrderLineItemQuantity = async (
+  const updateShopifyDraftOrderVariantQuantity = async (
     draftOrderId,
     shopifyVariantId,
     quantity
@@ -37,8 +37,11 @@ const useShopifyDraftOrder = () => {
     return draftOrder;
   };
 
-  const removeDraftOrderLineItem = async (draftOrderId, shopifyVariantId) => {
-    return await updateDraftOrderLineItemQuantity(
+  const removeShopifyDraftOrderVariant = async (
+    draftOrderId,
+    shopifyVariantId
+  ) => {
+    return await updateShopifyDraftOrderVariantQuantity(
       draftOrderId,
       shopifyVariantId,
       0
@@ -47,9 +50,9 @@ const useShopifyDraftOrder = () => {
 
   return {
     createShopifyDraftOrder,
-    addProductToShopifyDraftOrder,
-    updateDraftOrderLineItemQuantity,
-    removeDraftOrderLineItem
+    addVariantToShopifyDraftOrder,
+    updateShopifyDraftOrderVariantQuantity,
+    removeShopifyDraftOrderVariant
   };
 };
 

@@ -16,8 +16,8 @@ const CartInterceptor = () => {
   const { getCookie, removeCookie } = useCookies();
   const { shopifyCartItems } = useShopifyCart();
   const {
-    addProductToShopifyDraftOrder,
-    updateDraftOrderLineItemQuantity
+    addVariantToShopifyDraftOrder,
+    updateShopifyDraftOrderVariantQuantity
   } = useShopifyDraftOrder();
 
   const handleCartFormSubmit = useCallback((event) => {
@@ -103,7 +103,7 @@ const CartInterceptor = () => {
     // unnecessarily. Draft orders are only leveraged if one or more offers
     // have been accepted.
     if (shopifyVariantId && draftOrderId) {
-      await addProductToShopifyDraftOrder(draftOrderId, {
+      await addVariantToShopifyDraftOrder(draftOrderId, {
         shopifyVariantId
       });
 
@@ -119,7 +119,7 @@ const CartInterceptor = () => {
     let draftOrder = null;
 
     if (draftOrderId) {
-      draftOrder = await updateDraftOrderLineItemQuantity(
+      draftOrder = await updateShopifyDraftOrderVariantQuantity(
         draftOrderId,
         shopifyVariantId,
         quantity
