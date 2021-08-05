@@ -209,8 +209,8 @@ const OfferForm = ({
       setOfferPopupThemes([firstStrategyOfferPopupTheme, ...offerPopupThemes]);
     }
 
+    // Switch to the first strategy theme.
     if (firstStrategyOfferPopupTheme) {
-      // Use the copied theme.
       setPopupTheme(firstStrategyOfferPopupTheme);
     }
 
