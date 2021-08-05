@@ -14,6 +14,7 @@ const triggerEvent = 'ADD';
 const loadedAt = new Date();
 
 const ProductOffer = ({
+  shopifyCartItems,
   shopifyCartSubtotal,
   shopifyCartItemCount,
   viewingOffer,
@@ -31,7 +32,7 @@ const ProductOffer = ({
     shopifyProductIds,
     shouldQuery: productAdded && !!shopifyProductIds?.length
   });
-  const { addProduct } = useOfferAcceptance();
+  const { addProduct, replaceProduct } = useOfferAcceptance();
 
   const { offer, popupTheme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
@@ -135,15 +136,18 @@ const ProductOffer = ({
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
+      shopifyCartItems={shopifyCartItems}
       shopifyCartSubtotal={shopifyCartSubtotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
+      onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
   );
 };
 
 ProductOffer.propTypes = {
+  shopifyCartItems: PropTypes.array,
   shopifyCartSubtotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
@@ -152,6 +156,7 @@ ProductOffer.propTypes = {
 };
 
 ProductOffer.defaultProps = {
+  shopifyCartItems: [],
   viewingOffer: false,
   onOpen: () => {},
   onClose: () => {}

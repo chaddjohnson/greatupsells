@@ -25,12 +25,20 @@ const updateDraftOrderLineItemQuantity = async (
   const nonDiscountedLineItems = draftOrder.line_items.filter(
     (current) => !current.applied_discount
   );
-  const discountedLineItem = discountedLineItems.find(
+  const discountedLineItemIndex = discountedLineItems.findIndex(
     (current) => current.variant_id === shopifyVariantId
   );
-  const nonDiscountedLineItem = nonDiscountedLineItems.find(
+  const nonDiscountedLineItemIndex = nonDiscountedLineItems.findIndex(
     (current) => current.variant_id === shopifyVariantId
   );
+  const discountedLineItem = discountedLineItems[discountedLineItemIndex];
+  const nonDiscountedLineItem =
+    nonDiscountedLineItems[nonDiscountedLineItemIndex];
+
+  const shopifyVariantIndex =
+    nonDiscountedLineItemIndex > -1
+      ? nonDiscountedLineItemIndex
+      : discountedLineItemIndex;
 
   const lineItemQuantity =
     quantity === 0 ? 0 : Math.abs(quantity - discountedLineItem?.quantity);
@@ -48,10 +56,15 @@ const updateDraftOrderLineItemQuantity = async (
     }
   }
 
-  if (lineItemQuantity === 0) {
-    draftOrder.line_items = draftOrder.line_items.filter(
-      (current) => current.variant_id !== shopifyVariantId
-    );
+  // Remove the line item for the variant if the quantity is zero.
+  if (lineItemQuantity === 0 && shopifyVariantIndex > -1) {
+    // Remove the line item corresponding to the variant.
+    draftOrder.line_items = [
+      ...draftOrder.line_items.slice(0, shopifyVariantIndex),
+      ...draftOrder.line_items.slice(shopifyVariantIndex + 1)
+    ];
+
+    // Refresh the list of discounted line items.
     discountedLineItems = draftOrder.line_items.filter(
       (current) => !!current.applied_discount
     );

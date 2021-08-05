@@ -71,7 +71,42 @@ const useDataTranslation = (shop, offer) => {
     [formatCurrency, offer]
   );
 
-  return { translateProductData };
+  const translateTriggerProductData = useCallback(
+    (product = {}, shopifyCartItems = []) => {
+      const translatedData = translateProductData(product);
+
+      // Find the cart item corresponding to the product.
+      const shopifyCartItem = shopifyCartItems.find(
+        (item) => item.product_id === translatedData.id
+      );
+
+      // Find the specific variant.
+      const hasVariants = translatedData.variants.length > 1;
+      const variant =
+        hasVariants &&
+        shopifyCartItem &&
+        translatedData.variants.find(
+          (current) => current.id === shopifyCartItem.variant_id
+        );
+
+      // Use specific variant data for display for a better customer experience.
+      if (variant) {
+        translatedData.title =
+          shopifyCartItem.title ||
+          `${product.title} - ${variant.title}` ||
+          translatedData.title;
+        translatedData.image.src =
+          variant.image.src || translatedData.image.src;
+        translatedData.image.alt =
+          variant.image.alt || translatedData.image.alt;
+      }
+
+      return translatedData;
+    },
+    [translateProductData]
+  );
+
+  return { translateProductData, translateTriggerProductData };
 };
 
 export default useDataTranslation;

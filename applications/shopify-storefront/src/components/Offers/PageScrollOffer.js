@@ -14,6 +14,7 @@ const PageScrollOffer = ({
   popupTheme,
   triggerProduct,
   offeredProducts,
+  shopifyCartItems,
   shopifyCartSubtotal,
   shopifyCartItemCount,
   viewingOffer,
@@ -27,7 +28,7 @@ const PageScrollOffer = ({
   );
 
   const { trackOfferImpression } = useOfferTracking();
-  const { addProduct } = useOfferAcceptance();
+  const { addProduct, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -138,9 +139,11 @@ const PageScrollOffer = ({
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
+      shopifyCartItems={shopifyCartItems}
       shopifyCartSubtotal={shopifyCartSubtotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
+      onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
   );
@@ -151,6 +154,7 @@ PageScrollOffer.propTypes = {
   popupTheme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
+  shopifyCartItems: PropTypes.array,
   shopifyCartSubtotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
@@ -159,6 +163,7 @@ PageScrollOffer.propTypes = {
 };
 
 PageScrollOffer.defaultProps = {
+  shopifyCartItems: [],
   viewingOffer: false,
   onOpen: () => {},
   onClose: () => {}

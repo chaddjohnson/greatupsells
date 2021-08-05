@@ -37,10 +37,19 @@ const useShopifyDraftOrder = () => {
     return draftOrder;
   };
 
+  const removeDraftOrderLineItem = async (draftOrderId, shopifyVariantId) => {
+    return await updateDraftOrderLineItemQuantity(
+      draftOrderId,
+      shopifyVariantId,
+      0
+    );
+  };
+
   return {
     createShopifyDraftOrder,
     addProductToShopifyDraftOrder,
-    updateDraftOrderLineItemQuantity
+    updateDraftOrderLineItemQuantity,
+    removeDraftOrderLineItem
   };
 };
 

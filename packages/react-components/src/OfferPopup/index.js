@@ -29,9 +29,11 @@ const OfferPopup = ({
   offer,
   triggerProduct,
   offeredProducts,
+  shopifyCartItems,
   shopifyCartSubtotal,
   shopifyCartItemCount,
   onAddProduct,
+  onReplaceProduct,
   onClose,
   onClick
 }) => {
@@ -62,7 +64,10 @@ const OfferPopup = ({
   const [modalOpen, setModalOpen] = useState(designMode);
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
 
-  const { translateProductData } = useDataTranslation(shop, offer);
+  const {
+    translateProductData,
+    translateTriggerProductData
+  } = useDataTranslation(shop, offer);
 
   const iframeDocument =
     iframeRef?.contentWindow?.document ||
@@ -138,7 +143,7 @@ const OfferPopup = ({
 
   const translatedTriggerProduct = useMemo(() => {
     if (triggerProduct) {
-      return translateProductData(triggerProduct);
+      return translateTriggerProductData(triggerProduct, shopifyCartItems);
     }
   }, [triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -273,9 +278,9 @@ const OfferPopup = ({
     javascript,
     modalContentContainer: modalContentContainerRef,
     onAddProduct,
+    onReplaceProduct,
     onCheckoutUrlUpdate: setCheckoutUrl,
-    onQuantityAdd: handleQuantityAdd,
-    onClose: handleClose
+    onQuantityAdd: handleQuantityAdd
   });
 
   // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.
@@ -477,11 +482,13 @@ OfferPopup.propTypes = {
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
+  shopifyCartItems: PropTypes.array,
   shopifyCartSubtotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   onAddProduct: PropTypes.func,
+  onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,
   onClick: PropTypes.func
 };
@@ -492,7 +499,9 @@ OfferPopup.defaultProps = {
   designModeZoom: 1,
   triggerProduct: {},
   offeredProducts: [],
+  shopifyCartItems: [],
   onAddProduct: () => {},
+  onReplaceProduct: () => {},
   onClose: () => {}
 };
 

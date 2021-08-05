@@ -80,6 +80,7 @@ const Offers = () => {
         popupTheme={offerDataByTriggerEvent.EXIT?.popupTheme}
         triggerProduct={offerDataByTriggerEvent.EXIT?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.EXIT?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
         shopifyCartSubtotal={shopifyCartSubtotal}
         shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
@@ -91,6 +92,7 @@ const Offers = () => {
         popupTheme={offerDataByTriggerEvent.LINK?.popupTheme}
         triggerProduct={offerDataByTriggerEvent.LINK?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.LINK?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
         shopifyCartSubtotal={shopifyCartSubtotal}
         shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
@@ -102,6 +104,7 @@ const Offers = () => {
         popupTheme={offerDataByTriggerEvent.FOCUS?.popupTheme}
         triggerProduct={offerDataByTriggerEvent.FOCUS?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.FOCUS?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
         shopifyCartSubtotal={shopifyCartSubtotal}
         shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
@@ -114,6 +117,7 @@ const Offers = () => {
           popupTheme={offerDataByTriggerEvent.LOAD?.popupTheme}
           triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
           offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
+          shopifyCartItems={shopifyCartItems}
           shopifyCartSubtotal={shopifyCartSubtotal}
           shopifyCartItemCount={shopifyCartItemCount}
           viewingOffer={viewingOffer}
@@ -126,6 +130,7 @@ const Offers = () => {
         popupTheme={offerDataByTriggerEvent.SCROLL?.popupTheme}
         triggerProduct={offerDataByTriggerEvent.SCROLL?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.SCROLL?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
         shopifyCartSubtotal={shopifyCartSubtotal}
         shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}
@@ -133,6 +138,7 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <ProductOffer
+        shopifyCartItems={shopifyCartItems}
         shopifyCartSubtotal={shopifyCartSubtotal}
         shopifyCartItemCount={shopifyCartItemCount}
         viewingOffer={viewingOffer}

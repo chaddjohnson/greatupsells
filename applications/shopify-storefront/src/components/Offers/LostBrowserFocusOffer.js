@@ -14,6 +14,7 @@ const LostBrowserFocusOffer = ({
   popupTheme,
   triggerProduct,
   offeredProducts,
+  shopifyCartItems,
   shopifyCartSubtotal,
   shopifyCartItemCount,
   viewingOffer,
@@ -24,7 +25,7 @@ const LostBrowserFocusOffer = ({
   const [offerViewed, setOfferViewed] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
-  const { addProduct } = useOfferAcceptance();
+  const { addProduct, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -109,9 +110,11 @@ const LostBrowserFocusOffer = ({
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
+      shopifyCartItems={shopifyCartItems}
       shopifyCartSubtotal={shopifyCartSubtotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
+      onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
   );
@@ -122,6 +125,7 @@ LostBrowserFocusOffer.propTypes = {
   popupTheme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
+  shopifyCartItems: PropTypes.array,
   shopifyCartSubtotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
@@ -130,6 +134,7 @@ LostBrowserFocusOffer.propTypes = {
 };
 
 LostBrowserFocusOffer.defaultProps = {
+  shopifyCartItems: [],
   viewingOffer: false,
   onOpen: () => {},
   onClose: () => {}

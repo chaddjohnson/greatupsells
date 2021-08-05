@@ -62,15 +62,35 @@ const CartProvider = ({ children }) => {
     [shopifyCartItems]
   );
 
-  const addProductToShopifyCart = async (variantId, quantity) => {
+  const addProductToShopifyCart = async (shopifyVariantId, quantity) => {
     await httpClient.post('/cart/add.js', {
       items: [
         {
-          id: variantId,
+          id: shopifyVariantId,
           quantity
         }
       ]
     });
+  };
+
+  const removeProductFromShopifyCart = async (shopifyVariantId) => {
+    await httpClient.post('/cart/update.js', {
+      updates: {
+        [shopifyVariantId]: 0
+      }
+    });
+  };
+
+  const replaceProductInShopifyCart = async (
+    originalShopifyVariantId,
+    shopifyVariantId,
+    quantity
+  ) => {
+    // Remove the original variant from the cart.
+    await removeProductFromShopifyCart(originalShopifyVariantId);
+
+    // Add the new variant to the cart.
+    await addProductToShopifyCart(shopifyVariantId, quantity);
   };
 
   // Refresh the cart when an item is added.
@@ -96,7 +116,9 @@ const CartProvider = ({ children }) => {
         shopifyCartError,
         shopifyCartLoading,
         fetchShopifyCart,
-        addProductToShopifyCart
+        addProductToShopifyCart,
+        removeProductFromShopifyCart,
+        replaceProductInShopifyCart
       }}
     >
       {children}

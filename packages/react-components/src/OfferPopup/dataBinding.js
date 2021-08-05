@@ -16,6 +16,7 @@ const useDataBinding = ({
   javascript,
   modalContentContainer,
   onAddProduct,
+  onReplaceProduct,
   onCheckoutUrlUpdate,
   onQuantityAdd
 }) => {
@@ -220,8 +221,38 @@ const useDataBinding = ({
 
       this.handleAddProductBundle = async (event) => {
         // TODO
+      };
 
-        console.log('TODO');
+      this.handleReplaceProduct = async (
+        event,
+        triggerShopifyProductId,
+        productIndex
+      ) => {
+        const { viewModel } = iframe.contentWindow;
+        const productButton = event.target;
+        const offerId = offer._id;
+        const productId = viewModel.offeredProducts()[productIndex].id;
+        const variantId = viewModel.selectedVariants()[productIndex].id;
+
+        productButton.setAttribute('disabled', 'disabled');
+        productButton.classList.add('loading');
+
+        try {
+          await onReplaceProduct(
+            offerId,
+            triggerShopifyProductId,
+            productId,
+            variantId
+          );
+
+          onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
+
+          productButton.removeAttribute('disabled');
+        } catch (error) {
+          productButton.removeAttribute('disabled');
+        }
+
+        productButton.classList.remove('loading');
       };
     },
     [
@@ -231,6 +262,7 @@ const useDataBinding = ({
       addedQuantities,
       getCookie,
       onAddProduct,
+      onReplaceProduct,
       onCheckoutUrlUpdate,
       onQuantityAdd,
       formatCurrency

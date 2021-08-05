@@ -14,6 +14,7 @@ const ExitIntentOffer = ({
   popupTheme,
   triggerProduct,
   offeredProducts,
+  shopifyCartItems,
   shopifyCartSubtotal,
   shopifyCartItemCount,
   viewingOffer,
@@ -24,7 +25,7 @@ const ExitIntentOffer = ({
   const [offerViewed, setOfferViewed] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
-  const { addProduct } = useOfferAcceptance();
+  const { addProduct, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -197,9 +198,11 @@ const ExitIntentOffer = ({
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
+      shopifyCartItems={shopifyCartItems}
       shopifyCartSubtotal={shopifyCartSubtotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
+      onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
   );
@@ -210,6 +213,7 @@ ExitIntentOffer.propTypes = {
   popupTheme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
+  shopifyCartItems: PropTypes.array,
   shopifyCartSubtotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
@@ -218,6 +222,7 @@ ExitIntentOffer.propTypes = {
 };
 
 ExitIntentOffer.defaultProps = {
+  shopifyCartItems: [],
   viewingOffer: false,
   onOpen: () => {},
   onClose: () => {}
