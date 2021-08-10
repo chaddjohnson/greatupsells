@@ -60,7 +60,7 @@ const schema = new mongoose.Schema(
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     template: {
-      scripts: [{ type: String, required: true }],
+      scripts: [{ type: String, required: true, trim: true }],
       html: { type: String, required: false },
       css: { type: String, required: false },
       javascript: { type: String, required: false }
