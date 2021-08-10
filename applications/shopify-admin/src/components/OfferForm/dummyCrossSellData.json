@@ -230,6 +230,74 @@
   "offeredProducts": [
     {
       "shopifyProductData": {
+        "id": 4552007483437.0,
+        "title": "Fancy Hat",
+        "handle": "fancy-hat",
+        "variants": [
+          {
+            "id": 39586577711149.0,
+            "title": "Beige",
+            "price": "34.99",
+            "sku": "FH-W",
+            "image_id": 28537019367469.0,
+            "inventory_quantity": 10
+          },
+          {
+            "id": 39586577743917.0,
+            "title": "Khaki",
+            "price": "36.99",
+            "sku": "FH-R",
+            "image_id": 28537019400237.0,
+            "inventory_quantity": 10
+          },
+          {
+            "id": 39586577776685.0,
+            "title": "Black",
+            "price": "32.99",
+            "sku": "FH-B",
+            "image_id": 28537019334701.0,
+            "inventory_quantity": 10
+          },
+          {
+            "id": 39586577776686.0,
+            "title": "White",
+            "price": "32.99",
+            "sku": "FH-B",
+            "image_id": 28537019334702.0,
+            "inventory_quantity": 10
+          }
+        ],
+        "images": [
+          {
+            "id": 28537019367469.0,
+            "alt": null,
+            "src": "/images/cross-sell/hat/beige.jpg"
+          },
+          {
+            "id": 28537019400237.0,
+            "alt": null,
+            "src": "/images/cross-sell/hat/khaki.jpg"
+          },
+          {
+            "id": 28537019334701.0,
+            "alt": null,
+            "src": "/images/cross-sell/hat/black.jpg"
+          },
+          {
+            "id": 28537019334702.0,
+            "alt": null,
+            "src": "/images/cross-sell/hat/white.jpg"
+          }
+        ],
+        "image": {
+          "id": 28537019367469.0,
+          "alt": null,
+          "src": "/images/cross-sell/hat/beige.jpg"
+        }
+      }
+    },
+    {
+      "shopifyProductData": {
         "id": 6547332923437.0,
         "title": "Fancy Socks",
         "handle": "fancy-socks",
@@ -244,7 +312,7 @@
           },
           {
             "id": 39586674343981.0,
-            "title": "Sizes 5-10 / Pink",
+            "title": "Sizes 5-10 / Purple",
             "price": "18.99",
             "sku": "FSK-510-PK",
             "image_id": 28537321979949.0,
@@ -268,7 +336,7 @@
           },
           {
             "id": 39586674442285.0,
-            "title": "Sizes 10.5-13 / Pink",
+            "title": "Sizes 10.5-13 / Purple",
             "price": "18.99",
             "sku": "FSK-10513-PK",
             "image_id": 28537321979949.0,
@@ -292,7 +360,7 @@
           },
           {
             "id": 39586674540589.0,
-            "title": "Sizes 14+ / Pink",
+            "title": "Sizes 14+ / Purple",
             "price": "18.99",
             "sku": "FSK-14-PK",
             "image_id": 28537321979949.0,
@@ -316,7 +384,7 @@
           {
             "id": 28537321979949.0,
             "alt": null,
-            "src": "/images/cross-sell/socks/pink.jpg"
+            "src": "/images/cross-sell/socks/purple.jpg"
           },
           {
             "id": 28537322340397.0,
@@ -383,74 +451,6 @@
           "id": 28537472843821.0,
           "alt": null,
           "src": "/images/cross-sell/scarf/red.jpg"
-        }
-      }
-    },
-    {
-      "shopifyProductData": {
-        "id": 4552007483437.0,
-        "title": "Fancy Hat",
-        "handle": "fancy-hat",
-        "variants": [
-          {
-            "id": 39586577711149.0,
-            "title": "Beige",
-            "price": "34.99",
-            "sku": "FH-W",
-            "image_id": 28537019367469.0,
-            "inventory_quantity": 10
-          },
-          {
-            "id": 39586577743917.0,
-            "title": "Khaki",
-            "price": "36.99",
-            "sku": "FH-R",
-            "image_id": 28537019400237.0,
-            "inventory_quantity": 10
-          },
-          {
-            "id": 39586577776685.0,
-            "title": "Black",
-            "price": "32.99",
-            "sku": "FH-B",
-            "image_id": 28537019334701.0,
-            "inventory_quantity": 10
-          },
-          {
-            "id": 39586577776686.0,
-            "title": "White",
-            "price": "32.99",
-            "sku": "FH-B",
-            "image_id": 28537019334702.0,
-            "inventory_quantity": 10
-          }
-        ],
-        "images": [
-          {
-            "id": 28537019367469.0,
-            "alt": null,
-            "src": "/images/cross-sell/hat/beige.jpg"
-          },
-          {
-            "id": 28537019400237.0,
-            "alt": null,
-            "src": "/images/cross-sell/hat/khaki.jpg"
-          },
-          {
-            "id": 28537019334701.0,
-            "alt": null,
-            "src": "/images/cross-sell/hat/black.jpg"
-          },
-          {
-            "id": 28537019334702.0,
-            "alt": null,
-            "src": "/images/cross-sell/hat/white.jpg"
-          }
-        ],
-        "image": {
-          "id": 28537019367469.0,
-          "alt": null,
-          "src": "/images/cross-sell/hat/beige.jpg"
         }
       }
     }
