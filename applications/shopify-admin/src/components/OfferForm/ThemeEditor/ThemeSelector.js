@@ -292,7 +292,7 @@ const ThemeSelector = ({
                         <TextContainer>
                           <Banner>
                             Themes will adapt to work for both cross-selling and
-                            upselling based on the selected strategy.
+                            upselling strategies.
                           </Banner>
                         </TextContainer>
                       )}
