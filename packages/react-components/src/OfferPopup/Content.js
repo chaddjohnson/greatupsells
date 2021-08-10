@@ -13,16 +13,13 @@ const Modal = styled.div`
   bottom: 0;
   padding: 14px;
   margin-right: 0;
-  max-height: calc(100vh - 40px);
   transform: none;
-  overflow-y: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
 
   @media screen and (min-height: 768px) {
     top: 8%;
-    max-height: none;
   }
 
   @media screen and (min-width: 1024px) {
