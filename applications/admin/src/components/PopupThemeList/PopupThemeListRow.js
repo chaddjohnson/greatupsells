@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 200
   },
   thumbnailTableCell: {
-    minWidth: 100
+    minWidth: 100,
+    textAlign: 'center'
   },
   thumbnail: {
     width: 'auto',
