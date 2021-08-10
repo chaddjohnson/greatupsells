@@ -31,7 +31,7 @@ const ColorEditor = ({ variables, onChange }) => {
                   label={variable.label}
                   value={variable.value}
                   allowAlpha={variable.options?.allowAlpha}
-                  onChange={(value) => onChange(variable.name, value)}
+                  onChange={(value) => onChange(variable._id, value)}
                 />
               ))}
             </FormLayout>

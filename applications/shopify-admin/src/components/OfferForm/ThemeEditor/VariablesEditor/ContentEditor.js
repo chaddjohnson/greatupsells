@@ -31,7 +31,7 @@ const ContentEditor = ({ variables, onChange }) => {
                   type="text"
                   label={variable.label}
                   value={variable.value}
-                  onChange={(value) => onChange(variable.name, value)}
+                  onChange={(value) => onChange(variable._id, value)}
                 />
               ))}
             </FormLayout>

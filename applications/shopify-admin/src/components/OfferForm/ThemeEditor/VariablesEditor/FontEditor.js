@@ -23,7 +23,7 @@ const FontEditor = ({ variables, onChange }) => (
               type="text"
               label={variable.label}
               value={variable.value}
-              onChange={(newValue) => onChange(variable.name, newValue)}
+              onChange={(newValue) => onChange(variable._id, newValue)}
             />
           ))}
         </FormLayout>
