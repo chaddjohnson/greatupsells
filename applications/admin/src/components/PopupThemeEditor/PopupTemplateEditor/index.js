@@ -4,7 +4,8 @@ import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import CodeEditor from './CodeEditor';
-import dummyData from '../../dummyData.json';
+import dummyData from '../../dummyCrossSellData.json';
+// import dummyData from '../../dummyUpsellData.json';
 
 const useStyles = makeStyles((theme) => ({
   root: {

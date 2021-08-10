@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import Link from '../Link';
 import PopupThemeMenu from './PopupThemeMenu';
-import dummyData from '../dummyData.json';
+import dummyData from '../dummyCrossSellData.json';
+// import dummyData from '../dummyUpsellData.json';
 
 const strategyMap = {
   UPSELL: 'Upsell',

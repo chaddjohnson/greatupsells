@@ -15,7 +15,8 @@ import OfferProductsEditor from './OfferProductsEditor';
 import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
-import dummyData from './dummyData.json';
+import dummyCrossSellData from './dummyCrossSellData.json';
+import dummyUpsellData from './dummyUpsellData.json';
 
 let themeCount = 0;
 
@@ -58,6 +59,7 @@ const OfferForm = ({
   let contextualSaveBar = null;
 
   const app = useContext(AppBridgeContext);
+
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
   const [designMode, setDesignMode] = useState(true);
@@ -187,6 +189,9 @@ const OfferForm = ({
       offer: offer._id
     });
   };
+
+  const dummyData =
+    offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
 
   const handleStrategyChange = (value) => {
     const firstStrategyPopupTheme = popupThemes.find(
