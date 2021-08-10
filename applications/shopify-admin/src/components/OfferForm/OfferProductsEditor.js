@@ -95,7 +95,7 @@ const OfferProductsEditor = ({
                   {
                     label: 'Offer products in a bundle',
                     helpText:
-                      'All products presented in the offer will be bundled and added to the cart together on acceptance. Bundling helps increase average order value.',
+                      'All products presented in the offer will be bundled and added to the cart together on acceptance, if supported by the theme. Bundling helps increase average order value.',
                     value: 'true'
                   }
                 ]}
