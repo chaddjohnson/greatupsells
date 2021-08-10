@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
@@ -37,12 +38,18 @@ const App = ({ Component, pageProps }) => {
   const shopOrigin = cookies.get('shopOrigin');
   const authToken = cookies.get('authToken');
 
+  const [mounted, setMounted] = useState(false);
+
   // Copy cookie values to session storage so that multiple instances of this app may
   // be used across multiple shops simultaneously.
   if (typeof window !== 'undefined') {
     sessionStorage.shopOrigin = shopOrigin;
     sessionStorage.authToken = authToken;
   }
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <AppProvider i18n={translations} linkComponent={Link}>
@@ -56,16 +63,18 @@ const App = ({ Component, pageProps }) => {
         <HttpClientProvider httpClient={httpClient}>
           <ShopProvider>
             <RoutePropagator />
-            {typeof window !== 'undefined' && window.top !== window.self && (
-              <ErrorBoundary>
-                <Main>
-                  <Component {...pageProps} />
-                </Main>
-              </ErrorBoundary>
-            )}
-            {typeof window !== 'undefined' && window.top === window.self && (
-              <p>Loading...</p>
-            )}
+            {mounted &&
+              typeof window !== 'undefined' &&
+              window.top !== window.self && (
+                <ErrorBoundary>
+                  <Main>
+                    <Component {...pageProps} />
+                  </Main>
+                </ErrorBoundary>
+              )}
+            {mounted &&
+              typeof window !== 'undefined' &&
+              window.top === window.self && <p>Loading...</p>}
           </ShopProvider>
         </HttpClientProvider>
       </AppBridgeProvider>
