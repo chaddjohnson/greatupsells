@@ -92,7 +92,7 @@ const initialValues = {
   name: '',
   displayOrder: 1,
   strategy: 'UPSELL',
-  category: '',
+  categories: [],
   thumbnailImageUrl: '',
   description: '',
   template: {

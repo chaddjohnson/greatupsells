@@ -22,6 +22,16 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
     });
   };
 
+  const handleCategoriesChange = (event) => {
+    const { value = '' } = event.target;
+    const categories = value.split(',');
+
+    onChange({
+      ...popupTheme,
+      categories
+    });
+  };
+
   const handleReferenceUrlButtonClick = () => {
     const isExternal = !!popupTheme.referenceUrl?.match(/^https?:\/\//);
     const isDataUrl = !!popupTheme.referenceUrl?.match(/^data:/);
@@ -105,13 +115,13 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <TextField
-            name="category"
-            label="Category"
+            name="categories"
+            label="Categories (comma-delimited)"
             margin="normal"
             variant="outlined"
             required
-            value={popupTheme.category}
-            onChange={handleChange}
+            value={popupTheme.categories.join(',')}
+            onChange={handleCategoriesChange}
           />
         </FormControl>
         <FormControl fullWidth>

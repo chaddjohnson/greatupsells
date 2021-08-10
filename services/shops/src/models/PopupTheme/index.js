@@ -56,7 +56,7 @@ const schema = new mongoose.Schema(
       required: true,
       enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
     },
-    category: { type: String, required: true },
+    categories: [{ type: String, required: true, trim: true }],
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     template: {

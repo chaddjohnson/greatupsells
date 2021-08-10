@@ -34,7 +34,7 @@ const PopupThemeList = ({ popupThemes, onClonePopupTheme }) => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Strategy</TableCell>
-                  <TableCell>Category</TableCell>
+                  <TableCell>Categories</TableCell>
                   <TableCell>Preview</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
