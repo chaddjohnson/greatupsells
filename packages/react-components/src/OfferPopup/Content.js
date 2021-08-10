@@ -4,20 +4,26 @@ const Modal = styled.div`
   position: fixed;
   background: none;
   border: none;
-  margin-right: 0;
   outline: none;
   z-index: 20;
   visibility: hidden;
   left: 0;
   right: 0;
-  top: 8%;
+  top: 0;
   bottom: 0;
   padding: 14px;
   margin-right: 0;
+  max-height: calc(100vh - 40px);
   transform: none;
+  overflow-y: auto;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
+
+  @media screen and (min-height: 768px) {
+    top: 8%;
+    max-height: none;
+  }
 
   @media screen and (min-width: 1024px) {
     left: 50%;

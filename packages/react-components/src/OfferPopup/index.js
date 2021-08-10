@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
-import { StyleSheetManager } from 'styled-components';
+import { createGlobalStyle, StyleSheetManager } from 'styled-components';
 import { useLiquid } from 'react-liquid';
 import {
   useCookies,
@@ -17,6 +17,13 @@ import ContentContainer from './ContentContainer';
 import Mask from './Mask';
 
 const initialIframeHeight = 1000;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    overflow: ${(props) =>
+      props.modalOpen && !props.designMode ? 'hidden !important' : 'auto'};
+  }
+`;
 
 const OfferPopup = ({
   className,
@@ -363,114 +370,117 @@ const OfferPopup = ({
 
   // Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
   return (
-    <iframe
-      className={className}
-      title="Preview"
-      ref={setIframeRef}
-      style={{
-        border: 0,
-        position: designMode ? 'static' : 'fixed',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        width: designMode ? '100%' : '100vw',
-        height: designMode ? '100%' : '100vh',
-        minHeight: `${iframeHeight}px`,
-        zIndex: 2147483647
-      }}
-    >
-      {iframeHeadNode &&
-        createPortal(
-          <>
-            <meta charSet="UTF-8" />
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link
-              rel="preconnect"
-              href="https://fonts.gstatic.com"
-              crossOrigin
-            />
-            <link
-              href="https://fonts.googleapis.com/icon?family=Material+Icons"
-              rel="stylesheet"
-            />
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
+    <>
+      <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
+      <iframe
+        className={className}
+        title="Preview"
+        ref={setIframeRef}
+        style={{
+          border: 0,
+          position: designMode ? 'static' : 'fixed',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: designMode ? '100%' : '100vw',
+          height: designMode ? '100%' : '100vh',
+          minHeight: designMode ? `${iframeHeight}px` : 0,
+          zIndex: 2147483647
+        }}
+      >
+        {iframeHeadNode &&
+          createPortal(
+            <>
+              <meta charSet="UTF-8" />
+              <link rel="preconnect" href="https://fonts.googleapis.com" />
+              <link
+                rel="preconnect"
+                href="https://fonts.gstatic.com"
+                crossOrigin
+              />
+              <link
+                href="https://fonts.googleapis.com/icon?family=Material+Icons"
+                rel="stylesheet"
+              />
+              <style
+                dangerouslySetInnerHTML={{
+                  __html: `
                   body {
                     margin: 0;
                     padding: 0;
                   }
                   ${css}
                 `
-              }}
-            />
-          </>,
-          iframeHeadNode
-        )}
-      {iframeBodyNode &&
-        createPortal(
-          <>
-            <StyleSheetManager target={iframeHeadNode}>
-              <ReactModal
-                contentRef={setModalRef}
-                closeTimeoutMS={333}
-                parentSelector={() => iframeBodyNode}
-                isOpen={modalOpen}
-                shouldFocusAfterRender={!designMode}
-                shouldCloseOnOverlayClick={offer.enableMaskClose}
-                shouldCloseOnEsc={offer.enableEscClose}
-                contentLabel="Offer Modal"
-                className={clsx(
-                  designMode && 'design-mode',
-                  modalOpen && designMode && 'open',
-                  modalAfterOpen && 'open',
-                  !!offer.animation && !designMode && offer.animation
-                )}
-                overlayClassName={clsx(
-                  'overlay',
-                  !!offer.animation && !designMode && 'animated'
-                )}
-                overlayElement={(overlayProps, contentElement) => (
-                  <>
-                    {contentElement}
-                    <Overlay
-                      {...overlayProps}
+                }}
+              />
+            </>,
+            iframeHeadNode
+          )}
+        {iframeBodyNode &&
+          createPortal(
+            <>
+              <StyleSheetManager target={iframeHeadNode}>
+                <ReactModal
+                  contentRef={setModalRef}
+                  closeTimeoutMS={333}
+                  parentSelector={() => iframeBodyNode}
+                  isOpen={modalOpen}
+                  shouldFocusAfterRender={!designMode}
+                  shouldCloseOnOverlayClick={offer.enableMaskClose}
+                  shouldCloseOnEsc={offer.enableEscClose}
+                  contentLabel="Offer Modal"
+                  className={clsx(
+                    designMode && 'design-mode',
+                    modalOpen && designMode && 'open',
+                    modalAfterOpen && 'open',
+                    !!offer.animation && !designMode && offer.animation
+                  )}
+                  overlayClassName={clsx(
+                    'overlay',
+                    !!offer.animation && !designMode && 'animated'
+                  )}
+                  overlayElement={(overlayProps, contentElement) => (
+                    <>
+                      {contentElement}
+                      <Overlay
+                        {...overlayProps}
+                        style={{
+                          background: maskBackgroundColor
+                        }}
+                      />
+                    </>
+                  )}
+                  contentElement={(contentProps, children) => (
+                    <Content
+                      {...contentProps}
                       style={{
-                        background: maskBackgroundColor
+                        zoom: designMode ? designModeZoom : 1
                       }}
-                    />
-                  </>
-                )}
-                contentElement={(contentProps, children) => (
-                  <Content
-                    {...contentProps}
+                    >
+                      {children}
+                    </Content>
+                  )}
+                  onRequestClose={handleClose}
+                  onAfterOpen={handleAfterOpen}
+                >
+                  <ContentContainer
+                    className="content-container"
+                    ref={setModalContentContainerRef}
+                    forceDisplayType={forceDisplayType}
+                    dangerouslySetInnerHTML={{ __html: html }}
                     style={{
-                      zoom: designMode ? designModeZoom : 1
+                      maxWidth: forceDisplayType === 'mobile' ? '375px' : '100%'
                     }}
-                  >
-                    {children}
-                  </Content>
-                )}
-                onRequestClose={handleClose}
-                onAfterOpen={handleAfterOpen}
-              >
-                <ContentContainer
-                  className="content-container"
-                  ref={setModalContentContainerRef}
-                  forceDisplayType={forceDisplayType}
-                  dangerouslySetInnerHTML={{ __html: html }}
-                  style={{
-                    maxWidth: forceDisplayType === 'mobile' ? '375px' : '100%'
-                  }}
-                />
-                {designMode && <Mask onClick={onClick} />}
-              </ReactModal>
-            </StyleSheetManager>
-          </>,
-          iframeBodyNode
-        )}
-    </iframe>
+                  />
+                  {designMode && <Mask onClick={onClick} />}
+                </ReactModal>
+              </StyleSheetManager>
+            </>,
+            iframeBodyNode
+          )}
+      </iframe>
+    </>
   );
 };
 
