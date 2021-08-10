@@ -33,7 +33,7 @@ const formFieldsSchema = new mongoose.Schema(
       required: true,
       enum: ['TEXT', 'EMAIL', 'NUMBER', 'TEL', 'CHECKBOX', 'SELECT']
     },
-    options: [{ type: String, required: true }]
+    options: { type: mongoose.Schema.Types.Mixed, required: false }
   },
   { _id: false }
 );
