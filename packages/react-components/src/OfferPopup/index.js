@@ -187,12 +187,12 @@ const OfferPopup = ({
   );
 
   // Generate the markup.
-  let { markup: html } = useLiquid(theme.template.html, {
+  const { markup: html } = useLiquid(theme.template.html, {
     ...templateVariables,
     submitHandler: 'window.parent.OfferPopup.submit(event)',
     closeHandler: 'window.parent.OfferPopup.close()'
   });
-  const { markup: css } = useLiquid(theme.template.css, templateVariables);
+  let { markup: css } = useLiquid(theme.template.css, templateVariables);
   const { markup: javascript } = useLiquid(theme.template.javascript, {
     ...templateVariables,
     submitHandler: 'window.parent.OfferPopup.submit(event)',
@@ -255,14 +255,14 @@ const OfferPopup = ({
   // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
   if (forceDisplayType === 'desktop') {
     // Add "device" to media queries if missing.
-    html = html?.replace(
-      /(\(\s*)(min|max)-(width|height)(\s*:)/,
+    css = css?.replace(
+      /(\(\s*)(min|max)-(width|height)(\s*:)/g,
       '$1$2-device-$3$4'
     );
   } else if (forceDisplayType === 'mobile') {
     // Remove "device" from media queries if present.
-    html = html?.replace(
-      /(\(\s*)(min|max)-device-(width|height)(\s*:)/,
+    css = css?.replace(
+      /(\(\s*)(min|max)-device-(width|height)(\s*:)/g,
       '$1$2-$3$4'
     );
   }
@@ -385,6 +385,7 @@ const OfferPopup = ({
           right: 0,
           width: designMode ? '100%' : '100vw',
           height: designMode ? '100%' : '100vh',
+          maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none',
           minHeight: designMode ? `${iframeHeight}px` : 0,
           zIndex: 2147483647
         }}
@@ -467,11 +468,7 @@ const OfferPopup = ({
                   <ContentContainer
                     className="content-container"
                     ref={setModalContentContainerRef}
-                    forceDisplayType={forceDisplayType}
                     dangerouslySetInnerHTML={{ __html: html }}
-                    style={{
-                      maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none'
-                    }}
                   />
                   {designMode && <Mask onClick={onClick} />}
                 </ReactModal>
