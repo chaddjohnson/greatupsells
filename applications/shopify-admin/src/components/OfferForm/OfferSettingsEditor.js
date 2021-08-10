@@ -44,6 +44,8 @@ const OfferSettingsEditor = ({
   triggerScrollThreshold,
   triggerPage,
   triggerPagePath,
+  triggerProducts,
+  triggerCollections,
   discountType,
   discountTitle,
   actionButtonBehavior,
@@ -334,7 +336,7 @@ const OfferSettingsEditor = ({
                 onChange={() => setTriggerProductPickerOpen(true)}
               />
               <ProductResourceList
-                items={offer.triggerProducts}
+                items={triggerProducts}
                 // onChange={triggerProducts.onChange}
                 // onRemoveItem={triggerProducts => setOffer({ ...offer, triggerProducts })}
               />
@@ -351,7 +353,7 @@ const OfferSettingsEditor = ({
                 onChange={() => setTriggerCollectionPickerOpen(true)}
               />
               <ProductResourceList
-                items={offer.triggerCollections}
+                items={triggerCollections}
                 // onChange={triggerCollections.onChange}
                 // onRemoveItem={triggerCollections => setOffer({ ...offer, triggerCollections })}
               />
@@ -500,7 +502,8 @@ const OfferSettingsEditor = ({
                   suffix={discountType.value === 'PERCENTAGE' && '%'}
                   placeholder={
                     (discountType.value === 'AMOUNT' && '0.00') ||
-                    (discountType.value === 'SET_PRICE' && '0.00')
+                    (discountType.value === 'SET_PRICE' && '0.00') ||
+                    undefined
                   }
                   // {...discountValue}
                 />
@@ -512,7 +515,8 @@ const OfferSettingsEditor = ({
                 placeholder={
                   (discountType.value === 'PERCENTAGE' && '10% off') ||
                   (discountType.value === 'AMOUNT' && '$10 off') ||
-                  (discountType.value === 'SET_PRICE' && 'Discounted price')
+                  (discountType.value === 'SET_PRICE' && 'Discounted price') ||
+                  undefined
                 }
                 helpText="This will show as a discount description for order line items."
                 {...discountTitle}
@@ -557,6 +561,8 @@ OfferSettingsEditor.propTypes = {
   triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
+  triggerProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  triggerCollections: PropTypes.arrayOf(PropTypes.object).isRequired,
   discountType: PropTypes.object.isRequired,
   discountTitle: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
