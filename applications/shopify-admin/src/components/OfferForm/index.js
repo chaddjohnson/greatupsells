@@ -194,6 +194,8 @@ const OfferForm = ({
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
 
   const handleStrategyChange = (value) => {
+    const selectedThemeUsesSelectedStrategy =
+      popupTheme.strategies.indexOf(value) > -1;
     const firstStrategyPopupTheme = popupThemes.find(
       (current) => current.strategies.indexOf(value) > -1
     );
@@ -215,7 +217,7 @@ const OfferForm = ({
     }
 
     // Switch to the first strategy theme.
-    if (firstStrategyOfferPopupTheme) {
+    if (firstStrategyOfferPopupTheme && !selectedThemeUsesSelectedStrategy) {
       setPopupTheme(firstStrategyOfferPopupTheme);
     }
 
