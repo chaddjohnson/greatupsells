@@ -5,8 +5,6 @@ import {
   DisplayText,
   TextField,
   Button,
-  Popover,
-  ChoiceList,
   Card,
   Tabs,
   Icon,
@@ -20,7 +18,7 @@ import {
   Stack
 } from '@shopify/polaris';
 import { SearchMinor, MobileCancelMajor } from '@shopify/polaris-icons';
-import { sortBy, groupBy } from 'lodash';
+import { sortBy } from 'lodash';
 import styled from 'styled-components';
 
 const InnerWrapper = styled.div`
@@ -89,65 +87,6 @@ const ThemeDescription = styled.div`
   visibility: hidden;
 `;
 
-const SearchFilter = ({ strategy, category, onChange }) => {
-  const [active, setActive] = useState(false);
-
-  const choices = useMemo(() => {
-    if (strategy === 'UPSELL') {
-      return [{ value: 'Upselling', label: 'Upselling' }];
-    } else if (strategy === 'CROSS_SELL') {
-      return [{ value: 'Cross-selling', label: 'Cross-selling' }];
-    } else if (strategy === 'POPUP') {
-      return [
-        { value: '', label: 'All' },
-        { value: 'Email', label: 'Email' },
-        { value: 'Newsletter', label: 'Newsletter signup' },
-        { value: 'Survey', label: 'Survey' }
-      ];
-    } else {
-      return [];
-    }
-  }, [strategy]);
-
-  // TODO: Select the first available choice when `strategy` changes.
-
-  const handleChange = ([value]) => {
-    onChange(value);
-  };
-
-  return (
-    <Popover
-      active={active}
-      activator={
-        <Button disclosure onClick={() => setActive(!active)}>
-          Category
-        </Button>
-      }
-      preferredAlignment="right"
-      sectioned
-      onClose={() => setActive(false)}
-    >
-      <ChoiceList
-        title="Category"
-        titleHidden
-        choices={choices}
-        selected={category}
-        onChange={handleChange}
-      />
-    </Popover>
-  );
-};
-
-SearchFilter.propTypes = {
-  strategy: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-  onChange: PropTypes.func
-};
-
-SearchFilter.defaultProps = {
-  onChange: () => {}
-};
-
 const ThemeOption = ({ theme }) => (
   <ThemeOptionWrapper>
     <div className="preview">
@@ -211,36 +150,29 @@ const ThemeSelector = ({
     )?.__id_offerForm
   ]);
   const [offerThemeSelected, setOfferThemeSelected] = useState(true);
-  const [category, setCategory] = useState('');
 
-  const strategyThemes = useMemo(() => {
+  const themeOptions = useMemo(() => {
+    let strategyThemes = [];
+
     if (strategy === 'UPSELL') {
-      return themes.filter((current) => {
+      strategyThemes = themes.filter((current) => {
         return current.strategy === 'UPSELL';
       });
     } else if (strategy === 'CROSS_SELL') {
-      return themes.filter((current) => {
+      strategyThemes = themes.filter((current) => {
         return current.strategy === 'CROSS_SELL';
       });
     } else if (strategy === 'POPUP') {
-      return themes.filter((current) => {
+      strategyThemes = themes.filter((current) => {
         return current.strategy === 'POPUP';
       });
     }
-  }, [strategy, themes]);
 
-  const themeOptions = useMemo(() => {
-    const categoryThemes = groupBy(strategyThemes, 'category');
-    const categoryNames = Object.keys(categoryThemes).sort();
-
-    return categoryNames.map((categoryName) => ({
-      title: categoryName,
-      options: categoryThemes[categoryName].map((categoryTheme) => ({
-        value: categoryTheme._id,
-        label: <ThemeOption theme={categoryTheme} />
-      }))
+    return strategyThemes.map((strategyTheme) => ({
+      value: strategyTheme._id,
+      label: <ThemeOption theme={strategyTheme} />
     }));
-  }, [strategyThemes]);
+  }, [strategy, themes]);
 
   const offerThemeOptions = useMemo(() => {
     const sortedOfferThemes = sortBy(offerThemes, (offerTheme) => {
@@ -260,15 +192,6 @@ const ThemeSelector = ({
 
   const handleTabChange = (index) => {
     setSelectedTabIndex(index);
-  };
-
-  const handleCategoryChange = (value) => {
-    setCategory(value);
-
-    // TODO: Filter available templates within this component (`strategyThemes`?).
-
-    // TODO: Set theme to first theme in available categories on strategy change?
-    // Maybe this doesn't make sense since categories are already filtered based on `strategy`.
   };
 
   const handleThemeSelect = (value) => {
@@ -357,18 +280,11 @@ const ThemeSelector = ({
                         type="search"
                         placeholder="Search"
                         prefix={<Icon source={SearchMinor} />}
-                        connectedRight={
-                          <SearchFilter
-                            strategy={strategy}
-                            category={category}
-                            onChange={handleCategoryChange}
-                          />
-                        }
                         onChange={() => {}}
                       />
                       <Card>
                         <OptionList
-                          sections={themeOptions}
+                          options={themeOptions}
                           selected={selectedTheme}
                           onChange={handleThemeSelect}
                         />
