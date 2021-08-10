@@ -470,7 +470,7 @@ const OfferPopup = ({
                     forceDisplayType={forceDisplayType}
                     dangerouslySetInnerHTML={{ __html: html }}
                     style={{
-                      maxWidth: forceDisplayType === 'mobile' ? '375px' : '100%'
+                      maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none'
                     }}
                   />
                   {designMode && <Mask onClick={onClick} />}
