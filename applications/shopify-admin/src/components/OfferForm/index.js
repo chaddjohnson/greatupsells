@@ -195,12 +195,12 @@ const OfferForm = ({
 
   const handleStrategyChange = (value) => {
     const firstStrategyPopupTheme = popupThemes.find(
-      (current) => current.strategy === value
+      (current) => current.strategies.indexOf(value) > -1
     );
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
     let firstStrategyOfferPopupTheme = offerPopupThemes.find(
-      (current) => current.strategy === value
+      (current) => current.strategies.indexOf(value) > -1
     );
 
     strategy.onChange(value);

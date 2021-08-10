@@ -154,17 +154,18 @@ const ThemeSelector = ({
   const themeOptions = useMemo(() => {
     let strategyThemes = [];
 
+    // Filter by strategy.
     if (strategy === 'UPSELL') {
       strategyThemes = themes.filter((current) => {
-        return current.strategy === 'UPSELL';
+        return current.strategies.indexOf('UPSELL') > -1;
       });
     } else if (strategy === 'CROSS_SELL') {
       strategyThemes = themes.filter((current) => {
-        return current.strategy === 'CROSS_SELL';
+        return current.strategies.indexOf('CROSS_SELL') > -1;
       });
     } else if (strategy === 'POPUP') {
       strategyThemes = themes.filter((current) => {
-        return current.strategy === 'POPUP';
+        return current.strategies.indexOf('POPUP') > -1;
       });
     }
 
@@ -175,7 +176,7 @@ const ThemeSelector = ({
   }, [strategy, themes]);
 
   const offerThemeOptions = useMemo(() => {
-    const sortedOfferThemes = sortBy(offerThemes, (offerTheme) => {
+    let sortedOfferThemes = sortBy(offerThemes, (offerTheme) => {
       // Display the current theme first.
       if (offerTheme.__id_offerForm === theme?.__id_offerForm) {
         return -1;
@@ -184,11 +185,16 @@ const ThemeSelector = ({
       return offerTheme.displayOrder;
     });
 
+    // Filter by strategy.
+    sortedOfferThemes = sortedOfferThemes.filter(
+      (current) => current.strategies.indexOf(strategy) > -1
+    );
+
     return sortedOfferThemes.map((offerTheme) => ({
       value: offerTheme.__id_offerForm,
       label: <ThemeOption theme={offerTheme} />
     }));
-  }, [offerThemes, theme]);
+  }, [offerThemes, theme, strategy]);
 
   const handleTabChange = (index) => {
     setSelectedTabIndex(index);
@@ -272,9 +278,9 @@ const ThemeSelector = ({
                   {!offerThemeOptions?.length && <EmptyComponent />}
                 </Stack>
               )}
-              {tabs[selectedTabIndex].id === 'explore' &&
-                themeOptions?.length > 0 && (
-                  <>
+              {tabs[selectedTabIndex].id === 'explore' && (
+                <>
+                  {themeOptions?.length > 0 && (
                     <Stack vertical spacing="tight">
                       <TextField
                         type="search"
@@ -282,6 +288,14 @@ const ThemeSelector = ({
                         prefix={<Icon source={SearchMinor} />}
                         onChange={() => {}}
                       />
+                      {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
+                        <TextContainer>
+                          <Banner>
+                            Themes will adapt to work for both cross-selling and
+                            upselling based on the selected strategy.
+                          </Banner>
+                        </TextContainer>
+                      )}
                       <Card>
                         <OptionList
                           options={themeOptions}
@@ -290,9 +304,10 @@ const ThemeSelector = ({
                         />
                       </Card>
                     </Stack>
-                    {!themeOptions?.length && <EmptyComponent />}
-                  </>
-                )}
+                  )}
+                  {!themeOptions?.length && <EmptyComponent />}
+                </>
+              )}
             </SearchWrapper>
           </Tabs>
         </Scrollable>

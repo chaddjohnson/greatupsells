@@ -51,11 +51,13 @@ const schema = new mongoose.Schema(
       required: false
     },
     displayOrder: { type: Int32, required: false },
-    strategy: {
-      type: String,
-      required: true,
-      enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
-    },
+    strategies: [
+      {
+        type: String,
+        required: true,
+        enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
+      }
+    ],
     categories: [{ type: String, required: true, trim: true }],
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },

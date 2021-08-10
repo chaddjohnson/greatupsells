@@ -8,18 +8,39 @@ import {
   InputLabel,
   MenuItem,
   InputAdornment,
-  IconButton
+  IconButton,
+  Chip
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { OpenInNew as OpenInNewIcon } from '@material-ui/icons';
 
+const useStyles = makeStyles((theme) => ({
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    margin: 2
+  },
+  multiselectMenu: {
+    maxHeight: theme.spacing(6) * 4.5 + theme.spacing(1),
+    width: 250
+  }
+}));
+
 const PopupSettingsEditor = ({ popupTheme, onChange }) => {
+  const classes = useStyles();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    onChange({
-      ...popupTheme,
-      [name]: value
-    });
+    onChange({ ...popupTheme, [name]: value });
+  };
+
+  const handleChangeStrategy = (event) => {
+    const { value: strategies } = event.target;
+
+    onChange({ ...popupTheme, strategies });
   };
 
   const handleCategoriesChange = (event) => {
@@ -84,14 +105,27 @@ const PopupSettingsEditor = ({ popupTheme, onChange }) => {
           />
         </FormControl>
         <FormControl variant="outlined" margin="normal" fullWidth>
-          <InputLabel id="type-label">Strategy</InputLabel>
+          <InputLabel id="type-label">Strategies</InputLabel>
           <Select
-            name="strategy"
-            labelId="strategy"
-            label="Strategy"
+            name="strategies"
+            labelId="strategies"
+            label="Strategies"
+            multiple
             required
-            value={popupTheme.strategy}
-            onChange={handleChange}
+            value={popupTheme.strategies}
+            renderValue={(selected) => (
+              <div className={classes.chips}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} className={classes.chip} />
+                ))}
+              </div>
+            )}
+            MenuProps={{
+              PaperProps: {
+                className: classes.multiselectMenu
+              }
+            }}
+            onChange={handleChangeStrategy}
           >
             <MenuItem value="UPSELL">Upsell</MenuItem>
             <MenuItem value="CROSS_SELL">Cross-sell</MenuItem>

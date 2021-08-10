@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   nameTableCell: {
     minWidth: 400
   },
-  strategyTableCell: {
+  strategiesTableCell: {
     minWidth: 200
   },
   categoriesTableCell: {
@@ -71,8 +71,10 @@ const PopupThemeListRow = ({ popupTheme, onClonePopupTheme, ...props }) => {
       <TableCell className={classes.nameTableCell}>
         <Link href={`/popup-themes/${popupTheme._id}`}>{popupTheme.name}</Link>
       </TableCell>
-      <TableCell className={classes.strategyTableCell}>
-        {strategyMap[popupTheme.strategy] || popupTheme.strategy}
+      <TableCell className={classes.strategiesTableCell}>
+        {popupTheme.strategies.map(
+          (strategy) => strategyMap[strategy] || strategy
+        )}
       </TableCell>
       <TableCell className={classes.categoriesTableCell}>
         {popupTheme.categories.join(', ')}

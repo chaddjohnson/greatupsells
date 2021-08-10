@@ -91,7 +91,7 @@ const initialVariables = [
 const initialValues = {
   name: '',
   displayOrder: 1,
-  strategy: 'UPSELL',
+  strategies: ['UPSELL', 'CROSS_SELL'],
   categories: [],
   thumbnailImageUrl: '',
   description: '',
