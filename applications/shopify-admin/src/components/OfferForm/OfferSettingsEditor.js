@@ -23,7 +23,9 @@ import ProductResourceList from './ProductResourceList';
 import Link from '../Link';
 
 const DiscountValueInputWrapper = styled.div`
-  max-width: 170px;
+  .Polaris-TextField {
+    max-width: 170px;
+  }
 `;
 
 const TriggerScrollThresholdWrapper = styled.div`
@@ -47,6 +49,7 @@ const OfferSettingsEditor = ({
   triggerProducts,
   triggerCollections,
   discountType,
+  discountValue,
   discountTitle,
   actionButtonBehavior,
   actionButtonLink,
@@ -67,6 +70,11 @@ const OfferSettingsEditor = ({
     triggerPagePathPopoverActive,
     setTriggerPagePathPopoverActive
   ] = useState(false);
+  const [discountValueInternal, setDiscountValueInternal] = useState(
+    discountType.value === 'PERCENTAGE' && discountValue.value
+      ? discountValue.value * 100
+      : discountValue.value
+  );
 
   const { locale, countryCode, currency } = shop || {};
   const { getCurrencySymbol } = useNumberFormatter({
@@ -76,7 +84,62 @@ const OfferSettingsEditor = ({
   });
   const currencySymbol = getCurrencySymbol();
 
-  const handleTriggerPageChange = ([value]) => {
+  const handleActionButtonBehaviorChange = (value) => {
+    actionButtonBehavior.onChange(value);
+
+    if (value !== 'LINK') {
+      actionButtonLink.onChange(undefined);
+      actionButtonLinkOpenInNewTab.onChange(false);
+    }
+  };
+
+  const handleTriggerEventChange = (value) => {
+    if (value !== 'SCROLL') {
+      triggerScrollThreshold.onChange(undefined);
+    }
+
+    triggerEvent.onChange(value);
+  };
+
+  const handleViewAllowanceChange = (value) => {
+    if (value === 'DAYS') {
+      viewAllowanceDays.onChange('7');
+    } else {
+      viewAllowanceDays.onChange(undefined);
+    }
+
+    viewAllowance.onChange(value);
+  };
+
+  const handleDiscountTypeChange = (value) => {
+    if (discountType.value === 'NO_DISCOUNT') {
+      discountValue.onChange(undefined);
+      discountTitle.onChange(undefined);
+    }
+
+    discountType.onChange(value);
+
+    setDiscountValueInternal(undefined);
+    discountValue.onChange(undefined);
+  };
+
+  const handleDiscountValueChange = (value) => {
+    setDiscountValueInternal(value);
+
+    discountValue.onChange(
+      discountType.value === 'PERCENTAGE' && value ? value * 100 : value
+    );
+  };
+
+  const handleDiscountValueBlur = () => {
+    if (discountValueInternal) {
+      setDiscountValueInternal(parseFloat(discountValueInternal)?.toFixed(2));
+    }
+
+    discountValue.onBlur();
+  };
+
+  const handleTriggerPageChange = (value) => {
     if (triggerPage.value !== 'PAGE') {
       triggerPagePath.onChange(undefined);
     }
@@ -171,12 +234,8 @@ const OfferSettingsEditor = ({
                     isSelected && (
                       <TriggerScrollThresholdWrapper>
                         <TextField
-                          type="number"
                           inputMode="numeric"
                           suffix="%"
-                          min={1}
-                          max={100}
-                          step={1}
                           {...triggerScrollThreshold}
                           error={submitted && triggerScrollThreshold.error}
                         />
@@ -198,7 +257,7 @@ const OfferSettingsEditor = ({
                 }
               ]}
               selected={triggerEvent.value}
-              onChange={([value]) => triggerEvent.onChange(value)}
+              onChange={([value]) => handleTriggerEventChange(value)}
             />
           </FormLayout>
         </Card.Section>
@@ -291,7 +350,7 @@ const OfferSettingsEditor = ({
                 }
               ]}
               selected={triggerPage.value}
-              onChange={handleTriggerPageChange}
+              onChange={([value]) => handleTriggerPageChange(value)}
             />
           </FormLayout>
         </Card.Section>
@@ -391,10 +450,7 @@ const OfferSettingsEditor = ({
                 isSelected && (
                   <ViewAllowanceDaysInputWrapper>
                     <TextField
-                      type="number"
                       inputMode="numeric"
-                      min={1}
-                      step={1}
                       suffix="days"
                       {...viewAllowanceDays}
                       error={submitted && viewAllowanceDays.error}
@@ -422,7 +478,7 @@ const OfferSettingsEditor = ({
             }
           ]}
           selected={viewAllowance.value}
-          onChange={([value]) => viewAllowance.onChange(value)}
+          onChange={([value]) => handleViewAllowanceChange(value)}
         />
       </Card>
       <Card title="Action button behavior" sectioned>
@@ -463,12 +519,17 @@ const OfferSettingsEditor = ({
             }
           ]}
           selected={actionButtonBehavior.value}
-          onChange={([value]) => actionButtonBehavior.onChange(value)}
+          onChange={([value]) => handleActionButtonBehaviorChange(value)}
         />
       </Card>
       {offer.strategy !== 'POPUP' && (
         <Card title="Discount" sectioned>
           <FormLayout>
+            <Banner status="warning">
+              Due to technical limitations, discount codes cannot be used with
+              orders containing{' '}
+              {offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'} items.
+            </Banner>
             <ChoiceList
               choices={[
                 {
@@ -489,7 +550,7 @@ const OfferSettingsEditor = ({
                 }
               ]}
               selected={discountType.value}
-              onChange={([value]) => discountType.onChange(value)}
+              onChange={([value]) => handleDiscountTypeChange(value)}
             />
             {discountType.value !== 'NO_DISCOUNT' && (
               <DiscountValueInputWrapper>
@@ -505,7 +566,13 @@ const OfferSettingsEditor = ({
                     (discountType.value === 'SET_PRICE' && '0.00') ||
                     undefined
                   }
-                  // {...discountValue}
+                  helpText="The discount amount applied to the offered items added to the cart."
+                  inputMode="numeric"
+                  {...discountValue}
+                  value={discountValueInternal?.toString()}
+                  error={submitted && discountValue.error}
+                  onChange={handleDiscountValueChange}
+                  onBlur={handleDiscountValueBlur}
                 />
               </DiscountValueInputWrapper>
             )}
@@ -564,6 +631,7 @@ OfferSettingsEditor.propTypes = {
   triggerProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
   triggerCollections: PropTypes.arrayOf(PropTypes.object).isRequired,
   discountType: PropTypes.object.isRequired,
+  discountValue: PropTypes.object.isRequired,
   discountTitle: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,

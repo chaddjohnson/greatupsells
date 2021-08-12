@@ -42,7 +42,7 @@ const QuantityInputWrapper = styled.div`
     align-items: center;
   }
   .Polaris-TextField {
-    max-width: 170px;
+    max-width: 140px;
   }
 `;
 
@@ -125,10 +125,7 @@ const ProductResourceList = ({ items, onChange, onRemoveItem }) => {
                         minQuantitiesChecked[index] && (
                           <QuantityInputWrapper>
                             <TextField
-                              type="number"
                               inputMode="numeric"
-                              min={0}
-                              step={1}
                               suffix="items"
                               {...minQuantity}
                             />
@@ -146,10 +143,7 @@ const ProductResourceList = ({ items, onChange, onRemoveItem }) => {
                         maxQuantitiesChecked[index] && (
                           <QuantityInputWrapper>
                             <TextField
-                              type="number"
                               inputMode="numeric"
-                              min={1}
-                              step={1}
                               suffix="items"
                               {...maxQuantity}
                             />

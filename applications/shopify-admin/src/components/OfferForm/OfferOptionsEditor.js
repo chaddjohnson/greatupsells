@@ -13,7 +13,7 @@ import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
 const SecondsInputWrapper = styled.div`
-  max-width: 165px;
+  max-width: 145px;
 `;
 
 const AnimationSelectWrapper = styled.div`
@@ -82,10 +82,8 @@ const OfferOptionsEditor = ({
             delaySecondsActive && (
               <SecondsInputWrapper>
                 <TextField
-                  type="number"
                   inputMode="numeric"
                   min={0}
-                  step={0.25}
                   suffix="seconds"
                   {...delaySeconds}
                   error={submitted && delaySeconds.error}
@@ -102,10 +100,7 @@ const OfferOptionsEditor = ({
             onPageRequiredSecondsActive && (
               <SecondsInputWrapper>
                 <TextField
-                  type="number"
                   inputMode="numeric"
-                  min={0}
-                  step={1}
                   suffix="seconds"
                   {...onPageRequiredSeconds}
                   error={submitted && onPageRequiredSeconds.error}

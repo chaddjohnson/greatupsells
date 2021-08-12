@@ -118,8 +118,6 @@ const initialOffer = {
   hideOutOfStockProducts: true,
   enableEscClose: false,
   enableMaskClose: false,
-  // discountCodes
-  // discountPricingMethod
   enabled: true
 };
 

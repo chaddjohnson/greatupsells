@@ -122,8 +122,6 @@ const schema = new mongoose.Schema(
     hideOutOfStockProducts: { type: Boolean, required: true, default: true },
     enableEscClose: { type: Boolean, required: false, default: false },
     enableMaskClose: { type: Boolean, required: false, default: false },
-    // discountCodes
-    // discountPricingMethod
     enabled: { type: Boolean, required: true, default: true }
   },
   schemaOptions

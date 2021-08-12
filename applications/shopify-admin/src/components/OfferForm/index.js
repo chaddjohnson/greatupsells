@@ -83,6 +83,7 @@ const OfferForm = ({
     triggerPage,
     triggerPagePath,
     discountType,
+    discountValue,
     discountTitle,
     offeredProducts,
     offeredCollections,
@@ -122,7 +123,7 @@ const OfferForm = ({
       offeredCollections,
       // minimumProductsQuantity,
       discountType,
-      // discountValue,
+      discountValue,
       discountTitle,
       triggerProducts,
       triggerCollections,
@@ -184,7 +185,7 @@ const OfferForm = ({
     }),
     [initialOffer, fields]
   );
-
+  console.log(offer);
   const copyTheme = (value) => {
     return assignId({
       ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
@@ -311,6 +312,7 @@ const OfferForm = ({
             triggerProducts={triggerProducts}
             triggerCollections={triggerCollections}
             discountType={discountType}
+            discountValue={discountValue}
             discountTitle={discountTitle}
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
