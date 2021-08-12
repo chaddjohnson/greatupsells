@@ -66,10 +66,10 @@ const ProductResourceList = ({ items, onChange, onRemoveItem }) => {
     );
 
     if (checked) {
-      items[index].minQuantity.onChange('1');
+      items[index].minQuantity?.onChange('1');
     }
     if (!checked) {
-      items[index].minQuantity.onChange(undefined);
+      items[index].minQuantity?.onChange(undefined);
     }
   };
 
@@ -81,10 +81,10 @@ const ProductResourceList = ({ items, onChange, onRemoveItem }) => {
     );
 
     if (checked) {
-      items[index].maxQuantity.onChange('1');
+      items[index].maxQuantity?.onChange('1');
     }
     if (!checked) {
-      items[index].maxQuantity.onChange(undefined);
+      items[index].maxQuantity?.onChange(undefined);
     }
   };
 
