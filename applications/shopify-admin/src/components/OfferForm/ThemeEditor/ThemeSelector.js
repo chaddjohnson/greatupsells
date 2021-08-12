@@ -154,17 +154,20 @@ const ThemeSelector = ({
   const themeOptions = useMemo(() => {
     let strategyThemes = [];
 
+    // Filter for enabled themes.
+    strategyThemes = themes.filter(({ enabled }) => enabled);
+
     // Filter by strategy.
     if (strategy === 'UPSELL') {
-      strategyThemes = themes.filter((current) => {
+      strategyThemes = strategyThemes.filter((current) => {
         return current.strategies.indexOf('UPSELL') > -1;
       });
     } else if (strategy === 'CROSS_SELL') {
-      strategyThemes = themes.filter((current) => {
+      strategyThemes = strategyThemes.filter((current) => {
         return current.strategies.indexOf('CROSS_SELL') > -1;
       });
     } else if (strategy === 'POPUP') {
-      strategyThemes = themes.filter((current) => {
+      strategyThemes = strategyThemes.filter((current) => {
         return current.strategies.indexOf('POPUP') > -1;
       });
     }
