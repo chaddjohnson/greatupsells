@@ -19,6 +19,12 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
+    delete data.impressionCount;
+    delete data.acceptanceCount;
+    delete data.conversionCount;
+    delete data.conversionRate;
+    delete data.revenueIncrease;
+
     Object.assign(offer, data);
 
     try {

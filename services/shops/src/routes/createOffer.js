@@ -8,6 +8,13 @@ const handler = async (event, context) => {
   try {
     const Offer = await models.get('Offer');
     const data = JSON.parse(event.body);
+
+    delete data.impressionCount;
+    delete data.acceptanceCount;
+    delete data.conversionCount;
+    delete data.conversionRate;
+    delete data.revenueIncrease;
+
     const offer = new Offer(data);
 
     try {
