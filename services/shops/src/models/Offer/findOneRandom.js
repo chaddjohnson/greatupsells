@@ -98,7 +98,7 @@ const buildProductsCriterias = async (shopifyProductIds) => {
 
 const buildGeotargetingCriterias = (countryCode) => [
   {
-    enableGeotargeting: false
+    geotargetingCountries: { $size: 0 }
   },
   {
     geotargetingCountries: countryCode

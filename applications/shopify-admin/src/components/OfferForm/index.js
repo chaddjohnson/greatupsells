@@ -89,7 +89,6 @@ const OfferForm = ({
     offeredCollections,
     triggerProducts,
     triggerCollections,
-    enableGeotargeting,
     geotargetingCountries,
     animation,
     actionButtonBehavior,
@@ -127,7 +126,6 @@ const OfferForm = ({
       discountTitle,
       triggerProducts,
       triggerCollections,
-      enableGeotargeting,
       geotargetingCountries,
       animation,
       actionButtonBehavior,
@@ -185,7 +183,7 @@ const OfferForm = ({
     }),
     [initialOffer, fields]
   );
-  console.log(offer);
+
   const copyTheme = (value) => {
     return assignId({
       ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
@@ -373,7 +371,6 @@ const OfferForm = ({
             onShowEndDateChange={() => setShowEndDate(!showEndDate)}
           />
           <OfferGeotargetingEditor
-            enableGeotargeting={enableGeotargeting}
             geotargetingCountries={geotargetingCountries}
             submitted={submitted}
           />

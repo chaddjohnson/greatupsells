@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Stack, Checkbox } from '@shopify/polaris';
-import { asChoiceField } from '@shopify/react-form';
 import CountryAutocomplete from './CountryAutocomplete';
 
-const OfferGeotargetingEditor = ({
-  enableGeotargeting,
-  geotargetingCountries,
-  submitted
-}) => {
-  const handleEnableGeotargeting = (value) => {
-    enableGeotargeting.onChange(value);
+const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
+  const [enableGeotargeting, setEnableGeotargeting] = useState(
+    geotargetingCountries.value.length > 0
+  );
 
-    if (!value) {
+  const handleEnableGeotargeting = (checked) => {
+    setEnableGeotargeting(checked);
+
+    if (!checked) {
       geotargetingCountries.onChange([]);
     }
   };
@@ -22,10 +21,10 @@ const OfferGeotargetingEditor = ({
       <Stack vertical>
         <Checkbox
           label="Restrict offer to specific countries"
-          {...asChoiceField(enableGeotargeting)}
+          checked={enableGeotargeting}
           onChange={handleEnableGeotargeting}
         />
-        {enableGeotargeting.value && (
+        {enableGeotargeting && (
           <CountryAutocomplete
             label="Countries"
             placeholder="Search"
@@ -40,7 +39,6 @@ const OfferGeotargetingEditor = ({
 };
 
 OfferGeotargetingEditor.propTypes = {
-  enableGeotargeting: PropTypes.object.isRequired,
   geotargetingCountries: PropTypes.object.isRequired,
   submitted: PropTypes.bool
 };

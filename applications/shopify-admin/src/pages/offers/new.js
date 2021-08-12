@@ -105,7 +105,6 @@ const initialOffer = {
   triggerPage: 'ANY',
   triggerProducts: [],
   triggerCollections: [],
-  enableGeotargeting: false,
   geotargetingCountries: [],
   animation: 'effect-slide-in-scale',
   startAt: new Date().toISOString(),

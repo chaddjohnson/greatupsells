@@ -109,7 +109,6 @@ const schema = new mongoose.Schema(
     triggerProducts: [offerProductSchema],
     triggerCollections: [offerCollectionSchema],
     enableBundling: { type: Boolean, required: true, default: false },
-    enableGeotargeting: { type: Boolean, required: true, default: false },
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },
     startAt: { type: Date, required: true },
