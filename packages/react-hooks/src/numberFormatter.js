@@ -25,7 +25,7 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
       if (numberFormatter?.format) {
         return (
           numberFormatter.format(
-            Math.round(value * 10 ** decimals) / 10 ** decimals
+            Math.round(parseFloat(value) * 10 ** decimals) / 10 ** decimals
           ) || value
         );
       }
@@ -58,7 +58,7 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     (value, decimals = 2) => {
       if (numberFormatter?.format) {
         const formattedValue =
-          Math.round(value * 100 * 10 ** decimals) / 10 ** decimals;
+          Math.round(parseFloat(value) * 100 * 10 ** decimals) / 10 ** decimals;
 
         return typeof formattedValue === 'number'
           ? `${numberFormatter.format(formattedValue)}%`
