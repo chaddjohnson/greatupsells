@@ -184,13 +184,13 @@ const OfferSettingsEditor = ({
                 helpText:
                   'Encourage customers to purchase a comparable, more expensive product.',
                 value: 'UPSELL'
-              },
-              {
-                label: 'Popup',
-                helpText:
-                  'Display a popup for email collection, newsletter signups, surveys, sales, promotions, and general information.',
-                value: 'POPUP'
               }
+              // {
+              //   label: 'Popup',
+              //   helpText:
+              //     'Display a popup for email collection, newsletter signups, surveys, sales, promotions, and general information.',
+              //   value: 'POPUP'
+              // }
             ]}
             selected={strategy.value}
             onChange={([value]) => onStrategyChange(value)}
