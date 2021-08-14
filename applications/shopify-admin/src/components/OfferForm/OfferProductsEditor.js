@@ -121,6 +121,7 @@ const OfferProductsEditor = ({
             />
             <Checkbox
               label="Disable out of stock variants"
+              helpText="Out of stock variants will be disabled, and products with no in-stock variants will be not be shown."
               {...asChoiceField(disableOutOfStockVariants)}
             />
           </FormLayout>
