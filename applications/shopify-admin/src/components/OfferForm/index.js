@@ -98,7 +98,7 @@ const OfferForm = ({
     viewAllowanceDays,
     startAt,
     endAt,
-    hideOutOfStockProducts,
+    disableOutOfStockVariants,
     delaySeconds,
     onPageRequiredSeconds,
     enableEscClose,
@@ -135,7 +135,7 @@ const OfferForm = ({
       viewAllowanceDays,
       startAt,
       endAt,
-      hideOutOfStockProducts,
+      disableOutOfStockVariants,
       delaySeconds,
       onPageRequiredSeconds,
       enableEscClose,
@@ -325,7 +325,7 @@ const OfferForm = ({
               offer={offer}
               offeredProducts={offeredProducts}
               offeredCollections={offeredCollections}
-              hideOutOfStockProducts={hideOutOfStockProducts}
+              disableOutOfStockVariants={disableOutOfStockVariants}
               enableBundling={enableBundling}
               enableVariantSelection={enableVariantSelection}
               enableQuantitySelection={enableQuantitySelection}

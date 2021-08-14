@@ -114,7 +114,7 @@ const initialOffer = {
   enableBundling: false,
   enableVariantSelection: true,
   enableQuantitySelection: true,
-  hideOutOfStockProducts: true,
+  disableOutOfStockVariants: true,
   enableEscClose: false,
   enableMaskClose: false,
   enabled: true

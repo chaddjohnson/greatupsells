@@ -171,8 +171,7 @@ const OfferPopup = ({
       strategy: offer.strategy,
       enableBundling: offer.enableBundling,
       enableVariantSelection: offer.enableVariantSelection,
-      enableQuantitySelection: offer.enableQuantitySelection,
-      hideOutOfStockProducts: offer.hideOutOfStockProducts
+      enableQuantitySelection: offer.enableQuantitySelection
     }),
     [
       mappedVariables,

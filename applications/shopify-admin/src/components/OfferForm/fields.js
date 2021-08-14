@@ -171,7 +171,9 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [showEndDate, startAt.value]
   );
-  const hideOutOfStockProducts = useField(initialOffer.hideOutOfStockProducts);
+  const disableOutOfStockVariants = useField(
+    initialOffer.disableOutOfStockVariants
+  );
   const delaySeconds = useField({
     value: initialOffer.delaySeconds?.toString(),
     validates: [
@@ -249,7 +251,7 @@ const useFields = (initialOffer, showEndDate) => {
     viewAllowanceDays,
     startAt,
     endAt,
-    hideOutOfStockProducts,
+    disableOutOfStockVariants,
     delaySeconds,
     onPageRequiredSeconds,
     enableEscClose,

@@ -19,7 +19,7 @@
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableProductLinks": true,
-    "hideOutOfStockProducts": true,
+    "disableOutOfStockVariants": true,
     "delaySeconds": 0,
     "enableEscClose": true,
     "enableMaskClose": true,
@@ -32,23 +32,23 @@
     "actionButtonBehavior": "CART",
     "offeredProducts": [
       {
-        "title": "Fancy Hat",
-        "imageUrl": "/images/hat.jpg",
-        "shopifyProductId": 4474376290349,
+        "title": "Better Shoes",
+        "imageUrl": "/images/upsell/better/black.jpg",
+        "shopifyProductId": 6671390801965,
         "minQuantity": 2,
         "maxQuantity": 5
       },
       {
         "title": "Fancy Shoes",
-        "imageUrl": "/images/shoes.jpg",
-        "shopifyProductId": 4552007483437,
+        "imageUrl": "/images/upsell/fancy/dark-blue.jpg",
+        "shopifyProductId": 6671402762285,
         "minQuantity": 1,
         "maxQuantity": 5
       },
       {
-        "title": "Fancy Socks",
-        "imageUrl": "/images/socks.jpg",
-        "shopifyProductId": 6547332923437,
+        "title": "Super Fancy Shoes",
+        "imageUrl": "/images/upsell/super-fancy/black.jpg",
+        "shopifyProductId": 6671415181357,
         "maxQuantity": 5
       }
     ],
@@ -78,7 +78,9 @@
           "price": "55.00",
           "sku": "SS-8-BL",
           "image_id": 28507478786093.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170763309.0,
@@ -86,7 +88,9 @@
           "price": "55.00",
           "sku": "SS-8-RD",
           "image_id": 28507490025517.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170796077.0,
@@ -94,7 +98,9 @@
           "price": "55.00",
           "sku": "SS-8-GR",
           "image_id": 28507490746413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170828845.0,
@@ -102,7 +108,9 @@
           "price": "55.00",
           "sku": "SS-8-BK",
           "image_id": 28507492286509.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170861613.0,
@@ -110,7 +118,9 @@
           "price": "55.00",
           "sku": "SS-8-WH",
           "image_id": 28507495923757.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170894381.0,
@@ -118,7 +128,9 @@
           "price": "55.00",
           "sku": "SS-9-BL",
           "image_id": 28507478786093.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170927149.0,
@@ -126,7 +138,9 @@
           "price": "55.00",
           "sku": "SS-9-RD",
           "image_id": 28507490025517.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170959917.0,
@@ -134,7 +148,9 @@
           "price": "55.00",
           "sku": "SS-9-GR",
           "image_id": 28507490746413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574170992685.0,
@@ -142,7 +158,9 @@
           "price": "55.00",
           "sku": "SS-9-BK",
           "image_id": 28507492286509.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171025453.0,
@@ -150,7 +168,9 @@
           "price": "55.00",
           "sku": "SS-9-WH",
           "image_id": 28507495923757.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171058221.0,
@@ -158,7 +178,9 @@
           "price": "55.00",
           "sku": "SS-10-BL",
           "image_id": 28507478786093.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171090989.0,
@@ -166,7 +188,9 @@
           "price": "55.00",
           "sku": "SS-10-RD",
           "image_id": 28507490025517.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171123757.0,
@@ -174,7 +198,9 @@
           "price": "55.00",
           "sku": "SS-10-GR",
           "image_id": 28507490746413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171156525.0,
@@ -182,7 +208,9 @@
           "price": "55.00",
           "sku": "SS-10-BK",
           "image_id": 28507492286509.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171189293.0,
@@ -190,7 +218,9 @@
           "price": "55.00",
           "sku": "SS-10-WH",
           "image_id": 28507495923757.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171222061.0,
@@ -198,7 +228,9 @@
           "price": "55.00",
           "sku": "SS-11-BL",
           "image_id": 28507478786093.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171254829.0,
@@ -206,7 +238,9 @@
           "price": "55.00",
           "sku": "SS-11-RD",
           "image_id": 28507490025517.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171287597.0,
@@ -214,7 +248,9 @@
           "price": "55.00",
           "sku": "SS-11-GR",
           "image_id": 28507490746413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171320365.0,
@@ -222,7 +258,9 @@
           "price": "55.00",
           "sku": "SS-11-BK",
           "image_id": 28507492286509.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171353133.0,
@@ -230,7 +268,9 @@
           "price": "55.00",
           "sku": "SS-11-WH",
           "image_id": 28507495923757.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171385901.0,
@@ -238,7 +278,9 @@
           "price": "55.00",
           "sku": "SS-12-BL",
           "image_id": 28507478786093.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171418669.0,
@@ -246,7 +288,9 @@
           "price": "55.00",
           "sku": "SS-12-RD",
           "image_id": 28507490025517.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171451437.0,
@@ -254,7 +298,9 @@
           "price": "55.00",
           "sku": "SS-12-GR",
           "image_id": 28507490746413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171484205.0,
@@ -262,7 +308,9 @@
           "price": "55.00",
           "sku": "SS-12-BK",
           "image_id": 28507492286509.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39574171516973.0,
@@ -270,7 +318,9 @@
           "price": "55.00",
           "sku": "SS-12-WH",
           "image_id": 28507495923757.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         }
       ],
       "images": [
@@ -320,7 +370,9 @@
             "price": "70.00",
             "sku": "BS-8-BL",
             "image_id": 28507537276973.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206283821.0,
@@ -328,7 +380,9 @@
             "price": "70.00",
             "sku": "BS-8-WH",
             "image_id": 28507538292781.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206316589.0,
@@ -336,7 +390,9 @@
             "price": "70.00",
             "sku": "BS-9-BL",
             "image_id": 28507537276973.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206349357.0,
@@ -344,7 +400,9 @@
             "price": "70.00",
             "sku": "BS-9-WH",
             "image_id": 28507538292781.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206382125.0,
@@ -352,7 +410,9 @@
             "price": "70.00",
             "sku": "BS-10-BL",
             "image_id": 28507537276973.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206414893.0,
@@ -360,7 +420,9 @@
             "price": "70.00",
             "sku": "BS-10-WH",
             "image_id": 28507538292781.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206447661.0,
@@ -368,7 +430,9 @@
             "price": "70.00",
             "sku": "BS-11-BL",
             "image_id": 28507537276973.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206480429.0,
@@ -376,7 +440,9 @@
             "price": "70.00",
             "sku": "BS-11-WH",
             "image_id": 28507538292781.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206513197.0,
@@ -384,7 +450,9 @@
             "price": "70.00",
             "sku": "BS-12-BL",
             "image_id": 28507537276973.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574206545965.0,
@@ -392,7 +460,9 @@
             "price": "70.00",
             "sku": "BS-12-WH",
             "image_id": 28507538292781.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [
@@ -426,7 +496,9 @@
             "price": "150.00",
             "sku": "FS-8-DB",
             "image_id": 28507582234669.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221750317.0,
@@ -434,7 +506,9 @@
             "price": "150.00",
             "sku": "FS-8-DG",
             "image_id": 28507587706925.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221783085.0,
@@ -442,7 +516,9 @@
             "price": "150.00",
             "sku": "FS-8-WH",
             "image_id": 28507592130605.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221815853.0,
@@ -450,7 +526,9 @@
             "price": "150.00",
             "sku": "FS-9-DB",
             "image_id": 28507582234669.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221848621.0,
@@ -458,7 +536,9 @@
             "price": "150.00",
             "sku": "FS-9-DG",
             "image_id": 28507587706925.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221881389.0,
@@ -466,7 +546,9 @@
             "price": "150.00",
             "sku": "FS-9-WH",
             "image_id": 28507592130605.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221914157.0,
@@ -474,7 +556,9 @@
             "price": "150.00",
             "sku": "FS-10-DB",
             "image_id": 28507582234669.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221946925.0,
@@ -482,7 +566,9 @@
             "price": "150.00",
             "sku": "FS-10-DG",
             "image_id": 28507587706925.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574221979693.0,
@@ -490,7 +576,9 @@
             "price": "150.00",
             "sku": "FS-10-WH",
             "image_id": 28507592130605.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222012461.0,
@@ -498,7 +586,9 @@
             "price": "150.00",
             "sku": "FS-11-DB",
             "image_id": 28507582234669.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222045229.0,
@@ -506,7 +596,9 @@
             "price": "150.00",
             "sku": "FS-11-DG",
             "image_id": 28507587706925.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222077997.0,
@@ -514,7 +606,9 @@
             "price": "150.00",
             "sku": "FS-11-WH",
             "image_id": 28507592130605.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222110765.0,
@@ -522,7 +616,9 @@
             "price": "150.00",
             "sku": "FS-12-DB",
             "image_id": 28507582234669.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222143533.0,
@@ -530,7 +626,9 @@
             "price": "150.00",
             "sku": "FS-12-DG",
             "image_id": 28507587706925.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574222176301.0,
@@ -538,7 +636,9 @@
             "price": "150.00",
             "sku": "FS-12-WH",
             "image_id": 28507592130605.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [
@@ -577,7 +677,9 @@
             "price": "225.00",
             "sku": "SFS-8-BL",
             "image_id": 28507625193517.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238134317.0,
@@ -585,7 +687,9 @@
             "price": "225.00",
             "sku": "SFS-8-WH",
             "image_id": 28507628699693.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238167085.0,
@@ -593,7 +697,9 @@
             "price": "225.00",
             "sku": "SFS-9-BL",
             "image_id": 28507625193517.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238199853.0,
@@ -601,7 +707,9 @@
             "price": "225.00",
             "sku": "SFS-9-WH",
             "image_id": 28507628699693.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238232621.0,
@@ -609,7 +717,9 @@
             "price": "225.00",
             "sku": "SFS-10-BL",
             "image_id": 28507625193517.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238265389.0,
@@ -617,7 +727,9 @@
             "price": "225.00",
             "sku": "SFS-10-WH",
             "image_id": 28507628699693.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238298157.0,
@@ -625,7 +737,9 @@
             "price": "225.00",
             "sku": "SFS-11-BL",
             "image_id": 28507625193517.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238330925.0,
@@ -633,7 +747,9 @@
             "price": "225.00",
             "sku": "SFS-11-WH",
             "image_id": 28507628699693.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238363693.0,
@@ -641,7 +757,9 @@
             "price": "225.00",
             "sku": "SFS-12-BL",
             "image_id": 28507625193517.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39574238396461.0,
@@ -649,7 +767,9 @@
             "price": "225.00",
             "sku": "SFS-12-WH",
             "image_id": 28507628699693.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [

@@ -118,7 +118,7 @@ const schema = new mongoose.Schema(
     hideIfItemAdded: { type: Boolean, required: true, default: false },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
-    hideOutOfStockProducts: { type: Boolean, required: true, default: true },
+    disableOutOfStockVariants: { type: Boolean, required: true, default: true },
     enableEscClose: { type: Boolean, required: false, default: false },
     enableMaskClose: { type: Boolean, required: false, default: false },
     enabled: { type: Boolean, required: true, default: true }
@@ -192,7 +192,6 @@ schema.pre('validate', function (next) {
 
 schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
-schema.index({ shop: 1, triggerEvent: 1 });
 schema.index({ createdAt: -1 });
 
 Offer = mongodbClient.connection.model('Offer', schema);

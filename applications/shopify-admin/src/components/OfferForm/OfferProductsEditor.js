@@ -18,7 +18,7 @@ const OfferProductsEditor = ({
   offer,
   offeredProducts,
   offeredCollections,
-  hideOutOfStockProducts,
+  disableOutOfStockVariants,
   enableBundling,
   enableVariantSelection,
   enableQuantitySelection
@@ -120,8 +120,8 @@ const OfferProductsEditor = ({
               {...asChoiceField(enableQuantitySelection)}
             />
             <Checkbox
-              label="Exclude out of stock products"
-              {...asChoiceField(hideOutOfStockProducts)}
+              label="Disable out of stock variants"
+              {...asChoiceField(disableOutOfStockVariants)}
             />
           </FormLayout>
         </Card.Section>
@@ -153,7 +153,7 @@ OfferProductsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
   offeredProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
   offeredCollections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hideOutOfStockProducts: PropTypes.object.isRequired,
+  disableOutOfStockVariants: PropTypes.object.isRequired,
   enableBundling: PropTypes.object.isRequired,
   enableVariantSelection: PropTypes.object.isRequired,
   enableQuantitySelection: PropTypes.object.isRequired

@@ -19,7 +19,7 @@
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableProductLinks": true,
-    "hideOutOfStockProducts": true,
+    "disableOutOfStockVariants": true,
     "delaySeconds": 0,
     "enableEscClose": true,
     "enableMaskClose": true,
@@ -34,21 +34,21 @@
       {
         "title": "Fancy Hat",
         "imageUrl": "/images/hat.jpg",
-        "shopifyProductId": 4474376290349,
+        "shopifyProductId": 39586577711149,
         "minQuantity": 2,
         "maxQuantity": 5
       },
       {
-        "title": "Fancy Shoes",
+        "title": "Fancy Dress Shoes",
         "imageUrl": "/images/shoes.jpg",
-        "shopifyProductId": 4552007483437,
+        "shopifyProductId": 4474376290349,
         "minQuantity": 1,
         "maxQuantity": 5
       },
       {
         "title": "Fancy Socks",
         "imageUrl": "/images/socks.jpg",
-        "shopifyProductId": 6547332923437,
+        "shopifyProductId": 39586674311213,
         "maxQuantity": 5
       }
     ],
@@ -69,200 +69,248 @@
   "triggerProduct": {
     "shopifyProductData": {
       "id": 4474376290349.0,
-      "title": "Fancy Shoes",
-      "handle": "fancy-shoes",
+      "title": "Fancy Dress Shoes",
+      "handle": "fancy-dress-shoes",
       "variants": [
         {
           "id": 39586596880429.0,
           "title": "Size 5 / Black",
           "price": "159.99",
-          "sku": "FS-5-BL",
+          "sku": "FDS-5-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586596913197.0,
           "title": "Size 5 / White",
           "price": "149.99",
-          "sku": "FS-5-WH",
+          "sku": "FDS-5-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586596945965.0,
           "title": "Size 5 / Red",
           "price": "139.99",
-          "sku": "FS-5-RD",
+          "sku": "FDS-5-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586596978733.0,
           "title": "Size 5 / Green",
           "price": "139.99",
-          "sku": "FS-5-GR",
+          "sku": "FDS-5-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597011501.0,
           "title": "Size 6 / Black",
           "price": "159.99",
-          "sku": "FS-6-BL",
+          "sku": "FDS-6-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597044269.0,
           "title": "Size 6 / White",
           "price": "149.99",
-          "sku": "FS-6-WH",
+          "sku": "FDS-6-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597077037.0,
           "title": "Size 6 / Red",
           "price": "139.99",
-          "sku": "FS-6-RD",
+          "sku": "FDS-6-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597109805.0,
           "title": "Size 6 / Green",
           "price": "139.99",
-          "sku": "FS-6-GR",
+          "sku": "FDS-6-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597142573.0,
           "title": "Size 7 / Black",
           "price": "159.99",
-          "sku": "FS-7-BL",
+          "sku": "FDS-7-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597175341.0,
           "title": "Size 7 / White",
           "price": "149.99",
-          "sku": "FS-7-WH",
+          "sku": "FDS-7-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597208109.0,
           "title": "Size 7 / Red",
           "price": "139.99",
-          "sku": "FS-7-RD",
+          "sku": "FDS-7-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597240877.0,
           "title": "Size 7 / Green",
           "price": "139.99",
-          "sku": "FS-7-GR",
+          "sku": "FDS-7-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597273645.0,
           "title": "Size 8 / Black",
           "price": "159.99",
-          "sku": "FS-8-BL",
+          "sku": "FDS-8-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597306413.0,
           "title": "Size 8 / White",
           "price": "149.99",
-          "sku": "FS-8-WH",
+          "sku": "FDS-8-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597339181.0,
           "title": "Size 8 / Red",
           "price": "139.99",
-          "sku": "FS-8-RD",
+          "sku": "FDS-8-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597371949.0,
           "title": "Size 8 / Green",
           "price": "139.99",
-          "sku": "FS-8-GR",
+          "sku": "FDS-8-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597404717.0,
           "title": "Size 9 / Black",
           "price": "159.99",
-          "sku": "FS-9-BL",
+          "sku": "FDS-9-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597437485.0,
           "title": "Size 9 / White",
           "price": "149.99",
-          "sku": "FS-9-WH",
+          "sku": "FDS-9-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597470253.0,
           "title": "Size 9 / Red",
           "price": "139.99",
-          "sku": "FS-9-RD",
+          "sku": "FDS-9-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597503021.0,
           "title": "Size 9 / Green",
           "price": "139.99",
-          "sku": "FS-9-GR",
+          "sku": "FDS-9-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597535789.0,
           "title": "Size 10 / Black",
           "price": "159.99",
-          "sku": "FS-10-BL",
+          "sku": "FDS-10-BL",
           "image_id": 28537031098413.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597568557.0,
           "title": "Size 10 / White",
           "price": "149.99",
-          "sku": "FS-10-WH",
+          "sku": "FDS-10-WH",
           "image_id": 28537031000109.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597601325.0,
           "title": "Size 10 / Red",
           "price": "139.99",
-          "sku": "FS-10-RD",
+          "sku": "FDS-10-RD",
           "image_id": 28537031065645.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         },
         {
           "id": 39586597634093.0,
           "title": "Size 10 / Green",
           "price": "139.99",
-          "sku": "FS-10-GR",
+          "sku": "FDS-10-GR",
           "image_id": 28537031032877.0,
-          "inventory_quantity": 10
+          "inventory_quantity": 10,
+          "inventory_management": "shopify",
+          "inventory_policy": "deny"
         }
       ],
       "images": [
@@ -305,33 +353,41 @@
             "id": 39586577711149.0,
             "title": "Beige",
             "price": "34.99",
-            "sku": "FH-W",
+            "sku": "FH-BG",
             "image_id": 28537019367469.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586577743917.0,
             "title": "Khaki",
             "price": "36.99",
-            "sku": "FH-R",
+            "sku": "FH-KH",
             "image_id": 28537019400237.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586577776685.0,
             "title": "Black",
             "price": "32.99",
-            "sku": "FH-B",
+            "sku": "FH-BL",
             "image_id": 28537019334701.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586577776686.0,
             "title": "White",
             "price": "32.99",
-            "sku": "FH-B",
+            "sku": "FH-WH",
             "image_id": 28537019334702.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [
@@ -375,7 +431,9 @@
             "price": "18.99",
             "sku": "FSK-510-GR",
             "image_id": 28537322799149.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674343981.0,
@@ -383,7 +441,9 @@
             "price": "18.99",
             "sku": "FSK-510-PK",
             "image_id": 28537321979949.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674376749.0,
@@ -391,7 +451,9 @@
             "price": "18.99",
             "sku": "FSK-510-YW",
             "image_id": 28537322340397.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674409517.0,
@@ -399,7 +461,9 @@
             "price": "18.99",
             "sku": "FSK-10513-GR",
             "image_id": 28537322799149.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674442285.0,
@@ -407,7 +471,9 @@
             "price": "18.99",
             "sku": "FSK-10513-PK",
             "image_id": 28537321979949.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674475053.0,
@@ -415,7 +481,9 @@
             "price": "18.99",
             "sku": "FSK-10513-YW",
             "image_id": 28537322340397.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674507821.0,
@@ -423,7 +491,9 @@
             "price": "18.99",
             "sku": "FSK-14-GR",
             "image_id": 28537322799149.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674540589.0,
@@ -431,7 +501,9 @@
             "price": "18.99",
             "sku": "FSK-14-PK",
             "image_id": 28537321979949.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586674573357.0,
@@ -439,7 +511,9 @@
             "price": "18.99",
             "sku": "FSK-14-YW",
             "image_id": 28537322340397.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [
@@ -478,7 +552,9 @@
             "price": "29.99",
             "sku": "FSC-BD",
             "image_id": 28537472876589.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586708488237.0,
@@ -486,7 +562,9 @@
             "price": "29.99",
             "sku": "FSC-WH",
             "image_id": 28537472843821.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           },
           {
             "id": 39586708521005.0,
@@ -494,7 +572,9 @@
             "price": "29.99",
             "sku": "FSC-BL",
             "image_id": 28537472811053.0,
-            "inventory_quantity": 10
+            "inventory_quantity": 10,
+            "inventory_management": "shopify",
+            "inventory_policy": "deny"
           }
         ],
         "images": [

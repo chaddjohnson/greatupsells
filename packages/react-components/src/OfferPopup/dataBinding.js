@@ -37,6 +37,7 @@ const useDataBinding = ({
   // Define Knockout bindings for use within the popup.
   const ViewModel = useCallback(
     function () {
+      this.disableOutOfStockVariants = () => offer.disableOutOfStockVariants;
       this.offeredProducts = () => offeredProducts;
       this.addedQuantities = () => addedQuantities;
 
@@ -67,9 +68,20 @@ const useDataBinding = ({
       };
 
       this.selectedVariantIds = knockout.observableArray(
-        offeredProducts.map(({ variants }) =>
-          knockout.observable(variants[0].id)
-        )
+        offeredProducts.map(({ variants }) => {
+          const firstVariantHavingInventory = variants.find(
+            (current) => current.hasInventory
+          );
+          const firstVariant = variants[0];
+
+          if (offer.disableOutOfStockVariants) {
+            return knockout.observable(
+              firstVariantHavingInventory?.id || firstVariant?.id
+            );
+          } else {
+            return knockout.observable(firstVariant?.id);
+          }
+        })
       );
 
       this.selectedVariants = () =>
@@ -154,21 +166,29 @@ const useDataBinding = ({
             (selectedQuantityValid && selectedQuantity <= remainingQuantity);
           const addedQuantityBelowMax =
             !hasMaxQuantity || addedQuantity < maxQuantity;
+          const selectedVariantHasInventory = this.selectedVariants()[index]
+            ?.hasInventory;
 
           return (
             addedQuantityBelowMax &&
             selectedQuantityAtOrAboveMin &&
             selectedQuantityAtOrBelowRemaining &&
-            selectedQuantityValid
+            selectedQuantityValid &&
+            (!offer.disableOutOfStockVariants || selectedVariantHasInventory)
           );
         }, this);
 
-      this.replacingProductEnabled = () => {
+      this.replacingProductEnabled = (index) => {
         const itemReplaced = !!Object.values(addedQuantities || {}).find(
           (quantity) => quantity > 0
         );
+        const selectedVariantHasInventory = this.selectedVariants()[index]
+          ?.hasInventory;
 
-        return !itemReplaced;
+        return (
+          !itemReplaced &&
+          (!offer.disableOutOfStockVariants || selectedVariantHasInventory)
+        );
       };
 
       this.addingProductBundleEnabled = knockout.computed(
