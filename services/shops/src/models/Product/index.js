@@ -43,6 +43,7 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
+schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyProductId: 1 }, { unique: true });
 schema.index({ shop: 1, shopifyProductId: 1, shopifyCollectionIds: 1 });
