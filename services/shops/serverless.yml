@@ -379,11 +379,13 @@ functions:
       - schedule: cron(1 5,6 * * * *)
     timeout: 900
   fixShopWebhooks:
+    memorySize: 512
     handler: src/workers/fixShopWebhooks.handler
     events:
       - schedule: rate(1 day)
     timeout: 900
   importShopCollections:
+    memorySize: 512
     reservedConcurrency: 5
     handler: src/workers/importShopCollections.handler
     events:
@@ -391,6 +393,7 @@ functions:
           arn: ${env:SHOP_COLLECTION_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/shop-collection-import-queue-arn}
     timeout: 900
   importShopProducts:
+    memorySize: 512
     reservedConcurrency: 5
     handler: src/workers/importShopProducts.handler
     events:
@@ -398,11 +401,13 @@ functions:
           arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/shop-product-import-queue-arn}
     timeout: 900
   updateShopActiveStatuses:
+    memorySize: 512
     handler: src/workers/updateShopActiveStatuses.handler
     events:
       - schedule: rate(1 day)
     timeout: 900
   updateShopPlans:
+    memorySize: 512
     handler: src/workers/updateShopPlans.handler
     events:
       - schedule: rate(1 day)
