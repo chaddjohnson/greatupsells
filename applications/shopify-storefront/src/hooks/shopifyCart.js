@@ -55,8 +55,7 @@ const CartProvider = ({ children }) => {
     shopifyCart
   ]);
   const shopifyCartSubtotal =
-    shopifyCart?.items_subtotal_price &&
-    shopifyCart?.items_subtotal_price / 100;
+    shopifyCart?.total_price && shopifyCart?.total_price / 100;
   const shopifyCartItemCount = useMemo(
     () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
     [shopifyCartItems]
