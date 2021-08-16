@@ -1,6 +1,13 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Layout, PageActions } from '@shopify/polaris';
+import {
+  Form,
+  Layout,
+  Card,
+  TextStyle,
+  PageActions,
+  Sticky
+} from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { Context as AppBridgeContext } from '@shopify/app-bridge-react';
@@ -387,7 +394,19 @@ const OfferForm = ({
           />
         </Layout.Section>
         <Layout.Section secondary>
-          <OfferSummary offer={offer} />
+          <Sticky offset={16} disableWhenStacked={true}>
+            <OfferSummary offer={offer} />
+            {discountType.value !== 'NO_DISCOUNT' && (
+              <Card subdued>
+                <Card.Section title="Can't combine with discounts">
+                  <TextStyle variation="subdued">
+                    Customers won&apos;t be able to enter a discount code or use
+                    an automatic discount if this offer is accepted.
+                  </TextStyle>
+                </Card.Section>
+              </Card>
+            )}
+          </Sticky>
         </Layout.Section>
         <Layout.Section>
           <PageActions

@@ -525,11 +525,6 @@ const OfferSettingsEditor = ({
       {offer.strategy !== 'POPUP' && (
         <Card title="Discount" sectioned>
           <FormLayout>
-            <Banner status="warning">
-              Due to technical limitations within Shopify, discount codes cannot
-              be used with orders containing{' '}
-              {offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'} items.
-            </Banner>
             <ChoiceList
               choices={[
                 {
