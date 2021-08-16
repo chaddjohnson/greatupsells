@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -66,26 +66,52 @@ const OfferSummary = ({ offer }) => {
   } = useNumberFormatter({ locale, countryCode, currency });
   const { formatDate } = useDateTime();
 
+  const buildItems = useCallback(() => {
+    const newItems = [];
+
+    if (offer.discountType === 'PERCENTAGE' && offer.discountValue) {
+      newItems.push(`${offer.discountValue * 100}% off accepted products`);
+    }
+    if (offer.discountType === 'AMOUNT' && offer.discountValue) {
+      newItems.push(
+        `${formatCurrency(offer.discountValue)} off accepted products`
+      );
+    }
+    if (offer.discountType === 'SET_PRICE' && offer.discountValue) {
+      newItems.push(
+        `${formatCurrency(offer.discountValue)} for each accepted product`
+      );
+    }
+
+    if (offer.minimumRequirements === 'AMOUNT' && offer.minimumRequiredAmount) {
+      newItems.push(
+        `Minimum purchase of ${formatCurrency(offer.minimumRequiredAmount)}`
+      );
+    }
+    if (
+      offer.minimumRequirements === 'QUANTITY' &&
+      offer.minimumRequiredAmount
+    ) {
+      newItems.push(`Minimum purchase of ${offer.minimumRequiredAmount} items`);
+    }
+
+    if (offer.startAt && offer.endAt) {
+      newItems.push(
+        `Active from ${formatDate(offer.startAt, 'MMM d, y')} to ${formatDate(
+          offer.endAt,
+          'MMM d, y'
+        )}`
+      );
+    } else if (offer.startAt) {
+      newItems.push(`Active from ${formatDate(offer.startAt, 'MMM d, y')}`);
+    }
+
+    return newItems;
+  }, [offer, formatCurrency, formatDate]);
+
   useEffect(() => {
-    const buildItems = () => {
-      const newItems = [];
-
-      if (offer.startAt && offer.endAt) {
-        newItems.push(
-          `Active from ${formatDate(offer.startAt, 'MMM d')} to ${formatDate(
-            offer.endAt,
-            'MMM d'
-          )}`
-        );
-      } else if (offer.startAt) {
-        newItems.push(`Active from ${formatDate(offer.startAt, 'MMM d')}`);
-      }
-
-      return newItems;
-    };
-
     setItems(buildItems());
-  }, [offer.startAt, offer.endAt, formatDate]);
+  }, [buildItems]);
 
   return (
     <Card title="Summary" subdued>

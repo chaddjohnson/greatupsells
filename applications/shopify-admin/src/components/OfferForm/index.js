@@ -92,6 +92,8 @@ const OfferForm = ({
     discountType,
     discountValue,
     discountTitle,
+    minimumRequirements,
+    minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
     triggerProducts,
@@ -125,9 +127,10 @@ const OfferForm = ({
       triggerScrollThreshold,
       triggerPage,
       triggerPagePath,
+      minimumRequirements,
+      minimumRequiredAmount,
       offeredProducts,
       offeredCollections,
-      // minimumProductsQuantity,
       discountType,
       discountValue,
       discountTitle,
@@ -314,6 +317,8 @@ const OfferForm = ({
             triggerScrollThreshold={triggerScrollThreshold}
             triggerPage={triggerPage}
             triggerPagePath={triggerPagePath}
+            minimumRequirements={minimumRequirements}
+            minimumRequiredAmount={minimumRequiredAmount}
             triggerProducts={triggerProducts}
             triggerCollections={triggerCollections}
             discountType={discountType}

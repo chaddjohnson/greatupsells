@@ -65,6 +65,11 @@ const useFields = (initialOffer, showEndDate) => {
           if (value && Number(value) <= 0) {
             return 'Discount value must be greater than zero';
           }
+        },
+        (value) => {
+          if (discountType === 'PERCENTAGE' && value && Number(value) > 100) {
+            return 'Discount value must be 100 or less';
+          }
         }
       ]
     },
@@ -80,6 +85,43 @@ const useFields = (initialOffer, showEndDate) => {
       }
     },
     [discountType.value]
+  );
+  const minimumRequirements = useField(initialOffer.minimumRequirements);
+  const minimumRequiredAmount = useField(
+    {
+      value: initialOffer.minimumRequiredAmount,
+      validates: [
+        (value) => {
+          if (discountType.value !== 'NONE' && !value) {
+            return "Minimum amount can't be blank";
+          }
+        },
+        (value) => {
+          if (value && Number.isNaN(value)) {
+            return 'Minimum amount must be a number';
+          }
+        },
+        (value) => {
+          if (
+            value &&
+            Number(value) <= 0 &&
+            minimumRequirements.value === 'AMOUNT'
+          ) {
+            return 'Minimum amount must be greater than zero';
+          }
+        },
+        (value) => {
+          if (
+            value &&
+            Number(value) < 1 &&
+            minimumRequirements.value === 'QUANTITY'
+          ) {
+            return 'Minimum amount must be greater than 1';
+          }
+        }
+      ]
+    },
+    [minimumRequirements.value]
   );
   const offeredProducts = useList({
     list: initialOffer.offeredProducts.map((offeredProduct) => ({
@@ -238,6 +280,8 @@ const useFields = (initialOffer, showEndDate) => {
     discountType,
     discountValue,
     discountTitle,
+    minimumRequirements,
+    minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
     triggerProducts,

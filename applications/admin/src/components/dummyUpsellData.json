@@ -30,6 +30,7 @@
     "name": "Test Offer",
     "strategy": "UPSELL",
     "actionButtonBehavior": "CART",
+    "minimumRequirements": "NONE",
     "offeredProducts": [
       {
         "title": "Better Shoes",
@@ -53,7 +54,6 @@
       }
     ],
     "offeredCollections": [],
-    "minimumProductsQuantity": 1,
     "discountType": "PERCENTAGE",
     "discountValue": 0.1,
     "triggerEvent": "ADD",

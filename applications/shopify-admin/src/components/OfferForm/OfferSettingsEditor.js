@@ -33,7 +33,15 @@ const TriggerScrollThresholdWrapper = styled.div`
 `;
 
 const ViewAllowanceDaysInputWrapper = styled.div`
-  max-width: 125px;
+  .Polaris-TextField {
+    max-width: 125px;
+  }
+`;
+
+const MinimumRequiredAmountWrapper = styled.div`
+  .Polaris-TextField {
+    max-width: 150px;
+  }
 `;
 
 const OfferSettingsEditor = ({
@@ -46,6 +54,8 @@ const OfferSettingsEditor = ({
   triggerScrollThreshold,
   triggerPage,
   triggerPagePath,
+  minimumRequirements,
+  minimumRequiredAmount,
   triggerProducts,
   triggerCollections,
   discountType,
@@ -127,11 +137,18 @@ const OfferSettingsEditor = ({
     setDiscountValueInternal(value);
 
     discountValue.onChange(
-      discountType.value === 'PERCENTAGE' && value ? value * 100 : value
+      discountType.value === 'PERCENTAGE' && value ? value / 100 : value
     );
   };
 
   const handleDiscountValueBlur = () => {
+    if (
+      discountType.value === 'PERCENTAGE' ||
+      discountType.value === 'NO_DISCOUNT'
+    ) {
+      return discountValue.onBlur();
+    }
+
     if (discountValueInternal) {
       setDiscountValueInternal(parseFloat(discountValueInternal)?.toFixed(2));
     }
@@ -155,6 +172,11 @@ const OfferSettingsEditor = ({
     }
 
     triggerPagePath.onBlur(event);
+  };
+
+  const handleMinimumRequirementsChange = (value) => {
+    minimumRequirements.onChange(value);
+    minimumRequiredAmount.onChange(undefined);
   };
 
   return (
@@ -597,15 +619,40 @@ const OfferSettingsEditor = ({
                 value: 'NONE'
               },
               {
-                label: 'Minimum purchase amount ($)',
-                value: 'AMOUNT'
+                label: `Minimum purchase amount (${currencySymbol})`,
+                value: 'AMOUNT',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <MinimumRequiredAmountWrapper>
+                      <TextField
+                        inputMode="numeric"
+                        prefix={currencySymbol}
+                        placeholder="0.00"
+                        helpText="Applies to all products."
+                        {...minimumRequiredAmount}
+                        error={submitted && minimumRequiredAmount.error}
+                      />
+                    </MinimumRequiredAmountWrapper>
+                  )
               },
               {
                 label: 'Minimum quantity of items',
-                value: 'QUANTITY'
+                value: 'QUANTITY',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <MinimumRequiredAmountWrapper>
+                      <TextField
+                        inputMode="numeric"
+                        helpText="Applies to all products."
+                        {...minimumRequiredAmount}
+                        error={submitted && minimumRequiredAmount.error}
+                      />
+                    </MinimumRequiredAmountWrapper>
+                  )
               }
             ]}
-            selected="NONE"
+            selected={minimumRequirements.value}
+            onChange={([value]) => handleMinimumRequirementsChange(value)}
           />
         </FormLayout>
       </Card>
@@ -623,6 +670,8 @@ OfferSettingsEditor.propTypes = {
   triggerScrollThreshold: PropTypes.object.isRequired,
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
+  minimumRequirements: PropTypes.object.isRequired,
+  minimumRequiredAmount: PropTypes.object.isRequired,
   triggerProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
   triggerCollections: PropTypes.arrayOf(PropTypes.object).isRequired,
   discountType: PropTypes.object.isRequired,

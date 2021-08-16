@@ -30,6 +30,7 @@
     "name": "Test Offer",
     "strategy": "CROSS_SELL",
     "actionButtonBehavior": "CART",
+    "minimumRequirements": "NONE",
     "offeredProducts": [
       {
         "title": "Fancy Hat",
@@ -53,7 +54,6 @@
       }
     ],
     "offeredCollections": [],
-    "minimumProductsQuantity": 1,
     "discountType": "PERCENTAGE",
     "discountValue": 0.1,
     "triggerEvent": "ADD",

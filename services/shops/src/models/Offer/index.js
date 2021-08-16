@@ -76,9 +76,15 @@ const schema = new mongoose.Schema(
       ref: 'PopupTheme',
       required: false // false because PopupTheme requires an offer to be saved.
     },
+    minimumRequirements: {
+      type: String,
+      required: true,
+      enum: ['NONE', 'AMOUNT', 'QUANTITY'],
+      default: 'NONE'
+    },
+    minimumRequiredAmount: { type: Number, required: false },
     offeredProducts: [offerProductSchema],
     offeredCollections: [offerCollectionSchema],
-    minimumProductsQuantity: { type: Int32, required: true },
     discountType: {
       type: String,
       required: true,
