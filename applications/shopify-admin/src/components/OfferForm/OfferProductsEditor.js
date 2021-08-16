@@ -95,7 +95,7 @@ const OfferProductsEditor = ({
                   {
                     label: 'Offer products in a bundle',
                     helpText:
-                      'All products presented in the offer will be bundled and added to the cart together on acceptance, if supported by the theme. Bundling helps increase average order value.',
+                      'All products presented in the offer will be bundled and added to the cart together on acceptance, if supported by the selected theme. Bundling helps increase average order value.',
                     value: 'true'
                   }
                 ]}
@@ -111,17 +111,17 @@ const OfferProductsEditor = ({
           <FormLayout>
             <Checkbox
               label="Allow customers to select variants"
-              helpText="Customers may select variants if available and if supported by the theme."
+              helpText="Customers may select variants if available and if supported by the selected theme."
               {...asChoiceField(enableVariantSelection)}
             />
             <Checkbox
               label="Allow customers to change quantities"
-              helpText="Customers may change quantities for products if supported by the theme."
+              helpText="Customers may change quantities for products if supported by the selected theme."
               {...asChoiceField(enableQuantitySelection)}
             />
             <Checkbox
               label="Disable out of stock variants"
-              helpText="Out of stock variants will be disabled, and products with no in-stock variants will be not be shown."
+              helpText="Out of stock variants will be disabled, and products with no in-stock variants will be not be offered."
               {...asChoiceField(disableOutOfStockVariants)}
             />
           </FormLayout>
