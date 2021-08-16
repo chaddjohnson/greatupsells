@@ -88,6 +88,11 @@ const LinkClickOffer = ({
         return;
       }
 
+      // Abort if there are no offered products.
+      if (!offeredProducts?.length) {
+        return;
+      }
+
       // Abort if the offer was already viewed.
       if (offerViewed) {
         return;
@@ -140,7 +145,7 @@ const LinkClickOffer = ({
       // Finally, open the popup.
       openPopup();
     },
-    [offer, offerId, offerViewed, openPopup, viewingOffer]
+    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]
   );
 
   const handleClosePopup = () => {

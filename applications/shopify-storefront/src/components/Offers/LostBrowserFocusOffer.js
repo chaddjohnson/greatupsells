@@ -74,6 +74,11 @@ const LostBrowserFocusOffer = ({
       return;
     }
 
+    // Abort if there are no offered products.
+    if (!offeredProducts?.length) {
+      return;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;

@@ -72,6 +72,11 @@ const PageLoadOffer = ({
       return;
     }
 
+    // Abort if there are no offered products.
+    if (!offeredProducts?.length) {
+      return;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -91,7 +96,7 @@ const PageLoadOffer = ({
     // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]);
 
   if (!offer || !shop) {
     return null;

@@ -89,6 +89,11 @@ const ProductOffer = ({
       return;
     }
 
+    // Abort if there are no offered products.
+    if (!offeredProducts?.length) {
+      return;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -105,7 +110,7 @@ const ProductOffer = ({
     }
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]);
 
   // Subscribe to product add events for triggering the popup to show.
   useShopifyCartAddListener((addedProduct) => {

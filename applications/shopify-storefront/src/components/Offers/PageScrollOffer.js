@@ -89,6 +89,11 @@ const PageScrollOffer = ({
       return;
     }
 
+    // Abort if there are no offered products.
+    if (!offeredProducts?.length) {
+      return;
+    }
+
     // Abort if the offer was already viewed.
     if (offerViewed) {
       return;
@@ -115,7 +120,7 @@ const PageScrollOffer = ({
     if (scrollPercentage >= triggerScrollThreshold / 100) {
       openPopup();
     }
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Listen to scroll events.
   useEventListener('scroll', handleScroll, true);

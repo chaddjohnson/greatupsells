@@ -75,6 +75,11 @@ const ExitIntentOffer = ({
         return;
       }
 
+      // Abort if there are no offered products.
+      if (!offeredProducts?.length) {
+        return;
+      }
+
       // Abort if the offer was already viewed.
       if (offerViewed) {
         return;
@@ -120,7 +125,7 @@ const ExitIntentOffer = ({
         openPopup();
       }
     },
-    [offer, offerId, offerViewed, openPopup, viewingOffer] // eslint-disable-line react-hooks/exhaustive-deps
+    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]
   );
 
   // Reference: https://stackoverflow.com/a/56858467/83897
