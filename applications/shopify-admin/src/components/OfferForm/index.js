@@ -17,8 +17,17 @@ import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
-import OfferSettingsEditor from './OfferSettingsEditor';
+import OfferNameEditor from './OfferNameEditor';
+import OfferStrategyEditor from './OfferStrategyEditor';
+import OfferTriggerEventEditor from './OfferTriggerEventEditor';
+import OfferPagesEditor from './OfferPagesEditor';
+import OfferViewAllowanceEditor from './OfferViewAllowanceEditor';
+import OfferActionButtonEditor from './OfferActionButtonEditor';
+import OfferTriggerProductsEditor from './OfferTriggerProductsEditor';
 import OfferProductsEditor from './OfferProductsEditor';
+import OfferDiscountEditor from './OfferDiscountEditor';
+import OfferMinimumRequirementsEditor from './OfferMinimumRequirementsEditor';
+import OfferBundlingEditor from './OfferBundlingEditor';
 import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
@@ -307,43 +316,63 @@ const OfferForm = ({
     <Form noValidate onSubmit={submit}>
       <Layout>
         <Layout.Section>
-          <OfferSettingsEditor
-            shop={shop}
-            offer={offer}
-            name={name}
+          <OfferNameEditor name={name} submitted={submitted} />
+          <OfferStrategyEditor
             strategy={strategy}
+            onStrategyChange={handleStrategyChange}
+          />
+          <OfferTriggerEventEditor
             triggerEvent={triggerEvent}
             triggerExternalLinksOnly={triggerExternalLinksOnly}
             triggerScrollThreshold={triggerScrollThreshold}
+            submitted={submitted}
+          />
+          <OfferPagesEditor
             triggerPage={triggerPage}
             triggerPagePath={triggerPagePath}
-            minimumRequirements={minimumRequirements}
-            minimumRequiredAmount={minimumRequiredAmount}
-            triggerProducts={triggerProducts}
-            triggerCollections={triggerCollections}
-            discountType={discountType}
-            discountValue={discountValue}
-            discountTitle={discountTitle}
-            actionButtonBehavior={actionButtonBehavior}
-            actionButtonLink={actionButtonLink}
-            actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+            submitted={submitted}
+          />
+          <OfferViewAllowanceEditor
             viewAllowance={viewAllowance}
             viewAllowanceDays={viewAllowanceDays}
             submitted={submitted}
-            onStrategyChange={handleStrategyChange}
           />
-          {(offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') && (
-            <OfferProductsEditor
-              offer={offer}
-              offeredProducts={offeredProducts}
-              offeredCollections={offeredCollections}
-              disableOutOfStockVariants={disableOutOfStockVariants}
-              enableBundling={enableBundling}
-              enableVariantSelection={enableVariantSelection}
-              enableQuantitySelection={enableQuantitySelection}
-              submitted={submitted}
-            />
-          )}
+          <OfferActionButtonEditor
+            actionButtonBehavior={actionButtonBehavior}
+            actionButtonLink={actionButtonLink}
+            actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+            submitted={submitted}
+          />
+          <OfferTriggerProductsEditor
+            offer={offer}
+            triggerProducts={triggerProducts}
+            triggerCollections={triggerCollections}
+          />
+          <OfferProductsEditor
+            offer={offer}
+            offeredProducts={offeredProducts}
+            offeredCollections={offeredCollections}
+            discountType={discountType}
+            discountValue={discountValue}
+            discountTitle={discountTitle}
+            enableBundling={enableBundling}
+            submitted={submitted}
+          />
+          <OfferDiscountEditor
+            shop={shop}
+            offer={offer}
+            discountType={discountType}
+            discountValue={discountValue}
+            discountTitle={discountTitle}
+            submitted={submitted}
+          />
+          <OfferMinimumRequirementsEditor
+            shop={shop}
+            minimumRequirements={minimumRequirements}
+            minimumRequiredAmount={minimumRequiredAmount}
+            submitted={submitted}
+          />
+          <OfferBundlingEditor offer={offer} enableBundling={enableBundling} />
           <ThemeEditor
             strategy={offer.strategy}
             theme={popupTheme}
@@ -388,6 +417,9 @@ const OfferForm = ({
           />
           <OfferOptionsEditor
             offer={offer}
+            enableVariantSelection={enableVariantSelection}
+            enableQuantitySelection={enableQuantitySelection}
+            disableOutOfStockVariants={disableOutOfStockVariants}
             delaySeconds={delaySeconds}
             onPageRequiredSeconds={onPageRequiredSeconds}
             enableEscClose={enableEscClose}

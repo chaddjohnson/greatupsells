@@ -1,0 +1,83 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Card, TextField, ChoiceList } from '@shopify/polaris';
+import styled from 'styled-components';
+
+const ViewAllowanceDaysInputWrapper = styled.div`
+  .Polaris-TextField {
+    max-width: 125px;
+  }
+`;
+
+const OfferSettingsEditor = ({
+  viewAllowance,
+  viewAllowanceDays,
+  submitted
+}) => {
+  const handleViewAllowanceChange = (value) => {
+    if (value === 'DAYS') {
+      viewAllowanceDays.onChange('7');
+    } else {
+      viewAllowanceDays.onChange(undefined);
+    }
+
+    viewAllowance.onChange(value);
+  };
+
+  return (
+    <Card title="View frequency allowance" sectioned>
+      <ChoiceList
+        choices={[
+          {
+            label: 'Once within a period of days',
+            helpText:
+              'Customers may only see this offer once within a period of days.',
+            renderChildren: (isSelected) =>
+              isSelected && (
+                <ViewAllowanceDaysInputWrapper>
+                  <TextField
+                    inputMode="numeric"
+                    suffix="days"
+                    {...viewAllowanceDays}
+                    error={submitted && viewAllowanceDays.error}
+                  />
+                </ViewAllowanceDaysInputWrapper>
+              ),
+            value: 'DAYS'
+          },
+          {
+            label: 'Once per browser tab session',
+            helpText:
+              'Customers may see this offer only once per browser tab session.',
+            value: 'SESSION'
+          },
+          {
+            label: 'One time',
+            helpText: 'Customers may see this offer only one time.',
+            value: 'ONCE'
+          },
+          {
+            label: 'Once every page load',
+            helpText:
+              'Customers may see this offer with every new page visited.',
+            value: 'PAGE'
+          }
+        ]}
+        selected={viewAllowance.value}
+        onChange={([value]) => handleViewAllowanceChange(value)}
+      />
+    </Card>
+  );
+};
+
+OfferSettingsEditor.propTypes = {
+  viewAllowance: PropTypes.object.isRequired,
+  viewAllowanceDays: PropTypes.object.isRequired,
+  submitted: PropTypes.bool
+};
+
+OfferSettingsEditor.defaultProps = {
+  submitted: false
+};
+
+export default OfferSettingsEditor;

@@ -31,6 +31,9 @@ const Flex = styled.div`
 
 const OfferOptionsEditor = ({
   offer,
+  enableVariantSelection,
+  enableQuantitySelection,
+  disableOutOfStockVariants,
   delaySeconds,
   onPageRequiredSeconds,
   enableEscClose,
@@ -76,6 +79,21 @@ const OfferOptionsEditor = ({
   return (
     <Card title="Options" sectioned>
       <FormLayout>
+        <Checkbox
+          label="Allow customers to select variants"
+          helpText="Customers may select variants if available and if supported by the selected theme."
+          {...asChoiceField(enableVariantSelection)}
+        />
+        <Checkbox
+          label="Allow customers to change quantities"
+          helpText="Customers may change quantities for products if supported by the selected theme."
+          {...asChoiceField(enableQuantitySelection)}
+        />
+        <Checkbox
+          label="Disable out of stock variants"
+          helpText="Out of stock variants will be disabled, and products with no in-stock variants will be not be offered."
+          {...asChoiceField(disableOutOfStockVariants)}
+        />
         <Checkbox
           label="Delay showing offer after trigger event"
           helpText={
@@ -206,6 +224,9 @@ const OfferOptionsEditor = ({
 
 OfferOptionsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
+  enableVariantSelection: PropTypes.object.isRequired,
+  enableQuantitySelection: PropTypes.object.isRequired,
+  disableOutOfStockVariants: PropTypes.object.isRequired,
   delaySeconds: PropTypes.object.isRequired,
   onPageRequiredSeconds: PropTypes.object.isRequired,
   enableEscClose: PropTypes.object.isRequired,

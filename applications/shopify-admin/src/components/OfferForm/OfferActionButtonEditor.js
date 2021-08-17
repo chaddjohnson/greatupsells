@@ -1,0 +1,76 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Card, TextField, Checkbox, ChoiceList, Stack } from '@shopify/polaris';
+import { asChoiceField } from '@shopify/react-form';
+
+const OfferActionButtonEditor = ({
+  actionButtonBehavior,
+  actionButtonLink,
+  actionButtonLinkOpenInNewTab,
+  submitted
+}) => {
+  const handleActionButtonBehaviorChange = (value) => {
+    actionButtonBehavior.onChange(value);
+
+    if (value !== 'LINK') {
+      actionButtonLink.onChange(undefined);
+      actionButtonLinkOpenInNewTab.onChange(false);
+    }
+  };
+
+  return (
+    <Card title="Action button behavior" sectioned>
+      <ChoiceList
+        choices={[
+          {
+            label: 'Redirect customers to the Cart page',
+            value: 'CART'
+          },
+          {
+            label: 'Skip the cart and redirect customers to the Checkout page',
+            helpText:
+              'Immediately initiating checkout can increase conversions.',
+            value: 'CHECKOUT'
+          },
+          {
+            label: 'Remain on the same page',
+            value: 'PAGE'
+          },
+          {
+            label: 'Open a link',
+            renderChildren: (isSelected) =>
+              isSelected && (
+                <Stack vertical spacing="tight">
+                  <TextField
+                    placeholder="https://"
+                    {...actionButtonLink}
+                    error={submitted && actionButtonLink.error}
+                  />
+                  <Checkbox
+                    label="Open in new browser tab"
+                    {...asChoiceField(actionButtonLinkOpenInNewTab)}
+                  />
+                </Stack>
+              ),
+            value: 'LINK'
+          }
+        ]}
+        selected={actionButtonBehavior.value}
+        onChange={([value]) => handleActionButtonBehaviorChange(value)}
+      />
+    </Card>
+  );
+};
+
+OfferActionButtonEditor.propTypes = {
+  actionButtonBehavior: PropTypes.object.isRequired,
+  actionButtonLink: PropTypes.object.isRequired,
+  actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,
+  submitted: PropTypes.bool
+};
+
+OfferActionButtonEditor.defaultProps = {
+  submitted: false
+};
+
+export default OfferActionButtonEditor;
