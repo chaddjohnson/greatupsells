@@ -34,7 +34,7 @@ const LinkClickOffer = ({
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
-  shopifyCartSubtotal,
+  shopifyCartTotal,
   shopifyCartItemCount,
   viewingOffer,
   onOpen,
@@ -197,7 +197,7 @@ const LinkClickOffer = ({
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
-      shopifyCartSubtotal={shopifyCartSubtotal}
+      shopifyCartTotal={shopifyCartTotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
       onReplaceProduct={replaceProduct}
@@ -212,7 +212,7 @@ LinkClickOffer.propTypes = {
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,
-  shopifyCartSubtotal: PropTypes.number,
+  shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,

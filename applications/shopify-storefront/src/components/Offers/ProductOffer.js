@@ -15,7 +15,7 @@ const loadedAt = new Date();
 
 const ProductOffer = ({
   shopifyCartItems,
-  shopifyCartSubtotal,
+  shopifyCartTotal,
   shopifyCartItemCount,
   viewingOffer,
   onOpen,
@@ -142,7 +142,7 @@ const ProductOffer = ({
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
-      shopifyCartSubtotal={shopifyCartSubtotal}
+      shopifyCartTotal={shopifyCartTotal}
       shopifyCartItemCount={shopifyCartItemCount}
       onAddProduct={addProduct}
       onReplaceProduct={replaceProduct}
@@ -153,7 +153,7 @@ const ProductOffer = ({
 
 ProductOffer.propTypes = {
   shopifyCartItems: PropTypes.array,
-  shopifyCartSubtotal: PropTypes.number,
+  shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,

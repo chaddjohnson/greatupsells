@@ -54,7 +54,7 @@ const CartProvider = ({ children }) => {
   const shopifyCartItems = useMemo(() => shopifyCart?.items || [], [
     shopifyCart
   ]);
-  const shopifyCartSubtotal =
+  const shopifyCartTotal =
     shopifyCart?.total_price && shopifyCart?.total_price / 100;
   const shopifyCartItemCount = useMemo(
     () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
@@ -110,7 +110,7 @@ const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         shopifyCartItems,
-        shopifyCartSubtotal,
+        shopifyCartTotal,
         shopifyCartItemCount,
         shopifyCartError,
         shopifyCartLoading,
