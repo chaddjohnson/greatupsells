@@ -142,10 +142,13 @@ const Modal = styled.div`
   /* Slide and stick to top */
   &.effect-sticky-up {
     top: 0;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
+
+    @media screen and (min-width: 1024px) {
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
   }
 
   &.effect-sticky-up > .content-container {
@@ -163,16 +166,16 @@ const Modal = styled.div`
     border-radius: 0 0 3px 3px;
     opacity: 1;
 
-    -webkit-transform: translateY(15%);
-    -moz-transform: translateY(15%);
-    -ms-transform: translateY(15%);
-    transform: translateY(15%);
+    -webkit-transform: translateY(0%);
+    -moz-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    transform: translateY(0%);
 
     @media screen and (min-width: 1024px) {
-      -webkit-transform: translateY(30%);
-      -moz-transform: translateY(30%);
-      -ms-transform: translateY(30%);
-      transform: translateY(30%);
+      -webkit-transform: translateY(15%);
+      -moz-transform: translateY(15%);
+      -ms-transform: translateY(15%);
+      transform: translateY(15%);
     }
   }
 
