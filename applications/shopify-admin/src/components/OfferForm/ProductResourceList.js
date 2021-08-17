@@ -17,6 +17,10 @@ const ResourceListWrapper = styled.div`
 
   .Polaris-ResourceItem {
     cursor: default;
+
+    &:hover {
+      background-color: inherit;
+    }
   }
 
   .Polaris-ResourceItem__Container {
