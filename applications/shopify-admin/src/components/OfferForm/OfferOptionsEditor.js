@@ -81,12 +81,12 @@ const OfferOptionsEditor = ({
       <FormLayout>
         <Checkbox
           label="Allow customers to select variants"
-          helpText="Customers may select variants if available and if supported by the selected theme."
+          helpText="Customers may select variants if available."
           {...asChoiceField(enableVariantSelection)}
         />
         <Checkbox
           label="Allow customers to change quantities"
-          helpText="Customers may change quantities for products if supported by the selected theme."
+          helpText="Customers may change quantities for products."
           {...asChoiceField(enableQuantitySelection)}
         />
         <Checkbox

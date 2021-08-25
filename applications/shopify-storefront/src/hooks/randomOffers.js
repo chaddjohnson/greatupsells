@@ -9,6 +9,7 @@ import {
 const useRandomOffers = ({
   events,
   shopifyProductIds = [],
+  shopifyVariantIds = [],
   shouldQuery = true
 }) => {
   // Ensure Shopify product IDs is an array.
@@ -16,9 +17,12 @@ const useRandomOffers = ({
     shopifyProductIds = [shopifyProductIds].filter(Boolean);
   }
 
-  // Ensure Shopify product IDs are numeric.
+  // Ensure Shopify IDs are numeric.
   shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
     parseInt(shopifyProductId)
+  );
+  shopifyVariantIds = shopifyVariantIds.map((shopifyVariantId) =>
+    parseInt(shopifyVariantId)
   );
 
   const { httpClient } = useHttpClient();
@@ -43,6 +47,7 @@ const useRandomOffers = ({
       ? JSON.stringify([
           events,
           shopifyProductIds,
+          shopifyVariantIds,
           offerImpressions,
           sessionOfferImpressions,
           pagePath
@@ -52,6 +57,7 @@ const useRandomOffers = ({
       httpClient.post('/offers/random', {
         events,
         shopifyProductIds,
+        shopifyVariantIds,
         offerImpressions,
         sessionOfferImpressions,
         pagePath

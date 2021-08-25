@@ -1,4 +1,4 @@
-import { useField, useList, notEmpty } from '@shopify/react-form';
+import { useField, notEmpty } from '@shopify/react-form';
 
 const useFields = (initialOffer, showEndDate) => {
   const name = useField({
@@ -86,7 +86,7 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [discountType.value]
   );
-  const minimumRequirements = useField(initialOffer.minimumRequirements);
+  const minimumRequirement = useField(initialOffer.minimumRequirement);
   const minimumRequiredAmount = useField(
     {
       value: initialOffer.minimumRequiredAmount,
@@ -105,7 +105,7 @@ const useFields = (initialOffer, showEndDate) => {
           if (
             value &&
             Number(value) <= 0 &&
-            minimumRequirements.value === 'AMOUNT'
+            minimumRequirement.value === 'AMOUNT'
           ) {
             return 'Minimum amount must be greater than zero';
           }
@@ -114,49 +114,19 @@ const useFields = (initialOffer, showEndDate) => {
           if (
             value &&
             Number(value) < 1 &&
-            minimumRequirements.value === 'QUANTITY'
+            minimumRequirement.value === 'QUANTITY'
           ) {
             return 'Minimum amount must be greater than 1';
           }
         }
       ]
     },
-    [minimumRequirements.value]
+    [minimumRequirement.value]
   );
-  const offeredProducts = useList({
-    list: initialOffer.offeredProducts.map((offeredProduct) => ({
-      ...offeredProduct,
-      minQuantity: offeredProduct.minQuantity?.toString(),
-      maxQuantity: offeredProduct.maxQuantity?.toString()
-    })),
-    validates: {
-      minQuantity: (value) => {
-        if (value && Number.isNaN(value)) {
-          return 'Minumum quantity must be valid';
-        }
-        if (value && Number(value) < 0) {
-          return 'Minumum quantity must be zero or greater';
-        }
-        if (value && Number(value) % 1 !== 0) {
-          return 'Minumum quantity must be a whole number';
-        }
-      },
-      maxQuantity: (value) => {
-        if (value && Number.isNaN(value)) {
-          return 'Maximum quantity must be valid';
-        }
-        if (value && Number(value) < 1) {
-          return 'Maximum quantity must be 1 or greater';
-        }
-        if (value && Number(value) % 1 !== 0) {
-          return 'Maximum quantity must be a whole number';
-        }
-      }
-    }
-  });
-  const offeredCollections = useList(initialOffer.offeredCollections);
-  const triggerProducts = useList(initialOffer.triggerProducts);
-  const triggerCollections = useList(initialOffer.triggerCollections);
+  const offeredProducts = useField(initialOffer.offeredProducts);
+  const offeredCollections = useField(initialOffer.offeredCollections);
+  const triggerProducts = useField(initialOffer.triggerProducts);
+  const triggerCollections = useField(initialOffer.triggerCollections);
   const geotargetingCountries = useField(initialOffer.geotargetingCountries);
   const animation = useField(initialOffer.animation);
   const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
@@ -280,7 +250,7 @@ const useFields = (initialOffer, showEndDate) => {
     discountType,
     discountValue,
     discountTitle,
-    minimumRequirements,
+    minimumRequirement,
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,

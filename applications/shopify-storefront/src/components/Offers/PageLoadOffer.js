@@ -34,22 +34,27 @@ const PageLoadOffer = ({
     onOpen();
 
     setTimeout(async () => {
+      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
       const offeredShopifyProductIds = offeredProducts.map(
         ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      const offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
       );
 
       setPopupOpen(true);
 
       await trackOfferImpression({
         offerId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
+        triggerShopifyProductId,
+        offeredShopifyProductIds
       });
     }, delay);
-  }, [offer, offerId, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    offer,
+    offerId,
+    triggerProduct,
+    offeredProducts,
+    trackOfferImpression,
+    onOpen
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);

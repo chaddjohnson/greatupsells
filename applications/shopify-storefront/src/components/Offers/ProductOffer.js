@@ -24,13 +24,16 @@ const ProductOffer = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
+  const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
     shopifyProductIds,
-    shouldQuery: productAdded && !!shopifyProductIds?.length
+    shopifyVariantIds,
+    shouldQuery:
+      productAdded && !!shopifyProductIds?.length && !!shopifyVariantIds?.length
   });
   const { addProduct, replaceProduct } = useOfferAcceptance();
 
@@ -46,12 +49,9 @@ const ProductOffer = ({
     onOpen();
 
     setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct.shopifyProductId;
+      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
       const offeredShopifyProductIds = offeredProducts.map(
         ({ shopifyProductData }) => shopifyProductData?.id
-      );
-      const offeredShopifyVariantIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.variants?.[0]?.id
       );
 
       setPopupOpen(true);
@@ -59,8 +59,7 @@ const ProductOffer = ({
       await trackOfferImpression({
         offerId,
         triggerShopifyProductId,
-        offeredShopifyProductIds,
-        offeredShopifyVariantIds
+        offeredShopifyProductIds
       });
     }, delay);
   }, [
@@ -75,6 +74,7 @@ const ProductOffer = ({
   const handleClosePopup = () => {
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setShopifyVariantIds([]);
     setProductAdded(false);
     onClose();
   };
@@ -114,8 +114,9 @@ const ProductOffer = ({
 
   // Subscribe to product add events for triggering the popup to show.
   useShopifyCartAddListener((addedProduct) => {
-    if (!productAdded && addedProduct?.product_id) {
+    if (!offerViewed && addedProduct) {
       setShopifyProductIds([addedProduct.product_id]);
+      setShopifyVariantIds([addedProduct.variant_id]);
       setProductAdded(true);
     }
   });
@@ -125,6 +126,7 @@ const ProductOffer = ({
     setOfferViewed(false);
     setPopupOpen(false);
     setShopifyProductIds([]);
+    setShopifyVariantIds([]);
     setProductAdded(false);
   });
 

@@ -83,13 +83,13 @@ const OfferSummary = ({ offer }) => {
       );
     }
 
-    if (offer.minimumRequirements === 'AMOUNT' && offer.minimumRequiredAmount) {
+    if (offer.minimumRequirement === 'AMOUNT' && offer.minimumRequiredAmount) {
       newItems.push(
         `Minimum purchase of ${formatCurrency(offer.minimumRequiredAmount)}`
       );
     }
     if (
-      offer.minimumRequirements === 'QUANTITY' &&
+      offer.minimumRequirement === 'QUANTITY' &&
       offer.minimumRequiredAmount
     ) {
       newItems.push(`Minimum purchase of ${offer.minimumRequiredAmount} items`);

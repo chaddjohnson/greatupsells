@@ -6,7 +6,6 @@ const trackImpression = async (
   {
     triggerShopifyProductId = undefined,
     offeredShopifyProductIds = [],
-    offeredShopifyVariantIds = [],
     ipAddress = undefined
   }
 ) => {
@@ -42,11 +41,8 @@ const trackImpression = async (
 
       await offerHit.save();
 
-      if (offeredShopifyProductIds.length && offeredShopifyVariantIds.length) {
-        await offerHit.trackOfferedProducts(
-          offeredShopifyProductIds,
-          offeredShopifyVariantIds
-        );
+      if (offeredShopifyProductIds.length) {
+        await offerHit.trackOfferedProducts(offeredShopifyProductIds);
       }
 
       // Increment offer impression count.

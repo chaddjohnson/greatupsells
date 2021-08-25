@@ -102,7 +102,6 @@ const initialOffer = {
   triggerExternalLinksOnly: true,
   triggerScrollThreshold: 75,
   triggerPage: 'ANY',
-  minimumRequirements: 'NONE',
   triggerProducts: [],
   triggerCollections: [],
   geotargetingCountries: [],

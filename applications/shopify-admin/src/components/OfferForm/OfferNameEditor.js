@@ -19,14 +19,11 @@ const OfferNameEditor = ({ name, submitted }) => (
 
 OfferNameEditor.propTypes = {
   name: PropTypes.object.isRequired,
-  strategy: PropTypes.object.isRequired,
-  submitted: PropTypes.bool,
-  onStrategyChange: PropTypes.func
+  submitted: PropTypes.bool
 };
 
 OfferNameEditor.defaultProps = {
-  submitted: false,
-  onStrategyChange: () => {}
+  submitted: false
 };
 
 export default OfferNameEditor;

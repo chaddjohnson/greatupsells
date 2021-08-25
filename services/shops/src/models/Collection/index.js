@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const trackShopifyProducts = require('./trackShopifyProducts');
+const updateDependentOffers = require('./updateDependentOffers');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -34,6 +35,10 @@ schema.statics.findOneByShopifyCollectionId = function (shopifyCollectionId) {
 
 schema.methods.trackShopifyProducts = function () {
   return trackShopifyProducts(this);
+};
+
+schema.methods.updateDependentOffers = function () {
+  return updateDependentOffers(this);
 };
 
 schema.methods.toString = function () {

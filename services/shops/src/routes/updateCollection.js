@@ -32,7 +32,7 @@ const handler = async (event, context) => {
 
     await collection.save();
     await collection.trackShopifyProducts();
-    // TODO: Update `imageUrl` in offers.
+    await collection.updateDependentOffers();
     await collection.execPopulate('shop');
 
     await logger.info(`Collection updated (${collection.toString()})`, {

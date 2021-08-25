@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
 const trackShopifyCollections = require('./trackShopifyCollections');
+const updateDependentOffers = require('./updateDependentOffers');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -33,6 +34,10 @@ schema.statics.findOneByShopifyVariantId = function (shopifyVariantId) {
 
 schema.methods.trackShopifyCollections = function () {
   return trackShopifyCollections(this);
+};
+
+schema.methods.updateDependentOffers = function () {
+  return updateDependentOffers(this);
 };
 
 schema.methods.toString = function () {

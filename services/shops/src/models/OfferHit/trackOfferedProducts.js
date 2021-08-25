@@ -1,67 +1,9 @@
-const logger = require('@neatowebsolutions/upselling-logger');
-const mongodbClient = require('../mongodbClient');
-
-const findProducts = async (shopifyProductIds) => {
-  const Product = mongodbClient.connection.model('Product');
-
-  return await Promise.all(
-    shopifyProductIds.map(async (shopifyProductId) => {
-      const product = await Product.findOneByShopifyProductId(shopifyProductId);
-
-      if (!product) {
-        return await logger.error(
-          `Unable to find Shopify product ${shopifyProductId}`
-        );
-      }
-
-      return product;
-    })
-  );
-};
-
-const findVariants = async (products, shopifyVariantIds) => {
-  const variants = await Promise.all(
-    products.map(async (product, productIndex) => {
-      if (!product) {
-        return;
-      }
-
-      const shopifyVariants =
-        product.shopifyProductData && product.shopifyProductData.variants;
-      const shopifyVariantId = shopifyVariantIds[productIndex];
-
-      const shopifyVariant =
-        shopifyVariants &&
-        shopifyVariants.find(({ id }) => id === shopifyVariantId);
-
-      if (!shopifyVariant) {
-        return await logger.error(
-          `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
-        );
-      }
-
-      return shopifyVariant;
-    })
-  );
-
-  return variants.filter(Boolean);
-};
-
-const trackOfferedProducts = async (
-  offerHit,
-  shopifyProductIds = [],
-  shopifyVariantIds = []
-) => {
-  const products = await findProducts(shopifyProductIds);
-  const variants = await findVariants(products, shopifyVariantIds);
-  const variantPrices = variants.map(({ price }) => parseFloat(price) || 0);
+const trackOfferedProducts = async (offerHit, shopifyProductIds = []) => {
   const productCount = shopifyProductIds.length;
 
   // Track the viewed product data for the offer hit.
   offerHit.offeredProducts = [...Array(productCount)].map((_, index) => ({
-    shopifyProductId: shopifyProductIds[index],
-    shopifyVariantId: shopifyVariantIds[index],
-    price: variantPrices[index]
+    shopifyProductId: shopifyProductIds[index]
   }));
 
   offerHit.markModified('offeredProducts');

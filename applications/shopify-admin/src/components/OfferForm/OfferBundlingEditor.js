@@ -17,7 +17,7 @@ const OfferBundlingEditor = ({ offer, enableBundling }) =>
             {
               label: 'Offer products in a bundle',
               helpText:
-                'All products presented in the offer will be bundled and added to the cart together on acceptance, if supported by the selected theme. Bundling helps increase average order value.',
+                'All products presented in the offer will be bundled and added to the cart together on acceptance. Bundling helps increase average order value.',
               value: 'true'
             }
           ]}
@@ -29,15 +29,8 @@ const OfferBundlingEditor = ({ offer, enableBundling }) =>
   );
 
 OfferBundlingEditor.propTypes = {
-  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
-  offeredProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  offeredCollections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  discountType: PropTypes.object.isRequired,
-  discountValue: PropTypes.object.isRequired,
-  discountTitle: PropTypes.object.isRequired,
-  enableBundling: PropTypes.object.isRequired,
-  submitted: PropTypes.bool
+  enableBundling: PropTypes.object.isRequired
 };
 
 export default OfferBundlingEditor;

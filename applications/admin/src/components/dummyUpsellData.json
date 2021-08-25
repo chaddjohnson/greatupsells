@@ -30,21 +30,17 @@
     "name": "Test Offer",
     "strategy": "UPSELL",
     "actionButtonBehavior": "CART",
-    "minimumRequirements": "NONE",
+    "minimumRequirement": "NONE",
     "offeredProducts": [
       {
         "title": "Better Shoes",
         "imageUrl": "/images/upsell/better/black.jpg",
-        "shopifyProductId": 6671390801965,
-        "minQuantity": 2,
-        "maxQuantity": 5
+        "shopifyProductId": 6671390801965
       },
       {
         "title": "Fancy Shoes",
         "imageUrl": "/images/upsell/fancy/dark-blue.jpg",
-        "shopifyProductId": 6671402762285,
-        "minQuantity": 1,
-        "maxQuantity": 5
+        "shopifyProductId": 6671402762285
       },
       {
         "title": "Super Fancy Shoes",

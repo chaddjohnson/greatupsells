@@ -45,9 +45,7 @@ const schema = new mongoose.Schema(
     triggerShopifyProductId: { type: Number, required: false },
     offeredProducts: [
       {
-        shopifyProductId: { type: Number, required: true },
-        shopifyVariantId: { type: Number, required: true },
-        price: { type: Number, required: true }
+        shopifyProductId: { type: Number, required: true }
       }
     ],
     acceptedProducts: [

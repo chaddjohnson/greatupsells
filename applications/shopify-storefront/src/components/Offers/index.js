@@ -27,11 +27,16 @@ const Offers = () => {
     () => shopifyCartItems?.map((item) => item.product_id),
     [shopifyCartItems]
   );
+  const shopifyVariantIds = useMemo(
+    () => shopifyCartItems?.map((item) => item.variant_id),
+    [shopifyCartItems]
+  );
 
   // Combine requests to reduce cost and minimize chances of exceeding Lambda concurrency limit.
   const { offersData = [] } = useRandomOffers({
     events: ['EXIT', 'LINK', 'FOCUS', 'LOAD', 'SCROLL'],
     shopifyProductIds,
+    shopifyVariantIds,
     shouldQuery: !!shopifyCartItems && !shopifyCartLoading
   });
 

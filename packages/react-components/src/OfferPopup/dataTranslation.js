@@ -64,9 +64,7 @@ const useDataTranslation = (shop, offer) => {
             variant.inventory_management !== 'shopify' ||
             variant.inventory_quantity > 0 ||
             variant.inventory_policy === 'continue'
-        })),
-        minQuantity: offeredProduct?.minQuantity || 1,
-        maxQuantity: offeredProduct?.maxQuantity
+        }))
       };
 
       return translatedData;

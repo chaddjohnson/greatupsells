@@ -34,11 +34,9 @@ const handler = middy(async (event, context) => {
     ]);
     const shopId = shop._id;
     const offerShopId = offer.shop;
-    const {
-      triggerShopifyProductId,
-      offeredShopifyProductIds,
-      offeredShopifyVariantIds
-    } = JSON.parse(event.body);
+    const { triggerShopifyProductId, offeredShopifyProductIds } = JSON.parse(
+      event.body
+    );
 
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
@@ -57,7 +55,6 @@ const handler = middy(async (event, context) => {
     const offerHit = await httpClient.post(`/offers/${offerId}/impressions`, {
       triggerShopifyProductId,
       offeredShopifyProductIds,
-      offeredShopifyVariantIds,
       ipAddress
     });
 

@@ -56,8 +56,10 @@ const buildViewAllowanceCriterias = (
   }
 ];
 
-const buildProductsCriterias = async (shopifyProductIds) => {
+const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
   const Collection = mongodbClient.connection.model('Collection');
+
+  // Find collections containing one or more of the products.
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
   });
@@ -68,8 +70,8 @@ const buildProductsCriterias = async (shopifyProductIds) => {
   // An upsell offer requires a specific trigger product.
   const upsellCriteria = {
     strategy: 'UPSELL',
-    'triggerProducts.shopifyProductId': {
-      $in: shopifyProductIds
+    'triggerProducts.shopifyVariantIds': {
+      $in: shopifyVariantIds
     }
   };
 
@@ -77,8 +79,8 @@ const buildProductsCriterias = async (shopifyProductIds) => {
     strategy: { $ne: 'UPSELL' },
     $or: [
       {
-        'triggerProducts.shopifyProductId': {
-          $in: shopifyProductIds
+        'triggerProducts.shopifyVariantIds': {
+          $in: shopifyVariantIds
         }
       },
       {
@@ -115,6 +117,7 @@ const findOneRandom = async (
   {
     triggerEvent,
     shopifyProductIds = [],
+    shopifyVariantIds = [],
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = [],
@@ -153,13 +156,16 @@ const findOneRandom = async (
     ]
   };
 
-  // Ensure Shopify product IDs are numeric prior to querying.
-  shopifyProductIds =
-    shopifyProductIds &&
-    shopifyProductIds.map((shopifyProductId) => parseInt(shopifyProductId));
+  // Ensure Shopify IDs are numeric prior to querying.
+  shopifyProductIds = shopifyProductIds?.map((shopifyProductId) =>
+    parseInt(shopifyProductId)
+  );
+  shopifyVariantIds = shopifyVariantIds?.map((shopifyVariantId) =>
+    parseInt(shopifyVariantId)
+  );
 
   criteria.$and.push({
-    $or: await buildProductsCriterias(shopifyProductIds)
+    $or: await buildProductsCriterias(shopifyProductIds, shopifyVariantIds)
   });
 
   // Limit to offers with no geotargeting AND offers targeting the country that

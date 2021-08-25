@@ -30,21 +30,17 @@
     "name": "Test Offer",
     "strategy": "CROSS_SELL",
     "actionButtonBehavior": "CART",
-    "minimumRequirements": "NONE",
+    "minimumRequirement": "NONE",
     "offeredProducts": [
       {
         "title": "Fancy Hat",
         "imageUrl": "/images/hat.jpg",
-        "shopifyProductId": 39586577711149,
-        "minQuantity": 2,
-        "maxQuantity": 5
+        "shopifyProductId": 39586577711149
       },
       {
         "title": "Fancy Dress Shoes",
         "imageUrl": "/images/shoes.jpg",
-        "shopifyProductId": 4474376290349,
-        "minQuantity": 1,
-        "maxQuantity": 5
+        "shopifyProductId": 4474376290349
       },
       {
         "title": "Fancy Socks",

@@ -1,3 +1,4 @@
+const { flatten, uniq } = require('lodash');
 const mongodbClient = require('../mongodbClient');
 
 const findRandomProducts = async (offer) => {
@@ -13,6 +14,9 @@ const findRandomProducts = async (offer) => {
   const Product = mongodbClient.connection.model('Product');
   const offeredShopifyProductIds = offeredProducts.map(
     ({ shopifyProductId }) => shopifyProductId
+  );
+  const offeredShopifyVariantIds = uniq(
+    flatten(offeredProducts.map(({ shopifyVariantIds }) => shopifyVariantIds))
   );
   const offeredShopifyCollectionIds = offeredCollections.map(
     ({ shopifyCollectionId }) => shopifyCollectionId
@@ -56,7 +60,7 @@ const findRandomProducts = async (offer) => {
   };
 
   // Randomly select a product for the offer OR a product in a collection for the offer.
-  const randomProducts = await Product.aggregate([
+  let randomProducts = await Product.aggregate([
     { $match: criteria },
     { $sample: { size: 3 } },
     { $project: { _id: 1 } }
@@ -67,9 +71,18 @@ const findRandomProducts = async (offer) => {
   }
 
   // Aggregation only returns JSON, so query for Mongoose documents.
-  return await Promise.all(
+  randomProducts = await Promise.all(
     randomProducts.map(async ({ _id }) => Product.findById(_id))
   );
+
+  // Filter variants for only those offered.
+  randomProducts.forEach((randomProduct) => {
+    randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
+      (variant) => offeredShopifyVariantIds.includes(variant.id)
+    );
+  });
+
+  return randomProducts;
 };
 
 module.exports = findRandomProducts;

@@ -10,12 +10,18 @@ const hooks = require('./hooks');
 
 let Offer = null;
 
+const triggerProductSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  imageUrl: { type: String, required: false },
+  shopifyProductId: { type: Number, required: true },
+  shopifyVariantIds: [{ type: Number, required: true }]
+});
+
 const offerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true },
-  minQuantity: { type: Int32, required: false, min: 0 },
-  maxQuantity: { type: Int32, required: false, min: 1 }
+  shopifyVariantIds: [{ type: Number, required: true }]
 });
 
 const offerCollectionSchema = new mongoose.Schema({
@@ -71,27 +77,6 @@ const schema = new mongoose.Schema(
       default: 7,
       min: 0
     },
-    popupTheme: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'PopupTheme',
-      required: false // false because PopupTheme requires an offer to be saved.
-    },
-    minimumRequirements: {
-      type: String,
-      required: true,
-      enum: ['NONE', 'AMOUNT', 'QUANTITY'],
-      default: 'NONE'
-    },
-    minimumRequiredAmount: { type: Number, required: false },
-    offeredProducts: [offerProductSchema],
-    offeredCollections: [offerCollectionSchema],
-    discountType: {
-      type: String,
-      required: true,
-      enum: ['PERCENTAGE', 'AMOUNT', 'SET_PRICE', 'NO_DISCOUNT']
-    },
-    discountValue: { type: Number, required: false },
-    discountTitle: { type: String, required: false },
     triggerEvent: {
       type: String,
       required: true,
@@ -112,8 +97,30 @@ const schema = new mongoose.Schema(
       enum: ['ANY', 'PAGE']
     },
     triggerPagePath: { type: String, required: false },
-    triggerProducts: [offerProductSchema],
+    triggerProducts: [triggerProductSchema],
     triggerCollections: [offerCollectionSchema],
+    popupTheme: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PopupTheme',
+      required: false // false because PopupTheme requires an offer to be saved.
+    },
+    minimumRequirement: {
+      type: String,
+      required: true,
+      enum: ['NONE', 'AMOUNT', 'QUANTITY'],
+      default: 'NONE'
+    },
+    minimumRequiredAmount: { type: Number, required: false },
+    offeredProducts: [offerProductSchema],
+    offeredCollections: [offerCollectionSchema],
+    maximumOfferedProductQuantity: { type: Number, required: false },
+    discountType: {
+      type: String,
+      required: true,
+      enum: ['PERCENTAGE', 'AMOUNT', 'SET_PRICE', 'NO_DISCOUNT']
+    },
+    discountValue: { type: Number, required: false },
+    discountTitle: { type: String, required: false },
     enableBundling: { type: Boolean, required: true, default: false },
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },

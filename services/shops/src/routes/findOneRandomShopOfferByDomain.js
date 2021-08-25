@@ -23,6 +23,7 @@ const findPopupData = async (
   {
     triggerEvent,
     shopifyProductIds,
+    shopifyVariantIds,
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
@@ -34,6 +35,7 @@ const findPopupData = async (
   const offer = await Offer.findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,
+    shopifyVariantIds,
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
@@ -72,6 +74,7 @@ const handler = async (event, context) => {
     const {
       events: triggerEvents,
       shopifyProductIds,
+      shopifyVariantIds,
       ipAddress,
       offerImpressions,
       sessionOfferImpressions,
@@ -91,6 +94,7 @@ const handler = async (event, context) => {
         findPopupData(shop, {
           triggerEvent,
           shopifyProductIds,
+          shopifyVariantIds,
           ipAddress,
           offerImpressions,
           sessionOfferImpressions,

@@ -107,7 +107,11 @@ const OfferDiscountEditor = ({
                   (discountType.value === 'SET_PRICE' && '0.00') ||
                   undefined
                 }
-                helpText="The discount amount applied to each offered item added to the cart."
+                helpText={
+                  discountType.value !== 'SET_PRICE'
+                    ? 'The discount amount applied to each offered item added to the cart.'
+                    : 'The price for each offered item added to the cart.'
+                }
                 inputMode="numeric"
                 {...discountValue}
                 value={discountValueInternal?.toString()}
@@ -126,7 +130,7 @@ const OfferDiscountEditor = ({
                 (discountType.value === 'SET_PRICE' && 'Discounted price') ||
                 undefined
               }
-              helpText="This will show as a discount description for order line items."
+              helpText="This will show as a description for discounted order line items."
               {...discountTitle}
               error={submitted && discountTitle.error}
             />

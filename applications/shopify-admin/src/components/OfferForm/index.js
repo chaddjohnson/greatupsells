@@ -24,9 +24,8 @@ import OfferPagesEditor from './OfferPagesEditor';
 import OfferViewAllowanceEditor from './OfferViewAllowanceEditor';
 import OfferActionButtonEditor from './OfferActionButtonEditor';
 import OfferTriggerProductsEditor from './OfferTriggerProductsEditor';
-import OfferProductsEditor from './OfferProductsEditor';
+import OfferOfferedProductsEditor from './OfferOfferedProductsEditor';
 import OfferDiscountEditor from './OfferDiscountEditor';
-import OfferMinimumRequirementsEditor from './OfferMinimumRequirementsEditor';
 import OfferBundlingEditor from './OfferBundlingEditor';
 import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
@@ -101,7 +100,7 @@ const OfferForm = ({
     discountType,
     discountValue,
     discountTitle,
-    minimumRequirements,
+    minimumRequirement,
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
@@ -136,7 +135,7 @@ const OfferForm = ({
       triggerScrollThreshold,
       triggerPage,
       triggerPagePath,
-      minimumRequirements,
+      minimumRequirement,
       minimumRequiredAmount,
       offeredProducts,
       offeredCollections,
@@ -344,19 +343,17 @@ const OfferForm = ({
             submitted={submitted}
           />
           <OfferTriggerProductsEditor
-            offer={offer}
+            shop={shop}
             triggerProducts={triggerProducts}
             triggerCollections={triggerCollections}
+            minimumRequirement={minimumRequirement}
+            minimumRequiredAmount={minimumRequiredAmount}
+            submitted={submitted}
           />
-          <OfferProductsEditor
+          <OfferOfferedProductsEditor
             offer={offer}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
-            discountType={discountType}
-            discountValue={discountValue}
-            discountTitle={discountTitle}
-            enableBundling={enableBundling}
-            submitted={submitted}
           />
           <OfferDiscountEditor
             shop={shop}
@@ -364,12 +361,6 @@ const OfferForm = ({
             discountType={discountType}
             discountValue={discountValue}
             discountTitle={discountTitle}
-            submitted={submitted}
-          />
-          <OfferMinimumRequirementsEditor
-            shop={shop}
-            minimumRequirements={minimumRequirements}
-            minimumRequiredAmount={minimumRequiredAmount}
             submitted={submitted}
           />
           <OfferBundlingEditor offer={offer} enableBundling={enableBundling} />
