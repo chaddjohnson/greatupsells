@@ -106,15 +106,26 @@ const useDataBinding = ({
         })
       );
 
-      this.maxQuantity = () =>
+      this.maxQuantity = (index) =>
         knockout.computed(() => {
           const { maximumOfferedProductQuantity: maxQuantity } = offer;
+          const maxInventory = this.selectedVariants()[index]?.maxInventory;
           const hasMaxQuantity = typeof maxQuantity === 'number';
+          const hasMaxInventory = typeof maxInventory === 'number';
           const remainingQuantity =
             hasMaxQuantity && maxQuantity - addedQuantity;
+          const addedVariantQuantity = addedQuantities[index] || 0;
+          const remainingInventory =
+            hasMaxInventory && maxInventory - addedVariantQuantity;
 
+          if (hasMaxQuantity && hasMaxInventory) {
+            return Math.min(remainingQuantity, remainingInventory);
+          }
           if (hasMaxQuantity) {
             return remainingQuantity;
+          }
+          if (hasMaxInventory) {
+            return remainingInventory;
           }
         }, this);
 

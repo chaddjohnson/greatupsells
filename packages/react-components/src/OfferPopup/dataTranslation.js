@@ -28,10 +28,6 @@ const useDataTranslation = (shop, offer) => {
           {}
         ) || {};
 
-      const offeredProduct = offer.offeredProducts.find(
-        (current) => current.shopifyProductId === product.shopifyProductId
-      );
-
       const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
@@ -60,6 +56,11 @@ const useDataTranslation = (shop, offer) => {
               shopifyProductData.image?.alt ||
               shopifyProductData.title
           },
+          maxInventory:
+            variant.inventory_policy !== 'continue' &&
+            variant.inventory_management === 'shopify'
+              ? Math.max(variant.inventory_quantity, 0) || 0
+              : undefined,
           hasInventory:
             variant.inventory_management !== 'shopify' ||
             variant.inventory_quantity > 0 ||
