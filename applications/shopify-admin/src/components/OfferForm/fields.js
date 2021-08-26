@@ -10,26 +10,29 @@ const useFields = (initialOffer, showEndDate) => {
   const triggerExternalLinksOnly = useField(
     initialOffer.triggerExternalLinksOnly
   );
-  const triggerScrollThreshold = useField({
-    value: initialOffer.triggerScrollThreshold?.toString(),
-    validates: [
-      (value) => {
-        if (!value) {
-          return "Trigger scroll threshold can't be blank";
+  const triggerScrollThreshold = useField(
+    {
+      value: initialOffer.triggerScrollThreshold?.toString(),
+      validates: [
+        (value) => {
+          if (triggerEvent.value === 'SCROLL' && !value) {
+            return "Trigger scroll threshold can't be blank";
+          }
+        },
+        (value) => {
+          if (value && Number.isNaN(value)) {
+            return 'Trigger scroll threshold must be a number';
+          }
+        },
+        (value) => {
+          if (value && Number(value) < 1) {
+            return 'Trigger scroll threshold must be a positive value';
+          }
         }
-      },
-      (value) => {
-        if (value && Number.isNaN(value)) {
-          return 'Trigger scroll threshold must be a number';
-        }
-      },
-      (value) => {
-        if (value && Number(value) < 1) {
-          return 'Trigger scroll threshold must be a positive value';
-        }
-      }
-    ]
-  });
+      ]
+    },
+    [triggerEvent.value]
+  );
   const triggerPage = useField(initialOffer.triggerPage);
   const triggerPagePath = useField({
     value: initialOffer.triggerPagePath,
@@ -193,11 +196,6 @@ const useFields = (initialOffer, showEndDate) => {
     value: initialOffer.delaySeconds?.toString(),
     validates: [
       (value) => {
-        if (!value) {
-          return "Delay seconds can't be blank";
-        }
-      },
-      (value) => {
         if (value && Number.isNaN(value)) {
           return 'Delay seconds must be a number';
         }
@@ -212,11 +210,6 @@ const useFields = (initialOffer, showEndDate) => {
   const onPageRequiredSeconds = useField({
     value: initialOffer.onPageRequiredSeconds?.toString(),
     validates: [
-      (value) => {
-        if (!value) {
-          return "Required seconds can't be blank";
-        }
-      },
       (value) => {
         if (value && Number.isNaN(value)) {
           return 'Required seconds must be a number';
