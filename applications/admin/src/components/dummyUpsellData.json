@@ -28,7 +28,7 @@
     "shopifyShopId": 27708653613,
     "name": "Test Offer",
     "strategy": "UPSELL",
-    "actionButtonBehavior": "CART",
+    "actionButtonBehavior": "CHECKOUT",
     "minimumRequirement": "NONE",
     "offeredProducts": [
       {

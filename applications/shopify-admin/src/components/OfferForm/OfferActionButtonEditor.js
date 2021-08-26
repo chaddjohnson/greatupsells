@@ -23,14 +23,14 @@ const OfferActionButtonEditor = ({
       <ChoiceList
         choices={[
           {
-            label: 'Redirect customers to the Cart page',
-            value: 'CART'
-          },
-          {
             label: 'Skip the cart and redirect customers to the Checkout page',
             helpText:
               'Immediately initiating checkout can increase conversions.',
             value: 'CHECKOUT'
+          },
+          {
+            label: 'Redirect customers to the Cart page',
+            value: 'CART'
           },
           {
             label: 'Remain on the same page',

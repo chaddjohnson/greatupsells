@@ -123,6 +123,32 @@ const OfferPopup = ({
     });
   };
 
+  const actionButtonUrl = useMemo(() => {
+    if (offer.actionButtonBehavior === 'CHECKOUT') {
+      return checkoutUrl;
+    } else if (offer.actionButtonBehavior === 'CART') {
+      return '/cart';
+    } else if (offer.actionButtonBehavior === 'PAGE') {
+      return 'javascript:void(0)'; // eslint-disable-line no-script-url
+    } else if (offer.actionButtonBehavior === 'LINK') {
+      return offer.actionButtonLink;
+    }
+
+    return checkoutUrl;
+  }, [offer.actionButtonBehavior, offer.actionButtonLink, checkoutUrl]);
+
+  const actionButtonTarget = useMemo(() => {
+    const openInNewTab =
+      offer.actionButtonBehavior === 'LINK' &&
+      offer.actionButtonLinkOpenInNewTab;
+
+    if (openInNewTab) {
+      return '_blank';
+    }
+
+    return '_top';
+  }, [offer.actionButtonBehavior, offer.actionButtonLinkOpenInNewTab]);
+
   // Set up template variables.
   const mappedVariables = useMemo(
     () =>
@@ -165,7 +191,8 @@ const OfferPopup = ({
       ...mappedVariables,
       triggerProduct: translatedTriggerProduct,
       offeredProducts: translatedOfferedProducts,
-      checkoutUrl,
+      actionButtonUrl,
+      actionButtonTarget,
       shopifyCartTotal: formatCurrency(shopifyCartTotal || 0),
       shopifyCartItemCount: shopifyCartItemCount || 0,
       strategy: offer.strategy,
@@ -178,7 +205,8 @@ const OfferPopup = ({
       translatedTriggerProduct,
       translatedOfferedProducts,
       offer,
-      checkoutUrl,
+      actionButtonUrl,
+      actionButtonTarget,
       shopifyCartTotal,
       shopifyCartItemCount,
       formatCurrency

@@ -28,7 +28,7 @@
     "shopifyShopId": 27708653613,
     "name": "Test Offer",
     "strategy": "CROSS_SELL",
-    "actionButtonBehavior": "CART",
+    "actionButtonBehavior": "CHECKOUT",
     "minimumRequirement": "NONE",
     "maximumOfferedProductQuantity": 4,
     "offeredProducts": [

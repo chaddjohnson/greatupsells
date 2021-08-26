@@ -140,7 +140,7 @@ const useFields = (initialOffer, showEndDate) => {
     {
       value: initialOffer.actionButtonLink,
       validates: (value) => {
-        if (actionButtonBehavior.value === 'Link' && !value) {
+        if (actionButtonBehavior.value === 'LINK' && !value) {
           return "Action button link can't be blank";
         }
       }

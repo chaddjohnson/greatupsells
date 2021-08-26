@@ -51,7 +51,7 @@ const schema = new mongoose.Schema(
     actionButtonBehavior: {
       type: String,
       required: true,
-      enum: ['CART', 'CHECKOUT', 'PAGE', 'LINK']
+      enum: ['CHECKOUT', 'CART', 'PAGE', 'LINK']
     },
     actionButtonLink: {
       type: String,
@@ -60,7 +60,7 @@ const schema = new mongoose.Schema(
       }
     },
     actionButtonLinkOpenInNewTab: {
-      type: String,
+      type: Boolean,
       required() {
         return this.actionButtonBehavior === 'LINK';
       }
