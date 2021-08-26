@@ -57,9 +57,6 @@ const CountryAutocomplete = ({
       })
       .sort();
 
-    // The format of this is specific to the autocomplete.
-    // setSelectedOptions(values);
-
     onChange(selectedValues);
   };
 
