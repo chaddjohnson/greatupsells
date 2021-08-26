@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import knockout from 'knockout';
 import {
   useCookies,
@@ -27,6 +27,14 @@ const useDataBinding = ({
     countryCode,
     currency
   });
+
+  const addedQuantity = useMemo(
+    () =>
+      Object.values(addedQuantities).reduce((sum, quantity) => {
+        return sum + quantity;
+      }, 0),
+    [addedQuantities]
+  );
 
   const iframeDocument =
     iframe?.contentWindow?.document ||
@@ -93,47 +101,15 @@ const useDataBinding = ({
         );
 
       this.selectedQuantities = knockout.observableArray(
-        [...Array(offeredProducts.length).keys()].map((_, index) => {
-          const offeredProduct = offeredProducts[index];
-          const { minQuantity } = offeredProduct;
-          const addedQuantity = addedQuantities[index] || 0;
-
-          // Set selected quantity to 1 if an item has been added to the cart
-          // (and thus the minimum quantity has been achieved).
-          if (addedQuantity > 0) {
-            return knockout.observable(1);
-          }
-
-          // Set initial quantity to minimum with a default of 1.
-          return knockout.observable(minQuantity || 1);
+        [...Array(offeredProducts.length)].map(() => {
+          return knockout.observable(1);
         })
       );
 
-      this.minQuantity = (index) =>
+      this.maxQuantity = () =>
         knockout.computed(() => {
-          const { minQuantity } = offeredProducts[index];
-          const hasMinQuantity = typeof minQuantity === 'number';
-          const addedQuantity = addedQuantities[index] || 0;
-
-          // Allow 1 if an item has been added to the cart (and thus the
-          // minimum quantity has been achieved).
-          if (addedQuantity > 0) {
-            return 1;
-          }
-
-          if (hasMinQuantity) {
-            return minQuantity;
-          }
-
-          // Default
-          return 1;
-        }, this);
-
-      this.maxQuantity = (index) =>
-        knockout.computed(() => {
-          const { maxQuantity } = offeredProducts[index];
+          const { maximumOfferedProductQuantity: maxQuantity } = offer;
           const hasMaxQuantity = typeof maxQuantity === 'number';
-          const addedQuantity = addedQuantities[index] || 0;
           const remainingQuantity =
             hasMaxQuantity && maxQuantity - addedQuantity;
 
@@ -144,10 +120,8 @@ const useDataBinding = ({
 
       this.addingProductEnabled = (index) =>
         knockout.computed(() => {
-          const { minQuantity, maxQuantity } = offeredProducts[index];
-          const hasMinQuantity = typeof minQuantity === 'number';
+          const { maximumOfferedProductQuantity: maxQuantity } = offer;
           const hasMaxQuantity = typeof maxQuantity === 'number';
-          const addedQuantity = addedQuantities[index] || 0;
           const remainingQuantity =
             hasMaxQuantity && maxQuantity - addedQuantity;
           const selectedQuantity = parseInt(this.selectedQuantities()[index]());
@@ -156,11 +130,6 @@ const useDataBinding = ({
             !Number.isNaN(selectedQuantity) &&
             selectedQuantity > 0 &&
             selectedQuantity % 1 === 0;
-          const selectedQuantityAtOrAboveMin =
-            !hasMinQuantity ||
-            (selectedQuantityValid &&
-              (selectedQuantity >= minQuantity ||
-                (addedQuantity > 0 && selectedQuantity >= 1)));
           const selectedQuantityAtOrBelowRemaining =
             !hasMaxQuantity ||
             (selectedQuantityValid && selectedQuantity <= remainingQuantity);
@@ -171,7 +140,6 @@ const useDataBinding = ({
 
           return (
             addedQuantityBelowMax &&
-            selectedQuantityAtOrAboveMin &&
             selectedQuantityAtOrBelowRemaining &&
             selectedQuantityValid &&
             (!offer.disableOutOfStockVariants || selectedVariantHasInventory)
@@ -194,8 +162,7 @@ const useDataBinding = ({
       this.addingProductBundleEnabled = knockout.computed(
         () =>
           this.selectedQuantities().every((selectedQuantity, index) => {
-            const { minQuantity, maxQuantity } = offeredProducts[index];
-            const hasMinQuantity = typeof minQuantity === 'number';
+            const { maximumOfferedProductQuantity: maxQuantity } = offer;
             const hasMaxQuantity = typeof maxQuantity === 'number';
             const selectedQuantityValue = parseInt(
               this.selectedQuantities()[index]()
@@ -205,18 +172,11 @@ const useDataBinding = ({
               !Number.isNaN(selectedQuantity) &&
               selectedQuantityValue > 0 &&
               selectedQuantityValue % 1 === 0;
-            const selectedQuantityAtOrAboveMin =
-              !hasMinQuantity ||
-              (selectedQuantityValid && selectedQuantity >= minQuantity);
             const selectedQuantityAtOrBelowMax =
               !hasMaxQuantity ||
               (selectedQuantityValid && selectedQuantityValue <= maxQuantity);
 
-            return (
-              selectedQuantityValid &&
-              selectedQuantityAtOrAboveMin &&
-              selectedQuantityAtOrBelowMax
-            );
+            return selectedQuantityValid && selectedQuantityAtOrBelowMax;
           }),
         this
       );
@@ -290,6 +250,7 @@ const useDataBinding = ({
       offer,
       offeredProducts,
       addedQuantities,
+      addedQuantity,
       getCookie,
       onAddProduct,
       onReplaceProduct,

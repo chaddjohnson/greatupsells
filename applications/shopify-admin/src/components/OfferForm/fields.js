@@ -125,6 +125,9 @@ const useFields = (initialOffer, showEndDate) => {
   );
   const offeredProducts = useField(initialOffer.offeredProducts);
   const offeredCollections = useField(initialOffer.offeredCollections);
+  const maximumOfferedProductQuantity = useField(
+    initialOffer.maximumOfferedProductQuantity?.toString()
+  );
   const triggerProducts = useField(initialOffer.triggerProducts);
   const triggerCollections = useField(initialOffer.triggerCollections);
   const geotargetingCountries = useField(initialOffer.geotargetingCountries);
@@ -254,6 +257,7 @@ const useFields = (initialOffer, showEndDate) => {
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
+    maximumOfferedProductQuantity,
     triggerProducts,
     triggerCollections,
     geotargetingCountries,

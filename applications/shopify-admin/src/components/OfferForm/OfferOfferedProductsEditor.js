@@ -1,17 +1,36 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, ChoiceList, Checkbox } from '@shopify/polaris';
+import {
+  Card,
+  FormLayout,
+  ChoiceList,
+  Checkbox,
+  TextField
+} from '@shopify/polaris';
+import styled from 'styled-components';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
+
+const QuantityInputWrapper = styled.div`
+  .Polaris-TextField {
+    max-width: 145px;
+  }
+`;
 
 const OfferOfferedProductsEditor = ({
   offer,
   offeredProducts,
-  offeredCollections
+  offeredCollections,
+  maximumOfferedProductQuantity,
+  submitted
 }) => {
   const [appliesTo, setAppliesTo] = useState(
     offeredCollections.value.length ? 'COLLECTIONS' : 'PRODUCTS'
   );
+  const [
+    maximumOfferedProductQuantityActive,
+    setMaximumOfferedProductQuantityActive
+  ] = useState(!!maximumOfferedProductQuantity.value);
 
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
@@ -20,6 +39,14 @@ const OfferOfferedProductsEditor = ({
       offeredCollections.onChange([]);
     } else if (value === 'COLLECTIONS') {
       offeredProducts.onChange([]);
+    }
+  };
+
+  const handleMaximumOfferedProductQuantityActiveChange = (checked) => {
+    setMaximumOfferedProductQuantityActive(checked);
+
+    if (!checked) {
+      maximumOfferedProductQuantity.onChange(undefined);
     }
   };
 
@@ -101,15 +128,30 @@ const OfferOfferedProductsEditor = ({
             )}
           </FormLayout>
         </Card.Section>
-        <Card.Section>
-          <FormLayout>
-            <Checkbox
-              label={`Set a maximum number of ${
-                offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'
-              } items per order`}
-            />
-          </FormLayout>
-        </Card.Section>
+        {offer.strategy === 'CROSS_SELL' && (
+          <Card.Section>
+            <FormLayout>
+              <Checkbox
+                label={`Set a maximum number of cross-sell items for this offer`}
+                helpText={
+                  maximumOfferedProductQuantityActive && (
+                    <QuantityInputWrapper>
+                      <TextField
+                        inputMode="numeric"
+                        min={1}
+                        helpText="Applies to offered products."
+                        {...maximumOfferedProductQuantity}
+                        error={submitted && maximumOfferedProductQuantity.error}
+                      />
+                    </QuantityInputWrapper>
+                  )
+                }
+                checked={maximumOfferedProductQuantityActive}
+                onChange={handleMaximumOfferedProductQuantityActiveChange}
+              />
+            </FormLayout>
+          </Card.Section>
+        )}
       </Card>
     </>
   );
@@ -118,7 +160,13 @@ const OfferOfferedProductsEditor = ({
 OfferOfferedProductsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
   offeredProducts: PropTypes.object.isRequired,
-  offeredCollections: PropTypes.object.isRequired
+  offeredCollections: PropTypes.object.isRequired,
+  maximumOfferedProductQuantity: PropTypes.object.isRequired,
+  submitted: PropTypes.bool
+};
+
+OfferOfferedProductsEditor.defaultProps = {
+  submitted: false
 };
 
 export default OfferOfferedProductsEditor;

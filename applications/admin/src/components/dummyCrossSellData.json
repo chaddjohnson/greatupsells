@@ -31,6 +31,7 @@
     "strategy": "CROSS_SELL",
     "actionButtonBehavior": "CART",
     "minimumRequirement": "NONE",
+    "maximumOfferedProductQuantity": 4,
     "offeredProducts": [
       {
         "title": "Fancy Hat",

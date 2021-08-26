@@ -150,4 +150,8 @@ OfferDiscountEditor.propTypes = {
   submitted: PropTypes.bool
 };
 
+OfferDiscountEditor.defaultProps = {
+  submitted: false
+};
+
 export default OfferDiscountEditor;

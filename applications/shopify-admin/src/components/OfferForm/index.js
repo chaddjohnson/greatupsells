@@ -104,6 +104,7 @@ const OfferForm = ({
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
+    maximumOfferedProductQuantity,
     triggerProducts,
     triggerCollections,
     geotargetingCountries,
@@ -139,6 +140,7 @@ const OfferForm = ({
       minimumRequiredAmount,
       offeredProducts,
       offeredCollections,
+      maximumOfferedProductQuantity,
       discountType,
       discountValue,
       discountTitle,
@@ -226,6 +228,15 @@ const OfferForm = ({
 
     strategy.onChange(value);
 
+    if (value !== 'CROSS_SELL') {
+      maximumOfferedProductQuantity.onChange(undefined);
+    }
+
+    // Bundling is only available with cross-selling.
+    if (value !== 'CROSS_SELL') {
+      enableBundling.onChange(false);
+    }
+
     // If there is not yet a theme associated with the offer for the selected
     // strategy, then copy the first available theme for that strategy.
     if (!firstStrategyOfferPopupTheme && firstStrategyPopupTheme) {
@@ -238,11 +249,6 @@ const OfferForm = ({
     // Switch to the first strategy theme.
     if (firstStrategyOfferPopupTheme && !selectedThemeUsesSelectedStrategy) {
       setPopupTheme(firstStrategyOfferPopupTheme);
-    }
-
-    // Bundling is only available with cross-selling.
-    if (value !== 'CROSS_SELL') {
-      enableBundling.onChange(false);
     }
   };
 
@@ -354,6 +360,8 @@ const OfferForm = ({
             offer={offer}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
+            maximumOfferedProductQuantity={maximumOfferedProductQuantity}
+            submitted={submitted}
           />
           <OfferDiscountEditor
             shop={shop}

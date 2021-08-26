@@ -113,7 +113,7 @@ const schema = new mongoose.Schema(
     minimumRequiredAmount: { type: Number, required: false },
     offeredProducts: [offerProductSchema],
     offeredCollections: [offerCollectionSchema],
-    maximumOfferedProductQuantity: { type: Number, required: false },
+    maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
     discountType: {
       type: String,
       required: true,
