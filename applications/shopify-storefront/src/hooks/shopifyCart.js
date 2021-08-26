@@ -40,7 +40,8 @@ const CartProvider = ({ children }) => {
   const {
     data: shopifyCart,
     error: shopifyCartError,
-    mutate: fetchShopifyCart
+    mutate: fetchShopifyCart,
+    isValidating
   } = useSWR(
     '/cart.js',
     async () => {
@@ -50,12 +51,15 @@ const CartProvider = ({ children }) => {
       revalidateOnFocus: false
     }
   );
-  const shopifyCartLoading = !shopifyCart && !shopifyCartError;
+  const shopifyCartLoading =
+    (!shopifyCart && !shopifyCartError) || isValidating;
   const shopifyCartItems = useMemo(() => shopifyCart?.items || [], [
     shopifyCart
   ]);
-  const shopifyCartTotal =
-    shopifyCart?.total_price && shopifyCart?.total_price / 100;
+  const shopifyCartTotal = useMemo(
+    () => shopifyCart?.total_price && shopifyCart?.total_price / 100,
+    [shopifyCart]
+  );
   const shopifyCartItemCount = useMemo(
     () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
     [shopifyCartItems]

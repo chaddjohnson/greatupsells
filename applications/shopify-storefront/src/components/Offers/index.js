@@ -37,6 +37,8 @@ const Offers = () => {
     events: ['EXIT', 'LINK', 'FOCUS', 'LOAD', 'SCROLL'],
     shopifyProductIds,
     shopifyVariantIds,
+    shopifyCartTotal,
+    shopifyCartItemCount,
     shouldQuery: !!shopifyCartItems && !shopifyCartLoading
   });
 

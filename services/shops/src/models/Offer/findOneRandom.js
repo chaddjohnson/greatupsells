@@ -56,6 +56,21 @@ const buildViewAllowanceCriterias = (
   }
 ];
 
+const buildMinimumRequirementCriterias = (
+  shopifyCartTotal,
+  shopifyCartItemCount
+) => [
+  { minimumRequirement: 'NONE' },
+  {
+    minimumRequirement: 'AMOUNT',
+    minimumRequiredAmount: { $lte: shopifyCartTotal }
+  },
+  {
+    minimumRequirement: 'QUANTITY',
+    minimumRequiredAmount: { $lte: shopifyCartItemCount }
+  }
+];
+
 const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
   const Collection = mongodbClient.connection.model('Collection');
 
@@ -99,12 +114,8 @@ const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
 };
 
 const buildGeotargetingCriterias = (countryCode) => [
-  {
-    geotargetingCountries: { $size: 0 }
-  },
-  {
-    geotargetingCountries: countryCode
-  }
+  { geotargetingCountries: { $size: 0 } },
+  { geotargetingCountries: countryCode }
 ];
 
 // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
@@ -112,35 +123,21 @@ const sanitizePagePath = (pagePath) => {
   return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
 };
 
-const findOneRandom = async (
+const buildCriteria = async (
   shop,
   {
     triggerEvent,
     shopifyProductIds = [],
     shopifyVariantIds = [],
+    shopifyCartTotal = 0,
+    shopifyCartItemCount = 0,
     ipAddress = undefined,
     offerImpressions = [],
-    sessionOfferImpressions = [],
-    pagePath
+    sessionOfferImpressions = []
   }
 ) => {
-  const shopifyProductIdsRequired = triggerEvent === 'ADD';
-  const shopifyProductIdsMissing =
-    !shopifyProductIds || shopifyProductIds.length === 0;
-
-  if (!triggerEvent) {
-    throw new Error('`triggerEvent` must be provided');
-  }
-  if (shopifyProductIdsRequired && shopifyProductIdsMissing) {
-    throw new Error(
-      `\`shopifyProductIds\` must be provided with trigger event ${triggerEvent}`
-    );
-  }
-
-  const Offer = mongodbClient.connection.model('Offer');
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
-  const pagePathSanitized = sanitizePagePath(pagePath);
 
   const criteria = {
     shop: shop._id,
@@ -151,6 +148,12 @@ const findOneRandom = async (
         $or: buildViewAllowanceCriterias(
           offerImpressions,
           sessionOfferImpressions
+        )
+      },
+      {
+        $or: buildMinimumRequirementCriterias(
+          shopifyCartTotal,
+          shopifyCartItemCount
         )
       }
     ]
@@ -175,6 +178,49 @@ const findOneRandom = async (
       $or: buildGeotargetingCriterias(geoData.country)
     });
   }
+
+  return criteria;
+};
+
+const findOneRandom = async (
+  shop,
+  {
+    triggerEvent,
+    shopifyProductIds = [],
+    shopifyVariantIds = [],
+    shopifyCartTotal = 0,
+    shopifyCartItemCount = 0,
+    ipAddress = undefined,
+    offerImpressions = [],
+    sessionOfferImpressions = [],
+    pagePath
+  }
+) => {
+  const shopifyProductIdsRequired = triggerEvent === 'ADD';
+  const shopifyProductIdsMissing =
+    !shopifyProductIds || shopifyProductIds.length === 0;
+
+  if (!triggerEvent) {
+    throw new Error('`triggerEvent` must be provided');
+  }
+  if (shopifyProductIdsRequired && shopifyProductIdsMissing) {
+    throw new Error(
+      `\`shopifyProductIds\` must be provided with trigger event ${triggerEvent}`
+    );
+  }
+
+  const Offer = mongodbClient.connection.model('Offer');
+  const criteria = await buildCriteria(shop, {
+    triggerEvent,
+    shopifyProductIds,
+    shopifyVariantIds,
+    shopifyCartTotal,
+    shopifyCartItemCount,
+    ipAddress,
+    offerImpressions,
+    sessionOfferImpressions
+  });
+  const pagePathSanitized = sanitizePagePath(pagePath);
 
   // Randomly find an offer.
   let offers = await Offer.find(criteria);

@@ -7,6 +7,7 @@ import {
   useRandomOffers,
   useOfferAcceptance,
   useShop,
+  useShopifyCart,
   useShopifyCartAddListener
 } from '../../hooks';
 
@@ -27,13 +28,19 @@ const ProductOffer = ({
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
+  const { shopifyCartLoading } = useShopifyCart();
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
     shopifyProductIds,
     shopifyVariantIds,
+    shopifyCartTotal,
+    shopifyCartItemCount,
     shouldQuery:
-      productAdded && !!shopifyProductIds?.length && !!shopifyVariantIds?.length
+      productAdded &&
+      !!shopifyProductIds?.length &&
+      !!shopifyVariantIds?.length &&
+      !shopifyCartLoading
   });
   const { addProduct, replaceProduct } = useOfferAcceptance();
 

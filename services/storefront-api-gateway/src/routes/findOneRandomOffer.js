@@ -34,6 +34,8 @@ const handler = middy(async (event, context) => {
       events: triggerEvents,
       shopifyProductIds,
       shopifyVariantIds,
+      shopifyCartTotal,
+      shopifyCartItemCount,
       offerImpressions,
       sessionOfferImpressions,
       pagePath
@@ -49,6 +51,8 @@ const handler = middy(async (event, context) => {
         events: triggerEvents,
         shopifyProductIds,
         shopifyVariantIds,
+        shopifyCartTotal,
+        shopifyCartItemCount,
         ipAddress,
         offerImpressions,
         sessionOfferImpressions,
