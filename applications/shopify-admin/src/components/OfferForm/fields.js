@@ -240,7 +240,6 @@ const useFields = (initialOffer, showEndDate) => {
   const viewAllowanceDays = useField(
     initialOffer.viewAllowanceDays?.toString()
   );
-  const hideIfItemAdded = useField(initialOffer.hideIfItemAdded);
 
   return {
     name,
@@ -276,8 +275,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableMaskClose,
     enableBundling,
     enableVariantSelection,
-    enableQuantitySelection,
-    hideIfItemAdded
+    enableQuantitySelection
   };
 };
 

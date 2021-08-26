@@ -39,7 +39,6 @@ const OfferOptionsEditor = ({
   enableEscClose,
   enableMaskClose,
   animation,
-  hideIfItemAdded,
   submitted,
   onPreview
 }) => {
@@ -211,12 +210,6 @@ const OfferOptionsEditor = ({
           checked={animationActive}
           onChange={handleAnimationActiveChange}
         />
-        <Checkbox
-          label={`Hide if customer already added ${
-            offer.strategy === 'UPSELL' ? 'an upsell' : 'a cross-sell'
-          } item`}
-          {...asChoiceField(hideIfItemAdded)}
-        />
       </FormLayout>
     </Card>
   );
@@ -232,7 +225,6 @@ OfferOptionsEditor.propTypes = {
   enableEscClose: PropTypes.object.isRequired,
   enableMaskClose: PropTypes.object.isRequired,
   animation: PropTypes.object.isRequired,
-  hideIfItemAdded: PropTypes.object.isRequired,
   submitted: PropTypes.bool,
   onPreview: PropTypes.func
 };

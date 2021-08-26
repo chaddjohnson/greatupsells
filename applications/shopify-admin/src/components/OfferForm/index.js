@@ -123,8 +123,7 @@ const OfferForm = ({
     enableMaskClose,
     enableBundling,
     enableVariantSelection,
-    enableQuantitySelection,
-    hideIfItemAdded
+    enableQuantitySelection
   } = useFields(initialOffer, showEndDate);
 
   const { fields, dirty, submit, submitting /* submitErrors */ } = useForm({
@@ -162,8 +161,7 @@ const OfferForm = ({
       enableMaskClose,
       enableBundling,
       enableVariantSelection,
-      enableQuantitySelection,
-      hideIfItemAdded
+      enableQuantitySelection
     },
     onSubmit: async (formValues) => {
       // TODO: contextualSaveBar.set({ saveAction: { loading: true } });
@@ -424,7 +422,6 @@ const OfferForm = ({
             enableEscClose={enableEscClose}
             enableMaskClose={enableMaskClose}
             animation={animation}
-            hideIfItemAdded={hideIfItemAdded}
             submitted={submitted}
             onPreview={handlePreview}
           />
