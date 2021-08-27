@@ -3,86 +3,92 @@ const geoip = require('geoip-country');
 const globToRegExp = require('glob-to-regexp');
 const mongodbClient = require('../mongodbClient');
 
-const buildViewAllowanceCriterias = (
+const buildViewAllowanceCriteria = (
   offerImpressions,
   sessionOfferImpressions
-) => [
-  // Where customers may view the offer every n days, and the customer
-  // has not viewed the offer.
-  {
-    _id: {
-      $nin: offerImpressions.map(({ offerId }) =>
-        mongoose.Types.ObjectId(offerId)
-      )
+) => ({
+  $or: [
+    // Where customers may view the offer every n days, and the customer
+    // has not viewed the offer.
+    {
+      _id: {
+        $nin: offerImpressions.map(({ offerId }) =>
+          mongoose.Types.ObjectId(offerId)
+        )
+      },
+      viewAllowance: 'DAYS'
     },
-    viewAllowance: 'DAYS'
-  },
 
-  // Where customers may view the offev every n days, and the customer
-  // viewed the offer more than n days ago.
-  ...offerImpressions.map(({ offerId, viewedAt }) => ({
-    _id: mongoose.Types.ObjectId(offerId),
-    viewAllowance: 'DAYS',
-    viewAllowanceDays: {
-      $lte: Math.floor(
-        (new Date() - new Date(viewedAt)) / (1000 * 60 * 60 * 24)
-      )
+    // Where customers may view the offev every n days, and the customer
+    // viewed the offer more than n days ago.
+    ...offerImpressions.map(({ offerId, viewedAt }) => ({
+      _id: mongoose.Types.ObjectId(offerId),
+      viewAllowance: 'DAYS',
+      viewAllowanceDays: {
+        $lte: Math.floor(
+          (new Date() - new Date(viewedAt)) / (1000 * 60 * 60 * 24)
+        )
+      }
+    })),
+
+    // Where customers may view the offer with every page load.
+    {
+      viewAllowance: 'PAGE'
+    },
+
+    // Where customers may view the offer once per browser tab session.
+    {
+      _id: {
+        $nin: sessionOfferImpressions.map(({ offerId }) =>
+          mongoose.Types.ObjectId(offerId)
+        )
+      },
+      viewAllowance: 'SESSION'
+    },
+
+    // Where customers may view the offer only once.
+    {
+      _id: {
+        $nin: offerImpressions.map(({ offerId }) =>
+          mongoose.Types.ObjectId(offerId)
+        )
+      },
+      viewAllowance: 'ONCE'
     }
-  })),
+  ]
+});
 
-  // Where customers may view the offer with every page load.
-  {
-    viewAllowance: 'PAGE'
-  },
-
-  // Where customers may view the offer once per browser tab session.
-  {
-    _id: {
-      $nin: sessionOfferImpressions.map(({ offerId }) =>
-        mongoose.Types.ObjectId(offerId)
-      )
-    },
-    viewAllowance: 'SESSION'
-  },
-
-  // Where customers may view the offer only once.
-  {
-    _id: {
-      $nin: offerImpressions.map(({ offerId }) =>
-        mongoose.Types.ObjectId(offerId)
-      )
-    },
-    viewAllowance: 'ONCE'
-  }
-];
-
-const buildMinimumRequirementCriterias = (
+const buildMinimumRequirementCriteria = (
   shopifyCartTotal,
   shopifyCartItemCount
-) => [
-  { minimumRequirement: 'NONE' },
-  {
-    minimumRequirement: 'AMOUNT',
-    minimumRequiredAmount: { $lte: shopifyCartTotal }
-  },
-  {
-    minimumRequirement: 'QUANTITY',
-    minimumRequiredAmount: { $lte: shopifyCartItemCount }
-  }
-];
+) => ({
+  $or: [
+    { minimumRequirement: 'NONE' },
+    {
+      minimumRequirement: 'AMOUNT',
+      minimumRequiredAmount: { $lte: shopifyCartTotal }
+    },
+    {
+      minimumRequirement: 'QUANTITY',
+      minimumRequiredAmount: { $lte: shopifyCartItemCount }
+    }
+  ]
+});
 
-const buildDateCriterias = () => [
-  {
-    startAt: null,
-    endAt: null
-  },
-  {
-    startAt: { $lte: new Date() },
-    $or: [{ endAt: null }, { endAt: { $gte: new Date() } }]
-  }
-];
+const buildDateCriteria = () => ({
+  $or: [
+    {
+      startAt: null,
+      endAt: null
+    },
+    {
+      startAt: { $lte: new Date() },
+      $or: [{ endAt: null }, { endAt: { $gte: new Date() } }]
+    }
+  ]
+});
 
-const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
+const buildProductsCriteria = async (shopifyProductIds, shopifyVariantIds) => {
   const Collection = mongodbClient.connection.model('Collection');
 
   // Find collections containing one or more of the products.
@@ -121,13 +127,15 @@ const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
     ]
   };
 
-  return [upsellCriteria, nonUpsellCriteria];
+  return { $or: [upsellCriteria, nonUpsellCriteria] };
 };
 
-const buildGeotargetingCriterias = (countryCode) => [
-  { geotargetingCountries: { $size: 0 } },
-  { geotargetingCountries: countryCode }
-];
+const buildGeotargetingCriteria = (countryCode) => ({
+  $or: [
+    { geotargetingCountries: { $size: 0 } },
+    { geotargetingCountries: countryCode }
+  ]
+});
 
 // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
 const sanitizePagePath = (pagePath) => {
@@ -155,21 +163,9 @@ const buildCriteria = async (
     triggerEvent,
     enabled: true,
     $and: [
-      {
-        $or: buildViewAllowanceCriterias(
-          offerImpressions,
-          sessionOfferImpressions
-        )
-      },
-      {
-        $or: buildMinimumRequirementCriterias(
-          shopifyCartTotal,
-          shopifyCartItemCount
-        )
-      },
-      {
-        $or: buildDateCriterias()
-      }
+      buildViewAllowanceCriteria(offerImpressions, sessionOfferImpressions),
+      buildMinimumRequirementCriteria(shopifyCartTotal, shopifyCartItemCount),
+      buildDateCriteria()
     ]
   };
 
@@ -181,16 +177,14 @@ const buildCriteria = async (
     parseInt(shopifyVariantId)
   );
 
-  criteria.$and.push({
-    $or: await buildProductsCriterias(shopifyProductIds, shopifyVariantIds)
-  });
+  criteria.$and.push(
+    await buildProductsCriteria(shopifyProductIds, shopifyVariantIds)
+  );
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
   if (geoData && geoData.country) {
-    criteria.$and.push({
-      $or: buildGeotargetingCriterias(geoData.country)
-    });
+    criteria.$and.push(buildGeotargetingCriteria(geoData.country));
   }
 
   return criteria;
