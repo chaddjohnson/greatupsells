@@ -8,7 +8,7 @@ import CollectionResourceList from './CollectionResourceList';
 
 const MinimumRequiredAmountWrapper = styled.div`
   .Polaris-TextField {
-    max-width: 150px;
+    max-width: 170px;
   }
 `;
 

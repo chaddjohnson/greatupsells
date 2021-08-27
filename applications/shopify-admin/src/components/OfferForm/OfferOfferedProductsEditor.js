@@ -13,7 +13,7 @@ import CollectionResourceList from './CollectionResourceList';
 
 const QuantityInputWrapper = styled.div`
   .Polaris-TextField {
-    max-width: 145px;
+    max-width: 170px;
   }
 `;
 
