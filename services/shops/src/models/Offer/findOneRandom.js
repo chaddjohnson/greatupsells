@@ -71,6 +71,17 @@ const buildMinimumRequirementCriterias = (
   }
 ];
 
+const buildDateCriterias = () => [
+  {
+    startAt: null,
+    endAt: null
+  },
+  {
+    startAt: { $lte: new Date() },
+    $or: [{ endAt: null }, { endAt: { $gte: new Date() } }]
+  }
+];
+
 const buildProductsCriterias = async (shopifyProductIds, shopifyVariantIds) => {
   const Collection = mongodbClient.connection.model('Collection');
 
@@ -155,6 +166,9 @@ const buildCriteria = async (
           shopifyCartTotal,
           shopifyCartItemCount
         )
+      },
+      {
+        $or: buildDateCriterias()
       }
     ]
   };
