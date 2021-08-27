@@ -124,7 +124,7 @@ const schema = new mongoose.Schema(
     enableBundling: { type: Boolean, required: true, default: false },
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },
-    startAt: { type: Date, required: true },
+    startAt: { type: Date, required: true, default: Date.now },
     endAt: { type: Date, required: false },
     delaySeconds: { type: Number, required: false, default: 0 },
     onPageRequiredSeconds: { type: Number, required: false, default: 0 },
