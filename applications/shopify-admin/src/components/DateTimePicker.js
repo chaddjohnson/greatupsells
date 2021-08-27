@@ -93,6 +93,7 @@ DateTimePicker.propTypes = {
 
 DateTimePicker.defaultProps = {
   value: new Date(), // default to current date and time
+  disableDatesBefore: new Date(),
   onChange: () => {}
 };
 

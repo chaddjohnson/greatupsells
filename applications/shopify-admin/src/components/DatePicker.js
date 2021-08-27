@@ -84,7 +84,7 @@ const DatePicker = ({
       onClose={() => setPopoverShown(false)}
     >
       <ShopifyDatePicker
-        selected={selected}
+        selected={new Date(selected)}
         month={month}
         year={year}
         disableDatesBefore={disableDatesBeforeFormatted}
