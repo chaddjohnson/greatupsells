@@ -129,7 +129,7 @@ const OfferPopup = ({
     } else if (offer.actionButtonBehavior === 'CART') {
       return '/cart';
     } else if (offer.actionButtonBehavior === 'PAGE') {
-      return 'javascript:void(0)'; // eslint-disable-line no-script-url
+      return 'javascript:window.parent.OfferPopup.close()'; // eslint-disable-line no-script-url
     } else if (offer.actionButtonBehavior === 'LINK') {
       return offer.actionButtonLink;
     }
