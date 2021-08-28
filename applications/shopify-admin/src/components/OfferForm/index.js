@@ -334,6 +334,37 @@ const OfferForm = ({
             strategy={strategy}
             onStrategyChange={handleStrategyChange}
           />
+          <ThemeEditor
+            strategy={offer.strategy}
+            theme={popupTheme}
+            themes={popupThemes}
+            offerThemes={offerPopupThemes}
+            displayType={themeDisplayType}
+            previewElement={
+              <OfferPopupContainer>
+                <OfferPopup
+                  open={designMode || previewActive}
+                  designMode={designMode}
+                  designModeZoom={0.8}
+                  forceDisplayType={
+                    !previewActive ? themeDisplayType : undefined
+                  }
+                  shop={shop}
+                  theme={popupTheme}
+                  offer={offer}
+                  triggerProduct={dummyData.triggerProduct}
+                  offeredProducts={dummyData.offeredProducts}
+                  onClose={handleClosePreview}
+                  onClick={handlePreview}
+                />
+              </OfferPopupContainer>
+            }
+            onPreview={handlePreview}
+            onChange={handleThemeChange}
+            onThemeSelect={handleThemeSelect}
+            onOfferThemeSelect={setPopupTheme}
+            onDisplayTypeChange={handleThemeDisplayTypeChange}
+          />
           <OfferTriggerEventEditor
             triggerEvent={triggerEvent}
             triggerExternalLinksOnly={triggerExternalLinksOnly}
@@ -380,37 +411,6 @@ const OfferForm = ({
             submitted={submitted}
           />
           <OfferBundlingEditor offer={offer} enableBundling={enableBundling} />
-          <ThemeEditor
-            strategy={offer.strategy}
-            theme={popupTheme}
-            themes={popupThemes}
-            offerThemes={offerPopupThemes}
-            displayType={themeDisplayType}
-            previewElement={
-              <OfferPopupContainer>
-                <OfferPopup
-                  open={designMode || previewActive}
-                  designMode={designMode}
-                  designModeZoom={0.8}
-                  forceDisplayType={
-                    !previewActive ? themeDisplayType : undefined
-                  }
-                  shop={shop}
-                  theme={popupTheme}
-                  offer={offer}
-                  triggerProduct={dummyData.triggerProduct}
-                  offeredProducts={dummyData.offeredProducts}
-                  onClose={handleClosePreview}
-                  onClick={handlePreview}
-                />
-              </OfferPopupContainer>
-            }
-            onPreview={handlePreview}
-            onChange={handleThemeChange}
-            onThemeSelect={handleThemeSelect}
-            onOfferThemeSelect={setPopupTheme}
-            onDisplayTypeChange={handleThemeDisplayTypeChange}
-          />
           <OfferDatesEditor
             offer={offer}
             startAt={startAt}
