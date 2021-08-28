@@ -16,6 +16,10 @@ const useDataTranslation = (shop, offer) => {
 
   const translateProductData = useCallback(
     (product = {}) => {
+      if (!product) {
+        return;
+      }
+
       const { shopifyProductData } = product;
 
       if (!shopifyProductData) {
@@ -75,6 +79,10 @@ const useDataTranslation = (shop, offer) => {
 
   const translateTriggerProductData = useCallback(
     (product = {}, shopifyCartItems = []) => {
+      if (!product) {
+        return;
+      }
+
       const translatedData = translateProductData(product);
 
       // Find the cart item corresponding to the product.
@@ -83,11 +91,11 @@ const useDataTranslation = (shop, offer) => {
       );
 
       // Find the specific variant.
-      const hasVariants = translatedData.variants.length > 1;
+      const hasVariants = translatedData?.variants.length > 1;
       const variant =
         hasVariants &&
         shopifyCartItem &&
-        translatedData.variants.find(
+        translatedData?.variants.find(
           (current) => current.id === shopifyCartItem.variant_id
         );
 
