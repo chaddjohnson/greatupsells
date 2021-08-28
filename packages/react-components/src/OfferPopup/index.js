@@ -178,13 +178,13 @@ const OfferPopup = ({
     if (triggerProduct) {
       return translateTriggerProductData(triggerProduct, shopifyCartItems);
     }
-  }, [triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const translatedOfferedProducts = useMemo(() => {
     if (offeredProducts) {
       return offeredProducts.map(translateProductData);
     }
-  }, [offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [offer, offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const templateVariables = useMemo(
     () => ({
