@@ -91,30 +91,28 @@ const errorComponent = () => (
 const initialOffer = {
   name: '',
   strategy: 'CROSS_SELL',
-  actionButtonBehavior: 'CART',
+  actionButtonBehavior: 'CHECKOUT',
   viewAllowance: 'DAYS',
   viewAllowanceDays: 7,
   offeredProducts: [],
   offeredCollections: [],
   discountType: 'PERCENTAGE',
-  discountValue: 0.1,
   triggerEvent: 'ADD',
   triggerExternalLinksOnly: true,
   triggerScrollThreshold: 75,
   triggerPage: 'ANY',
   triggerProducts: [],
   triggerCollections: [],
-  geotargetingCountries: [],
-  animation: 'effect-slide-in-scale',
-  startAt: new Date().toISOString(),
-  delaySeconds: 0,
-  onPageRequiredSeconds: 0,
   enableBundling: false,
+  minimumRequirement: 'NONE',
+  geotargetingCountries: [],
+  startAt: new Date().toISOString(),
   enableVariantSelection: true,
   enableQuantitySelection: true,
   disableOutOfStockVariants: true,
   enableEscClose: false,
   enableMaskClose: false,
+  animation: 'effect-slide-in-scale',
   enabled: true
 };
 
@@ -171,7 +169,7 @@ const NewOfferPage = () => {
       updatedOfferData.popupTheme = updatedPopupThemeData._id;
 
       // Update the offer.
-      await saveOffer(offerData);
+      await saveOffer(updatedOfferData);
 
       showSuccessToast('Offer created.');
 
@@ -179,7 +177,6 @@ const NewOfferPage = () => {
       router.push(`/offers/${updatedOfferData._id}/`);
     } catch (submitError) {
       showErrorToast('Error creating offer.');
-      throw submitError;
     }
   };
 

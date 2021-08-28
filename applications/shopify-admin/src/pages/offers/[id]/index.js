@@ -161,13 +161,12 @@ const OfferEditPage = () => {
         updatedOfferData.popupTheme = updatedPopupThemeData._id;
 
         // Update the offer.
-        await saveOffer(offerData);
+        await saveOffer(updatedOfferData);
       }
 
       showSuccessToast('Offer updated.');
     } catch (submitError) {
       showErrorToast('Error updating offer.');
-      throw submitError;
     }
   };
 
@@ -175,9 +174,9 @@ const OfferEditPage = () => {
     router.push('/offers/');
   };
 
-  const handleTest = () => {
-    // TODO
-  };
+  // const handleTest = () => {
+  //   // TODO
+  // };
 
   const handleDuplicate = () => {
     // TODO
@@ -188,12 +187,12 @@ const OfferEditPage = () => {
   };
 
   const secondaryActions = [
-    {
-      content: 'Test',
-      accessibilityLabel: 'Test this offer',
-      icon: ExternalMinor,
-      onAction: handleTest
-    },
+    // {
+    //   content: 'Test',
+    //   accessibilityLabel: 'Test this offer',
+    //   icon: ExternalMinor,
+    //   onAction: handleTest
+    // },
     {
       content: 'Duplicate',
       accessibilityLabel: 'Duplicate this offer',

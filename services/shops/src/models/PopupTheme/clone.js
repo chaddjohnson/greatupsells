@@ -4,7 +4,6 @@ const clone = async (popupTheme) => {
 
   delete data._id;
   delete data.offer;
-  delete data.shop;
 
   const clonedPopupTheme = await PopupTheme.create(data);
 

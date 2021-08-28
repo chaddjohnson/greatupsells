@@ -55,7 +55,7 @@ const OfferOptionsEditor = ({
     setDelaySecondsActive(checked);
 
     if (!checked) {
-      delaySeconds.onChange('0');
+      delaySeconds.onChange(undefined);
     }
   };
 
@@ -63,7 +63,7 @@ const OfferOptionsEditor = ({
     setOnPageRequiredSecondsActive(checked);
 
     if (!checked) {
-      onPageRequiredSeconds.onChange('0');
+      onPageRequiredSeconds.onChange(undefined);
     }
   };
 
@@ -71,7 +71,7 @@ const OfferOptionsEditor = ({
     setAnimationActive(checked);
 
     if (!checked) {
-      animation.onChange('');
+      animation.onChange(undefined);
     }
   };
 

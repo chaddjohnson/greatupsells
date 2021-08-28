@@ -6,6 +6,21 @@ const useFields = (initialOffer, showEndDate) => {
     validates: [notEmpty("Name can't be blank")]
   });
   const strategy = useField(initialOffer.strategy);
+  const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
+  const actionButtonLink = useField(
+    {
+      value: initialOffer.actionButtonLink,
+      validates: (value) => {
+        if (actionButtonBehavior.value === 'LINK' && !value) {
+          return "Action button link can't be blank";
+        }
+      }
+    },
+    [actionButtonBehavior.value]
+  );
+  const actionButtonLinkOpenInNewTab = useField(
+    initialOffer.actionButtonLinkOpenInNewTab || false
+  );
   const triggerEvent = useField(initialOffer.triggerEvent);
   const triggerExternalLinksOnly = useField(
     initialOffer.triggerExternalLinksOnly
@@ -49,10 +64,58 @@ const useFields = (initialOffer, showEndDate) => {
       }
     ]
   });
+  const viewAllowance = useField(initialOffer.viewAllowance);
+  const viewAllowanceDays = useField(
+    initialOffer.viewAllowanceDays?.toString()
+  );
+  const triggerProducts = useField(initialOffer.triggerProducts);
+  const triggerCollections = useField(initialOffer.triggerCollections);
+  const minimumRequirement = useField(initialOffer.minimumRequirement);
+  const minimumRequiredAmount = useField(
+    {
+      value: initialOffer.minimumRequiredAmount,
+      validates: [
+        (value) => {
+          if (minimumRequirement.value !== 'NONE' && !value) {
+            return "Minimum amount can't be blank";
+          }
+        },
+        (value) => {
+          if (value && Number.isNaN(value)) {
+            return 'Minimum amount must be a number';
+          }
+        },
+        (value) => {
+          if (
+            value &&
+            Number(value) <= 0 &&
+            minimumRequirement.value === 'AMOUNT'
+          ) {
+            return 'Minimum amount must be greater than zero';
+          }
+        },
+        (value) => {
+          if (
+            value &&
+            Number(value) < 1 &&
+            minimumRequirement.value === 'QUANTITY'
+          ) {
+            return 'Minimum amount must be greater than 1';
+          }
+        }
+      ]
+    },
+    [minimumRequirement.value]
+  );
+  const offeredProducts = useField(initialOffer.offeredProducts);
+  const offeredCollections = useField(initialOffer.offeredCollections);
+  const maximumOfferedProductQuantity = useField(
+    initialOffer.maximumOfferedProductQuantity?.toString()
+  );
   const discountType = useField(initialOffer.discountType);
   const discountValue = useField(
     {
-      value: initialOffer.discountValue.toString(),
+      value: initialOffer.discountValue?.toString(),
       validates: [
         (value) => {
           if (discountType.value !== 'NO_DISCOUNT' && !value) {
@@ -89,67 +152,7 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [discountType.value]
   );
-  const minimumRequirement = useField(initialOffer.minimumRequirement);
-  const minimumRequiredAmount = useField(
-    {
-      value: initialOffer.minimumRequiredAmount,
-      validates: [
-        (value) => {
-          if (discountType.value !== 'NONE' && !value) {
-            return "Minimum amount can't be blank";
-          }
-        },
-        (value) => {
-          if (value && Number.isNaN(value)) {
-            return 'Minimum amount must be a number';
-          }
-        },
-        (value) => {
-          if (
-            value &&
-            Number(value) <= 0 &&
-            minimumRequirement.value === 'AMOUNT'
-          ) {
-            return 'Minimum amount must be greater than zero';
-          }
-        },
-        (value) => {
-          if (
-            value &&
-            Number(value) < 1 &&
-            minimumRequirement.value === 'QUANTITY'
-          ) {
-            return 'Minimum amount must be greater than 1';
-          }
-        }
-      ]
-    },
-    [minimumRequirement.value]
-  );
-  const offeredProducts = useField(initialOffer.offeredProducts);
-  const offeredCollections = useField(initialOffer.offeredCollections);
-  const maximumOfferedProductQuantity = useField(
-    initialOffer.maximumOfferedProductQuantity?.toString()
-  );
-  const triggerProducts = useField(initialOffer.triggerProducts);
-  const triggerCollections = useField(initialOffer.triggerCollections);
   const geotargetingCountries = useField(initialOffer.geotargetingCountries);
-  const animation = useField(initialOffer.animation);
-  const actionButtonBehavior = useField(initialOffer.actionButtonBehavior);
-  const actionButtonLink = useField(
-    {
-      value: initialOffer.actionButtonLink,
-      validates: (value) => {
-        if (actionButtonBehavior.value === 'LINK' && !value) {
-          return "Action button link can't be blank";
-        }
-      }
-    },
-    [actionButtonBehavior.value]
-  );
-  const actionButtonLinkOpenInNewTab = useField(
-    initialOffer.actionButtonLinkOpenInNewTab || false
-  );
   const startAt = useField({
     value: initialOffer.startAt,
     validates: [
@@ -201,7 +204,7 @@ const useFields = (initialOffer, showEndDate) => {
         }
       },
       (value) => {
-        if (value && Number(value) < 1) {
+        if (value && Number(value) < 0) {
           return 'Delay seconds must be a positive value';
         }
       }
@@ -216,7 +219,7 @@ const useFields = (initialOffer, showEndDate) => {
         }
       },
       (value) => {
-        if (value && Number(value) < 1) {
+        if (value && Number(value) < 0) {
           return 'Required seconds must be a positive value';
         }
       }
@@ -229,36 +232,32 @@ const useFields = (initialOffer, showEndDate) => {
   const enableQuantitySelection = useField(
     initialOffer.enableQuantitySelection
   );
-  const viewAllowance = useField(initialOffer.viewAllowance);
-  const viewAllowanceDays = useField(
-    initialOffer.viewAllowanceDays?.toString()
-  );
+  const animation = useField(initialOffer.animation);
 
   return {
     name,
     strategy,
+    actionButtonBehavior,
+    actionButtonLink,
+    actionButtonLinkOpenInNewTab,
     triggerEvent,
     triggerExternalLinksOnly,
     triggerScrollThreshold,
     triggerPage,
     triggerPagePath,
-    discountType,
-    discountValue,
-    discountTitle,
+    viewAllowance,
+    viewAllowanceDays,
+    triggerProducts,
+    triggerCollections,
     minimumRequirement,
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
     maximumOfferedProductQuantity,
-    triggerProducts,
-    triggerCollections,
+    discountType,
+    discountValue,
+    discountTitle,
     geotargetingCountries,
-    animation,
-    actionButtonBehavior,
-    actionButtonLink,
-    actionButtonLinkOpenInNewTab,
-    viewAllowance,
-    viewAllowanceDays,
     startAt,
     endAt,
     disableOutOfStockVariants,
@@ -268,7 +267,8 @@ const useFields = (initialOffer, showEndDate) => {
     enableMaskClose,
     enableBundling,
     enableVariantSelection,
-    enableQuantitySelection
+    enableQuantitySelection,
+    animation
   };
 };
 

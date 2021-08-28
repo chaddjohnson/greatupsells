@@ -126,15 +126,22 @@ const OfferForm = ({
     enableQuantitySelection
   } = useFields(initialOffer, showEndDate);
 
-  const { fields, dirty, submit, submitting /* submitErrors */ } = useForm({
+  const { fields, dirty, submit, submitting } = useForm({
     fields: {
       name,
       strategy,
+      actionButtonBehavior,
+      actionButtonLink,
+      actionButtonLinkOpenInNewTab,
       triggerEvent,
       triggerExternalLinksOnly,
       triggerScrollThreshold,
       triggerPage,
       triggerPagePath,
+      viewAllowance,
+      viewAllowanceDays,
+      triggerProducts,
+      triggerCollections,
       minimumRequirement,
       minimumRequiredAmount,
       offeredProducts,
@@ -143,15 +150,7 @@ const OfferForm = ({
       discountType,
       discountValue,
       discountTitle,
-      triggerProducts,
-      triggerCollections,
       geotargetingCountries,
-      animation,
-      actionButtonBehavior,
-      actionButtonLink,
-      actionButtonLinkOpenInNewTab,
-      viewAllowance,
-      viewAllowanceDays,
       startAt,
       endAt,
       disableOutOfStockVariants,
@@ -161,15 +160,16 @@ const OfferForm = ({
       enableMaskClose,
       enableBundling,
       enableVariantSelection,
-      enableQuantitySelection
+      enableQuantitySelection,
+      animation
     },
     onSubmit: async (formValues) => {
-      // TODO: contextualSaveBar.set({ saveAction: { loading: true } });
-
-      setSubmitted(true);
+      // TODO
+      // contextualSaveBar.set({ saveAction: { loading: true } });
 
       try {
-        // TODO: Handle update.
+        formValues._id = initialOffer._id;
+
         await onSubmit({
           offer: formValues,
           popupTheme,
@@ -185,12 +185,22 @@ const OfferForm = ({
     }
   });
 
+  const handleSubmit = () => {
+    setSubmitted(true);
+    submit();
+  };
+
+  const popupThemeDirty = useMemo(
+    () => JSON.stringify(popupTheme) !== JSON.stringify(initialPopupTheme),
+    [popupTheme, initialPopupTheme]
+  );
+
   contextualSaveBar = ContextualSaveBar.create(app, {
-    saveAction: { disabled: !dirty, loading: false },
+    saveAction: { disabled: !dirty && !popupThemeDirty, loading: false },
     discardAction: {
       disabled: false,
       loading: false,
-      discardConfirmationModal: dirty
+      discardConfirmationModal: dirty || popupThemeDirty
     }
   });
 
@@ -445,10 +455,10 @@ const OfferForm = ({
           <PageActions
             primaryAction={{
               content: 'Save offer',
-              disabled: !dirty,
+              disabled: !dirty && !popupThemeDirty,
               loading: submitting,
               submit: true,
-              onAction: submit
+              onAction: handleSubmit
             }}
             secondaryActions={[
               {

@@ -29,10 +29,10 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer.claims;
     const { popupThemeId } = event.pathParameters;
     const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
-    const popupThemeShopId = popupTheme && popupTheme.shop;
+    const offer = await httpClient.get(`/offers/${popupTheme.offer}`);
     const data = JSON.parse(event.body);
 
-    if (shopId !== popupThemeShopId) {
+    if (offer.shop !== shopId) {
       await logger.warn(
         `Unauthorized update attempt for popup theme ${popupThemeId}`,
         null,

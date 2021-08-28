@@ -99,11 +99,6 @@ const schema = new mongoose.Schema(
     triggerPagePath: { type: String, required: false },
     triggerProducts: [triggerProductSchema],
     triggerCollections: [offerCollectionSchema],
-    popupTheme: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'PopupTheme',
-      required: false // false because PopupTheme requires an offer to be saved.
-    },
     minimumRequirement: {
       type: String,
       required: true,
@@ -122,6 +117,11 @@ const schema = new mongoose.Schema(
     discountValue: { type: Number, required: false },
     discountTitle: { type: String, required: false },
     enableBundling: { type: Boolean, required: true, default: false },
+    popupTheme: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PopupTheme',
+      required: false // false because PopupTheme requires an offer to be saved.
+    },
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },
     startAt: { type: Date, required: true, default: Date.now },

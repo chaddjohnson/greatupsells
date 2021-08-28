@@ -34,11 +34,6 @@ const formFieldsSchema = new mongoose.Schema({
 const schema = new mongoose.Schema(
   {
     name: { type: String, required: false },
-    shop: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Shop',
-      required: false
-    },
     offer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Offer',
@@ -82,7 +77,6 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
-schema.index({ shop: 1 }, { sparse: true });
 schema.index({ offer: 1 }, { sparse: true });
 
 PopupTheme = mongodbClient.connection.model('PopupTheme', schema);

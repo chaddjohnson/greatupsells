@@ -5,7 +5,7 @@ const usePopupTheme = () => {
 
   const savePopupTheme = async (data) => {
     const isNew = !data._id;
-    const url = isNew ? '/popup-themes' : `/popup-theme/${data._id}`;
+    const url = isNew ? '/popup-themes' : `/popup-themes/${data._id}`;
     let updatedData = null;
 
     if (isNew) {
