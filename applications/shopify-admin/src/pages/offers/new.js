@@ -97,6 +97,7 @@ const initialOffer = {
   offeredProducts: [],
   offeredCollections: [],
   discountType: 'PERCENTAGE',
+  discountValue: 0.1,
   triggerEvent: 'ADD',
   triggerExternalLinksOnly: true,
   triggerScrollThreshold: 75,
