@@ -35,9 +35,7 @@ module.exports = {
 
   target: 'serverless',
   trailingSlash: true,
-  future: {
-    webpack5: true
-  },
+  webpack5: true,
   env: {
     ADMIN_API_GATEWAY_URL
   }

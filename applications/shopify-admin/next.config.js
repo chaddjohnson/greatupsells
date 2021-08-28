@@ -46,9 +46,7 @@ module.exports = {
 
   target: 'serverless',
   trailingSlash: true,
-  future: {
-    webpack5: true
-  },
+  webpack5: true,
   env: {
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOP_API_GATEWAY_URL
