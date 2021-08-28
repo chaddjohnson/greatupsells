@@ -10,14 +10,13 @@ const OfferBundlingEditor = ({ offer, enableBundling }) =>
           choices={[
             {
               label: 'Offer products individually',
-              helpText:
-                'Products will not be bundled and may be added to the cart individually.',
+              helpText: 'Products may be added to the cart individually.',
               value: 'false'
             },
             {
               label: 'Offer products in a bundle',
               helpText:
-                'All products presented in the offer will be bundled and added to the cart together on acceptance. Bundling helps increase average order value.',
+                'All presented products will added to the cart together on acceptance. Bundling helps increase average order value.',
               value: 'true'
             }
           ]}
