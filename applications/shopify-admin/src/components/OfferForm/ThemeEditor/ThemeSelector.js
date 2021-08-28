@@ -128,7 +128,7 @@ const tabs = [
   {
     id: 'explore',
     content: 'Explore',
-    accessibilityLabel: 'Exlore',
+    accessibilityLabel: 'Explore',
     panelID: 'explore'
   }
 ];
