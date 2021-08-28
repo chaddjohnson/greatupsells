@@ -425,7 +425,7 @@ const OfferPopup = ({
               <link
                 rel="preconnect"
                 href="https://fonts.gstatic.com"
-                crossOrigin
+                crossOrigin="anonymous"
               />
               <link
                 href="https://fonts.googleapis.com/icon?family=Material+Icons"
