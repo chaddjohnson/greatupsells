@@ -132,36 +132,34 @@ const OfferEditPage = () => {
     offerPopupThemesError
   );
 
-  const handleSubmit = async ({
-    offer: offerData,
-    popupTheme: popupThemeData,
-    offerPopupThemes: offerPopupThemesData
-  }) => {
+  const handleSubmit = async (data) => {
     try {
       // Save the offer.
-      const updatedOfferData = await saveOffer(offerData);
+      const updatedOffer = await saveOffer(data.offer);
 
       // Associate the offer popup themes with the offer.
-      popupThemeData.offer = updatedOfferData._id;
-      offerPopupThemesData = offerPopupThemesData.map((data) => ({
-        ...data,
-        offer: updatedOfferData._id
+      data.popupTheme.offer = updatedOffer._id;
+      data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
+        ...current,
+        offer: updatedOffer._id
       }));
 
       // Save the selected popup theme and the other popup themes in parallel.
-      const [updatedPopupThemeData] = await Promise.all([
-        savePopupTheme(popupThemeData),
-        ...offerPopupThemesData
-          .filter(({ _id }) => _id !== popupThemeData._id)
-          .map(savePopupTheme)
+      const [updatedPopupTheme] = await Promise.all([
+        savePopupTheme(data.popupTheme),
+        ...data.offerPopupThemes
+          .filter(({ _id }) => _id !== data.popupTheme._id)
+          .map(async (current) => {
+            return await savePopupTheme(current);
+          })
       ]);
 
-      if (updatedOfferData.popupTheme !== updatedPopupThemeData._id) {
+      if (updatedOffer.popupTheme !== updatedPopupTheme._id) {
         // Associate the selected popup theme with the offer.
-        updatedOfferData.popupTheme = updatedPopupThemeData._id;
+        updatedOffer.popupTheme = updatedPopupTheme._id;
 
         // Update the offer.
-        await saveOffer(updatedOfferData);
+        await saveOffer(updatedOffer);
       }
 
       showSuccessToast('Offer updated.');
