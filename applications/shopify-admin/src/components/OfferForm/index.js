@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect
+} from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -164,8 +170,7 @@ const OfferForm = ({
       animation
     },
     onSubmit: async (formValues) => {
-      // TODO
-      // contextualSaveBar.set({ saveAction: { loading: true } });
+      contextualSaveBar.set({ saveAction: { loading: true } });
 
       try {
         formValues._id = initialOffer._id;
@@ -179,16 +184,16 @@ const OfferForm = ({
         return { status: 'fail', errors: error };
       }
 
-      // TODO: contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
+      contextualSaveBar.set({ saveAction: { loading: false } });
 
       return { status: 'success' };
     }
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     setSubmitted(true);
     submit();
-  };
+  }, [submit]);
 
   const popupThemeDirty = useMemo(
     () => JSON.stringify(popupTheme) !== JSON.stringify(initialPopupTheme),
@@ -196,7 +201,10 @@ const OfferForm = ({
   );
 
   contextualSaveBar = ContextualSaveBar.create(app, {
-    saveAction: { disabled: !dirty && !popupThemeDirty, loading: false },
+    saveAction: {
+      disabled: !dirty && !popupThemeDirty,
+      loading: submitting
+    },
     discardAction: {
       disabled: false,
       loading: false,
@@ -296,26 +304,33 @@ const OfferForm = ({
   };
 
   // Handle Contextual Save Bar behavior.
-  useEffect(
-    () =>
-      contextualSaveBar.subscribe(ContextualSaveBar.Action.DISCARD, () => {
+  useEffect(() => {
+    const unsubscribeDiscard = contextualSaveBar.subscribe(
+      ContextualSaveBar.Action.DISCARD,
+      () => {
         contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
         onCancel();
-      }),
-    [contextualSaveBar, onCancel]
-  );
+      }
+    );
 
-  // useEffect(
-  //   () =>
-  //     contextualSaveBar.subscribe(ContextualSaveBar.Action.SAVE, async () => {
-  //       // TODO: Show toast message.
-  //     }),
-  //   [contextualSaveBar]
-  // );
+    const unsubscribeSave = contextualSaveBar.subscribe(
+      ContextualSaveBar.Action.SAVE,
+      handleSubmit
+    );
 
-  // useEffect(() => {
-  //   contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
-  // }, [contextualSaveBar]);
+    return () => {
+      unsubscribeDiscard();
+      unsubscribeSave();
+    };
+  }, [contextualSaveBar, onCancel, handleSubmit]);
+
+  useEffect(() => {
+    if (dirty) {
+      contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
+    } else {
+      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
+    }
+  }, [contextualSaveBar, dirty]);
 
   // Set end date to start date when showing end date.
   useEffect(
