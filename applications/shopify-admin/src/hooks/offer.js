@@ -37,11 +37,39 @@ const useOffer = (offerId) => {
     }
   };
 
+  const enableOffer = async () => {
+    if (!offerId) {
+      return;
+    }
+
+    await httpClient.put(`/offers/${offerId}`, {
+      ...offer,
+      enabled: true
+    });
+
+    mutate(`/offers/${offerId}`, { ...offer, enabled: true }, false);
+  };
+
+  const disableOffer = async () => {
+    if (!offerId) {
+      return;
+    }
+
+    await httpClient.put(`/offers/${offerId}`, {
+      ...offer,
+      enabled: false
+    });
+
+    mutate(`/offers/${offerId}`, { ...offer, enabled: false }, false);
+  };
+
   return {
     offer,
     offerLoading,
     offerError,
-    saveOffer
+    saveOffer,
+    enableOffer,
+    disableOffer
   };
 };
 

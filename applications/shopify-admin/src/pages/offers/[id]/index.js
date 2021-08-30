@@ -12,7 +12,6 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import {
-  ExternalMinor,
   DuplicateMinor,
   CircleDisableMinor,
   CircleTickOutlineMinor
@@ -100,7 +99,14 @@ const OfferEditPage = () => {
 
   const { showSuccessToast, showErrorToast } = useToast();
   const { shop, shopLoading, shopError } = useShop();
-  const { offer, offerLoading, offerError, saveOffer } = useOffer(offerId);
+  const {
+    offer,
+    offerLoading,
+    offerError,
+    saveOffer,
+    enableOffer,
+    disableOffer
+  } = useOffer(offerId);
   const { savePopupTheme } = usePopupTheme();
   const {
     popupThemes,
@@ -180,8 +186,12 @@ const OfferEditPage = () => {
     // TODO
   };
 
-  const handleToggleEnabled = () => {
-    // TODO
+  const handleToggleEnabled = async () => {
+    if (offer?.enabled) {
+      await disableOffer();
+    } else {
+      await enableOffer();
+    }
   };
 
   const secondaryActions = [
