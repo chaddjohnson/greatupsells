@@ -64,13 +64,30 @@ const useOffer = (offerId) => {
     mutate(`/offers/${offerId}`, { ...offer, enabled: false }, false);
   };
 
+  const duplicateOffer = async () => {
+    if (!offerId) {
+      return;
+    }
+
+    try {
+      const duplicatedOffer = await httpClient.post(`/offers/${offerId}/clone`);
+
+      showSuccessToast('Offer duplicated.');
+
+      router.push(`/offers/${duplicatedOffer._id}/`);
+    } catch (error) {
+      showErrorToast(`Error duplicating offer.`);
+    }
+  };
+
   return {
     offer,
     offerLoading,
     offerError,
     saveOffer,
     enableOffer,
-    disableOffer
+    disableOffer,
+    duplicateOffer
   };
 };
 

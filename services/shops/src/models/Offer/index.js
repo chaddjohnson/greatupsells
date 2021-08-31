@@ -5,6 +5,7 @@ const findOneRandom = require('./findOneRandom');
 const findRandomProducts = require('./findRandomProducts');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const trackImpression = require('./trackImpression');
+const clone = require('./clone');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -192,6 +193,10 @@ schema.methods.findPopupThemes = async function () {
 
 schema.methods.trackImpression = function (params) {
   return trackImpression(this, params);
+};
+
+schema.methods.clone = function () {
+  return clone(this);
 };
 
 schema.methods.toString = function () {

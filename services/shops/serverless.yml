@@ -46,6 +46,13 @@ functions:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
+  cloneOffer:
+    handler: src/routes/cloneOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}/clone
+          method: post
+          authorizer: aws_iam
   clonePopupTheme:
     handler: src/routes/clonePopupTheme.handler
     events:

@@ -102,6 +102,7 @@ const OfferEditPage = () => {
     offerLoading,
     offerError,
     saveOffer,
+    duplicateOffer,
     enableOffer,
     disableOffer
   } = useOffer(offerId);
@@ -174,8 +175,8 @@ const OfferEditPage = () => {
   //   // TODO
   // };
 
-  const handleDuplicate = () => {
-    // TODO
+  const handleDuplicate = async () => {
+    await duplicateOffer();
   };
 
   const handleToggleEnabled = async () => {

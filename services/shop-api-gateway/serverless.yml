@@ -36,6 +36,18 @@ functions:
           path: /region
           method: get
           cors: true
+  cloneOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/cloneOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}/clone
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
