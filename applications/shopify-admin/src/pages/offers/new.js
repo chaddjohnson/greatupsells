@@ -13,13 +13,7 @@ import {
 } from '@shopify/polaris';
 import { omit } from 'lodash';
 import { Loader } from '@neatowebsolutions/upselling-react-components';
-import {
-  useShop,
-  useOffer,
-  usePopupTheme,
-  usePopupThemes,
-  useToast
-} from '../../hooks';
+import { useShop, useOffer, usePopupTheme, usePopupThemes } from '../../hooks';
 import { TitleBar, OfferForm } from '../../components';
 
 const PageTitleBar = memo(() => (
@@ -119,7 +113,6 @@ const initialOffer = {
 
 const NewOfferPage = () => {
   const router = useRouter();
-  const { showSuccessToast, showErrorToast } = useToast();
   const { shop, shopLoading, shopError } = useShop();
   const { saveOffer } = useOffer();
   const { savePopupTheme } = usePopupTheme();
@@ -143,37 +136,31 @@ const NewOfferPage = () => {
   const error = !!(shopError || popupThemesError);
 
   const handleSubmit = async (data) => {
-    try {
-      // Save the offer.
-      const updatedOffer = await saveOffer(data.offer);
+    // Save the offer.
+    const updatedOffer = await saveOffer(data.offer);
 
-      // Associate the offer popup themes with the offer.
-      data.popupTheme.offer = updatedOffer._id;
-      data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
-        ...current,
-        offer: updatedOffer._id
-      }));
+    // Associate the offer popup themes with the offer.
+    data.popupTheme.offer = updatedOffer._id;
+    data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
+      ...current,
+      offer: updatedOffer._id
+    }));
 
-      // Save the selected popup theme and the other popup themes in parallel.
-      const [updatedPopupTheme] = await Promise.all(
-        data.offerPopupThemes.map(async (current) => {
-          return await savePopupTheme(current);
-        })
-      );
+    // Save the selected popup theme and the other popup themes in parallel.
+    const [updatedPopupTheme] = await Promise.all(
+      data.offerPopupThemes.map(async (current) => {
+        return await savePopupTheme(current);
+      })
+    );
 
-      // Associate the selected popup theme with the offer.
-      updatedOffer.popupTheme = updatedPopupTheme._id;
+    // Associate the selected popup theme with the offer.
+    updatedOffer.popupTheme = updatedPopupTheme._id;
 
-      // Update the offer.
-      await saveOffer(updatedOffer);
+    // Update the offer.
+    await saveOffer(updatedOffer);
 
-      showSuccessToast('Offer created.');
-
-      // Redirect to the offer edit page.
-      router.push(`/offers/${updatedOffer._id}/`);
-    } catch (submitError) {
-      showErrorToast('Error creating offer.');
-    }
+    // Redirect to the offer edit page.
+    router.push(`/offers/${updatedOffer._id}/`);
   };
 
   const handleCancel = () => {

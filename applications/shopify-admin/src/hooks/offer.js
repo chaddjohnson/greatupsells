@@ -1,8 +1,10 @@
+import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
 import useToast from './toast';
 
 const useOffer = (offerId) => {
+  const router = useRouter();
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
@@ -33,7 +35,6 @@ const useOffer = (offerId) => {
       return updatedData;
     } catch (error) {
       showErrorToast(`Error ${isNew ? 'creating' : 'updating'} offer.`);
-      throw error;
     }
   };
 
