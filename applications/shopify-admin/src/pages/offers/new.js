@@ -6,7 +6,9 @@ import {
   Layout,
   Card,
   TextContainer,
+  Breadcrumbs,
   Banner,
+  Stack,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -174,7 +176,14 @@ const NewOfferPage = () => {
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
     >
-      <Page title="Create offer">
+      <Page
+        title={
+          <Stack alignment="center">
+            <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
+            <span>Create offer</span>
+          </Stack>
+        }
+      >
         <PageTitleBar />
         {!loading && !error && (
           <OfferForm

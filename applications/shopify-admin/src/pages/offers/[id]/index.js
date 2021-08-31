@@ -1,12 +1,14 @@
-import { memo, useMemo } from 'react';
+import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Loading } from '@shopify/app-bridge-react';
+import { Loading, Modal } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
   Card,
   TextContainer,
+  Breadcrumbs,
   Banner,
+  Stack,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -96,12 +98,15 @@ const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const { shop, shopLoading, shopError } = useShop();
   const {
     offer,
     offerLoading,
     offerError,
     saveOffer,
+    deleteOffer,
     duplicateOffer,
     enableOffer,
     disableOffer
@@ -171,6 +176,20 @@ const OfferEditPage = () => {
     router.push('/offers/');
   };
 
+  const handleDelete = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    await deleteOffer();
+    setDeleteModalOpen(false);
+    router.push('/offers/');
+  };
+
   // const handleTest = () => {
   //   // TODO
   // };
@@ -211,29 +230,56 @@ const OfferEditPage = () => {
   ];
 
   return (
-    <Loader
-      isLoading={loading}
-      isError={error}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-    >
-      <Page title={offer?.name} secondaryActions={secondaryActions}>
-        <PageTitleBar />
-        {!loading && !error && (
-          <OfferForm
-            initialValues={{
-              offer,
-              popupTheme: offerPopupTheme,
-              offerPopupThemes
-            }}
-            shop={shop}
-            popupThemes={popupThemes}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-          />
-        )}
-      </Page>
-    </Loader>
+    <>
+      <Loader
+        isLoading={loading}
+        isError={error}
+        loadingComponent={loadingComponent}
+        errorComponent={errorComponent}
+      >
+        <Page
+          title={
+            <Stack alignment="center">
+              <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
+              <span>{offer?.name}</span>
+            </Stack>
+          }
+          secondaryActions={secondaryActions}
+        >
+          <PageTitleBar />
+          {!loading && !error && (
+            <OfferForm
+              initialValues={{
+                offer,
+                popupTheme: offerPopupTheme,
+                offerPopupThemes
+              }}
+              shop={shop}
+              popupThemes={popupThemes}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              onDelete={handleDelete}
+            />
+          )}
+        </Page>
+      </Loader>
+      <Modal
+        title={`Delete ${offer?.name}`}
+        message={`Are you sure you want to delete the offer ${offer?.name}? This can’t be undone.`}
+        open={deleteModalOpen}
+        primaryAction={{
+          content: 'Delete offer',
+          destructive: true,
+          onAction: handleConfirmDelete
+        }}
+        secondaryActions={[
+          {
+            content: 'Cancel',
+            onAction: handleCancelDelete
+          }
+        ]}
+      />
+    </>
   );
 };
 

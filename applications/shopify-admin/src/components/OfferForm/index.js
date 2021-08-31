@@ -77,7 +77,8 @@ const OfferForm = ({
   shop,
   popupThemes,
   onSubmit,
-  onCancel
+  onCancel,
+  onDelete
 }) => {
   let contextualSaveBar = null;
 
@@ -303,6 +304,10 @@ const OfferForm = ({
     setTimeout(() => setPreviewActive(true));
   };
 
+  const handleDiscard = () => {
+    contextualSaveBar.dispatch(ContextualSaveBar.Action.DISCARD);
+  };
+
   // Handle Contextual Save Bar behavior.
   useEffect(() => {
     const unsubscribeDiscard = contextualSaveBar.subscribe(
@@ -331,6 +336,13 @@ const OfferForm = ({
       contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
     }
   }, [contextualSaveBar, dirty]);
+
+  useEffect(() => {
+    return () => {
+      contextualSaveBar.unsubscribe();
+      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
+    };
+  }, [contextualSaveBar]);
 
   // Set end date to start date when showing end date.
   useEffect(
@@ -476,10 +488,16 @@ const OfferForm = ({
               onAction: handleSubmit
             }}
             secondaryActions={[
-              {
-                content: 'Cancel',
-                onAction: onCancel
-              }
+              offer._id
+                ? {
+                    content: 'Delete offer',
+                    onAction: onDelete,
+                    destructive: true
+                  }
+                : {
+                    content: 'Discard',
+                    onAction: handleDiscard
+                  }
             ]}
           />
         </Layout.Section>
@@ -497,7 +515,8 @@ OfferForm.propTypes = {
   shop: PropTypes.object.isRequired,
   popupThemes: PropTypes.array.isRequired,
   onSubmit: PropTypes.func,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 OfferForm.defaultProps = {
@@ -507,7 +526,8 @@ OfferForm.defaultProps = {
     offerPopupThemes: []
   },
   onSubmit: () => {},
-  onCancel: () => {}
+  onCancel: () => {},
+  onDelete: () => {}
 };
 
 export default OfferForm;

@@ -120,7 +120,7 @@ functions:
     handler: src/routes/deleteOffer.handler
     events:
       - http:
-          path: /offers
+          path: /offers/{offerId}
           method: delete
           authorizer: aws_iam
   deleteProduct:

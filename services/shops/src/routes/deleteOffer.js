@@ -8,6 +8,7 @@ const handler = async (event, context) => {
   try {
     const { offerId } = event.pathParameters;
     const Offer = await models.get('Offer');
+    const PopupTheme = await models.get('PopupTheme');
     const offer = await Offer.findById(offerId);
 
     if (!offer) {
@@ -18,7 +19,7 @@ const handler = async (event, context) => {
     }
 
     // Delete themes associated with the offer.
-    await Offer.deleteMany({ offer: offer._id });
+    await PopupTheme.deleteMany({ offer: offer._id });
 
     // Delete the offer.
     await Offer.findByIdAndDelete(offerId);

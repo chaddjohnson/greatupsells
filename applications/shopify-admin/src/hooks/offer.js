@@ -38,6 +38,19 @@ const useOffer = (offerId) => {
     }
   };
 
+  const deleteOffer = async () => {
+    if (!offerId) {
+      return;
+    }
+
+    try {
+      await httpClient.delete(`/offers/${offerId}`);
+      showSuccessToast('Offer deleted.');
+    } catch (error) {
+      showErrorToast(`Error deleting offer.`);
+    }
+  };
+
   const enableOffer = async () => {
     if (!offerId) {
       return;
@@ -85,6 +98,7 @@ const useOffer = (offerId) => {
     offerLoading,
     offerError,
     saveOffer,
+    deleteOffer,
     enableOffer,
     disableOffer,
     duplicateOffer
