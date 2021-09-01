@@ -44,7 +44,7 @@ const TimePicker = ({ label, placeholder, onChange, ...props }) => {
         return date;
       }
 
-      const isDate = !Number.isNaN(new Date(date));
+      const isDate = !!Date.parse(date);
 
       if (isDate) {
         return formatDate(date, 't');

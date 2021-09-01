@@ -1,4 +1,9 @@
-import { useField, notEmpty } from '@shopify/react-form';
+import {
+  useField,
+  notEmpty,
+  numericString,
+  positiveNumericString
+} from '@shopify/react-form';
 
 const useFields = (initialOffer, showEndDate) => {
   const name = useField({
@@ -34,16 +39,10 @@ const useFields = (initialOffer, showEndDate) => {
             return "Trigger scroll threshold can't be blank";
           }
         },
-        (value) => {
-          if (value && Number.isNaN(value)) {
-            return 'Trigger scroll threshold must be a number';
-          }
-        },
-        (value) => {
-          if (value && Number(value) < 1) {
-            return 'Trigger scroll threshold must be a positive value';
-          }
-        }
+        numericString('Trigger scroll threshold must be a number'),
+        positiveNumericString(
+          'Trigger scroll threshold must be a positive value'
+        )
       ]
     },
     [triggerEvent.value]
@@ -80,11 +79,7 @@ const useFields = (initialOffer, showEndDate) => {
             return "Minimum amount can't be blank";
           }
         },
-        (value) => {
-          if (value && Number.isNaN(value)) {
-            return 'Minimum amount must be a number';
-          }
-        },
+        numericString('Minimum amount must be a number'),
         (value) => {
           if (
             value &&
@@ -131,11 +126,7 @@ const useFields = (initialOffer, showEndDate) => {
             return "Discount value can't be blank";
           }
         },
-        (value) => {
-          if (value && Number.isNaN(value)) {
-            return 'Discount value must be a number';
-          }
-        },
+        numericString('Discount value must be a number'),
         (value) => {
           if (value && Number(value) <= 0) {
             return 'Discount value must be greater than zero';
@@ -167,7 +158,7 @@ const useFields = (initialOffer, showEndDate) => {
     validates: [
       notEmpty("Start date can't be blank"),
       (value) => {
-        if (value && Number.isNaN(new Date(value))) {
+        if (value && !Date.parse(value)) {
           return 'Start date must be valid';
         }
       }
@@ -183,7 +174,7 @@ const useFields = (initialOffer, showEndDate) => {
           }
         },
         (value) => {
-          if (value && Number.isNaN(new Date(value))) {
+          if (value && !Date.parse(value)) {
             return 'End date must be valid';
           }
         },
@@ -207,31 +198,15 @@ const useFields = (initialOffer, showEndDate) => {
   const delaySeconds = useField({
     value: initialOffer.delaySeconds?.toString(),
     validates: [
-      (value) => {
-        if (value && Number.isNaN(value)) {
-          return 'Delay seconds must be a number';
-        }
-      },
-      (value) => {
-        if (value && Number(value) < 0) {
-          return 'Delay seconds must be a positive value';
-        }
-      }
+      numericString('Delay seconds must be a number'),
+      positiveNumericString('Delay seconds must be a positive value')
     ]
   });
   const onPageRequiredSeconds = useField({
     value: initialOffer.onPageRequiredSeconds?.toString(),
     validates: [
-      (value) => {
-        if (value && Number.isNaN(value)) {
-          return 'Required seconds must be a number';
-        }
-      },
-      (value) => {
-        if (value && Number(value) < 0) {
-          return 'Required seconds must be a positive value';
-        }
-      }
+      numericString('Required seconds must be a number'),
+      positiveNumericString('Required seconds must be a positive value')
     ]
   });
   const enableEscClose = useField(initialOffer.enableEscClose);

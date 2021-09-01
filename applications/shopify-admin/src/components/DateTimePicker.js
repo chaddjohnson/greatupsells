@@ -30,7 +30,7 @@ const DateTimePicker = ({
   const handleDateChange = useCallback(
     (newDate) => {
       const newValue = new Date(`${formatDateISO(newDate)} ${time}`);
-      const isValid = !Number.isNaN(newValue);
+      const isValid = !!Date.parse(newValue);
 
       setDate(newDate);
 
@@ -44,7 +44,7 @@ const DateTimePicker = ({
   const handleTimeChange = useCallback(
     (newTime) => {
       const newValue = new Date(`${formatDateISO(date)} ${newTime}`);
-      const isValid = !Number.isNaN(newValue);
+      const isValid = !!Date.parse(newValue);
 
       setTime(newTime);
 
