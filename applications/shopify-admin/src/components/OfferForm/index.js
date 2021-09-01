@@ -170,6 +170,7 @@ const OfferForm = ({
       enableQuantitySelection,
       animation
     },
+    makeCleanAfterSubmit: true,
     onSubmit: async (formValues) => {
       contextualSaveBar.set({ saveAction: { loading: true } });
 
@@ -186,6 +187,7 @@ const OfferForm = ({
       }
 
       contextualSaveBar.set({ saveAction: { loading: false } });
+      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
 
       return { status: 'success' };
     }
@@ -200,7 +202,7 @@ const OfferForm = ({
     if (firstErrorElement) {
       firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [submit]);
+  }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const popupThemeDirty = useMemo(
     () => JSON.stringify(popupTheme) !== JSON.stringify(initialPopupTheme),
@@ -426,6 +428,7 @@ const OfferForm = ({
           />
           <OfferTriggerProductsEditor
             shop={shop}
+            offer={offer}
             triggerProducts={triggerProducts}
             triggerCollections={triggerCollections}
             minimumRequirement={minimumRequirement}

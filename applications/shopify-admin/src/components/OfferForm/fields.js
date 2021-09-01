@@ -39,10 +39,18 @@ const useFields = (initialOffer, showEndDate) => {
             return "Trigger scroll threshold can't be blank";
           }
         },
-        numericString('Trigger scroll threshold must be a number'),
-        positiveNumericString(
-          'Trigger scroll threshold must be a positive value'
-        )
+        (value) =>
+          triggerEvent.value === 'SCROLL' &&
+          value &&
+          numericString('Trigger scroll threshold must be a number')(
+            value?.toString()
+          ),
+        (value) =>
+          triggerEvent.value === 'SCROLL' &&
+          value &&
+          positiveNumericString(
+            'Trigger scroll threshold must be a positive value'
+          )(value?.toString())
       ]
     },
     [triggerEvent.value]
@@ -67,7 +75,19 @@ const useFields = (initialOffer, showEndDate) => {
   const viewAllowanceDays = useField(
     initialOffer.viewAllowanceDays?.toString()
   );
-  const triggerProducts = useField(initialOffer.triggerProducts);
+  const triggerProducts = useField(
+    {
+      value: initialOffer.triggerProducts,
+      validates: [
+        (value) => {
+          if (strategy.value === 'UPSELL' && !value?.length) {
+            return 'One or more trigger products are required';
+          }
+        }
+      ]
+    },
+    [strategy.value]
+  );
   const triggerCollections = useField(initialOffer.triggerCollections);
   const minimumRequirement = useField(initialOffer.minimumRequirement);
   const minimumRequiredAmount = useField(
@@ -79,7 +99,9 @@ const useFields = (initialOffer, showEndDate) => {
             return "Minimum amount can't be blank";
           }
         },
-        numericString('Minimum amount must be a number'),
+        (value) =>
+          value &&
+          numericString('Minimum amount must be a number')(value?.toString()),
         (value) => {
           if (
             value &&
@@ -121,19 +143,23 @@ const useFields = (initialOffer, showEndDate) => {
     {
       value: initialOffer.discountValue?.toString(),
       validates: [
-        (value) => {
-          if (discountType.value !== 'NO_DISCOUNT' && !value) {
-            return "Discount value can't be blank";
-          }
-        },
-        numericString('Discount value must be a number'),
+        (value) =>
+          discountType.value !== 'NO_DISCOUNT' &&
+          notEmpty("Discount value can't be blank")(value?.toString()),
+        (value) =>
+          value &&
+          numericString('Discount value must be a number')(value?.toString()),
         (value) => {
           if (value && Number(value) <= 0) {
             return 'Discount value must be greater than zero';
           }
         },
         (value) => {
-          if (discountType === 'PERCENTAGE' && value && Number(value) > 100) {
+          if (
+            discountType.value === 'PERCENTAGE' &&
+            value &&
+            Number(value) > 1
+          ) {
             return 'Discount value must be 100 or less';
           }
         }
@@ -198,15 +224,27 @@ const useFields = (initialOffer, showEndDate) => {
   const delaySeconds = useField({
     value: initialOffer.delaySeconds?.toString(),
     validates: [
-      numericString('Delay seconds must be a number'),
-      positiveNumericString('Delay seconds must be a positive value')
+      (value) =>
+        value &&
+        numericString('Delay seconds must be a number')(value?.toString()),
+      (value) =>
+        value &&
+        positiveNumericString('Delay seconds must be a positive value')(
+          value?.toString()
+        )
     ]
   });
   const onPageRequiredSeconds = useField({
     value: initialOffer.onPageRequiredSeconds?.toString(),
     validates: [
-      numericString('Required seconds must be a number'),
-      positiveNumericString('Required seconds must be a positive value')
+      (value) =>
+        value &&
+        numericString('Required seconds must be a number')(value?.toString()),
+      (value) =>
+        value &&
+        positiveNumericString('Required seconds must be a positive value')(
+          value?.toString()
+        )
     ]
   });
   const enableEscClose = useField(initialOffer.enableEscClose);

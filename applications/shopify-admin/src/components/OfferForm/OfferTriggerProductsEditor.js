@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, ChoiceList } from '@shopify/polaris';
+import {
+  Card,
+  FormLayout,
+  TextField,
+  ChoiceList,
+  InlineError
+} from '@shopify/polaris';
 import styled from 'styled-components';
 import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 import ProductResourceList from './ProductResourceList';
@@ -14,6 +20,7 @@ const MinimumRequiredAmountWrapper = styled.div`
 
 const OfferTriggerProductsEditor = ({
   shop,
+  offer,
   triggerProducts,
   triggerCollections,
   minimumRequirement,
@@ -81,31 +88,58 @@ const OfferTriggerProductsEditor = ({
     minimumRequiredAmount.onChange(undefined);
   };
 
+  useEffect(() => {
+    if (offer.strategy === 'UPSELL') {
+      setAppliesTo('PRODUCTS');
+    } else {
+      setAppliesTo('ALL');
+    }
+  }, [offer.strategy]);
+
+  useEffect(() => {
+    if (offer.strategy !== 'UPSELL') {
+      triggerProducts.setError(undefined);
+      return;
+    }
+
+    if (!triggerProducts.value.length) {
+      triggerProducts.setError('One or more trigger products are required');
+    } else {
+      triggerProducts.setError(undefined);
+    }
+  }, [triggerProducts.value, offer.strategy]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <>
-      <Card title="Trigger products and collections">
+      <Card
+        title={`Trigger products${
+          offer.strategy === 'CROSS_SELL' ? ' and collections' : ''
+        }`}
+      >
         <Card.Section>
           <FormLayout>
-            <ChoiceList
-              title="Applies to"
-              titleHidden
-              choices={[
-                {
-                  label: 'All products',
-                  value: 'ALL'
-                },
-                {
-                  label: 'Specific products',
-                  value: 'PRODUCTS'
-                },
-                {
-                  label: 'Specific collections',
-                  value: 'COLLECTIONS'
-                }
-              ]}
-              selected={[appliesTo]}
-              onChange={([value]) => handleAppliesToChange(value)}
-            />
+            {offer.strategy === 'CROSS_SELL' && (
+              <ChoiceList
+                title="Applies to"
+                titleHidden
+                choices={[
+                  {
+                    label: 'All products (including none)',
+                    value: 'ALL'
+                  },
+                  {
+                    label: 'Specific products',
+                    value: 'PRODUCTS'
+                  },
+                  {
+                    label: 'Specific collections',
+                    value: 'COLLECTIONS'
+                  }
+                ]}
+                selected={[appliesTo]}
+                onChange={([value]) => handleAppliesToChange(value)}
+              />
+            )}
             {appliesTo === 'PRODUCTS' && (
               <>
                 <ProductResourceList
@@ -125,6 +159,12 @@ const OfferTriggerProductsEditor = ({
                   onRemoveItem={removeCollection}
                 />
               </>
+            )}
+            {submitted && triggerProducts.error && (
+              <InlineError
+                message={triggerProducts.error}
+                fieldID="triggerProducts"
+              />
             )}
           </FormLayout>
         </Card.Section>
@@ -181,6 +221,7 @@ const OfferTriggerProductsEditor = ({
 
 OfferTriggerProductsEditor.propTypes = {
   shop: PropTypes.object.isRequired,
+  offer: PropTypes.object.isRequired,
   triggerProducts: PropTypes.object.isRequired,
   triggerCollections: PropTypes.object.isRequired,
   minimumRequirement: PropTypes.object.isRequired,
