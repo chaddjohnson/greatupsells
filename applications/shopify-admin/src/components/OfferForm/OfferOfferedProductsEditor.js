@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
   FormLayout,
   ChoiceList,
   Checkbox,
-  TextField
+  TextField,
+  InlineError
 } from '@shopify/polaris';
 import styled from 'styled-components';
 import ProductResourceList from './ProductResourceList';
@@ -75,6 +76,16 @@ const OfferOfferedProductsEditor = ({
     );
   };
 
+  useEffect(() => {
+    if (!offeredProducts.value.length && !offeredCollections.value.length) {
+      offeredProducts.setError(
+        'One or more offered products or collections are required'
+      );
+    } else {
+      offeredProducts.setError(undefined);
+    }
+  }, [offeredProducts.value, offeredCollections.value]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (offer.strategy !== 'UPSELL' && offer.strategy !== 'CROSS_SELL') {
     return null;
   }
@@ -124,6 +135,12 @@ const OfferOfferedProductsEditor = ({
                 items={offeredCollections.value}
                 onChange={handleCollectionSelection}
                 onRemoveItem={removeCollection}
+              />
+            )}
+            {submitted && offeredProducts.error && (
+              <InlineError
+                message={offeredProducts.error}
+                fieldID="offeredProducts"
               />
             )}
           </FormLayout>
