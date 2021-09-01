@@ -13,7 +13,9 @@ import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
 const SecondsInputWrapper = styled.div`
-  max-width: 145px;
+  .Polaris-TextField {
+    max-width: 145px;
+  }
 `;
 
 const AnimationSelectWrapper = styled.div`

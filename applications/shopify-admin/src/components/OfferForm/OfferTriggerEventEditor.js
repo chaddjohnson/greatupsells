@@ -11,7 +11,9 @@ import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
 const TriggerScrollThresholdWrapper = styled.div`
-  max-width: 170px;
+  .Polaris-TextField {
+    max-width: 170px;
+  }
 `;
 
 const OfferTriggerEventEditor = ({
