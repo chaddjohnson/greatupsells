@@ -194,6 +194,12 @@ const OfferForm = ({
   const handleSubmit = useCallback(() => {
     setSubmitted(true);
     submit();
+
+    const firstErrorElement = document.querySelector('.Polaris-InlineError');
+
+    if (firstErrorElement) {
+      firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }, [submit]);
 
   const popupThemeDirty = useMemo(
@@ -201,17 +207,21 @@ const OfferForm = ({
     [popupTheme, initialPopupTheme]
   );
 
-  contextualSaveBar = ContextualSaveBar.create(app, {
-    saveAction: {
-      disabled: !dirty && !popupThemeDirty,
-      loading: submitting
-    },
-    discardAction: {
-      disabled: false,
-      loading: false,
-      discardConfirmationModal: dirty || popupThemeDirty
-    }
-  });
+  contextualSaveBar = useMemo(
+    () =>
+      ContextualSaveBar.create(app, {
+        saveAction: {
+          disabled: !dirty && !popupThemeDirty,
+          loading: submitting
+        },
+        discardAction: {
+          disabled: false,
+          loading: false,
+          discardConfirmationModal: dirty || popupThemeDirty
+        }
+      }),
+    [app, dirty, popupThemeDirty, submitting]
+  );
 
   const offer = useMemo(
     () => ({
