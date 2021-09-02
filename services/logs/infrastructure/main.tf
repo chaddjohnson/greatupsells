@@ -7,12 +7,28 @@ terraform {
 }
 
 provider "aws" {
-  version = "~> 3.18"
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 resource "aws_sqs_queue" "log" {
   name = "log-queue-${terraform.workspace}"
+}
+
+resource "aws_sqs_queue_policy" "log_policy" {
+  queue_url = "${aws_sqs_queue.log.id}"
+  policy    = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.log.arn}"
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_ssm_parameter" "log_queue_arn" {
