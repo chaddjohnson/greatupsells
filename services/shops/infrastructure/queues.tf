@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "shop_product_import" {
 }
 
 resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
-  queue_url = "${aws_sqs_queue.shop_collection_import.id}"
+  queue_url = aws_sqs_queue.shop_collection_import.id
   policy    = <<EOF
 {
   "Version": "2012-10-17",
@@ -24,7 +24,7 @@ EOF
 }
 
 resource "aws_sqs_queue_policy" "shop_product_import_policy" {
-  queue_url = "${aws_sqs_queue.shop_product_import.id}"
+  queue_url = aws_sqs_queue.shop_product_import.id
   policy    = <<EOF
 {
   "Version": "2012-10-17",
