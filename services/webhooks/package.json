@@ -29,6 +29,6 @@
     "nodemon": "^2.0.7",
     "serverless": "^2.43.1",
     "serverless-offline": "^7.0.0",
-    "serverless-plugin-monorepo": "^0.9.0"
+    "serverless-plugin-monorepo": "^0.10.0"
   }
 }
