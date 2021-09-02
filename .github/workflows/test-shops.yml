@@ -28,7 +28,7 @@ jobs:
           terraform init services/shops/infrastructure \
           terraform validate services/shops/infrastructure \
           terraform workspace select test services/shops/infrastructure || { terraform workspace new test services/shops/infrastructure && terraform init services/shops/infrastructure; } \
-          terraform apply -var-file=services/shops/infrastructure/config/test.tfvars -auto-approve services/shops/infrastructure
+          terraform apply TF_VAR_region="us-east-1" -var-file=services/shops/infrastructure/config/test.tfvars -auto-approve services/shops/infrastructure
       - name: Install Node Modules
         run: yarn install
       - name: Exclude AWS SDK
