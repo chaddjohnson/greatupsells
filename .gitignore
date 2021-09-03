@@ -5,6 +5,7 @@ node_modules
 *.log
 .serverless
 .terraform
+.terraform.*
 terraform.tfstate.d
 dist
 build
