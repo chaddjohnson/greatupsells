@@ -1,210 +1,188 @@
 resource "aws_cloudwatch_event_rule" "app_uninstall" {
   name           = "app-uninstall-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "app/uninstalled"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "app/uninstalled"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "collection_creation" {
   name           = "collection-creation-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "collections/create"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "collections/create"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "collection_deletion" {
   name           = "collection-deletion-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "collections/delete"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "collections/delete"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "collection_update" {
   name           = "collection-update-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "collections/update"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "collections/update"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "order_cancelation" {
   name           = "order-cancelation-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "orders/cancelled"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "orders/cancelled"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "order_paid" {
   name           = "order-paid-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "orders/paid"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "orders/paid"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "order_update" {
   name           = "order-update-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "orders/updated"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "orders/updated"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "product_creation" {
   name           = "product-creation-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "products/create"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "products/create"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "product_deletion" {
   name           = "product-deletion-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "products/delete"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "products/delete"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "product_update" {
   name           = "product-update-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "products/update"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "products/update"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "shop_update" {
   name           = "shop-update-webhook"
   event_bus_name = var.event_bus_name
-  event_pattern  = <<EOF
-{
-  "detail-type": [
-    "shopifyWebhook"
-  ],
-  "detail": {
-    "metadata": {
-      "X-Shopify-Topic": [
-        "shop/update"
-      ]
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "shop/update"
+        ]
+      }
     }
-  }
-}
-EOF
+  })
 }
 
 resource "aws_cloudwatch_event_target" "app_uninstall" {

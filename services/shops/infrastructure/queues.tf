@@ -8,36 +8,32 @@ resource "aws_sqs_queue" "shop_product_import" {
 
 resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
   queue_url = aws_sqs_queue.shop_collection_import.id
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.shop_collection_import.arn}"
-    }
-  ]
-}
-EOF
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.shop_collection_import.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "shop_product_import_policy" {
   queue_url = aws_sqs_queue.shop_product_import.id
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.shop_product_import.arn}"
-    }
-  ]
-}
-EOF
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.shop_product_import.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_ssm_parameter" "shop_collection_import_queue_arn" {

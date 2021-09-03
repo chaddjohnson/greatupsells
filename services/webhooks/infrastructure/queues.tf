@@ -31,139 +31,123 @@ resource "aws_sqs_queue" "shop_update" {
 }
 
 resource "aws_sqs_queue_policy" "app_uninstall_policy" {
-  queue_url = "${aws_sqs_queue.app_uninstall.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.app_uninstall.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.app_uninstall.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.app_uninstall.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "collection_policy" {
-  queue_url = "${aws_sqs_queue.collection.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.collection.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.collection.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.collection.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "order_cancelation_policy" {
-  queue_url = "${aws_sqs_queue.order_cancelation.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.order_cancelation.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.order_cancelation.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.order_cancelation.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "order_paid_policy" {
-  queue_url = "${aws_sqs_queue.order_paid.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.order_paid.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.order_paid.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.order_paid.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "order_update_policy" {
-  queue_url = "${aws_sqs_queue.order_update.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.order_update.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.order_update.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.order_update.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "product_policy" {
-  queue_url = "${aws_sqs_queue.product.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.product.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.product.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.product.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "product_deletion_policy" {
-  queue_url = "${aws_sqs_queue.product_deletion.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.product_deletion.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.product_deletion.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.product_deletion.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_sqs_queue_policy" "shop_update_policy" {
-  queue_url = "${aws_sqs_queue.shop_update.id}"
-  policy    = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.shop_update.arn}"
-    }
-  ]
-}
-EOF
+  queue_url = aws_sqs_queue.shop_update.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.shop_update.arn}"
+      }
+    ]
+  })
 }
 
 resource "aws_ssm_parameter" "app_uninstall_queue_arn" {
