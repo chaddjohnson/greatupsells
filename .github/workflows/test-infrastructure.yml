@@ -1,0 +1,22 @@
+name: upselling-infrastructure
+on:
+  push:
+    branches:
+      - test
+    paths:
+      - infrastructure/**
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+      # - name: Run Terraform
+      #   run: (cd ./infrastructure && STAGE=test ./run.sh)
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - run: "echo on branch $GITHUB_REF"
