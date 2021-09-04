@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set Environment Variables
-        run: "BRANCH=${GITHUB_REF##*/}"
+        run: "export BRANCH=${GITHUB_REF##*/}"
       # - name: Checkout
       #   uses: actions/checkout@v2
       # - name: Install Terraform
