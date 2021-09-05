@@ -23,6 +23,7 @@ const {
   AWS_REGION,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_APP_API_SECRET_KEY,
+  SHOPIFY_ADMIN_APP_URL,
   SHOPIFY_ADMIN_APP_STOREFRONT_PORT,
   JWT_SECRET,
   SHOPS_API_URL
@@ -64,6 +65,7 @@ const createServer = () => {
   server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
   server.use(
     shopifyAuth({
+      prefix: SHOPIFY_ADMIN_APP_URL,
       apiKey: SHOPIFY_ADMIN_APP_API_KEY,
       secret: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
       scopes: [
