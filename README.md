@@ -97,6 +97,36 @@ The following are used:
 - Shopify Polaris
 - Material UI
 
+### Speed Improvement
+
+Loading the Shopify Admin app over ngrok can be slow. To speed this up, we can bypass ngrok using a local nginx server as follows:
+
+1. Set up nginx locally.
+2. Create server configurations for each subdomain; for example:
+
+   ```
+   server {
+       listen 80;
+       listen 443 ssl;
+       server_name example.ngrok.io;
+
+       ssl_certificate     /usr/local/etc/ssl/certs/self-signed.crt;
+       ssl_certificate_key /usr/local/etc/ssl/private/self-signed.key;
+
+       ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+       ssl_ciphers         HIGH:!aNULL:!MD5;
+       ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
+
+       location / {
+           proxy_pass http://127.0.0.1:3000/;
+       }
+   }
+   ```
+
+3. Create a self-signed certificate locally for wildcards (I use multiple ngrok tunnels) following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Note I changed all instances of "test.cpming.top" to "\*.ngrok.io". Also note that I used "2048" instead of "128" for the `openssl dhparam` command.
+4. Add the tunnel subdomains to /etc/hosts pointing them to 127.0.0.1; for example: `127.0.0.1 example.ngrok.io`.
+5. Add a `prefix` parameter to the `shopifyAuth()` function call (the default export of `@shopify/koa-shopify-auth`): `prefix: 'https://example.ngrok.io',`
+
 ### Coding Conventions
 
 - Prettier and ESLint for automatic code formatting.
