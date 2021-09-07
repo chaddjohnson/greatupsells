@@ -16,7 +16,7 @@ provider:
   environment:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
     LOG_SOURCE: 'webhooks-service'
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-secret-key~true}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key~true}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
@@ -126,12 +126,5 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: ${env:WEBHOOK_PORT}
+    httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 5004
-
-package:
-  exclude:
-    - test/**
-    - node_modules/aws-sdk
-    - node_modules/**/aws-sdk
-    - node_modules/**/*.map

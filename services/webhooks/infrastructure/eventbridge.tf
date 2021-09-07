@@ -1,3 +1,9 @@
+resource "aws_ssm_parameter" "event_bus_arn" {
+  name  = "/upselling/${terraform.workspace}/webhooks/arn"
+  type  = "String"
+  value = var.event_bus_arn
+}
+
 resource "aws_cloudwatch_event_rule" "app_uninstall" {
   name           = "app-uninstall-webhook"
   event_bus_name = var.event_bus_name

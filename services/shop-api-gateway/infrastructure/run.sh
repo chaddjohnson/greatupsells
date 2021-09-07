@@ -5,4 +5,4 @@
 terraform init
 terraform validate
 terraform workspace select $STAGE || terraform workspace new $STAGE
-terraform apply -auto-approve
+terraform apply -var-file=./config/$STAGE.tfvars -auto-approve

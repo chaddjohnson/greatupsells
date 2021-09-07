@@ -86,12 +86,12 @@ Please install the `ngrok` binary. Once installed and configured, ngrok will sta
 The following are used:
 
 - Node.js
-- React (with Hooks)
+- React (with hooks)
 - Next.js
 - REST
 - Lerna
-- webpack (v4)
-- Emotion
+- webpack
+- Styled Components
 - Mongoose
 - Serverless
 - Shopify Polaris
@@ -145,37 +145,48 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console.
 
-### Deploying
+### Deployment
 
 Simply push to the appropriate branch.
 
-CircleCI is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
+GitHub Actions is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
 
-- `master` = development environment
-- `test` = test environment
-- `production` = production environment
+- `test`
+- `production`
 
-All infrastructure will be setup and updated via Terraform with each deployment.
+Initial deployments should occur in the following order:
+
+1. `infrastructure`
+1. `services/logs`
+1. `services/webhooks`
+1. `services/shops`
+1. `services/email`
+1. `services/shop-api-gateway`
+1. `services/admin-api-gateway`
+1. `services/storefront-api-gateway`
+1. `applications/shopify-admin`
+1. `applications/shopify-storefront`
+1. `applications/admin`
 
 ## Infrastructure
 
-Hosting is with AWS. The following AWS services are used:
+All infrastructure is managed via Serverless, Terraform, and Ansible with each deployment. Linux is used for hosting.
 
-- API Gateway
+AWS is used for hosting. The following AWS services are used:
+
 - Lambda
-- EventBridge
+- API Gateway
 - EC2
 - SNS
 - SQS
 - S3
+- EventBridge
 - CloudFront
 - CloudWatch Events
 - SES
 - SSM
-- ACM
 - Elasticsearch
-
-All infrastructure is managed via Serverless, Terraform, and Ansible. Linux is used for hosting.
+- ACM
 
 ## Architecture
 
@@ -205,12 +216,10 @@ We support the following browsers:
 - Safari
 - iOS Safari
 
-We do not support Internet Explorer.
+Internet Explorer is not supported.
 
-This app must work in the [native Shopify app](https://apps.apple.com/us/app/shopify-ecommerce-business/id371294472).
+This app must work within the [native Shopify app](https://apps.apple.com/us/app/shopify-ecommerce-business/id371294472).
 
 ### Licensing
 
-All licenses are permissive free software licenses imposing minimal restrictions on the use and distribution of covered software.
-
-Run `npx license-checker --summary` to check licenses for dependencies.
+All licenses are permissive free software licenses imposing minimal restrictions on the use and distribution of covered software. Run `npx license-checker --summary` to check licenses for dependencies.

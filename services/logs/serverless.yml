@@ -11,8 +11,8 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
-    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch/uri~true}
-    MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri~true}
+    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch-logs/uri}
+    MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri}
 
 functions:
   createLog:
@@ -50,17 +50,19 @@ functions:
           cors: true
 
 plugins:
-  - serverless-plugin-monorepo
   - serverless-offline
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
 
 custom:
   serverless-offline:
-    httpPort: ${env:LOGS_API_PORT}
+    httpPort: ${env:LOGS_API_PORT, 4009}
     lambdaPort: 5005
-
-package:
-  exclude:
-    - test/**
-    - node_modules/aws-sdk
-    - node_modules/**/aws-sdk
-    - node_modules/**/*.map
+  customDomain:
+    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/logs-api/domain}
+    basePath: ''
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+    autoDomain: true

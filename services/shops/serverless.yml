@@ -20,11 +20,11 @@ provider:
         Resource: "*"
   environment:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
-    LOGS_API_URL: ${env:LOGS_API_URL}
     LOG_SOURCE: 'shops-service'
-    MONGODB_URI_SHOPS: ${env:MONGODB_URI_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/uri~true}
+    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
+    MONGODB_URI_SHOPS: ${env:MONGODB_URI_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/uri}
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
-    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify-admin/api-key}
+    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${env:SHOP_COLLECTION_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${env:SHOP_PRODUCT_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
@@ -426,19 +426,13 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: ${env:SHOPS_API_PORT}
+    httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 5002
   customDomain:
-    domainName: ${env:SHOPS_SERVICE_API_ENDPOINT, ssm:/upselling/${self:provider.stage}/shops-service-api/endpoint/${self:provider.region}}
+    domainName: ${env:SHOPS_SERVICE_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2
-
-package:
-  exclude:
-    - test/**
-    - node_modules/aws-sdk
-    - node_modules/**/aws-sdk
-    - node_modules/**/*.map
+    autoDomain: true

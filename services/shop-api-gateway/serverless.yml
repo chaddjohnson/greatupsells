@@ -308,19 +308,13 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: ${env:SHOP_API_GATEWAY_PORT}
+    httpPort: ${env:SHOP_API_GATEWAY_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${env:SHOP_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/shop-api-gateway/endpoint/${self:provider.region}}
+    domainName: ${env:SHOP_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/shop-api-gateway/endpoint}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2
-
-package:
-  exclude:
-    - test/**
-    - node_modules/aws-sdk
-    - node_modules/**/aws-sdk
-    - node_modules/**/*.map
+    autoDomain: true

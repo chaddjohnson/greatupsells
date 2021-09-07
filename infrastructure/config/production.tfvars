@@ -1,1 +1,7 @@
-certificate_name = ""
+certificate_name                 = "*.greatupsells.com"
+sandbox                          = "false"
+jwt_secret                       = "2ab8c99671a507f3314818894cad27ed562552a29713eda67f7b2dbdf81e13e0"
+shopify_admin_app_api_key        = ""
+shopify_admin_app_api_secret_key = ""
+shopify_admin_app_url            = "shopify-admin.greatupsells.com"
+shops_service_api_domain         = "shops-api.greatupsells.com"
