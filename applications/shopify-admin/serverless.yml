@@ -56,7 +56,7 @@ plugins:
 
 custom:
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/endpoint}
+    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

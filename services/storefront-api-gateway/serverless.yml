@@ -100,7 +100,7 @@ custom:
     httpPort: ${env:STOREFRONT_API_GATEWAY_PORT, 4006}
     lambdaPort: 5001
   customDomain:
-    domainName: ${env:STOREFRONT_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/storefront-api-gateway/endpoint}
+    domainName: ${env:STOREFRONT_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/storefront-api-gateway/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
