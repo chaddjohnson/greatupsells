@@ -18,6 +18,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
+      - name: Install Ansible
+        run: sudo apt-get install ansible
       - name: Run Terraform
         run: (cd ./infrastructure && STAGE=$BRANCH ./run.sh)
         env:

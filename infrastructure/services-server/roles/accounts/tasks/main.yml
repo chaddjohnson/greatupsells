@@ -1,0 +1,43 @@
+- name: Create admin user account
+  user:
+    name: "{{ server_admin_user }}"
+    password: "{{ server_admin_password | b64decode }}"
+    groups:
+      - sudo
+    state: present
+    shell: /bin/bash
+    createhome: yes
+    system: no
+
+- name: Add authorized key for admin user account
+  authorized_key:
+    user: "{{ server_admin_user }}"
+    state: present
+    key: "{{ server_admin_key | b64decode }}"
+
+- name: Create AWS config directory
+  file:
+    path: /root/.aws
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Configure AWS CLI credentials
+  vars:
+    content: |
+      [default]
+      aws_access_key_id = {{ aws_access_key_id }}
+      aws_secret_access_key = {{ aws_secret_access_key }}
+  copy:
+    content: "{{ content }}"
+    dest: /root/.aws/credentials
+
+- name: Configure AWS CLI settings
+  vars:
+    content: |
+      [default]
+      region = us-east-1
+  copy:
+    content: "{{ content }}"
+    dest: /root/.aws/config

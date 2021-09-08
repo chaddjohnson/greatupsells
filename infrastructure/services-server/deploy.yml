@@ -1,0 +1,8 @@
+- hosts: services-server
+  roles:
+    # - common
+    - system
+    # - accounts
+    # - mongodb
+    # - redis
+    # - elasticsearch

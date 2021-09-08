@@ -1,0 +1,76 @@
+# Reference: https://github.com/PharosProduction/tutorial-mongodb-ansible
+
+- name: Add Mongo PPA key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-4.2.asc
+    state: present
+
+- name: Add Mongo sources list
+  lineinfile:
+    line: "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse"
+    dest: /etc/apt/sources.list.d/mongodb-org-4.2.list
+    state: present
+    create: yes
+
+- name: Install MongoDB
+  apt:
+    name: mongodb-org
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+    allow_unauthenticated: yes
+
+- dpkg_selections:
+    name: mongodb-org
+    selection: hold
+- dpkg_selections:
+    name: mongodb-org-server
+    selection: hold
+
+- dpkg_selections:
+    name: mongodb-org-shell
+    selection: hold
+
+- dpkg_selections:
+    name: mongodb-org-mongos
+    selection: hold
+
+- dpkg_selections:
+    name: mongodb-org-tools
+    selection: hold
+
+- name: Ensure mongodb is running and enabled to start automatically on reboot
+  systemd:
+    name: mongod
+    enabled: yes
+    state: started
+
+- name: Add MongoDB admin user
+  mongodb_user:
+    database: "admin"
+    name: "root"
+    password: "{{ mongodb_root_password }}"
+    update_password: "on_create"
+    roles: "root"
+  ignore_errors: yes
+
+- name: Copy config file
+  copy:
+    src: mongod.conf
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create /etc/security/limits.d/mongod.conf
+  copy:
+    src: security-mongod.conf
+    dest: /etc/security/limits.d/mongod.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start MongoDB
+  service:
+    name: mongod
+    state: restarted
