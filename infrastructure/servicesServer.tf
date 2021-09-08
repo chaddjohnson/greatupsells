@@ -75,8 +75,7 @@ resource "aws_eip" "services_server" {
 # Create Ansible hosts config.
 resource "null_resource" "ansible_host_config" {
   provisioner "local-exec" {
-    working_dir = "src"
-    command     = <<EOT
+    command = <<EOT
       cat /dev/null > services-server/hosts
       echo "[services-server]" >> services-server/hosts
       echo "${aws_eip.services_server.public_ip}" >> services-server/hosts
@@ -99,7 +98,7 @@ EOT
 # Run Ansible to set up the server.
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
-    working_dir = "src/services-server"
+    working_dir = "services-server"
     command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml"
   }
 
