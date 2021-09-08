@@ -52,8 +52,7 @@ resource "aws_instance" "services_server" {
 
   root_block_device {
     delete_on_termination = false
-    iops                  = "216"
-    volume_size           = "72"
+    volume_size           = "64"
     volume_type           = "gp2"
   }
 
