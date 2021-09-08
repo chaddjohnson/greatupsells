@@ -22,8 +22,8 @@ resource "aws_security_group" "services_server" {
   description = "Security group for services server"
 
   ingress {
-    from_port   = 2222
-    to_port     = 2222
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -82,7 +82,7 @@ resource "null_resource" "ansible_host_config" {
       echo "" >> services-server/hosts
       echo "[all:vars]" >> services-server/hosts
       echo "ansible_user=ubuntu" >> services-server/hosts
-      echo "ansible_port=2222" >> services-server/hosts
+      echo "ansible_port=22" >> services-server/hosts
       echo "ansible_python_interpreter='/usr/bin/env python3'" >> services-server/hosts
 EOT
   }

@@ -1,4 +1,5 @@
 - hosts: services-server
+  gather_facts: no
   roles:
     # - common
     - system
