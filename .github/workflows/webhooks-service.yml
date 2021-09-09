@@ -1,19 +1,17 @@
-name: upselling-shops-service
+name: upselling-webhooks-service
 on:
   push:
     branches:
       - test
       - production
     paths:
-      - .github/workflows/shops.yml
-      - services/shops/**
+      - .github/workflows/webhooks.yml
+      - services/webhooks/**
       - packages/logger/**
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      PLACEHOLDER: value
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -36,7 +34,7 @@ jobs:
         run: yarn install
       - name: Deploy Serverless (us-east-1)
         run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
-        working-directory: services/shops
+        working-directory: services/webhooks
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

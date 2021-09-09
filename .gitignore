@@ -15,4 +15,3 @@ build
 .eslintcache
 pm2.json
 /archive
-infrastructure/**/hosts
