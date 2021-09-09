@@ -21,9 +21,9 @@ jobs:
           chmod 600 ~/.ssh/neatowebsolutions/id_rsa
       - name: Add Terraform variables
         run: |
-          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD }}\"" >> ~/upselling/infrastructure/servicesServer/roles/mongodb/vars/main.yml
-          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ~/upselling/infrastructure/servicesServer/roles/common/vars/main.yml
-          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ~/upselling/infrastructure/servicesServer/roles/common/vars/main.yml
+          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD }}\"" >> ~/work/upselling/infrastructure/servicesServer/roles/mongodb/vars/main.yml
+          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ~/work/upselling/infrastructure/servicesServer/roles/common/vars/main.yml
+          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ~/work/upselling/infrastructure/servicesServer/roles/common/vars/main.yml
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Terraform
