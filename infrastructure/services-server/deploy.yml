@@ -1,9 +1,9 @@
 - hosts: services-server
   gather_facts: no
   roles:
-    # - common
+    - common
     - system
-    # - accounts
-    # - mongodb
+    - accounts
+    - mongodb
     # - redis
     # - elasticsearch

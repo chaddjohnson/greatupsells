@@ -2,15 +2,19 @@
 
 - name: Add Mongo PPA key
   apt_key:
-    url: https://www.mongodb.org/static/pgp/server-4.2.asc
+    url: https://www.mongodb.org/static/pgp/server-4.4.asc
     state: present
 
 - name: Add Mongo sources list
   lineinfile:
-    line: "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse"
-    dest: /etc/apt/sources.list.d/mongodb-org-4.2.list
+    line: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse"
+    dest: /etc/apt/sources.list.d/mongodb-org-4.4.list
     state: present
     create: yes
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
 
 - name: Install MongoDB
   apt:
@@ -72,5 +76,5 @@
 
 - name: Start MongoDB
   service:
-    name: mongod
+    name: mongod.service
     state: restarted
