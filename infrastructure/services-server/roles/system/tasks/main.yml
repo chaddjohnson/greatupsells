@@ -14,6 +14,32 @@
     pkg: unattended-upgrades
     state: absent
 
+- name: Create swap file
+  command: fallocate -l 4G /swapfile
+
+- name: Set swap file permissions
+  file:
+    path: /swapfile
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Set up swap area
+  command: mkswap /swapfile
+
+- name: Add swap entry in fstab
+  mount:
+    name: none
+    src: /swapfile
+    fstype: swap
+    opts: sw
+    passno: "0"
+    dump: "0"
+    state: present
+
+- name: Mount swap
+  command: swapon /swapfile
+
 - name: Set vm.swappiness
   sysctl:
     name: vm.swappiness
