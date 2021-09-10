@@ -23,7 +23,7 @@
     "http-status-codes": "^2.1.4",
     "lodash": "^4.17.15",
     "luxon": "^1.27.0",
-    "mongoose": "^5.12.7",
+    "mongoose": "^5.13.9",
     "mongoose-int32": "^0.4.1",
     "shopify-api-node": "^3.6.5"
   },

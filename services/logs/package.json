@@ -22,7 +22,7 @@
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
     "migrate-mongo": "^8.1.4",
-    "mongoose": "^5.12.7"
+    "mongoose": "^5.13.9"
   },
   "devDependencies": {
     "aws-sdk": "^2.984.0",
