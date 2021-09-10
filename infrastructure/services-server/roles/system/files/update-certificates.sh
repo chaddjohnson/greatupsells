@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Update mongo.pem.
+cat /etc/letsencrypt/live/services1.greatupsells.com/fullchain.pem /etc/letsencrypt/live/services1.greatupsells.com/privkey.pem > /etc/ssl/mongodb.pem
+chmod 644 /etc/ssl/mongodb.pem
+
+# Update ca.pem.
+openssl x509 -in /etc/ssl/ca.crt -out /etc/ssl/ca.pem -outform PEM
+cat /etc/letsencrypt/live/services1.greatupsells.com/chain.pem >> /etc/ssl/ca.pem
+
+# Generate MongoDB key file.
+openssl rand -base64 768 > /etc/ssl/mongodb-keyfile.txt
+chown mongodb:mongodb /etc/ssl/mongodb-keyfile.txt
+chmod 400 /etc/ssl/mongodb-keyfile.txt

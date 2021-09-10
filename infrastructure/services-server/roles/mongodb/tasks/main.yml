@@ -1,4 +1,5 @@
 # Reference: https://github.com/PharosProduction/tutorial-mongodb-ansible
+# Reference: https://sebworks.com/securing-mongodb-tls-auth-letsencrypt/
 
 - name: Add Mongo PPA key
   apt_key:
@@ -49,7 +50,7 @@
     enabled: yes
     state: started
 
-- name: Add MongoDB admin user
+- name: Add MongoDB root user
   mongodb_user:
     database: "admin"
     name: "root"
@@ -78,3 +79,10 @@
   service:
     name: mongod.service
     state: restarted
+
+- name: Print instructions
+  debug:
+    msg:
+      - "TODO: Create admin user account."
+      - "TODO: Create app user account."
+      - "TODO: Initialize replica set."

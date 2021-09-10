@@ -2,7 +2,7 @@
   wait_for_connection:
     timeout: 900
 
-- name: Gather facts for first time
+- name: Gather facts
   setup:
 
 - name: Update all packages
@@ -14,8 +14,13 @@
     pkg: unattended-upgrades
     state: absent
 
+- name: Check if swap file exists
+  command: file /swapfile
+  register: swapfile
+
 - name: Create swap file
   command: fallocate -l 4G /swapfile
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Set swap file permissions
   file:
@@ -23,9 +28,11 @@
     owner: root
     group: root
     mode: 0600
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Set up swap area
   command: mkswap /swapfile
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Add swap entry in fstab
   mount:
@@ -36,9 +43,11 @@
     passno: "0"
     dump: "0"
     state: present
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Mount swap
   command: swapon /swapfile
+  when: swapfile.stdout.find('swap file') == -1
 
 - name: Set vm.swappiness
   sysctl:
@@ -65,3 +74,50 @@
 
 - name: Install Python packages
   raw: pip3 install -q pymongo --upgrade
+
+- name: Set Cron PATH
+  cronvar:
+    name: PATH
+    value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+
+- name: Install Let's Encrypt
+  apt:
+    name: letsencrypt
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+    allow_unauthenticated: yes
+
+- name: Install certbot-dns-route53 plugin
+  snap:
+    name: certbot-dns-route53
+
+- name: Obtain SSL certificate
+  command: certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m chad@neatowebsolutions.com -d services1.greatupsells.com
+
+- name: Install Let's Encrypt Certificate Authority Root Certificate
+  copy:
+    src: ca.pem
+    dest: /etc/ssl/ca.pem
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create certificate update script
+  copy:
+    src: update-certificates.sh
+    dest: /root/update-certificates.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Set up a job for updating certificate
+  cron:
+    name: update-certificates
+    minute: "0"
+    hour: "0,12"
+    user: root
+    job: "certbot renew --renew-hook /root/update-certificates.sh >> /root/certbot-cron.log 2>&1"
+
+- name: Generate MongoDB key file
+  command: /root/update-certificates.sh
