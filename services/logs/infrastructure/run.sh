@@ -5,4 +5,7 @@
 terraform init
 terraform validate
 terraform workspace select $STAGE || terraform workspace new $STAGE
-terraform -var="mongodb_app_password=$MONGODB_APP_PASSWORD" apply -var-file=./config/$STAGE.tfvars -auto-approve
+terraform apply \
+  -var="mongodb_app_password=$MONGODB_APP_PASSWORD" \
+  -var-file=./config/$STAGE.tfvars \
+  -auto-approve
