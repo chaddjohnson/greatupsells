@@ -46,7 +46,7 @@ resource "aws_security_group" "services_server" {
 # Commission the server instance.
 resource "aws_instance" "services_server" {
   ami               = data.aws_ami.ubuntu.id
-  instance_type     = "t3a.large"
+  instance_type     = var.instance_type
   availability_zone = "us-east-1a"
   monitoring        = true
 

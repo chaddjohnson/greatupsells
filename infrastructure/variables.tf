@@ -6,6 +6,10 @@ variable "hosted_zone_id" {
   type = string
 }
 
+variable "instance_type" {
+  type = string
+}
+
 variable "sandbox" {
   type = string
 }

@@ -1,5 +1,6 @@
 certificate_name                 = "*.greatupsells.com"
 hosted_zone_id                   = "Z023060413ODYTHFNWZW8"
+instance_type                    = "t3a.large"
 sandbox                          = "false"
 jwt_secret                       = "2ab8c99671a507f3314818894cad27ed562552a29713eda67f7b2dbdf81e13e0"
 shopify_admin_app_api_key        = ""
