@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "backups" {
-  bucket        = "neatowebsolutions-ecommerce-apps-backups"
+  bucket        = "neatowebsolutions-upselling-backups"
   acl           = "private"
   force_destroy = false
 

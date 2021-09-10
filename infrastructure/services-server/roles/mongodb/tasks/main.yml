@@ -59,6 +59,9 @@
     roles: "root"
   ignore_errors: yes
 
+- name: Regenerate certificate files
+  command: /root/update-certificates.sh
+
 - name: Copy config file
   copy:
     src: mongod.conf

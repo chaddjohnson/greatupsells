@@ -75,30 +75,57 @@
 - name: Install Python packages
   raw: pip3 install -q pymongo --upgrade
 
+- name: Create AWS config directory
+  file:
+    path: /root/.aws
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Configure AWS CLI credentials
+  vars:
+    content: |
+      [default]
+      aws_access_key_id = {{ aws_access_key_id }}
+      aws_secret_access_key = {{ aws_secret_access_key }}
+  copy:
+    content: "{{ content }}"
+    dest: /root/.aws/credentials
+
+- name: Configure AWS CLI settings
+  vars:
+    content: |
+      [default]
+      region = us-east-1
+  copy:
+    content: "{{ content }}"
+    dest: /root/.aws/config
+
 - name: Set Cron PATH
   cronvar:
     name: PATH
     value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
 
-- name: Install Let's Encrypt
+- name: Install Let's Encrypt and Certbot
   apt:
-    name: letsencrypt
+    name: "{{ packages }}"
     state: present
     update_cache: yes
     cache_valid_time: 3600
     allow_unauthenticated: yes
-
-- name: Install certbot-dns-route53 plugin
-  snap:
-    name: certbot-dns-route53
+  vars:
+    packages:
+      - letsencrypt
+      - python3-certbot-dns-route53
 
 - name: Obtain SSL certificate
   command: certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m chad@neatowebsolutions.com -d services1.greatupsells.com
 
 - name: Install Let's Encrypt Certificate Authority Root Certificate
   copy:
-    src: ca.pem
-    dest: /etc/ssl/ca.pem
+    src: ca.crt
+    dest: /etc/ssl/ca.crt
     owner: root
     group: root
     mode: 0644
@@ -119,5 +146,5 @@
     user: root
     job: "certbot renew --renew-hook /root/update-certificates.sh >> /root/certbot-cron.log 2>&1"
 
-- name: Generate MongoDB key file
+- name: Generate certificate files
   command: /root/update-certificates.sh

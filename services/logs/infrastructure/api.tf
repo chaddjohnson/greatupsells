@@ -1,16 +1,14 @@
-# TODO Import and use infrastructure outputs for database URLs.
-
 # resource "aws_ssm_parameter" "elasticsearch_logs_database_url" {
 #   name  = "/upselling/${terraform.workspace}/database/elasticsearch-logs/uri"
 #   type  = "String"
 #   value = "" # TODO
 # }
 
-# resource "aws_ssm_parameter" "mongodb_logs_database_url" {
-#   name  = "/upselling/${terraform.workspace}/database/mongodb-logs/uri"
-#   type  = "String"
-#   value = "" # TODO
-# }
+resource "aws_ssm_parameter" "mongodb_logs_database_url" {
+  name  = "/upselling/${terraform.workspace}/database/mongodb-logs/uri"
+  type  = "String"
+  value = "mongodb://app:${mongodb_app_password}@${data.terraform_remote_state.upselling_infrastructure.outputs.services_server_public_dns}:27017/upselling-logs?replicaSet=rs0&ssl=true"
+}
 
 resource "aws_ssm_parameter" "logs_api_domain" {
   name  = "/upselling/${terraform.workspace}/logs-api/domain"
