@@ -8,7 +8,7 @@
 
 - name: Add Mongo sources list
   lineinfile:
-    line: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse"
+    line: 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse'
     dest: /etc/apt/sources.list.d/mongodb-org-4.4.list
     state: present
     create: yes
@@ -50,13 +50,13 @@
     enabled: yes
     state: started
 
-- name: Add MongoDB root user
+- name: Create MongoDB root user
   mongodb_user:
-    database: "admin"
-    name: "root"
-    password: "{{ mongodb_root_password }}"
-    update_password: "on_create"
-    roles: "root"
+    database: admin
+    name: root
+    password: '{{ mongodb_root_password }}'
+    update_password: on_create
+    roles: root
   ignore_errors: yes
 
 - name: Regenerate certificate files
@@ -83,9 +83,44 @@
     name: mongod.service
     state: restarted
 
-- name: Print instructions
+- name: 'TODO: Initiate replica set.'
   debug:
-    msg:
-      - "TODO: Create admin user account."
-      - "TODO: Create app user account."
-      - "TODO: Initialize replica set."
+    msg: |
+      rs.initiate( {
+        _id : "rs0",
+        members: [
+            { _id: 0, host: "services1.greatupsells.com:27017" },
+            { _id: 1, host: "services2.greatupsells.com:27017" },
+            { _id: 2, host: "services3.greatupsells.com:27017" }
+        ]
+      })
+
+- name: 'TODO: Create admin user account'
+  debug:
+    msg: |
+      use admin
+      db.createUser({
+        user: "chad",
+        pwd: passwordPrompt(),
+        roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+      })
+
+- name: 'TODO: Create app user account for upselling-shops database'
+  debug:
+    msg: |
+      use upselling-shops
+      db.createUser({
+        user: "app",
+        pwd: passwordPrompt(),
+        roles: [ { role: "readWrite", db: "upselling-shops" } ]
+      })
+
+- name: 'TODO: Create app user account for upselling-logs database'
+  debug:
+    msg: |
+      use upselling-logs
+      db.createUser({
+        user: "app",
+        pwd: passwordPrompt(),
+        roles: [ { role: "readWrite", db: "upselling-logs" } ]
+      })

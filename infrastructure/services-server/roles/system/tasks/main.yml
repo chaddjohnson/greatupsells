@@ -40,8 +40,8 @@
     src: /swapfile
     fstype: swap
     opts: sw
-    passno: "0"
-    dump: "0"
+    passno: '0'
+    dump: '0'
     state: present
   when: swapfile.stdout.find('swap file') == -1
 
@@ -57,7 +57,7 @@
 
 - name: Install packages
   apt:
-    name: "{{ packages }}"
+    name: '{{ packages }}'
     state: latest
     update_cache: yes
     cache_valid_time: 3600
@@ -90,7 +90,7 @@
       aws_access_key_id = {{ aws_access_key_id }}
       aws_secret_access_key = {{ aws_secret_access_key }}
   copy:
-    content: "{{ content }}"
+    content: '{{ content }}'
     dest: /root/.aws/credentials
 
 - name: Configure AWS CLI settings
@@ -99,7 +99,7 @@
       [default]
       region = us-east-1
   copy:
-    content: "{{ content }}"
+    content: '{{ content }}'
     dest: /root/.aws/config
 
 - name: Set Cron PATH
@@ -109,7 +109,7 @@
 
 - name: Install Let's Encrypt and Certbot
   apt:
-    name: "{{ packages }}"
+    name: '{{ packages }}'
     state: present
     update_cache: yes
     cache_valid_time: 3600
@@ -119,8 +119,14 @@
       - letsencrypt
       - python3-certbot-dns-route53
 
+- name: Determine if certificates exist
+  ansible.builtin.stat:
+    path: '/etc/letsencrypt/live/{{ domain_name }}'
+  register: certificates
+
 - name: Obtain SSL certificate
-  command: certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m chad@neatowebsolutions.com -d services1.greatupsells.com
+  command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m chad@neatowebsolutions.com -d {{ domain_name }}'
+  when: certificates.stat.isdir is not defined
 
 - name: Install Let's Encrypt Certificate Authority Root Certificate
   copy:
@@ -138,13 +144,19 @@
     group: root
     mode: 0744
 
+- name: Inject domain into certificate update script
+  replace:
+    path: /root/update-certificates.sh
+    regexp: "\/domain_name\/"
+    replace: "\/{{ domain_name }}\/"
+
 - name: Set up a job for updating certificate
   cron:
     name: update-certificates
-    minute: "0"
-    hour: "0,12"
+    minute: '0'
+    hour: '0,12'
     user: root
-    job: "certbot renew --renew-hook /root/update-certificates.sh >> /root/certbot-cron.log 2>&1"
+    job: 'certbot renew --renew-hook /root/update-certificates.sh >> /root/certbot-cron.log 2>&1'
 
 - name: Generate certificate files
   command: /root/update-certificates.sh

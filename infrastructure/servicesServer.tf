@@ -99,7 +99,7 @@ EOT
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
     working_dir = "services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml"
+    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.domain_name}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.
