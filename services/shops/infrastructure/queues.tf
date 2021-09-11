@@ -13,7 +13,9 @@ resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Principal" : "*",
+        "Principal" : {
+          "Service" : ["lambda.amazonaws.com"]
+        },
         "Action" : "sqs:SendMessage",
         "Resource" : "${aws_sqs_queue.shop_collection_import.arn}"
       }
@@ -28,7 +30,9 @@ resource "aws_sqs_queue_policy" "shop_product_import_policy" {
     "Statement" : [
       {
         "Effect" : "Allow",
-        "Principal" : "*",
+        "Principal" : {
+          "Service" : ["lambda.amazonaws.com"]
+        },
         "Action" : "sqs:SendMessage",
         "Resource" : "${aws_sqs_queue.shop_product_import.arn}"
       }
