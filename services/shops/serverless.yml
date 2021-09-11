@@ -221,8 +221,8 @@ functions:
           path: /offers
           method: get
           authorizer: aws_iam
-  findOneCollectionByShopifyCollectionId:
-    handler: src/routes/findOneCollectionByShopifyCollectionId.handler
+  findOneCollectionId:
+    handler: src/routes/findOneCollectionId.handler
     events:
       - http:
           path: /collections/shopify-collection-id/{shopifyCollectionId}
