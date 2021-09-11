@@ -383,7 +383,7 @@ functions:
   calculateStats:
     handler: src/workers/calculateStats.handler
     events:
-      - schedule: cron(1 5,6 * * *)
+      - schedule: cron(1 5,6 * * ? *)
     timeout: 900
   fixShopWebhooks:
     memorySize: 512
