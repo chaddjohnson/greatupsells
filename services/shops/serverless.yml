@@ -428,6 +428,7 @@ functions:
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
+  - serverless-domain-manager
 
 custom:
   serverless-offline:
