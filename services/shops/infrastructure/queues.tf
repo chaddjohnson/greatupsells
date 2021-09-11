@@ -1,9 +1,11 @@
 resource "aws_sqs_queue" "shop_collection_import" {
-  name = "shop-collection-import-queue-${terraform.workspace}"
+  name                       = "shop-collection-import-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 900
 }
 
 resource "aws_sqs_queue" "shop_product_import" {
-  name = "shop-product-import-queue-${terraform.workspace}"
+  name                       = "shop-product-import-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 900
 }
 
 resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
