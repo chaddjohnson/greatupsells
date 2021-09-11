@@ -405,7 +405,7 @@ functions:
     handler: src/workers/importShopProducts.handler
     events:
       - sqs:
-          arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
+          arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn}
     timeout: 900
   updateShopActiveStatuses:
     memorySize: 512
