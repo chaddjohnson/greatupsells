@@ -59,7 +59,7 @@ custom:
     httpPort: ${env:LOGS_API_PORT, 4009}
     lambdaPort: 5005
   customDomain:
-    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/logs-api/domain}
+    domainName: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
