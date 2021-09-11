@@ -304,6 +304,11 @@ functions:
       - http:
           path: /health
           method: get
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - execute-api:Invoke
+        Resource: "*"
   initializeShopByDomain:
     handler: src/routes/initializeShopByDomain.handler
     events:
