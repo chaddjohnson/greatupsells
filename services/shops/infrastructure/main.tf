@@ -14,7 +14,7 @@ data "terraform_remote_state" "upselling_infrastructure" {
   backend = "s3"
   config = {
     bucket = "neatowebsolutions-upselling-infrastructure"
-    key    = "infrastructure.tfstate"
+    key    = "env:/test/infrastructure.tfstate"
     region = "us-east-1"
   }
 }
