@@ -23,6 +23,7 @@ functions:
       - http:
           path: /logs
           method: post
+          authorizer: aws_iam
   health:
     handler: src/routes/health.handler
     events:
@@ -47,7 +48,7 @@ functions:
       - http:
           path: /logs
           method: get
-          cors: true
+          authorizer: aws_iam
 
 plugins:
   - serverless-offline
