@@ -31,7 +31,7 @@ const handler = middy(async (event, context) => {
       body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
-};
+});
 
 handler.use(cors());
 
