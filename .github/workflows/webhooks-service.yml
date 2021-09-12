@@ -26,7 +26,7 @@ jobs:
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: (cd ./services/shops/infrastructure && STAGE=$BRANCH ./run.sh)
+        run: (cd ./services/webhooks/infrastructure && STAGE=$BRANCH ./run.sh)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
