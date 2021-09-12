@@ -67,3 +67,7 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
+
+package:
+  exclude:
+    - infrastructure

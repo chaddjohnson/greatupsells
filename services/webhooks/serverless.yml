@@ -128,3 +128,7 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 5004
+
+package:
+  exclude:
+    - infrastructure
