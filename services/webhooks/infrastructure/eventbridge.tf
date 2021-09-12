@@ -193,66 +193,66 @@ resource "aws_cloudwatch_event_rule" "shop_update" {
 
 resource "aws_cloudwatch_event_target" "app_uninstall" {
   target_id = "app-uninstall"
-  rule      = aws_cloudwatch_event_rule.app_uninstall
+  rule      = aws_cloudwatch_event_rule.app_uninstall.name
   arn       = aws_sqs_queue.app_uninstall.arn
 }
 
 resource "aws_cloudwatch_event_target" "collection_creation" {
   target_id = "collection-creation"
-  rule      = aws_cloudwatch_event_rule.collection_creation
+  rule      = aws_cloudwatch_event_rule.collection_creation.name
   arn       = aws_sqs_queue.collection.arn
 }
 
 resource "aws_cloudwatch_event_target" "collection_deletion" {
   target_id = "collection-deletion"
-  rule      = aws_cloudwatch_event_rule.collection_deletion
+  rule      = aws_cloudwatch_event_rule.collection_deletion.name
   arn       = aws_sqs_queue.collection_deletion.arn
 }
 
 resource "aws_cloudwatch_event_target" "collection_update" {
   target_id = "collection-update"
-  rule      = aws_cloudwatch_event_rule.collection_update
+  rule      = aws_cloudwatch_event_rule.collection_update.name
   arn       = aws_sqs_queue.collection.arn
 }
 
 resource "aws_cloudwatch_event_target" "order_cancelation" {
   target_id = "order-cancelation"
-  rule      = aws_cloudwatch_event_rule.order_cancelation
+  rule      = aws_cloudwatch_event_rule.order_cancelation.name
   arn       = aws_sqs_queue.order_cancelation.arn
 }
 
 resource "aws_cloudwatch_event_target" "order_paid" {
   target_id = "order-paid"
-  rule      = aws_cloudwatch_event_rule.order_paid
+  rule      = aws_cloudwatch_event_rule.order_paid.name
   arn       = aws_sqs_queue.order_paid.arn
 }
 
 resource "aws_cloudwatch_event_target" "order_update" {
   target_id = "order-update"
-  rule      = aws_cloudwatch_event_rule.order_update
+  rule      = aws_cloudwatch_event_rule.order_update.name
   arn       = aws_sqs_queue.order_update.arn
 }
 
 resource "aws_cloudwatch_event_target" "product_creation" {
   target_id = "product-creation"
-  rule      = aws_cloudwatch_event_rule.product_creation
+  rule      = aws_cloudwatch_event_rule.product_creation.name
   arn       = aws_sqs_queue.product.arn
 }
 
 resource "aws_cloudwatch_event_target" "product_deletion" {
   target_id = "product-deletion"
-  rule      = aws_cloudwatch_event_rule.product_deletion
+  rule      = aws_cloudwatch_event_rule.product_deletion.name
   arn       = aws_sqs_queue.product_deletion.arn
 }
 
 resource "aws_cloudwatch_event_target" "product_update" {
   target_id = "product-update"
-  rule      = aws_cloudwatch_event_rule.product_update
+  rule      = aws_cloudwatch_event_rule.product_update.name
   arn       = aws_sqs_queue.product.arn
 }
 
 resource "aws_cloudwatch_event_target" "shop_update" {
   target_id = "shop-update"
-  rule      = aws_cloudwatch_event_rule.shop_update
+  rule      = aws_cloudwatch_event_rule.shop_update.name
   arn       = aws_sqs_queue.shop_update.arn
 }
