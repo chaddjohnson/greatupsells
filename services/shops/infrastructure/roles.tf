@@ -27,7 +27,9 @@ resource "aws_iam_policy" "services_consumer_role_policy" {
           "logs:CreateLogStream",
           "logs:CreateLogGroup",
           "logs:PutLogEvents",
-          "sqs:ReceiveMessage"
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
         ],
         "Resource" : "*"
       }
