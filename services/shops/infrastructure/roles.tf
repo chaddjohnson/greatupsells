@@ -26,7 +26,8 @@ resource "aws_iam_policy" "services_consumer_role_policy" {
         "Action" : [
           "logs:CreateLogStream",
           "logs:CreateLogGroup",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "sqs:ReceiveMessage"
         ],
         "Resource" : "*"
       }
