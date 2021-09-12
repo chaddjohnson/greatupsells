@@ -6,6 +6,10 @@ resource "aws_sqs_queue" "collection" {
   name = "collection-queue-${terraform.workspace}"
 }
 
+resource "aws_sqs_queue" "collection_deletion" {
+  name = "collection-queue-${terraform.workspace}"
+}
+
 resource "aws_sqs_queue" "order_cancelation" {
   name = "order-cancelation-${terraform.workspace}"
 }
