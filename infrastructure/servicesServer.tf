@@ -97,9 +97,11 @@ EOT
 
 # Run Ansible to set up the server.
 resource "null_resource" "services_server_setup" {
+  count = length(split(",", var.services_domain_names))
+
   provisioner "local-exec" {
     working_dir = "services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.domain_name}'"
+    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${element(split(",", var.services_domain_names), count.index)}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.
@@ -111,6 +113,6 @@ resource "null_resource" "services_server_setup" {
 }
 
 # This facilitates setting up database connection strings in infrastructure for services.
-output "services_server_public_dns" {
-  value = aws_instance.services_server.public_dns
+output "services_domain_names" {
+  value = var.services_domain_names
 }
