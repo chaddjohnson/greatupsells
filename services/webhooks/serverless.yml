@@ -105,7 +105,7 @@ functions:
     handler: src/workers/productDelete.handler
     events:
       - sqs:
-          arn: ${env:PRODUCT_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product-delete/arn}
+          arn: ${env:PRODUCT_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn}
       - http:
           path: /shopify/product-deletion
           method: post
