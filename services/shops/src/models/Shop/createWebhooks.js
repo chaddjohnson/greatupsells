@@ -23,7 +23,7 @@ const definitions = [
   },
   {
     topic: 'collections/delete',
-    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/collection-delete`,
+    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/collection-deletion`,
     format: 'json'
   },
   {
@@ -38,7 +38,7 @@ const definitions = [
   },
   {
     topic: 'orders/cancelled',
-    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/order-cancel`,
+    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/order-cancelation`,
     format: 'json'
   },
   {
@@ -53,7 +53,7 @@ const definitions = [
   },
   {
     topic: 'products/delete',
-    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/product-delete`,
+    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/product-deletion`,
     format: 'json'
   },
   {

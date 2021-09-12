@@ -53,9 +53,9 @@ functions:
     handler: src/workers/collectionDelete.handler
     events:
       - sqs:
-          arn: ${env:COLLECTION_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection-delete/arn}
+          arn: ${env:COLLECTION_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn}
       - http:
-          path: /shopify/collection-delete
+          path: /shopify/collection-deletion
           method: post
   orderCancel:
     reservedConcurrency: 1
@@ -63,9 +63,9 @@ functions:
     handler: src/workers/orderCancel.handler
     events:
       - sqs:
-          arn: ${env:ORDER_CANCEL_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-cancel/arn}
+          arn: ${env:ORDER_CANCEL_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn}
       - http:
-          path: /shopify/order-cancel
+          path: /shopify/order-cancelation
           method: post
   orderPaid:
     reservedConcurrency: 1
@@ -107,7 +107,7 @@ functions:
       - sqs:
           arn: ${env:PRODUCT_DELETE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product-delete/arn}
       - http:
-          path: /shopify/product-delete
+          path: /shopify/product-deletion
           method: post
   shop:
     reservedConcurrency: 1
