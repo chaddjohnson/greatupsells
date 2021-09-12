@@ -5,7 +5,7 @@ on:
       - test
       - production
     paths:
-      - .github/workflows/logs.yml
+      - .github/workflows/logs-service.yml
       - services/logs/**
 jobs:
   deploy:

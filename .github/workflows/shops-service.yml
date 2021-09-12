@@ -5,7 +5,7 @@ on:
       - test
       - production
     paths:
-      - .github/workflows/shops.yml
+      - .github/workflows/shops-service.yml
       - services/shops/**
       - packages/logger/**
 jobs:

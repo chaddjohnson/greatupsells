@@ -5,7 +5,7 @@ on:
       - test
       - production
     paths:
-      - .github/workflows/webhooks.yml
+      - .github/workflows/webhooks-service.yml
       - services/webhooks/**
       - packages/logger/**
 jobs:
