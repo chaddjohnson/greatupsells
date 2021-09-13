@@ -32,7 +32,7 @@ jobs:
         run: (cd ./services/shop-api-gateway/infrastructure && STAGE=$BRANCH ./run.sh)
       - name: Install Node Modules
         run: yarn install
-      - name: Deploy Serverless (us-east-1)
+      - name: Deploy Serverless Application (us-east-1)
         run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
         working-directory: services/shop-api-gateway
       - name: Uninstall Global Packages
