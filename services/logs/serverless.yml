@@ -70,4 +70,4 @@ custom:
 
 package:
   exclude:
-    - infrastructure
+    - infrastructure/**
