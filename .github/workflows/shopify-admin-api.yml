@@ -32,6 +32,8 @@ jobs:
         run: (cd ./services/shopify-admin-api/infrastructure && STAGE=$BRANCH ./run.sh)
       - name: Install Node Modules
         run: yarn install
+      - name: Build Packages
+        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Deploy Serverless Application (us-east-1)
         run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
         working-directory: services/shopify-admin-api
