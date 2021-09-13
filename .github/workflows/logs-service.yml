@@ -20,7 +20,7 @@ jobs:
       - name: Use Cache
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: 'node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
       - name: Checkout
         uses: actions/checkout@v2

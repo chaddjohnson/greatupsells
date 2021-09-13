@@ -23,7 +23,7 @@ jobs:
       - name: Use Cache
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: 'node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
       - name: Install Node.js
         uses: actions/setup-node@v1
