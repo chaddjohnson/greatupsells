@@ -11,6 +11,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -32,6 +35,3 @@ jobs:
         run: sudo apt-get install ansible
       - name: Run Terraform
         run: (cd ./infrastructure && STAGE=$BRANCH ./run.sh)
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

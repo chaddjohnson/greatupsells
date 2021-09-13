@@ -1,12 +1,12 @@
-name: upselling-shops-service
+name: upselling-admin-api-gateway
 on:
   push:
     branches:
       - test
       - production
     paths:
-      - .github/workflows/shops-service.yml
-      - services/shops/**
+      - .github/workflows/admin-api-gateway.yml
+      - services/admin-api-gateway/**
       - packages/logger/**
 jobs:
   deploy:
@@ -29,12 +29,12 @@ jobs:
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: (cd ./services/shops/infrastructure && STAGE=$BRANCH ./run.sh)
+        run: (cd ./services/admin-api-gateway/infrastructure && STAGE=$BRANCH ./run.sh)
       - name: Install Node Modules
         run: yarn install
       - name: Deploy Serverless (us-east-1)
         run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
-        working-directory: services/shops
+        working-directory: services/admin-api-gateway
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g yarn serverless

@@ -311,7 +311,7 @@ custom:
     httpPort: ${env:SHOP_API_GATEWAY_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${env:SHOP_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/shop-api-gateway/domain}
+    domainName: ${env:SHOP_API_GATEWAY_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shop-api-gateway/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

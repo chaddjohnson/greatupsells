@@ -122,7 +122,7 @@ custom:
     httpPort: ${env:ADMIN_API_GATEWAY_PORT, 4005}
     lambdaPort: 5003
   customDomain:
-    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_ENDPOINT, ssm:/upselling/${self:provider.stage}/admin-api-gateway/domain}
+    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/admin-api-gateway/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
