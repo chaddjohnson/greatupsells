@@ -33,7 +33,7 @@ jobs:
       - name: Install Node Modules
         run: yarn install
       - name: Build Packages
-        run: NODE_ENV=production lerna bootstrap --force-local && lerna run build --stream --scope=@neatowebsolutions/*
+        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Deploy Serverless (us-east-1)
         run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
         working-directory: services/webhooks
