@@ -16,7 +16,7 @@ import '@shopify/polaris/dist/styles.css';
 const cookies = new Cookies();
 
 const httpClient = new HttpClient({
-  baseUrl: process.env.SHOP_API_GATEWAY_URL
+  baseUrl: process.env.SHOPIFY_ADMIN_API_GATEWAY_URL
 });
 
 // Add the token to each request.

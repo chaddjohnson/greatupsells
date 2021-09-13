@@ -51,7 +51,7 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
     authtoken: tokenhere
     region: us
     tunnels:
-      upselling-shop-api-gateway:
+      upselling-shopify-admin-api-gateway:
         addr: 4000
         proto: http
         subdomain: chaddjohnson-api

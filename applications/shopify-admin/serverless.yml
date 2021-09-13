@@ -15,7 +15,7 @@ provider:
     shouldStartNameWithService: true
   environment:
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    SHOP_API_GATEWAY_URL: ${env:SHOP_API_GATEWAY_URL, ssm:/upselling/${self:provider.stage}/shop-api-gateway/url}
+    SHOPIFY_ADMIN_API_GATEWAY_URL: ${env:SHOPIFY_ADMIN_API_GATEWAY_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-api-gateway/url}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
     SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key~true}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin/url}
