@@ -1,1 +1,1 @@
-shopify_admin_api__url = "shopify-admin-api.greatupsells.com"
+shopify_admin_api_url = "shopify-admin-api.greatupsells.com"
