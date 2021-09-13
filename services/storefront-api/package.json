@@ -1,10 +1,9 @@
 {
-  "name": "upselling-shopify-admin-api-gateway",
+  "name": "upselling-storefront-api",
   "version": "0.0.0",
   "scripts": {
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint src/**/*.js",
-    "infrastructure": "./scripts/infrastructure.sh",
     "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
   },
   "repository": {
@@ -13,7 +12,7 @@
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin-api-gateway",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/storefront-api",
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",

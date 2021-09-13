@@ -7,7 +7,7 @@ import { CartProvider } from './hooks';
 import { Offers, CartInterceptor } from './components';
 
 const httpClient = new HttpClient({
-  baseUrl: process.env.STOREFRONT_API_GATEWAY_URL
+  baseUrl: process.env.STOREFRONT_API_URL
 });
 
 const App = () => (

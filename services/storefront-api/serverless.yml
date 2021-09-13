@@ -1,4 +1,4 @@
-service: upselling-storefront-api-gateway
+service: upselling-storefront-api
 useDotenv: true
 
 provider:
@@ -15,7 +15,7 @@ provider:
     shouldStartNameWithService: true
   environment:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
-    LOG_SOURCE: 'storefront-api-gateway'
+    LOG_SOURCE: 'storefront-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
@@ -97,10 +97,10 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: ${env:STOREFRONT_API_GATEWAY_PORT, 4006}
+    httpPort: ${env:STOREFRONT_API_PORT, 4006}
     lambdaPort: 5001
   customDomain:
-    domainName: ${env:STOREFRONT_API_GATEWAY_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/storefront-api-gateway/domain}
+    domainName: ${env:STOREFRONT_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/storefront-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

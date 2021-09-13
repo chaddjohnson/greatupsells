@@ -1,4 +1,4 @@
-service: upselling-admin-api-gateway
+service: upselling-admin-api
 useDotenv: true
 
 provider:
@@ -17,7 +17,7 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
     LOGS_API_URL: ${env:LOGS_API_URL}
-    LOG_SOURCE: 'admin-api-gateway'
+    LOG_SOURCE: 'admin-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
 functions:
@@ -119,10 +119,10 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: ${env:ADMIN_API_GATEWAY_PORT, 4005}
+    httpPort: ${env:ADMIN_API_PORT, 4005}
     lambdaPort: 5003
   customDomain:
-    domainName: ${env:ADMIN_API_GATEWAY_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/admin-api-gateway/domain}
+    domainName: ${env:ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/admin-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

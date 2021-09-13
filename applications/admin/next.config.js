@@ -3,7 +3,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const dev = process.env.NODE_ENV !== 'production';
 
-const { ADMIN_APP_URL, ADMIN_API_GATEWAY_URL } = process.env;
+const { ADMIN_APP_URL, ADMIN_API_URL } = process.env;
 
 module.exports = {
   webpack: (config) => {
@@ -37,6 +37,6 @@ module.exports = {
   trailingSlash: true,
   webpack5: true,
   env: {
-    ADMIN_API_GATEWAY_URL
+    ADMIN_API_URL
   }
 };

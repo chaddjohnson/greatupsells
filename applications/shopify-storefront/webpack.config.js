@@ -45,7 +45,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.EnvironmentPlugin(['STOREFRONT_API_GATEWAY_URL']),
+    new webpack.EnvironmentPlugin(['STOREFRONT_API_URL']),
     dev && new ESLintPlugin({ cache: true }),
     new CompressionWebpackPlugin({
       filename: '[path].br[query]',

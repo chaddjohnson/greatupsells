@@ -11,7 +11,7 @@ import { ToastProvider } from '../hooks';
 import '../theme/index.css';
 
 const httpClient = new HttpClient({
-  baseUrl: process.env.ADMIN_API_GATEWAY_URL
+  baseUrl: process.env.ADMIN_API_URL
 });
 
 // Add the token to each request.

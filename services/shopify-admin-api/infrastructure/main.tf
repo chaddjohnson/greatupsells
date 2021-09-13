@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "neatowebsolutions-upselling-infrastructure"
-    key    = "admin-api-gateway.tfstate"
+    key    = "shopify-admin-api.tfstate"
     region = "us-east-1"
   }
 }
