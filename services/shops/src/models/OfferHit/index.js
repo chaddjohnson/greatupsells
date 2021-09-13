@@ -174,7 +174,10 @@ schema.methods.trackConversion = function (order) {
 schema.index({ shop: 1 });
 schema.index({ offer: 1 });
 schema.index({ order: 1 });
-schema.index({ acceptedShopifyVariantId: 1 });
+schema.index({ createdAt: 1 });
+schema.index({ acceptedAt: 1 });
+schema.index({ convertedAt: 1 });
+schema.index({ 'acceptedProducts.shopifyVariantId': 1 });
 
 OfferHit = mongodbClient.connection.model('OfferHit', schema);
 

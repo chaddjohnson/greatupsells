@@ -51,7 +51,7 @@ schema.pre('validate', function (next) {
 schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyProductId: 1 }, { unique: true });
-schema.index({ shop: 1, shopifyProductId: 1, shopifyCollectionIds: 1 });
+schema.index({ shopifyCollectionIds: 1 });
 schema.index({ 'shopifyProductData.variants.id': 1 });
 
 Product = mongodbClient.connection.model('Product', schema);
