@@ -1,1 +1,1 @@
-shop_api_gateway_url = "shops-api.greatupsells.com"
+shop_api_gateway_url = "shop-api.greatupsells.com"
