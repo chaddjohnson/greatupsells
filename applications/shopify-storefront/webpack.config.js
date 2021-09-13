@@ -56,7 +56,7 @@ module.exports = {
       minRatio: 0.8,
       deleteOriginalAssets: false
     })
-  ],
+  ].filter(Boolean),
   stats: 'errors-warnings',
   resolve: {
     // Setting this to `true` allows dependency packages to be watched.

@@ -42,7 +42,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     dev && new ESLintPlugin({ cache: true })
-  ],
+  ].filter(Boolean),
   stats: 'errors-warnings',
   externals: [
     '@neatowebsolutions/upselling-react-hooks',
