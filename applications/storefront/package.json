@@ -1,5 +1,5 @@
 {
-  "name": "upselling-shopify-storefront",
+  "name": "upselling-storefront",
   "version": "0.0.0",
   "main": "src/index.js",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "git+https://github.com/neatowebsolutions/upselling.git"
   },
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-storefront#readme",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/storefront#readme",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@neatowebsolutions/upselling-react-components": "0.0.0",

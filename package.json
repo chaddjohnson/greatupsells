@@ -12,7 +12,7 @@
     "bootstrap": "NODE_ENV=development dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@neatowebsolutions/*",
     "prestart": "yarn install && dotenv -- yarn bootstrap",
-    "start": "(dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-shopify-admin,upselling-shopify-storefront,upselling-admin,upselling-logs-service,upselling-shops-service,upselling-shopify-admin-api,upselling-storefront-api,upselling-admin-api,upselling-webhooks-service}) & ngrok start upselling-shopify-admin-api upselling-shopify-admin upselling-webhooks-service > /dev/null"
+    "start": "(dotenv -- lerna run start --parallel --scope={@neatowebsolutions/*,upselling-shopify-admin,upselling-storefront,upselling-admin,upselling-logs-service,upselling-shops-service,upselling-shopify-admin-api,upselling-storefront-api,upselling-admin-api,upselling-webhooks-service}) & ngrok start upselling-shopify-admin-api upselling-shopify-admin upselling-webhooks-service > /dev/null"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
