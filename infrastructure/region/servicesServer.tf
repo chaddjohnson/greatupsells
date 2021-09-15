@@ -101,7 +101,7 @@ EOT
 # Run Ansible to set up the server.
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
-    working_dir = "services-server"
+    working_dir = "region/services-server"
     command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.domain_name}'"
   }
 
