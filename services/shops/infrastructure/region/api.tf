@@ -6,7 +6,7 @@ locals {
 resource "aws_ssm_parameter" "mongodb_shops_database_url" {
   name     = "/upselling/${terraform.workspace}/database/mongodb-shops/uri"
   type     = "String"
-  value    = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/upselling-shops?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true"
+  value    = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/upselling-shops?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000&ssl=true"
   provider = aws.region
 }
 
