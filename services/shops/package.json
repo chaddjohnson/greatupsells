@@ -15,7 +15,7 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/shops",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^2.0.2",
+    "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
     "@neatowebsolutions/upselling-logger": "0.0.0",
     "bluebird": "^3.7.2",
     "geoip-country": "^4.0.56",

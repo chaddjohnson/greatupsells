@@ -16,7 +16,7 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/logs",
   "dependencies": {
-    "@chaddjohnson/mongodb-client-lambda": "^2.0.2",
+    "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
     "@neatowebsolutions/upselling-logger": "0.0.0",
     "@elastic/elasticsearch": "~7.10.0",
     "@middy/core": "^1.0.0",

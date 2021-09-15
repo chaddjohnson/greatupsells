@@ -1377,10 +1377,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@chaddjohnson/mongodb-client-lambda@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@chaddjohnson/mongodb-client-lambda/-/mongodb-client-lambda-2.0.2.tgz#5f6b4d77a25876c472fff1171c6b138d74dabdf5"
-  integrity sha512-+XmXA0IYM5k5cPIiTGdix1xdRe57kTeCTf9QvvdPDYWlp0VcudNqyvAIdkddzaIsq7nLL0w5zUIhdQrt3kYpBA==
+"@chaddjohnson/mongodb-client-lambda@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@chaddjohnson/mongodb-client-lambda/-/mongodb-client-lambda-2.1.0.tgz#6b4c5177d6cbcbf33b1bd781ecc7685fb20020ba"
+  integrity sha512-wvt7EQPqHi3cFHmNVJOpzw/3OOtfE5xcfTEFjensZbPVrWEBFxm21Zd6OHFiYEMaj6h+kfxjiW4ZKu0oJWmMcA==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"

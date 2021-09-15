@@ -6,8 +6,7 @@ const { MONGODB_URI_LOGS } = process.env;
 
 const connectionUri = MONGODB_URI_LOGS;
 const connectionOptions = {
-  reconnectTries: 30,
-  reconnectInterval: 500,
+  useUnifiedTopology: true,
 
   // The maximum number of sockets the MongoDB driver will keep open for this connection.
   poolSize: 10,
