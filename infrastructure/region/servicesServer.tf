@@ -79,14 +79,14 @@ resource "aws_eip" "services_server" {
 resource "null_resource" "ansible_host_config" {
   provisioner "local-exec" {
     command = <<EOT
-      cat /dev/null > services-server/hosts
-      echo "[services-server]" >> services-server/hosts
-      echo "${aws_eip.services_server.public_ip}" >> services-server/hosts
-      echo "" >> services-server/hosts
-      echo "[all:vars]" >> services-server/hosts
-      echo "ansible_user=ubuntu" >> services-server/hosts
-      echo "ansible_port=22" >> services-server/hosts
-      echo "ansible_python_interpreter='/usr/bin/env python3'" >> services-server/hosts
+      cat /dev/null > region/services-server/hosts
+      echo "[services-server]" >> region/services-server/hosts
+      echo "${aws_eip.services_server.public_ip}" >> region/services-server/hosts
+      echo "" >> region/services-server/hosts
+      echo "[all:vars]" >> region/services-server/hosts
+      echo "ansible_user=ubuntu" >> region/services-server/hosts
+      echo "ansible_port=22" >> region/services-server/hosts
+      echo "ansible_python_interpreter='/usr/bin/env python3'" >> region/services-server/hosts
 EOT
   }
 
