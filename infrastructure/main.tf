@@ -32,6 +32,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "backups" {
+  count         = terraform.workspace == "production" ? 1 : 0
   bucket        = "neatowebsolutions-upselling-backups"
   acl           = "private"
   force_destroy = false
