@@ -7,7 +7,6 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "us-east-1"
   region = "us-east-1"
 }
 
@@ -24,7 +23,7 @@ provider "aws" {
 module "api_us_east_1" {
   source = "./region"
   providers = {
-    aws.region = aws.us-east-1
+    aws.region = aws
   }
   mongodb_app_password = var.mongodb_app_password
 }

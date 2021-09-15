@@ -2,7 +2,6 @@ resource "aws_s3_bucket" "assets" {
   bucket        = var.assets_domain
   acl           = "private"
   force_destroy = false
-  provider      = aws.us-east-1
 }
 
 resource "aws_cloudfront_origin_access_identity" "assets" {}
@@ -22,14 +21,12 @@ data "aws_iam_policy_document" "assets" {
 resource "aws_s3_bucket_policy" "assets" {
   bucket   = aws_s3_bucket.assets.id
   policy   = data.aws_iam_policy_document.assets.json
-  provider = aws.us-east-1
 }
 
 resource "aws_cloudfront_distribution" "assets" {
   enabled     = true
   aliases     = [var.assets_domain]
   price_class = "PriceClass_All"
-  provider    = aws.us-east-1
 
   origin {
     domain_name = aws_s3_bucket.assets.bucket_regional_domain_name

@@ -7,7 +7,6 @@ terraform {
 }
 
 provider "aws" {
-  alias  = "us-east-1"
   region = "us-east-1"
 }
 
@@ -36,7 +35,6 @@ resource "aws_s3_bucket" "backups" {
   bucket        = "neatowebsolutions-upselling-backups"
   acl           = "private"
   force_destroy = false
-  provider      = aws.us-east-1
 
   lifecycle_rule {
     enabled                                = true
@@ -57,7 +55,7 @@ resource "aws_s3_bucket" "backups" {
 module "api_us_east_1" {
   source = "./region"
   providers = {
-    aws.region = aws.us-east-1
+    aws.region = aws
   }
   certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
