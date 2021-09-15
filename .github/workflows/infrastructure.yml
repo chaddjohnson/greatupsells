@@ -26,9 +26,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Add Terraform variables
         run: |
-          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ./infrastructure/services-server/roles/common/vars/main.yml
-          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ./infrastructure/services-server/roles/common/vars/main.yml
-          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD }}\"" >> ./infrastructure/services-server/roles/mongodb/vars/main.yml
+          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Ansible
