@@ -1,4 +1,4 @@
-certificate_arn = "arn:aws:acm:us-east-1:174585217681:certificate/def51b2c-579c-49dd-9901-5c2acb6c466f"
+certificate_arn  = "arn:aws:acm:us-east-1:174585217681:certificate/def51b2c-579c-49dd-9901-5c2acb6c466f"
 certificate_name = "*.greatupsells.com"
 hosted_zone_id   = "Z023060413ODYTHFNWZW8"
 domain           = "greatupsells.com"
@@ -15,5 +15,4 @@ services_domain_names = {
 assets_domain                    = "assets.greatupsells.com"
 shopify_admin_app_api_key        = ""
 shopify_admin_app_api_secret_key = ""
-shopify_admin_app_url            = "shopify-admin.greatupsells.com"
 event_bus_arn                    = ""

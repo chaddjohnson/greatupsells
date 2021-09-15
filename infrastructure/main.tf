@@ -69,7 +69,6 @@ module "api_us_east_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
-  shopify_admin_app_url            = var.shopify_admin_app_url
   event_bus_arn                    = var.event_bus_arn
 }
 
@@ -89,7 +88,6 @@ module "api_us_west_2" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
-  shopify_admin_app_url            = var.shopify_admin_app_url
   event_bus_arn                    = var.event_bus_arn
 }
 
@@ -109,7 +107,6 @@ module "api_us_east_2" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
-  shopify_admin_app_url            = var.shopify_admin_app_url
   event_bus_arn                    = var.event_bus_arn
 }
 
@@ -129,7 +126,6 @@ module "api_eu_west_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
-  shopify_admin_app_url            = var.shopify_admin_app_url
   event_bus_arn                    = var.event_bus_arn
 }
 
@@ -149,7 +145,6 @@ module "api_ap_northeast_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
-  shopify_admin_app_url            = var.shopify_admin_app_url
   event_bus_arn                    = var.event_bus_arn
 }
 
@@ -159,6 +154,10 @@ output "hosted_zone_id" {
 
 output "domain" {
   value = var.domain
+}
+
+output "assets_domain" {
+  value = var.assets_domain
 }
 
 output "services_domain_names" {

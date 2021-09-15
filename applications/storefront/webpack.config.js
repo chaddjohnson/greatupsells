@@ -69,7 +69,7 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
-    port: getenv.int('SHOPIFY_ADMIN_APP_STOREFRONT_PORT'),
+    port: getenv.int('STOREFRONT_PORT'),
     contentBase: path.join(__dirname, 'dist'),
     compress: true
   }

@@ -3,7 +3,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const dev = process.env.NODE_ENV !== 'production';
 
-const { ADMIN_APP_URL, ADMIN_API_URL } = process.env;
+const { ASSETS_URL, ADMIN_API_URL } = process.env;
 
 module.exports = {
   webpack: (config) => {
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
-  assetPrefix: dev ? '' : ADMIN_APP_URL,
+  assetPrefix: dev ? '' : `${ASSETS_URL}/admin`,
 
   target: 'serverless',
   trailingSlash: true,

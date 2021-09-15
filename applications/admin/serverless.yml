@@ -1,4 +1,4 @@
-service: upselling-shopify-admin
+service: upselling-admin
 useDotenv: true
 
 provider:
@@ -14,14 +14,10 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
+    ADMIN_API_URL: ${env:ADMIN_API_URL, ssm:/upselling/${self:provider.stage}/admin-api/url}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    SHOPIFY_ADMIN_API_URL: ${env:SHOPIFY_ADMIN_API_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-api/url}
-    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key~true}
-    SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-app/url}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
-    LOG_SOURCE: 'shopify-admin'
 
 functions:
   health:
@@ -40,16 +36,6 @@ functions:
           path: /region
           method: get
           cors: true
-  server:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/server.handler
-    events:
-      - http:
-          path: /
-          method: ANY
-      - http:
-          path: /{any+}
-          method: ANY
 
 plugins:
   - serverless-plugin-monorepo
@@ -57,7 +43,7 @@ plugins:
 
 custom:
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/regional-domain}
+    domainName: ${ssm:/upselling/${self:provider.stage}/admin-app/regional-domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

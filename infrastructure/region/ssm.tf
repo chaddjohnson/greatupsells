@@ -19,6 +19,13 @@ resource "aws_ssm_parameter" "jwt_secret" {
   provider = aws.region
 }
 
+resource "aws_ssm_parameter" "assets-url" {
+  name     = "/upselling/${terraform.workspace}/assets/url"
+  type     = "String"
+  value    = var.assets_domain
+  provider = aws.us-east-1
+}
+
 resource "aws_ssm_parameter" "shopify_admin_app_api_key" {
   name     = "/upselling/${terraform.workspace}/shopify/api-key"
   type     = "String"
@@ -30,13 +37,6 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
   name     = "/upselling/${terraform.workspace}/shopify/api-secret-key"
   type     = "SecureString"
   value    = var.shopify_admin_app_api_secret_key
-  provider = aws.region
-}
-
-resource "aws_ssm_parameter" "shopify_admin_app_url" {
-  name     = "/upselling/${terraform.workspace}/shopify-admin/url"
-  type     = "String"
-  value    = var.shopify_admin_app_url
   provider = aws.region
 }
 

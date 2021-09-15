@@ -3,17 +3,23 @@ const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
-const { SHOPS_API_URL } = process.env;
+const { SHOPS_API_URL, ADMIN_API_URL } = process.env;
 
-const httpClient = new HttpClient({
+const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
+});
+const adminApiHttpClient = new HttpClient({
+  baseUrl: ADMIN_API_URL
 });
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    await httpClient.get('/health');
+    await Promise.all([
+      await shopsServiceHttpClient.get('/health'),
+      await adminApiHttpClient.get('/health')
+    ]);
 
     return {
       statusCode: StatusCodes.OK,

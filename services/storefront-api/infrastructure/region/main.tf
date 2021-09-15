@@ -41,7 +41,6 @@ resource "aws_route53_health_check" "storefront_api" {
   resource_path     = "/health"
   failure_threshold = "5"
   request_interval  = "30"
-  provider          = aws.region
 }
 
 resource "aws_route53_record" "storefront_api" {
@@ -50,7 +49,6 @@ resource "aws_route53_record" "storefront_api" {
   type            = "A"
   set_identifier  = data.aws_region.current.name
   health_check_id = aws_route53_health_check.storefront_api.id
-  provider        = aws.region
 
   alias {
     name                   = aws_ssm_parameter.storefront_api_regional_domain.value

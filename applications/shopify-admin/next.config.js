@@ -4,7 +4,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const dev = process.env.NODE_ENV !== 'production';
 
 const {
-  SHOPIFY_ADMIN_APP_URL,
+  ASSETS_URL,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_API_URL
 } = process.env;
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
-  assetPrefix: dev ? '' : SHOPIFY_ADMIN_APP_URL,
+  assetPrefix: dev ? '' : `${ASSETS_URL}/shopify-admin`,
 
   target: 'serverless',
   trailingSlash: true,

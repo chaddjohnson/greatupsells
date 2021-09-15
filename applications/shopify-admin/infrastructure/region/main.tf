@@ -20,22 +20,22 @@ data "terraform_remote_state" "upselling_infrastructure" {
   }
 }
 
-resource "aws_ssm_parameter" "admin_api_regional_domain" {
-  name     = "/upselling/${terraform.workspace}/admin-api/regional-domain"
+resource "aws_ssm_parameter" "shopify_admin_app_regional_domain" {
+  name     = "/upselling/${terraform.workspace}/shopify-admin-app/regional-domain"
   type     = "String"
-  value    = "admin-api.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
+  value    = "shopify-admin.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
   provider = aws.region
 }
 
-resource "aws_ssm_parameter" "admin_api_url" {
-  name     = "/upselling/${terraform.workspace}/admin-api/url"
+resource "aws_ssm_parameter" "shopify_admin_app_url" {
+  name     = "/upselling/${terraform.workspace}/shopify-admin-app/url"
   type     = "String"
-  value    = "https://${var.admin_api_domain}"
+  value    = "https://${var.shopify_admin_app_domain}"
   provider = aws.region
 }
 
-resource "aws_route53_health_check" "admin_api" {
-  fqdn              = aws_ssm_parameter.admin_api_regional_domain.value
+resource "aws_route53_health_check" "shopify_admin_app" {
+  fqdn              = aws_ssm_parameter.shopify_admin_app_regional_domain.value
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -43,15 +43,15 @@ resource "aws_route53_health_check" "admin_api" {
   request_interval  = "30"
 }
 
-resource "aws_route53_record" "admin_api" {
+resource "aws_route53_record" "shopify_admin_app" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
-  name            = var.admin_api_domain
+  name            = var.shopify_admin_app_domain
   type            = "A"
   set_identifier  = data.aws_region.current.name
-  health_check_id = aws_route53_health_check.admin_api.id
+  health_check_id = aws_route53_health_check.shopify_admin_app.id
 
   alias {
-    name                   = aws_ssm_parameter.admin_api_regional_domain.value
+    name                   = aws_ssm_parameter.shopify_admin_app_regional_domain.value
     zone_id                = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
     evaluate_target_health = true
   }

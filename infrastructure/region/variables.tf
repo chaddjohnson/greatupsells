@@ -37,10 +37,6 @@ variable "shopify_admin_app_api_secret_key" {
   type = string
 }
 
-variable "shopify_admin_app_url" {
-  type = string
-}
-
 variable "event_bus_arn" {
   type = string
 }

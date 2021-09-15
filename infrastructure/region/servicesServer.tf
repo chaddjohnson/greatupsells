@@ -112,3 +112,11 @@ resource "null_resource" "services_server_setup" {
 
   depends_on = [aws_instance.services_server, aws_eip.services_server]
 }
+
+resource "aws_route53_record" "domain_name" {
+  zone_id = var.hosted_zone_id
+  name    = var.domain_name
+  type    = "A"
+  ttl     = 86400
+  records = [aws_eip.services_server.public_ip]
+}

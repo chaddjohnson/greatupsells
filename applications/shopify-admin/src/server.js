@@ -24,7 +24,7 @@ const {
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_APP_API_SECRET_KEY,
   SHOPIFY_ADMIN_APP_URL,
-  SHOPIFY_ADMIN_APP_STOREFRONT_PORT,
+  STOREFRONT_PORT,
   JWT_SECRET,
   SHOPS_API_URL
 } = process.env;
@@ -51,7 +51,7 @@ const createServer = () => {
     server.use(
       connect(
         createProxyMiddleware('/storefront.js', {
-          target: `http://localhost:${SHOPIFY_ADMIN_APP_STOREFRONT_PORT}`,
+          target: `http://localhost:${STOREFRONT_PORT}`,
           changeOrigin: true
         })
       )
