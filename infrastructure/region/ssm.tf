@@ -19,11 +19,11 @@ resource "aws_ssm_parameter" "jwt_secret" {
   provider = aws.region
 }
 
-resource "aws_ssm_parameter" "assets-url" {
+resource "aws_ssm_parameter" "assets_url" {
   name     = "/upselling/${terraform.workspace}/assets/url"
   type     = "String"
   value    = var.assets_domain
-  provider = aws.us-east-1
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "shopify_admin_app_api_key" {
