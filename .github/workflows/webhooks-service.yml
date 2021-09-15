@@ -35,7 +35,7 @@ jobs:
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Deploy Serverless Application (us-east-1)
-        run: AWS_REGION=us-east-1 serverless deploy -s $BRANCH
+        run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: services/webhooks
       - name: Uninstall Global Packages
         if: always()

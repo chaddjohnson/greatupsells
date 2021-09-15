@@ -7,7 +7,7 @@ provider:
   memorySize: 256
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}
-  region: ${env:AWS_REGION, 'us-east-1'}
+  region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
   apiGateway:
@@ -389,12 +389,14 @@ functions:
     events:
       - schedule: cron(1 5,6 * * ? *)
     timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
   fixShopWebhooks:
     memorySize: 512
     handler: src/workers/fixShopWebhooks.handler
     events:
       - schedule: rate(1 day)
     timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
   importShopCollections:
     memorySize: 512
     reservedConcurrency: 5
@@ -417,24 +419,27 @@ functions:
     events:
       - schedule: rate(1 day)
     timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
   updateShopPlans:
     memorySize: 512
     handler: src/workers/updateShopPlans.handler
     events:
       - schedule: rate(1 day)
     timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
+  - serverless-plugin-conditional-functions
 
 custom:
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 5002
   customDomain:
-    domainName: ${env:SHOPS_SERVICE_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/domain}
+    domainName: ${env:SHOPS_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/regional-domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

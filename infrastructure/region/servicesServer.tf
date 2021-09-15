@@ -20,6 +20,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_security_group" "services_server" {
   name        = "services-server"
   description = "Security group for services server"
+  provider    = aws.region
 
   ingress {
     from_port   = 22
@@ -61,6 +62,7 @@ resource "aws_instance" "services_server" {
   disable_api_termination = true
   ebs_optimized           = true
   key_name                = "neatowebsolutions"
+  provider                = aws.region
 
   tags = {
     Name = "services-server"
@@ -70,6 +72,7 @@ resource "aws_instance" "services_server" {
 # Set up a public IP address for the server.
 resource "aws_eip" "services_server" {
   instance = aws_instance.services_server.id
+  provider = aws.region
 }
 
 # Create Ansible hosts config.
@@ -97,11 +100,9 @@ EOT
 
 # Run Ansible to set up the server.
 resource "null_resource" "services_server_setup" {
-  count = length(split(",", var.services_domain_names))
-
   provisioner "local-exec" {
     working_dir = "services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${element(split(",", var.services_domain_names), count.index)}'"
+    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.domain_name}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.
@@ -110,9 +111,4 @@ resource "null_resource" "services_server_setup" {
   }
 
   depends_on = [aws_instance.services_server, aws_eip.services_server]
-}
-
-# This facilitates setting up database connection strings in infrastructure for services.
-output "services_domain_names" {
-  value = var.services_domain_names
 }

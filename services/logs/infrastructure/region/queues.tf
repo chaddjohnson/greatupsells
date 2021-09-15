@@ -1,5 +1,6 @@
 resource "aws_sqs_queue" "log" {
-  name = "log-queue-${terraform.workspace}"
+  name     = "log-queue-${terraform.workspace}"
+  provider = aws.region
 }
 
 resource "aws_sqs_queue_policy" "log_policy" {
@@ -15,16 +16,19 @@ resource "aws_sqs_queue_policy" "log_policy" {
       }
     ]
   })
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "log_queue_arn" {
-  name  = "/upselling/${terraform.workspace}/queues/log/arn"
-  type  = "String"
-  value = aws_sqs_queue.log.arn
+  name     = "/upselling/${terraform.workspace}/queues/log/arn"
+  type     = "String"
+  value    = aws_sqs_queue.log.arn
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "log_queue_url" {
-  name  = "/upselling/${terraform.workspace}/queues/log/url"
-  type  = "String"
-  value = aws_sqs_queue.log.id
+  name     = "/upselling/${terraform.workspace}/queues/log/url"
+  type     = "String"
+  value    = aws_sqs_queue.log.id
+  provider = aws.region
 }

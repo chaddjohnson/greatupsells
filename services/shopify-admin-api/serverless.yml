@@ -8,7 +8,7 @@ provider:
   timeout: 10
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}
-  region: ${env:AWS_REGION, 'us-east-1'}
+  region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
   apiGateway:
@@ -312,7 +312,7 @@ custom:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${env:SHOPIFY_ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shopify-admin-api/domain}
+    domainName: ${env:SHOPIFY_ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shopify-admin-api/regional-domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true

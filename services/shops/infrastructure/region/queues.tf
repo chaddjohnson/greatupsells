@@ -1,11 +1,13 @@
 resource "aws_sqs_queue" "shop_collection_import" {
   name                       = "shop-collection-import-queue-${terraform.workspace}"
   visibility_timeout_seconds = 900
+  provider                   = aws.region
 }
 
 resource "aws_sqs_queue" "shop_product_import" {
   name                       = "shop-product-import-queue-${terraform.workspace}"
   visibility_timeout_seconds = 900
+  provider                   = aws.region
 }
 
 resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
@@ -23,6 +25,7 @@ resource "aws_sqs_queue_policy" "shop_collection_import_policy" {
       }
     ]
   })
+  provider = aws.region
 }
 
 resource "aws_sqs_queue_policy" "shop_product_import_policy" {
@@ -40,28 +43,33 @@ resource "aws_sqs_queue_policy" "shop_product_import_policy" {
       }
     ]
   })
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "shop_collection_import_queue_arn" {
-  name  = "/upselling/${terraform.workspace}/queues/shop-collection-import/arn"
-  type  = "String"
-  value = aws_sqs_queue.shop_collection_import.arn
+  name     = "/upselling/${terraform.workspace}/queues/shop-collection-import/arn"
+  type     = "String"
+  value    = aws_sqs_queue.shop_collection_import.arn
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "shop_collection_import_queue_url" {
-  name  = "/upselling/${terraform.workspace}/queues/shop-collection-import/url"
-  type  = "String"
-  value = aws_sqs_queue.shop_collection_import.url
+  name     = "/upselling/${terraform.workspace}/queues/shop-collection-import/url"
+  type     = "String"
+  value    = aws_sqs_queue.shop_collection_import.url
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "shop_product_import_queue_arn" {
-  name  = "/upselling/${terraform.workspace}/queues/shop-product-import/arn"
-  type  = "String"
-  value = aws_sqs_queue.shop_product_import.arn
+  name     = "/upselling/${terraform.workspace}/queues/shop-product-import/arn"
+  type     = "String"
+  value    = aws_sqs_queue.shop_product_import.arn
+  provider = aws.region
 }
 
 resource "aws_ssm_parameter" "shop_product_import_queue_url" {
-  name  = "/upselling/${terraform.workspace}/queues/shop-product-import/url"
-  type  = "String"
-  value = aws_sqs_queue.shop_product_import.url
+  name     = "/upselling/${terraform.workspace}/queues/shop-product-import/url"
+  type     = "String"
+  value    = aws_sqs_queue.shop_product_import.url
+  provider = aws.region
 }

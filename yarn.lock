@@ -13877,6 +13877,11 @@ serverless-offline@^7.0.0:
     velocityjs "^2.0.3"
     ws "^7.4.2"
 
+serverless-plugin-conditional-functions@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/serverless-plugin-conditional-functions/-/serverless-plugin-conditional-functions-1.0.6.tgz#76de1387ed64980f5e19b679b6b8fad4ac865ef2"
+  integrity sha512-BP6mdJ530GHl7VtbWIBsrQYt2fNMHV08Rqi7AQOLg34eteFJ+uT5WyzPh4WTnQQj8jjbcnua1d5VKSGckepvIA==
+
 serverless-plugin-monorepo@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/serverless-plugin-monorepo/-/serverless-plugin-monorepo-0.10.0.tgz#33532e1c6d803fe416942ca6f3c489678d386b54"

@@ -31,8 +31,8 @@
     "aws-sdk": "^2.984.0",
     "nodemon": "^2.0.7",
     "serverless": "^2.43.1",
-    "serverless-domain-manager": "^5.1.5",
     "serverless-offline": "^7.0.0",
+    "serverless-plugin-conditional-functions": "^1.0.6",
     "serverless-plugin-monorepo": "^0.10.0"
   }
 }

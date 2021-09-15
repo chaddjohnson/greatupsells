@@ -6,10 +6,6 @@ variable "hosted_zone_id" {
   type = string
 }
 
-variable "domain" {
-  type = string
-}
-
 variable "instance_type" {
   type = string
 }
@@ -22,8 +18,8 @@ variable "jwt_secret" {
   type = string
 }
 
-variable "services_domain_names" {
-  type = map(string)
+variable "domain_name" {
+  type = string
 }
 
 variable "shopify_admin_app_api_key" {

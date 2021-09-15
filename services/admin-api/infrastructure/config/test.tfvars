@@ -1,1 +1,1 @@
-admin_api_url = "admin-api.test.greatupsells.com"
+admin_api_domain = "admin-api.test.greatupsells.com"

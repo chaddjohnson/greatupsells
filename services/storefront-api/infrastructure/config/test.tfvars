@@ -1,1 +1,1 @@
-storefront_api_url = "storefront-api.test.greatupsells.com"
+storefront_api_domain = "storefront-api.test.greatupsells.com"

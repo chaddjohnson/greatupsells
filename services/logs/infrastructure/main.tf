@@ -7,14 +7,42 @@ terraform {
 }
 
 provider "aws" {
+  alias  = "us-east-1"
   region = "us-east-1"
 }
 
-data "terraform_remote_state" "upselling_infrastructure" {
-  backend = "s3"
-  config = {
-    bucket = "neatowebsolutions-upselling-infrastructure"
-    key    = "env:/test/infrastructure.tfstate"
-    region = "us-east-1"
+provider "aws" {
+  alias  = "eu-west-1"
+  region = "eu-west-1"
+}
+
+provider "aws" {
+  alias  = "ap-northeast-1"
+  region = "ap-northeast-1"
+}
+
+module "api_us_east_1" {
+  source = "./region"
+  providers = {
+    aws.region = aws.us-east-1
   }
+  mongodb_app_password = var.mongodb_app_password
+}
+
+module "api_eu_west_1" {
+  count  = terraform.workspace == "production" ? 1 : 0
+  source = "./region"
+  providers = {
+    aws.region = aws.eu-west-1
+  }
+  mongodb_app_password = var.mongodb_app_password
+}
+
+module "api_ap_northeast_1" {
+  count  = terraform.workspace == "production" ? 1 : 0
+  source = "./region"
+  providers = {
+    aws.region = aws.ap-northeast-1
+  }
+  mongodb_app_password = var.mongodb_app_password
 }
