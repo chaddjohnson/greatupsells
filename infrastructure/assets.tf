@@ -19,8 +19,8 @@ data "aws_iam_policy_document" "assets" {
 }
 
 resource "aws_s3_bucket_policy" "assets" {
-  bucket   = aws_s3_bucket.assets.id
-  policy   = data.aws_iam_policy_document.assets.json
+  bucket = aws_s3_bucket.assets.id
+  policy = data.aws_iam_policy_document.assets.json
 }
 
 resource "aws_cloudfront_distribution" "assets" {
@@ -120,8 +120,4 @@ resource "aws_route53_record" "assets" {
     zone_id                = aws_cloudfront_distribution.assets.hosted_zone_id
     evaluate_target_health = false
   }
-}
-
-output "assets_cloudfront_access_identity_path" {
-  value = aws_cloudfront_origin_access_identity.assets.cloudfront_access_identity_path
 }
