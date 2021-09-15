@@ -1,3 +1,7 @@
+variable "certificate_arn" {
+  type = string
+}
+
 variable "certificate_name" {
   type = string
 }
@@ -19,6 +23,10 @@ variable "jwt_secret" {
 }
 
 variable "domain_name" {
+  type = string
+}
+
+variable "assets_domain" {
   type = string
 }
 

@@ -58,12 +58,14 @@ module "api_us_east_1" {
   providers = {
     aws.region = aws.us-east-1
   }
+  certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
   hosted_zone_id                   = var.hosted_zone_id
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
   domain_name                      = lookup(var.services_domain_names, "us-east-1")
+  assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_admin_app_url            = var.shopify_admin_app_url
@@ -76,12 +78,14 @@ module "api_us_west_2" {
   providers = {
     aws.region = aws.us-west-2
   }
+  certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
   hosted_zone_id                   = var.hosted_zone_id
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
   domain_name                      = lookup(var.services_domain_names, "us-west-2")
+  assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_admin_app_url            = var.shopify_admin_app_url
@@ -94,12 +98,14 @@ module "api_us_east_2" {
   providers = {
     aws.region = aws.us-east-2
   }
+  certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
   hosted_zone_id                   = var.hosted_zone_id
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
   domain_name                      = lookup(var.services_domain_names, "us-east-2")
+  assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_admin_app_url            = var.shopify_admin_app_url
@@ -112,12 +118,14 @@ module "api_eu_west_1" {
   providers = {
     aws.region = aws.eu-west-1
   }
+  certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
   hosted_zone_id                   = var.hosted_zone_id
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
   domain_name                      = lookup(var.services_domain_names, "eu-west-1")
+  assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_admin_app_url            = var.shopify_admin_app_url
@@ -130,12 +138,14 @@ module "api_ap_northeast_1" {
   providers = {
     aws.region = aws.ap-northeast-1
   }
+  certificate_arn                  = var.certificate_arn
   certificate_name                 = var.certificate_name
   hosted_zone_id                   = var.hosted_zone_id
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
   domain_name                      = lookup(var.services_domain_names, "ap-northeast-1")
+  assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_admin_app_url            = var.shopify_admin_app_url

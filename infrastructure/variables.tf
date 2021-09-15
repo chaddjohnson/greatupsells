@@ -1,3 +1,7 @@
+variable "certificate_arn" {
+  type = string
+}
+
 variable "certificate_name" {
   type = string
 }
@@ -24,6 +28,10 @@ variable "jwt_secret" {
 
 variable "services_domain_names" {
   type = map(string)
+}
+
+variable "assets_domain" {
+  type = string
 }
 
 variable "shopify_admin_app_api_key" {
