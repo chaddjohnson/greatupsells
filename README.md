@@ -51,7 +51,7 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
     authtoken: tokenhere
     region: us
     tunnels:
-      upselling-shopify-admin-api-gateway:
+      upselling-shopify-admin-api:
         addr: 4000
         proto: http
         subdomain: chaddjohnson-api
@@ -64,7 +64,7 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
         proto: http
         subdomain: chaddjohnson-webhooks
 
-Note that the tunnel names (e.g., `upselling-shop-api-gateway`) must remain unchanged.
+Note that the tunnel names (e.g., `upselling-shop-api`) must remain unchanged.
 
 Please install the `ngrok` binary. Once installed and configured, ngrok will start automatically via `yarn start`.
 
@@ -161,9 +161,9 @@ Initial deployments should occur in the following order:
 1. `services/shops`
 1. `services/webhooks`
 1. `services/email`
-1. `services/shop-api-gateway`
-1. `services/admin-api-gateway`
-1. `services/storefront-api-gateway`
+1. `services/shop-api`
+1. `services/admin-api`
+1. `services/storefront-api`
 1. `applications/shopify-admin`
 1. `applications/shopify-storefront`
 1. `applications/admin`
