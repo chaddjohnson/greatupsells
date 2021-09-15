@@ -1,9 +1,9 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 
-const { SHOPIFY_ADMIN_APP_URL } = process.env;
+const { ASSETS_URL } = process.env;
 
 const addScripts = async (shop) => {
-  const src = `${SHOPIFY_ADMIN_APP_URL}/storefront.js`;
+  const src = `${ASSETS_URL}/storefront.js`;
   const shopifyApiClient = shop.getShopifyApiClient();
   const scriptTags = await shopifyApiClient.scriptTag.list();
   const existingScriptTag = scriptTags.find(

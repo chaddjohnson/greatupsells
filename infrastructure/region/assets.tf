@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "assets" {
   provider      = aws.region
 }
 
-resource "aws_ssm_parameter" "assets-bucket" {
+resource "aws_ssm_parameter" "assets-url" {
   name     = "/upselling/${terraform.workspace}/assets/url"
   type     = "String"
   value    = var.assets_domain
