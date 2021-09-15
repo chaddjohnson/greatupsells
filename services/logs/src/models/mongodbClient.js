@@ -10,7 +10,7 @@ const connectionOptions = {
   reconnectInterval: 500,
 
   // The maximum number of sockets the MongoDB driver will keep open for this connection.
-  poolSize: 5,
+  poolSize: 10,
 
   // How long the MongoDB driver will wait before killing a socket due to inactivity after initial connection.
   socketTimeoutMS: 2000000,
