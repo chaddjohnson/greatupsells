@@ -21,10 +21,11 @@ data "terraform_remote_state" "upselling_infrastructure" {
 }
 
 resource "aws_ssm_parameter" "storefront_api_regional_domain" {
-  name     = "/upselling/${terraform.workspace}/storefront-api/regional-domain"
-  type     = "String"
-  value    = "storefront-api.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
-  provider = aws.region
+  name      = "/upselling/${terraform.workspace}/storefront-api/regional-domain"
+  type      = "String"
+  value     = "storefront-api.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
+  overwrite = true
+  provider  = aws.region
 }
 
 resource "aws_ssm_parameter" "storefront_api_url" {
