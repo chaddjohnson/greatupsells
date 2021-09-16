@@ -43,7 +43,7 @@ jobs:
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
         working-directory: applications/admin
-      - name: Upload Next.js to Assets Bucket
+      - name: Upload Next.js Static Assets to Assets Bucket
         run: aws s3 sync applications/admin/.next/static s3://$ASSETS_DOMAIN/admin/_next/static --delete --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
