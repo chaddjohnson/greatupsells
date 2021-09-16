@@ -20,6 +20,8 @@ const handler = middy(async (event, context) => {
       body: ReasonPhrases.OK
     };
   } catch (error) {
+    console.error(error.stack); // eslint-disable-line no-console
+
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
