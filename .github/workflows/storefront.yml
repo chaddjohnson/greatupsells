@@ -39,6 +39,7 @@ jobs:
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Build Application
         run: NODE_ENV=production yarn build
+        working-directory: applications/storefront
       - name: Upload Application to Assets Bucket
         run: aws s3 sync applications/storefront/dist/storefront.js s3://assets.greatupsells.com --cache-control public,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0 --storage-class STANDARD_IA
       - name: Uninstall Global Packages
