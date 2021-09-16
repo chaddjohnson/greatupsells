@@ -35,6 +35,7 @@ jobs:
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
+        working-directory: applications/shopify-admin
       - name: Upload Next.js to Assets Bucket
         run: aws s3 sync applications/shopify-admin/.next/static s3://assets.greatupsells.com/shopify-admin/_next/static --delete --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
       - name: Deploy Serverless Application to us-east-1
