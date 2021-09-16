@@ -21,12 +21,12 @@ jobs:
       - name: Inject "STOREFRONT_API_URL" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/test/storefront-api/url"
+          ssm_parameter: "/upselling/${{ env.BRANCH }}/storefront-api/url"
           env_variable_name: "STOREFRONT_API_URL"
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/test/assets/domain"
+          ssm_parameter: "/upselling/${{ env.BRANCH }}/assets/domain"
           env_variable_name: "ASSETS_DOMAIN"
       - name: Checkout
         uses: actions/checkout@v2
