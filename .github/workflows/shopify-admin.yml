@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Inject "ASSETS_DOMAIN" SSM Parameter
+        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        with:
+          ssm_parameter: "/upselling/${{ env.BRANCH }}/assets/domain"
+          env_variable_name: "ASSETS_DOMAIN"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Node.js
@@ -37,7 +42,7 @@ jobs:
         run: NODE_ENV=production yarn build
         working-directory: applications/shopify-admin
       - name: Upload Next.js to Assets Bucket
-        run: aws s3 sync applications/shopify-admin/.next/static s3://assets.greatupsells.com/shopify-admin/_next/static --delete --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
+        run: aws s3 sync applications/shopify-admin/.next/static s3://$ASSETS_DOMAIN/shopify-admin/_next/static --delete --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: applications/shopify-admin
