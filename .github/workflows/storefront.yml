@@ -18,20 +18,15 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      - uses: "aws-actions/configure-aws-credentials@v1"
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"
       - name: Inject "STOREFRONT_API_URL" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/storefront-api/url"
+          ssm_parameter: "/upselling/test/storefront-api/url"
           env_variable_name: "STOREFRONT_API_URL"
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/assets/domain"
+          ssm_parameter: "/upselling/test/assets/domain"
           env_variable_name: "ASSETS_DOMAIN"
       - name: Checkout
         uses: actions/checkout@v2
