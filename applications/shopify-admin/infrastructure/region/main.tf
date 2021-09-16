@@ -47,6 +47,7 @@ resource "aws_route53_record" "shopify_admin_app" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.shopify_admin_app_domain
   type            = "CNAME"
+  ttl             = "86400"
   set_identifier  = data.aws_region.current.name
   records         = [aws_ssm_parameter.shopify_admin_app_regional_domain.value]
   health_check_id = aws_route53_health_check.shopify_admin_app.id

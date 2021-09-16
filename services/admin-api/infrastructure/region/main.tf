@@ -47,6 +47,7 @@ resource "aws_route53_record" "admin_api" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.admin_api_domain
   type            = "CNAME"
+  ttl             = "86400"
   set_identifier  = data.aws_region.current.name
   records         = [aws_ssm_parameter.admin_api_regional_domain.value]
   health_check_id = aws_route53_health_check.admin_api.id

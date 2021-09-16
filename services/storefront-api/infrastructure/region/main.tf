@@ -47,6 +47,7 @@ resource "aws_route53_record" "storefront_api" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.storefront_api_domain
   type            = "CNAME"
+  ttl             = "86400"
   set_identifier  = data.aws_region.current.name
   records         = [aws_ssm_parameter.storefront_api_regional_domain.value]
   health_check_id = aws_route53_health_check.storefront_api.id
