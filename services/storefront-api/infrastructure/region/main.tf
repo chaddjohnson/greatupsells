@@ -29,11 +29,10 @@ resource "aws_ssm_parameter" "storefront_api_regional_domain" {
 }
 
 resource "aws_ssm_parameter" "storefront_api_url" {
-  name      = "/upselling/${terraform.workspace}/storefront-api/url"
-  type      = "String"
-  value     = "https://${var.storefront_api_domain}"
-  overwrite = true
-  provider  = aws.region
+  name     = "/upselling/${terraform.workspace}/storefront-api/url"
+  type     = "String"
+  value    = "https://${var.storefront_api_domain}"
+  provider = aws.region
 }
 
 resource "aws_route53_health_check" "storefront_api" {
