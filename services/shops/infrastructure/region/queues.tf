@@ -50,7 +50,6 @@ resource "aws_ssm_parameter" "shop_collection_import_queue_arn" {
   name     = "/upselling/${terraform.workspace}/queues/shop-collection-import/arn"
   type     = "String"
   value    = aws_sqs_queue.shop_collection_import.arn
-  overwrite = true
   provider = aws.region
 }
 
@@ -58,7 +57,6 @@ resource "aws_ssm_parameter" "shop_collection_import_queue_url" {
   name     = "/upselling/${terraform.workspace}/queues/shop-collection-import/url"
   type     = "String"
   value    = aws_sqs_queue.shop_collection_import.url
-  overwrite = true
   provider = aws.region
 }
 
@@ -66,7 +64,6 @@ resource "aws_ssm_parameter" "shop_product_import_queue_arn" {
   name     = "/upselling/${terraform.workspace}/queues/shop-product-import/arn"
   type     = "String"
   value    = aws_sqs_queue.shop_product_import.arn
-  overwrite = true
   provider = aws.region
 }
 
@@ -74,6 +71,5 @@ resource "aws_ssm_parameter" "shop_product_import_queue_url" {
   name     = "/upselling/${terraform.workspace}/queues/shop-product-import/url"
   type     = "String"
   value    = aws_sqs_queue.shop_product_import.url
-  overwrite = true
   provider = aws.region
 }

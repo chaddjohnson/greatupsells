@@ -24,7 +24,6 @@ resource "aws_ssm_parameter" "admin_app_regional_domain" {
   name     = "/upselling/${terraform.workspace}/admin-app/regional-domain"
   type     = "String"
   value    = "admin.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
-  overwrite = true
   provider = aws.region
 }
 
@@ -32,7 +31,6 @@ resource "aws_ssm_parameter" "admin_app_url" {
   name     = "/upselling/${terraform.workspace}/admin-app/url"
   type     = "String"
   value    = "https://${var.admin_app_domain}"
-  overwrite = true
   provider = aws.region
 }
 
