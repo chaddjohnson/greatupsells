@@ -1,11 +1,3 @@
-# TODO: Load STOREFRONT_API_URL from SSM via GitHub Actions plugin, and make that available when building the application.
-
-# TODO: Build storefront.js.
-
-# TODO: Upload storefront.js to assets bucket.
-
-# TODO: Update cache settings for storefront.js.
-
 name: upselling-storefront
 on:
   push:
@@ -22,9 +14,20 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Inject "STOREFRONT_API_URL" SSM Parameter
+        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        with:
+          ssm_parameter: "/upselling/$BRANCH/storefront-api/url"
+          env_variable_name: STOREFRONT_API_URL
+      - name: Inject "ASSETS_DOMAIN" SSM Parameter
+        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        with:
+          ssm_parameter: "/upselling/$BRANCH/assets/domain"
+          env_variable_name: ASSETS_DOMAIN
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Node.js
@@ -41,7 +44,7 @@ jobs:
         run: NODE_ENV=production yarn build
         working-directory: applications/storefront
       - name: Upload Application to Assets Bucket
-        run: aws s3 sync applications/storefront/dist/storefront.js s3://assets.greatupsells.com --cache-control public,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0 --storage-class STANDARD_IA
+        run: aws s3 sync applications/storefront/dist/storefront.js s3://$ASSETS_DOMAIN --cache-control public,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0 --storage-class STANDARD_IA
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g yarn serverless
