@@ -23,20 +23,20 @@ provider:
 functions:
   # authorizer:
   #   handler: src/authorizer.handler
-  # health:
-  #   handler: src/routes/health.handler
-  #   events:
-  #     - http:
-  #         path: /health
-  #         method: get
-  #         cors: true
-  # region:
-  #   handler: src/routes/region.handler
-  #   events:
-  #     - http:
-  #         path: /region
-  #         method: get
-  #         cors: true
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
   # findLogs:
   clonePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
