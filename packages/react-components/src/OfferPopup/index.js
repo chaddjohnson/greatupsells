@@ -295,8 +295,10 @@ const OfferPopup = ({
   }
 
   // Expose methods globally to enable themes to programmatically interface with popups.
-  window.OfferPopup.submit = handleSubmit;
-  window.OfferPopup.close = handleClose;
+  if (typeof window !== 'undefined') {
+    window.OfferPopup.submit = handleSubmit;
+    window.OfferPopup.close = handleClose;
+  }
 
   ReactModal.setAppElement(iframeBodyNode);
 
