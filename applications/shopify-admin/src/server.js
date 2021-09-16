@@ -14,7 +14,7 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
-const port = getenv.int('SHOPIFY_ADMIN_APP_PORT');
+const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
