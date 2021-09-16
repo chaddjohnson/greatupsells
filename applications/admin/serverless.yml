@@ -54,3 +54,4 @@ custom:
 package:
   exclude:
     - infrastructure/**
+    - .next/cache/webpack/**
