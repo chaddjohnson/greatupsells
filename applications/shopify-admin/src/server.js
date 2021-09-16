@@ -111,13 +111,13 @@ const createServer = () => {
   return server;
 };
 
-if (dev) {
-  app.prepare().then(() => {
-    createServer().listen(port, () =>
-      // eslint-disable-next-line no-console
-      console.info(`Running at http://localhost:${port}`)
-    );
-  });
-} else {
-  module.exports.handler = serverless(createServer());
-}
+// if (dev) {
+//   app.prepare().then(() => {
+//     createServer().listen(port, () =>
+//       // eslint-disable-next-line no-console
+//       console.info(`Running at http://localhost:${port}`)
+//     );
+//   });
+// }
+
+module.exports.handler = serverless(createServer());
