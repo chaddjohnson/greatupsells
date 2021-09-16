@@ -14,6 +14,8 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
+console.log('process.env.NODE_ENV = ', process.env.NODE_ENV);
+
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -111,13 +113,13 @@ const createServer = () => {
   return server;
 };
 
-// if (dev) {
-//   app.prepare().then(() => {
-//     createServer().listen(port, () =>
-//       // eslint-disable-next-line no-console
-//       console.info(`Running at http://localhost:${port}`)
-//     );
-//   });
-// }
-
-module.exports.handler = serverless(createServer());
+if (dev) {
+  app.prepare().then(() => {
+    createServer().listen(port, () =>
+      // eslint-disable-next-line no-console
+      console.info(`Running at http://localhost:${port}`)
+    );
+  });
+} else {
+  module.exports.handler = serverless(createServer());
+}
