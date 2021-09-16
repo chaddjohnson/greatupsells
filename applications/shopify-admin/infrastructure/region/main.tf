@@ -24,6 +24,7 @@ resource "aws_ssm_parameter" "shopify_admin_app_regional_domain" {
   name     = "/upselling/${terraform.workspace}/shopify-admin-app/regional-domain"
   type     = "String"
   value    = "shopify-admin.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
+  overwrite = true
   provider = aws.region
 }
 
@@ -31,6 +32,7 @@ resource "aws_ssm_parameter" "shopify_admin_app_url" {
   name     = "/upselling/${terraform.workspace}/shopify-admin-app/url"
   type     = "String"
   value    = "https://${var.shopify_admin_app_domain}"
+  overwrite = true
   provider = aws.region
 }
 

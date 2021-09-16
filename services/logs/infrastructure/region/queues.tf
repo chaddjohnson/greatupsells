@@ -23,6 +23,7 @@ resource "aws_ssm_parameter" "log_queue_arn" {
   name     = "/upselling/${terraform.workspace}/queues/log/arn"
   type     = "String"
   value    = aws_sqs_queue.log.arn
+  overwrite = true
   provider = aws.region
 }
 
@@ -30,5 +31,6 @@ resource "aws_ssm_parameter" "log_queue_url" {
   name     = "/upselling/${terraform.workspace}/queues/log/url"
   type     = "String"
   value    = aws_sqs_queue.log.id
+  overwrite = true
   provider = aws.region
 }
