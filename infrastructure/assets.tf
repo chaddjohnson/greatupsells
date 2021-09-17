@@ -2,6 +2,13 @@ resource "aws_s3_bucket" "assets" {
   bucket        = var.assets_domain
   acl           = "private"
   force_destroy = false
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    max_age_seconds = 86400
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "assets" {}
