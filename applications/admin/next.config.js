@@ -36,6 +36,7 @@ module.exports = {
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
+  crossOrigin: 'anonymous',
   env: {
     ADMIN_API_URL
   }
