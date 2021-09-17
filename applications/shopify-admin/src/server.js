@@ -1,11 +1,11 @@
 const getenv = require('getenv');
+const serverless = require('serverless-http');
 const Koa = require('koa');
 const connect = require('koa-connect');
 const session = require('koa-session');
 const helmet = require('koa-helmet');
 const jwt = require('jsonwebtoken');
 const next = require('next');
-const serverless = require('serverless-http');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const {
   default: shopifyAuth,
@@ -14,10 +14,8 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
-console.log('process.env.NODE_ENV = ', process.env.NODE_ENV);
-
-const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
 const dev = process.env.NODE_ENV !== 'production';
+const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -112,14 +110,14 @@ const createServer = () => {
 
   return server;
 };
+const server = createServer();
 
 if (dev) {
   app.prepare().then(() => {
-    createServer().listen(port, () =>
-      // eslint-disable-next-line no-console
-      console.info(`Running at http://localhost:${port}`)
-    );
+    server.listen(port, () => {
+      console.info(`Shopify Admin app running at http://localhost:${port}`); // eslint-disable-line no-console
+    });
   });
 } else {
-  module.exports.handler = serverless(createServer());
+  module.exports.handler = serverless(server);
 }
