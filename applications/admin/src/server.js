@@ -1,0 +1,26 @@
+const getenv = require('getenv');
+const serverless = require('serverless-http');
+const Koa = require('Koa');
+const next = require('next');
+
+const dev = process.env.NODE_ENV !== 'production';
+const port = getenv.int('ADMIN_APP_PORT', 4001);
+const server = new Koa();
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+server.use(async (ctx) => {
+  await handle(ctx.req, ctx.res);
+  ctx.respond = false;
+  ctx.res.statusCode = 200;
+});
+
+if (dev) {
+  app.prepare().then(() => {
+    server.listen(port, () => {
+      console.info(`Admin app running at http://localhost:${port}`); // eslint-disable-line no-console
+    });
+  });
+} else {
+  module.exports.handler = serverless(server);
+}
