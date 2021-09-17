@@ -37,6 +37,16 @@ functions:
           path: /region
           method: get
           cors: true
+  server:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/server.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{any+}
+          method: ANY
 
 plugins:
   - serverless-plugin-monorepo
