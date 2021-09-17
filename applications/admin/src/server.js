@@ -1,6 +1,6 @@
 const getenv = require('getenv');
 const serverless = require('serverless-http');
-const Koa = require('Koa');
+const Koa = require('koa');
 const next = require('next');
 
 const dev = process.env.NODE_ENV !== 'production';
