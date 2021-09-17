@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "assets" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
     allowed_origins = ["*"]
     max_age_seconds = 86400
   }
@@ -45,7 +45,7 @@ resource "aws_cloudfront_distribution" "assets" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "assets"
     min_ttl                = 0
