@@ -45,7 +45,7 @@ resource "aws_cloudfront_distribution" "assets" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "assets"
     min_ttl                = 0
