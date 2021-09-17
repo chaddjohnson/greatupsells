@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
 const mongodbClient = require('./mongodbClient');
 
-const { ELASTICSEARCH_URL } = process.env;
+// const { ELASTICSEARCH_URL } = process.env;
 
-const esClient = new ElasticsearchClient({
-  node: ELASTICSEARCH_URL
-});
+// const esClient = new ElasticsearchClient({
+//   node: ELASTICSEARCH_URL
+// });
 
 let Log = null;
 
@@ -31,18 +31,18 @@ schema.post('save', async function (log, next) {
   // ONLY used as an index into the MongoDB "logs" collection and `data` is NOT
   // stored in Elasticsearch as Elasticsearch servers and storage are VERY
   // expensive.
-  await esClient.index({
-    index: 'logs',
-    id,
-    body: {
-      type,
-      message,
-      date
-    }
-  });
+  // await esClient.index({
+  //   index: 'logs',
+  //   id,
+  //   body: {
+  //     type,
+  //     message,
+  //     date
+  //   }
+  // });
 
   // Force an index refresh to ensure the logs are included in subsequent searches.
-  await esClient.indices.refresh({ index: 'logs' });
+  // await esClient.indices.refresh({ index: 'logs' });
 
   next();
 });

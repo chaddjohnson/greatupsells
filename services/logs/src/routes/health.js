@@ -1,21 +1,21 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
+// const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
 const mongodbClient = require('../models/mongodbClient');
 
-const { ELASTICSEARCH_URL } = process.env;
+// const { ELASTICSEARCH_URL } = process.env;
 
-const esClient = new ElasticsearchClient({
-  node: ELASTICSEARCH_URL
-});
+// const esClient = new ElasticsearchClient({
+//   node: ELASTICSEARCH_URL
+// });
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
     await mongodbClient.connect();
-    await esClient.ping();
+    // await esClient.ping();
 
     if (!mongodbClient.connected) {
       throw new Error(`Cannot connect to MongoDB`);
