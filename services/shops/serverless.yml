@@ -23,6 +23,7 @@ provider:
         Action: execute-api:Invoke
         Resource: "execute-api:/*/GET/health"
   environment:
+    NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
     LOG_SOURCE: 'shops-service'

@@ -11,6 +11,7 @@ provider:
   apiGateway:
     shouldStartNameWithService: true
   environment:
+    NODE_ENV: ${env:NODE_ENV, 'production'}
     ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch-logs/uri}
     MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri}
 
