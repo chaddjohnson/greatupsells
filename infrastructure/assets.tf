@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "assets" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET"]
+    allowed_methods = ["GET", "HEAD"]
     allowed_origins = ["*"]
     max_age_seconds = 86400
   }
