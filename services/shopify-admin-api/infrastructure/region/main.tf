@@ -141,7 +141,7 @@ resource "aws_route53_record" "shopify_admin_api" {
   type            = "CNAME"
   ttl             = "86400"
   set_identifier  = data.aws_region.current.name
-  records         = [aws_cloudfront_distribution.shopify_admin_api_url.domain_name]
+  records         = [aws_cloudfront_distribution.shopify_admin_api.domain_name]
   health_check_id = aws_route53_health_check.shopify_admin_api.id
 
   latency_routing_policy {
