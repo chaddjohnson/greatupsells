@@ -63,14 +63,6 @@ resource "aws_cloudfront_distribution" "assets" {
     viewer_protocol_policy   = "redirect-to-https"
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.assets.id
     cache_policy_id          = data.aws_cloudfront_cache_policy.assets.id
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
   }
 
   custom_error_response {
