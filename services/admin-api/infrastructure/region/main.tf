@@ -65,7 +65,7 @@ resource "aws_cloudfront_distribution" "admin_api" {
 
     forwarded_values {
       query_string = true
-      headers      = ["*"]
+      headers      = "*"
 
       cookies {
         forward = "none"
@@ -139,15 +139,11 @@ resource "aws_route53_health_check" "admin_api" {
 resource "aws_route53_record" "admin_api" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.admin_api_domain
-  type            = "A"
+  type            = "CNAME"
+  ttl             = "86400"
   set_identifier  = data.aws_region.current.name
+  records         = [aws_cloudfront_distribution.admin_api.domain_name]
   health_check_id = aws_route53_health_check.admin_api.id
-
-  alias {
-    name                   = aws_cloudfront_distribution.admin_api.domain_name
-    zone_id                = aws_cloudfront_distribution.admin_api.hosted_zone_id
-    evaluate_target_health = false
-  }
 
   latency_routing_policy {
     region = data.aws_region.current.name
