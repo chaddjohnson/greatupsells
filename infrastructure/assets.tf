@@ -30,6 +30,14 @@ resource "aws_s3_bucket_policy" "assets" {
   policy = data.aws_iam_policy_document.assets.json
 }
 
+data "aws_cloudfront_origin_request_policy" "assets" {
+  name = "Managed-CORS-S3Origin"
+}
+
+data "aws_cloudfront_cache_policy" "assets" {
+  name = "Managed-CachingOptimized"
+}
+
 resource "aws_cloudfront_distribution" "assets" {
   enabled     = true
   aliases     = [var.assets_domain]
@@ -45,14 +53,16 @@ resource "aws_cloudfront_distribution" "assets" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "assets"
-    min_ttl                = 0
-    default_ttl            = 2628000
-    max_ttl                = 31536000
-    compress               = true
-    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods          = ["GET", "HEAD", "OPTIONS"]
+    cached_methods           = ["GET", "HEAD"]
+    target_origin_id         = "assets"
+    min_ttl                  = 0
+    default_ttl              = 2628000
+    max_ttl                  = 31536000
+    compress                 = true
+    viewer_protocol_policy   = "redirect-to-https"
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.assets.id
+    cache_policy_id          = data.aws_cloudfront_cache_policy.assets.id
 
     forwarded_values {
       query_string = false
