@@ -38,6 +38,7 @@ provider:
 
 functions:
   addDraftOrderLineItem:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItem.handler
     events:
       - http:
@@ -45,6 +46,7 @@ functions:
           method: post
           authorizer: aws_iam
   cancelOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cancelOrder.handler
     events:
       - http:
@@ -52,6 +54,7 @@ functions:
           method: post
           authorizer: aws_iam
   cloneOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
     events:
       - http:
@@ -59,6 +62,7 @@ functions:
           method: post
           authorizer: aws_iam
   clonePopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/clonePopupTheme.handler
     events:
       - http:
@@ -66,6 +70,7 @@ functions:
           method: post
           authorizer: aws_iam
   createCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler
     events:
       - http:
@@ -73,6 +78,7 @@ functions:
           method: post
           authorizer: aws_iam
   createDraftOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
     events:
       - http:
@@ -80,6 +86,7 @@ functions:
           method: post
           authorizer: aws_iam
   createOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
     events:
       - http:
@@ -87,6 +94,7 @@ functions:
           method: post
           authorizer: aws_iam
   createOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOrder.handler
     events:
       - http:
@@ -94,6 +102,7 @@ functions:
           method: post
           authorizer: aws_iam
   createPopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
     events:
       - http:
@@ -101,6 +110,7 @@ functions:
           method: post
           authorizer: aws_iam
   createProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
     events:
       - http:
@@ -108,6 +118,7 @@ functions:
           method: post
           authorizer: aws_iam
   deactivateShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deactivateShop.handler
     events:
       - http:
@@ -115,6 +126,7 @@ functions:
           method: post
           authorizer: aws_iam
   deleteCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteCollection.handler
     events:
       - http:
@@ -122,6 +134,7 @@ functions:
           method: delete
           authorizer: aws_iam
   deleteOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
     events:
       - http:
@@ -129,6 +142,7 @@ functions:
           method: delete
           authorizer: aws_iam
   deleteProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteProduct.handler
     events:
       - http:
@@ -136,6 +150,7 @@ functions:
           method: delete
           authorizer: aws_iam
   findOfferAcceptances:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
     events:
       - http:
@@ -143,6 +158,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOfferConversionRates:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
     events:
       - http:
@@ -150,6 +166,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOfferImpressions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
     events:
       - http:
@@ -157,6 +174,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOfferConversions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
     events:
       - http:
@@ -164,6 +182,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOfferRevenueIncreases:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
@@ -171,6 +190,7 @@ functions:
           method: get
           authorizer: aws_iam
   findPopupThemes:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
     events:
       - http:
@@ -178,6 +198,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopAcceptances:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
     events:
       - http:
@@ -185,6 +206,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopConversionRates:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
     events:
       - http:
@@ -192,6 +214,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopConversions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
     events:
       - http:
@@ -199,6 +222,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopImpressions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
     events:
       - http:
@@ -206,6 +230,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopRevenueIncreases:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
     events:
       - http:
@@ -213,6 +238,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOfferPopupThemes:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferPopupThemes.handler
     events:
       - http:
@@ -220,6 +246,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOffers:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
     events:
       - http:
@@ -227,6 +254,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneCollectionId:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneCollectionId.handler
     events:
       - http:
@@ -234,6 +262,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
     events:
       - http:
@@ -241,6 +270,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrder.handler
     events:
       - http:
@@ -248,6 +278,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneOrderByShopifyOrderId:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrderByShopifyOrderId.handler
     events:
       - http:
@@ -255,6 +286,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOnePopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
     events:
       - http:
@@ -262,6 +294,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneProductByShopifyProductId:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneProductByShopifyProductId.handler
     events:
       - http:
@@ -269,6 +302,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneRandomShopOfferByDomain:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopOfferByDomain.handler
     events:
       - http:
@@ -276,6 +310,7 @@ functions:
           method: post
           authorizer: aws_iam
   findOneShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
     events:
       - http:
@@ -283,6 +318,7 @@ functions:
           method: get
           authorizer: aws_iam
   findOneShopByDomain:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShopByDomain.handler
     events:
       - http:
@@ -290,6 +326,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopOffers:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopOffers.handler
     events:
       - http:
@@ -297,6 +334,7 @@ functions:
           method: get
           authorizer: aws_iam
   findShopPopupThemes:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopPopupThemes.handler
     events:
       - http:
@@ -304,12 +342,14 @@ functions:
           method: get
           authorizer: aws_iam
   health:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/health.handler
     events:
       - http:
           path: /health
           method: get
   initializeShopByDomain:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/initializeShopByDomain.handler
     events:
       - http:
@@ -317,12 +357,14 @@ functions:
           method: post
           authorizer: aws_iam
   region:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/region.handler
     events:
       - http:
           path: /region
           method: get
   trackOfferAcceptance:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
     events:
       - http:
@@ -330,6 +372,7 @@ functions:
           method: post
           authorizer: aws_iam
   trackOfferImpression:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
     events:
       - http:
@@ -337,6 +380,7 @@ functions:
           method: post
           authorizer: aws_iam
   updateCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateCollection.handler
     events:
       - http:
@@ -344,6 +388,7 @@ functions:
           method: put
           authorizer: aws_iam
   updateShopifyDraftOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrder.handler
     events:
       - http:
@@ -351,6 +396,7 @@ functions:
           method: post
           authorizer: aws_iam
   updateOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
     events:
       - http:
@@ -358,6 +404,7 @@ functions:
           method: put
           authorizer: aws_iam
   updateOrder:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOrder.handler
     events:
       - http:
@@ -365,6 +412,7 @@ functions:
           method: put
           authorizer: aws_iam
   updatePopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
     events:
       - http:
@@ -372,6 +420,7 @@ functions:
           method: put
           authorizer: aws_iam
   updateProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
     events:
       - http:
@@ -379,6 +428,7 @@ functions:
           method: put
           authorizer: aws_iam
   updateShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
     events:
       - http:
@@ -386,6 +436,7 @@ functions:
           method: put
           authorizer: aws_iam
   calculateStats:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/calculateStats.handler
     events:
       - schedule: cron(1 5,6 * * ? *)
@@ -393,6 +444,7 @@ functions:
     enabled: '"${self:provider.region}" == "us-east-1"'
   fixShopWebhooks:
     memorySize: 512
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/fixShopWebhooks.handler
     events:
       - schedule: rate(1 day)
@@ -401,6 +453,7 @@ functions:
   importShopCollections:
     memorySize: 512
     reservedConcurrency: 5
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopCollections.handler
     events:
       - sqs:
@@ -409,6 +462,7 @@ functions:
   importShopProducts:
     memorySize: 512
     reservedConcurrency: 5
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopProducts.handler
     events:
       - sqs:
@@ -416,6 +470,7 @@ functions:
     timeout: 900
   updateShopActiveStatuses:
     memorySize: 512
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/updateShopActiveStatuses.handler
     events:
       - schedule: rate(1 day)
@@ -423,6 +478,7 @@ functions:
     enabled: '"${self:provider.region}" == "us-east-1"'
   updateShopPlans:
     memorySize: 512
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/updateShopPlans.handler
     events:
       - schedule: rate(1 day)
