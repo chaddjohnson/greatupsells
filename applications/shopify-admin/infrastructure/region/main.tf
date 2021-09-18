@@ -67,7 +67,7 @@ resource "aws_cloudfront_distribution" "shopify_admin_app" {
       query_string = true
 
       cookies {
-        forward = "none"
+        forward = "all"
       }
     }
   }
