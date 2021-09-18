@@ -14,11 +14,12 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
+console.log('SERVER 1');
 const dev = process.env.NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
+console.log('SERVER 2');
 const {
   AWS_REGION,
   SHOPIFY_ADMIN_APP_API_KEY,
@@ -32,15 +33,16 @@ const {
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
+console.log('SERVER 3');
 shopsServiceHttpClient.addRequestInterceptor(
   aws4Interceptor({
     region: AWS_REGION,
     service: 'execute-api'
   })
 );
-
+console.log('SERVER 4');
 const createServer = () => {
+  console.log('SERVER 6');
   const server = new Koa();
 
   // Secure HTTP headers. Disable frameguard so that the app may be embedded within Shopify Admin.
@@ -57,7 +59,7 @@ const createServer = () => {
       )
     );
   }
-
+  console.log('SERVER 7');
   // Initialize Shopify OAuth support.
   server.use(
     session({ httpOnly: true, secure: true, sameSite: 'None' }, server)
@@ -78,6 +80,7 @@ const createServer = () => {
       ],
       accessMode: 'offline',
       afterAuth: async (ctx) => {
+        console.log('SERVER 8');
         const { shop: shopDomain, accessToken } = ctx.session;
         const shop = await shopsServiceHttpClient.post(
           `/shops/domain/${shopDomain}/initialization`,
@@ -103,6 +106,7 @@ const createServer = () => {
   );
   server.use(verifyRequest());
   server.use(async (ctx) => {
+    console.log('SERVER 9');
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
@@ -110,14 +114,17 @@ const createServer = () => {
 
   return server;
 };
+console.log('SERVER 5');
 const server = createServer();
 
 if (dev) {
+  console.log('SERVER 10');
   app.prepare().then(() => {
     server.listen(port, () => {
       console.info(`Shopify Admin app running at http://localhost:${port}`); // eslint-disable-line no-console
     });
   });
 } else {
+  console.log('SERVER 11');
   module.exports.handler = serverless(server);
 }
