@@ -146,6 +146,10 @@ module "api_ap_northeast_1" {
   event_bus_arn                    = var.event_bus_arn
 }
 
+output "certificate_arn" {
+  value = var.certificate_arn
+}
+
 output "hosted_zone_id" {
   value = var.hosted_zone_id
 }
