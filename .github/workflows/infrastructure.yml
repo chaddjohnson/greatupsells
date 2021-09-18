@@ -24,7 +24,7 @@ jobs:
           chmod 600 ~/.ssh/neatowebsolutions/id_rsa
       - name: Prepare Lambda Resources
         run: zip host-lambda.zip host-lambda.js
-        working-directory: infrastructure
+        working-directory: ./infrastructure
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add Terraform variables
