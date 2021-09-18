@@ -65,7 +65,7 @@ const createServer = () => {
   server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
   server.use(
     shopifyAuth({
-      prefix: SHOPIFY_ADMIN_APP_URL,
+      // prefix: SHOPIFY_ADMIN_APP_URL,
       apiKey: SHOPIFY_ADMIN_APP_API_KEY,
       secret: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
       scopes: [
