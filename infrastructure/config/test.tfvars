@@ -9,6 +9,6 @@ services_domain_names = {
   "us-east-1" = "services.test.greatupsells.com"
 }
 assets_domain                    = "assets.test.greatupsells.com"
-shopify_admin_app_api_key        = "d69e5e185091a5b588def0dbcc24949b"
-shopify_admin_app_api_secret_key = "6390563adf413a420a52a65f79b53925"
+shopify_admin_app_api_key        = "973752778780866d1cbbbabb75b3401c"
+shopify_admin_app_api_secret_key = "c83f0620743c0e2ba66477f615486c2b"
 event_bus_arn                    = "arn:aws:events:us-east-1:174585217681:event-bus/aws.partner/shopify.com/3309183/upselling-webhooks-test"
