@@ -28,7 +28,7 @@ jobs:
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: ./run.sh)
+        run: ./run.sh
         working-directory: services/logs/infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
