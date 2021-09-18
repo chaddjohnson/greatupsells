@@ -22,6 +22,8 @@ jobs:
           mkdir -p ~/.ssh/neatowebsolutions
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/neatowebsolutions/id_rsa
           chmod 600 ~/.ssh/neatowebsolutions/id_rsa
+      - name: Prepare Lambda Resources
+        run: (cd infrastructure && zip host-lambda.zip host-lambda.js)
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add Terraform variables
