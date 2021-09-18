@@ -36,19 +36,11 @@ resource "aws_ssm_parameter" "admin_api_url" {
   provider  = aws.region
 }
 
-resource "aws_cloudfront_distribution" "assets" {
+resource "aws_cloudfront_distribution" "admin_api" {
   enabled     = true
   aliases     = [var.admin_api_domain]
   price_class = "PriceClass_All"
 
-  # origin {
-  #   domain_name = aws_s3_bucket.assets.bucket_regional_domain_name
-  #   origin_id   = "assets"
-
-  #   s3_origin_config {
-  #     origin_access_identity = aws_cloudfront_origin_access_identity.assets.cloudfront_access_identity_path
-  #   }
-  # }
   origin {
     domain_name = aws_ssm_parameter.admin_api_regional_domain.value
     origin_id   = "api"
@@ -121,14 +113,14 @@ resource "aws_cloudfront_distribution" "assets" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = var.certificate_arn
+    acm_certificate_arn      = data.terraform_remote_state.upselling_infrastructure.outputs.certificate_arn
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
 }
 
 resource "aws_route53_health_check" "admin_api" {
-  fqdn              = aws_cloudfront_distribution.assets.domain_name
+  fqdn              = aws_cloudfront_distribution.admin_api.domain_name
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -142,7 +134,7 @@ resource "aws_route53_record" "admin_api" {
   type            = "CNAME"
   ttl             = "86400"
   set_identifier  = data.aws_region.current.name
-  records         = [aws_cloudfront_distribution.assets.domain_name]
+  records         = [aws_cloudfront_distribution.admin_api.domain_name]
   health_check_id = aws_route53_health_check.admin_api.id
 
   latency_routing_policy {
