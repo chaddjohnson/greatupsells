@@ -23,7 +23,8 @@ jobs:
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/neatowebsolutions/id_rsa
           chmod 600 ~/.ssh/neatowebsolutions/id_rsa
       - name: Prepare Lambda Resources
-        run: (cd infrastructure && zip host-lambda.zip host-lambda.js)
+        run: zip host-lambda.zip host-lambda.js
+        working-directory: infrastructure
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add Terraform variables
@@ -36,4 +37,5 @@ jobs:
       - name: Install Ansible
         run: sudo apt-get install ansible
       - name: Run Terraform
-        run: (cd ./infrastructure && STAGE=$BRANCH ./run.sh)
+        run: STAGE=$BRANCH ./run.sh
+        working-directory: infrastructure
