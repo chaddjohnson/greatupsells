@@ -44,6 +44,13 @@ resource "aws_cloudfront_distribution" "admin_api" {
   origin {
     domain_name = aws_ssm_parameter.admin_api_regional_domain.value
     origin_id   = "api"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
   default_cache_behavior {
