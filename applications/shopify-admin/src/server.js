@@ -63,6 +63,9 @@ const createServer = () => {
     session({ httpOnly: true, secure: true, sameSite: 'None' }, server)
   );
   server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
+  server.use((ctx) => {
+    ctx.host = new URL(SHOPIFY_ADMIN_APP_URL).host;
+  });
   server.use(
     shopifyAuth({
       prefix: dev ? SHOPIFY_ADMIN_APP_URL : '',
