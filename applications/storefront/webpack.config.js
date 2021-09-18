@@ -49,14 +49,14 @@ module.exports = {
     new webpack.EnvironmentPlugin(['STOREFRONT_API_URL']),
     dev && new ESLintPlugin({ cache: true }),
     new CompressionWebpackPlugin({
-      filename: '[path].gz[query]',
+      filename: '[path][base].gz',
       algorithm: 'gzip',
       test: /\.(js|css|html)$/,
       threshold: 10240,
       minRatio: 0.8
     }),
     new CompressionWebpackPlugin({
-      filename: '[path].br[query]',
+      filename: '[path][base].br',
       algorithm: 'brotliCompress',
       test: /\.(js|css|html|svg)$/,
       compressionOptions: {

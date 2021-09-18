@@ -17,7 +17,7 @@ module.exports = {
       // Enable compression in production.
       config.plugins.push(
         new CompressionWebpackPlugin({
-          filename: '[path].gz[query]',
+          filename: '[path][base].gz',
           algorithm: 'gzip',
           test: /\.(js|css|html)$/,
           threshold: 10240,
@@ -26,7 +26,7 @@ module.exports = {
       );
       config.plugins.push(
         new CompressionWebpackPlugin({
-          filename: '[path].br[query]',
+          filename: '[path][base].br',
           algorithm: 'brotliCompress',
           test: /\.(js|css|html|svg)$/,
           compressionOptions: {
