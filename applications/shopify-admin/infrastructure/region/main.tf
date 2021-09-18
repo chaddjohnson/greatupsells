@@ -70,6 +70,11 @@ resource "aws_cloudfront_distribution" "shopify_admin_app" {
         forward = "all"
       }
     }
+
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = data.terraform_remote_state.upselling_infrastructure.outputs.host_lambda_arn
+    }
   }
 
   custom_error_response {
