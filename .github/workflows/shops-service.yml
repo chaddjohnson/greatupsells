@@ -29,8 +29,10 @@ jobs:
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: (cd ./services/shops/infrastructure && STAGE=$BRANCH ./run.sh)
+        run: ./run.sh
+        working-directory: services/shops/infrastructure
         env:
+          STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
       - name: Install Node Modules
         run: yarn install

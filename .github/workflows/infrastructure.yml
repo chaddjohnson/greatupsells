@@ -37,5 +37,7 @@ jobs:
       - name: Install Ansible
         run: sudo apt-get install ansible
       - name: Run Terraform
-        run: STAGE=$BRANCH ./run.sh
+        run: ./run.sh
         working-directory: infrastructure
+        env:
+          STAGE: ${{ env.BRANCH }}
