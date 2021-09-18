@@ -24,7 +24,7 @@ resource "aws_iam_role" "cloudfront_lambda_role" {
 }
 
 resource "aws_lambda_function" "host_lambda" {
-  filename      = "src/host-lambda.zip"
+  filename      = "host-lambda.zip"
   function_name = "cloudfront-host-${terraform.workspace}"
   role          = aws_iam_role.cloudfront_lambda_role.arn
   handler       = "host.handler"
