@@ -57,7 +57,7 @@ const App = ({ Component, pageProps }) => {
         config={{
           apiKey: process.env.SHOPIFY_ADMIN_APP_API_KEY,
           shopOrigin,
-          forceRedirect: true
+          forceRedirect: false
         }}
       >
         <HttpClientProvider httpClient={httpClient}>
