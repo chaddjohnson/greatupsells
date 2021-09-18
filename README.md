@@ -64,22 +64,23 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
         proto: http
         subdomain: chaddjohnson-webhooks
 
-Note that the tunnel names (e.g., `upselling-shop-api`) must remain unchanged.
+Note that the tunnel names (e.g., `upselling-shopify-admin-api`) must remain unchanged.
 
-Please install the `ngrok` binary. Once installed and configured, ngrok will start automatically via `yarn start`.
+Please follow instructions [here](https://ngrok.com/download) to install the `ngrok` binary and authorize your machine. Once done, ngrok will start automatically with `yarn start`.
 
 ## Development
 
 ### Setup
 
 1. Clone this repository.
-1. Create a top-level `.env` file by copying `.env.example` and filling in values.
+1. Create a top-level `.env` file by copying `.env.example` and fill in values.
 1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
 1. Run `yarn start`. This automatically does the following:
    1. Installs dependencies.
    1. Runs Lerna bootstrapping.
    1. Builds packages.
    1. Starts all applications, services, and package build watching.
+   1. Starts tunnels.
 
 ### Tooling
 
@@ -99,7 +100,7 @@ The following are used:
 
 ### Speed Improvement
 
-Loading the Shopify Admin app over ngrok can be slow. To speed this up, we can bypass ngrok using a local nginx server as follows:
+Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
 2. Create server configurations for each subdomain; for example:
@@ -124,28 +125,58 @@ Loading the Shopify Admin app over ngrok can be slow. To speed this up, we can b
    ```
 
 3. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Change all instances of "test.cpming.top" to "\*.ngrok.io". use "2048" instead of "128" for the `openssl dhparam` command.
-4. Add the tunnel subdomains to /etc/hosts pointing them to 127.0.0.1; for example: `127.0.0.1 example.ngrok.io`.
-5. Add a `prefix` parameter to the `shopifyAuth()` function call (the default export of `@shopify/koa-shopify-auth`): `prefix: 'https://example.ngrok.io'`.
+4. Add the tunnel subdomains to `/etc/hosts` pointing them to `127.0.0.1`; for example: `127.0.0.1 example.ngrok.io`.
+5. Add a `prefix` parameter to the `shopifyAuth()` function call (the default export of `@shopify/koa-shopify-auth`): `prefix: 'https://example.ngrok.io'`. Note this should already be present, and no change should be necessary.
 
 ### Coding Conventions
+
+The following coding conventions are adhered to except in special cases:
 
 - Prettier and ESLint for automatic code formatting.
 - kebab-case for names of repositories, applications, packages, and services.
 - PascalCase for names of component file and exported components.
 - camelCase for variable names.
 - camelCase for code file names (except for pages, which must use hyphens).
+- snake_case for Terraform resource names.
 - Hyphens for image and media file names.
+- Hyphens for directory names.
 - Default exports are used for modules and components (with the exception of index.js files).
 
-Code consistency is important. In order to maintain consistency, convention changes should be discussed and decisions should be made as a team.
+Code consistency is important. In order to maintain consistency, convention changes should be openly discussed and decisions made as a team. Please do your best to respect conventions established throughout this code base.
 
 ## Deployment
 
 ### Setup
 
-Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console.
+1. Create a version of the app in the target Shopify Partners account for the target environment.
+1. In Shopify under App Setup, configure things as follows:
+   1. Set "App URL" to the root of the Shopify Admin application, like so:
+      ```
+      https://shopify-admin.greatupsells.com/
+      ```
+   1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL and all individual regional domains, like so:
+      ```
+      https://shopify-admin.greatupsells.com/auth/callback
+      https://shopify-admin.us-east-1.greatupsells.com/auth/callback
+      https://shopify-admin.eu-west-1.greatupsells.com/auth/callback
+      https://shopify-admin.ap-northeast-1.greatupsells.com/auth/callback
+      ```
+1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
+1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
+   1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
+   1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
+   1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/eventbuses) for region us-east-1)
+1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
+   1. `AWS_ACCESS_KEY_ID`
+   1. `AWS_ACCESS_KEY_ID_SERVER`
+   1. `AWS_SECRET_ACCESS_KEY`
+   1. `AWS_SECRET_ACCESS_KEY_SERVER`
+   1. `MONGODB_ADMIN_PASSWORD`
+   1. `MONGODB_APP_PASSWORD`
+   1. `MONGODB_ROOT_PASSWORD`
+   1. `PRIVATE_KEY`
 
-### Deployment
+### Triggering
 
 Simply push to the appropriate branch.
 
@@ -170,9 +201,7 @@ Initial deployments should occur in the following order:
 
 ## Infrastructure
 
-All infrastructure is managed via Serverless, Terraform, and Ansible with each deployment. Linux is used for hosting.
-
-AWS is used for hosting. The following AWS services are used:
+All infrastructure is managed via Serverless, Terraform, and Ansible with each deployment. Linux and AWS are used for hosting. The following AWS services are used:
 
 - Lambda
 - API Gateway
