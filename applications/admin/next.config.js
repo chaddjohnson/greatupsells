@@ -1,5 +1,6 @@
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const zlib = require('zlib');
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -13,16 +14,28 @@ module.exports = {
     }
 
     if (!dev) {
-      // Enable compression in production. Use Brotli which is superior to gzip.
+      // Enable compression in production.
+      config.plugins.push(
+        new CompressionWebpackPlugin({
+          filename: '[path].br[query]',
+          algorithm: 'gzip',
+          test: /\.(js|css|html)$/,
+          threshold: 10240,
+          minRatio: 0.8
+        })
+      );
       config.plugins.push(
         new CompressionWebpackPlugin({
           filename: '[path].br[query]',
           algorithm: 'brotliCompress',
           test: /\.(js|css|html|svg)$/,
-          compressionOptions: { level: 11 },
+          compressionOptions: {
+            params: {
+              [zlib.constants.BROTLI_PARAM_QUALITY]: 11
+            }
+          },
           threshold: 10240,
-          minRatio: 0.8,
-          deleteOriginalAssets: false
+          minRatio: 0.8
         })
       );
     }
