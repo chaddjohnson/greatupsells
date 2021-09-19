@@ -27,7 +27,7 @@ resource "aws_lambda_function" "host_lambda" {
   filename      = "host-lambda.zip"
   function_name = "cloudfront-host-${terraform.workspace}"
   role          = aws_iam_role.cloudfront_lambda_role.arn
-  handler       = "host.handler"
+  handler       = "host-lambda.handler"
   runtime       = "nodejs14.x"
   memory_size   = 128
   timeout       = 3
