@@ -1,10 +1,9 @@
-certificate_arn  = "arn:aws:acm:us-east-1:174585217681:certificate/def51b2c-579c-49dd-9901-5c2acb6c466f"
-certificate_name = "*.greatupsells.com"
-hosted_zone_id   = "Z023060413ODYTHFNWZW8"
-domain           = "test.greatupsells.com"
-instance_type    = "t3a.medium"
-sandbox          = "true"
-jwt_secret       = "85576eb20045603e3fac6800d4f0aff35d5a7477397b3a43e14f2f087205f6bc"
+hosted_zone_id = "Z023060413ODYTHFNWZW8"
+base_domain    = "greatupsells.com"
+domain         = "test.greatupsells.com"
+instance_type  = "t3a.medium"
+sandbox        = "true"
+jwt_secret     = "85576eb20045603e3fac6800d4f0aff35d5a7477397b3a43e14f2f087205f6bc"
 services_domain_names = {
   "us-east-1" = "services.test.greatupsells.com"
 }

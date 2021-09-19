@@ -102,7 +102,7 @@ EOT
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
     working_dir = "region/services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.domain_name}'"
+    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'domain_name=${var.services_domain_name}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.
@@ -115,7 +115,7 @@ resource "null_resource" "services_server_setup" {
 
 resource "aws_route53_record" "domain_name" {
   zone_id = var.hosted_zone_id
-  name    = var.domain_name
+  name    = var.services_domain_name
   type    = "A"
   ttl     = 86400
   records = [aws_eip.services_server.public_ip]

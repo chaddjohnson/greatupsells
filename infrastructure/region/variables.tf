@@ -1,12 +1,8 @@
-variable "certificate_arn" {
-  type = string
-}
-
-variable "certificate_name" {
-  type = string
-}
-
 variable "hosted_zone_id" {
+  type = string
+}
+
+variable "base_domain" {
   type = string
 }
 
@@ -22,7 +18,7 @@ variable "jwt_secret" {
   type = string
 }
 
-variable "domain_name" {
+variable "services_domain_name" {
   type = string
 }
 

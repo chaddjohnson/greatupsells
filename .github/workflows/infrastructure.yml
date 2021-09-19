@@ -24,9 +24,6 @@ jobs:
           chmod 600 ~/.ssh/neatowebsolutions/id_rsa
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Prepare Lambda Resources
-        run: zip host-lambda.zip host-lambda.js
-        working-directory: infrastructure
       - name: Add Terraform variables
         run: |
           echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml

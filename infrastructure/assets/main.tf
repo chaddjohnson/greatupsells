@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source                = "hashicorp/aws"
+      configuration_aliases = [aws.region]
+    }
+  }
+}
+
 resource "aws_s3_bucket" "assets" {
   bucket        = var.assets_domain
   acl           = "private"

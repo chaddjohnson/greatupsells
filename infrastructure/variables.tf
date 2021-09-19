@@ -1,12 +1,8 @@
-variable "certificate_arn" {
-  type = string
-}
-
-variable "certificate_name" {
-  type = string
-}
-
 variable "hosted_zone_id" {
+  type = string
+}
+
+variable "base_domain" {
   type = string
 }
 
