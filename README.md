@@ -146,6 +146,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
+1. Ensure the domain name (e.g., greatupsells.com) exists in AWS within Route 53 with nameserver DNS set up correctly, and update `hosted_zone_id` in both config files under `infrastructure/config`.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
