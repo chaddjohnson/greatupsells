@@ -52,7 +52,7 @@ resource "aws_s3_bucket" "backups" {
   }
 }
 
-module "api_us_east_1" {
+module "us_east_1" {
   source = "./region"
   providers = {
     aws.region = aws
@@ -70,7 +70,7 @@ module "api_us_east_1" {
   event_bus_arn                    = var.event_bus_arn
 }
 
-module "api_us_west_2" {
+module "us_west_2" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {
@@ -89,7 +89,7 @@ module "api_us_west_2" {
   event_bus_arn                    = var.event_bus_arn
 }
 
-module "api_us_east_2" {
+module "us_east_2" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {
@@ -108,7 +108,7 @@ module "api_us_east_2" {
   event_bus_arn                    = var.event_bus_arn
 }
 
-module "api_eu_west_1" {
+module "eu_west_1" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {
@@ -127,7 +127,7 @@ module "api_eu_west_1" {
   event_bus_arn                    = var.event_bus_arn
 }
 
-module "api_ap_northeast_1" {
+module "ap_northeast_1" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {

@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "admin_app" {
 
   origin {
     domain_name = aws_ssm_parameter.admin_app_regional_domain.value
-    origin_id   = "api"
+    origin_id   = "app"
 
     custom_origin_config {
       http_port              = 80
@@ -56,7 +56,7 @@ resource "aws_cloudfront_distribution" "admin_app" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "api"
+    target_origin_id       = "app"
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0

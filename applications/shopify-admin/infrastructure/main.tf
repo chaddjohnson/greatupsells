@@ -20,7 +20,7 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
-module "api_us_east_1" {
+module "us_east_1" {
   source = "./region"
   providers = {
     aws.region = aws
@@ -28,7 +28,7 @@ module "api_us_east_1" {
   shopify_admin_app_domain = var.shopify_admin_app_domain
 }
 
-module "api_eu_west_1" {
+module "eu_west_1" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {
@@ -37,7 +37,7 @@ module "api_eu_west_1" {
   shopify_admin_app_domain = var.shopify_admin_app_domain
 }
 
-module "api_ap_northeast_1" {
+module "ap_northeast_1" {
   count  = terraform.workspace == "production" ? 1 : 0
   source = "./region"
   providers = {
