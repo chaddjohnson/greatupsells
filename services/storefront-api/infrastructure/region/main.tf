@@ -143,11 +143,15 @@ resource "aws_route53_health_check" "storefront_api" {
 resource "aws_route53_record" "storefront_api" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.storefront_api_domain
-  type            = "CNAME"
-  ttl             = "86400"
+  type            = "A"
   set_identifier  = data.aws_region.current.name
-  records         = [aws_cloudfront_distribution.storefront_api.domain_name]
   health_check_id = aws_route53_health_check.storefront_api.id
+
+  alias {
+    name                   = aws_cloudfront_distribution.storefront_api.domain_name
+    zone_id                = aws_cloudfront_distribution.storefront_api.hosted_zone_id
+    evaluate_target_health = false
+  }
 
   latency_routing_policy {
     region = data.aws_region.current.name

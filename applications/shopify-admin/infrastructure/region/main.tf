@@ -143,11 +143,15 @@ resource "aws_route53_health_check" "shopify_admin_app" {
 resource "aws_route53_record" "shopify_admin_app" {
   zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
   name            = var.shopify_admin_app_domain
-  type            = "CNAME"
-  ttl             = "86400"
+  type            = "A"
   set_identifier  = data.aws_region.current.name
-  records         = [aws_cloudfront_distribution.shopify_admin_app.domain_name]
   health_check_id = aws_route53_health_check.shopify_admin_app.id
+
+  alias {
+    name                   = aws_cloudfront_distribution.shopify_admin_app.domain_name
+    zone_id                = aws_cloudfront_distribution.shopify_admin_app.hosted_zone_id
+    evaluate_target_health = false
+  }
 
   latency_routing_policy {
     region = data.aws_region.current.name
