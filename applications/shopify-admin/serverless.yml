@@ -58,11 +58,15 @@ plugins:
 
 custom:
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/regional-domain}
+    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
+    route53Params:
+      routingPolicy: latency
+      setIdentifier: ${self:provider.region}
+      healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
 

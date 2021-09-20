@@ -20,10 +20,10 @@ data "terraform_remote_state" "upselling_infrastructure" {
   }
 }
 
-resource "aws_ssm_parameter" "shopify_admin_app_regional_domain" {
-  name      = "/upselling/${terraform.workspace}/shopify-admin-app/regional-domain"
+resource "aws_ssm_parameter" "shopify_admin_app_domain" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin-app/domain"
   type      = "String"
-  value     = "shopify-admin.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
+  value     = var.shopify_admin_app_domain
   overwrite = true
   provider  = aws.region
 }
@@ -36,103 +36,8 @@ resource "aws_ssm_parameter" "shopify_admin_app_url" {
   provider  = aws.region
 }
 
-resource "aws_cloudfront_distribution" "shopify_admin_app" {
-  enabled     = true
-  aliases     = [var.shopify_admin_app_domain]
-  price_class = "PriceClass_All"
-
-  origin {
-    domain_name = aws_ssm_parameter.shopify_admin_app_regional_domain.value
-    origin_id   = "app"
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
-  }
-
-  default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "app"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
-    compress               = false
-    viewer_protocol_policy = "redirect-to-https"
-
-    forwarded_values {
-      query_string = true
-
-      cookies {
-        forward = "all"
-      }
-    }
-
-    lambda_function_association {
-      event_type = "origin-request"
-      lambda_arn = data.terraform_remote_state.upselling_infrastructure.outputs.host_lambda_arn
-    }
-  }
-
-  custom_error_response {
-    error_code            = 400
-    error_caching_min_ttl = 5
-  }
-
-  custom_error_response {
-    error_code            = 403
-    error_caching_min_ttl = 5
-  }
-
-  custom_error_response {
-    error_code            = 404
-    error_caching_min_ttl = 5
-  }
-
-  custom_error_response {
-    error_code            = 500
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 501
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 502
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 503
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 504
-    error_caching_min_ttl = 0
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-      locations        = []
-    }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = data.terraform_remote_state.upselling_infrastructure.outputs.certificate_arn
-    minimum_protocol_version = "TLSv1.2_2018"
-    ssl_support_method       = "sni-only"
-  }
-}
-
 resource "aws_route53_health_check" "shopify_admin_app" {
-  fqdn              = aws_ssm_parameter.shopify_admin_app_regional_domain.value
+  fqdn              = aws_ssm_parameter.shopify_admin_app_domain.value
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -140,20 +45,10 @@ resource "aws_route53_health_check" "shopify_admin_app" {
   request_interval  = "30"
 }
 
-resource "aws_route53_record" "shopify_admin_app" {
-  zone_id         = data.terraform_remote_state.upselling_infrastructure.outputs.hosted_zone_id
-  name            = var.shopify_admin_app_domain
-  type            = "A"
-  set_identifier  = data.aws_region.current.name
-  health_check_id = aws_route53_health_check.shopify_admin_app.id
-
-  alias {
-    name                   = aws_cloudfront_distribution.shopify_admin_app.domain_name
-    zone_id                = aws_cloudfront_distribution.shopify_admin_app.hosted_zone_id
-    evaluate_target_health = false
-  }
-
-  latency_routing_policy {
-    region = data.aws_region.current.name
-  }
+resource "aws_ssm_parameter" "shopify_admin_app_health_check_id" {
+  name      = "/upselling/${terraform.workspace}/shopify-admin-app/health-check-id"
+  type      = "String"
+  value     = aws_route53_health_check.shopify_admin_app.id
+  overwrite = true
+  provider  = aws.region
 }
