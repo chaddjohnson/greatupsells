@@ -15,6 +15,10 @@ server.use(async (ctx) => {
   ctx.res.statusCode = 200;
 });
 
+server.on('error', (error) => {
+  console.log(error); // eslint-disable-line no-console
+});
+
 if (dev) {
   app.prepare().then(() => {
     server.listen(port, () => {
