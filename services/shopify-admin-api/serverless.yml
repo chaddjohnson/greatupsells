@@ -189,7 +189,8 @@ functions:
       - http:
           path: /shop
           method: get
-          cors: true
+          cors:
+            origin: '*'
           authorizer:
             name: authorizer
             type: request
