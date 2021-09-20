@@ -30,12 +30,14 @@ functions:
       - http:
           path: /health
           method: get
+          cors: true
   region:
     handler: src/routes/region.handler
     events:
       - http:
           path: /region
           method: get
+          cors: true
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -43,6 +45,7 @@ functions:
       - http:
           path: /offers/{offerId}/clone
           method: post
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -54,6 +57,7 @@ functions:
       - http:
           path: /offers
           method: post
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -65,6 +69,7 @@ functions:
       - http:
           path: /popup-themes
           method: post
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -76,6 +81,7 @@ functions:
       - http:
           path: /offers/{offerId}
           method: delete
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -87,6 +93,7 @@ functions:
       - http:
           path: /offers/{offerId}
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -98,6 +105,7 @@ functions:
       - http:
           path: /offers/{offerId}/acceptances
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -109,6 +117,7 @@ functions:
       - http:
           path: /offers/{offerId}/conversion-rates
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -120,6 +129,7 @@ functions:
       - http:
           path: /offers/{offerId}/conversions
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -131,6 +141,7 @@ functions:
       - http:
           path: /offers/{offerId}/popup-themes
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -142,6 +153,7 @@ functions:
       - http:
           path: /offers/{offerId}/revenue-increases
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -153,6 +165,7 @@ functions:
       - http:
           path: /offers
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -164,6 +177,7 @@ functions:
       - http:
           path: /offers/{offerId}/impressions
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -175,6 +189,7 @@ functions:
       - http:
           path: /shop
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -186,6 +201,7 @@ functions:
       - http:
           path: /popup-themes
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -197,6 +213,7 @@ functions:
       - http:
           path: /shop/acceptances
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -208,6 +225,7 @@ functions:
       - http:
           path: /shop/conversion-rates
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -219,6 +237,7 @@ functions:
       - http:
           path: /shop/conversions
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -230,6 +249,7 @@ functions:
       - http:
           path: /shop/impressions
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -241,6 +261,7 @@ functions:
       - http:
           path: /shop/revenue-increases
           method: get
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -252,6 +273,7 @@ functions:
       - http:
           path: /offers/{offerId}
           method: put
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -263,6 +285,7 @@ functions:
       - http:
           path: /popup-themes/{popupThemeId}
           method: put
+          cors: true
           authorizer:
             name: authorizer
             type: request
@@ -274,6 +297,7 @@ functions:
       - http:
           path: /shop
           method: put
+          cors: true
           authorizer:
             name: authorizer
             type: request
