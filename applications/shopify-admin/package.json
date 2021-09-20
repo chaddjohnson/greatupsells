@@ -54,7 +54,7 @@
     "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-imports": "^2.0.0",
     "serverless": "^2.43.1",
-    "serverless-domain-manager": "neatowebsolutions/serverless-domain-manager#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
+    "serverless-domain-manager": "git+https://github.com/neatowebsolutions/serverless-domain-manager.git#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
     "serverless-plugin-monorepo": "^0.10.0"
   },
   "scripts": {

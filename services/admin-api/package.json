@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "serverless": "^2.43.1",
-    "serverless-domain-manager": "neatowebsolutions/serverless-domain-manager#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
+    "serverless-domain-manager": "git+https://github.com/neatowebsolutions/serverless-domain-manager.git#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
     "serverless-offline": "^7.0.0",
     "serverless-plugin-monorepo": "^0.10.0"
   }
