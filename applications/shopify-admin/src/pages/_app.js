@@ -25,7 +25,6 @@ httpClient.addRequestInterceptor((config) => {
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    config.withCredentials = true;
   }
 
   return config;
