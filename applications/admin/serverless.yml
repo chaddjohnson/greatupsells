@@ -59,9 +59,10 @@ custom:
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
-    routingPolicy: latency
-    setIdentifier: ${self:provider.region}
-    healthCheckId: ${ssm:/upselling/${self:provider.stage}/admin-app/health-check-id}
+    route53Params:
+      routingPolicy: latency
+      setIdentifier: ${self:provider.region}
+      healthCheckId: ${ssm:/upselling/${self:provider.stage}/admin-app/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
 
