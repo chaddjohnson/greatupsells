@@ -183,6 +183,7 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
   findOneShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
     events:
       - http:
