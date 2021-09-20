@@ -31,6 +31,11 @@ const loadModels = () => {
     };
   }, {});
 
+  // Re-register model schemas.
+  modelNames.forEach((modelName) => {
+    mongodbClient.connection.model(modelName, modelMap[modelName].schema);
+  });
+
   modelsLoaded = true;
 
   return modelMap;
@@ -40,6 +45,11 @@ const get = async (modelName) => {
   if (mongodbClient.connected && modelMap[modelName]) {
     return modelMap[modelName];
   }
+
+  // Force reinitialization as models may be flagged as loaded due to Lambda
+  // warming but the connection may be closed.
+  modelsLoaded = false;
+  modelMap = {};
 
   // If the bufferCommands connection option is false, the connection must be established prior to models being loaded.
   await mongodbClient.connect();
