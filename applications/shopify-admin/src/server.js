@@ -101,11 +101,15 @@ const createServer = () => {
       }
     })
   );
-  server.use(verifyRequest());
+  // server.use(verifyRequest());
   server.use(async (ctx) => {
+    console.log('HERE 1');
     await handle(ctx.req, ctx.res);
+    console.log('HERE 2');
     ctx.respond = false;
+    console.log('HERE 3');
     ctx.res.statusCode = 200;
+    console.log('HERE 4');
   });
 
   return server;
