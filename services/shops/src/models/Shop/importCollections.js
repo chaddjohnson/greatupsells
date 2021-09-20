@@ -11,8 +11,8 @@ const importCollection = async (shop, shopifyCollectionData) => {
       shopifyCollectionData.id
     );
 
-    if (Collection) {
-      Collection.shopifyCollectionData = shopifyCollectionData;
+    if (collection) {
+      collection.shopifyCollectionData = shopifyCollectionData;
     } else {
       collection = new Collection({
         shop,
