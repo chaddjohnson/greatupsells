@@ -218,6 +218,7 @@ functions:
             name: authorizer
             type: request
             identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
   findShopConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
