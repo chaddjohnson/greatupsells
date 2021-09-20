@@ -115,6 +115,8 @@ const createServer = () => {
   );
   server.use(router.allowedMethods());
   server.use(router.routes());
+
+  // Log errors.
   server.use(async (ctx, nextHandler) => {
     try {
       await nextHandler();
@@ -122,9 +124,6 @@ const createServer = () => {
       console.log(error); // eslint-disable-line no-console
       throw error;
     }
-  });
-  server.on('error', (error) => {
-    console.log(error); // eslint-disable-line no-console
   });
 
   return server;
