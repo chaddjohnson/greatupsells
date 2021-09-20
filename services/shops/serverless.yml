@@ -351,6 +351,7 @@ functions:
   initializeShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/initializeShopByDomain.handler
+    timeout: 20
     events:
       - http:
           path: /shops/domain/{domain}/initialization
