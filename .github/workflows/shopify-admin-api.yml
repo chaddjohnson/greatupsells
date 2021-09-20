@@ -33,11 +33,6 @@ jobs:
         working-directory: services/shopify-admin-api/infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: 'node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
       - name: Install Node Modules
         run: yarn install
       - name: Build Packages
