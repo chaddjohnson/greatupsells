@@ -25,7 +25,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.requestContext.authorizer.claims;
+    const { shopId } = event.requestContext.authorizer;
     const popupThemes = await httpClient.get(`/shops/${shopId}/popup-themes`);
 
     popupThemes.forEach((popupTheme) => {

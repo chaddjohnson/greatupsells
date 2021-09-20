@@ -23,24 +23,16 @@ httpClient.addRequestInterceptor(
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  console.log('findOneShop 1');
+
   try {
-    const { shopId } = event.requestContext.authorizer.claims;
-    console.log('findOneShop 2');
+    const { shopId } = event.requestContext.authorizer;
     const shop = await httpClient.get(`/shops/${shopId}`);
-    console.log('findOneShop 3');
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(shop)
     };
   } catch (error) {
-    console.log('findOneShop 4');
-    console.log(error);
-    console.log(event);
-    console.log(context);
-    console.log(error.errors);
-    console.log(error.response);
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,

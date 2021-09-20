@@ -26,7 +26,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const { shopId } = event.requestContext.authorizer.claims;
+    const { shopId } = event.requestContext.authorizer;
     const { offerId } = event.pathParameters;
     const [offer, offerPopupThemes] = await Promise.all([
       httpClient.get(`/offers/${offerId}`),
