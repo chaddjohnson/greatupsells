@@ -126,6 +126,8 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
 4. Add the tunnel subdomains to `/etc/hosts` pointing them to `127.0.0.1`; for example: `127.0.0.1 example.ngrok.io`.
 5. Add a `prefix` parameter to the `shopifyAuth()` function call (the default export of `@shopify/koa-shopify-auth`): `prefix: 'https://example.ngrok.io'`. Note this should already be present, and no change should be necessary.
 
+Please note you will need to disable this (temporarily comment out entries you added in `/etc/hosts`) in order to install the app via OAuth with Shopify.
+
 ### Coding Conventions
 
 The following coding conventions are adhered to except in special cases:
@@ -153,12 +155,9 @@ Code consistency is important. In order to maintain consistency, convention chan
       ```
       https://shopify-admin.greatupsells.com/
       ```
-   1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL and all individual regional domains, like so:
+   1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
       ```
       https://shopify-admin.greatupsells.com/auth/callback
-      https://shopify-admin.us-east-1.greatupsells.com/auth/callback
-      https://shopify-admin.eu-west-1.greatupsells.com/auth/callback
-      https://shopify-admin.ap-northeast-1.greatupsells.com/auth/callback
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
 1. Create a `ci` IAM account with administrator access.
