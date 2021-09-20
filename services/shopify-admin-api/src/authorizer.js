@@ -58,7 +58,7 @@ const handler = async (event, context) => {
       return {
         ...generateAuthResponse(decoded.shopId, 'Allow', methodArn),
         context: {
-          userId: decoded.userId
+          shopId: decoded.shopId
         }
       };
     } else {
