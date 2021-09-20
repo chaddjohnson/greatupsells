@@ -146,7 +146,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
-1. Ensure the domain name (e.g., greatupsells.com) exists in AWS within Route 53 with nameserver DNS set up correctly, and update `hosted_zone_id` in both config files under `infrastructure/config`.
+1. Ensure the domain name (e.g., greatupsells.com) exists in AWS within Route 53 with nameserver DNS set up correctly.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -161,19 +161,44 @@ Code consistency is important. In order to maintain consistency, convention chan
       https://shopify-admin.ap-northeast-1.greatupsells.com/auth/callback
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
+1. Create a `ci` IAM account with administrator access.
+1. Create a `server` account with the following inline policy:
+   ```
+   {
+      "Version": "2012-10-17",
+      "Statement": [
+         {
+               "Sid": "VisualEditor0",
+               "Effect": "Allow",
+               "Action": "route53:*",
+               "Resource": "*"
+         },
+         {
+               "Sid": "VisualEditor1",
+               "Effect": "Allow",
+               "Action": "s3:*",
+               "Resource": [
+                  "arn:aws:s3:::neatowebsolutions-ecommerce-apps-backups",
+                  "arn:aws:s3:::neatowebsolutions-ecommerce-apps-backups/*"
+               ]
+         }
+      ]
+   }
+   ```
 1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
+   1. `hosted_zone_id` (get this from Route 53 for the domain)
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/eventbuses) for region us-east-1)
 1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
-   1. `AWS_ACCESS_KEY_ID`
-   1. `AWS_ACCESS_KEY_ID_SERVER`
-   1. `AWS_SECRET_ACCESS_KEY`
-   1. `AWS_SECRET_ACCESS_KEY_SERVER`
-   1. `MONGODB_ADMIN_PASSWORD`
-   1. `MONGODB_APP_PASSWORD`
-   1. `MONGODB_ROOT_PASSWORD`
-   1. `PRIVATE_KEY`
+   1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
+   1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
+   1. `AWS_SECRET_ACCESS_KEY` (key for a server IAM account used by CI)
+   1. `AWS_SECRET_ACCESS_KEY_SERVER` (key for a server IAM account used by CI)
+   1. `MONGODB_ADMIN_PASSWORD` (the main admin account MongoDB password)
+   1. `MONGODB_APP_PASSWORD` (the app account MongoDB password)
+   1. `MONGODB_ROOT_PASSWORD` (the root MongoDB password)
+   1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
 
 ### Triggering
 
