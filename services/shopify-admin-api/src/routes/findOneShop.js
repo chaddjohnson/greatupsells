@@ -37,6 +37,8 @@ const handler = middy(async (event, context) => {
   } catch (error) {
     console.log('findOneShop 4');
     console.log(error);
+    console.log(event);
+    console.log(context);
     console.log(error.errors);
     console.log(error.response);
     if (error.response && error.response.status) {
