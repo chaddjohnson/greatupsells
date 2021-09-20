@@ -45,7 +45,7 @@ jobs:
         run: NODE_ENV=production yarn build
         working-directory: applications/storefront
       - name: Upload Application to Assets Bucket
-        run: aws s3 sync applications/storefront/dist/ s3://$ASSETS_DOMAIN --cache-control public,must-revalidate,proxy-revalidate,max-age=0,s-maxage=0 --storage-class STANDARD_IA
+        run: aws s3 sync applications/storefront/dist/ s3://$ASSETS_DOMAIN --cache-control public,must-revalidate,proxy-revalidate,max-age=30,s-maxage=30 --storage-class STANDARD_IA
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g yarn serverless
