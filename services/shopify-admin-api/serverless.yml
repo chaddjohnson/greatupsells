@@ -313,11 +313,14 @@ custom:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${env:SHOPIFY_ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shopify-admin-api/regional-domain}
+    domainName: ${env:SHOPIFY_ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shopify-admin-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
+    routingPolicy: latency
+    setIdentifier: ${self:provider.region}
+    healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
 
