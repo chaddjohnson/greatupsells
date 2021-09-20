@@ -25,6 +25,7 @@ module "us_east_1" {
   providers = {
     aws.region = aws
   }
+
   admin_app_domain = var.admin_app_domain
 }
 
@@ -34,6 +35,7 @@ module "eu_west_1" {
   providers = {
     aws.region = aws.eu-west-1
   }
+
   admin_app_domain = var.admin_app_domain
 }
 
@@ -43,5 +45,6 @@ module "ap_northeast_1" {
   providers = {
     aws.region = aws.ap-northeast-1
   }
+
   admin_app_domain = var.admin_app_domain
 }
