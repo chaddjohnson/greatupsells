@@ -108,7 +108,8 @@ custom:
     createRoute53Record: true
     endpointType: regional
     routingPolicy: latency
-    setIdentifier: ${self:provider.region}
+    route53Params:
+      setIdentifier: ${self:provider.region}
     healthCheckId: ${ssm:/upselling/${self:provider.stage}/storefront-api/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
