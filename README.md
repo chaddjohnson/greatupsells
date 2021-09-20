@@ -191,7 +191,7 @@ Initial deployments should occur in the following order:
 1. `services/shops`
 1. `services/webhooks`
 1. `services/email`
-1. `services/shop-api`
+1. `services/shopify-admin-api`
 1. `services/admin-api`
 1. `services/storefront-api`
 1. `applications/shopify-admin`
