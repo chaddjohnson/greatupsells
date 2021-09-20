@@ -115,6 +115,14 @@ const createServer = () => {
   );
   server.use(router.allowedMethods());
   server.use(router.routes());
+  server.use(async (ctx, nextHandler) => {
+    try {
+      await nextHandler();
+    } catch (error) {
+      console.log(error); // eslint-disable-line no-console
+      throw error;
+    }
+  });
 
   return server;
 };
