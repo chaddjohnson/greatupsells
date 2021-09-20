@@ -37,9 +37,10 @@ const generateAuthResponse = (principalId, effect, methodArn) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  const authorizationHeader =
+    event.headers.Authorization || event.headers.authorization;
   const token =
-    event.headers.Authorization &&
-    event.headers.Authorization.replace('Bearer ', '');
+    authorizationHeader && authorizationHeader.replace('Bearer ', '');
   const { methodArn } = event;
 
   if (!token || !methodArn) {
