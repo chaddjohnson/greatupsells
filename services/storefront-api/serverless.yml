@@ -102,11 +102,14 @@ custom:
     httpPort: ${env:STOREFRONT_API_PORT, 4006}
     lambdaPort: 5001
   customDomain:
-    domainName: ${env:STOREFRONT_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/storefront-api/regional-domain}
+    domainName: ${env:STOREFRONT_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/storefront-api/domain}
     basePath: ''
     certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
     createRoute53Record: true
     endpointType: regional
+    routingPolicy: latency
+    setIdentifier: ${self:provider.region}
+    healthCheckId: ${ssm:/upselling/${self:provider.stage}/storefront-api/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
 
