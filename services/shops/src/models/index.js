@@ -6,8 +6,8 @@ let modelMap = {};
 
 const modelPathsMap = {
   Collection: path.join(__dirname, './Collection'),
-  Offer: path.join(__dirname, './Offer'),
   OfferHit: path.join(__dirname, './OfferHit'),
+  Offer: path.join(__dirname, './Offer'),
   Order: path.join(__dirname, './Order'),
   PopupTheme: path.join(__dirname, './PopupTheme'),
   Product: path.join(__dirname, './Product'),
