@@ -1,6 +1,7 @@
 const getenv = require('getenv');
 const serverless = require('serverless-http');
 const Koa = require('koa');
+const Router = require('koa-router');
 const connect = require('koa-connect');
 const session = require('koa-session');
 const helmet = require('koa-helmet');
@@ -42,6 +43,17 @@ shopsServiceHttpClient.addRequestInterceptor(
 
 const createServer = () => {
   const server = new Koa();
+  const router = new Router();
+
+  const handleRequest = async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
+  };
+
+  router.get('(/_next/static/.*)', handleRequest);
+  router.get('/_next/webpack-hmr', handleRequest);
+  router.get('(.*)', verifyRequest({ accessMode: 'offline' }), handleRequest);
 
   // Secure HTTP headers. Disable frameguard so that the app may be embedded within Shopify Admin.
   server.use(helmet({ frameguard: false }));
@@ -101,12 +113,8 @@ const createServer = () => {
       }
     })
   );
-  server.use(verifyRequest());
-  server.use(async (ctx) => {
-    await handle(ctx.req, ctx.res);
-    ctx.respond = false;
-    ctx.res.statusCode = 200;
-  });
+  server.use(router.allowedMethods());
+  server.use(router.routes());
 
   return server;
 };
