@@ -188,7 +188,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `hosted_zone_id` (get this from Route 53 for the domain)
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
-   1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/eventbuses) for region us-east-1)
+   1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
 1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
    1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
