@@ -33,7 +33,6 @@ const handler = middy(async (event, context) => {
       body: JSON.stringify(shop)
     };
   } catch (error) {
-    console.error(error);
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
