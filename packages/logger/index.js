@@ -71,7 +71,7 @@ const logDebug = async (message) => {
 };
 
 const logInfo = async (message, data = {}) => {
-  console.info(`INFO - ${message}`);
+  console.info(message);
 
   data = formatData(data);
 
@@ -83,7 +83,7 @@ const logInfo = async (message, data = {}) => {
 const logWarning = async (message, error, data = {}) => {
   const stackTrace = error instanceof Error && error.stack;
 
-  console.warn(`WARN - ${message}`);
+  console.warn(message);
 
   if (error) {
     console.warn(error.stack);
@@ -106,7 +106,7 @@ const logWarning = async (message, error, data = {}) => {
 const logError = async (message, error, data = {}) => {
   const stackTrace = error instanceof Error && error.stack;
 
-  console.error(`ERROR - ${message}`);
+  console.error(message);
 
   if (error) {
     console.error(error.stack);
