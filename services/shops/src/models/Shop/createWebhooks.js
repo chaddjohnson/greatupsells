@@ -152,16 +152,20 @@ const createWebhooks = async (shop) => {
     maxTimeout: 2 * 1000
   };
 
-  await Promise.mapSeries(definitions, async (definition) => {
-    // Sometimes webhook creation fails, so try multiple times.
-    await promiseRetry(async (retry) => {
-      try {
-        await createWebhook(shop, webhooks, definition);
-      } catch (error) {
-        return retry(error);
-      }
-    }, retryConfig);
-  });
+  await Promise.map(
+    definitions,
+    async (definition) => {
+      // Sometimes webhook creation fails, so try multiple times.
+      await promiseRetry(async (retry) => {
+        try {
+          await createWebhook(shop, webhooks, definition);
+        } catch (error) {
+          return retry(error);
+        }
+      }, retryConfig);
+    },
+    { concurrency: 6 }
+  );
 };
 
 module.exports = createWebhooks;
