@@ -29,7 +29,7 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = new URL(event.headers.Origin).host;
+    const domain = new URL(event.headers.origin || event.headers.Origin).host;
     const {
       events: triggerEvents,
       shopifyProductIds,

@@ -22,7 +22,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    const domain = new URL(event.headers.Origin).host;
+    const domain = new URL(event.headers.origin || event.headers.Origin).host;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { countryCode, currency, locale, timezone } = shop;
 
