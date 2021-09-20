@@ -75,6 +75,8 @@ const logInfo = async (message, data = {}) => {
 
   data = formatData(data);
 
+  console.info(JSON.stringify(data, null, 2));
+
   await sendMessage('INFO', message, undefined, data);
 };
 
@@ -96,6 +98,8 @@ const logWarning = async (message, error, data = {}) => {
   data = { ...data, ...extractErrorData(error) };
   data = formatData(data);
 
+  console.warn(JSON.stringify(data, null, 2));
+
   await sendMessage('WARN', message, stackTrace, data);
 };
 
@@ -116,6 +120,8 @@ const logError = async (message, error, data = {}) => {
 
   data = { ...data, ...extractErrorData(error) };
   data = formatData(data);
+
+  console.error(JSON.stringify(data, null, 2));
 
   await sendMessage('ERROR', message, stackTrace, data);
 };
