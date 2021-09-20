@@ -10,4 +10,4 @@ services_domain_names = {
 assets_domain                    = "assets.test.greatupsells.com"
 shopify_admin_app_api_key        = "973752778780866d1cbbbabb75b3401c"
 shopify_admin_app_api_secret_key = "c83f0620743c0e2ba66477f615486c2b"
-event_bus_arn                    = "arn:aws:events:us-east-1:174585217681:event-bus/aws.partner/shopify.com/3309183/upselling-webhooks-test"
+event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/3309183/upselling-webhooks-test"
