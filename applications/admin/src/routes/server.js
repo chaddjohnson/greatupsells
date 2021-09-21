@@ -30,6 +30,7 @@ if (dev) {
     context.callbackWaitsForEmptyEventLoop = false;
 
     if (event.source === 'serverless-plugin-warmup') {
+      console.log('WarmUp - Lambda is warm!');
       await new Promise((resolve) => setTimeout(resolve, 25));
       return 'Lambda is warm!';
     }
