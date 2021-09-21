@@ -16,6 +16,8 @@ const handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
+  console.log('Normal request'); // eslint-disable-line no-console
+
   try {
     const { popupThemeId } = event.pathParameters;
     const PopupTheme = await models.get('PopupTheme');
