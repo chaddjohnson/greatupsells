@@ -2,8 +2,13 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
 
+let counter = 1;
+
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
+
+  counter += 1;
+  console.log(`counter = ${counter}`); // eslint-disable-line no-console
 
   if (event.source === 'serverless-plugin-warmup') {
     console.log('WarmUp - Lambda is warm!'); // eslint-disable-line no-console
