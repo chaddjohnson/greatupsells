@@ -134,6 +134,7 @@ if (dev) {
 
 module.exports.handler = async (event, context) => {
   if (event.source === 'serverless-plugin-warmup') {
+    console.log('WarmUp - Lambda is warm!'); // eslint-disable-line no-console
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }

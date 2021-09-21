@@ -26,6 +26,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   if (event.source === 'serverless-plugin-warmup') {
+    console.log('WarmUp - Lambda is warm!'); // eslint-disable-line no-console
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
