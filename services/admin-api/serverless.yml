@@ -55,7 +55,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   region:
     handler: src/routes/region.handler
     events:
@@ -79,7 +79,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
@@ -95,7 +95,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
   findLogs:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
@@ -111,7 +111,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
   findOnePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
@@ -127,7 +127,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
   findPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
@@ -143,7 +143,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
   # findShops:
   # findStats:
   updatePopupTheme:
@@ -161,7 +161,7 @@ functions:
           #   resultTtlInSeconds: 0
     warmup:
       default:
-        enabled: false
+        enabled: true
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo

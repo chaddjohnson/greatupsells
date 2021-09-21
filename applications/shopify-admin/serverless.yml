@@ -54,7 +54,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -75,7 +75,7 @@ functions:
           method: ANY
     warmup:
       default:
-        enabled: false
+        enabled: true
 
 plugins:
   - serverless-plugin-monorepo

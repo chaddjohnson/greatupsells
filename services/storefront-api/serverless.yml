@@ -52,7 +52,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   region:
     handler: src/routes/region.handler
     events:
@@ -70,7 +70,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -81,7 +81,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   findOneRandomOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
@@ -92,7 +92,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -103,7 +103,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -114,7 +114,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -125,7 +125,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   updateShopifyDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrder.handler
@@ -136,7 +136,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
 
 plugins:
   - serverless-offline

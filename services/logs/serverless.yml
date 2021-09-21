@@ -48,7 +48,7 @@ functions:
           authorizer: aws_iam
     warmup:
       default:
-        enabled: false
+        enabled: true
   health:
     handler: src/routes/health.handler
     events:
@@ -58,7 +58,7 @@ functions:
           cors: true
     warmup:
       default:
-        enabled: false
+        enabled: true
   log:
     memorySize: 128
     reservedConcurrency: 1
@@ -70,7 +70,7 @@ functions:
           maximumBatchingWindow: 60
     warmup:
       default:
-        enabled: false
+        enabled: true
   findLogs:
     memorySize: 128
     reservedConcurrency: 1
@@ -82,7 +82,7 @@ functions:
           authorizer: aws_iam
     warmup:
       default:
-        enabled: false
+        enabled: true
 
 plugins:
   - serverless-offline
