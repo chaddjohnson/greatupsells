@@ -16,25 +16,32 @@ const handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
-  console.log('Normal request'); // eslint-disable-line no-console
+  console.log('Normal request 1'); // eslint-disable-line no-console
 
   try {
+    console.log('Normal request 2'); // eslint-disable-line no-console
     const { popupThemeId } = event.pathParameters;
+    console.log('Normal request 3'); // eslint-disable-line no-console
     const PopupTheme = await models.get('PopupTheme');
+    console.log('Normal request 4'); // eslint-disable-line no-console
     const popupTheme = await PopupTheme.findById(popupThemeId);
+    console.log('Normal request 5'); // eslint-disable-line no-console
 
     if (!popupTheme) {
+      console.log('Normal request 6'); // eslint-disable-line no-console
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
+    console.log('Normal request 7'); // eslint-disable-line no-console
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(popupTheme)
     };
   } catch (error) {
+    console.log('Normal request 8'); // eslint-disable-line no-console
     await logger.error(`Error retrieving popup theme`, error, { event });
 
     return {
