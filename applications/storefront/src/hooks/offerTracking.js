@@ -60,8 +60,6 @@ const useOfferTracking = () => {
       offeredShopifyProductIds
     });
 
-    console.log(offerHit);
-
     // Keep track of the newly-created offer hit.
     offerHitId = offerHit._id;
   };
