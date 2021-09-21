@@ -14,6 +14,7 @@ const trackAcceptance = async (
   const Shop = shop.constructor;
 
   const session = await mongodbClient.connection.startSession();
+  const transactionOptions = { readPreference: 'primary' };
 
   try {
     // Use a transaction.
@@ -54,7 +55,7 @@ const trackAcceptance = async (
         },
         { session }
       );
-    });
+    }, transactionOptions);
   } catch (error) {
     await logger.error(
       `Error tracking offer acceptance for offer hit (${

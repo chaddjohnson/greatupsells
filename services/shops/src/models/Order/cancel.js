@@ -17,6 +17,7 @@ const cancel = async (order) => {
   const offerHits = await OfferHit.findByOrderId(order._id);
 
   const session = await mongodbClient.connection.startSession();
+  const transactionOptions = { readPreference: 'primary' };
 
   // Use a transaction.
   await session.withTransaction(async () => {
@@ -79,7 +80,7 @@ const cancel = async (order) => {
         { session }
       );
     });
-  });
+  }, transactionOptions);
 
   session.endSession();
 };

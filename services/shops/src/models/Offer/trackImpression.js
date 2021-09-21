@@ -33,6 +33,7 @@ const trackImpression = async (
   });
 
   const session = await mongodbClient.connection.startSession();
+  const transactionOptions = { readPreference: 'primary' };
 
   try {
     // Use a transaction.
@@ -69,7 +70,7 @@ const trackImpression = async (
         },
         { session }
       );
-    });
+    }, transactionOptions);
 
     return offerHit;
   } catch (error) {

@@ -24,6 +24,7 @@ const trackConversions = async (order) => {
   }
 
   const session = await mongodbClient.connection.startSession();
+  const transactionOptions = { readPreference: 'primary' };
 
   // Use a transaction.
   await session.withTransaction(async () => {
@@ -44,7 +45,7 @@ const trackConversions = async (order) => {
     }, 0);
 
     await order.save();
-  });
+  }, transactionOptions);
 
   return offerHits;
 };
