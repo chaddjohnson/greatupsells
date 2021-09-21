@@ -22,12 +22,12 @@ httpClient.addRequestInterceptor(
 );
 
 const handler = middy(async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   if (event.source === 'serverless-plugin-warmup') {
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
-
-  context.callbackWaitsForEmptyEventLoop = false;
 
   try {
     const popupThemes = await httpClient.get(`/popup-themes`);

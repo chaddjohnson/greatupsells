@@ -2,12 +2,12 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const mongodbClient = require('../models/mongodbClient');
 
 const handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   if (event.source === 'serverless-plugin-warmup') {
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
-
-  context.callbackWaitsForEmptyEventLoop = false;
 
   try {
     await mongodbClient.connect();
