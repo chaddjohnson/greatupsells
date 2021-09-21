@@ -132,5 +132,12 @@ if (dev) {
     });
   });
 } else {
-  module.exports.handler = serverless(server);
+  module.exports.handler = async (event) => {
+    if (event.source === 'serverless-plugin-warmup') {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+      return 'Lambda is warm!';
+    }
+
+    return serverless(server);
+  };
 }

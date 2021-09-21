@@ -21,6 +21,16 @@ provider:
     SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key~true}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
+custom:
+  serverless-offline:
+    httpPort: ${env:WEBHOOK_PORT, 4008}
+    lambdaPort: 5004
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
 functions:
   health:
     handler: src/routes/health.handler
@@ -29,6 +39,9 @@ functions:
           path: /health
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   appUninstall:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -39,6 +52,9 @@ functions:
       - http:
           path: /shopify/app-uninstall
           method: post
+    warmup:
+      default:
+        enabled: false
   collection:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -49,6 +65,9 @@ functions:
       - http:
           path: /shopify/collection
           method: post
+    warmup:
+      default:
+        enabled: false
   collectionDelete:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -59,6 +78,9 @@ functions:
       - http:
           path: /shopify/collection-deletion
           method: post
+    warmup:
+      default:
+        enabled: false
   orderCancel:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -69,6 +91,9 @@ functions:
       - http:
           path: /shopify/order-cancelation
           method: post
+    warmup:
+      default:
+        enabled: false
   orderPaid:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -79,6 +104,9 @@ functions:
       - http:
           path: /shopify/order-paid
           method: post
+    warmup:
+      default:
+        enabled: false
   orderUpdate:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -89,6 +117,9 @@ functions:
       - http:
           path: /shopify/order-update
           method: post
+    warmup:
+      default:
+        enabled: false
   product:
     reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -101,6 +132,9 @@ functions:
       - http:
           path: /shopify/product
           method: post
+    warmup:
+      default:
+        enabled: false
   productDelete:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -111,6 +145,9 @@ functions:
       - http:
           path: /shopify/product-deletion
           method: post
+    warmup:
+      default:
+        enabled: false
   shop:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -121,15 +158,14 @@ functions:
       - http:
           path: /shopify/shop
           method: post
+    warmup:
+      default:
+        enabled: false
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
-
-custom:
-  serverless-offline:
-    httpPort: ${env:WEBHOOK_PORT, 4008}
-    lambdaPort: 5004
+  - serverless-plugin-warmup
 
 package:
   exclude:

@@ -21,6 +21,28 @@ provider:
     LOG_SOURCE: 'admin-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
+custom:
+  serverless-offline:
+    httpPort: ${env:ADMIN_API_PORT, 4005}
+    lambdaPort: 5003
+  customDomain:
+    domainName: ${env:ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/admin-api/domain}
+    basePath: ''
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    route53Params:
+      routingPolicy: latency
+      setIdentifier: ${self:provider.region}
+      healthCheckId: ${ssm:/upselling/${self:provider.stage}/admin-api/health-check-id}
+    securityPolicy: tls_1_2
+    autoDomain: true
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
 functions:
   # authorizer:
   #   handler: src/authorizer.handler
@@ -31,6 +53,9 @@ functions:
           path: /health
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   region:
     handler: src/routes/region.handler
     events:
@@ -52,6 +77,9 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
@@ -65,6 +93,9 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
   findLogs:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
@@ -78,6 +109,9 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
   findOnePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
@@ -91,6 +125,9 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
   findPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
@@ -104,6 +141,9 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
   # findShops:
   # findStats:
   updatePopupTheme:
@@ -119,27 +159,14 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
-
-custom:
-  serverless-offline:
-    httpPort: ${env:ADMIN_API_PORT, 4005}
-    lambdaPort: 5003
-  customDomain:
-    domainName: ${env:ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/admin-api/domain}
-    basePath: ''
-    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
-    createRoute53Record: true
-    endpointType: regional
-    route53Params:
-      routingPolicy: latency
-      setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/admin-api/health-check-id}
-    securityPolicy: tls_1_2
-    autoDomain: true
+  - serverless-plugin-warmup
 
 package:
   exclude:

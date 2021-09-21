@@ -18,47 +18,6 @@ provider:
     ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch-logs/uri}
     MONGODB_URI_LOGS: ${env:MONGODB_URI_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/uri}
 
-functions:
-  createLog:
-    memorySize: 128
-    reservedConcurrency: 1
-    handler: src/routes/createLog.handler
-    events:
-      - http:
-          path: /logs
-          method: post
-          authorizer: aws_iam
-  health:
-    handler: src/routes/health.handler
-    events:
-      - http:
-          path: /health
-          method: get
-          cors: true
-  log:
-    memorySize: 128
-    reservedConcurrency: 1
-    handler: src/workers/log.handler
-    events:
-      - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
-          batchSize: 10
-          maximumBatchingWindow: 60
-  findLogs:
-    memorySize: 128
-    reservedConcurrency: 1
-    handler: src/routes/findLogs.handler
-    events:
-      - http:
-          path: /logs
-          method: get
-          authorizer: aws_iam
-
-plugins:
-  - serverless-offline
-  - serverless-plugin-monorepo
-  - serverless-domain-manager
-
 custom:
   serverless-offline:
     httpPort: ${env:LOGS_API_PORT, 4009}
@@ -71,6 +30,65 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
+functions:
+  createLog:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/routes/createLog.handler
+    events:
+      - http:
+          path: /logs
+          method: post
+          authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+    warmup:
+      default:
+        enabled: false
+  log:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/workers/log.handler
+    events:
+      - sqs:
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
+          batchSize: 10
+          maximumBatchingWindow: 60
+    warmup:
+      default:
+        enabled: false
+  findLogs:
+    memorySize: 128
+    reservedConcurrency: 1
+    handler: src/routes/findLogs.handler
+    events:
+      - http:
+          path: /logs
+          method: get
+          authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+  - serverless-plugin-warmup
 
 package:
   exclude:

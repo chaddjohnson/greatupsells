@@ -36,6 +36,7 @@
     "serverless-domain-manager": "git+https://github.com/neatowebsolutions/serverless-domain-manager.git#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
     "serverless-offline": "^7.0.0",
     "serverless-plugin-conditional-functions": "^1.0.6",
-    "serverless-plugin-monorepo": "^0.10.0"
+    "serverless-plugin-monorepo": "^0.10.0",
+    "serverless-plugin-warmup": "^5.3.1"
   }
 }

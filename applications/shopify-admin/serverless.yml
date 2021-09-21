@@ -24,38 +24,6 @@ provider:
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
     LOG_SOURCE: 'shopify-admin'
 
-functions:
-  health:
-    memorySize: 128
-    handler: src/routes/health.handler
-    events:
-      - http:
-          path: /health
-          method: get
-          cors: true
-  region:
-    memorySize: 128
-    handler: src/routes/region.handler
-    events:
-      - http:
-          path: /region
-          method: get
-          cors: true
-  server:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/server.handler
-    events:
-      - http:
-          path: /
-          method: ANY
-      - http:
-          path: /{any+}
-          method: ANY
-
-plugins:
-  - serverless-plugin-monorepo
-  - serverless-domain-manager
-
 custom:
   customDomain:
     domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/domain}
@@ -69,6 +37,50 @@ custom:
       healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
+functions:
+  health:
+    memorySize: 128
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+    warmup:
+      default:
+        enabled: false
+  region:
+    memorySize: 128
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
+  server:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/server.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{any+}
+          method: ANY
+    warmup:
+      default:
+        enabled: false
+
+plugins:
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+  - serverless-plugin-warmup
 
 package:
   exclude:

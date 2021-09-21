@@ -41,6 +41,24 @@ provider:
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL}
     WEBHOOK_ARN: ${env:WEBHOOK_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
 
+custom:
+  serverless-offline:
+    httpPort: ${env:SHOPS_API_PORT, 4004}
+    lambdaPort: 5002
+  customDomain:
+    domainName: ${env:SHOPS_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/regional-domain}
+    basePath: ''
+    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+    autoDomain: true
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
 functions:
   addDraftOrderLineItem:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -50,6 +68,9 @@ functions:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   cancelOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cancelOrder.handler
@@ -58,6 +79,9 @@ functions:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -66,6 +90,9 @@ functions:
           path: /offers/{offerId}/clone
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   clonePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/clonePopupTheme.handler
@@ -74,6 +101,9 @@ functions:
           path: /popup-themes/{popupThemeId}/clone
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler
@@ -82,6 +112,9 @@ functions:
           path: /collections
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -90,6 +123,9 @@ functions:
           path: /shops/{shopId}/draft-orders
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
@@ -98,6 +134,9 @@ functions:
           path: /offers
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOrder.handler
@@ -106,6 +145,9 @@ functions:
           path: /orders
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
@@ -114,6 +156,9 @@ functions:
           path: /popup-themes
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   createProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
@@ -122,6 +167,9 @@ functions:
           path: /products
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   deactivateShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deactivateShop.handler
@@ -130,6 +178,9 @@ functions:
           path: /shops/{shopId}/deactivation
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   deleteCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteCollection.handler
@@ -138,6 +189,9 @@ functions:
           path: /collections/{collectionId}
           method: delete
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   deleteOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
@@ -146,6 +200,9 @@ functions:
           path: /offers/{offerId}
           method: delete
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   deleteProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteProduct.handler
@@ -154,6 +211,9 @@ functions:
           path: /products/{productId}
           method: delete
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
@@ -162,6 +222,9 @@ functions:
           path: /offers/{offerId}/acceptances
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
@@ -170,6 +233,9 @@ functions:
           path: /offers/{offerId}/conversion-rates
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
@@ -178,6 +244,9 @@ functions:
           path: /offers/{offerId}/impressions
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
@@ -186,6 +255,9 @@ functions:
           path: /offers/{offerId}/conversions
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
@@ -194,6 +266,9 @@ functions:
           path: /offers/{offerId}/revenue-increases
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
@@ -202,6 +277,9 @@ functions:
           path: /popup-themes
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
@@ -210,6 +288,9 @@ functions:
           path: /shops/{shopId}/acceptances
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
@@ -218,6 +299,9 @@ functions:
           path: /shops/{shopId}/conversion-rates
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
@@ -226,6 +310,9 @@ functions:
           path: /shops/{shopId}/conversions
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
@@ -234,6 +321,9 @@ functions:
           path: /shops/{shopId}/impressions
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
@@ -242,6 +332,9 @@ functions:
           path: /shops/{shopId}/revenue-increases
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOfferPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferPopupThemes.handler
@@ -250,6 +343,9 @@ functions:
           path: /offers/{offerId}/popup-themes
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
@@ -258,6 +354,9 @@ functions:
           path: /offers
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneCollectionId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneCollectionId.handler
@@ -266,6 +365,9 @@ functions:
           path: /collections/shopify-collection-id/{shopifyCollectionId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
@@ -274,6 +376,9 @@ functions:
           path: /offers/{offerId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrder.handler
@@ -282,6 +387,9 @@ functions:
           path: /orders/{orderId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneOrderByShopifyOrderId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrderByShopifyOrderId.handler
@@ -290,6 +398,9 @@ functions:
           path: /orders/shopify-order-id/{shopifyOrderId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOnePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
@@ -298,6 +409,9 @@ functions:
           path: /popup-themes/{popupThemeId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneProductByShopifyProductId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneProductByShopifyProductId.handler
@@ -306,6 +420,9 @@ functions:
           path: /products/shopify-product-id/{shopifyProductId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneRandomShopOfferByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopOfferByDomain.handler
@@ -314,6 +431,9 @@ functions:
           path: /shops/domain/{domain}/offers/random
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
@@ -322,6 +442,9 @@ functions:
           path: /shops/{shopId}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findOneShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShopByDomain.handler
@@ -330,6 +453,9 @@ functions:
           path: /shops/domain/{domain}
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopOffers.handler
@@ -338,6 +464,9 @@ functions:
           path: /shops/{shopId}/offers
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   findShopPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopPopupThemes.handler
@@ -346,6 +475,9 @@ functions:
           path: /shops/{shopId}/popup-themes
           method: get
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   health:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/health.handler
@@ -353,6 +485,9 @@ functions:
       - http:
           path: /health
           method: get
+    warmup:
+      default:
+        enabled: false
   initializeShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/initializeShopByDomain.handler
@@ -362,13 +497,9 @@ functions:
           path: /shops/domain/{domain}/initialization
           method: post
           authorizer: aws_iam
-  region:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/region.handler
-    events:
-      - http:
-          path: /region
-          method: get
+    warmup:
+      default:
+        enabled: false
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -377,6 +508,9 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -385,6 +519,9 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateCollection.handler
@@ -393,6 +530,9 @@ functions:
           path: /collections/{collectionId}
           method: put
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateShopifyDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrder.handler
@@ -401,6 +541,9 @@ functions:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items/{shopifyVariantId}
           method: post
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -409,6 +552,9 @@ functions:
           path: /offers/{offerId}
           method: put
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOrder.handler
@@ -417,6 +563,9 @@ functions:
           path: /orders/{orderId}
           method: put
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updatePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
@@ -425,6 +574,9 @@ functions:
           path: /popup-themes/{popupThemeId}
           method: put
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
@@ -433,6 +585,9 @@ functions:
           path: /products/{productId}
           method: put
           authorizer: aws_iam
+    warmup:
+      default:
+        enabled: false
   updateShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
@@ -495,20 +650,8 @@ plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
+  - serverless-plugin-warmup
   - serverless-plugin-conditional-functions
-
-custom:
-  serverless-offline:
-    httpPort: ${env:SHOPS_API_PORT, 4004}
-    lambdaPort: 5002
-  customDomain:
-    domainName: ${env:SHOPS_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/regional-domain}
-    basePath: ''
-    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
-    createRoute53Record: true
-    endpointType: regional
-    securityPolicy: tls_1_2
-    autoDomain: true
 
 package:
   exclude:

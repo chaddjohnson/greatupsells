@@ -21,315 +21,6 @@ provider:
     LOG_SOURCE: 'shopify-admin-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
-functions:
-  authorizer:
-    handler: src/authorizer.handler
-  health:
-    handler: src/routes/health.handler
-    events:
-      - http:
-          path: /health
-          method: get
-          cors: true
-  region:
-    handler: src/routes/region.handler
-    events:
-      - http:
-          path: /region
-          method: get
-          cors: true
-  cloneOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/cloneOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}/clone
-          method: post
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  createOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createOffer.handler
-    events:
-      - http:
-          path: /offers
-          method: post
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  createPopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createPopupTheme.handler
-    events:
-      - http:
-          path: /popup-themes
-          method: post
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  deleteOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/deleteOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: delete
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOneOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOneOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferAcceptances:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferAcceptances.handler
-    events:
-      - http:
-          path: /offers/{offerId}/acceptances
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferConversionRates:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferConversionRates.handler
-    events:
-      - http:
-          path: /offers/{offerId}/conversion-rates
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferConversions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferConversions.handler
-    events:
-      - http:
-          path: /offers/{offerId}/conversions
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferPopupThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferPopupThemes.handler
-    events:
-      - http:
-          path: /offers/{offerId}/popup-themes
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferRevenueIncreases:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferRevenueIncreases.handler
-    events:
-      - http:
-          path: /offers/{offerId}/revenue-increases
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOffers:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOffers.handler
-    events:
-      - http:
-          path: /offers
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOfferImpressions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferImpressions.handler
-    events:
-      - http:
-          path: /offers/{offerId}/impressions
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findOneShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOneShop.handler
-    events:
-      - http:
-          path: /shop
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findPopupThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findPopupThemes.handler
-    events:
-      - http:
-          path: /popup-themes
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findShopAcceptances:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopAcceptances.handler
-    events:
-      - http:
-          path: /shop/acceptances
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findShopConversionRates:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopConversionRates.handler
-    events:
-      - http:
-          path: /shop/conversion-rates
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findShopConversions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopConversions.handler
-    events:
-      - http:
-          path: /shop/conversions
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findShopImpressions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopImpressions.handler
-    events:
-      - http:
-          path: /shop/impressions
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  findShopRevenueIncreases:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopRevenueIncreases.handler
-    events:
-      - http:
-          path: /shop/revenue-increases
-          method: get
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  updateOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateOffer.handler
-    events:
-      - http:
-          path: /offers/{offerId}
-          method: put
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  updatePopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updatePopupTheme.handler
-    events:
-      - http:
-          path: /popup-themes/{popupThemeId}
-          method: put
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  updateShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateShop.handler
-    events:
-      - http:
-          path: /shop
-          method: put
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-
-plugins:
-  - serverless-offline
-  - serverless-plugin-monorepo
-  - serverless-domain-manager
-
 custom:
   serverless-offline:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
@@ -346,6 +37,396 @@ custom:
       healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/health-check-id}
     securityPolicy: tls_1_2
     autoDomain: true
+  warmup:
+    default:
+      enabled: true
+      concurrency: 5
+      prewarm: true
+
+functions:
+  authorizer:
+    handler: src/authorizer.handler
+    warmup:
+      default:
+        enabled: false
+  health:
+    handler: src/routes/health.handler
+    events:
+      - http:
+          path: /health
+          method: get
+          cors: true
+    warmup:
+      default:
+        enabled: false
+  region:
+    handler: src/routes/region.handler
+    events:
+      - http:
+          path: /region
+          method: get
+          cors: true
+    warmup:
+      default:
+        enabled: false
+  cloneOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/cloneOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}/clone
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  createOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/createOffer.handler
+    events:
+      - http:
+          path: /offers
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  createPopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/createPopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  deleteOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/deleteOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: delete
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOneOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferAcceptances:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferAcceptances.handler
+    events:
+      - http:
+          path: /offers/{offerId}/acceptances
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferConversionRates:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferConversionRates.handler
+    events:
+      - http:
+          path: /offers/{offerId}/conversion-rates
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferConversions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferConversions.handler
+    events:
+      - http:
+          path: /offers/{offerId}/conversions
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferPopupThemes:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferPopupThemes.handler
+    events:
+      - http:
+          path: /offers/{offerId}/popup-themes
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferRevenueIncreases:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferRevenueIncreases.handler
+    events:
+      - http:
+          path: /offers/{offerId}/revenue-increases
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOffers:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOffers.handler
+    events:
+      - http:
+          path: /offers
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOfferImpressions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferImpressions.handler
+    events:
+      - http:
+          path: /offers/{offerId}/impressions
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findOneShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneShop.handler
+    events:
+      - http:
+          path: /shop
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findPopupThemes:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findPopupThemes.handler
+    events:
+      - http:
+          path: /popup-themes
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findShopAcceptances:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopAcceptances.handler
+    events:
+      - http:
+          path: /shop/acceptances
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findShopConversionRates:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopConversionRates.handler
+    events:
+      - http:
+          path: /shop/conversion-rates
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findShopConversions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopConversions.handler
+    events:
+      - http:
+          path: /shop/conversions
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findShopImpressions:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopImpressions.handler
+    events:
+      - http:
+          path: /shop/impressions
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  findShopRevenueIncreases:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findShopRevenueIncreases.handler
+    events:
+      - http:
+          path: /shop/revenue-increases
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  updateOffer:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateOffer.handler
+    events:
+      - http:
+          path: /offers/{offerId}
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  updatePopupTheme:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updatePopupTheme.handler
+    events:
+      - http:
+          path: /popup-themes/{popupThemeId}
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+  updateShop:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateShop.handler
+    events:
+      - http:
+          path: /shop
+          method: put
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+    warmup:
+      default:
+        enabled: false
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-monorepo
+  - serverless-domain-manager
+  - serverless-plugin-warmup
 
 package:
   exclude:
