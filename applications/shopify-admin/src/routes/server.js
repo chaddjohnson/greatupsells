@@ -15,12 +15,8 @@ const {
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
-const dev = process.env.NODE_ENV !== 'production';
-const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
 const {
+  NODE_ENV,
   AWS_REGION,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_APP_API_SECRET_KEY,
@@ -29,6 +25,9 @@ const {
   JWT_SECRET,
   SHOPS_API_URL
 } = process.env;
+const dev = NODE_ENV !== 'production';
+const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
+const app = next({ dev });
 
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
@@ -44,6 +43,7 @@ shopsServiceHttpClient.addRequestInterceptor(
 const createServer = () => {
   const server = new Koa();
   const router = new Router();
+  const handle = app.getRequestHandler();
 
   const handleRequest = async (ctx) => {
     await handle(ctx.req, ctx.res);
@@ -123,25 +123,22 @@ const createServer = () => {
 
   return server;
 };
-const server = createServer();
 
 if (dev) {
   app.prepare().then(() => {
-    server.listen(port, () => {
+    createServer().listen(port, () => {
       console.info(`Shopify Admin app running at http://localhost:${port}`); // eslint-disable-line no-console
     });
   });
-} else {
-  module.exports.handler = async (event, context) => {
-    context.callbackWaitsForEmptyEventLoop = false;
-
-    if (event.source === 'serverless-plugin-warmup') {
-      await new Promise((resolve) => setTimeout(resolve, 25));
-      return 'Lambda is warm!';
-    }
-
-    const serverlessHandler = serverless(server);
-
-    return serverlessHandler(event, context);
-  };
 }
+
+module.exports.handler = async (event, context) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    await new Promise((resolve) => setTimeout(resolve, 25));
+    return 'Lambda is warm!';
+  }
+
+  const serverlessHandler = serverless(createServer());
+
+  return serverlessHandler(event, context);
+};
