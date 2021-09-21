@@ -58,6 +58,8 @@ custom:
       enabled: true
       concurrency: 5
       prewarm: true
+      events:
+        - schedule: rate(2 minutes)
 
 functions:
   addDraftOrderLineItem:
