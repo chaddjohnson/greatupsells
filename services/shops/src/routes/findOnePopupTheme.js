@@ -1,6 +1,7 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const models = require('../models');
+const mongodbClient = require('../models/mongodbClient');
 
 let counter = 1;
 
@@ -22,6 +23,7 @@ const handler = async (event, context) => {
     console.log('Normal request 2'); // eslint-disable-line no-console
     const { popupThemeId } = event.pathParameters;
     console.log('Normal request 3'); // eslint-disable-line no-console
+    console.log('Connected?', mongodbClient.connected);
     const PopupTheme = await models.get('PopupTheme');
     console.log('Normal request 4'); // eslint-disable-line no-console
     const popupTheme = await PopupTheme.findById(popupThemeId);
