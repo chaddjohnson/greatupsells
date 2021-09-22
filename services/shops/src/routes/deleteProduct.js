@@ -15,8 +15,10 @@ const handler = async (event, context) => {
 
   try {
     const { productId } = event.pathParameters;
-    const Product = await models.get('Product');
-    const Offer = await models.get('Offer');
+    const [Product, Offer] = await Promise.all([
+      models.get('Product'),
+      models.get('Offer')
+    ]);
     const product = await Product.findById(productId);
     const { shopifyProductId } = product;
 

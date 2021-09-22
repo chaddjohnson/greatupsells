@@ -14,7 +14,10 @@ const handler = async (event, context) => {
   }
 
   try {
-    const Offer = await models.get('Offer');
+    const [Offer] = await Promise.all([
+      models.get('Offer'),
+      models.get('Shop')
+    ]);
     const data = JSON.parse(event.body);
 
     delete data.impressionCount;
@@ -24,8 +27,6 @@ const handler = async (event, context) => {
     delete data.revenueIncrease;
 
     const offer = new Offer(data);
-
-    await models.get('Shop');
 
     try {
       await offer.validate();

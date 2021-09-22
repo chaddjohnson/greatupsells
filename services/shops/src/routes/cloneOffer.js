@@ -15,7 +15,10 @@ const handler = async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
+    const [Offer] = await Promise.all([
+      models.get('Offer'),
+      models.get('Shop')
+    ]);
     const offer = await Offer.findById(offerId);
 
     if (!offer) {
@@ -27,7 +30,6 @@ const handler = async (event, context) => {
 
     const clonedOffer = await offer.clone();
 
-    await models.get('Shop');
     await clonedOffer.execPopulate('shop');
     await logger.info(`Offer cloned (${offer.toString()})`, { clonedOffer });
 

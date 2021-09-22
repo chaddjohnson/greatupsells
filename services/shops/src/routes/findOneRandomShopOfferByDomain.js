@@ -33,8 +33,10 @@ const findPopupData = async (
     pagePath
   }
 ) => {
-  const Offer = await models.get('Offer');
-  const PopupTheme = await models.get('PopupTheme');
+  const [Offer, PopupTheme] = await Promise.all([
+    models.get('Offer'),
+    models.get('PopupTheme')
+  ]);
   const offer = await Offer.findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,

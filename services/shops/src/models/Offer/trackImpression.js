@@ -10,7 +10,12 @@ const trackImpression = async (
     ipAddress = undefined
   }
 ) => {
-  await models.get('Shop');
+  const [Offer, Shop, OfferHit] = await Promise.all([
+    models.get('Offer'),
+    models.get('Shop'),
+    models.get('OfferHit')
+  ]);
+
   await offer.execPopulate('shop');
 
   const {
@@ -20,9 +25,6 @@ const trackImpression = async (
     triggerEvent,
     triggerPagePath
   } = offer;
-  const Offer = await models.get('Offer');
-  const Shop = await models.get('Shop');
-  const OfferHit = await models.get('OfferHit');
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,

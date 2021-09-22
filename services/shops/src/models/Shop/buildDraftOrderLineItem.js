@@ -5,8 +5,10 @@ const buildDraftOrderLineItem = async ({
   shopifyVariantId,
   quantity
 }) => {
-  const Product = await models.get('Product');
-  const Offer = await models.get('Offer');
+  const [Product, Offer] = await Promise.all([
+    models.get('Product'),
+    models.get('Offer')
+  ]);
 
   // Find the offer if one is referenced.
   const offer = offerId && (await Offer.findById(offerId));

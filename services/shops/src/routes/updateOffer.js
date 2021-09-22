@@ -15,11 +15,12 @@ const handler = async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
+    const [Offer] = await Promise.all([
+      models.get('Offer'),
+      models.get('Shop')
+    ]);
     const offer = await Offer.findById(offerId);
     const data = JSON.parse(event.body);
-
-    await models.get('Shop');
 
     if (!offer) {
       return {

@@ -217,7 +217,10 @@ const findOneRandom = async (
     );
   }
 
-  const Offer = await models.get('Offer');
+  const [Offer] = await Promise.all([
+    models.get('Offer'),
+    models.get('Collection')
+  ]);
   const criteria = await buildCriteria(shop, {
     triggerEvent,
     shopifyProductIds,

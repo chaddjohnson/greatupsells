@@ -15,11 +15,12 @@ const handler = async (event, context) => {
 
   try {
     const { collectionId } = event.pathParameters;
-    const Collection = await models.get('Collection');
+    const [Collection] = await Promise.all([
+      models.get('Collection'),
+      models.get('Shop')
+    ]);
     const collection = await Collection.findById(collectionId);
     const data = JSON.parse(event.body);
-
-    await models.get('Shop');
 
     if (!collection) {
       return {

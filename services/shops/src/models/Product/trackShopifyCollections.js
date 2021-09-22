@@ -78,10 +78,13 @@ const addProductToCollections = async (product, collections) => {
 };
 
 const trackShopifyCollections = async (product) => {
-  await models.get('Shop');
+  const [Collection] = await Promise.all([
+    models.get('Collection'),
+    models.get('Shop')
+  ]);
+
   await product.execPopulate('shop');
 
-  const Collection = await models.get('Collection');
   const shopifyCollectionIds = await getShopifyCollectionIds(product);
 
   // Get all referenced collections.

@@ -3,10 +3,12 @@ const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
 const trackConversions = async (order) => {
-  await models.get('Shop');
-  await order.execPopulate('shop');
+  const [OfferHit] = await Promise.all([
+    models.get('OfferHit'),
+    models.get('Shop')
+  ]);
 
-  const OfferHit = await models.get('OfferHit');
+  await order.execPopulate('shop');
 
   // Get line items for the order.
   const lineItems = order.shopifyOrderData.line_items || [];

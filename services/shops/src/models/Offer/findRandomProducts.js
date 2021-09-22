@@ -2,7 +2,11 @@ const { flatten, uniq } = require('lodash');
 const models = require('..');
 
 const findRandomProducts = async (offer) => {
-  await models.get('Shop');
+  const [Product] = await Promise.all([
+    models.get('Product'),
+    models.get('Shop')
+  ]);
+
   await offer.execPopulate('shop');
 
   const { shop, offeredProducts, offeredCollections } = offer;
@@ -12,7 +16,6 @@ const findRandomProducts = async (offer) => {
     return [];
   }
 
-  const Product = await models.get('Product');
   const offeredShopifyProductIds = offeredProducts.map(
     ({ shopifyProductId }) => shopifyProductId
   );

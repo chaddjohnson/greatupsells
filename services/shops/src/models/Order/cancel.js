@@ -8,14 +8,15 @@ const cancel = async (order) => {
     return;
   }
 
-  await models.get('Shop');
-  await models.get('Offer');
+  const [Order, OfferHit, Offer, Shop] = await Promise.all([
+    models.get('Order'),
+    models.get('OfferHit'),
+    models.get('Offer'),
+    models.get('Shop')
+  ]);
+
   await order.execPopulate('shop');
 
-  const Order = await models.get('Order');
-  const OfferHit = await models.get('OfferHit');
-  const Offer = await models.get('Offer');
-  const Shop = await models.get('Shop');
   const { shop } = order;
   const offerHits = await OfferHit.findByOrderId(order._id);
 

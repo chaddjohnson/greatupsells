@@ -1,8 +1,10 @@
 const models = require('..');
 
 const clone = async (offer) => {
-  const Offer = await models.get('Offer');
-  const PopupTheme = await models.get('PopupTheme');
+  const [Offer, PopupTheme] = await Promise.all([
+    models.get('Offer'),
+    models.get('PopupTheme')
+  ]);
   const data = offer.toObject();
 
   delete data.__v;

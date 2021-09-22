@@ -14,12 +14,13 @@ const handler = async (event, context) => {
   }
 
   try {
-    const Order = await models.get('Order');
+    const [Order] = await Promise.all([
+      models.get('Order'),
+      models.get('Shop')
+    ]);
     const data = JSON.parse(event.body);
     const order = new Order(data);
     let offerHits = [];
-
-    await models.get('Shop');
 
     try {
       await order.validate();
