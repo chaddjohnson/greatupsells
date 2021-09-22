@@ -30,6 +30,8 @@ custom:
       enabled: true
       concurrency: 5
       prewarm: true
+      events:
+        - schedule: rate(5 minutes)
 
 functions:
   health:
