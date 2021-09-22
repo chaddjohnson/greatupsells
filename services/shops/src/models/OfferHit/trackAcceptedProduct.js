@@ -40,6 +40,8 @@ const trackAcceptedProduct = async (
     quantity
   });
 
+  offerHit.acceptedAt = offerHit.acceptedAt || Date.now();
+
   offerHit.markModified('acceptedProducts');
 
   await offerHit.save();
