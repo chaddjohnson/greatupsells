@@ -18,6 +18,8 @@ const handler = async (event, context) => {
     const data = JSON.parse(event.body);
     const collection = new Collection(data);
 
+    await models.get('Shop');
+
     try {
       await collection.validate();
     } catch (error) {

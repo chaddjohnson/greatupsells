@@ -3,6 +3,7 @@ const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
 const trackConversions = async (order) => {
+  await models.get('Shop');
   await order.execPopulate('shop');
 
   const OfferHit = await models.get('OfferHit');

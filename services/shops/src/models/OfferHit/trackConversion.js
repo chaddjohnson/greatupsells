@@ -3,6 +3,8 @@ const calculateRevenueIncrease = require('./calculateRevenueIncrease');
 const models = require('..');
 
 const trackConversion = async (offerHit, order) => {
+  await models.get('Shop');
+  await models.get('Offer');
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;

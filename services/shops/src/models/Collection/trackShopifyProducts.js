@@ -58,6 +58,7 @@ const trackProductCollections = async (collection) => {
 };
 
 const trackShopifyProducts = async (collection) => {
+  await models.get('Shop');
   await collection.execPopulate('shop');
 
   // Track products for the collection.

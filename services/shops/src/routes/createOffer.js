@@ -25,6 +25,8 @@ const handler = async (event, context) => {
 
     const offer = new Offer(data);
 
+    await models.get('Shop');
+
     try {
       await offer.validate();
     } catch (error) {

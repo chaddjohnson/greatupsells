@@ -6,6 +6,7 @@ const trackAcceptedProduct = async (
   shopifyVariantId,
   quantity
 ) => {
+  await models.get('Offer');
   await offerHit.execPopulate('offer');
 
   const Product = await models.get('Product');

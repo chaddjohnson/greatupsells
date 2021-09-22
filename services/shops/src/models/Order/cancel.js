@@ -8,6 +8,8 @@ const cancel = async (order) => {
     return;
   }
 
+  await models.get('Shop');
+  await models.get('Offer');
   await order.execPopulate('shop');
 
   const Order = await models.get('Order');

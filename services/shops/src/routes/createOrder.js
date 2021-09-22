@@ -19,6 +19,8 @@ const handler = async (event, context) => {
     const order = new Order(data);
     let offerHits = [];
 
+    await models.get('Shop');
+
     try {
       await order.validate();
     } catch (error) {

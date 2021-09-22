@@ -2,6 +2,7 @@ const { flatten, uniq } = require('lodash');
 const models = require('..');
 
 const findRandomProducts = async (offer) => {
+  await models.get('Shop');
   await offer.execPopulate('shop');
 
   const { shop, offeredProducts, offeredCollections } = offer;

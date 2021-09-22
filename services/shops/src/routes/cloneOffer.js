@@ -27,6 +27,7 @@ const handler = async (event, context) => {
 
     const clonedOffer = await offer.clone();
 
+    await models.get('Shop');
     await clonedOffer.execPopulate('shop');
     await logger.info(`Offer cloned (${offer.toString()})`, { clonedOffer });
 

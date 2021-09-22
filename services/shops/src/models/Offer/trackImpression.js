@@ -10,6 +10,7 @@ const trackImpression = async (
     ipAddress = undefined
   }
 ) => {
+  await models.get('Shop');
   await offer.execPopulate('shop');
 
   const {

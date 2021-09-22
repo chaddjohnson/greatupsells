@@ -8,6 +8,8 @@ const trackAcceptance = async (
   shopifyVariantId = undefined,
   quantity = 0
 ) => {
+  await models.get('Shop');
+  await models.get('Offer');
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;

@@ -19,6 +19,8 @@ const handler = async (event, context) => {
     const product = await Product.findById(productId);
     const data = JSON.parse(event.body);
 
+    await models.get('Shop');
+
     if (!product) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
