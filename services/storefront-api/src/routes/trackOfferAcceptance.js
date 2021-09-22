@@ -28,34 +28,13 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const domain = new URL(event.headers.origin || event.headers.Origin).host;
     const { offerId } = event.pathParameters;
-    const [shop, offer] = await Promise.all([
-      httpClient.get(`/shops/domain/${domain}`),
-      httpClient.get(`/offers/${offerId}`)
-    ]);
-    const shopId = shop._id;
-    const offerShopId = offer.shop;
     const {
       offerHitId,
       shopifyProductId,
       shopifyVariantId,
       quantity
     } = JSON.parse(event.body);
-
-    // Only allow tracking for offers belonging to the requestor domain.
-    if (shopId !== offerShopId) {
-      await logger.warn(
-        `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
-        null,
-        { event }
-      );
-
-      return {
-        statusCode: StatusCodes.FORBIDDEN,
-        body: ReasonPhrases.FORBIDDEN
-      };
-    }
 
     const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,

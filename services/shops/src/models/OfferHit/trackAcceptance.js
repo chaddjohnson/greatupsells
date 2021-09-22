@@ -8,21 +8,22 @@ const trackAcceptance = async (
   shopifyVariantId = undefined,
   quantity = 0
 ) => {
-  await models.get('Shop');
-  await models.get('Offer');
+  const [Offer, Shop, session] = await Promise.all([
+    models.get('Offer'),
+    models.get('Shop'),
+    mongodbClient.connection.startSession()
+  ]);
+
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;
-  const Offer = await models.get('Offer');
-  const Shop = await models.get('Shop');
-
-  const session = await mongodbClient.connection.startSession();
   const transactionOptions = { readPreference: 'primary' };
-  const promises = [];
 
   try {
     // Use a transaction.
     await session.withTransaction(async () => {
+      const promises = [];
+
       offerHit.$session(session);
 
       // If a product is associated with this acceptance, track it.
@@ -61,10 +62,10 @@ const trackAcceptance = async (
           { session }
         )
       );
-    }, transactionOptions);
 
-    // Run queries in parallel.
-    await Promise.all(promises);
+      // Run queries in parallel.
+      await Promise.all(promises);
+    }, transactionOptions);
   } catch (error) {
     await logger.error(
       `Error tracking offer acceptance for offer hit (${
