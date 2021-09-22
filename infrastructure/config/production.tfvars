@@ -1,7 +1,7 @@
 hosted_zone_id = "Z023060413ODYTHFNWZW8"
 base_domain    = "greatupsells.com"
 domain         = "greatupsells.com"
-instance_type  = "t3a.medium"
+instance_type  = "t3.medium"
 sandbox        = "false"
 jwt_secret     = "2ab8c99671a507f3314818894cad27ed562552a29713eda67f7b2dbdf81e13e0"
 services_domain_names = {
