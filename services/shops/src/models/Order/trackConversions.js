@@ -1,10 +1,11 @@
 const Promise = require('bluebird');
 const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const trackConversions = async (order) => {
   await order.execPopulate('shop');
 
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const OfferHit = await models.get('OfferHit');
 
   // Get line items for the order.
   const lineItems = order.shopifyOrderData.line_items || [];

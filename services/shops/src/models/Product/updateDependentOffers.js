@@ -1,7 +1,7 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const updateDependentOffers = async (product) => {
-  const Offer = mongodbClient.connection.model('Offer');
+  const Offer = await models.get('Offer');
   const { shopifyProductId, shopifyProductData } = product;
   const { title, image } = shopifyProductData;
   const offers = await Offer.find({

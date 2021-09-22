@@ -1,16 +1,13 @@
 const logger = require('@neatowebsolutions/upselling-logger');
-const mongodbClient = require('../mongodbClient');
 const calculateRevenueIncrease = require('./calculateRevenueIncrease');
+const models = require('..');
 
 const trackConversion = async (offerHit, order) => {
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;
-  const Offer = offer.constructor;
-  const Shop = shop.constructor;
-  const Product = mongodbClient.connection.model('Product');
-  const shopifyApiClient = shop.getShopifyApiClient();
-
+  const Offer = await models.get('Offer');
+  const Shop = await models.get('Shop');
   const session = order.$session();
 
   try {

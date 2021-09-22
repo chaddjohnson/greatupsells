@@ -1,12 +1,12 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const buildDraftOrderLineItem = async ({
   offerId,
   shopifyVariantId,
   quantity
 }) => {
-  const Product = mongodbClient.connection.model('Product');
-  const Offer = mongodbClient.connection.model('Offer');
+  const Product = await models.get('Product');
+  const Offer = await models.get('Offer');
 
   // Find the offer if one is referenced.
   const offer = offerId && (await Offer.findById(offerId));

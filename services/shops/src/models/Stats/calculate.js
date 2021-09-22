@@ -1,8 +1,8 @@
 const Promise = require('bluebird');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const calculate = async (startDate, endDate) => {
-  const Stats = mongodbClient.connection.model('Stats');
+  const Stats = await models.get('Stats');
 
   return await Promise.props({
     activeShopCount: Stats.calculateActiveShopCount(),

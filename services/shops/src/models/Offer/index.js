@@ -156,37 +156,43 @@ schema.methods.calculateDiscountedPrice = function (price) {
 };
 
 schema.methods.findImpressions = async function (startAt, endAt) {
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
 
   return OfferHit.findImpressionsByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findAcceptances = async function (startAt, endAt) {
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
 
   return OfferHit.findAcceptancesByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findRevenueIncreases = async function (startAt, endAt) {
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
 
   return OfferHit.findRevenueIncreasesByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findConversions = async function (startAt, endAt) {
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
 
   return OfferHit.findConversionsByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findConversionRates = async function (startAt, endAt) {
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const models = require('..');
+  const OfferHit = await models.get('OfferHit');
 
   return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
 };
 
 schema.methods.findPopupThemes = async function () {
-  const PopupTheme = mongodbClient.connection.model('PopupTheme');
+  const models = require('..');
+  const PopupTheme = await models.get('PopupTheme');
 
   return PopupTheme.findByOfferId(this._id);
 };

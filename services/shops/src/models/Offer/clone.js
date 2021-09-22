@@ -1,8 +1,8 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const clone = async (offer) => {
-  const Offer = offer.constructor;
-  const PopupTheme = mongodbClient.connection.model('PopupTheme');
+  const Offer = await models.get('Offer');
+  const PopupTheme = await models.get('PopupTheme');
   const data = offer.toObject();
 
   delete data.__v;

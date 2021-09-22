@@ -1,4 +1,4 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const getManualCollectionIds = async (product) => {
   const { shop, shopifyProductId } = product;
@@ -80,7 +80,7 @@ const addProductToCollections = async (product, collections) => {
 const trackShopifyCollections = async (product) => {
   await product.execPopulate('shop');
 
-  const Collection = mongodbClient.connection.model('Collection');
+  const Collection = await models.get('Collection');
   const shopifyCollectionIds = await getShopifyCollectionIds(product);
 
   // Get all referenced collections.

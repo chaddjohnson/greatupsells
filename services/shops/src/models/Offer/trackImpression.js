@@ -1,5 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const trackImpression = async (
   offer,
@@ -18,9 +19,9 @@ const trackImpression = async (
     triggerEvent,
     triggerPagePath
   } = offer;
-  const Offer = offer.constructor;
-  const Shop = shop.constructor;
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const Offer = await models.get('Offer');
+  const Shop = await models.get('Shop');
+  const OfferHit = await models.get('OfferHit');
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,

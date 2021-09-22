@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const preValidate = async (offer, next) => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
 
   // Ensure ObjectId fields are indeed type ObjectId.
   if (typeof offer.shop === 'string') {

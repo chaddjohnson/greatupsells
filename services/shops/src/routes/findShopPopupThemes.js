@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
+const mongodbClient = require('../models/mongodbClient');
 const models = require('../models');
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  await mongodbClient.connect();
+
   if (event.source === 'serverless-plugin-warmup') {
-    console.log('WarmUp - Lambda is warm!'); // eslint-disable-line no-console
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }

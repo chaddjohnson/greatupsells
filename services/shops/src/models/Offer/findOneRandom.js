@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const geoip = require('geoip-country');
 const globToRegExp = require('glob-to-regexp');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const buildViewAllowanceCriteria = (
   offerImpressions,
@@ -89,7 +89,7 @@ const buildDateCriteria = () => ({
 });
 
 const buildProductsCriteria = async (shopifyProductIds, shopifyVariantIds) => {
-  const Collection = mongodbClient.connection.model('Collection');
+  const Collection = await models.get('Collection');
 
   // Find collections containing one or more of the products.
   const collections = await Collection.find({
@@ -217,7 +217,7 @@ const findOneRandom = async (
     );
   }
 
-  const Offer = mongodbClient.connection.model('Offer');
+  const Offer = await models.get('Offer');
   const criteria = await buildCriteria(shop, {
     triggerEvent,
     shopifyProductIds,

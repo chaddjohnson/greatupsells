@@ -1,4 +1,4 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const getShopifyProductIds = async (collection) => {
   const { shop, shopifyCollectionId } = collection;
@@ -39,7 +39,7 @@ const trackCollectionProducts = async (collection) => {
 };
 
 const trackProductCollections = async (collection) => {
-  const Product = mongodbClient.connection.model('Product');
+  const Product = await models.get('Product');
   const { shopifyCollectionId } = collection;
   const products = await Product.find({
     shopifyProductId: { $in: collection.shopifyProductIds }

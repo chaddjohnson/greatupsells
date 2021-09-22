@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const cancel = async (order) => {
   // Abort if the order is already canceled.
@@ -9,10 +10,10 @@ const cancel = async (order) => {
 
   await order.execPopulate('shop');
 
-  const Order = order.constructor;
-  const OfferHit = mongodbClient.connection.model('OfferHit');
-  const Offer = mongodbClient.connection.model('Offer');
-  const Shop = mongodbClient.connection.model('Shop');
+  const Order = await models.get('Order');
+  const OfferHit = await models.get('OfferHit');
+  const Offer = await models.get('Offer');
+  const Shop = await models.get('Shop');
   const { shop } = order;
   const offerHits = await OfferHit.findByOrderId(order._id);
 

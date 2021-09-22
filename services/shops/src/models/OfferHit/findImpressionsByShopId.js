@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const findImpressionsByShopId = async (shopId, startAt, endAt) => {
   if (typeof shopId !== 'object') {
     shopId = mongoose.Types.ObjectId(shopId);
   }
 
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const OfferHit = await models.get('OfferHit');
   const pipelines = [
     {
       $match: {

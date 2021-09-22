@@ -1,5 +1,7 @@
+const models = require('..');
+
 const clone = async (popupTheme) => {
-  const PopupTheme = popupTheme.constructor;
+  const PopupTheme = await models.get('PopupTheme');
   const data = popupTheme.toObject();
 
   delete data.__v;

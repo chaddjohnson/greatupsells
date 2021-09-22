@@ -1,5 +1,6 @@
 const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const trackAcceptance = async (
   offerHit,
@@ -10,8 +11,8 @@ const trackAcceptance = async (
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer } = offerHit;
-  const Offer = offer.constructor;
-  const Shop = shop.constructor;
+  const Offer = await models.get('Offer');
+  const Shop = await models.get('Shop');
 
   const session = await mongodbClient.connection.startSession();
   const transactionOptions = { readPreference: 'primary' };

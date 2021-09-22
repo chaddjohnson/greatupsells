@@ -1,8 +1,8 @@
 const logger = require('@neatowebsolutions/upselling-logger');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const updatePlans = async () => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   const criteria = {
     active: true,
     'plan.level': { $ne: 'FREE' }

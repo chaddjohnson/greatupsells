@@ -1,9 +1,9 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const calculateGrossProfitChange = async (startDate, endDate) => {
   // TODO: Sum shop.plan.price for active shops installed today.
 
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   const pipelines = [
     {
       $match: {

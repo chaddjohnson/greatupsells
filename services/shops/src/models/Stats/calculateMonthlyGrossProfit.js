@@ -1,7 +1,7 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const calculateMonthlyGrossProfit = async () => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   const pipelines = [
     {
       $match: {

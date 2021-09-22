@@ -1,8 +1,8 @@
 const { DateTime } = require('luxon');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const calculateToday = async () => {
-  const Stats = mongodbClient.connection.model('Stats');
+  const Stats = await models.get('Stats');
 
   // Use end of day UTC time to ensure the day has rolled over.
   const date = DateTime.utc().endOf('day').toJSDate();

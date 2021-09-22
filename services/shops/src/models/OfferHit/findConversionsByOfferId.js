@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const findConversionsByOfferId = async (offerId, startAt, endAt) => {
   if (typeof offerId !== 'object') {
     offerId = mongoose.Types.ObjectId(offerId);
   }
 
-  const OfferHit = mongodbClient.connection.model('OfferHit');
+  const OfferHit = await models.get('OfferHit');
   const pipelines = [
     {
       $match: {

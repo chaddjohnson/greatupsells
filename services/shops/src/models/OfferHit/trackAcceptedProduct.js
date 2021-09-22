@@ -1,4 +1,4 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const trackAcceptedProduct = async (
   offerHit,
@@ -8,7 +8,7 @@ const trackAcceptedProduct = async (
 ) => {
   await offerHit.execPopulate('offer');
 
-  const Product = mongodbClient.connection.model('Product');
+  const Product = await models.get('Product');
   const product = await Product.findOneByShopifyProductId(shopifyProductId);
   const { offer } = offerHit;
 

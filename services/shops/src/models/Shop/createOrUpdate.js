@@ -1,8 +1,8 @@
 const logger = require('@neatowebsolutions/upselling-logger');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const createShop = async (shopDomain, accessToken) => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   const shop = new Shop({ domain: shopDomain, accessToken });
   const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyShopData = await shopifyApiClient.shop.get();
@@ -16,7 +16,7 @@ const createShop = async (shopDomain, accessToken) => {
 };
 
 const createOrUpdate = async (shopDomain, accessToken) => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   let shop = await Shop.findOneByDomain(shopDomain);
 
   if (!shop) {

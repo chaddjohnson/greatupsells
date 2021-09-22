@@ -1,7 +1,7 @@
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const calculateShopInstallCount = async (startDate, endDate) => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
   const criteria = {
     active: true,
     createdAt: {

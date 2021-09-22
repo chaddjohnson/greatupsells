@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const preValidate = async (product, next) => {
-  const Shop = mongodbClient.connection.model('Shop');
+  const Shop = await models.get('Shop');
 
   product.title = product.shopifyProductData.title;
 

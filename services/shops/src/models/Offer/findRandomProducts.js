@@ -1,5 +1,5 @@
 const { flatten, uniq } = require('lodash');
-const mongodbClient = require('../mongodbClient');
+const models = require('..');
 
 const findRandomProducts = async (offer) => {
   await offer.execPopulate('shop');
@@ -11,7 +11,7 @@ const findRandomProducts = async (offer) => {
     return [];
   }
 
-  const Product = mongodbClient.connection.model('Product');
+  const Product = await models.get('Product');
   const offeredShopifyProductIds = offeredProducts.map(
     ({ shopifyProductId }) => shopifyProductId
   );
