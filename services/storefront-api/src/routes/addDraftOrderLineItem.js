@@ -34,26 +34,9 @@ const handler = middy(async (event, context) => {
   try {
     const domain = new URL(event.headers.origin || event.headers.Origin).host;
     const { draftOrderId } = event.pathParameters;
+    const data = JSON.parse(event.body);
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const shopId = shop._id;
-    const data = JSON.parse(event.body);
-    const { offerId } = data;
-    const offer = offerId && (await httpClient.get(`/offers/${offerId}`));
-
-    // Verify any offer associated with the line item belongs to the shop.
-    if (offerId && offer.shop !== shopId) {
-      await logger.warn(
-        `Unauthorized usage attempt for offer from domain ${domain}`,
-        null,
-        { event }
-      );
-
-      return {
-        statusCode: StatusCodes.FORBIDDEN,
-        body: ReasonPhrases.FORBIDDEN
-      };
-    }
-
     const draftOrder = await httpClient.post(
       `/shops/${shopId}/draft-orders/${draftOrderId}/line-items`,
       data
