@@ -68,9 +68,6 @@ functions:
           path: /region
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: true
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
