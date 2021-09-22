@@ -263,9 +263,9 @@ functions:
     warmup:
       default:
         enabled: true
-  findOneShop:
+  findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOneShop.handler
+    handler: src/routes/findShop.handler
     events:
       - http:
           path: /shop
