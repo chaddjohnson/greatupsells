@@ -19,7 +19,10 @@ const connectionOptions = {
 
   // Opt in to using the MongoDB driver's findOneAndUpdate() function.
   // See https://mongoosejs.com/docs/deprecations.html#findandmodify.
-  useFindAndModify: false
+  useFindAndModify: false,
+
+  // Use IPv4, and skip trying IPv6.
+  family: 4
 };
 
 const mongodbClient = new MongodbClientLambda(connectionUri, connectionOptions);
