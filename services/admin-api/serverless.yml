@@ -55,9 +55,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: true
   region:
     handler: src/routes/region.handler
     events:
@@ -65,6 +62,9 @@ functions:
           path: /region
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   # findLogs:
   clonePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -79,9 +79,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
@@ -95,9 +92,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findLogs:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
@@ -111,9 +105,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOnePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
@@ -127,9 +118,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
@@ -143,9 +131,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   # findShops:
   # findStats:
   updatePopupTheme:
@@ -161,9 +146,6 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo

@@ -54,9 +54,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -65,6 +62,9 @@ functions:
           path: /region
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   server:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/server.handler
@@ -75,9 +75,6 @@ functions:
       - http:
           path: /{any+}
           method: ANY
-    warmup:
-      default:
-        enabled: true
 
 plugins:
   - serverless-plugin-monorepo

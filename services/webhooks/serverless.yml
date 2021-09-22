@@ -41,9 +41,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: true
   appUninstall:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -54,9 +51,6 @@ functions:
       - http:
           path: /shopify/app-uninstall
           method: post
-    warmup:
-      default:
-        enabled: true
   collection:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -67,9 +61,6 @@ functions:
       - http:
           path: /shopify/collection
           method: post
-    warmup:
-      default:
-        enabled: true
   collectionDelete:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -80,9 +71,6 @@ functions:
       - http:
           path: /shopify/collection-deletion
           method: post
-    warmup:
-      default:
-        enabled: true
   orderCancel:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -93,9 +81,6 @@ functions:
       - http:
           path: /shopify/order-cancelation
           method: post
-    warmup:
-      default:
-        enabled: true
   orderPaid:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -106,9 +91,6 @@ functions:
       - http:
           path: /shopify/order-paid
           method: post
-    warmup:
-      default:
-        enabled: true
   orderUpdate:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -119,9 +101,6 @@ functions:
       - http:
           path: /shopify/order-update
           method: post
-    warmup:
-      default:
-        enabled: true
   product:
     reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -134,9 +113,6 @@ functions:
       - http:
           path: /shopify/product
           method: post
-    warmup:
-      default:
-        enabled: true
   productDelete:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -147,9 +123,6 @@ functions:
       - http:
           path: /shopify/product-deletion
           method: post
-    warmup:
-      default:
-        enabled: true
   shop:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -160,9 +133,6 @@ functions:
       - http:
           path: /shopify/shop
           method: post
-    warmup:
-      default:
-        enabled: true
 
 plugins:
   - serverless-offline

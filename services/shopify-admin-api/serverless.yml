@@ -48,9 +48,6 @@ custom:
 functions:
   authorizer:
     handler: src/authorizer.handler
-    warmup:
-      default:
-        enabled: true
   health:
     handler: src/routes/health.handler
     events:
@@ -58,9 +55,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: true
   region:
     handler: src/routes/region.handler
     events:
@@ -68,6 +62,9 @@ functions:
           path: /region
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -81,9 +78,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
@@ -97,9 +91,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   createPopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
@@ -113,9 +104,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   deleteOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
@@ -129,9 +117,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
@@ -145,9 +130,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
@@ -161,9 +143,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
@@ -177,9 +156,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
@@ -193,9 +169,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferPopupThemes.handler
@@ -209,9 +182,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
@@ -225,9 +195,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
@@ -241,9 +208,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findOfferImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
@@ -257,9 +221,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -273,9 +234,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findPopupThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
@@ -289,9 +247,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShopAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
@@ -305,9 +260,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShopConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
@@ -321,9 +273,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShopConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
@@ -337,9 +286,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShopImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
@@ -353,9 +299,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   findShopRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
@@ -369,9 +312,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -385,9 +325,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   updatePopupTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
@@ -401,9 +338,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
   updateShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
@@ -417,9 +351,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    warmup:
-      default:
-        enabled: true
 
 plugins:
   - serverless-offline
