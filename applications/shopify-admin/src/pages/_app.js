@@ -62,15 +62,17 @@ const App = ({ Component, pageProps }) => {
       >
         <HttpClientProvider httpClient={httpClient}>
           <ShopProvider>
-            <RoutePropagator />
             {mounted &&
               typeof window !== 'undefined' &&
               window.top !== window.self && (
-                <ErrorBoundary>
-                  <Main>
-                    <Component {...pageProps} />
-                  </Main>
-                </ErrorBoundary>
+                <>
+                  <RoutePropagator />
+                  <ErrorBoundary>
+                    <Main>
+                      <Component {...pageProps} />
+                    </Main>
+                  </ErrorBoundary>
+                </>
               )}
             {mounted &&
               typeof window !== 'undefined' &&
