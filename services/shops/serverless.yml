@@ -459,6 +459,7 @@ functions:
           method: put
           authorizer: aws_iam
   calculateStats:
+    memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/calculateStats.handler
     events:

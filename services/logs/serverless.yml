@@ -40,7 +40,6 @@ custom:
 
 functions:
   createLog:
-    memorySize: 128
     reservedConcurrency: 1
     handler: src/routes/createLog.handler
     events:
@@ -60,7 +59,7 @@ functions:
       default:
         enabled: false
   log:
-    memorySize: 128
+    memorySize: 256
     reservedConcurrency: 1
     handler: src/workers/log.handler
     events:
@@ -69,7 +68,6 @@ functions:
           batchSize: 10
           maximumBatchingWindow: 60
   findLogs:
-    memorySize: 128
     reservedConcurrency: 1
     handler: src/routes/findLogs.handler
     events:
