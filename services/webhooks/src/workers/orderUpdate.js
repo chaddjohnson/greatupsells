@@ -36,7 +36,7 @@ const processData = async (metadata, data, rawData) => {
     );
 
     if (!hmacValid) {
-      await logger.error('Invalid HMAC for webhook', null, { metadata, data });
+      await logger.warn('Invalid HMAC for webhook', null, { metadata, data });
     }
 
     const shopifyOrderData = data;
