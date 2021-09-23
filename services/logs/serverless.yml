@@ -49,12 +49,16 @@ functions:
           method: post
           authorizer: aws_iam
   health:
+    memorySize: 128
     handler: src/routes/health.handler
     events:
       - http:
           path: /health
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   log:
     memorySize: 128
     reservedConcurrency: 1

@@ -50,6 +50,9 @@ functions:
           path: /health
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   region:
     memorySize: 128
     handler: src/routes/region.handler

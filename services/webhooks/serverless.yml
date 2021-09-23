@@ -35,12 +35,16 @@ custom:
 
 functions:
   health:
+    memorySize: 128
     handler: src/routes/health.handler
     events:
       - http:
           path: /health
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   appUninstall:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
