@@ -3,7 +3,7 @@ name: Feature Request
 about: File a feature request
 title: '[Feature]: '
 labels: 'enhancement'
-assignees: 'chad'
+assignees: 'chaddjohnson'
 ---
 
 ## Description
