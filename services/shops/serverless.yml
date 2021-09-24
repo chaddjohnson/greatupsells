@@ -466,6 +466,9 @@ functions:
       - schedule: cron(1 5,6 * * ? *)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
   fixShopWebhooks:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -474,6 +477,9 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
   importShopCollections:
     memorySize: 512
     reservedConcurrency: 5
@@ -483,6 +489,9 @@ functions:
       - sqs:
           arn: ${env:SHOP_COLLECTION_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn}
     timeout: 900
+    warmup:
+      default:
+        enabled: false
   importShopProducts:
     memorySize: 512
     reservedConcurrency: 5
@@ -492,6 +501,9 @@ functions:
       - sqs:
           arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn}
     timeout: 900
+    warmup:
+      default:
+        enabled: false
   updateShopActiveStatuses:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -500,6 +512,9 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
   updateShopPlans:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
@@ -508,6 +523,9 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
 
 plugins:
   - serverless-offline
