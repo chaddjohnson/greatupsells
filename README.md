@@ -79,6 +79,21 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
    1. Builds packages.
    1. Starts all applications, services, and package build watching.
    1. Starts tunnels.
+1. Create a Shopify Partners account.
+1. Create a development store in your Shopify Partners account.
+1. Create a version of the app in your Shopify Partners account.
+1. In Shopify under App Setup, configure things as follows:
+   1. Set "App URL" to the root of the Shopify Admin application, like so:
+      ```
+      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/
+      ```
+   1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
+      ```
+      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth/callback
+      ```
+1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-app.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com).
+
+Please use the `master` branch for main development.
 
 ### Tooling
 
@@ -198,8 +213,6 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `MONGODB_APP_PASSWORD` (the app account MongoDB password)
    1. `MONGODB_ROOT_PASSWORD` (the root MongoDB password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
-
-Please use the `master` branch for main development.
 
 ### Triggering
 
