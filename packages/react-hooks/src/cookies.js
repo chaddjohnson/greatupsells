@@ -30,7 +30,7 @@ class Cookies {
       maxAge: (60 * 60 * 24 * 365) / 12, // 1 month in relative seconds
       secure:
         typeof window !== 'undefined' && window.location.protocol === 'https:', // Secure based on protocol.
-      sameSite: 'None',
+      sameSite: 'Strict',
       domain: getDomain(), // Use top-level domain.
       httpOnly: false // Allow access on client side.
     };
