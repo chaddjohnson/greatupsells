@@ -19,7 +19,7 @@ const createServer = () => {
   });
 
   server.on('error', (error) => {
-    console.log(error); // eslint-disable-line no-console
+    console.error(error); // eslint-disable-line no-console
   });
 
   return server;
