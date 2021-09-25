@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Toast } from '@shopify/app-bridge/actions';
-import { Context as AppBridgeContext } from '@shopify/app-bridge-react';
+import { useAppBridge } from '@shopify/app-bridge-react';
 
 const useToast = () => {
-  const app = useContext(AppBridgeContext);
+  const app = useAppBridge();
 
   const showSuccessToast = (message, options = {}) => {
     Toast.create(app, {

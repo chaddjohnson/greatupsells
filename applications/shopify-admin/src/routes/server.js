@@ -3,8 +3,8 @@ const serverless = require('serverless-http');
 const Koa = require('koa');
 const Router = require('koa-router');
 const connect = require('koa-connect');
-const session = require('koa-session');
 const helmet = require('koa-helmet');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -12,6 +12,7 @@ const {
   default: shopifyAuth,
   verifyRequest
 } = require('@shopify/koa-shopify-auth');
+const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
 
@@ -22,8 +23,8 @@ const {
   SHOPIFY_ADMIN_APP_API_SECRET_KEY,
   SHOPIFY_ADMIN_APP_URL,
   STOREFRONT_PORT,
-  JWT_SECRET,
-  SHOPS_API_URL
+  SHOPS_API_URL,
+  JWT_SECRET
 } = process.env;
 const dev = NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
@@ -40,6 +41,24 @@ shopsServiceHttpClient.addRequestInterceptor(
   })
 );
 
+Shopify.Context.initialize({
+  API_KEY: SHOPIFY_ADMIN_APP_API_KEY,
+  API_SECRET_KEY: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
+  SCOPES: [
+    'read_products',
+    'read_orders',
+    'read_script_tags',
+    'read_draft_orders',
+    'write_script_tags',
+    'write_draft_orders'
+  ],
+  HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
+  API_VERSION: ApiVersion.January21,
+  IS_EMBEDDED_APP: true,
+  // TODO: More information at https://github.com/Shopify/shopify-node-api/blob/main/docs/issues.md#notes-on-session-handling
+  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage()
+});
+
 const createServer = () => {
   const server = new Koa();
   const router = new Router();
@@ -50,10 +69,6 @@ const createServer = () => {
     ctx.respond = false;
     ctx.res.statusCode = 200;
   };
-
-  router.get('(/_next/static/.*)', handleRequest);
-  router.get('/_next/webpack-hmr', handleRequest);
-  router.get('(.*)', verifyRequest({ accessMode: 'offline' }), handleRequest);
 
   // Secure HTTP headers. Disable frameguard so that the app may be embedded within Shopify Admin.
   server.use(helmet({ frameguard: false }));
@@ -70,55 +85,77 @@ const createServer = () => {
     );
   }
 
-  // Initialize Shopify OAuth support.
-  server.use(
-    session({ httpOnly: true, secure: true, sameSite: 'None' }, server)
-  );
-  server.keys = [SHOPIFY_ADMIN_APP_API_SECRET_KEY];
+  server.keys = [Shopify.Context.API_SECRET_KEY];
+
   server.use(
     shopifyAuth({
-      prefix: dev ? SHOPIFY_ADMIN_APP_URL : '',
-      apiKey: SHOPIFY_ADMIN_APP_API_KEY,
-      secret: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-      scopes: [
-        'read_products',
-        'read_orders',
-        'read_script_tags',
-        'read_draft_orders',
-        'write_script_tags',
-        'write_draft_orders'
-      ],
       accessMode: 'offline',
       afterAuth: async (ctx) => {
-        const { shop: shopDomain, accessToken } = ctx.session;
-        const shop = await shopsServiceHttpClient.post(
+        const { shop: shopDomain, accessToken } = ctx.state.shopify;
+
+        await shopsServiceHttpClient.post(
           `/shops/domain/${shopDomain}/initialization`,
           { accessToken }
         );
-        const shopId = shop._id;
-        const authToken = jwt.sign({ shopId }, JWT_SECRET);
 
-        ctx.cookies.set('shopOrigin', shopDomain, {
-          httpOnly: false,
-          sameSite: 'None',
-          secure: true
-        });
-        ctx.cookies.set('authToken', authToken, {
-          httpOnly: false,
-          sameSite: 'None',
-          secure: true
-        });
-
-        ctx.redirect('/');
+        ctx.redirect(`/?shop=${shopDomain}`);
       }
     })
   );
+
+  router.get('/', async (ctx) => {
+    const shopDomain = ctx.query.shop;
+    const shop = await shopsServiceHttpClient.get(
+      `/shops/domain/${shopDomain}`
+    );
+
+    if (!shop) {
+      ctx.redirect(`/auth?shop=${shopDomain}`);
+    } else {
+      return await handleRequest(ctx);
+    }
+  });
+
+  router.get('/authToken', async (ctx) => {
+    try {
+      // Get Shopify session token.
+      const { shopifySessionToken } = ctx.request.query;
+
+      // Verify Shopify session token.
+      // TODO
+
+      // Extract the shop domain from the session token.
+      const shopUrl = jwt.decode(shopifySessionToken).dest;
+      const shopDomain = shopUrl.replace(/https?:\/\//, '');
+
+      // Retrieve shop data based on the shop domain.
+      const shop = await shopsServiceHttpClient.get(
+        `/shops/domain/${shopDomain}`
+      );
+      const shopId = shop._id;
+
+      // Create a signed auth token.
+      const authToken = jwt.sign({ shopId }, JWT_SECRET);
+
+      // Return the auth token.
+      ctx.response.set('Content-Type', 'application/json');
+      ctx.body = JSON.stringify({ authToken });
+    } catch (error) {
+      ctx.status = StatusCodes.INTERNAL_SERVER_ERROR;
+      ctx.body = ReasonPhrases.INTERNAL_SERVER_ERROR;
+    }
+  });
+
+  router.get('(/_next/static/.*)', handleRequest);
+  router.get('/_next/webpack-hmr', handleRequest);
+  router.get('(.*)', verifyRequest({ accessMode: 'offline' }), handleRequest);
+
   server.use(router.allowedMethods());
   server.use(router.routes());
 
   // Log errors.
   server.on('error', (error) => {
-    console.log(error); // eslint-disable-line no-console
+    console.error(error); // eslint-disable-line no-console
   });
 
   return server;

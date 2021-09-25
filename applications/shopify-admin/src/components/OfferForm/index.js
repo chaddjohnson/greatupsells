@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect
-} from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -16,7 +10,7 @@ import {
 } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
-import { Context as AppBridgeContext } from '@shopify/app-bridge-react';
+import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
@@ -82,7 +76,7 @@ const OfferForm = ({
 }) => {
   let contextualSaveBar = null;
 
-  const app = useContext(AppBridgeContext);
+  const app = useAppBridge();
 
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);

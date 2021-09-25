@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
+import createApp from '@shopify/app-bridge';
 import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
-import Cookies from 'universal-cookie';
+import { getSessionToken } from '@shopify/app-bridge-utils';
 import styled from 'styled-components';
 import { ErrorBoundary } from '@neatowebsolutions/upselling-react-components';
 import {
@@ -13,21 +14,55 @@ import { ShopProvider } from '../hooks';
 import { Link, RoutePropagator } from '../components';
 import '@shopify/polaris/dist/styles.css';
 
-const cookies = new Cookies();
+const apiKey = process.env.SHOPIFY_ADMIN_APP_API_KEY;
 
 const httpClient = new HttpClient({
   baseUrl: process.env.SHOPIFY_ADMIN_API_URL
 });
 
+const getHost = () => {
+  const isClientSide = typeof window !== 'undefined';
+  const shopOrigin =
+    isClientSide && new URLSearchParams(window.location.search).get('shop');
+  const host =
+    (isClientSide && shopOrigin && shopOrigin.includes('.')
+      ? window.btoa(`${shopOrigin}/admin`)
+      : shopOrigin) ||
+    (isClientSide && sessionStorage.host);
+
+  return host;
+};
+
+const getAuthToken = async () => {
+  // Get a JWT via Shopify.
+  const { host } = sessionStorage;
+  const app = createApp({ apiKey, host });
+  const shopifySessionToken = await getSessionToken(app);
+
+  // Retrieve a custom access token tailored to this application using Shopify's
+  // session token.
+  const response = await (
+    await fetch(`/authToken?shopifySessionToken=${shopifySessionToken}`)
+  ).json();
+
+  return response.authToken;
+};
+
 // Add the token to each request.
-httpClient.addRequestInterceptor((config) => {
-  const token = sessionStorage.authToken;
+httpClient.addRequestInterceptor(async (config) => {
+  try {
+    if (!sessionStorage.authToken) {
+      sessionStorage.authToken = await getAuthToken();
+    }
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (sessionStorage.authToken) {
+      config.headers.Authorization = `Bearer ${sessionStorage.authToken}`;
+    }
+
+    return config;
+  } catch (error) {
+    return config;
   }
-
-  return config;
 });
 
 const Main = styled.main`
@@ -35,16 +70,14 @@ const Main = styled.main`
 `;
 
 const App = ({ Component, pageProps }) => {
-  const shopOrigin = cookies.get('shopOrigin');
-  const authToken = cookies.get('authToken');
-
   const [mounted, setMounted] = useState(false);
 
-  // Copy cookie values to session storage so that multiple instances of this app may
-  // be used across multiple shops simultaneously.
+  const host = getHost();
+  const forceRedirect = true;
+  const appBridgeConfig = { apiKey, host, forceRedirect };
+
   if (typeof window !== 'undefined') {
-    sessionStorage.shopOrigin = shopOrigin;
-    sessionStorage.authToken = authToken;
+    sessionStorage.host = host;
   }
 
   useEffect(() => {
@@ -53,13 +86,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <AppProvider i18n={translations} linkComponent={Link}>
-      <AppBridgeProvider
-        config={{
-          apiKey: process.env.SHOPIFY_ADMIN_APP_API_KEY,
-          shopOrigin,
-          forceRedirect: true
-        }}
-      >
+      <AppBridgeProvider config={appBridgeConfig}>
         <HttpClientProvider httpClient={httpClient}>
           <ShopProvider>
             {mounted &&
@@ -76,7 +103,7 @@ const App = ({ Component, pageProps }) => {
               )}
             {mounted &&
               typeof window !== 'undefined' &&
-              window.top === window.self && <p>Loading...</p>}
+              window.top === window.self && <h1>Loading...</h1>}
           </ShopProvider>
         </HttpClientProvider>
       </AppBridgeProvider>
