@@ -3,11 +3,11 @@ const dotenvExpand = require('dotenv-expand');
 
 dotenvExpand(dotenv.config());
 
-const { MONGODB_URI_LOGS } = process.env;
+const { MONGODB_URL_LOGS } = process.env;
 
 const config = {
   mongodb: {
-    url: MONGODB_URI_LOGS,
+    url: MONGODB_URL_LOGS,
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,

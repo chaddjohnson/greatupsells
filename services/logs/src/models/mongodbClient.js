@@ -2,9 +2,9 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const MongodbClientLambda = require('@chaddjohnson/mongodb-client-lambda');
 
-const { MONGODB_URI_LOGS } = process.env;
+const { MONGODB_URL_LOGS } = process.env;
 
-const connectionUri = MONGODB_URI_LOGS;
+const connectionUri = MONGODB_URL_LOGS;
 const connectionOptions = {
   useUnifiedTopology: true,
 
