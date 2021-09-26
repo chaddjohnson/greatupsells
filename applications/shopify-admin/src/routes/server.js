@@ -15,6 +15,7 @@ const {
 const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
+const RedisStore = require('../utilities/RedisStore');
 
 const {
   NODE_ENV,
@@ -24,7 +25,8 @@ const {
   SHOPIFY_ADMIN_APP_URL,
   STOREFRONT_PORT,
   SHOPS_API_URL,
-  JWT_SECRET
+  JWT_SECRET,
+  REDIS_URL
 } = process.env;
 const dev = NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
@@ -33,6 +35,8 @@ const app = next({ dev });
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
+
+const sessionStorage = new RedisStore(REDIS_URL);
 
 shopsServiceHttpClient.addRequestInterceptor(
   aws4Interceptor({
@@ -55,8 +59,11 @@ Shopify.Context.initialize({
   HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
   API_VERSION: ApiVersion.January21,
   IS_EMBEDDED_APP: true,
-  // TODO: More information at https://github.com/Shopify/shopify-node-api/blob/main/docs/issues.md#notes-on-session-handling
-  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage()
+  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
+    sessionStorage.storeCallback,
+    sessionStorage.loadCallback,
+    sessionStorage.deleteCallback
+  )
 });
 
 const createServer = () => {
