@@ -1,27 +1,19 @@
 import React from 'react';
 import { TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
-import { useRouter } from 'next/router';
 
 const TitleBar = (props) => {
-  const router = useRouter();
-
   const primaryAction = {
     content: 'Create offer',
-    onAction: () => router.push('/offers/new/')
+    url: '/offers/new/'
   };
   const secondaryActions = [
     {
       content: 'Dashboard',
-      onAction: () => {
-        // Work around "maximum call stack size exceeded" issue.
-        if (router.pathname !== '/') {
-          router.push('/');
-        }
-      }
+      url: '/'
     },
     {
       content: 'Offers',
-      onAction: () => router.push('/offers/')
+      url: '/offers/'
     }
   ];
   const actionGroups = [

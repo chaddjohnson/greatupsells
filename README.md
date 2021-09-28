@@ -95,7 +95,7 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
       ```
       https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth/callback
       ```
-1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-app.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com).
+1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-app.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
 
 Please use the `master` branch for main development.
 
@@ -143,9 +143,8 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
 
 3. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Change all instances of "test.cpming.top" to "\*.ngrok.io". use "2048" instead of "128" for the `openssl dhparam` command.
 4. Add the tunnel subdomains to `/etc/hosts` pointing them to `127.0.0.1`; for example: `127.0.0.1 example.ngrok.io`.
-5. Add a `prefix` parameter to the `shopifyAuth()` function call (the default export of `@shopify/koa-shopify-auth`): `prefix: 'https://example.ngrok.io'`. Note this should already be present, and no change should be necessary.
 
-Please note you will need to disable this (temporarily comment out entries you added in `/etc/hosts`) in order to install the app via OAuth with Shopify.
+Please note you will need to temporarily disable this by commenting out entries you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
 ### Coding Conventions
 

@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import createApp from '@shopify/app-bridge';
-import { Provider as AppBridgeProvider } from '@shopify/app-bridge-react';
+import {
+  Provider as AppBridgeProvider,
+  ClientRouter
+} from '@shopify/app-bridge-react';
+
 import { getSessionToken } from '@shopify/app-bridge-utils';
 import styled from 'styled-components';
 import { ErrorBoundary } from '@neatowebsolutions/upselling-react-components';
@@ -72,6 +77,8 @@ const Main = styled.main`
 const App = ({ Component, pageProps }) => {
   const [mounted, setMounted] = useState(false);
 
+  const router = useRouter();
+
   const host = getHost();
   const forceRedirect = true;
   const appBridgeConfig = { apiKey, host, forceRedirect };
@@ -93,6 +100,7 @@ const App = ({ Component, pageProps }) => {
               typeof window !== 'undefined' &&
               window.top !== window.self && (
                 <>
+                  <ClientRouter history={router} />
                   <RoutePropagator />
                   <ErrorBoundary>
                     <Main>

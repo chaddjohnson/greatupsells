@@ -8,10 +8,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const {
-  default: shopifyAuth,
-  verifyRequest
-} = require('@shopify/koa-shopify-auth');
+const shopifyAuth = require('@shopify/koa-shopify-auth').default;
 const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
 const { aws4Interceptor } = require('aws4-axios');
 const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
@@ -110,30 +107,17 @@ const createServer = () => {
     })
   );
 
-  router.get('/', async (ctx) => {
-    const shopDomain = ctx.query.shop;
-    const shop = await shopsServiceHttpClient.get(
-      `/shops/domain/${shopDomain}`
-    );
-
-    if (!shop) {
-      ctx.redirect(`/auth?shop=${shopDomain}`);
-    } else {
-      return await handleRequest(ctx);
-    }
-  });
-
   router.get('/authToken', async (ctx) => {
     try {
       // Get Shopify session token.
-      const { shopifySessionToken } = ctx.request.query;
+      const { shopifySessionToken } = ctx.query;
 
       // Verify Shopify session token.
       // TODO
 
       // Extract the shop domain from the session token.
       const shopUrl = jwt.decode(shopifySessionToken).dest;
-      const shopDomain = shopUrl.replace(/https?:\/\//, '');
+      const shopDomain = shopUrl.replace('https://', '');
 
       // Retrieve shop data based on the shop domain.
       const shop = await shopsServiceHttpClient.get(
@@ -155,7 +139,7 @@ const createServer = () => {
 
   router.get('(/_next/static/.*)', handleRequest);
   router.get('/_next/webpack-hmr', handleRequest);
-  router.get('(.*)', verifyRequest({ accessMode: 'offline' }), handleRequest);
+  router.get('(.*)', handleRequest);
 
   server.use(router.allowedMethods());
   server.use(router.routes());
