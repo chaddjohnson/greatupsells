@@ -237,7 +237,7 @@ Initial deployments should occur in the following order:
 1. `services/admin-api`
 1. `services/storefront-api`
 1. `applications/shopify-admin`
-1. `applications/shopify-storefront`
+1. `applications/storefront`
 1. `applications/admin`
 
 ## Infrastructure
