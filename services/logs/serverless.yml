@@ -16,7 +16,7 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch-logs/url}
+    ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/upselling/${self:provider.stage}/database/elasticsearch-logs/url, ''}
     MONGODB_URL_LOGS: ${env:MONGODB_URL_LOGS, ssm:/upselling/${self:provider.stage}/database/mongodb-logs/url}
 
 custom:
