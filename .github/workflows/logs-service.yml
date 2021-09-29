@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: Inject "MONGODB_URL_LOGS" SSM Parameter
+        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        with:
+          ssm_parameter: "/upselling/${{ env.BRANCH }}/database/mongodb-logs/url"
+          env_variable_name: "MONGODB_URL_LOGS"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Node.js
@@ -35,6 +40,10 @@ jobs:
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
       - name: Install Node Modules
         run: yarn install
+      # - name: Run Data Migrations
+      #   run: yarn migrate
+      #   env:
+      #     MONGODB_URL_SHOPS: ${{ env.MONGODB_URL_SHOPS }}
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Deploy Serverless Application to us-east-1
