@@ -18,7 +18,7 @@ provider:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret}
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shopify-admin-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
 
@@ -27,15 +27,15 @@ custom:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${env:SHOPIFY_ADMIN_API_SERVICE_DOMAIN, ssm:/upselling/${self:provider.stage}/shopify-admin-api/domain}
+    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/domain, ''}
     basePath: ''
-    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/health-check-id}
+      healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:

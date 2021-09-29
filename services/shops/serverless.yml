@@ -31,25 +31,25 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shops-service'
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
     MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/url}
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${env:SHOP_COLLECTION_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${env:SHOP_PRODUCT_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url}
+    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url, ''}
+    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL}
-    WEBHOOK_ARN: ${env:WEBHOOK_ARN, ssm:/upselling/${self:provider.stage}/webhooks/arn}
+    WEBHOOK_ARN: ${ssm:/upselling/${self:provider.stage}/webhooks/arn, ''}
 
 custom:
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 5002
   customDomain:
-    domainName: ${env:SHOPS_API_DOMAIN, ssm:/upselling/${self:provider.stage}/shops-api/regional-domain}
+    domainName: ${ssm:/upselling/${self:provider.stage}/shops-api/regional-domain, ''}
     basePath: ''
-    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2
@@ -488,7 +488,7 @@ functions:
     handler: src/workers/importShopCollections.handler
     events:
       - sqs:
-          arn: ${env:SHOP_COLLECTION_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, ''}
     timeout: 900
     warmup:
       default:
@@ -500,7 +500,7 @@ functions:
     handler: src/workers/importShopProducts.handler
     events:
       - sqs:
-          arn: ${env:SHOP_PRODUCT_IMPORT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, ''}
     timeout: 900
     warmup:
       default:

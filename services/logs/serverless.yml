@@ -24,9 +24,9 @@ custom:
     httpPort: ${env:LOGS_API_PORT, 4009}
     lambdaPort: 5005
   customDomain:
-    domainName: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/regional-domain}
+    domainName: ${ssm:/upselling/${self:provider.stage}/logs-api/regional-domain, ''}
     basePath: ''
-    certificateName: ${env:CERTIFICATE_NAME, ssm:/upselling/${self:provider.stage}/certificate-name}
+    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     securityPolicy: tls_1_2

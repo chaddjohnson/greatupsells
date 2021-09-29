@@ -17,7 +17,7 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
+    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'webhooks-service'
     SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
@@ -52,7 +52,7 @@ functions:
     handler: src/workers/appUninstall.handler
     events:
       - sqs:
-          arn: ${env:APP_UNINSTALL_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn, ''}
       - http:
           path: /shopify/app-uninstall
           method: post
@@ -62,7 +62,7 @@ functions:
     handler: src/workers/collection.handler
     events:
       - sqs:
-          arn: ${env:COLLECTION_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn, ''}
       - http:
           path: /shopify/collection
           method: post
@@ -72,7 +72,7 @@ functions:
     handler: src/workers/collectionDelete.handler
     events:
       - sqs:
-          arn: ${env:COLLECTION_DELETION_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn, ''}
       - http:
           path: /shopify/collection-deletion
           method: post
@@ -82,7 +82,7 @@ functions:
     handler: src/workers/orderCancel.handler
     events:
       - sqs:
-          arn: ${env:ORDER_CANCELATION_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn, ''}
       - http:
           path: /shopify/order-cancelation
           method: post
@@ -92,7 +92,7 @@ functions:
     handler: src/workers/orderPaid.handler
     events:
       - sqs:
-          arn: ${env:ORDER_PAID_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-paid/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn, ''}
       - http:
           path: /shopify/order-paid
           method: post
@@ -102,7 +102,7 @@ functions:
     handler: src/workers/orderUpdate.handler
     events:
       - sqs:
-          arn: ${env:ORDER_UPDATE_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/order-update/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn, ''}
       - http:
           path: /shopify/order-update
           method: post
@@ -112,7 +112,7 @@ functions:
     handler: src/workers/product.handler
     events:
       - sqs:
-          arn: ${env:PRODUCT_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn, ''}
           batchSize: 10
           maximumBatchingWindow: 10
       - http:
@@ -124,7 +124,7 @@ functions:
     handler: src/workers/productDelete.handler
     events:
       - sqs:
-          arn: ${env:PRODUCT_DELETION_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn, ''}
       - http:
           path: /shopify/product-deletion
           method: post
@@ -134,7 +134,7 @@ functions:
     handler: src/workers/shop.handler
     events:
       - sqs:
-          arn: ${env:SHOP_QUEUE_ARN, ssm:/upselling/${self:provider.stage}/queues/shop-update/arn}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn, ''}
       - http:
           path: /shopify/shop
           method: post
