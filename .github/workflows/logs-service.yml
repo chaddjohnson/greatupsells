@@ -43,6 +43,7 @@ jobs:
         run: yarn install
       # - name: Run Data Migrations
       #   run: yarn migrate
+      #   working-directory: services/logs
       #   env:
       #     MONGODB_URL_SHOPS: ${{ env.MONGODB_URL_SHOPS }}
       - name: Build Packages
