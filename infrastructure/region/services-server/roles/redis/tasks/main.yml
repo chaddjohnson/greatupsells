@@ -1,0 +1,109 @@
+# Reference: https://bitlaunch.io/blog/installing-redis-server-on-ubuntu-20-04-lts/
+
+- name: Determine if Redis is installed
+  stat:
+    path: /usr/local/bin/redis-server
+  register: redis
+
+- name: Install Redis dependencies
+  apt:
+    pkg:
+      - build-essential
+      - pkg-config
+      - libssl-dev
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  when: not redis.stat.exists
+
+- name: Download and unarchive Redis source
+  unarchive:
+    src: http://download.redis.io/redis-stable.tar.gz
+    dest: /usr/src
+    remote_src: yes
+  when: not redis.stat.exists
+
+- name: Build Redis dependencies
+  command: make hiredis lua jemalloc linenoise
+  args:
+    chdir: /usr/src/redis-stable/deps
+  when: not redis.stat.exists
+
+- name: Build Redis
+  command: make MALLOC=libc BUILD_TLS=yes
+  args:
+    chdir: /usr/src/redis-stable
+  when: not redis.stat.exists
+
+- name: Install Redis
+  make:
+    chdir: /usr/src/redis-stable
+    target: install
+  when: not redis.stat.exists
+
+- name: Create "redis" user
+  command: adduser --system --group --no-create-home redis
+  when: not redis.stat.exists
+
+- name: Create Redis data directory
+  file:
+    path: /var/lib/redis
+    state: directory
+    mode: '0770'
+    owner: redis
+    group: redis
+  when: not redis.stat.exists
+
+- name: Create Redis log directory
+  file:
+    path: /var/log/redis
+    state: directory
+    owner: redis
+    group: redis
+  when: not redis.stat.exists
+
+- name: Create Redis run directory
+  file:
+    path: /var/run/redis
+    state: directory
+    owner: redis
+    group: redis
+  when: not redis.stat.exists
+
+- name: Create Redis config directory
+  file:
+    path: /etc/redis
+    state: directory
+    owner: redis
+    group: redis
+  when: not redis.stat.exists
+
+- name: Create Redis config file
+  copy:
+    src: redis.conf
+    dest: /etc/redis/redis.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: not redis.stat.exists
+
+- name: Create Redis service file
+  copy:
+    src: redis.service
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0644
+  when: not redis.stat.exists
+
+- name: Inject password into Redis config file
+  replace:
+    path: /etc/redis/redis.conf
+    regexp: "redis_app_password"
+    replace: "{{ redis_app_password }}"
+
+- name: Start Redis
+  service:
+    name: redis.service
+    state: restarted
+  when: not redis.stat.exists

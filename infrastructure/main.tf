@@ -68,6 +68,7 @@ module "us_east_1" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   event_bus_arn                    = var.event_bus_arn
+  redis_app_password               = var.redis_app_password
 }
 
 module "us_west_2" {
@@ -87,6 +88,7 @@ module "us_west_2" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   event_bus_arn                    = var.event_bus_arn
+  redis_app_password               = var.redis_app_password
 }
 
 module "us_east_2" {
@@ -106,6 +108,7 @@ module "us_east_2" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   event_bus_arn                    = var.event_bus_arn
+  redis_app_password               = var.redis_app_password
 }
 
 module "eu_west_1" {
@@ -125,6 +128,7 @@ module "eu_west_1" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   event_bus_arn                    = var.event_bus_arn
+  redis_app_password               = var.redis_app_password
 }
 
 module "ap_northeast_1" {
@@ -144,6 +148,7 @@ module "ap_northeast_1" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   event_bus_arn                    = var.event_bus_arn
+  redis_app_password               = var.redis_app_password
 }
 
 module "assets" {

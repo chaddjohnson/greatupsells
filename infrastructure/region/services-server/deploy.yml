@@ -5,5 +5,5 @@
     - system
     - accounts
     - mongodb
-    # - redis
+    - redis
     # - elasticsearch

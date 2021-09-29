@@ -23,7 +23,7 @@ const {
   STOREFRONT_PORT,
   SHOPS_API_URL,
   JWT_SECRET,
-  REDIS_URL
+  REDIS_URL_APP
 } = process.env;
 const dev = NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
@@ -33,7 +33,7 @@ const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
 
-const sessionStorage = new RedisStore(REDIS_URL);
+const sessionStorage = new RedisStore(REDIS_URL_APP);
 
 shopsServiceHttpClient.addRequestInterceptor(
   aws4Interceptor({

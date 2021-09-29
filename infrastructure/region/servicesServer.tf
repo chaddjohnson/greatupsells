@@ -22,6 +22,7 @@ resource "aws_security_group" "services_server" {
   description = "Security group for services server"
   provider    = aws.region
 
+  # SSH
   ingress {
     from_port   = 22
     to_port     = 22
@@ -29,9 +30,18 @@ resource "aws_security_group" "services_server" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # MongoDB
   ingress {
     from_port   = 27017
     to_port     = 27017
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Redis
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
