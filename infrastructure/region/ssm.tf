@@ -65,7 +65,7 @@ resource "aws_ssm_parameter" "event_bus_arn" {
 resource "aws_ssm_parameter" "redis_app_database_url" {
   name      = "/upselling/${terraform.workspace}/database/redis-app/url"
   type      = "SecureString"
-  value     = "redis://app:${var.redis_app_password}@${var.services_domain_name}:6379/0?ssl=true&sslprotocols=Tls12"
+  value     = "rediss://:${var.redis_app_password}@${var.services_domain_name}:6379/0?ssl=true&sslprotocols=Tls12"
   overwrite = true
   provider  = aws.region
 }
