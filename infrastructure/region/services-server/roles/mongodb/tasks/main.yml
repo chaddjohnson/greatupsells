@@ -1,10 +1,16 @@
 # Reference: https://github.com/PharosProduction/tutorial-mongodb-ansible
 # Reference: https://sebworks.com/securing-mongodb-tls-auth-letsencrypt/
 
+- name: Determine if MongoDB is installed
+  stat:
+    path: /usr/bin/mongod
+  register: mongodb
+
 - name: Add Mongo PPA key
   apt_key:
     url: https://www.mongodb.org/static/pgp/server-4.4.asc
     state: present
+  when: not mongodb.stat.exists
 
 - name: Add Mongo sources list
   lineinfile:
@@ -12,10 +18,12 @@
     dest: /etc/apt/sources.list.d/mongodb-org-4.4.list
     state: present
     create: yes
+  when: not mongodb.stat.exists
 
 - name: Update apt cache
   apt:
     update_cache: yes
+  when: not mongodb.stat.exists
 
 - name: Install MongoDB
   apt:
@@ -24,31 +32,26 @@
     update_cache: yes
     cache_valid_time: 3600
     allow_unauthenticated: yes
+  when: not mongodb.stat.exists
 
-- dpkg_selections:
-    name: mongodb-org
+- name: Hold MongoDB packages
+  dpkg_selections:
+    name: '{{ item }}'
     selection: hold
-- dpkg_selections:
-    name: mongodb-org-server
-    selection: hold
-
-- dpkg_selections:
-    name: mongodb-org-shell
-    selection: hold
-
-- dpkg_selections:
-    name: mongodb-org-mongos
-    selection: hold
-
-- dpkg_selections:
-    name: mongodb-org-tools
-    selection: hold
+  loop:
+    - mongodb-org
+    - mongodb-org-server
+    - mongodb-org-shell
+    - mongodb-org-mongos
+    - mongodb-org-tools
+  when: not mongodb.stat.exists
 
 - name: Ensure mongodb is running and enabled to start automatically on reboot
   systemd:
     name: mongod
     enabled: yes
     state: started
+  when: not mongodb.stat.exists
 
 - name: Create MongoDB root user
   mongodb_user:
@@ -58,17 +61,20 @@
     update_password: on_create
     roles: root
   ignore_errors: yes
+  when: not mongodb.stat.exists
 
 - name: Regenerate certificate files
   command: /root/update-certificates.sh
+  when: not mongodb.stat.exists
 
-- name: Copy config file
+- name: Create MongoDB config file
   copy:
     src: mongod.conf
     dest: /etc/mongod.conf
     owner: root
     group: root
     mode: 0644
+  when: not mongodb.stat.exists
 
 - name: Create /etc/security/limits.d/mongod.conf
   copy:
@@ -77,11 +83,13 @@
     owner: root
     group: root
     mode: 0644
+  when: not mongodb.stat.exists
 
 - name: Start MongoDB
   service:
     name: mongod.service
     state: restarted
+  when: not mongodb.stat.exists
 
 - name: 'TODO: Initiate replica set'
   debug:
@@ -119,6 +127,7 @@
         pwd: passwordPrompt(),
         roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
       })
+  when: not mongodb.stat.exists
 
 - name: 'TODO: Create app user account for upselling-shops database'
   debug:
@@ -129,6 +138,7 @@
         pwd: passwordPrompt(),
         roles: [ { role: "readWrite", db: "upselling-shops" } ]
       })
+  when: not mongodb.stat.exists
 
 - name: 'TODO: Create app user account for upselling-logs database'
   debug:
@@ -139,3 +149,4 @@
         pwd: passwordPrompt(),
         roles: [ { role: "readWrite", db: "upselling-logs" } ]
       })
+  when: not mongodb.stat.exists

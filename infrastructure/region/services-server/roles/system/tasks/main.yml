@@ -57,17 +57,15 @@
 
 - name: Install packages
   apt:
-    name: '{{ packages }}'
-    state: latest
-    update_cache: yes
-    cache_valid_time: 3600
-  vars:
-    packages:
+    pkg:
       - software-properties-common
       - ntp
       - python3
       - python3-pip
       - jq
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install AWS CLI
   raw: pip3 install -q awscli --upgrade
@@ -109,18 +107,16 @@
 
 - name: Install Let's Encrypt and Certbot
   apt:
-    name: '{{ packages }}'
+    pkg:
+      - letsencrypt
+      - python3-certbot-dns-route53
     state: present
     update_cache: yes
     cache_valid_time: 3600
     allow_unauthenticated: yes
-  vars:
-    packages:
-      - letsencrypt
-      - python3-certbot-dns-route53
 
 - name: Determine if certificates exist
-  ansible.builtin.stat:
+  stat:
     path: '/etc/letsencrypt/live/{{ domain_name }}'
   register: certificates
 
