@@ -1,4 +1,5 @@
 service: upselling-shopify-admin
+variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
@@ -16,11 +17,11 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
-    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret~true}
-    REDIS_URL_APP: ${env:REDIS_URL_APP, ssm:/upselling/${self:provider.stage}/database/redis-app/url~true}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret}
+    REDIS_URL_APP: ${env:REDIS_URL_APP, ssm:/upselling/${self:provider.stage}/database/redis-app/url}
     SHOPIFY_ADMIN_API_URL: ${env:SHOPIFY_ADMIN_API_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-api/url}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key~true}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-app/url}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
     LOG_SOURCE: 'shopify-admin'
