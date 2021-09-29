@@ -39,7 +39,7 @@ provider:
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url, ''}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/url, ''}
-    WEBHOOK_API_URL: ${env:WEBHOOK_API_URL}
+    WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
     WEBHOOK_ARN: ${ssm:/upselling/${self:provider.stage}/webhooks/arn, ''}
 
 custom:
