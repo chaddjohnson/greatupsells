@@ -80,6 +80,7 @@ functions:
       - http:
           path: /{any+}
           method: ANY
+    timeout: 20
 
 plugins:
   - serverless-plugin-monorepo
