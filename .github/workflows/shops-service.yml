@@ -42,13 +42,13 @@ jobs:
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
       - name: Install Node Modules
         run: yarn install
+      - name: Build Packages
+        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Run Data Migrations
         run: yarn migrate
         working-directory: services/shops
         env:
           MONGODB_URL_SHOPS: ${{ env.MONGODB_URL_SHOPS }}
-      - name: Build Packages
-        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@neatowebsolutions/*
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: services/shops
