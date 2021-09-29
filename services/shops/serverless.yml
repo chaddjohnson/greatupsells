@@ -33,7 +33,7 @@ provider:
     LOG_QUEUE_URL: ${env:LOG_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/log/url}
     LOG_SOURCE: 'shops-service'
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/uri}
+    MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/upselling/${self:provider.stage}/database/mongodb-shops/url~true}
     SANDBOX: ${env:SANDBOX, ssm:/upselling/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${env:SHOP_COLLECTION_IMPORT_QUEUE_URL, ssm:/upselling/${self:provider.stage}/queues/shop-collection-import/url}
