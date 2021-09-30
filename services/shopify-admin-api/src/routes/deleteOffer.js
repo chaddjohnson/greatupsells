@@ -66,7 +66,7 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      body: ReasonPhrases.INTERNAL_SERVER_ERROR
+      body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
     };
   }
 });
