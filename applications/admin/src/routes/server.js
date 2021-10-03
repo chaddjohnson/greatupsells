@@ -5,7 +5,7 @@ const next = require('next');
 
 const { NODE_ENV } = process.env;
 const dev = NODE_ENV !== 'production';
-const port = getenv.int('ADMIN_APP_PORT', 4001);
+const port = getenv.int('ADMIN_APP_PORT', 4003);
 const app = next({ dev });
 
 const createServer = () => {
