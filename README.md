@@ -53,18 +53,14 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
     authtoken: tokenhere
     region: us
     tunnels:
-      upselling-shopify-admin-api:
-        addr: 4000
-        proto: http
-        subdomain: chaddjohnson-api
       upselling-shopify-admin:
-        addr: 4001
-        proto: http
-        subdomain: chaddjohnson-shopify-app
+         addr: 4001
+         proto: http
+         subdomain: chaddjohnson-shopify-admin
       upselling-webhooks-service:
-        addr: 4008
-        proto: http
-        subdomain: chaddjohnson-webhooks
+         addr: 4008
+         proto: http
+         subdomain: chaddjohnson-webhooks
 
 Note that the tunnel names (e.g., `upselling-shopify-admin-api`) must remain unchanged.
 
@@ -95,7 +91,7 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
       ```
       https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth/callback
       ```
-1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-app.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
+1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-admin.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
 
 Please use the `master` branch for main development.
 
@@ -120,13 +116,13 @@ The following are used:
 Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
-2. Create server configurations for each subdomain; for example:
+2. Create a server configuration for the Shopify Admin app URL; for example:
 
    ```
    server {
        listen 80;
        listen 443 ssl;
-       server_name example.ngrok.io;
+       server_name yourname-shopify-admin.ngrok.io;
 
        ssl_certificate     /usr/local/etc/ssl/certs/self-signed.crt;
        ssl_certificate_key /usr/local/etc/ssl/private/self-signed.key;
@@ -142,9 +138,9 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
    ```
 
 3. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Change all instances of "test.cpming.top" to "\*.ngrok.io". use "2048" instead of "128" for the `openssl dhparam` command.
-4. Add the tunnel subdomains to `/etc/hosts` pointing them to `127.0.0.1`; for example: `127.0.0.1 example.ngrok.io`.
+4. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
 
-Please note you will need to temporarily disable this by commenting out entries you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
+Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
 ### Coding Conventions
 
