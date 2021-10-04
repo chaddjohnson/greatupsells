@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
 import { createGlobalStyle, StyleSheetManager } from 'styled-components';
@@ -53,8 +53,8 @@ const OfferPopup = ({
     currency
   });
 
-  const [iframeRef, setIframeRef] = useState(null);
-  const [frameLoaded, setFrameLoaded] = useState(false);
+  const [frameRef, setFrameRef] = useState(null);
+  const [frameDocument, setFrameDocument] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
   const [modalContentContainerRef, setModalContentContainerRef] = useState(
@@ -77,15 +77,8 @@ const OfferPopup = ({
     translateTriggerProductData
   } = useDataTranslation(shop, offer);
 
-  const iframeDocument =
-    iframeRef?.contentWindow?.document ||
-    iframeRef?.contentDocument ||
-    iframeRef?.document;
-  const iframeHeadNode = iframeDocument?.head;
-  const iframeBodyNode = iframeDocument?.body;
-
   const fixIframeHeight = () => {
-    if (!iframeDocument || !modalRef) {
+    if (!frameDocument || !modalRef) {
       return;
     }
 
@@ -99,7 +92,7 @@ const OfferPopup = ({
       // the content height.
       // Reference: https://stackoverflow.com/a/60949881/83897
       await Promise.all(
-        Array.from(iframeDocument.images).map((image) => {
+        Array.from(frameDocument.images).map((image) => {
           if (image.complete) {
             return Promise.resolve(image.naturalHeight !== 0);
           }
@@ -227,10 +220,6 @@ const OfferPopup = ({
     closeHandler: 'window.parent.OfferPopup.close()'
   });
 
-  const handleIframeLoad = () => {
-    setFrameLoaded(true);
-  };
-
   const handleSubmit = async (event) => {
     if (!event) {
       throw new Error('No event object passed to form submission handler');
@@ -305,11 +294,9 @@ const OfferPopup = ({
     window.OfferPopup.close = handleClose;
   }
 
-  ReactModal.setAppElement(iframeBodyNode);
-
   // Set up data binding for popup.
   useDataBinding({
-    iframe: iframeRef,
+    iframe: frameRef,
     shop,
     offer,
     offeredProducts: translatedOfferedProducts,
@@ -330,35 +317,34 @@ const OfferPopup = ({
     let externalScript;
     let customScript;
 
-    if (iframeDocument) {
+    if (frameDocument) {
       // Link to external scripts.
       theme.template.scripts?.forEach((scriptUrl) => {
-        externalScript = iframeDocument.createElement('script');
+        externalScript = frameDocument.createElement('script');
         externalScript.type = 'text/javascript';
         externalScript.src = scriptUrl;
         externalScripts.push(externalScript);
-        iframeHeadNode.appendChild(externalScript);
+        frameDocument.head.appendChild(externalScript);
       });
 
       // Inject custom JavaScript.
-      customScript = iframeDocument.createElement('script');
+      customScript = frameDocument.createElement('script');
       customScript.type = 'text/javascript';
       customScript.text = javascript;
-      iframeHeadNode.appendChild(customScript);
+      frameDocument.head.appendChild(customScript);
     }
 
     return () => {
-      if (iframeDocument) {
+      if (frameDocument) {
         externalScripts.forEach((current) =>
-          iframeHeadNode.removeChild(current)
+          frameDocument.head.removeChild(current)
         );
-        iframeHeadNode.removeChild(customScript);
+        frameDocument.head.removeChild(customScript);
       }
     };
   }, [
-    iframeRef,
-    iframeDocument,
-    iframeHeadNode,
+    frameRef,
+    frameDocument,
     translatedOfferedProducts,
     javascript,
     theme.template.scripts
@@ -366,7 +352,7 @@ const OfferPopup = ({
 
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
-    iframeDocument,
+    frameDocument,
     modalRef,
     theme.template,
     designMode,
@@ -406,11 +392,39 @@ const OfferPopup = ({
   return (
     <>
       <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
-      <iframe
+      <Frame
         className={className}
         title="Offer"
-        ref={setIframeRef}
-        onLoad={handleIframeLoad}
+        ref={(frame) => frame && setFrameRef(frame?.node || frame?.base)}
+        head={
+          <>
+            <meta charSet="UTF-8" />
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link
+              rel="preconnect"
+              href="https://fonts.gstatic.com"
+              crossOrigin="anonymous"
+            />
+            <link
+              href="https://fonts.googleapis.com/icon?family=Material+Icons"
+              rel="stylesheet"
+            />
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
+                  body {
+                    margin: 0;
+                    padding: 0;
+                  }
+                  * {
+                    box-sizing: border-box;
+                  }
+                  ${css}
+                `
+              }}
+            />
+          </>
+        }
         style={{
           border: 0,
           position: designMode ? 'static' : 'fixed',
@@ -425,42 +439,17 @@ const OfferPopup = ({
           zIndex: 2147483647
         }}
       >
-        {frameLoaded &&
-          createPortal(
-            <>
-              <meta charSet="UTF-8" />
-              <link rel="preconnect" href="https://fonts.googleapis.com" />
-              <link
-                rel="preconnect"
-                href="https://fonts.gstatic.com"
-                crossOrigin="anonymous"
-              />
-              <link
-                href="https://fonts.googleapis.com/icon?family=Material+Icons"
-                rel="stylesheet"
-              />
-              <style
-                dangerouslySetInnerHTML={{
-                  __html: `
-                  body {
-                    margin: 0;
-                    padding: 0;
-                  }
-                  ${css}
-                `
-                }}
-              />
-            </>,
-            iframeHeadNode
-          )}
-        {frameLoaded &&
-          createPortal(
-            <>
-              <StyleSheetManager target={iframeHeadNode}>
+        <FrameContextConsumer>
+          {({ document }) => {
+            setFrameDocument(document);
+            ReactModal.setAppElement(document.body);
+
+            return (
+              <StyleSheetManager target={document.head}>
                 <ReactModal
                   contentRef={setModalRef}
                   closeTimeoutMS={333}
-                  parentSelector={() => iframeBodyNode}
+                  parentSelector={() => document.body}
                   isOpen={modalOpen}
                   shouldFocusAfterRender={!designMode}
                   shouldCloseOnOverlayClick={offer.enableMaskClose}
@@ -508,10 +497,10 @@ const OfferPopup = ({
                   {designMode && <Mask onClick={onClick} />}
                 </ReactModal>
               </StyleSheetManager>
-            </>,
-            iframeBodyNode
-          )}
-      </iframe>
+            );
+          }}
+        </FrameContextConsumer>
+      </Frame>
     </>
   );
 };
