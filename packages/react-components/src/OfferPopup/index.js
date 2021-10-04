@@ -403,7 +403,7 @@ const OfferPopup = ({
       <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
       <iframe
         className={className}
-        title="Preview"
+        title="Offer"
         ref={setIframeRef}
         style={{
           border: 0,
