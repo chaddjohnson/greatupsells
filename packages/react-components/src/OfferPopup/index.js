@@ -54,6 +54,7 @@ const OfferPopup = ({
   });
 
   const [iframeRef, setIframeRef] = useState(null);
+  const [frameLoaded, setFrameLoaded] = useState(false);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
   const [modalContentContainerRef, setModalContentContainerRef] = useState(
@@ -225,6 +226,10 @@ const OfferPopup = ({
     submitHandler: 'window.parent.OfferPopup.submit(event)',
     closeHandler: 'window.parent.OfferPopup.close()'
   });
+
+  const handleIframeLoad = () => {
+    setFrameLoaded(true);
+  };
 
   const handleSubmit = async (event) => {
     if (!event) {
@@ -405,6 +410,7 @@ const OfferPopup = ({
         className={className}
         title="Offer"
         ref={setIframeRef}
+        onLoad={handleIframeLoad}
         style={{
           border: 0,
           position: designMode ? 'static' : 'fixed',
@@ -419,7 +425,7 @@ const OfferPopup = ({
           zIndex: 2147483647
         }}
       >
-        {iframeHeadNode &&
+        {frameLoaded &&
           createPortal(
             <>
               <meta charSet="UTF-8" />
@@ -447,7 +453,7 @@ const OfferPopup = ({
             </>,
             iframeHeadNode
           )}
-        {iframeBodyNode &&
+        {frameLoaded &&
           createPortal(
             <>
               <StyleSheetManager target={iframeHeadNode}>
