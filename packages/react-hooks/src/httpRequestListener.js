@@ -25,7 +25,9 @@ if (XMLHttpRequest) {
   };
 
   XMLHttpRequest.prototype.send = function (data) {
-    this._data = data;
+    // Attach request data to the request for downstream access.
+    this.data = data;
+
     return originalSend.call(this, data);
   };
 }

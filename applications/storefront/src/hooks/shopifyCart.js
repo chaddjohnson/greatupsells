@@ -25,7 +25,7 @@ const useShopifyCartAddListener = (listener) => {
 
 const useShopifyCartQuantityListener = (listener) => {
   const handler = (request) => {
-    const params = qs.parse(request._data);
+    const params = qs.parse(request.data);
     const lineItemNumber = parseInt(params.line);
     const quantity = parseInt(params.quantity);
 
