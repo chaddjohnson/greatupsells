@@ -2,18 +2,21 @@ import React from 'react';
 import { TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
 
 const TitleBar = (props) => {
+  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
+  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
+
   const primaryAction = {
     content: 'Create offer',
-    url: '/offers/new/'
+    url: `/offers/new/${urlParams}`
   };
   const secondaryActions = [
     {
       content: 'Dashboard',
-      url: '/'
+      url: `/${urlParams}`
     },
     {
       content: 'Offers',
-      url: '/offers/'
+      url: `/offers/${urlParams}`
     }
   ];
   const actionGroups = [

@@ -25,15 +25,36 @@ const httpClient = new HttpClient({
   baseUrl: process.env.SHOPIFY_ADMIN_API_URL
 });
 
+const getShop = () => {
+  const isClientSide = typeof window !== 'undefined';
+
+  if (!isClientSide) {
+    return undefined;
+  }
+
+  if (sessionStorage.shop) {
+    return sessionStorage.shop;
+  }
+
+  const shop = new URLSearchParams(window.location.search).get('shop');
+
+  return shop;
+};
+
 const getHost = () => {
   const isClientSide = typeof window !== 'undefined';
-  const shopOrigin =
-    isClientSide && new URLSearchParams(window.location.search).get('shop');
+
+  if (!isClientSide) {
+    return undefined;
+  }
+
+  if (sessionStorage.host) {
+    return sessionStorage.host;
+  }
+
+  const shop = getShop();
   const host =
-    (isClientSide && shopOrigin && shopOrigin.includes('.')
-      ? window.btoa(`${shopOrigin}/admin`)
-      : shopOrigin) ||
-    (isClientSide && sessionStorage.host);
+    shop && shop.includes('.') ? window.btoa(`${shop}/admin`) : undefined;
 
   return host;
 };
@@ -79,11 +100,13 @@ const App = ({ Component, pageProps }) => {
 
   const router = useRouter();
 
+  const shop = getShop();
   const host = getHost();
   const forceRedirect = true;
   const appBridgeConfig = { apiKey, host, forceRedirect };
 
   if (typeof window !== 'undefined') {
+    sessionStorage.shop = shop;
     sessionStorage.host = host;
   }
 
