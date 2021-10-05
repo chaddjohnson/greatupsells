@@ -91,8 +91,6 @@ const OfferTriggerProductsEditor = ({
   useEffect(() => {
     if (offer.strategy === 'UPSELL') {
       setAppliesTo('PRODUCTS');
-    } else {
-      setAppliesTo('ALL');
     }
   }, [offer.strategy]);
 
