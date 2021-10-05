@@ -11,17 +11,20 @@ import {
 const CartContext = createContext(null);
 
 const useShopifyCartAddListener = (listener) => {
-  useHttpRequestListener('/cart/add.js', (request) => {
+  const handler = (request) => {
     const product = JSON.parse(request?.responseText || {});
 
     if (listener) {
       listener.call(listener, product);
     }
-  });
+  };
+
+  useHttpRequestListener('/cart/add.js', handler);
+  useHttpRequestListener('/cart/add', handler);
 };
 
 const useShopifyCartQuantityListener = (listener) => {
-  useHttpRequestListener('/cart/change.js', (request) => {
+  const handler = (request) => {
     const params = qs.parse(request._data);
     const lineItemNumber = parseInt(params.line);
     const quantity = parseInt(params.quantity);
@@ -29,7 +32,10 @@ const useShopifyCartQuantityListener = (listener) => {
     if (listener) {
       listener.call(listener, lineItemNumber, quantity);
     }
-  });
+  };
+
+  useHttpRequestListener('/cart/change.js', handler);
+  useHttpRequestListener('/cart/change', handler);
 };
 
 const httpClient = new HttpClient({
