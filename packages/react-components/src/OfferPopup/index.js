@@ -368,7 +368,7 @@ const OfferPopup = ({
           requestAnimationFrame(() => {
             setModalAfterOpen(true);
           });
-        });
+        }, 20);
       }
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
