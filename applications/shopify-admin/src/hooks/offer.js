@@ -56,12 +56,15 @@ const useOffer = (offerId) => {
       return;
     }
 
-    await httpClient.put(`/offers/${offerId}`, {
-      ...offer,
-      enabled: true
-    });
+    const url = `/offers/${offerId}`;
 
-    mutate(`/offers/${offerId}`, { ...offer, enabled: true }, false);
+    try {
+      await mutate(url, httpClient.put(url, { ...offer, enabled: true }));
+
+      showSuccessToast('Offer enabled.');
+    } catch (error) {
+      showErrorToast('Error enabling offer');
+    }
   };
 
   const disableOffer = async () => {
@@ -69,12 +72,15 @@ const useOffer = (offerId) => {
       return;
     }
 
-    await httpClient.put(`/offers/${offerId}`, {
-      ...offer,
-      enabled: false
-    });
+    const url = `/offers/${offerId}`;
 
-    mutate(`/offers/${offerId}`, { ...offer, enabled: false }, false);
+    try {
+      await mutate(url, httpClient.put(url, { ...offer, enabled: false }));
+
+      showSuccessToast('Offer disabled.');
+    } catch (error) {
+      showErrorToast('Error disabling offer.');
+    }
   };
 
   const duplicateOffer = async () => {
