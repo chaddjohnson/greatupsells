@@ -179,7 +179,7 @@ const AnalyticsPage = () => {
                 Here&rsquo;s a summary of how your offers are performing
               </TextStyle>
             </DisplayText>
-            <Popover
+            {/* <Popover
               active={datePickerActive}
               activator={
                 <Button
@@ -194,7 +194,7 @@ const AnalyticsPage = () => {
               onClose={() => setDatePickerActive(false)}
             >
               Date picker here
-            </Popover>
+            </Popover> */}
           </Stack>
           <Layout>
             <Layout.Section fullWidth>

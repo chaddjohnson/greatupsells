@@ -188,11 +188,11 @@ const OfferAnalyticsPage = () => {
                 Here&rsquo;s a summary of how your offer is performing
               </TextStyle>
             </DisplayText>
-            <DateRangePicker
+            {/* <DateRangePicker
               active={datePickerActive}
               onActivate={() => setDatePickerActive(!datePickerActive)}
               onClose={() => setDatePickerActive(false)}
-            />
+            /> */}
           </Stack>
           <Layout>
             <Layout.Section fullWidth>
