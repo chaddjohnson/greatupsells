@@ -30,7 +30,7 @@ const dataToJson = (data) => {
   const isQueryString =
     !isEmpty &&
     isString &&
-    !!decodeURIComponent(data).match(
+    !!data.match(
       /^(\w+(=[\w.-]*)?(&\w+(=[\w.-]*[^\x00-\x7F]*)?)*)?$/ // eslint-disable-line no-control-regex
     );
 
@@ -39,7 +39,7 @@ const dataToJson = (data) => {
   } else if (isFormData) {
     return JSON.stringify(formDataToJson(data));
   } else if (isQueryString) {
-    return JSON.stringify(qs.parse(decodeURIComponent(data)));
+    return JSON.stringify(qs.parse(data));
   } else if (isObject) {
     return JSON.stringify(data);
   }
