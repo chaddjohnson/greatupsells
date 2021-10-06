@@ -364,8 +364,10 @@ const OfferPopup = ({
       setModalOpen(true);
 
       if (!designMode) {
-        requestAnimationFrame(() => {
-          setModalAfterOpen(true);
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            setModalAfterOpen(true);
+          });
         });
       }
     }
