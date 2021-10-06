@@ -143,7 +143,6 @@ const ProductOffer = ({
 
   return (
     <OfferPopup
-      appRoot="#upselling-popup-root"
       open={popupOpen}
       shop={shop}
       theme={popupTheme}
