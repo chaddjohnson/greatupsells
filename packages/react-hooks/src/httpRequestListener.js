@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
+import qs from 'querystringify';
 
 const XMLHttpRequest = typeof window !== 'undefined' && window.XMLHttpRequest;
+const originalFetch = typeof window !== 'undefined' && window.fetch;
 const originalOpen = XMLHttpRequest?.prototype?.open;
 const originalSend = XMLHttpRequest?.prototype?.send;
 
@@ -8,15 +10,57 @@ const originalSend = XMLHttpRequest?.prototype?.send;
 // Listeners are keyed by URL.
 const listeners = {};
 
+const formDataToJson = (formData) => {
+  const object = {};
+
+  formData.forEach((value, key) => {
+    object[key] = value;
+  });
+
+  return object;
+};
+
+const dataToJson = (data) => {
+  const isEmpty = !data;
+  const isString = typeof data === 'string';
+  const isObject = typeof data === 'object';
+  const isFormData = data instanceof FormData;
+
+  // References: https://stackoverflow.com/q/23959352/83897, https://stackoverflow.com/a/150078/83897
+  const isQueryString =
+    !isEmpty &&
+    isString &&
+    !!decodeURIComponent(data).match(
+      /^(\w+(=[\w.-]*)?(&\w+(=[\w.-]*[^\x00-\x7F]*)?)*)?$/ // eslint-disable-line no-control-regex
+    );
+
+  if (isEmpty) {
+    return data;
+  } else if (isFormData) {
+    return JSON.stringify(formDataToJson(data));
+  } else if (isQueryString) {
+    return JSON.stringify(qs.parse(decodeURIComponent(data)));
+  } else if (isObject) {
+    return JSON.stringify(data);
+  }
+
+  // JSON string, plain text, or other format.
+  return data;
+};
+
+// Intercept XML HTTP requests.
 if (XMLHttpRequest) {
   XMLHttpRequest.prototype.open = function (method, url, ...params) {
     const request = this;
 
-    // Intercept Shopify's add to cart event responses.
+    // Intercept Shopify's add to cart event responses, and call listeners.
     if (listeners[url]) {
       request.addEventListener('load', () => {
         listeners[url].forEach((current) => {
-          current.call(current, request);
+          const requestData = request.data;
+          const responseData = request.responseText;
+
+          current.call(current, requestData, responseData);
         });
       });
     }
@@ -25,10 +69,32 @@ if (XMLHttpRequest) {
   };
 
   XMLHttpRequest.prototype.send = function (data) {
-    // Attach request data to the request for downstream access.
-    this.data = data;
+    // Convert request data to JSON, and attach it to the request for downstream access.
+    this.data = dataToJson(data);
 
     return originalSend.call(this, data);
+  };
+}
+
+// Intercept fetch requests.
+if (originalFetch) {
+  window.fetch = async function (resource, config) {
+    const url =
+      typeof resource === 'object' ? resource?.url || resource : resource;
+    const requestData = dataToJson(config?.body);
+    const request = originalFetch.apply(this, [resource, config]);
+    const response = await request;
+    const clonedResponse = response.clone();
+    const responseData = await clonedResponse.text();
+
+    // Call listeners.
+    if (listeners[url]) {
+      listeners[url].forEach((current) => {
+        current.call(current, requestData, responseData);
+      });
+    }
+
+    return request;
   };
 }
 

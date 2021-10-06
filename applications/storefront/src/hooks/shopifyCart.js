@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import useSWR from 'swr';
-import qs from 'querystringify';
 import {
   useHttpRequestListener,
   usePushStateListener,
@@ -11,11 +10,11 @@ import {
 const CartContext = createContext(null);
 
 const useShopifyCartAddListener = (listener) => {
-  const handler = (request) => {
-    const product = JSON.parse(request?.responseText || {});
+  const handler = (requestData, responseData) => {
+    const productData = JSON.parse(responseData);
 
     if (listener) {
-      listener.call(listener, product);
+      listener.call(listener, productData);
     }
   };
 
@@ -24,10 +23,10 @@ const useShopifyCartAddListener = (listener) => {
 };
 
 const useShopifyCartQuantityListener = (listener) => {
-  const handler = (request) => {
-    const params = qs.parse(request.data);
-    const lineItemNumber = parseInt(params.line);
-    const quantity = parseInt(params.quantity);
+  const handler = (requestData) => {
+    const jsonData = JSON.parse(requestData);
+    const lineItemNumber = parseInt(jsonData.line);
+    const quantity = parseInt(jsonData.quantity);
 
     if (listener) {
       listener.call(listener, lineItemNumber, quantity);
