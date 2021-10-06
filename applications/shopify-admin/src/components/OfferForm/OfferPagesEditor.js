@@ -72,8 +72,8 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
                                 }
                               >
                                 glob syntax
-                              </Button>{' '}
-                              to reference multiple pages.
+                              </Button>
+                              .
                             </>
                           }
                           onClose={() => setTriggerPagePathPopoverActive(false)}
