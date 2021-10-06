@@ -59,10 +59,14 @@ const useOffer = (offerId) => {
     const url = `/offers/${offerId}`;
 
     try {
+      // Optimistically update.
+      mutate(url, { ...offer, enabled: true }, false);
+
       await mutate(url, httpClient.put(url, { ...offer, enabled: true }));
 
       showSuccessToast('Offer enabled.');
     } catch (error) {
+      mutate(url, { ...offer, enabled: false }, false);
       showErrorToast('Error enabling offer');
     }
   };
@@ -75,10 +79,14 @@ const useOffer = (offerId) => {
     const url = `/offers/${offerId}`;
 
     try {
+      // Optimistically update.
+      mutate(url, { ...offer, enabled: false }, false);
+
       await mutate(url, httpClient.put(url, { ...offer, enabled: false }));
 
       showSuccessToast('Offer disabled.');
     } catch (error) {
+      mutate(url, { ...offer, enabled: true }, false);
       showErrorToast('Error disabling offer.');
     }
   };
