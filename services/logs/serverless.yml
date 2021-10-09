@@ -41,7 +41,6 @@ custom:
 
 functions:
   createLog:
-    reservedConcurrency: 1
     handler: src/routes/createLog.handler
     events:
       - http:
@@ -61,18 +60,17 @@ functions:
         enabled: false
   log:
     memorySize: 256
-    reservedConcurrency: 1
+    reservedConcurrency: 3
     handler: src/workers/log.handler
     events:
       - sqs:
           arn: ${ssm:/upselling/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 10
-          maximumBatchingWindow: 60
+          maximumBatchingWindow: 10
     warmup:
       default:
         enabled: false
   findLogs:
-    reservedConcurrency: 1
     handler: src/routes/findLogs.handler
     events:
       - http:

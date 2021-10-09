@@ -107,7 +107,7 @@ functions:
           path: /shopify/order-update
           method: post
   product:
-    reservedConcurrency: 2
+    reservedConcurrency: 3
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/product.handler
     events:
