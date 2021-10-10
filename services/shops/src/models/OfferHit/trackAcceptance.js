@@ -19,6 +19,7 @@ const trackAcceptance = async (
 
   const { shop, offer } = offerHit;
   const transactionOptions = { readPreference: 'primary' };
+  const acceptanceTracked = offerHit.acceptedProducts.length > 0;
 
   try {
     // Use a transaction.
@@ -39,31 +40,34 @@ const trackAcceptance = async (
         );
       }
 
-      // Increment offer acceptance count.
-      promises.push(
-        Offer.findByIdAndUpdate(
-          offer.id,
-          {
-            $inc: {
-              acceptanceCount: 1
-            }
-          },
-          { session }
-        )
-      );
+      // Track acceptance one time per offer hit (and not once per product per offer hit).
+      if (!acceptanceTracked) {
+        // Increment offer acceptance count.
+        promises.push(
+          Offer.findByIdAndUpdate(
+            offer.id,
+            {
+              $inc: {
+                acceptanceCount: 1
+              }
+            },
+            { session }
+          )
+        );
 
-      // Increment shop offer acceptance count.
-      promises.push(
-        Shop.findByIdAndUpdate(
-          shop.id,
-          {
-            $inc: {
-              offerAcceptanceCount: 1
-            }
-          },
-          { session }
-        )
-      );
+        // Increment shop offer acceptance count.
+        promises.push(
+          Shop.findByIdAndUpdate(
+            shop.id,
+            {
+              $inc: {
+                offerAcceptanceCount: 1
+              }
+            },
+            { session }
+          )
+        );
+      }
 
       // Run queries in parallel.
       await Promise.all(promises);
