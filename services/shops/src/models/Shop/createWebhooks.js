@@ -42,6 +42,11 @@ const definitions = [
     format: 'json'
   },
   {
+    topic: 'draft_orders/update',
+    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/draft-order-update`,
+    format: 'json'
+  },
+  {
     topic: 'products/create',
     address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/product`,
     format: 'json'

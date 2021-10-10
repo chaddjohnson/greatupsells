@@ -4,6 +4,7 @@ const models = require('..');
 
 const trackAcceptance = async (
   offerHit,
+  shopifyDraftOrderId,
   shopifyProductId = undefined,
   shopifyVariantId = undefined,
   quantity = 0
@@ -30,6 +31,7 @@ const trackAcceptance = async (
       if (shopifyProductId && shopifyVariantId) {
         promises.push(
           offerHit.trackAcceptedProduct(
+            shopifyDraftOrderId,
             shopifyProductId,
             shopifyVariantId,
             quantity

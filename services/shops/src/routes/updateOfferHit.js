@@ -14,36 +14,38 @@ const handler = async (event, context) => {
   }
 
   try {
+    const { offerHitId } = event.pathParameters;
     const OfferHit = await models.get('OfferHit');
-    const {
-      offerHitId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    } = JSON.parse(event.body);
     const offerHit = await OfferHit.findById(offerHitId);
+    const data = JSON.parse(event.body);
 
-    if (!offerHitId) {
+    if (!offerHit) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    await offerHit.trackAcceptance(
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
+    delete data.__v;
+    Object.assign(offerHit, data);
+
+    try {
+      await offerHit.validate();
+    } catch (error) {
+      return {
+        statusCode: StatusCodes.BAD_REQUEST,
+        body: ReasonPhrases.BAD_REQUEST
+      };
+    }
+
+    await offerHit.save();
 
     return {
-      statusCode: StatusCodes.CREATED,
+      statusCode: StatusCodes.OK,
       body: JSON.stringify(offerHit)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer acceptance`, error, { event });
+    await logger.error(`Error updating offer hit`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

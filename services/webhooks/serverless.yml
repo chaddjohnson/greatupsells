@@ -76,6 +76,16 @@ functions:
       - http:
           path: /shopify/collection-deletion
           method: post
+  draftOrderUpdate:
+    reservedConcurrency: 1
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/draftOrderUpdate.handler
+    events:
+      - sqs:
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/draft-order-update/arn, ''}
+      - http:
+          path: /shopify/draft-order-update
+          method: post
   orderCancel:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}

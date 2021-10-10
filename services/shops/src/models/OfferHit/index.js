@@ -64,6 +64,7 @@ const schema = new mongoose.Schema(
     },
     shopifyOrderId: { type: Number, required: false },
     shopifyOrderNumber: { type: Int32, required: false },
+    shopifyDraftOrderId: { type: Number, required: false },
     ipAddress: { type: String, required: false },
     acceptedAt: { type: Date, required: false },
     convertedAt: { type: Date, required: false },
@@ -74,12 +75,6 @@ const schema = new mongoose.Schema(
 
 schema.statics.findByOrderId = function (orderId) {
   return OfferHit.find({ order: mongoose.Types.ObjectId(orderId) });
-};
-
-schema.statics.findOneByAcceptedVariantId = function (shopifyVariantId) {
-  return OfferHit.findOne({
-    'acceptedProducts.shopifyVariantId': parseInt(shopifyVariantId)
-  });
 };
 
 schema.statics.findImpressionsByOfferId = function (offerId, startAt, endAt) {
@@ -142,12 +137,14 @@ schema.methods.trackOfferedProducts = function (
 };
 
 schema.methods.trackAcceptedProduct = function (
+  shopifyDraftOrderId,
   shopifyProductId,
   shopifyVariantId,
   quantity
 ) {
   return trackAcceptedProduct(
     this,
+    shopifyDraftOrderId,
     shopifyProductId,
     shopifyVariantId,
     quantity
@@ -155,11 +152,18 @@ schema.methods.trackAcceptedProduct = function (
 };
 
 schema.methods.trackAcceptance = function (
+  shopifyDraftOrderId,
   shopifyProductId,
   shopifyVariantId,
   quantity
 ) {
-  return trackAcceptance(this, shopifyProductId, shopifyVariantId, quantity);
+  return trackAcceptance(
+    this,
+    shopifyDraftOrderId,
+    shopifyProductId,
+    shopifyVariantId,
+    quantity
+  );
 };
 
 schema.methods.trackConversion = function (order) {
@@ -177,7 +181,6 @@ schema.index({ order: 1 });
 schema.index({ createdAt: 1 });
 schema.index({ acceptedAt: 1 });
 schema.index({ convertedAt: 1 });
-schema.index({ 'acceptedProducts.shopifyVariantId': 1 });
 
 OfferHit = mongodbClient.connection.model('OfferHit', schema);
 

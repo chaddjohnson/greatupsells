@@ -23,23 +23,15 @@ const useOfferAcceptance = () => {
     shopifyVariantId,
     quantity
   ) => {
-    const draftOrderId = getCookie('upsellingDraftOrderId');
+    let shopifyDraftOrderId = getCookie('upsellingDraftOrderId');
     let draftOrder = null;
-
-    // Accept the offer.
-    await trackOfferAcceptance(
-      offerId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
     await addVariantToShopifyCart(shopifyVariantId, quantity);
 
     // Add the variant to the existing draft order if one exists.
-    if (draftOrderId) {
-      await addVariantToShopifyDraftOrder(draftOrderId, {
+    if (shopifyDraftOrderId) {
+      await addVariantToShopifyDraftOrder(shopifyDraftOrderId, {
         offerId,
         shopifyVariantId,
         quantity
@@ -47,7 +39,7 @@ const useOfferAcceptance = () => {
     }
 
     // Create a new draft order if one does not exist.
-    if (!draftOrderId) {
+    if (!shopifyDraftOrderId) {
       // Create a new draft order. Include the offered item and items already in the cart.
       // Associate the new item with the offer.
       draftOrder = await createShopifyDraftOrder({
@@ -63,6 +55,7 @@ const useOfferAcceptance = () => {
           }))
         ]
       });
+      shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
       setCookie('upsellingDraftOrderId', draftOrder.id, {
@@ -76,6 +69,15 @@ const useOfferAcceptance = () => {
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
     }
+
+    // Accept the offer.
+    await trackOfferAcceptance(
+      offerId,
+      shopifyDraftOrderId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    );
   };
 
   const addProductBundle = async (offerId, bundle) => {
@@ -99,21 +101,13 @@ const useOfferAcceptance = () => {
       ...shopifyCartItems.slice(triggerShopifyCartItemIndex + 1)
     ];
     const quantity = triggerShopifyCartItem?.quantity;
-    const draftOrderId = getCookie('upsellingDraftOrderId');
+    let shopifyDraftOrderId = getCookie('upsellingDraftOrderId');
     let draftOrder = null;
 
     // Abort if trigger product was not found in cart.
     if (!triggerShopifyCartItem || triggerShopifyCartItemIndex === -1) {
       return;
     }
-
-    // Accept the offer.
-    await trackOfferAcceptance(
-      offerId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
     await replaceVariantInShopifyCart(
@@ -122,15 +116,15 @@ const useOfferAcceptance = () => {
       quantity
     );
 
-    if (draftOrderId) {
+    if (shopifyDraftOrderId) {
       // Remove the trigger product from draft order.
       await removeShopifyDraftOrderVariant(
-        draftOrderId,
+        shopifyDraftOrderId,
         triggerShopifyVariantId
       );
 
       // Add the new variant to the existing draft order if one exists.
-      await addVariantToShopifyDraftOrder(draftOrderId, {
+      await addVariantToShopifyDraftOrder(shopifyDraftOrderId, {
         offerId,
         shopifyVariantId,
         quantity
@@ -138,7 +132,7 @@ const useOfferAcceptance = () => {
     }
 
     // Create a new draft order if one does not exist.
-    if (!draftOrderId) {
+    if (!shopifyDraftOrderId) {
       // Create a new draft order. Include the offered item and items already in the cart.
       // Associate the new item with the offer.
       draftOrder = await createShopifyDraftOrder({
@@ -154,6 +148,7 @@ const useOfferAcceptance = () => {
           }))
         ]
       });
+      shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
       setCookie('upsellingDraftOrderId', draftOrder.id, {
@@ -167,6 +162,15 @@ const useOfferAcceptance = () => {
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
     }
+
+    // Accept the offer.
+    await trackOfferAcceptance(
+      offerId,
+      shopifyDraftOrderId,
+      shopifyProductId,
+      shopifyVariantId,
+      quantity
+    );
   };
 
   return { addProduct, addProductBundle, replaceProduct };

@@ -2,6 +2,13 @@ const Promise = require('bluebird');
 const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
+const promiseWhile = (conditionFn, fn) => {
+  const whilst = () => {
+    return conditionFn() ? fn().then(whilst) : Promise.resolve();
+  };
+  return whilst();
+};
+
 const trackConversions = async (order) => {
   const [OfferHit] = await Promise.all([
     models.get('OfferHit'),
@@ -10,21 +17,20 @@ const trackConversions = async (order) => {
 
   await order.execPopulate('shop');
 
-  // Get line items for the order.
-  const lineItems = order.shopifyOrderData.line_items || [];
+  // Find all offer hits associated with the order.
+  const { shopifyOrderId } = order;
+  let offerHits = [];
+  let attempts = 0;
+  const conditionFn = () => offerHits.length === 0 && attempts < 3;
 
-  // Find all offer hits associated with line items.
-  let offerHits = await Promise.all(
-    lineItems.map(
-      async ({ variant_id: variantId }) =>
-        variantId && OfferHit.findOneByAcceptedVariantId(variantId)
-    )
-  );
-
-  offerHits = offerHits.filter(Boolean);
+  await promiseWhile(conditionFn, async () => {
+    offerHits = await OfferHit.find({ shopifyOrderId });
+    attempts++;
+    await Promise.delay(500);
+  });
 
   if (offerHits.length === 0) {
-    return offerHits;
+    return [];
   }
 
   const session = await mongodbClient.connection.startSession();

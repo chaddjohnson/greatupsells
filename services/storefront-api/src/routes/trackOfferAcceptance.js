@@ -31,6 +31,7 @@ const handler = middy(async (event, context) => {
     const { offerId } = event.pathParameters;
     const {
       offerHitId,
+      shopifyDraftOrderId,
       shopifyProductId,
       shopifyVariantId,
       quantity
@@ -38,6 +39,7 @@ const handler = middy(async (event, context) => {
 
     const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
+      shopifyDraftOrderId,
       shopifyProductId,
       shopifyVariantId,
       quantity

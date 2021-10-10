@@ -66,6 +66,23 @@ resource "aws_cloudwatch_event_rule" "collection_update" {
   })
 }
 
+resource "aws_cloudwatch_event_rule" "draft_order_update" {
+  name           = "draft-order-update-webhook"
+  event_bus_name = var.event_bus_name
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "draft_orders/update"
+        ]
+      }
+    }
+  })
+}
+
 resource "aws_cloudwatch_event_rule" "order_cancelation" {
   name           = "order-cancelation-webhook"
   event_bus_name = var.event_bus_name
@@ -211,6 +228,13 @@ resource "aws_cloudwatch_event_target" "collection_update" {
   event_bus_name = var.event_bus_name
   rule           = aws_cloudwatch_event_rule.collection_update.name
   arn            = aws_sqs_queue.collection.arn
+}
+
+resource "aws_cloudwatch_event_target" "draft_order_update" {
+  target_id      = "draft-order-update"
+  event_bus_name = var.event_bus_name
+  rule           = aws_cloudwatch_event_rule.draft_order_update.name
+  arn            = aws_sqs_queue.draft_order_update.arn
 }
 
 resource "aws_cloudwatch_event_target" "order_cancelation" {

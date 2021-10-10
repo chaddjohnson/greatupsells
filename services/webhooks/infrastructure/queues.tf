@@ -10,28 +10,32 @@ resource "aws_sqs_queue" "collection_deletion" {
   name = "collection-queue-${terraform.workspace}"
 }
 
+resource "aws_sqs_queue" "draft_order_update" {
+  name = "draft-order-update-queue-${terraform.workspace}"
+}
+
 resource "aws_sqs_queue" "order_cancelation" {
-  name = "order-cancelation-${terraform.workspace}"
+  name = "order-cancelation-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue" "order_paid" {
-  name = "order-paid-${terraform.workspace}"
+  name = "order-paid-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue" "order_update" {
-  name = "order-update-${terraform.workspace}"
+  name = "order-update-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue" "product" {
-  name = "product-${terraform.workspace}"
+  name = "product-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue" "product_deletion" {
-  name = "product-deletion-${terraform.workspace}"
+  name = "product-deletion-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue" "shop_update" {
-  name = "shop-update-${terraform.workspace}"
+  name = "shop-update-queue-${terraform.workspace}"
 }
 
 resource "aws_sqs_queue_policy" "app_uninstall_policy" {
@@ -59,6 +63,21 @@ resource "aws_sqs_queue_policy" "collection_policy" {
         "Principal" : "*",
         "Action" : "sqs:SendMessage",
         "Resource" : "${aws_sqs_queue.collection.arn}"
+      }
+    ]
+  })
+}
+
+resource "aws_sqs_queue_policy" "draft_order_update_policy" {
+  queue_url = aws_sqs_queue.draft_order_update.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.draft_order_update.arn}"
       }
     ]
   })
@@ -172,6 +191,13 @@ resource "aws_ssm_parameter" "collection_deletion_queue_arn" {
   name      = "/upselling/${terraform.workspace}/queues/collection-deletion/arn"
   type      = "String"
   value     = aws_sqs_queue.collection_deletion.arn
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "draft_order_update_queue_arn" {
+  name      = "/upselling/${terraform.workspace}/queues/draft-order-update/arn"
+  type      = "String"
+  value     = aws_sqs_queue.draft_order_update.arn
   overwrite = true
 }
 

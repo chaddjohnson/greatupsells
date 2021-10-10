@@ -207,6 +207,14 @@ functions:
           path: /offers/{offerId}/conversions
           method: get
           authorizer: aws_iam
+  findOfferHitsByDraftOrderId:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOfferHitsByDraftOrderId.handler
+    events:
+      - http:
+          path: /offer-hits/shopify-draft-order-id/{shopifyDraftOrderId}
+          method: get
+          authorizer: aws_iam
   findOfferRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
@@ -293,6 +301,14 @@ functions:
     events:
       - http:
           path: /offers/{offerId}
+          method: get
+          authorizer: aws_iam
+  findOneOfferHit:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneOfferHit.handler
+    events:
+      - http:
+          path: /offer-hits/{offerHitId}
           method: get
           authorizer: aws_iam
   findOneOrder:
@@ -409,6 +425,14 @@ functions:
     events:
       - http:
           path: /collections/{collectionId}
+          method: put
+          authorizer: aws_iam
+  updateOfferHit:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateOfferHit.handler
+    events:
+      - http:
+          path: /offer-hits/{offerHitId}
           method: put
           authorizer: aws_iam
   updateShopifyDraftOrder:

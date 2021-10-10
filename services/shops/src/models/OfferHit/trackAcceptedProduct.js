@@ -2,6 +2,7 @@ const models = require('..');
 
 const trackAcceptedProduct = async (
   offerHit,
+  shopifyDraftOrderId,
   shopifyProductId,
   shopifyVariantId,
   quantity
@@ -33,6 +34,9 @@ const trackAcceptedProduct = async (
 
   const originalPrice = parseFloat(variant.price);
   const acceptedPrice = offer.calculateDiscountedPrice(originalPrice);
+
+  // Track the draft order for the offer hit.
+  offerHit.shopifyDraftOrderId = shopifyDraftOrderId;
 
   // Track the accepted product data for the offer hit.
   offerHit.acceptedProducts = offerHit.acceptedProducts || [];

@@ -14,36 +14,20 @@ const handler = async (event, context) => {
   }
 
   try {
+    const { shopifyDraftOrderId } = event.pathParameters;
     const OfferHit = await models.get('OfferHit');
-    const {
-      offerHitId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    } = JSON.parse(event.body);
-    const offerHit = await OfferHit.findById(offerHitId);
-
-    if (!offerHitId) {
-      return {
-        statusCode: StatusCodes.NOT_FOUND,
-        body: ReasonPhrases.NOT_FOUND
-      };
-    }
-
-    await offerHit.trackAcceptance(
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
+    const offerHits = await OfferHit.find({ shopifyDraftOrderId });
 
     return {
-      statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offerHit)
+      statusCode: StatusCodes.OK,
+      body: JSON.stringify(offerHits)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer acceptance`, error, { event });
+    await logger.error(
+      `Error retrieving offer hits for Shopify draft order`,
+      error,
+      { event }
+    );
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
