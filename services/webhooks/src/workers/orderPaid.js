@@ -52,7 +52,7 @@ const processData = async (metadata, data, rawData) => {
     try {
       await httpClient.get(`/orders/shopify-order-id/${shopifyOrderId}`);
     } catch (error) {
-      await httpClient.post(`/orders`, {
+      await httpClient.post('/orders', {
         shop: shop._id,
         shopifyShopId,
         shopifyOrderId,
