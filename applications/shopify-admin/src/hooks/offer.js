@@ -22,20 +22,14 @@ const useOffer = (offerId) => {
     const url = isNew ? '/offers' : `/offers/${data._id}`;
     let updatedData = null;
 
-    try {
-      if (isNew) {
-        // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
-        updatedData = await httpClient.post(url, data);
-        showSuccessToast('Offer created.');
-      } else {
-        updatedData = await mutate(url, httpClient.put(url, data));
-        showSuccessToast('Offer updated.');
-      }
-
-      return updatedData;
-    } catch (error) {
-      showErrorToast(`Error ${isNew ? 'creating' : 'updating'} offer.`);
+    if (isNew) {
+      // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
+      updatedData = await httpClient.post(url, data);
+    } else {
+      updatedData = await mutate(url, httpClient.put(url, data));
     }
+
+    return updatedData;
   };
 
   const deleteOffer = async () => {
@@ -48,6 +42,7 @@ const useOffer = (offerId) => {
       showSuccessToast('Offer deleted.');
     } catch (error) {
       showErrorToast(`Error deleting offer.`);
+      throw error;
     }
   };
 
@@ -68,6 +63,7 @@ const useOffer = (offerId) => {
     } catch (error) {
       mutate(url, { ...offer, enabled: false }, false);
       showErrorToast('Error enabling offer');
+      throw error;
     }
   };
 
@@ -88,6 +84,7 @@ const useOffer = (offerId) => {
     } catch (error) {
       mutate(url, { ...offer, enabled: true }, false);
       showErrorToast('Error disabling offer.');
+      throw error;
     }
   };
 
@@ -104,6 +101,7 @@ const useOffer = (offerId) => {
       router.push(`/offers/${duplicatedOffer._id}/`);
     } catch (error) {
       showErrorToast(`Error duplicating offer.`);
+      throw error;
     }
   };
 
