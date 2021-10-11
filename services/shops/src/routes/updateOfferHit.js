@@ -17,6 +17,24 @@ const handler = async (event, context) => {
     const { offerHitId } = event.pathParameters;
     const OfferHit = await models.get('OfferHit');
     const offerHit = await OfferHit.findById(offerHitId);
+    const {
+      offer,
+      shop,
+      shopifyShopId,
+      strategy,
+      triggerEvent,
+      triggerPagePath,
+      triggerShopifyProductId,
+      offeredProducts,
+      acceptedProducts,
+      order,
+      shopifyOrderNumber,
+      shopifyDraftOrderId,
+      ipAddress,
+      acceptedAt,
+      convertedAt,
+      revenueIncrease
+    } = offerHit;
     const data = JSON.parse(event.body);
 
     if (!offerHit) {
@@ -27,10 +45,29 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(offerHit, data);
 
     try {
-      await offerHit.validate();
+      await offerHit.replaceOne({
+        ...data,
+
+        // Fields managed only by this API.
+        offer,
+        shop,
+        shopifyShopId,
+        strategy,
+        triggerEvent,
+        triggerPagePath,
+        triggerShopifyProductId,
+        offeredProducts,
+        acceptedProducts,
+        order,
+        shopifyOrderNumber,
+        shopifyDraftOrderId,
+        ipAddress,
+        acceptedAt,
+        convertedAt,
+        revenueIncrease
+      });
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,

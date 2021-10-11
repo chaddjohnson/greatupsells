@@ -31,15 +31,11 @@ const handler = middy(async (event, context) => {
 
   try {
     const { popupThemeId } = event.pathParameters;
-    const popupTheme = await httpClient.get(`/popup-themes/${popupThemeId}`);
     const data = JSON.parse(event.body);
 
     const updatedPopupTheme = await httpClient.put(
       `/popup-themes/${popupThemeId}`,
-      {
-        ...popupTheme,
-        ...data
-      }
+      data
     );
 
     return {

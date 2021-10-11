@@ -20,6 +20,7 @@ const handler = async (event, context) => {
       models.get('Shop')
     ]);
     const product = await Product.findById(productId);
+    const { shopifyCollectionIds, title } = product;
     const data = JSON.parse(event.body);
 
     if (!product) {
@@ -30,10 +31,15 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(product, data);
 
     try {
-      await product.validate();
+      await product.replaceOne({
+        ...data,
+
+        // Fields managed only by this API.
+        shopifyCollectionIds,
+        title
+      });
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
