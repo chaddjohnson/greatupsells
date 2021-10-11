@@ -110,7 +110,7 @@ const OfferTriggerProductsEditor = ({
   return (
     <>
       <Card
-        title={`In-cart trigger products${
+        title={`Cart trigger products${
           offer.strategy === 'CROSS_SELL' ? ' and collections' : ''
         }`}
       >
@@ -166,7 +166,7 @@ const OfferTriggerProductsEditor = ({
             )}
           </FormLayout>
         </Card.Section>
-        <Card.Section title="Minimum requirements">
+        <Card.Section title="Minimum cart requirements">
           <FormLayout>
             <ChoiceList
               choices={[
