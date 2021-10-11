@@ -110,7 +110,7 @@ const OfferTriggerProductsEditor = ({
   return (
     <>
       <Card
-        title={`Trigger products${
+        title={`In-cart trigger products${
           offer.strategy === 'CROSS_SELL' ? ' and collections' : ''
         }`}
       >
