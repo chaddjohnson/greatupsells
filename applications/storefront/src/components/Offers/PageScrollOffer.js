@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
@@ -7,7 +7,8 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
-const loadedAt = new Date();
+let delayTimeout = 0;
+let onPageRequiredSecondsTimeout = 0;
 
 const PageScrollOffer = ({
   offer,
@@ -23,6 +24,7 @@ const PageScrollOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(
     window.pageYOffset || document.documentElement.scrollTop
   );
@@ -32,6 +34,7 @@ const PageScrollOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -39,20 +42,22 @@ const PageScrollOffer = ({
     setOfferViewed(true);
     onOpen();
 
-    setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(async () => {
+        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+        const offeredShopifyProductIds = offeredProducts.map(
+          ({ shopifyProductData }) => shopifyProductData?.id
+        );
 
-      setPopupOpen(true);
+        setPopupOpen(true);
 
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds
-      });
-    }, delay);
+        await trackOfferImpression({
+          offerId,
+          triggerShopifyProductId,
+          offeredShopifyProductIds
+        });
+      }, delay);
+    }
   }, [
     offer,
     offerId,
@@ -67,65 +72,75 @@ const PageScrollOffer = ({
     onClose();
   };
 
-  const handleScroll = useCallback(() => {
-    // Reference: https://stackoverflow.com/a/31223774
-    // Reference: https://javascript.info/size-and-scroll-window#width-height-of-the-document
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollHeight = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight,
-      document.body.clientHeight,
-      document.documentElement.clientHeight
-    );
-    const windowHeight = window.innerHeight;
-    const scrollPercentage = (scrollTop + windowHeight) / scrollHeight;
-    const scrollingUp = lastScrollTop > scrollTop;
+  const handleScroll = useCallback(
+    () => {
+      const defaultTriggerScrollThreshold = 75;
+      const { triggerScrollThreshold = defaultTriggerScrollThreshold } =
+        offer || {};
 
-    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
-    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+      // Reference: https://stackoverflow.com/a/31223774
+      // Reference: https://javascript.info/size-and-scroll-window#width-height-of-the-document
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight,
+        document.body.clientHeight,
+        document.documentElement.clientHeight
+      );
+      const windowHeight = window.innerHeight;
+      const scrollPercentage = (scrollTop + windowHeight) / scrollHeight;
+      const scrollingUp = lastScrollTop > scrollTop;
 
-    setLastScrollTop(scrollTop);
+      setLastScrollTop(scrollTop);
 
-    // Nothing to show if there is no offer or product.
-    if (!offerId) {
-      return;
-    }
+      // Nothing to show if there is no offer or product.
+      if (!offerId) {
+        return;
+      }
 
-    // Abort if there are no offered products.
-    if (!offeredProducts?.length) {
-      return;
-    }
+      // Abort if there are no offered products.
+      if (!offeredProducts?.length) {
+        return;
+      }
 
-    // Abort if the offer was already viewed.
-    if (offerViewed) {
-      return;
-    }
+      // Abort if the offer was already viewed.
+      if (offerViewed) {
+        return;
+      }
 
-    // Abort if not on page required seconds.
-    if (!isOnPageRequiredSeconds) {
-      return;
-    }
+      // Abort if not on page required seconds.
+      if (!isOnPageRequiredSeconds) {
+        return;
+      }
 
-    // Abort if another offer is open.
-    if (viewingOffer) {
-      return;
-    }
+      // Abort if another offer is open.
+      if (viewingOffer) {
+        return;
+      }
 
-    // Ignore scroll up.
-    if (scrollingUp) {
-      return;
-    }
+      // Ignore scroll up.
+      if (scrollingUp) {
+        return;
+      }
 
-    const defaultTriggerScrollThreshold = 75;
-    const { triggerScrollThreshold = defaultTriggerScrollThreshold } = offer;
-
-    if (scrollPercentage >= triggerScrollThreshold / 100) {
-      openPopup();
-    }
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
+      if (scrollPercentage >= triggerScrollThreshold / 100) {
+        openPopup();
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      offer,
+      offerId,
+      offerViewed,
+      openPopup,
+      viewingOffer,
+      offeredProducts,
+      isOnPageRequiredSeconds
+    ]
+  );
 
   // Listen to scroll events.
   useEventListener('scroll', handleScroll, true);
@@ -134,8 +149,24 @@ const PageScrollOffer = ({
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setIsOnPageRequiredSeconds(false);
     setLastScrollTop(0);
+    clearTimeout(delayTimeout);
+    clearTimeout(onPageRequiredSecondsTimeout);
   });
+
+  useEffect(() => {
+    if (typeof onPageRequiredSeconds === 'number') {
+      if (onPageRequiredSeconds > 0) {
+        // Wait the required number of seconds to show the offer
+        onPageRequiredSecondsTimeout = setTimeout(() => {
+          setIsOnPageRequiredSeconds(true);
+        }, onPageRequiredSeconds * 1000);
+      } else {
+        setIsOnPageRequiredSeconds(true);
+      }
+    }
+  }, [onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

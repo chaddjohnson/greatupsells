@@ -60,7 +60,7 @@ const OfferTriggerEventEditor = ({
             {
               label: 'Page scroll',
               helpText:
-                'Offer is shown when the page is scrolled downward beyond a specified threshold.',
+                'Offer is shown when the page is actively scrolled downward beyond a specified threshold.',
               value: 'SCROLL',
               renderChildren: (isSelected) =>
                 isSelected && (
