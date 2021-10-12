@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
@@ -7,7 +7,8 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
-const loadedAt = new Date();
+let delayTimeout = 0;
+let onPageRequiredSecondsTimeout = 0;
 
 const ExitIntentOffer = ({
   offer,
@@ -23,12 +24,14 @@ const ExitIntentOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProduct, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -36,20 +39,22 @@ const ExitIntentOffer = ({
     setOfferViewed(true);
     onOpen();
 
-    setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(async () => {
+        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+        const offeredShopifyProductIds = offeredProducts.map(
+          ({ shopifyProductData }) => shopifyProductData?.id
+        );
 
-      setPopupOpen(true);
+        setPopupOpen(true);
 
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds
-      });
-    }, delay);
+        await trackOfferImpression({
+          offerId,
+          triggerShopifyProductId,
+          offeredShopifyProductIds
+        });
+      }, delay);
+    }
   }, [
     offer,
     offerId,
@@ -70,10 +75,6 @@ const ExitIntentOffer = ({
   const handleMouseOut = useCallback(
     (event) => {
       event = event || window.event;
-
-      const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-      const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
-      const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
 
       // Nothing to show if there is no offer.
       if (!offerId) {
@@ -130,8 +131,30 @@ const ExitIntentOffer = ({
         openPopup();
       }
     },
-    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      offer,
+      offerId,
+      offerViewed,
+      openPopup,
+      viewingOffer,
+      offeredProducts,
+      isOnPageRequiredSeconds
+    ]
   );
+
+  useEffect(() => {
+    if (typeof onPageRequiredSeconds === 'number') {
+      if (onPageRequiredSeconds > 0) {
+        // Wait the required number of seconds to show the offer
+        onPageRequiredSecondsTimeout = setTimeout(() => {
+          setIsOnPageRequiredSeconds(true);
+        }, onPageRequiredSeconds * 1000);
+      } else {
+        setIsOnPageRequiredSeconds(true);
+      }
+    }
+  }, [onPageRequiredSeconds]);
 
   // Reference: https://stackoverflow.com/a/56858467/83897
   const getScrollDelta = useMemo(() => {
@@ -194,6 +217,9 @@ const ExitIntentOffer = ({
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setIsOnPageRequiredSeconds(false);
+    clearTimeout(delayTimeout);
+    clearTimeout(onPageRequiredSecondsTimeout);
   });
 
   if (!offer || !shop) {

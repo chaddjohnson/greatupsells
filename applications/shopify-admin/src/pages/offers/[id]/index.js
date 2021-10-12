@@ -24,8 +24,10 @@ import {
   useOffer,
   usePopupTheme,
   usePopupThemes,
-  useOfferPopupThemes
+  useOfferPopupThemes,
+  useToast
 } from '../../../hooks';
+
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (
@@ -98,6 +100,8 @@ const OfferEditPage = () => {
   const router = useRouter();
   const offerId = router.query.id;
 
+  const { showSuccessToast, showErrorToast } = useToast();
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { shop, shopLoading, shopError } = useShop();
@@ -143,32 +147,38 @@ const OfferEditPage = () => {
   );
 
   const handleSubmit = async (data) => {
-    // Save the offer.
-    const updatedOffer = await saveOffer(data.offer);
+    try {
+      // Save the offer.
+      const updatedOffer = await saveOffer(data.offer);
 
-    // Associate the offer popup themes with the offer.
-    data.popupTheme.offer = updatedOffer._id;
-    data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
-      ...current,
-      offer: updatedOffer._id
-    }));
+      // Associate the offer popup themes with the offer.
+      data.popupTheme.offer = updatedOffer._id;
+      data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
+        ...current,
+        offer: updatedOffer._id
+      }));
 
-    // Save the selected popup theme and the other popup themes in parallel.
-    const [updatedPopupTheme] = await Promise.all([
-      savePopupTheme(data.popupTheme),
-      ...data.offerPopupThemes
-        .filter(({ _id }) => _id !== data.popupTheme._id)
-        .map(async (current) => {
-          return await savePopupTheme(current);
-        })
-    ]);
+      // Save the selected popup theme and the other popup themes in parallel.
+      const [updatedPopupTheme] = await Promise.all([
+        savePopupTheme(data.popupTheme),
+        ...data.offerPopupThemes
+          .filter(({ _id }) => _id !== data.popupTheme._id)
+          .map(async (current) => {
+            return await savePopupTheme(current);
+          })
+      ]);
 
-    if (updatedOffer.popupTheme !== updatedPopupTheme._id) {
-      // Associate the selected popup theme with the offer.
-      updatedOffer.popupTheme = updatedPopupTheme._id;
+      if (updatedOffer.popupTheme !== updatedPopupTheme._id) {
+        // Associate the selected popup theme with the offer.
+        updatedOffer.popupTheme = updatedPopupTheme._id;
 
-      // Update the offer.
-      await saveOffer(updatedOffer);
+        // Update the offer.
+        await saveOffer(updatedOffer);
+      }
+
+      showSuccessToast('Offer updated.');
+    } catch (saveError) {
+      showErrorToast(`Error updating offer.`);
     }
   };
 

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@neatowebsolutions/upselling-logger');
 const mongodbClient = require('../models/mongodbClient');
@@ -20,6 +21,7 @@ const handler = async (event, context) => {
       models.get('Shop')
     ]);
     const collection = await Collection.findById(collectionId);
+    const { shopifyProductIds, title, productCount } = collection;
     const data = JSON.parse(event.body);
 
     if (!collection) {
@@ -30,10 +32,16 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(collection, data);
 
     try {
-      await collection.validate();
+      await collection.replaceOne({
+        ...data,
+
+        // Fields managed only by this API.
+        shopifyProductIds,
+        title,
+        productCount
+      });
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,

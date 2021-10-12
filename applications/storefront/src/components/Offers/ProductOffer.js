@@ -13,6 +13,8 @@ import {
 
 const triggerEvent = 'ADD';
 const loadedAt = new Date();
+let delayTimeout = 0;
+let onPageRequiredSecondsTimeout = 0;
 
 const ProductOffer = ({
   shopifyCartItems,
@@ -24,6 +26,7 @@ const ProductOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
@@ -48,6 +51,7 @@ const ProductOffer = ({
     offerData?.[0] || {};
   const offerId = offer?._id;
   const { shop } = useShop();
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -55,20 +59,22 @@ const ProductOffer = ({
     setOfferViewed(true);
     onOpen();
 
-    setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(async () => {
+        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+        const offeredShopifyProductIds = offeredProducts.map(
+          ({ shopifyProductData }) => shopifyProductData?.id
+        );
 
-      setPopupOpen(true);
+        setPopupOpen(true);
 
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds
-      });
-    }, delay);
+        await trackOfferImpression({
+          offerId,
+          triggerShopifyProductId,
+          offeredShopifyProductIds
+        });
+      }, delay);
+    }
   }, [
     offer,
     offerId,
@@ -86,11 +92,28 @@ const ProductOffer = ({
     onClose();
   };
 
-  useEffect(() => {
-    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
-    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
+  // Subscribe to product add events for triggering the popup to show.
+  useShopifyCartAddListener((addedProduct) => {
+    if (!offerViewed && addedProduct) {
+      setShopifyProductIds([addedProduct.product_id]);
+      setShopifyVariantIds([addedProduct.variant_id]);
+      setProductAdded(true);
+    }
+  });
 
+  // Listen to pushState events.
+  usePushStateListener(() => {
+    setOfferViewed(false);
+    setPopupOpen(false);
+    setIsOnPageRequiredSeconds(false);
+    setShopifyProductIds([]);
+    setShopifyVariantIds([]);
+    setProductAdded(false);
+    clearTimeout(delayTimeout);
+    clearTimeout(onPageRequiredSecondsTimeout);
+  });
+
+  useEffect(() => {
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -117,25 +140,31 @@ const ProductOffer = ({
     }
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]);
+  }, [
+    offer,
+    offerId,
+    offerViewed,
+    openPopup,
+    viewingOffer,
+    offeredProducts,
+    isOnPageRequiredSeconds
+  ]);
 
-  // Subscribe to product add events for triggering the popup to show.
-  useShopifyCartAddListener((addedProduct) => {
-    if (!offerViewed && addedProduct) {
-      setShopifyProductIds([addedProduct.product_id]);
-      setShopifyVariantIds([addedProduct.variant_id]);
-      setProductAdded(true);
+  useEffect(() => {
+    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
+    const remainingSeconds = (onPageRequiredSeconds || 0) - secondsSinceLoad;
+
+    if (typeof onPageRequiredSeconds === 'number') {
+      if (remainingSeconds > 0) {
+        // Wait the required number of seconds to show the offer
+        onPageRequiredSecondsTimeout = setTimeout(() => {
+          setIsOnPageRequiredSeconds(true);
+        }, remainingSeconds * 1000);
+      } else {
+        setIsOnPageRequiredSeconds(true);
+      }
     }
-  });
-
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setOfferViewed(false);
-    setPopupOpen(false);
-    setShopifyProductIds([]);
-    setShopifyVariantIds([]);
-    setProductAdded(false);
-  });
+  }, [onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

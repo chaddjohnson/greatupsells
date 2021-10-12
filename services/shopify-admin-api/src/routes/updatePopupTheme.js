@@ -52,10 +52,7 @@ const handler = middy(async (event, context) => {
 
     const updatedPopupTheme = await httpClient.put(
       `/popup-themes/${popupThemeId}`,
-      {
-        ...popupTheme,
-        ...data
-      }
+      data
     );
 
     return {

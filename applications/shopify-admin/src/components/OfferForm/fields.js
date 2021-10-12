@@ -92,7 +92,7 @@ const useFields = (initialOffer, showEndDate) => {
   const minimumRequirement = useField(initialOffer.minimumRequirement);
   const minimumRequiredAmount = useField(
     {
-      value: initialOffer.minimumRequiredAmount,
+      value: initialOffer.minimumRequiredAmount?.toString(),
       validates: [
         (value) => {
           if (minimumRequirement.value !== 'NONE' && !value) {

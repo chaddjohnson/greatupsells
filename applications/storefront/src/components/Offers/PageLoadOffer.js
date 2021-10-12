@@ -4,7 +4,8 @@ import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
-const loadedAt = new Date();
+let delayTimeout = 0;
+let onPageRequiredSecondsTimeout = 0;
 
 const PageLoadOffer = ({
   offer,
@@ -20,12 +21,14 @@ const PageLoadOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProduct, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -33,20 +36,22 @@ const PageLoadOffer = ({
     setOfferViewed(true);
     onOpen();
 
-    setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(async () => {
+        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+        const offeredShopifyProductIds = offeredProducts.map(
+          ({ shopifyProductData }) => shopifyProductData?.id
+        );
 
-      setPopupOpen(true);
+        setPopupOpen(true);
 
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds
-      });
-    }, delay);
+        await trackOfferImpression({
+          offerId,
+          triggerShopifyProductId,
+          offeredShopifyProductIds
+        });
+      }, delay);
+    }
   }, [
     offer,
     offerId,
@@ -65,13 +70,12 @@ const PageLoadOffer = ({
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setIsOnPageRequiredSeconds(false);
+    clearTimeout(delayTimeout);
+    clearTimeout(onPageRequiredSecondsTimeout);
   });
 
   useEffect(() => {
-    const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-    const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
-    const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
-
     // Nothing to show if there is no offer or product.
     if (!offerId) {
       return;
@@ -101,7 +105,28 @@ const PageLoadOffer = ({
     // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
 
     openPopup();
-  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]);
+  }, [
+    offer,
+    offerId,
+    offerViewed,
+    openPopup,
+    viewingOffer,
+    offeredProducts,
+    isOnPageRequiredSeconds
+  ]);
+
+  useEffect(() => {
+    if (typeof onPageRequiredSeconds === 'number') {
+      if (onPageRequiredSeconds > 0) {
+        // Wait the required number of seconds to show the offer
+        onPageRequiredSecondsTimeout = setTimeout(() => {
+          setIsOnPageRequiredSeconds(true);
+        }, onPageRequiredSeconds * 1000);
+      } else {
+        setIsOnPageRequiredSeconds(true);
+      }
+    }
+  }, [onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

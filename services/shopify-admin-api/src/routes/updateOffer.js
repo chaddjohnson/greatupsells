@@ -33,7 +33,10 @@ const handler = middy(async (event, context) => {
   try {
     const { shopId } = event.requestContext.authorizer;
     const { offerId } = event.pathParameters;
-    const offer = await httpClient.get(`/offers/${offerId}`);
+    const [shop, offer] = await Promise.all([
+      httpClient.get(`/shops/${shopId}`),
+      httpClient.get(`/offers/${offerId}`)
+    ]);
     const offerShopId = offer && offer.shop;
     const data = JSON.parse(event.body);
 
@@ -50,19 +53,17 @@ const handler = middy(async (event, context) => {
       };
     }
 
+    data.shop = shop._id;
+    data.shopifyShopId = shop.shopifyShopId;
+
     // Disallow updating specific fields.
-    delete data.shop;
-    delete data.shopifyShopId;
     delete data.impressionCount;
     delete data.acceptanceCount;
     delete data.conversionCount;
     delete data.conversionRate;
     delete data.revenueIncrease;
 
-    const updatedOffer = await httpClient.put(`/offers/${offerId}`, {
-      ...offer,
-      ...data
-    });
+    const updatedOffer = await httpClient.put(`/offers/${offerId}`, data);
 
     return {
       statusCode: StatusCodes.OK,

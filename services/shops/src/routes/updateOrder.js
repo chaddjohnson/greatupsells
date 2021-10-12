@@ -20,6 +20,7 @@ const handler = async (event, context) => {
       models.get('Shop')
     ]);
     const order = await Order.findById(orderId);
+    const { revenueIncrease } = order;
     const data = JSON.parse(event.body);
 
     if (!order) {
@@ -30,10 +31,14 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(order, data);
 
     try {
-      await order.validate();
+      await order.replaceOne({
+        ...data,
+
+        // Fields managed only by this API.
+        revenueIncrease
+      });
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,

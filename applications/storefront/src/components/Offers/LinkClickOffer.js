@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import {
@@ -26,7 +26,8 @@ if (!Element.prototype.closest) {
   };
 }
 
-const loadedAt = new Date();
+let delayTimeout = 0;
+let onPageRequiredSecondsTimeout = 0;
 
 const LinkClickOffer = ({
   offer,
@@ -42,6 +43,7 @@ const LinkClickOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [openLinkInNewWindow, setOpenLinkInNewWindow] = useState(false);
 
@@ -50,6 +52,7 @@ const LinkClickOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
     const delay = (offer?.delaySeconds || 0) * 1000;
@@ -57,20 +60,22 @@ const LinkClickOffer = ({
     setOfferViewed(true);
     onOpen();
 
-    setTimeout(async () => {
-      const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-      const offeredShopifyProductIds = offeredProducts.map(
-        ({ shopifyProductData }) => shopifyProductData?.id
-      );
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(async () => {
+        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+        const offeredShopifyProductIds = offeredProducts.map(
+          ({ shopifyProductData }) => shopifyProductData?.id
+        );
 
-      setPopupOpen(true);
+        setPopupOpen(true);
 
-      await trackOfferImpression({
-        offerId,
-        triggerShopifyProductId,
-        offeredShopifyProductIds
-      });
-    }, delay);
+        await trackOfferImpression({
+          offerId,
+          triggerShopifyProductId,
+          offeredShopifyProductIds
+        });
+      }, delay);
+    }
   }, [
     offer,
     offerId,
@@ -83,11 +88,6 @@ const LinkClickOffer = ({
   const handleLinkClick = useCallback(
     (event) => {
       event = event || window.event;
-
-      const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-      const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
-      const isOnPageRequiredSeconds = secondsSinceLoad >= onPageRequiredSeconds;
-
       // Nothing to show if there is no offer or product.
       if (!offerId) {
         return;
@@ -102,7 +102,6 @@ const LinkClickOffer = ({
       if (offerViewed) {
         return;
       }
-
       // Abort if not on page required seconds.
       if (!isOnPageRequiredSeconds) {
         return;
@@ -150,7 +149,15 @@ const LinkClickOffer = ({
       // Finally, open the popup.
       openPopup();
     },
-    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts]
+    [
+      offer,
+      offerId,
+      offerViewed,
+      openPopup,
+      viewingOffer,
+      offeredProducts,
+      isOnPageRequiredSeconds
+    ]
   );
 
   const handleClosePopup = () => {
@@ -185,9 +192,25 @@ const LinkClickOffer = ({
   usePushStateListener(() => {
     setOfferViewed(false);
     setPopupOpen(false);
+    setIsOnPageRequiredSeconds(false);
     setLinkUrl('');
     setOpenLinkInNewWindow(false);
+    clearTimeout(delayTimeout);
+    clearTimeout(onPageRequiredSecondsTimeout);
   });
+
+  useEffect(() => {
+    if (typeof onPageRequiredSeconds === 'number') {
+      if (onPageRequiredSeconds > 0) {
+        // Wait the required number of seconds to show the offer
+        onPageRequiredSecondsTimeout = setTimeout(() => {
+          setIsOnPageRequiredSeconds(true);
+        }, onPageRequiredSeconds * 1000);
+      } else {
+        setIsOnPageRequiredSeconds(true);
+      }
+    }
+  }, [onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

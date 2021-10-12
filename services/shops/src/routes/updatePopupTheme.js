@@ -27,10 +27,9 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(popupTheme, data);
 
     try {
-      await popupTheme.validate();
+      await popupTheme.replaceOne(data);
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,

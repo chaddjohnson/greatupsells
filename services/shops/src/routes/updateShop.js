@@ -17,8 +17,17 @@ const handler = async (event, context) => {
     const { shopId } = event.pathParameters;
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
-    const data = JSON.parse(event.body);
+    const {
+      shopifyShopId,
+      plan,
+      offerImpressionCount,
+      offerAcceptanceCount,
+      offerConversionCount,
+      offerConversionRate,
+      revenueIncrease
+    } = shop;
     const shopifyPlanCanceled = shop.shopifyPlan === 'cancelled';
+    const data = JSON.parse(event.body);
 
     if (!shop) {
       return {
@@ -28,10 +37,20 @@ const handler = async (event, context) => {
     }
 
     delete data.__v;
-    Object.assign(shop, data);
 
     try {
-      await shop.validate();
+      await shop.replaceOne({
+        ...data,
+
+        // Fields managed only by this API.
+        shopifyShopId,
+        plan,
+        offerImpressionCount,
+        offerAcceptanceCount,
+        offerConversionCount,
+        offerConversionRate,
+        revenueIncrease
+      });
     } catch (error) {
       return {
         statusCode: StatusCodes.BAD_REQUEST,
