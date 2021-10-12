@@ -507,7 +507,7 @@ functions:
         enabled: false
   importShopCollections:
     memorySize: 512
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopCollections.handler
     events:
@@ -519,7 +519,7 @@ functions:
         enabled: false
   importShopProducts:
     memorySize: 512
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopProducts.handler
     events:
