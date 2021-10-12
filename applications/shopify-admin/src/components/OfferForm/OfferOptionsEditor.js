@@ -79,9 +79,11 @@ const OfferOptionsEditor = ({
 
   useEffect(() => {
     if (!['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent)) {
-      handleDelaySecondsActiveChange(false);
+      setDelaySecondsActive(false);
+      delaySeconds.onChange(undefined);
     }
-  }, [offer.triggerEvent, handleDelaySecondsActiveChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offer.triggerEvent]);
 
   return (
     <Card title="Options" sectioned>
