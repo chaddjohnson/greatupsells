@@ -52,7 +52,7 @@ functions:
     handler: src/workers/appUninstall.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:app-uninstall-queue-dev'}
       - http:
           path: /shopify/app-uninstall
           method: post
@@ -62,7 +62,7 @@ functions:
     handler: src/workers/collection.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-queue-dev'}
       - http:
           path: /shopify/collection
           method: post
@@ -72,7 +72,7 @@ functions:
     handler: src/workers/collectionDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-deletion-queue-dev'}
       - http:
           path: /shopify/collection-deletion
           method: post
@@ -82,7 +82,7 @@ functions:
     handler: src/workers/draftOrderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/draft-order-update/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/draft-order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:draft-order-update-queue-dev'}
       - http:
           path: /shopify/draft-order-update
           method: post
@@ -92,7 +92,7 @@ functions:
     handler: src/workers/orderCancel.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-cancelation-queue-dev'}
       - http:
           path: /shopify/order-cancelation
           method: post
@@ -102,7 +102,7 @@ functions:
     handler: src/workers/orderPaid.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-paid-queue-dev'}
       - http:
           path: /shopify/order-paid
           method: post
@@ -112,7 +112,7 @@ functions:
     handler: src/workers/orderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-update-queue-dev'}
       - http:
           path: /shopify/order-update
           method: post
@@ -122,7 +122,7 @@ functions:
     handler: src/workers/product.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-queue-dev'}
           batchSize: 10
           maximumBatchingWindow: 10
       - http:
@@ -134,7 +134,7 @@ functions:
     handler: src/workers/productDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-deletion-queue-dev'}
       - http:
           path: /shopify/product-deletion
           method: post
@@ -144,7 +144,7 @@ functions:
     handler: src/workers/shop.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-update-queue-dev'}
       - http:
           path: /shopify/shop
           method: post
@@ -155,5 +155,5 @@ plugins:
   - serverless-plugin-warmup
 
 package:
-  exclude:
-    - infrastructure/**
+  patterns:
+    - '!infrastructure/**'
