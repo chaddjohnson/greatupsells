@@ -26,6 +26,7 @@ const ProductOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [delayFinished, setDelayFinished] = useState(false);
   const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [shopifyProductIds, setShopifyProductIds] = useState([]);
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
@@ -46,43 +47,31 @@ const ProductOffer = ({
       !shopifyCartLoading
   });
   const { addProduct, replaceProduct } = useOfferAcceptance();
+  const { shop } = useShop();
 
   const { offer, popupTheme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
   const offerId = offer?._id;
-  const { shop } = useShop();
+  const delaySeconds = offer?.delaySeconds;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
-    const delay = (offer?.delaySeconds || 0) * 1000;
-
     setOfferViewed(true);
     onOpen();
 
-    if (!delayTimeout) {
-      delayTimeout = setTimeout(async () => {
-        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-        const offeredShopifyProductIds = offeredProducts.map(
-          ({ shopifyProductData }) => shopifyProductData?.id
-        );
+    const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
 
-        setPopupOpen(true);
+    setPopupOpen(true);
 
-        await trackOfferImpression({
-          offerId,
-          triggerShopifyProductId,
-          offeredShopifyProductIds
-        });
-      }, delay);
-    }
-  }, [
-    offer,
-    offerId,
-    triggerProduct,
-    offeredProducts,
-    trackOfferImpression,
-    onOpen
-  ]);
+    trackOfferImpression({
+      offerId,
+      triggerShopifyProductId,
+      offeredShopifyProductIds
+    });
+  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -139,6 +128,10 @@ const ProductOffer = ({
       return;
     }
 
+    if (!delayFinished) {
+      return;
+    }
+
     openPopup();
   }, [
     offer,
@@ -147,8 +140,23 @@ const ProductOffer = ({
     openPopup,
     viewingOffer,
     offeredProducts,
-    isOnPageRequiredSeconds
+    isOnPageRequiredSeconds,
+    delayFinished
   ]);
+
+  useEffect(() => {
+    if (typeof delaySeconds === 'number') {
+      if (delaySeconds > 0) {
+        if (!delayTimeout) {
+          delayTimeout = setTimeout(() => {
+            setDelayFinished(true);
+          }, delaySeconds * 1000);
+        }
+      } else {
+        setDelayFinished(true);
+      }
+    }
+  }, [delaySeconds]);
 
   useEffect(() => {
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
