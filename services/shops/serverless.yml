@@ -512,7 +512,7 @@ functions:
     handler: src/workers/importShopCollections.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
     timeout: 900
     warmup:
       default:
@@ -524,7 +524,7 @@ functions:
     handler: src/workers/importShopProducts.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, ''}
+          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
     timeout: 900
     warmup:
       default:
@@ -560,5 +560,5 @@ plugins:
   - serverless-plugin-conditional-functions
 
 package:
-  exclude:
-    - infrastructure/**
+  patterns:
+    - '!infrastructure/**'

@@ -365,5 +365,5 @@ plugins:
   - serverless-plugin-warmup
 
 package:
-  exclude:
-    - infrastructure/**
+  patterns:
+    - '!infrastructure/**'

@@ -88,6 +88,6 @@ plugins:
   - serverless-plugin-warmup
 
 package:
-  exclude:
-    - infrastructure/**
-    - .next/cache/webpack/**
+  patterns:
+    - '!infrastructure/**'
+    - '!.next/cache/webpack/**'
