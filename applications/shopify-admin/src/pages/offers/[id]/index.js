@@ -168,7 +168,10 @@ const OfferEditPage = () => {
           })
       ]);
 
-      if (updatedOffer.popupTheme !== updatedPopupTheme._id) {
+      if (
+        updatedPopupTheme?._id &&
+        updatedOffer.popupTheme !== updatedPopupTheme._id
+      ) {
         // Associate the selected popup theme with the offer.
         updatedOffer.popupTheme = updatedPopupTheme._id;
 
