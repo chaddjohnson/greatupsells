@@ -26,7 +26,6 @@ if (!Element.prototype.closest) {
   };
 }
 
-let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
 const LinkClickOffer = ({
@@ -55,35 +54,22 @@ const LinkClickOffer = ({
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
-    const delay = (offer?.delaySeconds || 0) * 1000;
-
     setOfferViewed(true);
     onOpen();
 
-    if (!delayTimeout) {
-      delayTimeout = setTimeout(async () => {
-        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-        const offeredShopifyProductIds = offeredProducts.map(
-          ({ shopifyProductData }) => shopifyProductData?.id
-        );
+    const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
 
-        setPopupOpen(true);
+    setPopupOpen(true);
 
-        await trackOfferImpression({
-          offerId,
-          triggerShopifyProductId,
-          offeredShopifyProductIds
-        });
-      }, delay);
-    }
-  }, [
-    offer,
-    offerId,
-    triggerProduct,
-    offeredProducts,
-    trackOfferImpression,
-    onOpen
-  ]);
+    trackOfferImpression({
+      offerId,
+      triggerShopifyProductId,
+      offeredShopifyProductIds
+    });
+  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleLinkClick = useCallback(
     (event) => {
@@ -195,7 +181,6 @@ const LinkClickOffer = ({
     setIsOnPageRequiredSeconds(false);
     setLinkUrl('');
     setOpenLinkInNewWindow(false);
-    clearTimeout(delayTimeout);
     clearTimeout(onPageRequiredSecondsTimeout);
   });
 

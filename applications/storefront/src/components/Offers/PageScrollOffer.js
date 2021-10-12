@@ -24,6 +24,7 @@ const PageScrollOffer = ({
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
+  const [delayFinished, setDelayFinished] = useState(false);
   const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(
     window.pageYOffset || document.documentElement.scrollTop
@@ -34,38 +35,26 @@ const PageScrollOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
+  const delaySeconds = offer?.delaySeconds;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
-    const delay = (offer?.delaySeconds || 0) * 1000;
-
     setOfferViewed(true);
     onOpen();
 
-    if (!delayTimeout) {
-      delayTimeout = setTimeout(async () => {
-        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-        const offeredShopifyProductIds = offeredProducts.map(
-          ({ shopifyProductData }) => shopifyProductData?.id
-        );
+    const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
 
-        setPopupOpen(true);
+    setPopupOpen(true);
 
-        await trackOfferImpression({
-          offerId,
-          triggerShopifyProductId,
-          offeredShopifyProductIds
-        });
-      }, delay);
-    }
-  }, [
-    offer,
-    offerId,
-    triggerProduct,
-    offeredProducts,
-    trackOfferImpression,
-    onOpen
-  ]);
+    trackOfferImpression({
+      offerId,
+      triggerShopifyProductId,
+      offeredShopifyProductIds
+    });
+  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -121,6 +110,10 @@ const PageScrollOffer = ({
         return;
       }
 
+      if (!delayFinished) {
+        return;
+      }
+
       // Ignore scroll up.
       if (scrollingUp) {
         return;
@@ -138,7 +131,8 @@ const PageScrollOffer = ({
       openPopup,
       viewingOffer,
       offeredProducts,
-      isOnPageRequiredSeconds
+      isOnPageRequiredSeconds,
+      delayFinished
     ]
   );
 
@@ -154,6 +148,20 @@ const PageScrollOffer = ({
     clearTimeout(delayTimeout);
     clearTimeout(onPageRequiredSecondsTimeout);
   });
+
+  useEffect(() => {
+    if (typeof delaySeconds === 'number') {
+      if (delaySeconds > 0) {
+        if (!delayTimeout) {
+          delayTimeout = setTimeout(() => {
+            setDelayFinished(true);
+          }, delaySeconds * 1000);
+        }
+      } else {
+        setDelayFinished(true);
+      }
+    }
+  }, [delaySeconds]);
 
   useEffect(() => {
     if (typeof onPageRequiredSeconds === 'number') {

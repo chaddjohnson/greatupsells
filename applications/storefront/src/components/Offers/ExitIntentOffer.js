@@ -7,7 +7,6 @@ import {
 } from '@neatowebsolutions/upselling-react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
-let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
 const ExitIntentOffer = ({
@@ -34,35 +33,22 @@ const ExitIntentOffer = ({
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
 
   const openPopup = useCallback(() => {
-    const delay = (offer?.delaySeconds || 0) * 1000;
-
     setOfferViewed(true);
     onOpen();
 
-    if (!delayTimeout) {
-      delayTimeout = setTimeout(async () => {
-        const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-        const offeredShopifyProductIds = offeredProducts.map(
-          ({ shopifyProductData }) => shopifyProductData?.id
-        );
+    const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const offeredShopifyProductIds = offeredProducts.map(
+      ({ shopifyProductData }) => shopifyProductData?.id
+    );
 
-        setPopupOpen(true);
+    setPopupOpen(true);
 
-        await trackOfferImpression({
-          offerId,
-          triggerShopifyProductId,
-          offeredShopifyProductIds
-        });
-      }, delay);
-    }
-  }, [
-    offer,
-    offerId,
-    triggerProduct,
-    offeredProducts,
-    trackOfferImpression,
-    onOpen
-  ]);
+    trackOfferImpression({
+      offerId,
+      triggerShopifyProductId,
+      offeredShopifyProductIds
+    });
+  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -218,7 +204,6 @@ const ExitIntentOffer = ({
     setOfferViewed(false);
     setPopupOpen(false);
     setIsOnPageRequiredSeconds(false);
-    clearTimeout(delayTimeout);
     clearTimeout(onPageRequiredSecondsTimeout);
   });
 

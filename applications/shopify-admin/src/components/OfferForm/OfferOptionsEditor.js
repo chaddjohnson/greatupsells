@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -77,6 +77,14 @@ const OfferOptionsEditor = ({
     }
   };
 
+  useEffect(() => {
+    if (!['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent)) {
+      setDelaySecondsActive(false);
+      delaySeconds.onChange(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offer.triggerEvent]);
+
   return (
     <Card title="Options" sectioned>
       <FormLayout>
@@ -95,24 +103,26 @@ const OfferOptionsEditor = ({
           helpText="Variants with no inventory will be disabled, and products with no inventory variants will not be offered."
           {...asChoiceField(disableOutOfStockVariants)}
         />
-        <Checkbox
-          label="Delay showing offer after trigger event"
-          helpText={
-            delaySecondsActive && (
-              <SecondsInputWrapper>
-                <TextField
-                  inputMode="numeric"
-                  min={0}
-                  suffix="seconds"
-                  {...delaySeconds}
-                  error={submitted && delaySeconds.error}
-                />
-              </SecondsInputWrapper>
-            )
-          }
-          checked={delaySecondsActive}
-          onChange={handleDelaySecondsActiveChange}
-        />
+        {['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
+          <Checkbox
+            label="Delay showing offer after trigger event"
+            helpText={
+              delaySecondsActive && (
+                <SecondsInputWrapper>
+                  <TextField
+                    inputMode="numeric"
+                    min={0}
+                    suffix="seconds"
+                    {...delaySeconds}
+                    error={submitted && delaySeconds.error}
+                  />
+                </SecondsInputWrapper>
+              )
+            }
+            checked={delaySecondsActive}
+            onChange={handleDelaySecondsActiveChange}
+          />
+        )}
         <Checkbox
           label="Require customer be on page for a specified amount of time before allowing offer to show"
           helpText={
