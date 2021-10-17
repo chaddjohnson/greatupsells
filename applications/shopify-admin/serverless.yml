@@ -95,7 +95,6 @@ plugins:
   - serverless-plugin-monorepo
   - serverless-domain-manager
   - serverless-plugin-warmup
-  - serverless-apigw-binary
 
 package:
   patterns:
