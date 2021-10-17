@@ -46,6 +46,16 @@ custom:
       prewarm: true
       events:
         - schedule: rate(5 minutes)
+  apigwBinary:
+    types:
+      - 'font/eot'
+      - 'font/opentype'
+      - 'font/otf'
+      - 'font/woff'
+      - 'font/woff2'
+      - 'image/jpeg'
+      - 'image/png'
+      - 'image/svg+xml'
 
 functions:
   health:
@@ -86,6 +96,7 @@ plugins:
   - serverless-plugin-monorepo
   - serverless-domain-manager
   - serverless-plugin-warmup
+  - serverless-apigw-binary
 
 package:
   patterns:
