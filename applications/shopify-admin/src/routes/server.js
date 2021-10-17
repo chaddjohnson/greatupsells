@@ -4,7 +4,6 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const connect = require('koa-connect');
 const helmet = require('koa-helmet');
-const serve = require('koa-static');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const next = require('next');
@@ -91,8 +90,6 @@ const createServer = () => {
   }
 
   server.keys = [Shopify.Context.API_SECRET_KEY];
-
-  server.use(serve(`${__dirname}/images`));
 
   server.use(
     shopifyAuth({
