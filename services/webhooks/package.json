@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/neatowebsolutions/upselling.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/webhooks#readme",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/webhooks#readme",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {

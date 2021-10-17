@@ -1,13 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Form,
-  Layout,
-  Card,
-  TextStyle,
-  PageActions,
-  Sticky
-} from '@shopify/polaris';
+import { Form, Layout, Card, PageActions, Sticky } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
@@ -60,6 +53,16 @@ const OfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
   min-height: 300px;
+`;
+
+const PreviewOfferPopupContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 `;
 
 const OfferForm = ({
@@ -473,16 +476,23 @@ const OfferForm = ({
         <Layout.Section secondary>
           <Sticky offset={16} disableWhenStacked={true}>
             <OfferSummary offer={offer} />
-            {discountType.value !== 'NO_DISCOUNT' && (
-              <Card subdued>
-                <Card.Section title="Can't combine with discounts">
-                  <TextStyle variation="subdued">
-                    Customers won&apos;t be able to enter a discount code or use
-                    an automatic discount if this offer is accepted.
-                  </TextStyle>
-                </Card.Section>
-              </Card>
-            )}
+            <Card.Section fullWidth>
+              <PreviewOfferPopupContainer>
+                <OfferPopup
+                  open={true}
+                  designMode={true}
+                  designModeZoom={0.3}
+                  forceDisplayType="desktop"
+                  shop={shop}
+                  theme={popupTheme}
+                  offer={offer}
+                  triggerProduct={dummyData.triggerProduct}
+                  offeredProducts={dummyData.offeredProducts}
+                  onClose={handleClosePreview}
+                  onClick={handlePreview}
+                />
+              </PreviewOfferPopupContainer>
+            </Card.Section>
           </Sticky>
         </Layout.Section>
         <Layout.Section>

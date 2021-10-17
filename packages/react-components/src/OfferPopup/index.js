@@ -438,7 +438,7 @@ const OfferPopup = ({
           height: designMode ? '100%' : '100vh',
           maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none',
           minHeight: designMode ? `${iframeHeight}px` : 0,
-          zIndex: 2147483647
+          zIndex: designMode ? 1 : 2147483647
         }}
       >
         <FrameContextConsumer>

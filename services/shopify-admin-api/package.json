@@ -13,7 +13,7 @@
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/shopify-admin-api",
+  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/shopify-admin-api",
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",

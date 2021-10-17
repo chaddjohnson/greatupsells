@@ -24,10 +24,6 @@ provider:
         Principal: "*"
         Action: execute-api:Invoke
         Resource: "execute-api:/*/GET/health"
-      - Effect: Allow
-        Principal: "*"
-        Action: execute-api:Invoke
-        Resource: "execute-api:/*/GET/region"
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
@@ -507,7 +503,7 @@ functions:
         enabled: false
   importShopCollections:
     memorySize: 512
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopCollections.handler
     events:
@@ -519,7 +515,7 @@ functions:
         enabled: false
   importShopProducts:
     memorySize: 512
-    reservedConcurrency: 5
+    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopProducts.handler
     events:
