@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, ChoiceList } from '@shopify/polaris';
+import {
+  Card,
+  FormLayout,
+  TextField,
+  ChoiceList,
+  Banner
+} from '@shopify/polaris';
 import styled from 'styled-components';
 import { useNumberFormatter } from '@neatowebsolutions/upselling-react-hooks';
 
@@ -134,6 +140,12 @@ const OfferDiscountEditor = ({
               {...discountTitle}
               error={submitted && discountTitle.error}
             />
+          )}
+          {discountType.value !== 'NO_DISCOUNT' && (
+            <Banner title="Can't combine with discounts" status="info">
+              Customers won&apos;t be able to enter a discount code or use an
+              automatic discount if this offer is accepted.
+            </Banner>
           )}
         </FormLayout>
       </Card>
