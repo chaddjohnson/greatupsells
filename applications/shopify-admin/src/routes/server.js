@@ -166,7 +166,18 @@ module.exports.handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
-  const serverlessHandler = serverless(createServer());
+  const serverlessHandler = serverless(createServer(), {
+    binary: [
+      'font/eot',
+      'font/opentype',
+      'font/otf',
+      'font/woff',
+      'font/woff2',
+      'image/jpeg',
+      'image/png',
+      'image/svg+xml'
+    ]
+  });
 
   return serverlessHandler(event, context);
 };
