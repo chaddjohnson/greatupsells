@@ -2,7 +2,6 @@ const path = require('path');
 const mongodbClient = require('./mongodbClient');
 
 const modelCache = {};
-
 const modelPathsMap = {
   Log: path.join(__dirname, './Log')
 };

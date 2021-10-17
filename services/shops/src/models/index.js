@@ -2,7 +2,6 @@ const path = require('path');
 const mongodbClient = require('./mongodbClient');
 
 const modelCache = {};
-
 const modelPathsMap = {
   Collection: path.join(__dirname, './Collection'),
   OfferHit: path.join(__dirname, './OfferHit'),
