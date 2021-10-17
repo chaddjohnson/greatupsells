@@ -14,6 +14,15 @@ provider:
   logRetentionInDays: 14
   apiGateway:
     shouldStartNameWithService: true
+    binaryMediaTypes:
+      - 'font/eot'
+      - 'font/opentype'
+      - 'font/otf'
+      - 'font/woff'
+      - 'font/woff2'
+      - 'image/jpeg'
+      - 'image/png'
+      - 'image/svg+xml'
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
