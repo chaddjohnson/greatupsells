@@ -1,11 +1,11 @@
-name: upselling-shops-service
+name: upselling-shops-api
 on:
   push:
     branches:
       - test
       - production
     paths:
-      - .github/workflows/shops-service.yml
+      - .github/workflows/shops-api.yml
       - services/shops/**
       - packages/logger/**
 jobs:
