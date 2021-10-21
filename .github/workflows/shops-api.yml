@@ -31,7 +31,7 @@ jobs:
         run: npm install -g yarn serverless
       - name: Run Terraform
         run: ./run.sh
-        working-directory: shops-api/infrastructure
+        working-directory: services/shops-api/infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
