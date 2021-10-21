@@ -106,7 +106,12 @@ const schema = new mongoose.Schema(
       enum: ['NONE', 'AMOUNT', 'QUANTITY'],
       default: 'NONE'
     },
-    minimumRequiredAmount: { type: Number, required: false },
+    minimumRequiredAmount: {
+      type: Number,
+      required() {
+        return this.minimumRequirement !== 'NONE';
+      }
+    },
     offeredProducts: [offerProductSchema],
     offeredCollections: [offerCollectionSchema],
     maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
@@ -115,8 +120,18 @@ const schema = new mongoose.Schema(
       required: true,
       enum: ['PERCENTAGE', 'AMOUNT', 'SET_PRICE', 'NO_DISCOUNT']
     },
-    discountValue: { type: Number, required: false },
-    discountTitle: { type: String, required: false },
+    discountValue: {
+      type: Number,
+      required() {
+        return this.discountType !== 'NO_DISCOUNT';
+      }
+    },
+    discountTitle: {
+      type: String,
+      required() {
+        return this.discountType !== 'NO_DISCOUNT';
+      }
+    },
     enableBundling: { type: Boolean, required: true, default: false },
     popupTheme: {
       type: mongoose.Schema.Types.ObjectId,
