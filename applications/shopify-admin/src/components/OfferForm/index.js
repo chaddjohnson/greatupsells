@@ -23,8 +23,20 @@ import OfferBundlingEditor from './OfferBundlingEditor';
 import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
-import dummyCrossSellData from './dummyCrossSellData.json';
-import dummyUpsellData from './dummyUpsellData.json';
+
+let dummyCrossSellData = require('./dummyCrossSellData.json');
+let dummyUpsellData = require('./dummyUpsellData.json');
+
+// Set assets URL in dummy data.
+dummyCrossSellData = JSON.parse(
+  JSON.stringify(dummyCrossSellData).replace(
+    /ASSETS_URL/g,
+    process.env.ASSETS_URL
+  )
+);
+dummyUpsellData = JSON.parse(
+  JSON.stringify(dummyUpsellData).replace(/ASSETS_URL/g, process.env.ASSETS_URL)
+);
 
 let themeCount = 0;
 

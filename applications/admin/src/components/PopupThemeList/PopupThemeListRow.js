@@ -5,8 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
 import Link from '../Link';
 import PopupThemeMenu from './PopupThemeMenu';
-import dummyData from '../dummyCrossSellData.json';
-// import dummyData from '../dummyUpsellData.json';
+
+let dummyData = require('../dummyCrossSellData.json');
+// let dummyData = require('../dummyUpsellData.json');
+
+// Set assets URL in dummy data.
+dummyData = JSON.parse(
+  JSON.stringify(dummyData).replace(/ASSETS_URL/g, process.env.ASSETS_URL)
+);
 
 const strategyMap = {
   UPSELL: 'Upsell',

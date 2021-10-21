@@ -33,17 +33,17 @@
     "offeredProducts": [
       {
         "title": "Better Shoes",
-        "imageUrl": "/images/upsell/better/black.jpg",
+        "imageUrl": "ASSETS_URL/images/upsell/better/black.jpg",
         "shopifyProductId": 6671390801965
       },
       {
         "title": "Fancy Shoes",
-        "imageUrl": "/images/upsell/fancy/dark-blue.jpg",
+        "imageUrl": "ASSETS_URL/images/upsell/fancy/dark-blue.jpg",
         "shopifyProductId": 6671402762285
       },
       {
         "title": "Super Fancy Shoes",
-        "imageUrl": "/images/upsell/super-fancy/black.jpg",
+        "imageUrl": "ASSETS_URL/images/upsell/super-fancy/black.jpg",
         "shopifyProductId": 6671415181357,
         "maxQuantity": 5
       }
@@ -322,33 +322,33 @@
         {
           "id": 28507478786093.0,
           "alt": null,
-          "src": "/images/upsell/simple/blue.jpg"
+          "src": "ASSETS_URL/images/upsell/simple/blue.jpg"
         },
         {
           "id": 28507490025517.0,
           "alt": null,
-          "src": "/images/upsell/simple/red.jpg"
+          "src": "ASSETS_URL/images/upsell/simple/red.jpg"
         },
         {
           "id": 28507490746413.0,
           "alt": null,
-          "src": "/images/upsell/simple/green.jpg"
+          "src": "ASSETS_URL/images/upsell/simple/green.jpg"
         },
         {
           "id": 28507492286509.0,
           "alt": null,
-          "src": "/images/upsell/simple/black.jpg"
+          "src": "ASSETS_URL/images/upsell/simple/black.jpg"
         },
         {
           "id": 28507495923757.0,
           "alt": null,
-          "src": "/images/upsell/simple/white.jpg"
+          "src": "ASSETS_URL/images/upsell/simple/white.jpg"
         }
       ],
       "image": {
         "id": 28507478786093.0,
         "alt": null,
-        "src": "/images/upsell/simple/blue.jpg"
+        "src": "ASSETS_URL/images/upsell/simple/blue.jpg"
       }
     }
   },
@@ -464,18 +464,18 @@
           {
             "id": 28507537276973.0,
             "alt": null,
-            "src": "/images/upsell/better/black.jpg"
+            "src": "ASSETS_URL/images/upsell/better/black.jpg"
           },
           {
             "id": 28507538292781.0,
             "alt": null,
-            "src": "/images/upsell/better/white.jpg"
+            "src": "ASSETS_URL/images/upsell/better/white.jpg"
           }
         ],
         "image": {
           "id": 28507537276973.0,
           "alt": null,
-          "src": "/images/upsell/better/black.jpg"
+          "src": "ASSETS_URL/images/upsell/better/black.jpg"
         }
       }
     },
@@ -640,23 +640,23 @@
           {
             "id": 28507582234669.0,
             "alt": null,
-            "src": "/images/upsell/fancy/dark-blue.jpg"
+            "src": "ASSETS_URL/images/upsell/fancy/dark-blue.jpg"
           },
           {
             "id": 28507587706925.0,
             "alt": null,
-            "src": "/images/upsell/fancy/dark-grey.jpg"
+            "src": "ASSETS_URL/images/upsell/fancy/dark-grey.jpg"
           },
           {
             "id": 28507592130605.0,
             "alt": null,
-            "src": "/images/upsell/fancy/white.jpg"
+            "src": "ASSETS_URL/images/upsell/fancy/white.jpg"
           }
         ],
         "image": {
           "id": 28507582234669.0,
           "alt": null,
-          "src": "/images/upsell/fancy/dark-blue.jpg"
+          "src": "ASSETS_URL/images/upsell/fancy/dark-blue.jpg"
         }
       }
     },
@@ -771,18 +771,18 @@
           {
             "id": 28507625193517.0,
             "alt": null,
-            "src": "/images/upsell/super-fancy/black.jpg"
+            "src": "ASSETS_URL/images/upsell/super-fancy/black.jpg"
           },
           {
             "id": 28507628699693.0,
             "alt": null,
-            "src": "/images/upsell/super-fancy/white.jpg"
+            "src": "ASSETS_URL/images/upsell/super-fancy/white.jpg"
           }
         ],
         "image": {
           "id": 28507625193517.0,
           "alt": null,
-          "src": "/images/upsell/super-fancy/black.jpg"
+          "src": "ASSETS_URL/images/upsell/super-fancy/black.jpg"
         }
       }
     }
