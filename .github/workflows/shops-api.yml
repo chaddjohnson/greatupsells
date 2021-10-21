@@ -1,11 +1,11 @@
-name: upselling-shops-service
+name: upselling-shops-api
 on:
   push:
     branches:
       - test
       - production
     paths:
-      - .github/workflows/shops-service.yml
+      - .github/workflows/shops-api.yml
       - services/shops/**
       - packages/logger/**
 jobs:
@@ -19,11 +19,6 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      - name: Inject "MONGODB_URL_SHOPS" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
-        with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/database/mongodb-shops/url"
-          env_variable_name: "MONGODB_URL_SHOPS"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Node.js
@@ -40,6 +35,11 @@ jobs:
         env:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
+      - name: Inject "MONGODB_URL_SHOPS" SSM Parameter
+        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        with:
+          ssm_parameter: "/upselling/${{ env.BRANCH }}/database/mongodb-shops/url"
+          env_variable_name: "MONGODB_URL_SHOPS"
       - name: Install Node Modules
         run: yarn install
       - name: Build Packages

@@ -53,7 +53,7 @@ if (XMLHttpRequest) {
   XMLHttpRequest.prototype.open = function (method, url, ...params) {
     const request = this;
 
-    // Intercept Shopify's add to cart event responses, and call listeners.
+    // Intercept HTTP request responses, and call listeners.
     if (listeners[url]) {
       request.addEventListener('load', () => {
         listeners[url].forEach((current) => {

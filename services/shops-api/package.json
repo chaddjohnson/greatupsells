@@ -1,5 +1,5 @@
 {
-  "name": "upselling-shops-service",
+  "name": "upselling-shops-api",
   "version": "0.0.0",
   "scripts": {
     "lint": "eslint src/**/*.js",
