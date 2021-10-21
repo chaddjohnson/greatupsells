@@ -30,7 +30,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const popupThemes = await httpClient.get(`/popup-themes`);
+    const popupThemes = await httpClient.get('/popup-themes');
 
     return {
       statusCode: StatusCodes.OK,
