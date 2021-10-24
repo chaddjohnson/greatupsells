@@ -211,6 +211,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `MONGODB_ADMIN_PASSWORD` (the main admin account MongoDB password)
    1. `MONGODB_APP_PASSWORD` (the app account MongoDB password)
    1. `MONGODB_ROOT_PASSWORD` (the root MongoDB password)
+   1. `MONGODB_BACKUP_PASSWORD` (the baackup MongoDB password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
 
 ### Triggering

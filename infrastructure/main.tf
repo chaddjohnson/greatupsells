@@ -31,7 +31,6 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "backups" {
-  count         = terraform.workspace == "production" ? 1 : 0
   bucket        = "neatowebsolutions-upselling-backups"
   acl           = "private"
   force_destroy = false
@@ -58,6 +57,7 @@ module "us_east_1" {
     aws.region = aws
   }
 
+  region                           = "us-east-1"
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -78,6 +78,7 @@ module "us_west_2" {
     aws.region = aws.us-west-2
   }
 
+  region                           = "us-west-2"
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -98,6 +99,7 @@ module "us_east_2" {
     aws.region = aws.us-east-2
   }
 
+  region                           = "us-east-2"
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -118,6 +120,7 @@ module "eu_west_1" {
     aws.region = aws.eu-west-1
   }
 
+  region                           = "eu-west-1"
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -138,6 +141,7 @@ module "ap_northeast_1" {
     aws.region = aws.ap-northeast-1
   }
 
+  region                           = "ap-northeast-1"
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
