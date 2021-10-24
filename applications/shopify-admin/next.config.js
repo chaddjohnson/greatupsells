@@ -2,13 +2,13 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const zlib = require('zlib');
 
-const dev = process.env.NODE_ENV !== 'production';
-
 const {
+  NODE_ENV,
   ASSETS_URL,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_API_URL
 } = process.env;
+const dev = NODE_ENV !== 'production';
 
 module.exports = {
   webpack: (config) => {

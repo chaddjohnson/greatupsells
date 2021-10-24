@@ -91,6 +91,24 @@
     state: restarted
   when: not mongodb.stat.exists
 
+- name: Set up a job for Shops database backup
+  cron:
+    name: backup-shops-database
+    minute: "0"
+    hour: "0,6,12,18"
+    user: root
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ domain_name }}/upselling-shops?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' --sslAllowInvalidCertificates | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://neatowebsolutions-upselling-backups/database/{{ stage }}/upselling-shops/$(date +\%s).gz --storage-class STANDARD_IA"
+  when: aws.region == "us-east-1"
+
+- name: Set up a job for Logs database backup
+  cron:
+    name: backup-logs-database
+    minute: "1"
+    hour: "0,6,12,18"
+    user: root
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ domain_name }}/upselling-logs?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' --sslAllowInvalidCertificates | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://neatowebsolutions-upselling-backups/database/{{ stage }}/upselling-logs/$(date +\%s).gz --storage-class STANDARD_IA"
+  when: aws.region == "us-east-1"
+
 - name: 'TODO: Initiate replica set'
   debug:
     msg: |
@@ -146,6 +164,28 @@
       use upselling-logs
       db.createUser({
         user: "app",
+        pwd: passwordPrompt(),
+        roles: [ { role: "readWrite", db: "upselling-logs" } ]
+      })
+  when: not mongodb.stat.exists
+
+- name: 'TODO: Create backup user account for upselling-shops database'
+  debug:
+    msg: |
+      use upselling-shops
+      db.createUser({
+        user: "backup",
+        pwd: passwordPrompt(),
+        roles: [ { role: "readWrite", db: "upselling-shops" } ]
+      })
+  when: not mongodb.stat.exists
+
+- name: 'TODO: Create backup user account for upselling-logs database'
+  debug:
+    msg: |
+      use upselling-logs
+      db.createUser({
+        user: "backup",
         pwd: passwordPrompt(),
         roles: [ { role: "readWrite", db: "upselling-logs" } ]
       })
