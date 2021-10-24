@@ -243,7 +243,6 @@ All infrastructure is managed via Serverless, Terraform, and Ansible with each d
 - Lambda
 - API Gateway
 - EC2
-- SNS
 - SQS
 - S3
 - EventBridge
