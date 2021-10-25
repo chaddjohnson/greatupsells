@@ -1,7 +1,7 @@
 const Promise = require('bluebird');
 const { StatusCodes } = require('http-status-codes');
 const promiseRetry = require('promise-retry');
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 
 const { WEBHOOK_ARN, WEBHOOK_API_URL } = process.env;
 

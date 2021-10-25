@@ -71,7 +71,7 @@ resource "aws_instance" "services_server" {
   tenancy                 = "default"
   disable_api_termination = true
   ebs_optimized           = true
-  key_name                = "neatowebsolutions"
+  key_name                = "greatupsells"
   provider                = aws.region
 
   tags = {
@@ -112,7 +112,7 @@ EOT
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
     working_dir = "region/services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/neatowebsolutions/id_rsa -b deploy.yml -e 'stage=${terraform.workspace}' -e 'region=${var.region}' -e 'domain_name=${var.services_domain_name}'"
+    command     = "ansible-playbook --private-key ~/.ssh/greatupsells/id_rsa -b deploy.yml -e 'stage=${terraform.workspace}' -e 'region=${var.region}' -e 'domain_name=${var.services_domain_name}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.

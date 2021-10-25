@@ -1,9 +1,6 @@
 import { useCallback, useMemo, useEffect } from 'react';
 import knockout from 'knockout';
-import {
-  useCookies,
-  useNumberFormatter
-} from '@neatowebsolutions/greatupsells-react-hooks';
+import { useCookies, useNumberFormatter } from '@greatupsellsreact-hooks';
 
 const useDataBinding = ({
   iframe,

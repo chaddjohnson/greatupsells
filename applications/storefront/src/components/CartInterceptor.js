@@ -1,8 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  useCookies,
-  usePushStateListener
-} from '@neatowebsolutions/greatupsells-react-hooks';
+import { useCookies, usePushStateListener } from '@greatupsellsreact-hooks';
 import {
   useShopifyCart,
   useShopifyDraftOrder,

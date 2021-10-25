@@ -1,5 +1,5 @@
 {
-  "name": "@neatowebsolutions/greatupsells-http-client",
+  "name": "@greatupsellshttp-client",
   "version": "0.0.0",
   "main": "dist/index.js",
   "repository": {

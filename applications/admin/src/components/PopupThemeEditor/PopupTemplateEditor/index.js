@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { OfferPopup } from '@neatowebsolutions/greatupsells-react-components';
+import { OfferPopup } from '@greatupsells/react-components';
 import CodeEditor from './CodeEditor';
 
 let dummyData = require('../../dummyCrossSellData.json');

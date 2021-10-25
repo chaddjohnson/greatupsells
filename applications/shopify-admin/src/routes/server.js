@@ -11,8 +11,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const shopifyAuth = require('@shopify/koa-shopify-auth').default;
 const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/greatupsells-http-client')
-  .default;
+const HttpClient = require('@greatupsellshttp-client').default;
 const RedisStore = require('../utilities/RedisStore');
 
 const {

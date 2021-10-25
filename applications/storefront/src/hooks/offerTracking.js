@@ -1,7 +1,4 @@
-import {
-  useHttpClient,
-  useCookies
-} from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient, useCookies } from '@greatupsellsreact-hooks';
 
 // Intentionally track offer hit ID at module level as this hook may be used in
 // multiple places, and state won't be shared.

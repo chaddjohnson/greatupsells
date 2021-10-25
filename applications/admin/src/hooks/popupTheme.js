@@ -1,5 +1,5 @@
 import useSWR, { mutate } from 'swr';
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsells/react-hooks';
 import { useToast } from './toast';
 
 const usePopupTheme = (id) => {

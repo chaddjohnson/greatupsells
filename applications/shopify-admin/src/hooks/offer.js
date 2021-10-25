@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsellsreact-hooks';
 import useToast from './toast';
 
 const useOffer = (offerId) => {

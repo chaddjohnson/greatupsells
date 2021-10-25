@@ -121,7 +121,7 @@
   register: certificates
 
 - name: Obtain SSL certificate
-  command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m chad@neatowebsolutions.com -d {{ domain_name }}'
+  command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m greatupsells@neatowebsolutions.com -d {{ domain_name }}'
   when: certificates.stat.isdir is not defined
 
 - name: Install Let's Encrypt Certificate Authority Root Certificate

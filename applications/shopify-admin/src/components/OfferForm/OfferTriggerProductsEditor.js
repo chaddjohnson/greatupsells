@@ -8,7 +8,7 @@ import {
   InlineError
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useNumberFormatter } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useNumberFormatter } from '@greatupsellsreact-hooks';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
 

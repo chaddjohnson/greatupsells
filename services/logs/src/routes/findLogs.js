@@ -1,5 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
 const models = require('../models');
 

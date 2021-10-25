@@ -4,9 +4,8 @@ const {
   createRawBody
 } = require('shopify-hmac-validation');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/greatupsells-http-client')
-  .default;
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const HttpClient = require('@greatupsellshttp-client').default;
+const logger = require('@greatupsellslogger');
 
 const {
   AWS_REGION,

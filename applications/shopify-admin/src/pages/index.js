@@ -22,8 +22,8 @@ import {
   useNumberFormatter,
   useDateTime,
   useInterval
-} from '@neatowebsolutions/greatupsells-react-hooks';
-import { Loader } from '@neatowebsolutions/greatupsells-react-components';
+} from '@greatupsellsreact-hooks';
+import { Loader } from '@greatupsellsreact-components';
 import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 
