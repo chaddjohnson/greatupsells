@@ -67,6 +67,13 @@
     update_cache: yes
     cache_valid_time: 3600
 
+- name: Add domain to hosts file
+  lineinfile:
+    path: /tmp/testfile
+    insertafter: 127.0.0.1 localhost
+    line: 127.0.0.1 {{ domain_name }}
+    create: yes
+
 - name: Install AWS CLI
   raw: pip3 install -q awscli --upgrade
 
