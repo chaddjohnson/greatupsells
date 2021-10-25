@@ -128,6 +128,13 @@ const createServer = () => {
       // Create a signed auth token.
       const authToken = jwt.sign({ shopId }, JWT_SECRET);
 
+      if (!shop.accessToken) {
+        ctx.status = StatusCodes.UNAUTHORIZED;
+        ctx.body = ReasonPhrases.UNAUTHORIZED;
+
+        return;
+      }
+
       // Return the auth token.
       ctx.response.set('Content-Type', 'application/json');
       ctx.body = JSON.stringify({ authToken });
