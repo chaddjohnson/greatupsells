@@ -1,11 +1,11 @@
 {
-  "name": "upselling-admin",
+  "name": "greatupsells-admin",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/admin#readme",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/applications/admin#readme",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
   "dependencies": {
@@ -14,8 +14,8 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
-    "@neatowebsolutions/upselling-react-components": "0.0.0",
-    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
+    "@neatowebsolutions/greatupsells-react-components": "0.0.0",
+    "@neatowebsolutions/greatupsells-react-hooks": "0.0.0",
     "clsx": "^1.1.1",
     "codemirror": "^5.60.0",
     "compression-webpack-plugin": "^9.0.0",

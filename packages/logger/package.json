@@ -1,17 +1,17 @@
 {
-  "name": "@neatowebsolutions/upselling-logger",
+  "name": "@neatowebsolutions/greatupsells-logger",
   "version": "0.0.0",
   "description": "Logger service.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/logger",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/logger",
   "dependencies": {
-    "@neatowebsolutions/upselling-http-client": "0.0.0",
+    "@neatowebsolutions/greatupsells-http-client": "0.0.0",
     "aws-sdk": "^2.984.0",
     "aws4-axios": "^2.2.0",
     "axios": "^0.21.1"

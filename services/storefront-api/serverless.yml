@@ -1,4 +1,4 @@
-service: upselling-storefront-api
+service: greatupsells-storefront-api
 useDotenv: true
 
 provider:
@@ -15,25 +15,25 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
+    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
+    LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'storefront-api'
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
 custom:
   serverless-offline:
     httpPort: ${env:STOREFRONT_API_PORT, 4006}
     lambdaPort: 5001
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/storefront-api/domain, ''}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/domain, ''}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
+    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/storefront-api/health-check-id, ''}
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:
@@ -68,7 +68,7 @@ functions:
       default:
         enabled: false
   addDraftOrderLineItem:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItem.handler
     events:
       - http:
@@ -76,7 +76,7 @@ functions:
           method: post
           cors: true
   createDraftOrder:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
     events:
       - http:
@@ -84,7 +84,7 @@ functions:
           method: post
           cors: true
   findOneRandomOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
     events:
       - http:
@@ -92,7 +92,7 @@ functions:
           method: post
           cors: true
   findShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
     events:
       - http:
@@ -100,7 +100,7 @@ functions:
           method: get
           cors: true
   trackOfferAcceptance:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
     events:
       - http:
@@ -108,7 +108,7 @@ functions:
           method: post
           cors: true
   trackOfferImpression:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
     events:
       - http:
@@ -116,7 +116,7 @@ functions:
           method: post
           cors: true
   updateShopifyDraftOrder:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrder.handler
     events:
       - http:

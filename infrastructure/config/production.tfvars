@@ -1,4 +1,4 @@
-hosted_zone_id = "Z023060413ODYTHFNWZW8"
+hosted_zone_id = "Z0668352114KCMXPF25HT"
 base_domain    = "greatupsells.com"
 domain         = "greatupsells.com"
 instance_type  = "t3.medium"

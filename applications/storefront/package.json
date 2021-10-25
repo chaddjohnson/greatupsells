@@ -1,17 +1,17 @@
 {
-  "name": "upselling-storefront",
+  "name": "greatupsells-storefront",
   "version": "0.0.0",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/applications/storefront#readme",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/applications/storefront#readme",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@neatowebsolutions/upselling-react-components": "0.0.0",
-    "@neatowebsolutions/upselling-react-hooks": "0.0.0",
+    "@neatowebsolutions/greatupsells-react-components": "0.0.0",
+    "@neatowebsolutions/greatupsells-react-hooks": "0.0.0",
     "preact": "^10.5.13",
     "querystringify": "^2.2.0",
     "styled-components": "^5.2.1",

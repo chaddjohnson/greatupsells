@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const logger = require('@neatowebsolutions/upselling-logger');
+const logger = require('@neatowebsolutions/greatupsells-logger');
 const models = require('..');
 
 const importProduct = async (shop, shopifyProductData) => {

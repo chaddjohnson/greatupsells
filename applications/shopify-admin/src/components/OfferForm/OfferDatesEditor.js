@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, FormLayout, Checkbox } from '@shopify/polaris';
-import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
+import { useDateTime } from '@neatowebsolutions/greatupsells-react-hooks';
 import DateTimePicker from '../DateTimePicker';
 
 const OfferDatesEditor = ({

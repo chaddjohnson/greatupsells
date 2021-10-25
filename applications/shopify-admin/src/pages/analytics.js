@@ -18,8 +18,8 @@ import {
   useNumberFormatter,
   useDateTime,
   useInterval
-} from '@neatowebsolutions/upselling-react-hooks';
-import { Loader } from '@neatowebsolutions/upselling-react-components';
+} from '@neatowebsolutions/greatupsells-react-hooks';
+import { Loader } from '@neatowebsolutions/greatupsells-react-components';
 import { useShop, useShopAnalytics } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 

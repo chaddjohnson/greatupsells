@@ -7,7 +7,8 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@neatowebsolutions/upselling-http-client').default;
+const HttpClient = require('@neatowebsolutions/greatupsells-http-client')
+  .default;
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
 

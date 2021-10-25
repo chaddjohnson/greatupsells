@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "neatowebsolutions-upselling-infrastructure"
+    bucket = "greatupsells-infrastructure"
     key    = "infrastructure.tfstate"
     region = "us-east-1"
   }
@@ -31,7 +31,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "backups" {
-  bucket        = "neatowebsolutions-upselling-backups"
+  bucket        = "greatupsells-backups"
   acl           = "private"
   force_destroy = false
 

@@ -12,7 +12,7 @@ data "aws_region" "current" {
 }
 
 resource "aws_ssm_parameter" "admin_app_domain" {
-  name      = "/upselling/${terraform.workspace}/admin-app/domain"
+  name      = "/greatupsells/${terraform.workspace}/admin-app/domain"
   type      = "String"
   value     = var.admin_app_domain
   overwrite = true
@@ -20,7 +20,7 @@ resource "aws_ssm_parameter" "admin_app_domain" {
 }
 
 resource "aws_ssm_parameter" "admin_app_url" {
-  name      = "/upselling/${terraform.workspace}/admin-app/url"
+  name      = "/greatupsells/${terraform.workspace}/admin-app/url"
   type      = "String"
   value     = "https://${var.admin_app_domain}"
   overwrite = true
@@ -37,7 +37,7 @@ resource "aws_route53_health_check" "admin_app" {
 }
 
 resource "aws_ssm_parameter" "admin_app_health_check_id" {
-  name      = "/upselling/${terraform.workspace}/admin-app/health-check-id"
+  name      = "/greatupsells/${terraform.workspace}/admin-app/health-check-id"
   type      = "String"
   value     = aws_route53_health_check.admin_app.id
   overwrite = true

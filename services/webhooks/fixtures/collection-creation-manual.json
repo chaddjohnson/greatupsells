@@ -2,7 +2,7 @@
   "version": "0",
   "id": "44f4b558-7b4b-c440-10e6-a0123ac313f7",
   "detail-type": "shopifyWebhook",
-  "source": "aws.partner/shopify.com/3307431/upselling-webhooks-dev",
+  "source": "aws.partner/shopify.com/3307431/greatupsells-webhooks-dev",
   "account": "174585217681",
   "time": "2021-01-18T23:04:11Z",
   "region": "us-east-1",

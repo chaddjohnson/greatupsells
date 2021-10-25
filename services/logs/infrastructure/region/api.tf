@@ -1,25 +1,25 @@
 # resource "aws_ssm_parameter" "elasticsearch_logs_database_url" {
-#   name  = "/upselling/${terraform.workspace}/database/elasticsearch-logs/url"
+#   name  = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
 #   type  = "String"
 #    overwrite = true
 #   value = "" # TODO
 # }
 
 locals {
-  mongodb_hosts = "${join(":27017,", data.terraform_remote_state.upselling_infrastructure.outputs.services_domain_names)}:27017"
-  domain = "logs-api.${data.aws_region.current.name}.${data.terraform_remote_state.upselling_infrastructure.outputs.domain}"
+  mongodb_hosts = "${join(":27017,", data.terraform_remote_state.greatupsells_infrastructure.outputs.services_domain_names)}:27017"
+  domain = "logs-api.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
 }
 
 resource "aws_ssm_parameter" "mongodb_logs_database_url" {
-  name      = "/upselling/${terraform.workspace}/database/mongodb-logs/url"
+  name      = "/greatupsells/${terraform.workspace}/database/mongodb-logs/url"
   type      = "SecureString"
-  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/upselling-logs?replicaSet=rs0&readPreference=secondaryPreferred&w=1&wtimeoutMS=5000&ssl=true"
+  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/greatupsells-logs?replicaSet=rs0&readPreference=secondaryPreferred&w=1&wtimeoutMS=5000&ssl=true"
   overwrite = true
   provider  = aws.region
 }
 
 resource "aws_ssm_parameter" "logs_api_regional_domain" {
-  name      = "/upselling/${terraform.workspace}/logs-api/regional-domain"
+  name      = "/greatupsells/${terraform.workspace}/logs-api/regional-domain"
   type      = "String"
   value     = local.domain
   overwrite = true
@@ -27,7 +27,7 @@ resource "aws_ssm_parameter" "logs_api_regional_domain" {
 }
 
 resource "aws_ssm_parameter" "logs_api_url" {
-  name      = "/upselling/${terraform.workspace}/logs-api/url"
+  name      = "/greatupsells/${terraform.workspace}/logs-api/url"
   type      = "String"
   value     = "https://${local.domain}"
   overwrite = true

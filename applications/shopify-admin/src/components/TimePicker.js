@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
 import { ClockMajor } from '@shopify/polaris-icons';
 import { flatten } from 'lodash';
-import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
+import { useDateTime } from '@neatowebsolutions/greatupsells-react-hooks';
 
 const validateValue = (test) => test && !!test.match(/^\d{1,2}:\d{2} ?[AP]M$/);
 

@@ -1,4 +1,4 @@
-name: upselling-admin-api
+name: greatupsells-admin-api
 on:
   push:
     branches:

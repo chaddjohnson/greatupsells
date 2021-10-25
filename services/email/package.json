@@ -1,5 +1,5 @@
 {
-  "name": "upselling-email-service",
+  "name": "greatupsells-email-service",
   "version": "0.0.0",
   "scripts": {
     "lint": "eslint src/**/*.js",
@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/email",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/email",
   "devDependencies": {
     "nodemon": "^2.0.7",
     "serverless": "^2.43.1",

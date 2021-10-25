@@ -11,17 +11,17 @@ data "aws_region" "current" {
   provider = aws.region
 }
 
-data "terraform_remote_state" "upselling_infrastructure" {
+data "terraform_remote_state" "greatupsells_infrastructure" {
   backend = "s3"
   config = {
-    bucket = "neatowebsolutions-upselling-infrastructure"
+    bucket = "greatupsells-infrastructure"
     key    = "env:/${terraform.workspace}/infrastructure.tfstate"
     region = "us-east-1"
   }
 }
 
 resource "aws_ssm_parameter" "shopify_admin_api_domain" {
-  name      = "/upselling/${terraform.workspace}/shopify-admin-api/domain"
+  name      = "/greatupsells/${terraform.workspace}/shopify-admin-api/domain"
   type      = "String"
   value     = var.shopify_admin_api_domain
   overwrite = true
@@ -29,7 +29,7 @@ resource "aws_ssm_parameter" "shopify_admin_api_domain" {
 }
 
 resource "aws_ssm_parameter" "shopify_admin_api_url" {
-  name      = "/upselling/${terraform.workspace}/shopify-admin-api/url"
+  name      = "/greatupsells/${terraform.workspace}/shopify-admin-api/url"
   type      = "String"
   value     = "https://${var.shopify_admin_api_domain}"
   overwrite = true
@@ -46,7 +46,7 @@ resource "aws_route53_health_check" "shopify_admin_api" {
 }
 
 resource "aws_ssm_parameter" "shopify_admin_api_health_check_id" {
-  name      = "/upselling/${terraform.workspace}/shopify-admin-api/health-check-id"
+  name      = "/greatupsells/${terraform.workspace}/shopify-admin-api/health-check-id"
   type      = "String"
   value     = aws_route53_health_check.shopify_admin_api.id
   overwrite = true

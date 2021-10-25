@@ -1,4 +1,4 @@
-name: upselling-storefront-api
+name: greatupsells-storefront-api
 on:
   push:
     branches:

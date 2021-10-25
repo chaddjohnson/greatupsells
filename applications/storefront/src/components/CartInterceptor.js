@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import {
   useCookies,
   usePushStateListener
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import {
   useShopifyCart,
   useShopifyDraftOrder,
@@ -24,8 +24,10 @@ const CartInterceptor = () => {
     // Prevent default form handling (which redirects to the normal cart page).
     event.preventDefault();
 
-    const draftOrderId = getCookie('upsellingDraftOrderId');
-    const draftOrderCheckoutUrl = getCookie('upsellingDraftOrderCheckoutUrl');
+    const draftOrderId = getCookie('greatupsellsDraftOrderId');
+    const draftOrderCheckoutUrl = getCookie(
+      'greatupsellsDraftOrderCheckoutUrl'
+    );
 
     if (!draftOrderId || !draftOrderCheckoutUrl) {
       return;
@@ -36,8 +38,10 @@ const CartInterceptor = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const overrideCartForm = useCallback(() => {
-    const draftOrderId = getCookie('upsellingDraftOrderId');
-    const draftOrderCheckoutUrl = getCookie('upsellingDraftOrderCheckoutUrl');
+    const draftOrderId = getCookie('greatupsellsDraftOrderId');
+    const draftOrderCheckoutUrl = getCookie(
+      'greatupsellsDraftOrderCheckoutUrl'
+    );
     const cartForms = Array.from(document.forms).filter((form) =>
       form.action.match(/\/cart$/)
     );
@@ -97,7 +101,7 @@ const CartInterceptor = () => {
     }
 
     const { variant_id: shopifyVariantId } = addedProduct;
-    const draftOrderId = getCookie('upsellingDraftOrderId');
+    const draftOrderId = getCookie('greatupsellsDraftOrderId');
 
     // Only add to an existing draft order. Do not create a new draft order
     // unnecessarily. Draft orders are only leveraged if one or more offers
@@ -113,7 +117,7 @@ const CartInterceptor = () => {
   };
 
   const shopifyCartQuantityListener = async (lineItemNumber, quantity) => {
-    const draftOrderId = getCookie('upsellingDraftOrderId');
+    const draftOrderId = getCookie('greatupsellsDraftOrderId');
     const lineItem = shopifyCartItems[lineItemNumber - 1];
     const shopifyVariantId = parseInt(lineItem.variant_id);
     let draftOrder = null;
@@ -130,8 +134,8 @@ const CartInterceptor = () => {
         overrideCartForm();
       } else {
         // Remove cookies as draft order no longer exists.
-        removeCookie('upsellingDraftOrderId');
-        removeCookie('upsellingDraftOrderCheckoutUrl');
+        removeCookie('greatupsellsDraftOrderId');
+        removeCookie('greatupsellsDraftOrderCheckoutUrl');
 
         // Refresh in order to undo cart form overrides.
         // window.location.reload();

@@ -13,7 +13,7 @@ import {
 import {
   useNumberFormatter,
   useDateTime
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import { useShop } from '../../hooks';
 
 const HeadingWrapper = styled.div`

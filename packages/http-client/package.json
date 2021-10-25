@@ -1,12 +1,12 @@
 {
-  "name": "@neatowebsolutions/upselling-http-client",
+  "name": "@neatowebsolutions/greatupsells-http-client",
   "version": "0.0.0",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/http-client",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/http-client",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {},

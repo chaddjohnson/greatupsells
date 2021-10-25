@@ -1,4 +1,4 @@
-service: upselling-shopify-admin-api
+service: greatupsells-shopify-admin-api
 variablesResolutionMode: 20210326
 useDotenv: true
 
@@ -16,26 +16,26 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret}
-    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
+    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
+    LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shopify-admin-api'
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
 custom:
   serverless-offline:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
     lambdaPort: 5000
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/domain, ''}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/domain, ''}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
+    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:
@@ -72,7 +72,7 @@ functions:
       default:
         enabled: false
   cloneOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
     events:
       - http:
@@ -85,7 +85,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   createOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
     events:
       - http:
@@ -98,7 +98,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   createPopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
     events:
       - http:
@@ -111,7 +111,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   deleteOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
     events:
       - http:
@@ -124,7 +124,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOneOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
     events:
       - http:
@@ -137,7 +137,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferAcceptances:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
     events:
       - http:
@@ -150,7 +150,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferConversionRates:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
     events:
       - http:
@@ -163,7 +163,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferConversions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
     events:
       - http:
@@ -176,7 +176,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferPopupThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferPopupThemes.handler
     events:
       - http:
@@ -189,7 +189,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferRevenueIncreases:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
       - http:
@@ -202,7 +202,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOffers:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
     events:
       - http:
@@ -215,7 +215,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findOfferImpressions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
     events:
       - http:
@@ -228,7 +228,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
     events:
       - http:
@@ -241,7 +241,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findPopupThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
     events:
       - http:
@@ -254,7 +254,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShopAcceptances:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
     events:
       - http:
@@ -267,7 +267,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShopConversionRates:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
     events:
       - http:
@@ -280,7 +280,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShopConversions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
     events:
       - http:
@@ -293,7 +293,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShopImpressions:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
     events:
       - http:
@@ -306,7 +306,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   findShopRevenueIncreases:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
     events:
       - http:
@@ -319,7 +319,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   updateOffer:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
     events:
       - http:
@@ -332,7 +332,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   updatePopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
     events:
       - http:
@@ -345,7 +345,7 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
   updateShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
     events:
       - http:

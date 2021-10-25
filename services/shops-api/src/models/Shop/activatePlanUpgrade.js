@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/upselling-logger');
+const logger = require('@neatowebsolutions/greatupsells-logger');
 
 const activatePlanUpgrade = async (shop) => {
   const shopifyApiClient = shop.getShopifyApiClient();

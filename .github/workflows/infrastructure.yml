@@ -1,4 +1,4 @@
-name: upselling-infrastructure
+name: greatupsells-infrastructure
 on:
   push:
     branches:

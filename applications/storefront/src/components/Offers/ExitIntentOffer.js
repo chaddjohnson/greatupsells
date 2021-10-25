@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { OfferPopup } from '@neatowebsolutions/upselling-react-components';
+import { OfferPopup } from '@neatowebsolutions/greatupsells-react-components';
 import {
   usePushStateListener,
   useEventListener
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
 let onPageRequiredSecondsTimeout = 0;

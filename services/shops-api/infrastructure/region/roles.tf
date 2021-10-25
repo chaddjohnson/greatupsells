@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "services_consumer_role_policy" {
 }
 
 resource "aws_ssm_parameter" "services_consumer_role_arn" {
-  name      = "/upselling/${terraform.workspace}/roles/services-consumer-arn"
+  name      = "/greatupsells/${terraform.workspace}/roles/services-consumer-arn"
   type      = "String"
   value     = aws_iam_role.services_consumer_role.arn
   overwrite = true

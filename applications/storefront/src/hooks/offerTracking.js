@@ -1,7 +1,7 @@
 import {
   useHttpClient,
   useCookies
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 
 // Intentionally track offer hit ID at module level as this hook may be used in
 // multiple places, and state won't be shared.
@@ -17,9 +17,9 @@ const useOfferTracking = () => {
     offeredShopifyProductIds = []
   }) => {
     // Retrieve local event and offer tracking data.
-    const offerImpressions = getCookie('upsellingOfferImpressions') || [];
-    const sessionOfferImpressions = sessionStorage.upsellingSessionOfferImpressions
-      ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
+    const offerImpressions = getCookie('greatupsellsOfferImpressions') || [];
+    const sessionOfferImpressions = sessionStorage.greatupsellsSessionOfferImpressions
+      ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
       : [];
     const offerImpression = offerImpressions.find(
       (current) => current.offerId === offerId
@@ -44,13 +44,13 @@ const useOfferTracking = () => {
     }
 
     // Track the offer impression via cookie.
-    setCookie('upsellingOfferImpressions', offerImpressions, {
+    setCookie('greatupsellsOfferImpressions', offerImpressions, {
       sameSite: 'Strict',
       maxAge: 60 * 60 * 24 // 1 day
     });
 
     // Track the offer impression via sessionStorage.
-    sessionStorage.upsellingSessionOfferImpressions = JSON.stringify(
+    sessionStorage.greatupsellsSessionOfferImpressions = JSON.stringify(
       sessionOfferImpressions
     );
 

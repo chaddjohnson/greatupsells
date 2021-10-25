@@ -1,4 +1,4 @@
-name: upselling-logs-service
+name: greatupsells-logs-service
 on:
   push:
     branches:
@@ -21,7 +21,7 @@ jobs:
       - name: Inject "MONGODB_URL_LOGS" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/database/mongodb-logs/url"
+          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/database/mongodb-logs/url"
           env_variable_name: "MONGODB_URL_LOGS"
       - name: Checkout
         uses: actions/checkout@v2

@@ -1,16 +1,16 @@
 {
-  "name": "@neatowebsolutions/upselling-react-hooks",
+  "name": "@neatowebsolutions/greatupsells-react-hooks",
   "version": "0.0.0",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/packages/react-hooks",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/react-hooks",
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
-    "@neatowebsolutions/upselling-http-client": "0.0.0",
+    "@neatowebsolutions/greatupsells-http-client": "0.0.0",
     "axios": "^0.21.1",
     "luxon": "^1.27.0",
     "querystringify": "^2.2.0",

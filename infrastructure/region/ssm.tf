@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "certificate_name" {
-  name      = "/upselling/${terraform.workspace}/certificate-name"
+  name      = "/greatupsells/${terraform.workspace}/certificate-name"
   type      = "String"
   value     = "greatupsells.com"
   overwrite = true
@@ -7,7 +7,7 @@ resource "aws_ssm_parameter" "certificate_name" {
 }
 
 resource "aws_ssm_parameter" "sandbox" {
-  name      = "/upselling/${terraform.workspace}/sandbox"
+  name      = "/greatupsells/${terraform.workspace}/sandbox"
   type      = "String"
   value     = var.sandbox
   overwrite = true
@@ -15,7 +15,7 @@ resource "aws_ssm_parameter" "sandbox" {
 }
 
 resource "aws_ssm_parameter" "jwt_secret" {
-  name      = "/upselling/${terraform.workspace}/jwt-secret"
+  name      = "/greatupsells/${terraform.workspace}/jwt-secret"
   type      = "SecureString"
   value     = var.jwt_secret
   overwrite = true
@@ -23,7 +23,7 @@ resource "aws_ssm_parameter" "jwt_secret" {
 }
 
 resource "aws_ssm_parameter" "assets_domain" {
-  name      = "/upselling/${terraform.workspace}/assets/domain"
+  name      = "/greatupsells/${terraform.workspace}/assets/domain"
   type      = "String"
   value     = var.assets_domain
   overwrite = true
@@ -31,7 +31,7 @@ resource "aws_ssm_parameter" "assets_domain" {
 }
 
 resource "aws_ssm_parameter" "assets_url" {
-  name      = "/upselling/${terraform.workspace}/assets/url"
+  name      = "/greatupsells/${terraform.workspace}/assets/url"
   type      = "String"
   value     = "https://${var.assets_domain}"
   overwrite = true
@@ -39,7 +39,7 @@ resource "aws_ssm_parameter" "assets_url" {
 }
 
 resource "aws_ssm_parameter" "shopify_admin_app_api_key" {
-  name      = "/upselling/${terraform.workspace}/shopify/api-key"
+  name      = "/greatupsells/${terraform.workspace}/shopify/api-key"
   type      = "String"
   value     = var.shopify_admin_app_api_key
   overwrite = true
@@ -47,7 +47,7 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_key" {
 }
 
 resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
-  name      = "/upselling/${terraform.workspace}/shopify/api-secret-key"
+  name      = "/greatupsells/${terraform.workspace}/shopify/api-secret-key"
   type      = "SecureString"
   value     = var.shopify_admin_app_api_secret_key
   overwrite = true
@@ -55,7 +55,7 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
 }
 
 resource "aws_ssm_parameter" "event_bus_arn" {
-  name      = "/upselling/${terraform.workspace}/webhooks/arn"
+  name      = "/greatupsells/${terraform.workspace}/webhooks/arn"
   type      = "String"
   value     = var.event_bus_arn
   overwrite = true
@@ -63,7 +63,7 @@ resource "aws_ssm_parameter" "event_bus_arn" {
 }
 
 resource "aws_ssm_parameter" "redis_app_database_url" {
-  name      = "/upselling/${terraform.workspace}/database/redis-app/url"
+  name      = "/greatupsells/${terraform.workspace}/database/redis-app/url"
   type      = "SecureString"
   value     = "rediss://:${var.redis_app_password}@${var.services_domain_name}:6379/0?ssl=true&sslprotocols=Tls12"
   overwrite = true
