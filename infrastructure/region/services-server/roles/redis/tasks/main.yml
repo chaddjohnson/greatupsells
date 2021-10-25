@@ -102,12 +102,6 @@
     regexp: "redis_app_password"
     replace: "{{ redis_app_password }}"
 
-- name: Enable Redis to start at boot
-  service:
-    name: redis.service
-    enabled: true
-  when: not redis.stat.exists
-
 - name: Start Redis
   service:
     name: redis.service
