@@ -83,13 +83,6 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.options.toJSON = {
-  transform(document, transformed) {
-    delete transformed.accessToken;
-    return transformed;
-  }
-};
-
 schema.virtual('shopName').get(function () {
   return this.domain.replace(/^([^\.]+).*$/, '$1');
 });

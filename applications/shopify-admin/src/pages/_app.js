@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import createApp from '@shopify/app-bridge';
+import { Redirect } from '@shopify/app-bridge/actions';
 import {
   Provider as AppBridgeProvider,
   ClientRouter
@@ -56,26 +57,48 @@ const getHost = () => {
   return host;
 };
 
+const initiateOauth = () => {
+  const host = getHost();
+  const shop = getShop();
+  const app = createApp({ apiKey, host });
+  const redirect = Redirect.create(app);
+
+  redirect.dispatch(
+    Redirect.Action.REMOTE,
+    `https://${window.location.host}/auth?shop=${shop}`
+  );
+};
+
 const getAuthToken = async () => {
   // Get a JWT via Shopify.
-  const { host } = sessionStorage;
+  const host = getHost();
   const app = createApp({ apiKey, host });
   const shopifySessionToken = await getSessionToken(app);
 
-  // Retrieve a custom access token tailored to this application using Shopify's
-  // session token.
-  const response = await (
-    await fetch(`/authToken?shopifySessionToken=${shopifySessionToken}`)
-  ).json();
+  try {
+    // Retrieve a custom access token tailored to this application using Shopify's
+    // session token.
+    const response = await (
+      await fetch(`/authToken?shopifySessionToken=${shopifySessionToken}`)
+    ).json();
 
-  return response.authToken;
+    return response.authToken;
+  } catch (error) {
+    initiateOauth();
+  }
 };
 
 // Add the token to each request.
 httpClient.addRequestInterceptor(async (config) => {
   try {
+    let authToken = null;
+
     if (!sessionStorage.authToken) {
-      sessionStorage.authToken = await getAuthToken();
+      authToken = await getAuthToken();
+
+      if (authToken) {
+        sessionStorage.authToken = authToken;
+      }
     }
 
     if (sessionStorage.authToken) {

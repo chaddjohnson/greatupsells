@@ -33,6 +33,8 @@ const handler = middy(async (event, context) => {
     const { shopId } = event.requestContext.authorizer;
     const shop = await httpClient.get(`/shops/${shopId}`);
 
+    delete shop.accessToken;
+
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify(shop)
