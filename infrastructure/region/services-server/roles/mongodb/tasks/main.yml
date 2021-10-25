@@ -178,7 +178,7 @@
         pwd: "{{ mongodb_admin_password }}",
         roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
       })
-    ''
+    '
   when:
     - region == "us-east-1"
     - "'NotYetInitialized' in mongodb_info.stdout"
