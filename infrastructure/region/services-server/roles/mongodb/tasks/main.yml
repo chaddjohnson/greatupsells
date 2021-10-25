@@ -115,11 +115,11 @@
       rs.initiate( {
         _id : "rs0",
         members: [
-            { _id: 0, host: "services.us-east-1.greatupsells.com:27017" },
-            { _id: 1, host: "services.us-west-2.greatupsells.com:27017" },
-            { _id: 2, host: "services.us-east-2.greatupsells.com:27017" },
-            { _id: 3, host: "services.eu-west-1.greatupsells.com:27017" },
-            { _id: 4, host: "services.ap-northeast-1.greatupsells.com:27017" }
+          { _id: 0, host: "services.us-east-1.greatupsells.com:27017" },
+          { _id: 1, host: "services.us-west-2.greatupsells.com:27017" },
+          { _id: 2, host: "services.us-east-2.greatupsells.com:27017" },
+          { _id: 3, host: "services.eu-west-1.greatupsells.com:27017" },
+          { _id: 4, host: "services.ap-northeast-1.greatupsells.com:27017" }
         ]
       })
 
