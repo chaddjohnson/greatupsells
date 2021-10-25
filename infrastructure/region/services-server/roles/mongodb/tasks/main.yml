@@ -109,10 +109,33 @@
     job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ domain_name }}/greatupsells-logs?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' --sslAllowInvalidCertificates | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups/database/{{ stage }}/greatupsells-logs/$(date +\\%s).gz --storage-class STANDARD_IA"
   when: region == "us-east-1"
 
-- name: 'TODO: Initiate replica set'
-  debug:
-    msg: |
-      rs.initiate( {
+- name: Read MongoDB status
+  shell: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --eval 'rs.status()' --quiet
+  changed_when: false
+  ignore_errors: true
+  register: mongodb_info
+  when: region == "us-east-1"
+
+- name: "Initiate MongoDB replica set (test)"
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
+      rs.initiate({
+        _id : "rs0",
+        members: [
+          { _id: 0, host: "services.test.greatupsells.com:27017" }
+        ]
+      })
+    '
+  when:
+    - region == "us-east-1"
+    - stage == "test"
+    - "'NotYetInitialized' in mongodb_info.stdout"
+
+- name: "Initiate MongoDB replica set (production)"
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
+      rs.initiate({
         _id : "rs0",
         members: [
           { _id: 0, host: "services.us-east-1.greatupsells.com:27017" },
@@ -122,10 +145,15 @@
           { _id: 4, host: "services.ap-northeast-1.greatupsells.com:27017" }
         ]
       })
+    '
+  when:
+    - region == "us-east-1"
+    - stage == "production"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Configure replica set hosts'
-  debug:
-    msg: |
+- name: Configure replica set hosts
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       config = rs.conf()
       config.members[0].priority = 0.5
       config.members[1].priority = 0.5
@@ -135,58 +163,78 @@
       config.members[4].priority = 0
       config.members[4].votes = 0
       rs.reconfig(config)
+    '
+  when:
+    - region == "us-east-1"
+    - stage == "production"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Create admin user account'
-  debug:
-    msg: |
+- name: Create admin user account
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       use admin
       db.createUser({
         user: "chad",
-        pwd: passwordPrompt(),
+        pwd: "{{ mongodb_admin_password }}",
         roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
       })
-  when: not mongodb.stat.exists
+    ''
+  when:
+    - region == "us-east-1"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Create app user account for greatupsells-shops database'
-  debug:
-    msg: |
+- name: Create app user account for shops database
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       use greatupsells-shops
       db.createUser({
         user: "app",
-        pwd: passwordPrompt(),
+        pwd: "{{ mongodb_app_password }}",
         roles: [ { role: "readWrite", db: "greatupsells-shops" } ]
       })
-  when: not mongodb.stat.exists
+    '
+  when:
+    - region == "us-east-1"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Create app user account for greatupsells-logs database'
-  debug:
-    msg: |
+- name: Create app user account for logs database
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       use greatupsells-logs
       db.createUser({
         user: "app",
-        pwd: passwordPrompt(),
+        pwd: "{{ mongodb_app_password }}",
         roles: [ { role: "readWrite", db: "greatupsells-logs" } ]
       })
-  when: not mongodb.stat.exists
+    '
+  when:
+    - region == "us-east-1"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Create backup user account for greatupsells-shops database'
-  debug:
-    msg: |
+- name: Create backup user account for shops database
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       use greatupsells-shops
       db.createUser({
         user: "backup",
-        pwd: passwordPrompt(),
+        pwd: "{{ mongodb_backup_password }}",
         roles: [ { role: "readWrite", db: "greatupsells-shops" } ]
       })
-  when: not mongodb.stat.exists
+    '
+  when:
+    - region == "us-east-1"
+    - "'NotYetInitialized' in mongodb_info.stdout"
 
-- name: 'TODO: Create backup user account for greatupsells-logs database'
-  debug:
-    msg: |
+- name: Create backup user account for logs database
+  command: |
+    mongo --host {{ domain_name }} -u root -p {{ mongodb_root_password }} --tls --sslAllowInvalidCertificates --quiet --eval '
       use greatupsells-logs
       db.createUser({
         user: "backup",
-        pwd: passwordPrompt(),
+        pwd: "{{ mongodb_backup_password }}",
         roles: [ { role: "readWrite", db: "greatupsells-logs" } ]
       })
-  when: not mongodb.stat.exists
+    '
+  when:
+    - region == "us-east-1"
+    - "'NotYetInitialized' in mongodb_info.stdout"
