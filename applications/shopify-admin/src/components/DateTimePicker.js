@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormLayout } from '@shopify/polaris';
-import { useDateTime } from '@greatupsellsreact-hooks';
+import { useDateTime } from '@greatupsells/react-hooks';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 

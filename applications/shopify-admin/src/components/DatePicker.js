@@ -7,7 +7,7 @@ import {
   Icon
 } from '@shopify/polaris';
 import { CalendarMajor } from '@shopify/polaris-icons';
-import { useDateTime } from '@greatupsellsreact-hooks';
+import { useDateTime } from '@greatupsells/react-hooks';
 
 const DatePicker = ({
   name,

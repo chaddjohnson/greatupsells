@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
-import HttpClient from '@greatupsellshttp-client';
+import HttpClient from '@greatupsells/http-client';
 
 const HttpClientContext = createContext(null);
 

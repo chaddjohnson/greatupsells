@@ -18,8 +18,8 @@ import {
   useNumberFormatter,
   useDateTime,
   useInterval
-} from '@greatupsellsreact-hooks';
-import { Loader } from '@greatupsellsreact-components';
+} from '@greatupsells/react-hooks';
+import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAnalytics } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../components';
 

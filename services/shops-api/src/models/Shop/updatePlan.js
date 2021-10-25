@@ -1,4 +1,4 @@
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 
 const updatePlan = async (shop) => {
   if (!shop.plan.chargeId) {

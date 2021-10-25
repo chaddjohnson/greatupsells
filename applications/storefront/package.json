@@ -10,8 +10,8 @@
   "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/applications/storefront#readme",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@greatupsellsreact-components": "0.0.0",
-    "@greatupsellsreact-hooks": "0.0.0",
+    "@greatupsells/react-components": "0.0.0",
+    "@greatupsells/react-hooks": "0.0.0",
     "preact": "^10.5.13",
     "querystringify": "^2.2.0",
     "styled-components": "^5.2.1",

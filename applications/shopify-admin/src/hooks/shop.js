@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import useSWR, { mutate } from 'swr';
-import { useHttpClient } from '@greatupsellsreact-hooks';
+import { useHttpClient } from '@greatupsells/react-hooks';
 import useToast from './toast';
 
 const ShopContext = createContext(null);

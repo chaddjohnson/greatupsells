@@ -1,4 +1,4 @@
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 
 const activatePlanUpgrade = async (shop) => {
   const shopifyApiClient = shop.getShopifyApiClient();

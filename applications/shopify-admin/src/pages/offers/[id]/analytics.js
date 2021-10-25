@@ -16,9 +16,9 @@ import {
   useNumberFormatter,
   useDateTime,
   useInterval
-} from '@greatupsellsreact-hooks';
+} from '@greatupsells/react-hooks';
 
-import { Loader } from '@greatupsellsreact-components';
+import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
 import {
   TitleBar,

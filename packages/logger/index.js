@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const HttpClient = require('@greatupsellshttp-client').default;
+const HttpClient = require('@greatupsells/http-client').default;
 
 // TODO: Use bunyan? Use winston?
 

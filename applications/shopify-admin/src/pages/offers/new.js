@@ -14,7 +14,7 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import { omit } from 'lodash';
-import { Loader } from '@greatupsellsreact-components';
+import { Loader } from '@greatupsells/react-components';
 import {
   useShop,
   useOffer,

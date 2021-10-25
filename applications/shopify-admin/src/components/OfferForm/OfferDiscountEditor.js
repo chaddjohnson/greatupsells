@@ -8,7 +8,7 @@ import {
   Banner
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useNumberFormatter } from '@greatupsellsreact-hooks';
+import { useNumberFormatter } from '@greatupsells/react-hooks';
 
 const DiscountValueInputWrapper = styled.div`
   .Polaris-TextField {

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useHttpClient } from '@greatupsellsreact-hooks';
+import { useHttpClient } from '@greatupsells/react-hooks';
 
 const useShopAcceptances = (shopId, startAt, endAt) => {
   const { httpClient } = useHttpClient();
