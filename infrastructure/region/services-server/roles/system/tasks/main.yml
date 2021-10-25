@@ -69,7 +69,7 @@
 
 - name: Add domain to hosts file
   lineinfile:
-    path: /tmp/testfile
+    path: /etc/hosts
     insertafter: '^127\.0\.0\.1 localhost'
     regexp: '^127\.0\.0\.1 {{ domain_name }}'
     line: 127.0.0.1 {{ domain_name }}
