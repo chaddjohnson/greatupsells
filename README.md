@@ -191,8 +191,8 @@ Code consistency is important. In order to maintain consistency, convention chan
                "Effect": "Allow",
                "Action": "s3:*",
                "Resource": [
-                  "arn:aws:s3:::neatowebsolutions-upselling-backups",
-                  "arn:aws:s3:::neatowebsolutions-upselling-backups/*"
+                  "arn:aws:s3:::greatupsells-backups",
+                  "arn:aws:s3:::greatupsells-backups/*"
                ]
          }
       ]
