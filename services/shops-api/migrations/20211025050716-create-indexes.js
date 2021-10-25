@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const models = require('../src/models');
 
 module.exports = {
@@ -12,15 +13,17 @@ module.exports = {
     const Stats = await models.get('Stats');
     const User = await models.get('User');
 
-    await Collection.createIndexes();
-    await OfferHit.createIndexes();
-    await Offer.createIndexes();
-    await Order.createIndexes();
-    await PopupTheme.createIndexes();
-    await Product.createIndexes();
-    await Shop.createIndexes();
-    await Stats.createIndexes();
-    await User.createIndexes();
+    Collection.createIndexes();
+    OfferHit.createIndexes();
+    Offer.createIndexes();
+    Order.createIndexes();
+    PopupTheme.createIndexes();
+    Product.createIndexes();
+    Shop.createIndexes();
+    Stats.createIndexes();
+    User.createIndexes();
+
+    await Promise.delay(2000);
   },
 
   async down() {
