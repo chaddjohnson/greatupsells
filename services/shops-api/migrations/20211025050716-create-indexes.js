@@ -12,44 +12,44 @@ module.exports = {
     const Stats = await models.get('Stats');
     const User = await models.get('User');
 
-    await Collection.createIndex({ shop: 1 });
-    await Collection.createIndex({ shopifyShopId: 1 });
-    await Collection.createIndex({ shopifyCollectionId: 1 }, { unique: true });
-    await Collection.createIndex({ shopifyProductIds: 1 });
+    await Collection.index({ shop: 1 });
+    await Collection.index({ shopifyShopId: 1 });
+    await Collection.index({ shopifyCollectionId: 1 }, { unique: true });
+    await Collection.index({ shopifyProductIds: 1 });
 
-    await OfferHit.createIndex({ shop: 1 });
-    await OfferHit.createIndex({ offer: 1 });
-    await OfferHit.createIndex({ order: 1 });
-    await OfferHit.createIndex({ createdAt: 1 });
-    await OfferHit.createIndex({ acceptedAt: 1 });
-    await OfferHit.createIndex({ convertedAt: 1 });
+    await OfferHit.index({ shop: 1 });
+    await OfferHit.index({ offer: 1 });
+    await OfferHit.index({ order: 1 });
+    await OfferHit.index({ createdAt: 1 });
+    await OfferHit.index({ acceptedAt: 1 });
+    await OfferHit.index({ convertedAt: 1 });
 
-    await Offer.createIndex({ shop: 1 });
-    await Offer.createIndex({ shopifyShopId: 1 });
-    await Offer.createIndex({ createdAt: -1 });
+    await Offer.index({ shop: 1 });
+    await Offer.index({ shopifyShopId: 1 });
+    await Offer.index({ createdAt: -1 });
 
-    await Order.createIndex(
+    await Order.index(
       { shopifyShopId: 1, shopifyOrderNumber: 1 },
       { unique: true }
     );
-    await Order.createIndex({ shopifyOrderId: 1 }, { unique: true });
+    await Order.index({ shopifyOrderId: 1 }, { unique: true });
 
-    await PopupTheme.createIndex({ offer: 1 }, { sparse: true });
+    await PopupTheme.index({ offer: 1 }, { sparse: true });
 
-    await Product.createIndex({ shop: 1 });
-    await Product.createIndex({ shopifyShopId: 1 });
-    await Product.createIndex({ shopifyProductId: 1 }, { unique: true });
-    await Product.createIndex({ shopifyCollectionIds: 1 });
-    await Product.createIndex({ 'shopifyProductData.variants.id': 1 });
+    await Product.index({ shop: 1 });
+    await Product.index({ shopifyShopId: 1 });
+    await Product.index({ shopifyProductId: 1 }, { unique: true });
+    await Product.index({ shopifyCollectionIds: 1 });
+    await Product.index({ 'shopifyProductData.variants.id': 1 });
 
-    await Shop.createIndex({ shopifyShopId: 1 }, { unique: true });
-    await Shop.createIndex({ domain: 1 }, { unique: true });
-    await Shop.createIndex({ alternateDomain: 1 });
-    await Shop.createIndex({ createdAt: -1 });
+    await Shop.index({ shopifyShopId: 1 }, { unique: true });
+    await Shop.index({ domain: 1 }, { unique: true });
+    await Shop.index({ alternateDomain: 1 });
+    await Shop.index({ createdAt: -1 });
 
-    await Stats.createIndex({ createdAt: -1 });
+    await Stats.index({ createdAt: -1 });
 
-    await User.createIndex({ emailAddress: 1 });
+    await User.index({ emailAddress: 1 });
   },
 
   async down() {
