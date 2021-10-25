@@ -16,6 +16,7 @@ const schema = new mongoose.Schema(
 schema.statics.findByEmailAddress = function (emailAddress) {
   return User.find({ emailAddress });
 };
+
 schema.index({ emailAddress: 1 });
 
 User = mongodbClient.connection.model('User', schema);
