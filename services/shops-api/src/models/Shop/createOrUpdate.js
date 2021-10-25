@@ -1,4 +1,4 @@
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 const models = require('..');
 
 const createShop = async (shopDomain, accessToken) => {

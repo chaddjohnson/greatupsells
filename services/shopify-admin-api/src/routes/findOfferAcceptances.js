@@ -6,8 +6,8 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsellshttp-client').default;
-const logger = require('@greatupsellslogger');
+const HttpClient = require('@greatupsells/http-client').default;
+const logger = require('@greatupsells/logger');
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
 

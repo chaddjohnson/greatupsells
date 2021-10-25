@@ -6,7 +6,7 @@ import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
-import { OfferPopup } from '@greatupsellsreact-components';
+import { OfferPopup } from '@greatupsells/react-components';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';

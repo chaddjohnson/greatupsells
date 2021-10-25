@@ -1,5 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
 const models = require('../models');
 

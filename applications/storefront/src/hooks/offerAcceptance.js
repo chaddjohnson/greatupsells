@@ -1,4 +1,4 @@
-import { useCookies } from '@greatupsellsreact-hooks';
+import { useCookies } from '@greatupsells/react-hooks';
 import useOfferTracking from './offerTracking';
 import { useShopifyCart } from './shopifyCart';
 import useShopifyDraftOrder from './shopifyDraftOrder';

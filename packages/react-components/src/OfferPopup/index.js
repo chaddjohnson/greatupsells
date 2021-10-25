@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import clsx from 'clsx';
 import { createGlobalStyle, StyleSheetManager } from 'styled-components';
 import { useLiquid } from 'react-liquid';
-import { useCookies, useNumberFormatter } from '@greatupsellsreact-hooks';
+import { useCookies, useNumberFormatter } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 import Overlay from './Overlay';

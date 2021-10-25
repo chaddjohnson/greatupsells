@@ -45,7 +45,7 @@ module.exports = {
   ].filter(Boolean),
   stats: 'errors-warnings',
   externals: [
-    '@greatupsellsreact-hooks',
+    '@greatupsells/react-hooks',
     'prop-types',
     'react',
     'react-dom',

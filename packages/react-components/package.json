@@ -1,5 +1,5 @@
 {
-  "name": "@greatupsellsreact-components",
+  "name": "@greatupsells/react-components",
   "version": "0.0.0",
   "main": "dist/index.js",
   "repository": {
@@ -19,7 +19,7 @@
     "style-loader": "^1.2.1"
   },
   "peerDependencies": {
-    "@greatupsellsreact-hooks": "^0.0.0",
+    "@greatupsells/react-hooks": "^0.0.0",
     "prop-types": "^15.7.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

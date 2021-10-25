@@ -1,4 +1,4 @@
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 
 const deactivate = async (shop) => {
   // Record when the uninstall occurred.

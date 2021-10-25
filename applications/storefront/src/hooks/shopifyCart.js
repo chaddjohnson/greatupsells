@@ -5,7 +5,7 @@ import {
   useHttpRequestListener,
   usePushStateListener,
   HttpClient
-} from '@greatupsellsreact-hooks';
+} from '@greatupsells/react-hooks';
 
 const CartContext = createContext(null);
 

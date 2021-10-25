@@ -1,4 +1,4 @@
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 const mongodbClient = require('../mongodbClient');
 const models = require('..');
 

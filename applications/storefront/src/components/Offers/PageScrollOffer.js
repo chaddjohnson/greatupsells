@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { OfferPopup } from '@greatupsellsreact-components';
+import { OfferPopup } from '@greatupsells/react-components';
 import {
   usePushStateListener,
   useEventListener
-} from '@greatupsellsreact-hooks';
+} from '@greatupsells/react-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
 let delayTimeout = 0;

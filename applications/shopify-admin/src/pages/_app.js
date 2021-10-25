@@ -10,8 +10,8 @@ import {
 
 import { getSessionToken } from '@shopify/app-bridge-utils';
 import styled from 'styled-components';
-import { ErrorBoundary } from '@greatupsellsreact-components';
-import { HttpClientProvider, HttpClient } from '@greatupsellsreact-hooks';
+import { ErrorBoundary } from '@greatupsells/react-components';
+import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
 import { ShopProvider } from '../hooks';
 import { Link, RoutePropagator } from '../components';
 import '@shopify/polaris/dist/styles.css';

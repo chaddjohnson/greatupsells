@@ -1,5 +1,5 @@
 const getenv = require('getenv');
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 
 const { SHOPIFY_ADMIN_APP_API_KEY } = process.env;
 

@@ -9,7 +9,7 @@ import {
   SkeletonBodyText,
   EmptyState
 } from '@shopify/polaris';
-import { Loader } from '@greatupsellsreact-components';
+import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffers } from '../../hooks';
 import { TitleBar, OfferList } from '../../components';
 

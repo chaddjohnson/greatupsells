@@ -1,5 +1,5 @@
 import React from 'react';
-import { HttpClientProvider, HttpClient } from '@greatupsellsreact-hooks';
+import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
 import { CartProvider } from './hooks';
 import { Offers, CartInterceptor } from './components';
 

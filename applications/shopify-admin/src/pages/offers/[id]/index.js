@@ -18,7 +18,7 @@ import {
   CircleDisableMinor,
   CircleTickOutlineMinor
 } from '@shopify/polaris-icons';
-import { Loader } from '@greatupsellsreact-components';
+import { Loader } from '@greatupsells/react-components';
 import {
   useShop,
   useOffer,

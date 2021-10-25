@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 
 const { JWT_SECRET } = process.env;
 

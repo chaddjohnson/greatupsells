@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const logger = require('@greatupsellslogger');
+const logger = require('@greatupsells/logger');
 const models = require('..');
 
 const importCollection = async (shop, shopifyCollectionData) => {

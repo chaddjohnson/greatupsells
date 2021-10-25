@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { HttpClientProvider, HttpClient } from '@greatupsellsreact-hooks';
+import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
 import theme from '../theme';
 import { ToastProvider } from '../hooks';
 import '../theme/index.css';

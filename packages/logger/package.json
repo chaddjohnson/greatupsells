@@ -1,5 +1,5 @@
 {
-  "name": "@greatupsellslogger",
+  "name": "@greatupsells/logger",
   "version": "0.0.0",
   "description": "Logger service.",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/logger",
   "dependencies": {
-    "@greatupsellshttp-client": "0.0.0",
+    "@greatupsells/http-client": "0.0.0",
     "aws-sdk": "^2.984.0",
     "aws4-axios": "^2.2.0",
     "axios": "^0.21.1"

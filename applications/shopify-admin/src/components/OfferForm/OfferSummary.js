@@ -10,7 +10,7 @@ import {
   Button,
   Badge
 } from '@shopify/polaris';
-import { useNumberFormatter, useDateTime } from '@greatupsellsreact-hooks';
+import { useNumberFormatter, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
 
 const HeadingWrapper = styled.div`
