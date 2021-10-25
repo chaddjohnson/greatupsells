@@ -12,47 +12,20 @@ module.exports = {
     const Stats = await models.get('Stats');
     const User = await models.get('User');
 
-    await Collection.index({ shop: 1 });
-    await Collection.index({ shopifyShopId: 1 });
-    await Collection.index({ shopifyCollectionId: 1 }, { unique: true });
-    await Collection.index({ shopifyProductIds: 1 });
-
-    await OfferHit.index({ shop: 1 });
-    await OfferHit.index({ offer: 1 });
-    await OfferHit.index({ order: 1 });
-    await OfferHit.index({ createdAt: 1 });
-    await OfferHit.index({ acceptedAt: 1 });
-    await OfferHit.index({ convertedAt: 1 });
-
-    await Offer.index({ shop: 1 });
-    await Offer.index({ shopifyShopId: 1 });
-    await Offer.index({ createdAt: -1 });
-
-    await Order.index(
-      { shopifyShopId: 1, shopifyOrderNumber: 1 },
-      { unique: true }
-    );
-    await Order.index({ shopifyOrderId: 1 }, { unique: true });
-
-    await PopupTheme.index({ offer: 1 }, { sparse: true });
-
-    await Product.index({ shop: 1 });
-    await Product.index({ shopifyShopId: 1 });
-    await Product.index({ shopifyProductId: 1 }, { unique: true });
-    await Product.index({ shopifyCollectionIds: 1 });
-    await Product.index({ 'shopifyProductData.variants.id': 1 });
-
-    await Shop.index({ shopifyShopId: 1 }, { unique: true });
-    await Shop.index({ domain: 1 }, { unique: true });
-    await Shop.index({ alternateDomain: 1 });
-    await Shop.index({ createdAt: -1 });
-
-    await Stats.index({ createdAt: -1 });
-
-    await User.index({ emailAddress: 1 });
+    await Collection.createIndexes();
+    await OfferHit.createIndexes();
+    await Offer.createIndexes();
+    await Order.createIndexes();
+    await PopupTheme.createIndexes();
+    await Product.createIndexes();
+    await Shop.createIndexes();
+    await Stats.createIndexes();
+    await User.createIndexes();
   },
 
   async down() {
-    //
+    // TODO write the statements to rollback your migration (if possible)
+    // Example:
+    // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
   }
 };
