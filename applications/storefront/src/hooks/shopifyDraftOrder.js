@@ -1,4 +1,4 @@
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsellsreact-hooks';
 
 const useShopifyDraftOrder = () => {
   const { httpClient } = useHttpClient();

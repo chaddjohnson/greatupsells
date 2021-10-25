@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 const { StatusCodes } = require('http-status-codes');
 
 const updateActiveStatus = async (shop) => {

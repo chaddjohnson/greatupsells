@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { OfferPopup } from '@neatowebsolutions/greatupsells-react-components';
-import { usePushStateListener } from '@neatowebsolutions/greatupsells-react-hooks';
+import { OfferPopup } from '@greatupsellsreact-components';
+import { usePushStateListener } from '@greatupsellsreact-hooks';
 import {
   useOfferTracking,
   useRandomOffers,

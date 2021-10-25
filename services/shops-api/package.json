@@ -16,7 +16,7 @@
   "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/shops-api",
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
-    "@neatowebsolutions/greatupsells-logger": "0.0.0",
+    "@greatupsellslogger": "0.0.0",
     "bluebird": "^3.7.2",
     "geoip-country": "^4.0.56",
     "getenv": "^1.0.0",

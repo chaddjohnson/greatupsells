@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNumberFormatter } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useNumberFormatter } from '@greatupsellsreact-hooks';
 import calculateDiscountedPrice from './calculateDiscountedPrice';
 
 const getThumbnailImageUrl = (url) => {

@@ -4,7 +4,7 @@ import {
   useHttpClient,
   useCookies,
   usePushStateListener
-} from '@neatowebsolutions/greatupsells-react-hooks';
+} from '@greatupsellsreact-hooks';
 
 const useRandomOffers = ({
   events,

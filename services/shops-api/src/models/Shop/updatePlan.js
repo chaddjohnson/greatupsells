@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 
 const updatePlan = async (shop) => {
   if (!shop.plan.chargeId) {

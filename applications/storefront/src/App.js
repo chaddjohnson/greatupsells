@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  HttpClientProvider,
-  HttpClient
-} from '@neatowebsolutions/greatupsells-react-hooks';
+import { HttpClientProvider, HttpClient } from '@greatupsellsreact-hooks';
 import { CartProvider } from './hooks';
 import { Offers, CartInterceptor } from './components';
 

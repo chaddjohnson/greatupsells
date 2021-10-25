@@ -19,9 +19,9 @@ jobs:
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - name: Install Private Key
         run: |
-          mkdir -p ~/.ssh/neatowebsolutions
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/neatowebsolutions/id_rsa
-          chmod 600 ~/.ssh/neatowebsolutions/id_rsa
+          mkdir -p ~/.ssh/greatupsells
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/id_rsa
+          chmod 600 ~/.ssh/greatupsells/id_rsa
       - name: Checkout
         uses: actions/checkout@v2
       - name: Add Terraform variables

@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { OfferPopup } from '@neatowebsolutions/greatupsells-react-components';
+import { OfferPopup } from '@greatupsellsreact-components';
 import {
   usePushStateListener,
   useEventListener
-} from '@neatowebsolutions/greatupsells-react-hooks';
+} from '@greatupsellsreact-hooks';
 import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 
 // IE9+ polyfill for `.closest()`.

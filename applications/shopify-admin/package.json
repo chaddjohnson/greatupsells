@@ -11,8 +11,8 @@
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
-    "@neatowebsolutions/greatupsells-react-components": "0.0.0",
-    "@neatowebsolutions/greatupsells-react-hooks": "0.0.0",
+    "@greatupsellsreact-components": "0.0.0",
+    "@greatupsellsreact-hooks": "0.0.0",
     "@shopify/app-bridge": "^2.0.3",
     "@shopify/app-bridge-react": "^2.0.3",
     "@shopify/app-bridge-utils": "^2.0.3",
@@ -53,8 +53,8 @@
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
-    "@neatowebsolutions/greatupsells-react-components": "0.0.0",
-    "@neatowebsolutions/greatupsells-react-hooks": "0.0.0",
+    "@greatupsellsreact-components": "0.0.0",
+    "@greatupsellsreact-hooks": "0.0.0",
     "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-imports": "^2.0.0",
     "nodemon": "^2.0.7",

@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 const createWebhooks = require('./createWebhooks');
 const addScripts = require('./addScripts');
 const enqueueCollectionImport = require('./enqueueCollectionImport');

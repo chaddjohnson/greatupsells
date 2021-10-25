@@ -7,8 +7,7 @@ const {
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
 const qs = require('qs');
-const HttpClient = require('@neatowebsolutions/greatupsells-http-client')
-  .default;
+const HttpClient = require('@greatupsellshttp-client').default;
 
 const { AWS_REGION, LOGS_API_URL } = process.env;
 

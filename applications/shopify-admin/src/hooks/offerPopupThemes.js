@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsellsreact-hooks';
 
 const useOfferPopupThemes = (offerId) => {
   const { httpClient } = useHttpClient();

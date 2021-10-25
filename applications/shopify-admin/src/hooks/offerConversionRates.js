@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsellsreact-hooks';
 
 const useOfferConversionRates = (offerId, startAt, endAt) => {
   const { httpClient } = useHttpClient();

@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/greatupsells-logger');
+const logger = require('@greatupsellslogger');
 const models = require('../models');
 
 const handler = async (event, context) => {

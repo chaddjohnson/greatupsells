@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TableRow, TableCell, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { OfferPopup } from '@neatowebsolutions/greatupsells-react-components';
+import { OfferPopup } from '@greatupsells/react-components';
 import Link from '../Link';
 import PopupThemeMenu from './PopupThemeMenu';
 

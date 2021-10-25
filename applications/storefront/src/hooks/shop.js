@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR from 'swr';
-import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
+import { useHttpClient } from '@greatupsellsreact-hooks';
 
 const useShop = () => {
   const { httpClient } = useHttpClient();
