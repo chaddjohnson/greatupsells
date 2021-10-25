@@ -5,7 +5,7 @@ import { CssBaseline } from '@material-ui/core';
 import {
   HttpClientProvider,
   HttpClient
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import theme from '../theme';
 import { ToastProvider } from '../hooks';
 import '../theme/index.css';

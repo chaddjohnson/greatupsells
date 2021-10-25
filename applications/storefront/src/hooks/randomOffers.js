@@ -4,7 +4,7 @@ import {
   useHttpClient,
   useCookies,
   usePushStateListener
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 
 const useRandomOffers = ({
   events,
@@ -33,11 +33,11 @@ const useRandomOffers = ({
   // Use state so tracking data is not not re-read with every render; otherwise,
   // the API will undesirably be requeried whenever tracking data is updated.
   const [offerImpressions, setOfferImpressions] = useState(
-    getCookie('upsellingOfferImpressions') || []
+    getCookie('greatupsellsOfferImpressions') || []
   );
   const [sessionOfferImpressions, setSessionOfferImpressions] = useState(
-    sessionStorage.upsellingSessionOfferImpressions
-      ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
+    sessionStorage.greatupsellsSessionOfferImpressions
+      ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
       : []
   );
   const [pagePath, setPagePath] = useState(window.location.pathname);
@@ -76,10 +76,10 @@ const useRandomOffers = ({
 
   const pushStateListener = () => {
     // Update stateful values. This will automatically trigger a re-query for a random offer.
-    setOfferImpressions(getCookie('upsellingOfferImpressions') || []);
+    setOfferImpressions(getCookie('greatupsellsOfferImpressions') || []);
     setSessionOfferImpressions(
-      sessionStorage.upsellingSessionOfferImpressions
-        ? JSON.parse(sessionStorage.upsellingSessionOfferImpressions)
+      sessionStorage.greatupsellsSessionOfferImpressions
+        ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
         : []
     );
     setPagePath(window.location.pathname);

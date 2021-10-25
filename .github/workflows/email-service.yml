@@ -1,4 +1,4 @@
-name: upselling-email-service
+name: greatupsells-email-service
 on:
   push:
     branches:

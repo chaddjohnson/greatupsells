@@ -1,4 +1,4 @@
-service: upselling-webhooks-service
+service: greatupsells-webhooks-service
 variablesResolutionMode: 20210326
 useDotenv: true
 
@@ -16,11 +16,11 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
+    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
+    LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'webhooks-service'
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key}
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-secret-key}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
 custom:
   serverless-offline:
@@ -48,81 +48,81 @@ functions:
         enabled: false
   appUninstall:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/appUninstall.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/app-uninstall/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:app-uninstall-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/app-uninstall/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:app-uninstall-queue-dev'}
       - http:
           path: /shopify/app-uninstall
           method: post
   collection:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/collection.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/collection/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-queue-dev'}
       - http:
           path: /shopify/collection
           method: post
   collectionDelete:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/collectionDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/collection-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-deletion-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/collection-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:collection-deletion-queue-dev'}
       - http:
           path: /shopify/collection-deletion
           method: post
   draftOrderUpdate:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/draftOrderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/draft-order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:draft-order-update-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/draft-order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:draft-order-update-queue-dev'}
       - http:
           path: /shopify/draft-order-update
           method: post
   orderCancel:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderCancel.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-cancelation/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-cancelation-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/order-cancelation/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-cancelation-queue-dev'}
       - http:
           path: /shopify/order-cancelation
           method: post
   orderPaid:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderPaid.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-paid/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-paid-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/order-paid/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-paid-queue-dev'}
       - http:
           path: /shopify/order-paid
           method: post
   orderUpdate:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderUpdate.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-update-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-update-queue-dev'}
       - http:
           path: /shopify/order-update
           method: post
   product:
     reservedConcurrency: 3
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/product.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/product/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-queue-dev'}
           batchSize: 10
           maximumBatchingWindow: 10
       - http:
@@ -130,21 +130,21 @@ functions:
           method: post
   productDelete:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/productDelete.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/product-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-deletion-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/product-deletion/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-deletion-queue-dev'}
       - http:
           path: /shopify/product-deletion
           method: post
   shop:
     reservedConcurrency: 1
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/shop.handler
     events:
       - sqs:
-          arn: ${ssm:/upselling/${self:provider.stage}/queues/shop-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-update-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-update-queue-dev'}
       - http:
           path: /shopify/shop
           method: post

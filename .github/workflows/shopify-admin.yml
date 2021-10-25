@@ -1,4 +1,4 @@
-name: upselling-shopify-admin
+name: greatupsells-shopify-admin
 on:
   push:
     branches:
@@ -22,22 +22,22 @@ jobs:
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/assets/domain"
+          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/assets/domain"
           env_variable_name: "ASSETS_DOMAIN"
       - name: Inject "ASSETS_URL" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/assets/url"
+          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/assets/url"
           env_variable_name: "ASSETS_URL"
       - name: Inject "SHOPIFY_ADMIN_APP_API_KEY" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/shopify/api-key"
+          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/shopify/api-key"
           env_variable_name: "SHOPIFY_ADMIN_APP_API_KEY"
       - name: Inject "SHOPIFY_ADMIN_API_URL" SSM Parameter
         uses: "marvinpinto/action-inject-ssm-secrets@latest"
         with:
-          ssm_parameter: "/upselling/${{ env.BRANCH }}/shopify-admin-api/url"
+          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url"
           env_variable_name: "SHOPIFY_ADMIN_API_URL"
       - name: Checkout
         uses: actions/checkout@v2

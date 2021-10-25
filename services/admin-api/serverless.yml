@@ -1,4 +1,4 @@
-service: upselling-admin-api
+service: greatupsells-admin-api
 variablesResolutionMode: 20210326
 useDotenv: true
 
@@ -16,26 +16,26 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret}
-    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/upselling/${self:provider.stage}/logs-api/url}
-    LOG_QUEUE_URL: ${ssm:/upselling/${self:provider.stage}/queues/log/url, ''}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
+    LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
+    LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'admin-api'
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
 custom:
   serverless-offline:
     httpPort: ${env:ADMIN_API_PORT, 4005}
     lambdaPort: 5003
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/admin-api/domain, ''}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/admin-api/domain, ''}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
+    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/admin-api/health-check-id, ''}
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:
@@ -73,7 +73,7 @@ functions:
         enabled: false
   # findLogs:
   clonePopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/clonePopupTheme.handler
     events:
       - http:
@@ -86,7 +86,7 @@ functions:
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
   createPopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createPopupTheme.handler
     events:
       - http:
@@ -99,7 +99,7 @@ functions:
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
   findLogs:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
     events:
       - http:
@@ -112,7 +112,7 @@ functions:
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
   findOnePopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOnePopupTheme.handler
     events:
       - http:
@@ -125,7 +125,7 @@ functions:
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
   findPopupThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findPopupThemes.handler
     events:
       - http:
@@ -140,7 +140,7 @@ functions:
   # findShops:
   # findStats:
   updatePopupTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updatePopupTheme.handler
     events:
       - http:

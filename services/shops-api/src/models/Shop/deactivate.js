@@ -1,4 +1,4 @@
-const logger = require('@neatowebsolutions/upselling-logger');
+const logger = require('@neatowebsolutions/greatupsells-logger');
 
 const deactivate = async (shop) => {
   // Record when the uninstall occurred.

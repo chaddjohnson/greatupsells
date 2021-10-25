@@ -1,4 +1,4 @@
-name: upselling-shopify-admin-api
+name: greatupsells-shopify-admin-api
 on:
   push:
     branches:

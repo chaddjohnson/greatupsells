@@ -20,7 +20,7 @@ resource "aws_sqs_queue_policy" "log_policy" {
 }
 
 resource "aws_ssm_parameter" "log_queue_arn" {
-  name     = "/upselling/${terraform.workspace}/queues/log/arn"
+  name     = "/greatupsells/${terraform.workspace}/queues/log/arn"
   type     = "String"
   value    = aws_sqs_queue.log.arn
   overwrite = true
@@ -28,7 +28,7 @@ resource "aws_ssm_parameter" "log_queue_arn" {
 }
 
 resource "aws_ssm_parameter" "log_queue_url" {
-  name     = "/upselling/${terraform.workspace}/queues/log/url"
+  name     = "/greatupsells/${terraform.workspace}/queues/log/url"
   type     = "String"
   value    = aws_sqs_queue.log.id
   overwrite = true

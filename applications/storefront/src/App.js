@@ -2,7 +2,7 @@ import React from 'react';
 import {
   HttpClientProvider,
   HttpClient
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import { CartProvider } from './hooks';
 import { Offers, CartInterceptor } from './components';
 

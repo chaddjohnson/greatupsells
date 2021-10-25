@@ -1,4 +1,4 @@
-import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
+import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
 
 const usePopupTheme = () => {
   const { httpClient } = useHttpClient();

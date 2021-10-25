@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Breadcrumbs, Hidden } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
-import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { Loader } from '@neatowebsolutions/greatupsells-react-components';
 import { Layout, Link, PopupThemeEditor } from '../../components';
 import { usePopupTheme } from '../../hooks';
 

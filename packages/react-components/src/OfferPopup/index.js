@@ -8,7 +8,7 @@ import { useLiquid } from 'react-liquid';
 import {
   useCookies,
   useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 import Overlay from './Overlay';
@@ -61,7 +61,7 @@ const OfferPopup = ({
     null
   );
   const [checkoutUrl, setCheckoutUrl] = useState(
-    getCookie('upsellingDraftOrderCheckoutUrl') || '/checkout'
+    getCookie('greatupsellsDraftOrderCheckoutUrl') || '/checkout'
   );
   const [addedQuantities, setAddedQuantities] = useState(
     [...Array(offeredProducts.length).keys()].map(() => 0)

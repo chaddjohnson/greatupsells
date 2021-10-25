@@ -1,5 +1,5 @@
 {
-  "name": "upselling-shopify-admin-api",
+  "name": "greatupsells-shopify-admin-api",
   "version": "0.0.0",
   "scripts": {
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
@@ -9,16 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/upselling.git"
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/upselling/tree/master/services/shopify-admin-api",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/shopify-admin-api",
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
-    "@neatowebsolutions/upselling-http-client": "0.0.0",
-    "@neatowebsolutions/upselling-logger": "0.0.0",
+    "@neatowebsolutions/greatupsells-http-client": "0.0.0",
+    "@neatowebsolutions/greatupsells-logger": "0.0.0",
     "aws4-axios": "^2.2.0",
     "axios": "^0.21.1",
     "http-status-codes": "^2.1.4",

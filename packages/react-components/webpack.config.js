@@ -45,7 +45,7 @@ module.exports = {
   ].filter(Boolean),
   stats: 'errors-warnings',
   externals: [
-    '@neatowebsolutions/upselling-react-hooks',
+    '@neatowebsolutions/greatupsells-react-hooks',
     'prop-types',
     'react',
     'react-dom',

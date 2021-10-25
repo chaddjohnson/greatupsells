@@ -1,4 +1,4 @@
-service: upselling-shopify-admin
+service: greatupsells-shopify-admin
 variablesResolutionMode: 20210326
 useDotenv: true
 
@@ -16,27 +16,27 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    ASSETS_URL: ${env:ASSETS_URL, ssm:/upselling/${self:provider.stage}/assets/url}
-    JWT_SECRET: ${env:JWT_SECRET, ssm:/upselling/${self:provider.stage}/jwt-secret}
-    REDIS_URL_APP: ${env:REDIS_URL_APP, ssm:/upselling/${self:provider.stage}/database/redis-app/url}
-    SHOPIFY_ADMIN_API_URL: ${env:SHOPIFY_ADMIN_API_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-api/url}
-    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-key}
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/upselling/${self:provider.stage}/shopify/api-secret-key}
-    SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/upselling/${self:provider.stage}/shopify-admin-app/url}
-    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/upselling/${self:provider.stage}/shops-api/url}
+    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
+    JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
+    REDIS_URL_APP: ${env:REDIS_URL_APP, ssm:/greatupsells/${self:provider.stage}/database/redis-app/url}
+    SHOPIFY_ADMIN_API_URL: ${env:SHOPIFY_ADMIN_API_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/url}
+    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-secret-key}
+    SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
+    SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
     LOG_SOURCE: 'shopify-admin'
 
 custom:
   customDomain:
-    domainName: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/domain}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/domain}
     basePath: ''
-    certificateName: ${ssm:/upselling/${self:provider.stage}/certificate-name, ''}
+    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/upselling/${self:provider.stage}/shopify-admin-app/health-check-id, ''}
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:
@@ -71,7 +71,7 @@ functions:
       default:
         enabled: false
   server:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/upselling/${self:provider.stage}/roles/services-consumer-arn}
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/server.handler
     events:
       - http:

@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import useSWR, { mutate } from 'swr';
-import { useHttpClient } from '@neatowebsolutions/upselling-react-hooks';
+import { useHttpClient } from '@neatowebsolutions/greatupsells-react-hooks';
 import useToast from './toast';
 
 const ShopContext = createContext(null);

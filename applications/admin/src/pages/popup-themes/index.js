@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Skeleton } from '@material-ui/lab';
 import { Brush as PopupThemesIcon } from '@material-ui/icons';
-import { Loader } from '@neatowebsolutions/upselling-react-components';
+import { Loader } from '@neatowebsolutions/greatupsells-react-components';
 import { Layout, PopupThemeList } from '../../components';
 import { usePopupThemes, usePopupTheme } from '../../hooks';
 

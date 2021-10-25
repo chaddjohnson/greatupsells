@@ -1,4 +1,4 @@
-import { useCookies } from '@neatowebsolutions/upselling-react-hooks';
+import { useCookies } from '@neatowebsolutions/greatupsells-react-hooks';
 import useOfferTracking from './offerTracking';
 import { useShopifyCart } from './shopifyCart';
 import useShopifyDraftOrder from './shopifyDraftOrder';
@@ -23,7 +23,7 @@ const useOfferAcceptance = () => {
     shopifyVariantId,
     quantity
   ) => {
-    let shopifyDraftOrderId = getCookie('upsellingDraftOrderId');
+    let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
@@ -58,13 +58,13 @@ const useOfferAcceptance = () => {
       shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
-      setCookie('upsellingDraftOrderId', draftOrder.id, {
+      setCookie('greatupsellsDraftOrderId', draftOrder.id, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
 
       // Track the draft order checkout URL.
-      setCookie('upsellingDraftOrderCheckoutUrl', draftOrder.invoice_url, {
+      setCookie('greatupsellsDraftOrderCheckoutUrl', draftOrder.invoice_url, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
@@ -101,7 +101,7 @@ const useOfferAcceptance = () => {
       ...shopifyCartItems.slice(triggerShopifyCartItemIndex + 1)
     ];
     const quantity = triggerShopifyCartItem?.quantity;
-    let shopifyDraftOrderId = getCookie('upsellingDraftOrderId');
+    let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
 
     // Abort if trigger product was not found in cart.
@@ -151,13 +151,13 @@ const useOfferAcceptance = () => {
       shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
-      setCookie('upsellingDraftOrderId', draftOrder.id, {
+      setCookie('greatupsellsDraftOrderId', draftOrder.id, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
 
       // Track the draft order checkout URL.
-      setCookie('upsellingDraftOrderCheckoutUrl', draftOrder.invoice_url, {
+      setCookie('greatupsellsDraftOrderCheckoutUrl', draftOrder.invoice_url, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "neatowebsolutions-upselling-infrastructure"
+    bucket = "greatupsells-infrastructure"
     key    = "shops-api.tfstate"
     region = "us-east-1"
   }

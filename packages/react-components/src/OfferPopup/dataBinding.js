@@ -3,7 +3,7 @@ import knockout from 'knockout';
 import {
   useCookies,
   useNumberFormatter
-} from '@neatowebsolutions/upselling-react-hooks';
+} from '@neatowebsolutions/greatupsells-react-hooks';
 
 const useDataBinding = ({
   iframe,
@@ -209,7 +209,7 @@ const useDataBinding = ({
           await onAddProduct(offerId, productId, variantId, quantity);
 
           onQuantityAdd(productIndex, quantity);
-          onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
+          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
 
           productButton.removeAttribute('disabled');
         } catch (error) {
@@ -246,7 +246,7 @@ const useDataBinding = ({
           );
 
           onQuantityAdd(productIndex, 1);
-          onCheckoutUrlUpdate(getCookie('upsellingDraftOrderCheckoutUrl'));
+          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
 
           productButton.removeAttribute('disabled');
         } catch (error) {

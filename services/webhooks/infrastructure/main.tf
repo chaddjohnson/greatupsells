@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "neatowebsolutions-upselling-infrastructure"
+    bucket = "greatupsells-infrastructure"
     key    = "webhooks-service.tfstate"
     region = "us-east-1"
   }

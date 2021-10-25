@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormLayout } from '@shopify/polaris';
-import { useDateTime } from '@neatowebsolutions/upselling-react-hooks';
+import { useDateTime } from '@neatowebsolutions/greatupsells-react-hooks';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 

@@ -11,10 +11,10 @@ data "aws_region" "current" {
   provider = aws.region
 }
 
-data "terraform_remote_state" "upselling_infrastructure" {
+data "terraform_remote_state" "greatupsells_infrastructure" {
   backend = "s3"
   config = {
-    bucket = "neatowebsolutions-upselling-infrastructure"
+    bucket = "greatupsells-infrastructure"
     key    = "env:/${terraform.workspace}/infrastructure.tfstate"
     region = "us-east-1"
   }

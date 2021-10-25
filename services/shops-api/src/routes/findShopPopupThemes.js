@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const logger = require('@neatowebsolutions/upselling-logger');
+const logger = require('@neatowebsolutions/greatupsells-logger');
 const mongodbClient = require('../models/mongodbClient');
 const models = require('../models');
 

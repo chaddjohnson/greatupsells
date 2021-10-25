@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { usePushStateListener } from '@neatowebsolutions/upselling-react-hooks';
+import { usePushStateListener } from '@neatowebsolutions/greatupsells-react-hooks';
 import {
   useRandomOffers,
   useShopifyCart,
