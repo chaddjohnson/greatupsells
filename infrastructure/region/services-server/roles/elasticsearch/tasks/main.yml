@@ -1,0 +1,33 @@
+- name: Add Elasticsearch GPG key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  # when: not elasticsearch.stat.exists
+
+- name: Add Elasticsearch sources list
+  lineinfile:
+    line: 'deb https://artifacts.elastic.co/packages/7.x/apt stable main'
+    dest: /etc/apt/sources.list.d/elastic-7.x.list
+    state: present
+    create: yes
+  # when: not elasticsearch.stat.exists
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  # when: not elasticsearch.stat.exists
+
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+    allow_unauthenticated: yes
+  # when: not elasticsearch.stat.exists
+
+- name: Start Elasticsearch
+  service:
+    name: elasticsearch.service
+    state: restarted
+  when: not mongodb.stat.exists
