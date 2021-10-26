@@ -62,7 +62,7 @@ module.exports = {
   webpack5: true,
   crossOrigin: 'anonymous',
   env: {
-    ASSETS_URL,
+    ASSETS_URL: dev ? '' : ASSETS_URL,
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOPIFY_ADMIN_API_URL
   }
