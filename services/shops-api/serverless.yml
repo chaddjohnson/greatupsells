@@ -381,7 +381,6 @@ functions:
           authorizer: aws_iam
   health:
     memorySize: 128
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/health.handler
     events:
       - http:
