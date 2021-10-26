@@ -30,4 +30,4 @@
   service:
     name: elasticsearch.service
     state: restarted
-  when: not mongodb.stat.exists
+  # when: not elasticsearch.stat.exists
