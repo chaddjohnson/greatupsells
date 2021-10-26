@@ -213,7 +213,7 @@ const DashboardPage = () => {
             >
               <TutorialsImage
                 alt="Tutorials"
-                src={`${process.env.ASSETS_URL}/shopify-admin/images/tutorials.svg`}
+                src={`${process.env.ASSETS_URL}/images/tutorials.svg`}
               />
             </MediaCard>
           </Layout.Section>
