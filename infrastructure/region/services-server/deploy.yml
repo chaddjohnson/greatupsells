@@ -6,4 +6,4 @@
     - accounts
     - mongodb
     - redis
-    # - elasticsearch
+    - elasticsearch

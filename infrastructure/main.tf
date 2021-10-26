@@ -155,18 +155,6 @@ module "ap_northeast_1" {
   redis_app_password               = var.redis_app_password
 }
 
-module "assets" {
-  count  = terraform.workspace == "test" ? 1 : 0
-  source = "./assets"
-  providers = {
-    aws.region = aws
-  }
-
-  certificate_arn = module.us_east_1.certificate_arn
-  hosted_zone_id  = var.hosted_zone_id
-  assets_domain   = var.assets_domain
-}
-
 output "domain" {
   value = var.domain
 }
