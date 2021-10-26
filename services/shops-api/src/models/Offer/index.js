@@ -86,7 +86,9 @@ const schema = new mongoose.Schema(
     triggerExternalLinksOnly: { type: Boolean, required: false, default: true },
     triggerScrollThreshold: {
       type: Number,
-      required: false,
+      required() {
+        return this.triggerEvent === 'SCROLL';
+      },
       default: 75,
       min: 1,
       max: 100
@@ -141,9 +143,20 @@ const schema = new mongoose.Schema(
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },
     startAt: { type: Date, required: true, default: Date.now },
-    endAt: { type: Date, required: false },
-    delaySeconds: { type: Number, required: false, default: 0 },
-    onPageRequiredSeconds: { type: Number, required: false, default: 0 },
+    endAt: {
+      type: Date,
+      required: false,
+      validate: {
+        validator(value) {
+          if (this.startAt && value) {
+            return new Date(this.startAt) < new Date(value);
+          }
+        },
+        message: 'End date must be on or after start date'
+      }
+    },
+    delaySeconds: { type: Number, required: false, min: 0 },
+    onPageRequiredSeconds: { type: Number, required: false, min: 0 },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
     disableOutOfStockVariants: { type: Boolean, required: true, default: true },

@@ -50,7 +50,7 @@ module.exports = {
   webpack5: true,
   crossOrigin: 'anonymous',
   env: {
-    ASSETS_URL,
+    ASSETS_URL: dev ? '/admin' : ASSETS_URL,
     ADMIN_API_URL
   }
 };
