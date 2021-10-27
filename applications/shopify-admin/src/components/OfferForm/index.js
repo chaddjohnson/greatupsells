@@ -24,7 +24,7 @@ import OfferDatesEditor from './OfferDatesEditor';
 import OfferGeotargetingEditor from './OfferGeotargetingEditor';
 import OfferOptionsEditor from './OfferOptionsEditor';
 import dummyCrossSellData from './dummyCrossSellData.json';
-// import dummyUpsellData from './dummyUpsellData.json';
+import dummyUpsellData from './dummyUpsellData.json';
 
 let themeCount = 0;
 
