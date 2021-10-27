@@ -155,6 +155,10 @@ module "ap_northeast_1" {
   redis_app_password               = var.redis_app_password
 }
 
+output "hosted_zone_id" {
+  value = var.hosted_zone_id
+}
+
 output "domain" {
   value = var.domain
 }

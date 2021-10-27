@@ -113,7 +113,7 @@ resource "aws_cloudfront_distribution" "admin" {
 }
 
 resource "aws_route53_record" "admin" {
-  zone_id = var.hosted_zone_id
+  zone_id = data.terraform_remote_state.greatupsells_infrastructure.outputs.hosted_zone_id
   name    = var.admin_app_domain
   type    = "A"
 

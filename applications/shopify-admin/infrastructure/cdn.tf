@@ -113,7 +113,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
 }
 
 resource "aws_route53_record" "shopify_admin" {
-  zone_id = var.hosted_zone_id
+  zone_id = data.terraform_remote_state.greatupsells_infrastructure.outputs.hosted_zone_id
   name    = var.shopify_admin_app_domain
   type    = "A"
 
