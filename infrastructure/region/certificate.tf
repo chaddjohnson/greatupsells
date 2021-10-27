@@ -4,10 +4,10 @@ resource "aws_acm_certificate" "domain" {
   subject_alternative_names = [
     "*.${var.base_domain}",
     "*.${data.aws_region.current.name}.${var.base_domain}",
-    "*.regional.${var.base_domain}",
+    "*.latency.${var.base_domain}",
     "*.test.${var.base_domain}",
     "*.${data.aws_region.current.name}.test.${var.base_domain}",
-    "*.regional.test.${var.base_domain}",
+    "*.latency.test.${var.base_domain}",
   ]
 }
 
