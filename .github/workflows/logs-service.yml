@@ -35,10 +35,10 @@ jobs:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
       - name: Inject "MONGODB_URL_LOGS" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/database/mongodb-logs/url"
-          env_variable_name: "MONGODB_URL_LOGS"
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/mongodb-logs/url'
+          env_variable_name: 'MONGODB_URL_LOGS'
       - name: Install Node Modules
         run: yarn install
       - name: Build Packages
@@ -48,6 +48,9 @@ jobs:
       #   working-directory: services/logs
       #   env:
       #     MONGODB_URL_LOGS: ${{ env.MONGODB_URL_LOGS }}
+      - name: Download .serverless directory
+        run: aws s3 sync s3://greatupsells-infrastructure/serverless/logs-service .
+        working-directory: services/logs
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: services/logs
@@ -59,6 +62,9 @@ jobs:
         run: serverless deploy --stage $BRANCH --region ap-northeast-1
         working-directory: services/logs
         if: ${{ github.ref == 'refs/heads/production' }}
+      - name: Sync .serverless directory
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/logs-service/.serverless
+        working-directory: services/logs
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g yarn serverless

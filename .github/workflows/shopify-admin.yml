@@ -20,25 +20,25 @@ jobs:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/assets/domain"
-          env_variable_name: "ASSETS_DOMAIN"
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
+          env_variable_name: 'ASSETS_DOMAIN'
       - name: Inject "ASSETS_URL" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/assets/url"
-          env_variable_name: "ASSETS_URL"
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/url'
+          env_variable_name: 'ASSETS_URL'
       - name: Inject "SHOPIFY_ADMIN_APP_API_KEY" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/shopify/api-key"
-          env_variable_name: "SHOPIFY_ADMIN_APP_API_KEY"
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/api-key'
+          env_variable_name: 'SHOPIFY_ADMIN_APP_API_KEY'
       - name: Inject "SHOPIFY_ADMIN_API_URL" SSM Parameter
-        uses: "marvinpinto/action-inject-ssm-secrets@latest"
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: "/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url"
-          env_variable_name: "SHOPIFY_ADMIN_API_URL"
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url'
+          env_variable_name: 'SHOPIFY_ADMIN_API_URL'
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Node.js
@@ -58,6 +58,9 @@ jobs:
         run: yarn install
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
+      - name: Download .serverless directory
+        run: aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin .
+        working-directory: applications/shopify-admin
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
         working-directory: applications/shopify-admin
@@ -76,6 +79,9 @@ jobs:
         run: serverless deploy --stage $BRANCH --region ap-northeast-1
         working-directory: applications/shopify-admin
         if: ${{ github.ref == 'refs/heads/production' }}
+      - name: Sync .serverless directory
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/shopify-admin/.serverless
+        working-directory: applications/shopify-admin
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g yarn serverless
