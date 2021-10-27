@@ -17,6 +17,7 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ADMIN_API_URL: ${env:ADMIN_API_URL, ssm:/greatupsells/${self:provider.stage}/admin-api/url}
+    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
