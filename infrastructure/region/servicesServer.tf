@@ -104,7 +104,7 @@ resource "null_resource" "ansible_host_config" {
     command = <<EOT
       cat /dev/null > region/services-server/hosts
       echo "[services-server]" >> region/services-server/hosts
-      echo "${var.services_domain_name}" >> region/services-server/hosts
+      echo "${aws_eip.services_server.public_ip}" >> region/services-server/hosts
       echo "" >> region/services-server/hosts
       echo "[all:vars]" >> region/services-server/hosts
       echo "ansible_user=ubuntu" >> region/services-server/hosts
