@@ -67,14 +67,6 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Add domain to hosts file
-  lineinfile:
-    path: /etc/hosts
-    insertafter: '^127\.0\.0\.1 localhost'
-    regexp: '^127\.0\.0\.1 {{ domain_name }}'
-    line: 127.0.0.1 {{ domain_name }}
-    create: yes
-
 - name: Install AWS CLI
   raw: pip3 install -q awscli --upgrade
 
@@ -164,3 +156,11 @@
 
 - name: Generate certificate files
   command: /root/update-certificates.sh
+
+- name: Add domain to hosts file
+  lineinfile:
+    path: /etc/hosts
+    insertafter: '^127\.0\.0\.1 localhost'
+    regexp: '^127\.0\.0\.1 {{ domain_name }}'
+    line: 127.0.0.1 {{ domain_name }}
+    create: yes
