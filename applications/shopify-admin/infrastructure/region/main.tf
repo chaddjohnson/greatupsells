@@ -28,6 +28,15 @@ resource "aws_ssm_parameter" "shopify_admin_app_domain" {
   provider  = aws.region
 }
 
+resource "aws_ssm_parameter" "shopify_admin_app_latency_domain" {
+  name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/latency-domain"
+  type      = "String"
+  value     = "shopify-admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+  overwrite = true
+  provider  = aws.region
+}
+
+
 resource "aws_ssm_parameter" "shopify_admin_app_url" {
   name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/url"
   type      = "String"

@@ -166,3 +166,7 @@ output "assets_domain" {
 output "services_domain_names" {
   value = values(var.services_domain_names)
 }
+
+output "certificate_arn" {
+  value = module.us_east_1.certificate_arn
+}

@@ -250,28 +250,28 @@
         {
           "id": 28537031098413.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/shoes/black.jpg"
+          "src": "/assets/images/cross-sell/shoes/black.jpg"
         },
         {
           "id": 28537031000109.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/shoes/white.jpg"
+          "src": "/assets/images/cross-sell/shoes/white.jpg"
         },
         {
           "id": 28537031065645.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/shoes/red.jpg"
+          "src": "/assets/images/cross-sell/shoes/red.jpg"
         },
         {
           "id": 28537031032877.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/shoes/black.jpggreen"
+          "src": "/assets/images/cross-sell/shoes/black.jpggreen"
         }
       ],
       "image": {
         "id": 28537031098413.0,
         "alt": null,
-        "src": "ASSETS_URL/images/cross-sell/shoes/black.jpg"
+        "src": "/assets/images/cross-sell/shoes/black.jpg"
       }
     }
   },
@@ -327,28 +327,28 @@
           {
             "id": 28537019367469.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/hat/beige.jpg"
+            "src": "/assets/images/cross-sell/hat/beige.jpg"
           },
           {
             "id": 28537019400237.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/hat/khaki.jpg"
+            "src": "/assets/images/cross-sell/hat/khaki.jpg"
           },
           {
             "id": 28537019334701.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/hat/black.jpg"
+            "src": "/assets/images/cross-sell/hat/black.jpg"
           },
           {
             "id": 28537019334702.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/hat/white.jpg"
+            "src": "/assets/images/cross-sell/hat/white.jpg"
           }
         ],
         "image": {
           "id": 28537019367469.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/hat/beige.jpg"
+          "src": "/assets/images/cross-sell/hat/beige.jpg"
         }
       }
     },
@@ -453,23 +453,23 @@
           {
             "id": 28537322799149.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/socks/gray.jpg"
+            "src": "/assets/images/cross-sell/socks/gray.jpg"
           },
           {
             "id": 28537321979949.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/socks/purple.jpg"
+            "src": "/assets/images/cross-sell/socks/purple.jpg"
           },
           {
             "id": 28537322340397.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/socks/yellow.jpg"
+            "src": "/assets/images/cross-sell/socks/yellow.jpg"
           }
         ],
         "image": {
           "id": 28537322799149.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/socks/gray.jpg"
+          "src": "/assets/images/cross-sell/socks/gray.jpg"
         }
       }
     },
@@ -514,23 +514,23 @@
           {
             "id": 28537472876589.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/scarf/red.jpg"
+            "src": "/assets/images/cross-sell/scarf/red.jpg"
           },
           {
             "id": 28537472843821.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/scarf/white.jpg"
+            "src": "/assets/images/cross-sell/scarf/white.jpg"
           },
           {
             "id": 28537472811053.0,
             "alt": null,
-            "src": "ASSETS_URL/images/cross-sell/scarf/black.jpg"
+            "src": "/assets/images/cross-sell/scarf/black.jpg"
           }
         ],
         "image": {
           "id": 28537472843821.0,
           "alt": null,
-          "src": "ASSETS_URL/images/cross-sell/scarf/red.jpg"
+          "src": "/assets/images/cross-sell/scarf/red.jpg"
         }
       }
     }

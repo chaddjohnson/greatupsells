@@ -213,7 +213,7 @@ const DashboardPage = () => {
             >
               <TutorialsImage
                 alt="Tutorials"
-                src={`${process.env.ASSETS_URL}/images/tutorials.svg`}
+                src={`/assets/images/tutorials.svg`}
               />
             </MediaCard>
           </Layout.Section>

@@ -4,14 +4,8 @@ import { Paper, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { OfferPopup } from '@greatupsells/react-components';
 import CodeEditor from './CodeEditor';
-
-let dummyData = require('../../dummyCrossSellData.json');
-// let dummyData = require('../../dummyUpsellData.json');
-
-// Set assets URL in dummy data.
-dummyData = JSON.parse(
-  JSON.stringify(dummyData).replace(/ASSETS_URL/g, process.env.ASSETS_URL)
-);
+import dummyData from '../../dummyCrossSellData.json';
+// import dummyData from '../../dummyUpsellData.json'
 
 const useStyles = makeStyles((theme) => ({
   root: {
