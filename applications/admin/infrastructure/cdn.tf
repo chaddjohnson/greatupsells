@@ -15,6 +15,13 @@ resource "aws_cloudfront_distribution" "admin" {
   origin {
     domain_name = "admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
     origin_id   = "app"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
   ordered_cache_behavior {

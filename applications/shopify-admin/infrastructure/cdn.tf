@@ -4,8 +4,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   price_class = "PriceClass_All"
 
   origin {
-    # domain_name = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_bucket_regional_domain_name
-    domain_name = "assets.test.greatupsells.com.s3.us-east-1.amazonaws.com"
+    domain_name = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_bucket_regional_domain_name
     origin_id   = "assets"
 
     s3_origin_config {
@@ -16,6 +15,13 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   origin {
     domain_name = "shopify-admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
     origin_id   = "app"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
   ordered_cache_behavior {
