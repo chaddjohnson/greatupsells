@@ -6,6 +6,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   origin {
     domain_name = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_bucket_regional_domain_name
     origin_id   = "assets"
+    origin_path = "/shopify-admin"
 
     s3_origin_config {
       origin_access_identity = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_access_identity_path
