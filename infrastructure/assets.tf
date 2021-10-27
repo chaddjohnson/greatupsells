@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source                = "hashicorp/aws"
-      configuration_aliases = [aws.region]
-    }
-  }
-}
-
 resource "aws_s3_bucket" "assets" {
   bucket        = var.assets_domain
   acl           = "private"
@@ -138,4 +129,20 @@ resource "aws_route53_record" "assets" {
     zone_id                = aws_cloudfront_distribution.assets.hosted_zone_id
     evaluate_target_health = false
   }
+}
+
+output "assets_bucket_regional_domain_name" {
+  value = aws_s3_bucket.assets.bucket_regional_domain_name
+}
+
+output "assets_cloudfront_access_identity_path" {
+  value = aws_cloudfront_origin_access_identity.assets.cloudfront_access_identity_path
+}
+
+output "assets_cloudfront_origin_request_policy_id" {
+  value = data.aws_cloudfront_origin_request_policy.assets.id
+}
+
+output "assets_cloudfront_cache_policy_id" {
+  value = data.aws_cloudfront_cache_policy.assets.id
 }

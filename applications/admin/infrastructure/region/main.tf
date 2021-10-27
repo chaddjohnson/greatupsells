@@ -11,10 +11,27 @@ data "aws_region" "current" {
   provider = aws.region
 }
 
+data "terraform_remote_state" "greatupsells_infrastructure" {
+  backend = "s3"
+  config = {
+    bucket = "greatupsells-infrastructure"
+    key    = "env:/${terraform.workspace}/infrastructure.tfstate"
+    region = "us-east-1"
+  }
+}
+
 resource "aws_ssm_parameter" "admin_app_domain" {
   name      = "/greatupsells/${terraform.workspace}/admin-app/domain"
   type      = "String"
   value     = var.admin_app_domain
+  overwrite = true
+  provider  = aws.region
+}
+
+resource "aws_ssm_parameter" "admin_app_latency_domain" {
+  name      = "/greatupsells/${terraform.workspace}/admin-app/latency-domain"
+  type      = "String"
+  value     = "admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
   overwrite = true
   provider  = aws.region
 }

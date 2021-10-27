@@ -4,7 +4,6 @@ const zlib = require('zlib');
 
 const {
   NODE_ENV,
-  ASSETS_URL,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_API_URL
 } = process.env;
@@ -53,16 +52,12 @@ module.exports = {
 
     return config;
   },
-
-  // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
-  assetPrefix: dev ? '' : `${ASSETS_URL}/shopify-admin`,
-
+  assetPrefix: '/assets',
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
   crossOrigin: 'anonymous',
   env: {
-    ASSETS_URL: dev ? '/shopify-admin' : `${ASSETS_URL}/shopify-admin`,
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOPIFY_ADMIN_API_URL
   }

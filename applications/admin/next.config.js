@@ -2,7 +2,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const zlib = require('zlib');
 
-const { NODE_ENV, ASSETS_URL, ADMIN_API_URL } = process.env;
+const { NODE_ENV, ADMIN_API_URL } = process.env;
 const dev = NODE_ENV !== 'production';
 
 module.exports = {
@@ -41,16 +41,12 @@ module.exports = {
 
     return config;
   },
-
-  // Prefix URL for all static assets. Disable prefixing in dev mode as this breaks mobile testing.
-  assetPrefix: dev ? '' : `${ASSETS_URL}/admin`,
-
+  assetPrefix: '/assets',
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
   crossOrigin: 'anonymous',
   env: {
-    ASSETS_URL: dev ? '/admin' : `${ASSETS_URL}/admin`,
     ADMIN_API_URL
   }
 };
