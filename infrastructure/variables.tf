@@ -2,6 +2,10 @@ variable "hosted_zone_id" {
   type = string
 }
 
+variable "public_key" {
+  type = string
+}
+
 variable "base_domain" {
   type = string
 }
