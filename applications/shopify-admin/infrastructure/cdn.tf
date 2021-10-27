@@ -4,7 +4,8 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   price_class = "PriceClass_All"
 
   origin {
-    domain_name = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_bucket_regional_domain_name
+    # domain_name = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_bucket_regional_domain_name
+    domain_name = "assets.test.greatupsells.com.s3.amazonaws.com"
     origin_id   = "assets"
 
     s3_origin_config {
