@@ -52,7 +52,7 @@ module.exports = {
 
     return config;
   },
-  assetPrefix: '/assets',
+  assetPrefix: dev ? '' : '/assets',
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
