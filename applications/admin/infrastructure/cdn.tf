@@ -36,14 +36,6 @@ resource "aws_cloudfront_distribution" "admin" {
     viewer_protocol_policy   = "redirect-to-https"
     origin_request_policy_id = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_origin_request_policy_id
     cache_policy_id          = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_cache_policy_id
-
-    forwarded_values {
-      query_string = false
-
-      cookies {
-        forward = "none"
-      }
-    }
   }
 
   default_cache_behavior {
