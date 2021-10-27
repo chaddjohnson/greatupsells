@@ -58,6 +58,7 @@ module "us_east_1" {
   }
 
   region                           = "us-east-1"
+  public_key                       = var.public_key
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -79,6 +80,7 @@ module "us_west_2" {
   }
 
   region                           = "us-west-2"
+  public_key                       = var.public_key
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -100,6 +102,7 @@ module "us_east_2" {
   }
 
   region                           = "us-east-2"
+  public_key                       = var.public_key
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -121,6 +124,7 @@ module "eu_west_1" {
   }
 
   region                           = "eu-west-1"
+  public_key                       = var.public_key
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
@@ -142,6 +146,7 @@ module "ap_northeast_1" {
   }
 
   region                           = "ap-northeast-1"
+  public_key                       = var.public_key
   hosted_zone_id                   = var.hosted_zone_id
   base_domain                      = var.base_domain
   instance_type                    = var.instance_type
