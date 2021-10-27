@@ -59,15 +59,15 @@ jobs:
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin .
+        run: aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin . --region us-east-1
         working-directory: applications/shopify-admin
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
         working-directory: applications/shopify-admin
       - name: Upload Next.js Static Assets to Assets Bucket
-        run: aws s3 sync applications/shopify-admin/.next/static s3://$ASSETS_DOMAIN/shopify-admin/_next/static --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
+        run: aws s3 sync applications/shopify-admin/.next/static s3://$ASSETS_DOMAIN/shopify-admin/_next/static --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
       - name: Upload Next.js Public Assets to Assets Bucket
-        run: aws s3 sync applications/shopify-admin/public/assets s3://$ASSETS_DOMAIN/shopify-admin --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA
+        run: aws s3 sync applications/shopify-admin/public/assets s3://$ASSETS_DOMAIN/shopify-admin --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: applications/shopify-admin

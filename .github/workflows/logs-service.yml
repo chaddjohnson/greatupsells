@@ -49,7 +49,7 @@ jobs:
       #   env:
       #     MONGODB_URL_LOGS: ${{ env.MONGODB_URL_LOGS }}
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/logs-service .
+        run: aws s3 sync s3://greatupsells-infrastructure/serverless/logs-service . --region us-east-1
         working-directory: services/logs
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
@@ -63,7 +63,7 @@ jobs:
         working-directory: services/logs
         if: ${{ github.ref == 'refs/heads/production' }}
       - name: Sync .serverless directory
-        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/logs-service/.serverless
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/logs-service/.serverless --region us-east-1
         working-directory: services/logs
       - name: Uninstall Global Packages
         if: always()
