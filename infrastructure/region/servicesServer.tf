@@ -17,6 +17,11 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+resource "aws_key_pair" "greatupsells" {
+  key_name   = "greatupsells"
+  public_key = var.public_key
+}
+
 resource "aws_security_group" "services_server" {
   name        = "services-server"
   description = "Security group for services server"
