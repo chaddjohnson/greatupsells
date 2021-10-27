@@ -41,7 +41,7 @@ module.exports = {
 
     return config;
   },
-  assetPrefix: dev ? '' : `${ASSETS_URL}/assets`,
+  assetPrefix: dev ? '' : ASSETS_URL,
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
