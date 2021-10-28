@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD", "OPTIONS"]
     target_origin_id       = "app"
     min_ttl                = 0
     default_ttl            = 0
