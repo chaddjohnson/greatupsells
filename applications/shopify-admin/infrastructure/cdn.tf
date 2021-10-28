@@ -51,7 +51,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
 
     forwarded_values {
       query_string = true
-      headers      = "*"
+      headers      = ["*"]
 
       cookies {
         forward = "all"
