@@ -211,10 +211,7 @@ const DashboardPage = () => {
               }}
               description="Learn how upselling and cross-selling can boost your sales and revenue."
             >
-              <TutorialsImage
-                alt="Tutorials"
-                src={`/assets/images/tutorials.svg`}
-              />
+              <TutorialsImage alt="Tutorials" src={`/images/tutorials.svg`} />
             </MediaCard>
           </Layout.Section>
         </Layout>
