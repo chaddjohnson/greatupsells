@@ -204,8 +204,8 @@
     name: backup
     password: '{{ mongodb_backup_password }}'
     roles:
-      - { role: 'backup', db: 'greatupsells-shops' }
-      - { role: 'backup', db: 'greatupsells-logs' }
+      - { role: 'read', db: 'greatupsells-shops' }
+      - { role: 'read', db: 'greatupsells-logs' }
     ssl: true
     state: present
     connection_options:
