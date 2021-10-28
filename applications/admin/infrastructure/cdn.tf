@@ -65,6 +65,7 @@ resource "aws_cloudfront_distribution" "admin" {
 
     forwarded_values {
       query_string = true
+      headers      = "*"
 
       cookies {
         forward = "all"
