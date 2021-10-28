@@ -183,6 +183,8 @@
     name: app
     password: '{{ mongodb_app_password }}'
     roles:
+      - { role: 'dbAdmin', db: 'greatupsells-shops' }
+      - { role: 'dbAdmin', db: 'greatupsells-logs' }
       - { role: 'readWrite', db: 'greatupsells-shops' }
       - { role: 'readWrite', db: 'greatupsells-logs' }
     ssl: true
@@ -202,8 +204,8 @@
     name: backup
     password: '{{ mongodb_backup_password }}'
     roles:
-      - { role: 'readWrite', db: 'greatupsells-shops' }
-      - { role: 'readWrite', db: 'greatupsells-logs' }
+      - { role: 'read', db: 'greatupsells-shops' }
+      - { role: 'read', db: 'greatupsells-logs' }
     ssl: true
     state: present
     connection_options:
