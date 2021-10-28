@@ -5,7 +5,8 @@ const zlib = require('zlib');
 const {
   NODE_ENV,
   SHOPIFY_ADMIN_APP_API_KEY,
-  SHOPIFY_ADMIN_API_URL
+  SHOPIFY_ADMIN_API_URL,
+  ASSETS_URL
 } = process.env;
 const dev = NODE_ENV !== 'production';
 
@@ -52,7 +53,7 @@ module.exports = {
 
     return config;
   },
-  assetPrefix: dev ? '' : '/assets',
+  assetPrefix: dev ? '' : `${ASSETS_URL}/shopify-admin`,
   target: 'serverless',
   trailingSlash: true,
   webpack5: true,
