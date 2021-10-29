@@ -89,8 +89,8 @@
 
 - name: Create Redis service file
   copy:
-    src: redis.service
-    dest: /etc/systemd/system/redis.service
+    src: redis-server.service
+    dest: /etc/systemd/system/redis-server.service
     owner: root
     group: root
     mode: 0644
@@ -99,11 +99,18 @@
 - name: Inject password into Redis config file
   replace:
     path: /etc/redis/redis.conf
-    regexp: "redis_app_password"
-    replace: "{{ redis_app_password }}"
+    regexp: 'redis_app_password'
+    replace: '{{ redis_app_password }}'
 
 - name: Start Redis
   service:
-    name: redis.service
+    name: redis-server.service
     state: restarted
+  when: not redis.stat.exists
+
+- name: Ensure Redis is running and enabled to start automatically on reboot
+  systemd:
+    name: redis-server.service
+    enabled: yes
+    state: started
   when: not redis.stat.exists
