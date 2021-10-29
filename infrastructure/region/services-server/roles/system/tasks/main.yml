@@ -124,6 +124,7 @@
   command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m greatupsells@neatowebsolutions.com -d {{ domain_name }}'
   when: certificates.stat.isdir is not defined
 
+# Active ISRG Root X1 pem file from https://letsencrypt.org/certificates/.
 - name: Install Let's Encrypt Certificate Authority Root Certificate
   copy:
     src: ca.crt
