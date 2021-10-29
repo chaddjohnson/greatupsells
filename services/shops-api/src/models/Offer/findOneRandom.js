@@ -233,8 +233,6 @@ const findOneRandom = async (
   });
   const pagePathSanitized = sanitizePagePath(pagePath);
 
-  console.log(JSON.stringify(criteria));
-
   // Randomly find an offer.
   let offers = await Offer.find(criteria);
 
