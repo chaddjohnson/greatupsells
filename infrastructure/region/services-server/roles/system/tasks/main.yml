@@ -156,11 +156,3 @@
 
 - name: Generate certificate files
   command: /root/update-certificates.sh
-
-- name: Add domain to hosts file
-  lineinfile:
-    path: /etc/hosts
-    insertafter: '^127\.0\.0\.1 localhost'
-    regexp: '^127\.0\.0\.1 {{ domain_name }}'
-    line: 127.0.0.1 {{ domain_name }}
-    create: yes
