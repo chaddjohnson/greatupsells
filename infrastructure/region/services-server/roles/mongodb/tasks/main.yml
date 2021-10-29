@@ -46,7 +46,7 @@
     - mongodb-org-tools
   when: not mongodb.stat.exists
 
-- name: Ensure mongodb is running and enabled to start automatically on reboot
+- name: Ensure MongoDB is running and enabled to start automatically on reboot
   systemd:
     name: mongod
     enabled: yes
