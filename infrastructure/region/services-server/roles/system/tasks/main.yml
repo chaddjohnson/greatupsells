@@ -153,7 +153,7 @@
     minute: '0'
     hour: '0,12'
     user: root
-    job: 'certbot renew --renew-hook /root/update-certificates.sh >> /root/certbot-cron.log 2>&1'
+    job: 'certbot renew --renew-hook "/root/update-certificates.sh && reboot" >> /root/certbot-cron.log 2>&1'
 
 - name: Generate certificate files
   command: /root/update-certificates.sh
