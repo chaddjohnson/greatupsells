@@ -157,12 +157,3 @@
 
 - name: Generate certificate files
   command: /root/update-certificates.sh
-
-- name: Set up a job to reboot once per month
-  cron:
-    name: reboot
-    minute: '5'
-    hour: '0'
-    day: '15'
-    user: root
-    job: 'reboot'

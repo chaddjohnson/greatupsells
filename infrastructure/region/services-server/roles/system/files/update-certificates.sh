@@ -15,3 +15,6 @@ fi
 
 chown mongodb:mongodb /etc/ssl/mongodb-keyfile.txt
 chmod 400 /etc/ssl/mongodb-keyfile.txt
+
+# Machine must be rebooted when certificate is updated.
+reboot
