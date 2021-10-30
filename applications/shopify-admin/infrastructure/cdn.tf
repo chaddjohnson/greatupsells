@@ -25,41 +25,26 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
     }
   }
 
-  ordered_cache_behavior {
-    path_pattern             = "_next/*"
-    allowed_methods          = ["GET", "HEAD"]
-    cached_methods           = ["GET", "HEAD"]
-    target_origin_id         = "assets"
-    min_ttl                  = 0
-    default_ttl              = 86400
-    max_ttl                  = 31536000
-    compress                 = true
-    viewer_protocol_policy   = "redirect-to-https"
-    origin_request_policy_id = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_origin_request_policy_id
-    cache_policy_id          = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_cache_policy_id
-  }
+  origin_group {
+    origin_id = "assets-app"
 
-  ordered_cache_behavior {
-    path_pattern             = "images/*"
-    allowed_methods          = ["GET", "HEAD"]
-    cached_methods           = ["GET", "HEAD"]
-    target_origin_id         = "assets"
-    min_ttl                  = 0
-    default_ttl              = 86400
-    max_ttl                  = 31536000
-    compress                 = true
-    viewer_protocol_policy   = "redirect-to-https"
-    origin_request_policy_id = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_origin_request_policy_id
-    cache_policy_id          = data.terraform_remote_state.greatupsells_infrastructure.outputs.assets_cloudfront_cache_policy_id
+    failover_criteria {
+      status_codes = [403, 404]
+    }
+
+    member {
+      origin_id = "assets"
+    }
+
+    member {
+      origin_id = "app"
+    }
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id       = "app"
-    min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    target_origin_id       = "assets-app"
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
 
