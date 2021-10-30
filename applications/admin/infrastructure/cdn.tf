@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "admin" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
     target_origin_id       = "assets-app"
     compress               = true
