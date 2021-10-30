@@ -61,8 +61,10 @@ jobs:
         working-directory: applications/admin
       - name: Upload Next.js Static Assets to Assets Bucket
         run: aws s3 sync applications/admin/.next/static s3://$ASSETS_DOMAIN/admin/_next/static --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
-      - name: Upload Next.js Public Assets to Assets Bucket
-        run: aws s3 sync applications/admin/public s3://$ASSETS_DOMAIN/admin --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
+      - name: Upload Next.js Fonts to Assets Bucket
+        run: aws s3 sync applications/admin/public/fonts s3://$ASSETS_DOMAIN/admin/fonts --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
+      - name: Upload Next.js Images to Assets Bucket
+        run: aws s3 sync applications/admin/public/images s3://$ASSETS_DOMAIN/admin/images --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: applications/admin
