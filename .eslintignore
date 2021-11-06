@@ -1,3 +1,2 @@
-.circleci
 node_modules
 .serverless
