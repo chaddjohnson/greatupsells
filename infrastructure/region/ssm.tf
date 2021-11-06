@@ -1,7 +1,7 @@
 resource "aws_ssm_parameter" "certificate_name" {
   name      = "/greatupsells/${terraform.workspace}/certificate-name"
   type      = "String"
-  value     = "greatupsells.com"
+  value     = var.base_domain
   overwrite = true
   provider  = aws.region
 }
