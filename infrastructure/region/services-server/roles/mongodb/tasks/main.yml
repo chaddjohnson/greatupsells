@@ -46,7 +46,7 @@
     - mongodb-org-tools
   when: not mongodb.stat.exists
 
-- name: Ensure MongoDB is running and enabled to start automatically on reboot
+- name: Ensure MongoDB is enabled to start automatically on boot
   systemd:
     name: mongod
     enabled: yes
@@ -85,7 +85,7 @@
     mode: 0644
   when: not mongodb.stat.exists
 
-- name: Start MongoDB
+- name: Restart MongoDB
   service:
     name: mongod.service
     state: restarted
@@ -122,8 +122,8 @@
       - 'tlsAllowInvalidCertificates=true'
     validate: no
   when:
-    - region == "us-east-1"
     - stage == "test"
+    - region == "us-east-1"
 
 - name: Initiate MongoDB replica set (production)
   community.mongodb.mongodb_replicaset:
