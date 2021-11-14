@@ -1,4 +1,1 @@
 hosts
-region/services-server/roles/common/vars/main.yml
-region/services-server/roles/mongodb/vars/main.yml
-region/services-server/roles/redis/vars/main.yml
