@@ -32,6 +32,8 @@ jobs:
           echo -e "\nmongodb_admin_password: \"${{ secrets.MONGODB_ADMIN_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
           echo -e "\nmongodb_app_password: \"${{ secrets.MONGODB_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
           echo -e "\nmongodb_backup_password: \"${{ secrets.MONGODB_BACKUP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nelasticsearch_root_password: \"${{ secrets.ELASTICSEARCH_ROOT_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
+          echo -e "\nelasticsearch_app_password: \"${{ secrets.ELASTICSEARCH_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
           echo -e "\nredis_app_password: \"${{ secrets.REDIS_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/redis/vars/main.yml
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1

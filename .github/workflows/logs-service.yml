@@ -34,6 +34,7 @@ jobs:
         env:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
+          ELASTICSEARCH_APP_PASSWORD: ${{ secrets.ELASTICSEARCH_APP_PASSWORD }}
       - name: Inject "MONGODB_URL_LOGS" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:

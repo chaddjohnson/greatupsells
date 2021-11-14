@@ -63,6 +63,7 @@ http.port: 9200
 # For more information, consult the network module documentation.
 #
 # --------------------------------- Discovery ----------------------------------
+discovery.type: single-node
 #
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
@@ -80,3 +81,5 @@ discovery.seed_hosts: ['127.0.0.1', '[::1]']
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
+
+xpack.security.enabled: true

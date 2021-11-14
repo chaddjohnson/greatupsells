@@ -17,8 +17,14 @@ module.exports = {
     await esClient.indices.create({
       index: 'logs',
       body: {
+        settings: {
+          number_of_replicas: 2
+        },
         mappings: {
           properties: {
+            source: {
+              type: 'text'
+            },
             type: {
               type: 'text'
             },

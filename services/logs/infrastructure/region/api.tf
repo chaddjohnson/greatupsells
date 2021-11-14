@@ -1,13 +1,22 @@
-# resource "aws_ssm_parameter" "elasticsearch_logs_database_url" {
-#   name  = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
-#   type  = "String"
-#    overwrite = true
-#   value = "" # TODO
-# }
-
 locals {
   mongodb_hosts = "${join(":27017,", data.terraform_remote_state.greatupsells_infrastructure.outputs.services_domain_names)}:27017"
-  domain = "logs-api.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+  domain        = "logs-api.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+}
+
+resource "aws_ssm_parameter" "elasticsearch_logs_database_url" {
+  count     = terraform.workspace == "production" ? 1 : 0
+  name      = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
+  type      = "SecureString"
+  overwrite = true
+  value     = "http://app:${var.elasticsearch_app_password}@services.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}:9200"
+}
+
+resource "aws_ssm_parameter" "elasticsearch_logs_database_url" {
+  count     = terraform.workspace == "test" ? 1 : 0
+  name      = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
+  type      = "SecureString"
+  overwrite = true
+  value     = "http://elastic:${var.elasticsearch_app_password}@services.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}:9200"
 }
 
 resource "aws_ssm_parameter" "mongodb_logs_database_url" {

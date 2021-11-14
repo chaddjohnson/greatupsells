@@ -31,6 +31,9 @@
     allow_unauthenticated: yes
   when: not elasticsearch.stat.exists
 
+- name: Set Elasticsearch bootstrap password
+  command: echo {{ elasticsearch_root_password }} | /usr/share/elasticsearch/bin/elasticsearch-keystore add --stdin "bootstrap.password" -f
+
 - name: Create Elasticsearch config file (test)
   copy:
     src: elasticsearch-test.yml
@@ -89,4 +92,26 @@
   service:
     name: elasticsearch
     state: restarted
+  when: not elasticsearch.stat.exists
+
+- name: Configure "app" user for Elasticsearch
+  command: |
+    curl -X POST -u elastic 'http://localhost:9200/_security/role/app' -H "Content-Type: application/json" -d '{
+      "indices" : [
+        {
+          "names" : [ "logs*" ],
+          "privileges" : [ "all" ]
+        }
+      ]
+    }'
+
+    curl -X POST -u elastic 'http://localhost:9200/_security/user/app' -H "Content-Type: application/json" -d '{
+      "password" : "{{ elasticsearch_app_password }}",
+      "full_name" : "App",
+      "roles" : [ "app" ]
+    }'
+
+- name: 'TODO: Change Elasticsearch passwords'
+  debug:
+    msg: 'Run: `/usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`'
   when: not elasticsearch.stat.exists
