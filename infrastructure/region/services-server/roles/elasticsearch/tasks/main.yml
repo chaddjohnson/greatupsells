@@ -99,6 +99,16 @@
     state: started
   when: not elasticsearch.stat.exists
 
+- name: Limit Elasticsearch memory usage
+  ansible.builtin.lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Environment=ES_JAVA_OPTS'
+    insertbefore: '^EnvironmentFile='
+    line: Environment=ES_JAVA_OPTS="-Xms2g -Xmx2g"
+
+- name: Reload service files
+  command: systemctl daemon-reload
+
 - name: Retart Elasticsearch
   service:
     name: elasticsearch
