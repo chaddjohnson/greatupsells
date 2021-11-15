@@ -191,9 +191,11 @@ const LinkClickOffer = ({
     }
 
     // Wait the required number of seconds to show the offer.
-    onPageRequiredSecondsTimeout = setTimeout(() => {
-      setIsOnPageRequiredSeconds(true);
-    }, onPageRequiredSeconds * 1000);
+    if (!onPageRequiredSecondsTimeout) {
+      onPageRequiredSecondsTimeout = setTimeout(() => {
+        setIsOnPageRequiredSeconds(true);
+      }, onPageRequiredSeconds * 1000);
+    }
   }, [offerId, onPageRequiredSeconds]);
 
   if (!offer || !shop) {

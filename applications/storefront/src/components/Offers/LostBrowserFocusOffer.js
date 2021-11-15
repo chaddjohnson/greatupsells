@@ -128,9 +128,11 @@ const LostBrowserFocusOffer = ({
       return;
     }
 
-    delayTimeout = setTimeout(() => {
-      setDelayFinished(true);
-    }, delaySeconds * 1000);
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(() => {
+        setDelayFinished(true);
+      }, delaySeconds * 1000);
+    }
   }, [offerId, delaySeconds]);
 
   useEffect(() => {

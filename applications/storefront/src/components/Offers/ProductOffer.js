@@ -150,9 +150,11 @@ const ProductOffer = ({
       return;
     }
 
-    delayTimeout = setTimeout(() => {
-      setDelayFinished(true);
-    }, delaySeconds * 1000);
+    if (!delayTimeout) {
+      delayTimeout = setTimeout(() => {
+        setDelayFinished(true);
+      }, delaySeconds * 1000);
+    }
   }, [offerId, delaySeconds]);
 
   useEffect(() => {
@@ -167,9 +169,11 @@ const ProductOffer = ({
     );
 
     // Wait the required number of seconds to show the offer.
-    onPageRequiredSecondsTimeout = setTimeout(() => {
-      setIsOnPageRequiredSeconds(true);
-    }, remainingSeconds * 1000);
+    if (!onPageRequiredSecondsTimeout) {
+      onPageRequiredSecondsTimeout = setTimeout(() => {
+        setIsOnPageRequiredSeconds(true);
+      }, remainingSeconds * 1000);
+    }
   }, [offerId, onPageRequiredSeconds]);
 
   if (!offer || !shop) {
