@@ -107,7 +107,7 @@
 
 - name: Configure "app" user role for Elasticsearch
   command: |
-    curl -X POST -u elastic 'http://localhost:9200/_security/role/app' -H "Content-Type: application/json" -d '{
+    curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@services.test.greatupsells.com:9200/_security/role/app' -H "Content-Type: application/json" -d '{
       "indices" : [
         {
           "names" : [ "logs*" ],
@@ -115,16 +115,14 @@
         }
       ]
     }'
-  when: not elasticsearch.stat.exists
 
 - name: Configure "app" user for Elasticsearch
   command: |
-    curl -X POST -u elastic 'http://localhost:9200/_security/user/app' -H "Content-Type: application/json" -d '{
+    curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@localhost:9200/_security/user/app' -H "Content-Type: application/json" -d '{
       "password" : "{{ elasticsearch_app_password }}",
       "full_name" : "App",
       "roles" : [ "app" ]
     }'
-  when: not elasticsearch.stat.exists
 
 - name: 'TODO: Change Elasticsearch passwords'
   debug:
