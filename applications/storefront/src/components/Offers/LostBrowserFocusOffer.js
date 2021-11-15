@@ -33,8 +33,8 @@ const LostBrowserFocusOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
-  const delaySeconds = offer?.delaySeconds;
-  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
+  const delaySeconds = offer?.delaySeconds || 0;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
   const openPopup = useCallback(() => {
     setOfferViewed(true);
@@ -116,39 +116,32 @@ const LostBrowserFocusOffer = ({
     setOfferViewed(false);
     setPopupOpen(false);
     setIsOnPageRequiredSeconds(false);
+
     clearTimeout(delayTimeout);
     clearTimeout(onPageRequiredSecondsTimeout);
   });
 
   useEffect(() => {
-    if (typeof delaySeconds === 'number') {
-      if (delaySeconds > 0) {
-        if (!delayTimeout) {
-          delayTimeout = setTimeout(() => {
-            setDelayFinished(true);
-          }, delaySeconds * 1000);
-        }
-      } else {
-        setDelayFinished(true);
-      }
+    if (!offerId) {
+      return;
     }
-  }, [delaySeconds]);
+
+    delayTimeout = setTimeout(() => {
+      setDelayFinished(true);
+    }, delaySeconds * 1000);
+  }, [offerId, delaySeconds]);
 
   useEffect(() => {
-    if (typeof onPageRequiredSeconds === 'number') {
-      if (onPageRequiredSeconds > 0) {
-        if (!onPageRequiredSecondsTimeout) {
-          // Wait the required number of seconds to show the offer
-          onPageRequiredSecondsTimeout = setTimeout(() => {
-            setIsOnPageRequiredSeconds(true);
-            tryOpeningPopup();
-          }, onPageRequiredSeconds * 1000);
-        }
-      } else {
-        setIsOnPageRequiredSeconds(true);
-      }
+    if (!offerId) {
+      return;
     }
-  }, [onPageRequiredSeconds, tryOpeningPopup]);
+
+    // Wait the required number of seconds to show the offer.
+    onPageRequiredSecondsTimeout = setTimeout(() => {
+      setIsOnPageRequiredSeconds(true);
+      tryOpeningPopup();
+    }, onPageRequiredSeconds * 1000);
+  }, [offerId, onPageRequiredSeconds, tryOpeningPopup]);
 
   if (!offer || !shop) {
     return null;

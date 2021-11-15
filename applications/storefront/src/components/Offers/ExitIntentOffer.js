@@ -30,7 +30,7 @@ const ExitIntentOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
-  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
   const openPopup = useCallback(() => {
     setOfferViewed(true);
@@ -129,19 +129,6 @@ const ExitIntentOffer = ({
     ]
   );
 
-  useEffect(() => {
-    if (typeof onPageRequiredSeconds === 'number') {
-      if (onPageRequiredSeconds > 0) {
-        // Wait the required number of seconds to show the offer
-        onPageRequiredSecondsTimeout = setTimeout(() => {
-          setIsOnPageRequiredSeconds(true);
-        }, onPageRequiredSeconds * 1000);
-      } else {
-        setIsOnPageRequiredSeconds(true);
-      }
-    }
-  }, [onPageRequiredSeconds]);
-
   // Reference: https://stackoverflow.com/a/56858467/83897
   const getScrollDelta = useMemo(() => {
     let lastPosition;
@@ -204,8 +191,20 @@ const ExitIntentOffer = ({
     setOfferViewed(false);
     setPopupOpen(false);
     setIsOnPageRequiredSeconds(false);
+
     clearTimeout(onPageRequiredSecondsTimeout);
   });
+
+  useEffect(() => {
+    if (!offerId) {
+      return;
+    }
+
+    // Wait the required number of seconds to show the offer.
+    onPageRequiredSecondsTimeout = setTimeout(() => {
+      setIsOnPageRequiredSeconds(true);
+    }, onPageRequiredSeconds * 1000);
+  }, [offerId, onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

@@ -35,8 +35,8 @@ const PageScrollOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
-  const delaySeconds = offer?.delaySeconds;
-  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
+  const delaySeconds = offer?.delaySeconds || 0;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
   const openPopup = useCallback(() => {
     setOfferViewed(true);
@@ -145,36 +145,31 @@ const PageScrollOffer = ({
     setPopupOpen(false);
     setIsOnPageRequiredSeconds(false);
     setLastScrollTop(0);
+
     clearTimeout(delayTimeout);
     clearTimeout(onPageRequiredSecondsTimeout);
   });
 
   useEffect(() => {
-    if (typeof delaySeconds === 'number') {
-      if (delaySeconds > 0) {
-        if (!delayTimeout) {
-          delayTimeout = setTimeout(() => {
-            setDelayFinished(true);
-          }, delaySeconds * 1000);
-        }
-      } else {
-        setDelayFinished(true);
-      }
+    if (!offerId) {
+      return;
     }
-  }, [delaySeconds]);
+
+    delayTimeout = setTimeout(() => {
+      setDelayFinished(true);
+    }, delaySeconds * 1000);
+  }, [offerId, delaySeconds]);
 
   useEffect(() => {
-    if (typeof onPageRequiredSeconds === 'number') {
-      if (onPageRequiredSeconds > 0) {
-        // Wait the required number of seconds to show the offer
-        onPageRequiredSecondsTimeout = setTimeout(() => {
-          setIsOnPageRequiredSeconds(true);
-        }, onPageRequiredSeconds * 1000);
-      } else {
-        setIsOnPageRequiredSeconds(true);
-      }
+    if (!offerId) {
+      return;
     }
-  }, [onPageRequiredSeconds]);
+
+    // Wait the required number of seconds to show the offer.
+    onPageRequiredSecondsTimeout = setTimeout(() => {
+      setIsOnPageRequiredSeconds(true);
+    }, onPageRequiredSeconds * 1000);
+  }, [offerId, onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;

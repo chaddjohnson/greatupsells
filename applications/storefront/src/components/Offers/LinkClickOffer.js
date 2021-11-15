@@ -51,7 +51,7 @@ const LinkClickOffer = ({
   const { shop } = useShop();
 
   const offerId = offer?._id;
-  const onPageRequiredSeconds = offer?.onPageRequiredSeconds;
+  const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
   const openPopup = useCallback(() => {
     setOfferViewed(true);
@@ -181,21 +181,20 @@ const LinkClickOffer = ({
     setIsOnPageRequiredSeconds(false);
     setLinkUrl('');
     setOpenLinkInNewWindow(false);
+
     clearTimeout(onPageRequiredSecondsTimeout);
   });
 
   useEffect(() => {
-    if (typeof onPageRequiredSeconds === 'number') {
-      if (onPageRequiredSeconds > 0) {
-        // Wait the required number of seconds to show the offer
-        onPageRequiredSecondsTimeout = setTimeout(() => {
-          setIsOnPageRequiredSeconds(true);
-        }, onPageRequiredSeconds * 1000);
-      } else {
-        setIsOnPageRequiredSeconds(true);
-      }
+    if (!offerId) {
+      return;
     }
-  }, [onPageRequiredSeconds]);
+
+    // Wait the required number of seconds to show the offer.
+    onPageRequiredSecondsTimeout = setTimeout(() => {
+      setIsOnPageRequiredSeconds(true);
+    }, onPageRequiredSeconds * 1000);
+  }, [offerId, onPageRequiredSeconds]);
 
   if (!offer || !shop) {
     return null;
