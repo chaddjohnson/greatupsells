@@ -34,6 +34,14 @@
 - name: Set Elasticsearch bootstrap password
   command: echo {{ elasticsearch_root_password }} | /usr/share/elasticsearch/bin/elasticsearch-keystore add --stdin "bootstrap.password" -f
 
+- name: Generate Elasticsearch certificate
+  command: |
+    /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /usr/share/elasticsearch/elastic-stack-ca.zip
+    unzip /usr/share/elasticsearch/elastic-stack-ca.zip -d /usr/share/elasticsearch
+    /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key --out /usr/share/elasticsearch/elastic-certificates.p12 --pass ''
+    cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch/
+    chmod 660 /etc/elasticsearch/elastic-certificates.p12
+
 - name: Create Elasticsearch config file (test)
   copy:
     src: elasticsearch-test.yml
