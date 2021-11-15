@@ -33,6 +33,7 @@
 
 - name: Set Elasticsearch bootstrap password
   command: echo {{ elasticsearch_root_password }} | /usr/share/elasticsearch/bin/elasticsearch-keystore add --stdin "bootstrap.password" -f
+  when: not elasticsearch.stat.exists
 
 - name: Generate Elasticsearch certificate
   command: '{{ item }}'
@@ -114,6 +115,7 @@
         }
       ]
     }'
+  when: not elasticsearch.stat.exists
 
 - name: Configure "app" user for Elasticsearch
   command: |
@@ -122,6 +124,7 @@
       "full_name" : "App",
       "roles" : [ "app" ]
     }'
+  when: not elasticsearch.stat.exists
 
 - name: 'TODO: Change Elasticsearch passwords'
   debug:
