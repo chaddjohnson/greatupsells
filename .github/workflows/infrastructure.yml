@@ -45,3 +45,4 @@ jobs:
         env:
           STAGE: ${{ env.BRANCH }}
           REDIS_APP_PASSWORD: ${{ secrets.REDIS_APP_PASSWORD }}
+        timeout-minutes: 45
