@@ -107,8 +107,10 @@ const LostBrowserFocusOffer = ({
   ]);
 
   useDocumentVisibility((visible) => {
-    setIsVisible(visible);
-    tryOpeningPopup();
+    if (isVisible !== visible) {
+      setIsVisible(visible);
+      tryOpeningPopup();
+    }
   });
 
   // Listen to pushState events.
@@ -137,10 +139,12 @@ const LostBrowserFocusOffer = ({
     }
 
     // Wait the required number of seconds to show the offer.
-    onPageRequiredSecondsTimeout = setTimeout(() => {
-      setIsOnPageRequiredSeconds(true);
-      tryOpeningPopup();
-    }, onPageRequiredSeconds * 1000);
+    if (!onPageRequiredSecondsTimeout) {
+      onPageRequiredSecondsTimeout = setTimeout(() => {
+        setIsOnPageRequiredSeconds(true);
+        tryOpeningPopup();
+      }, onPageRequiredSeconds * 1000);
+    }
   }, [offerId, onPageRequiredSeconds, tryOpeningPopup]);
 
   if (!offer || !shop) {

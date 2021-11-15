@@ -26,14 +26,11 @@ const useDocumentVisibility = (callback) => {
     // Standards
     if ('hidden' in document) {
       (document.hidden ? unfocused : focused)();
-    }
-    if ('mozHidden' in document) {
+    } else if ('mozHidden' in document) {
       (document.mozHidden ? unfocused : focused)();
-    }
-    if ('webkitHidden' in document) {
+    } else if ('webkitHidden' in document) {
       (document.webkitHidden ? unfocused : focused)();
-    }
-    if ('msHidden' in document) {
+    } else if ('msHidden' in document) {
       (document.msHidden ? unfocused : focused)();
     }
   }, [focused, unfocused]);
@@ -42,19 +39,16 @@ const useDocumentVisibility = (callback) => {
     // Standards
     if ('hidden' in document) {
       document.addEventListener('visibilitychange', listener);
-    }
-    if ('mozHidden' in document) {
+    } else if ('mozHidden' in document) {
       document.addEventListener('mozvisibilitychange', listener);
-    }
-    if ('webkitHidden' in document) {
+    } else if ('webkitHidden' in document) {
       document.addEventListener('webkitvisibilitychange', listener);
-    }
-    if ('msHidden' in document) {
+    } else if ('msHidden' in document) {
       document.addEventListener('msvisibilitychange', listener);
     }
 
     // IE 9 and lower
-    if ('onfocusin' in document) {
+    else if ('onfocusin' in document) {
       document.onfocusin = focused;
       document.onfocusout = unfocused;
     }
@@ -67,19 +61,16 @@ const useDocumentVisibility = (callback) => {
       // Standards
       if ('hidden' in document) {
         document.removeEventListener('visibilitychange', listener);
-      }
-      if ('mozHidden' in document) {
+      } else if ('mozHidden' in document) {
         document.removeEventListener('mozvisibilitychange', listener);
-      }
-      if ('webkitHidden' in document) {
+      } else if ('webkitHidden' in document) {
         document.removeEventListener('webkitvisibilitychange', listener);
-      }
-      if ('msHidden' in document) {
+      } else if ('msHidden' in document) {
         document.removeEventListener('msvisibilitychange', listener);
       }
 
       // IE 9 and lower
-      if ('onfocusin' in document) {
+      else if ('onfocusin' in document) {
         document.onfocusin = undefined;
         document.onfocusout = undefined;
       }
