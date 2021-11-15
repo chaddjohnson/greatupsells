@@ -1,6 +1,7 @@
 const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
 
-const { ELASTICSEARCH_URL } = process.env;
+const { NODE_ENV, ELASTICSEARCH_URL } = process.env;
+const dev = NODE_ENV !== 'production';
 
 const esClient = new ElasticsearchClient({
   node: ELASTICSEARCH_URL
@@ -18,7 +19,7 @@ module.exports = {
       index: 'logs',
       body: {
         settings: {
-          number_of_replicas: 2
+          number_of_replicas: dev ? 1 : 2
         },
         mappings: {
           properties: {
