@@ -35,12 +35,14 @@
   command: echo {{ elasticsearch_root_password }} | /usr/share/elasticsearch/bin/elasticsearch-keystore add --stdin "bootstrap.password" -f
 
 - name: Generate Elasticsearch certificate
-  command: |
-    /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /usr/share/elasticsearch/elastic-stack-ca.zip
-    unzip /usr/share/elasticsearch/elastic-stack-ca.zip -d /usr/share/elasticsearch
-    /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key --out /usr/share/elasticsearch/elastic-certificates.p12 --pass ''
-    cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch/
-    chmod 660 /etc/elasticsearch/elastic-certificates.p12
+  command: '{{ item }}'
+  with_items:
+    - /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /usr/share/elasticsearch/elastic-stack-ca.zip
+    - unzip /usr/share/elasticsearch/elastic-stack-ca.zip -d /usr/share/elasticsearch
+    - /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key --out /usr/share/elasticsearch/elastic-certificates.p12 --pass ''
+    - cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch/
+    - chmod 660 /etc/elasticsearch/elastic-certificates.p12
+  when: not elasticsearch.stat.exists
 
 - name: Create Elasticsearch config file (test)
   copy:
@@ -102,7 +104,7 @@
     state: restarted
   when: not elasticsearch.stat.exists
 
-- name: Configure "app" user for Elasticsearch
+- name: Configure "app" user role for Elasticsearch
   command: |
     curl -X POST -u elastic 'http://localhost:9200/_security/role/app' -H "Content-Type: application/json" -d '{
       "indices" : [
@@ -113,6 +115,8 @@
       ]
     }'
 
+- name: Configure "app" user for Elasticsearch
+  command: |
     curl -X POST -u elastic 'http://localhost:9200/_security/user/app' -H "Content-Type: application/json" -d '{
       "password" : "{{ elasticsearch_app_password }}",
       "full_name" : "App",
