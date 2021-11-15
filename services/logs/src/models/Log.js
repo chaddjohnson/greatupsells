@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
-const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
+const elasticsearch = require('@elastic/elasticsearch');
 const mongodbClient = require('./mongodbClient');
 
 const { ELASTICSEARCH_URL } = process.env;
 
-const esClient = new ElasticsearchClient({
-  node: ELASTICSEARCH_URL
+const esClient = new elasticsearch.Client({
+  node: ELASTICSEARCH_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 let Log = null;

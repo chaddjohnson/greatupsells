@@ -1,12 +1,15 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
-const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
+const elasticsearch = require('@elastic/elasticsearch');
 const models = require('../models');
 
 const { ELASTICSEARCH_URL } = process.env;
 
-const esClient = new ElasticsearchClient({
-  node: ELASTICSEARCH_URL
+const esClient = new elasticsearch.Client({
+  node: ELASTICSEARCH_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 const handler = async (event, context) => {

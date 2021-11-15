@@ -1,10 +1,13 @@
-const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
+const elasticsearch = require('@elastic/elasticsearch');
 
 const { NODE_ENV, ELASTICSEARCH_URL } = process.env;
 const dev = NODE_ENV !== 'production';
 
-const esClient = new ElasticsearchClient({
-  node: ELASTICSEARCH_URL
+const esClient = new elasticsearch.Client({
+  node: ELASTICSEARCH_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 module.exports = {

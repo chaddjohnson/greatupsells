@@ -1,14 +1,17 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-// const { Client: ElasticsearchClient } = require('@elastic/elasticsearch');
+const elasticsearch = require('@elastic/elasticsearch');
 const mongodbClient = require('../models/mongodbClient');
 
-// const { ELASTICSEARCH_URL } = process.env;
+const { ELASTICSEARCH_URL } = process.env;
 
-// const esClient = new ElasticsearchClient({
-//   node: ELASTICSEARCH_URL
-// });
+const esClient = new elasticsearch.Client({
+  node: ELASTICSEARCH_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -20,7 +23,7 @@ const handler = middy(async (event, context) => {
 
   try {
     await mongodbClient.connect();
-    // await esClient.ping();
+    await esClient.ping();
 
     if (!mongodbClient.connected) {
       throw new Error(`Cannot connect to MongoDB`);
