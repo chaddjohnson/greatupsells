@@ -101,7 +101,7 @@
 
 - name: Limit Elasticsearch memory usage
   ansible.builtin.lineinfile:
-    path: /etc/httpd/conf/httpd.conf
+    path: /etc/systemd/system/multi-user.target.wants/elasticsearch.service
     regexp: '^Environment=ES_JAVA_OPTS'
     insertbefore: '^EnvironmentFile='
     line: Environment=ES_JAVA_OPTS="-Xms2g -Xmx2g"
