@@ -7,8 +7,6 @@ sandbox        = "false"
 jwt_secret     = "2ab8c99671a507f3314818894cad27ed562552a29713eda67f7b2dbdf81e13e0"
 services_domain_names = {
   "us-east-1"      = "services.us-east-1.greatupsells.com"
-  "us-west-2"      = "services.us-west-2.greatupsells.com"
-  "us-east-2"      = "services.us-east-2.greatupsells.com"
   "eu-west-1"      = "services.eu-west-1.greatupsells.com"
   "ap-northeast-1" = "services.ap-northeast-1.greatupsells.com"
 }
