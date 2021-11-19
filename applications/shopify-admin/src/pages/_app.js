@@ -91,9 +91,9 @@ const getAuthToken = async () => {
 // Add the token to each request.
 httpClient.addRequestInterceptor(async (config) => {
   try {
-    let authToken = null;
+    let { authToken } = sessionStorage;
 
-    if (!sessionStorage.authToken) {
+    if (!authToken) {
       authToken = await getAuthToken();
 
       if (authToken) {
@@ -101,8 +101,8 @@ httpClient.addRequestInterceptor(async (config) => {
       }
     }
 
-    if (sessionStorage.authToken) {
-      config.headers.Authorization = `Bearer ${sessionStorage.authToken}`;
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`;
     }
 
     return config;
