@@ -1,0 +1,20 @@
+{
+  "name": "@greatupsells/email-client",
+  "version": "0.0.0",
+  "description": "Email client.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+  },
+  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/email-client",
+  "dependencies": {
+    "aws-sdk": "^2.1032.0"
+  },
+  "scripts": {
+    "format": "eslint --fix index.js",
+    "lint": "eslint index.js"
+  }
+}
