@@ -5,12 +5,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 
 const { REDIS_URL_APP } = process.env;
 
-const handler = middy(async (event) => {
-  if (event.source === 'serverless-plugin-warmup') {
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    return 'Lambda is warm!';
-  }
-
+const handler = middy(async (event, context) => {
   try {
     redis.createClient({ url: REDIS_URL_APP });
 
