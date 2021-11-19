@@ -1,4 +1,7 @@
+const emailClient = require('@greatupsells/email-client');
 const models = require('../models');
+
+const { BASE_DOMAIN, LOGS_NOTIFICATION_EMAIL } = process.env;
 
 const processRecord = async (record) => {
   const Log = await models.get('Log');
@@ -11,14 +14,19 @@ const processRecord = async (record) => {
 
   // Enqueue an email notification for error logs.
   if (type === 'ERROR') {
-    // TODO
+    await emailClient.enqueue({
+      to: LOGS_NOTIFICATION_EMAIL,
+      from: `noreply@${BASE_DOMAIN}`,
+      subject: `[${type}] - ${message}`,
+      body: `${stackTrace}\n\n${JSON.stringify(data, null, 2)}`
+    });
   }
 };
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await Promise.all(event.Records.map(processRecord));
+  await Promise.allSettled(event.Records.map(processRecord));
 };
 
 module.exports.handler = handler;
