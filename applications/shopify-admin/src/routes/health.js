@@ -6,6 +6,8 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const { REDIS_URL_APP } = process.env;
 
 const handler = middy(async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   try {
     redis.createClient({ url: REDIS_URL_APP });
 
