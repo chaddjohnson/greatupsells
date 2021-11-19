@@ -14,7 +14,7 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    await Promise.all(event.Records.map(processRecord));
+    await Promise.allSettled(event.Records.map(processRecord));
   } catch (error) {
     await logger.error(`Job importShopProducts failed`, error, { event });
     throw error;
