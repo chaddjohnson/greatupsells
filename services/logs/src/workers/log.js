@@ -27,6 +27,7 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   // Using Promise.all() instead of Promise.allSettled() because batchSize is set to 1.
+  // batchSize is set to 1 as messages should never be processed successfully more than once.
   await Promise.all(event.Records.map(processRecord));
 };
 
