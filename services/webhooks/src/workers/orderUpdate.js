@@ -97,7 +97,12 @@ const handler = async (event, context) => {
 
   if (event.Records) {
     // SQS (production).
-    await Promise.allSettled(event.Records.map(processRecord));
+    const results = await Promise.allSettled(event.Records.map(processRecord));
+    const anyFailed = results.some(({ status }) => status === 'rejected');
+
+    if (anyFailed) {
+      throw new Error('Failed to process one or more records');
+    }
   } else {
     // HTTP (development).
     await processData(event.headers, JSON.parse(event.body), event.body);

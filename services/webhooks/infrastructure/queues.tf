@@ -1,41 +1,141 @@
+resource "aws_sqs_queue" "app_uninstall_dlq" {
+  name                      = "app-uninstall-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "collection_dlq" {
+  name                      = "collection-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "collection_deletion_dlq" {
+  name                      = "collection-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "draft_order_update_dlq" {
+  name                      = "draft-order-update-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "order_cancelation_dlq" {
+  name                      = "order-cancelation-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "order_paid_dlq" {
+  name                      = "order-paid-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "order_update_dlq" {
+  name                      = "order-update-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "product_dlq" {
+  name                      = "product-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "product_deletion_dlq" {
+  name                      = "product-deletion-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
+resource "aws_sqs_queue" "shop_update_dlq" {
+  name                      = "shop-update-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
 resource "aws_sqs_queue" "app_uninstall" {
-  name = "app-uninstall-queue-${terraform.workspace}"
+  name                       = "app-uninstall-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.app_uninstall_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "collection" {
-  name = "collection-queue-${terraform.workspace}"
+  name                       = "collection-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.collection_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "collection_deletion" {
-  name = "collection-queue-${terraform.workspace}"
+  name                       = "collection-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.collection_deletion_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "draft_order_update" {
-  name = "draft-order-update-queue-${terraform.workspace}"
+  name                       = "draft-order-update-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.draft_order_update_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "order_cancelation" {
-  name = "order-cancelation-queue-${terraform.workspace}"
+  name                       = "order-cancelation-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.order_cancelation_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "order_paid" {
-  name = "order-paid-queue-${terraform.workspace}"
+  name                       = "order-paid-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.order_paid_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "order_update" {
-  name = "order-update-queue-${terraform.workspace}"
+  name                       = "order-update-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.order_update_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "product" {
-  name = "product-queue-${terraform.workspace}"
+  name                       = "product-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.product_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "product_deletion" {
-  name = "product-deletion-queue-${terraform.workspace}"
+  name                       = "product-deletion-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.product_deletion_dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue" "shop_update" {
-  name = "shop-update-queue-${terraform.workspace}"
+  name                       = "shop-update-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue._dlq.arn
+    maxReceiveCount     = 10
+  })
 }
 
 resource "aws_sqs_queue_policy" "app_uninstall_policy" {

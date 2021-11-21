@@ -14,7 +14,12 @@ const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    await Promise.allSettled(event.Records.map(processRecord));
+    const results = await Promise.allSettled(event.Records.map(processRecord));
+    const anyFailed = results.some(({ status }) => status === 'rejected');
+
+    if (anyFailed) {
+      throw new Error('Failed to process one or more records');
+    }
   } catch (error) {
     await logger.error(`Job importShopCollections failed`, error, { event });
     throw error;
