@@ -68,8 +68,7 @@ functions:
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
-          batchSize: 10
-          maximumBatchingWindow: 10
+          batchSize: 1
     warmup:
       default:
         enabled: false
