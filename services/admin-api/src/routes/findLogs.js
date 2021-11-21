@@ -31,8 +31,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { query, type, page = 0, pageSize = 50 } =
-      event.queryStringParameters || {};
+    const { query, type, page, pageSize } = event.queryStringParameters || {};
     const params = qs.stringify({ query, type, page, pageSize });
     const logs = await httpClient.get(`/logs?${params}`);
 
