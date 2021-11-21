@@ -54,10 +54,6 @@ const processData = async (metadata, data, rawData) => {
       `/offer-hits/shopify-draft-order-id/${shopifyDraftOrderId}`
     );
 
-    await logger.info(
-      `Associated offer hits for Shopify draft order ${shopifyDraftOrderId} with Shopify order ${shopifyOrderId}`
-    );
-
     // Update each offer hit to reference the order associated wtih the draft order.
     await Promise.all(
       offerHits.map(async (offerHit) => {
@@ -66,6 +62,10 @@ const processData = async (metadata, data, rawData) => {
           shopifyOrderId
         });
       })
+    );
+
+    await logger.info(
+      `Associated offer hits for Shopify draft order ${shopifyDraftOrderId} to reference Shopify order ${shopifyOrderId}`
     );
   } catch (error) {
     await logger.error(
