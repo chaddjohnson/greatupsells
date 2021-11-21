@@ -1,5 +1,15 @@
+resource "aws_sqs_queue" "email_dlq" {
+  name                      = "email-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
 resource "aws_sqs_queue" "email" {
-  name     = "email-queue-${terraform.workspace}"
+  name                       = "email-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 900
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.email_dlq.arn
+    maxReceiveCount     = 100
+  })
   provider = aws.region
 }
 
