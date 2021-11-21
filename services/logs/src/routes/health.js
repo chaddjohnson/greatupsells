@@ -9,7 +9,7 @@ const { ELASTICSEARCH_URL } = process.env;
 const esClient = new elasticsearch.Client({
   node: ELASTICSEARCH_URL,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false // allow self-signed certificate
   }
 });
 
