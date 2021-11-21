@@ -8,6 +8,8 @@ const processRecord = async (record) => {
   try {
     await emailClient.send({ to, from, subject, body });
   } catch (error) {
+    // **DO NOT** log an error here, or an infinite loop may ensue.
+    // error log -> email -> error log -> email -> etc.
     await logger.warn(`Failed to send email to "${to}"`, error, {
       to,
       from,
@@ -21,12 +23,8 @@ const processRecord = async (record) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const results = await Promise.allSettled(event.Records.map(processRecord));
-  const anyFailed = results.some(({ status }) => status === 'rejected');
-
-  if (anyFailed) {
-    throw new Error('Failed to process one or more records');
-  }
+  // Using Promise.all() instead of Promise.allSettled() because batchSize is set to 1.
+  await Promise.all(event.Records.map(processRecord));
 };
 
 module.exports.handler = handler;

@@ -26,7 +26,8 @@ const processRecord = async (record) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await Promise.allSettled(event.Records.map(processRecord));
+  // Using Promise.all() instead of Promise.allSettled() because batchSize is set to 1.
+  await Promise.all(event.Records.map(processRecord));
 };
 
 module.exports.handler = handler;
