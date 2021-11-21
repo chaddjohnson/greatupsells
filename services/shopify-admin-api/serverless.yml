@@ -25,7 +25,7 @@ provider:
 custom:
   serverless-offline:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
-    lambdaPort: 5000
+    lambdaPort: 4100
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/domain, ''}
     basePath: ''

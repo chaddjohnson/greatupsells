@@ -25,7 +25,7 @@ provider:
 custom:
   serverless-offline:
     httpPort: ${env:ADMIN_API_PORT, 4005}
-    lambdaPort: 5003
+    lambdaPort: 4105
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/admin-api/domain, ''}
     basePath: ''

@@ -25,7 +25,7 @@ provider:
 custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
-    lambdaPort: 5004
+    lambdaPort: 4108
   warmup:
     default:
       enabled: true

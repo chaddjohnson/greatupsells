@@ -19,11 +19,11 @@ provider:
         Principal:
           AWS: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
         Action: execute-api:Invoke
-        Resource: "*"
+        Resource: '*'
       - Effect: Allow
-        Principal: "*"
+        Principal: '*'
         Action: execute-api:Invoke
-        Resource: "execute-api:/*/GET/health"
+        Resource: 'execute-api:/*/GET/health'
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
@@ -41,7 +41,7 @@ provider:
 custom:
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT, 4004}
-    lambdaPort: 5002
+    lambdaPort: 4104
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shops-api/regional-domain, ''}
     basePath: ''

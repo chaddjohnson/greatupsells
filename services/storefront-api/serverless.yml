@@ -23,7 +23,7 @@ provider:
 custom:
   serverless-offline:
     httpPort: ${env:STOREFRONT_API_PORT, 4006}
-    lambdaPort: 5001
+    lambdaPort: 4106
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/domain, ''}
     basePath: ''
