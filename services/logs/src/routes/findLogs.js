@@ -1,16 +1,6 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
-const elasticsearch = require('@elastic/elasticsearch');
 const models = require('../models');
-
-const { ELASTICSEARCH_URL } = process.env;
-
-const esClient = new elasticsearch.Client({
-  node: ELASTICSEARCH_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
 
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -22,45 +12,8 @@ const handler = async (event, context) => {
 
   try {
     const Log = await models.get('Log');
-    const { query, type, page = 0, pageSize = 50 } =
-      event.queryStringParameters || {};
-    const conditions = [];
-
-    // Filter by query.
-    if (query) {
-      conditions.push({
-        query_string: {
-          query,
-          fields: ['message']
-        }
-      });
-    }
-
-    // Filter by type.
-    if (type) {
-      conditions.push({ term: { type } });
-    }
-
-    // Query the index.
-    const { body } = await esClient.search({
-      index: 'logs',
-      body: {
-        from: page * pageSize,
-        size: pageSize,
-        query: {
-          bool: {
-            must: conditions
-          }
-        }
-      }
-    });
-
-    // Filter out empty results.
-    const hits = body.hits.hits.filter((hit) => !!hit);
-
-    // Pull in log data.
-    const ids = hits.map(({ _id }) => _id);
-    const logs = await Log.find({ _id: { $in: ids } }).lean();
+    const { type, query, page, pageSize } = event.queryStringParameters || {};
+    const logs = await Log.search(type, query, page, pageSize);
 
     return {
       statusCode: StatusCodes.OK,
