@@ -28,13 +28,6 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    throw new Error('This is a test error');
-  } catch (error) {
-    await logger.info('Some info', { hello: 'world' });
-    await logger.error('Some error', error, { hello: 'world' });
-  }
-
-  try {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
