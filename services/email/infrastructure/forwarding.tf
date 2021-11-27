@@ -158,19 +158,6 @@ resource "aws_ses_receipt_rule" "forward_rule" {
     position        = 2
   }
 
-  bounce_action {
-    message         = "This is an unattended mailbox. Your message has been discarded."
-    sender          = "postmaster@${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
-    smtp_reply_code = "550"
-    status_code     = "5.5.1"
-    position        = "3"
-  }
-
-  stop_action {
-    scope    = "RuleSet"
-    position = "4"
-  }
-
   depends_on = [aws_s3_bucket.email, aws_lambda_permission.allow_ses]
 }
 
