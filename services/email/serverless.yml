@@ -15,13 +15,6 @@ provider:
     shouldStartNameWithService: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
-    EMAIL_BUCKET: ${env:EMAIL_BUCKET, ssm:/greatupsells/${self:provider.stage}/email/bucket}
-    INFO_EMAIL: ${env:INFO_EMAIL, ssm:/greatupsells/${self:provider.stage}/email/addresses/info}
-    SUPPORT_EMAIL: ${env:SUPPORT_EMAIL, ssm:/greatupsells/${self:provider.stage}/email/addresses/support}
-    ABUSE_FORWARDING_EMAIL: ${env:ABUSE_FORWARDING_EMAIL, ssm:/greatupsells/${self:provider.stage}/email/addresses/abuse-forwarding}
-    INFO_FORWARDING_EMAIL: ${env:INFO_FORWARDING_EMAIL, ssm:/greatupsells/${self:provider.stage}/email/addresses/info-forwarding}
-    SUPPORT_FORWARDING_EMAIL: ${env:SUPPORT_FORWARDING_EMAIL, ssm:/greatupsells/${self:provider.stage}/email/addresses/support-forwarding}
 
 custom:
   customDomain:
@@ -42,11 +35,6 @@ functions:
           path: /health
           method: get
           cors: true
-  forwarding:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    memorySize: 256
-    reservedConcurrency: 1
-    handler: src/workers/forwarding.handler
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256
