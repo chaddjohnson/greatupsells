@@ -3,11 +3,22 @@ const AWS = require('aws-sdk');
 const { EMAIL_QUEUE_URL } = process.env;
 
 const enqueue = async ({ to, from, subject, body }) => {
+  console.log('ENQUEUE 1');
   if (!EMAIL_QUEUE_URL) {
     return;
   }
+  console.log('ENQUEUE 2');
 
   const sqs = new AWS.SQS();
+  console.log(
+    'ENQUEUE 3',
+    JSON.stringify({
+      to,
+      from,
+      subject,
+      body
+    })
+  );
 
   await sqs.sendMessage({
     QueueUrl: EMAIL_QUEUE_URL,
