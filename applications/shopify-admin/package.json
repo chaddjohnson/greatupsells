@@ -11,6 +11,7 @@
   "dependencies": {
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
+    "@greatupsells/http-client": "0.0.0",
     "@greatupsells/react-components": "0.0.0",
     "@greatupsells/react-hooks": "0.0.0",
     "@shopify/app-bridge": "^2.0.3",
@@ -53,6 +54,7 @@
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
+    "@greatupsells/http-client": "0.0.0",
     "@greatupsells/react-components": "0.0.0",
     "@greatupsells/react-hooks": "0.0.0",
     "babel-plugin-styled-components": "^1.10.7",
