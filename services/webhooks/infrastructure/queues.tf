@@ -9,7 +9,7 @@ resource "aws_sqs_queue" "collection_dlq" {
 }
 
 resource "aws_sqs_queue" "collection_deletion_dlq" {
-  name                      = "collection-dlq-${terraform.workspace}"
+  name                      = "collection-deletion-dlq-${terraform.workspace}"
   message_retention_seconds = 259200 # 3 days
 }
 
@@ -67,7 +67,7 @@ resource "aws_sqs_queue" "collection" {
 }
 
 resource "aws_sqs_queue" "collection_deletion" {
-  name                       = "collection-queue-${terraform.workspace}"
+  name                       = "collection-deletion-queue-${terraform.workspace}"
   visibility_timeout_seconds = 60
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.collection_deletion_dlq.arn
@@ -133,7 +133,7 @@ resource "aws_sqs_queue" "shop_update" {
   name                       = "shop-update-queue-${terraform.workspace}"
   visibility_timeout_seconds = 60
   redrive_policy = jsonencode({
-    deadLetterTargetArn = aws_sqs_queue._dlq.arn
+    deadLetterTargetArn = aws_sqs_queue.shop_update_dlq.arn
     maxReceiveCount     = 10
   })
 }
