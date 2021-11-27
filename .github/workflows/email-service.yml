@@ -29,6 +29,8 @@ jobs:
         working-directory: services/email/infrastructure
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
+        env:
+          STAGE: ${{ env.BRANCH }}
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
