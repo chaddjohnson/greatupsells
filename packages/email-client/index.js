@@ -9,15 +9,17 @@ const enqueue = async ({ to, from, subject, body }) => {
 
   const sqs = new AWS.SQS();
 
-  await sqs.sendMessage({
-    QueueUrl: EMAIL_QUEUE_URL,
-    MessageBody: JSON.stringify({
-      to,
-      from,
-      subject,
-      body
+  await sqs
+    .sendMessage({
+      QueueUrl: EMAIL_QUEUE_URL,
+      MessageBody: JSON.stringify({
+        to,
+        from,
+        subject,
+        body
+      })
     })
-  });
+    .promise();
 };
 
 const send = async ({ from, to, subject = '', body = '' }) => {
