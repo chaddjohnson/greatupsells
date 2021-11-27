@@ -6,6 +6,14 @@ resource "aws_ssm_parameter" "base_domain" {
   provider  = aws.region
 }
 
+resource "aws_ssm_parameter" "domain" {
+  name      = "/greatupsells/${terraform.workspace}/domain"
+  type      = "String"
+  value     = var.domain
+  overwrite = true
+  provider  = aws.region
+}
+
 resource "aws_ssm_parameter" "certificate_name" {
   name      = "/greatupsells/${terraform.workspace}/certificate-name"
   type      = "String"

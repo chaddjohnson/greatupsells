@@ -14,6 +14,10 @@ variable "base_domain" {
   type = string
 }
 
+variable "domain" {
+  type = string
+}
+
 variable "instance_type" {
   type = string
 }
