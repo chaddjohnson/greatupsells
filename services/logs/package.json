@@ -5,7 +5,6 @@
     "lint": "eslint src/**/*.js",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "migrate": "migrate-mongo up",
-    "infrastructure": "./scripts/infrastructure.sh",
     "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
   },
   "repository": {

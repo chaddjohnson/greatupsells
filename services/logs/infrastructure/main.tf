@@ -27,7 +27,8 @@ module "us_east_1" {
   }
 
   elasticsearch_app_password = var.elasticsearch_app_password
-  mongodb_app_password = var.mongodb_app_password
+  mongodb_app_password       = var.mongodb_app_password
+  logs_notification_email    = var.logs_notification_email
 }
 
 module "eu_west_1" {
@@ -38,7 +39,8 @@ module "eu_west_1" {
   }
 
   elasticsearch_app_password = var.elasticsearch_app_password
-  mongodb_app_password = var.mongodb_app_password
+  mongodb_app_password       = var.mongodb_app_password
+  logs_notification_email    = var.logs_notification_email
 }
 
 module "ap_northeast_1" {
@@ -49,5 +51,6 @@ module "ap_northeast_1" {
   }
 
   elasticsearch_app_password = var.elasticsearch_app_password
-  mongodb_app_password = var.mongodb_app_password
+  mongodb_app_password       = var.mongodb_app_password
+  logs_notification_email    = var.logs_notification_email
 }

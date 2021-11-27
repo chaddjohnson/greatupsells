@@ -1,0 +1,6 @@
+email_bucket             = "greatupsells-email-test"
+info_email               = "info@test.greatupsells.com"
+support_email            = "support@test.greatupsells.com"
+abuse_forwarding_email   = "chad@neatowebsolutions.com"
+info_forwarding_email    = "chad@neatowebsolutions.com"
+support_forwarding_email = "chad@neatowebsolutions.com"

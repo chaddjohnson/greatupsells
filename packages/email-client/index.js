@@ -29,7 +29,9 @@ const send = async ({ from, to, subject = '', body = '' }) => {
     throw new Error('"to" required when sending email');
   }
 
-  const ses = new AWS.SES();
+  // Only us-east-1 is verified for sending emails.
+  const ses = new AWS.SES({ region: 'us-east-1' });
+
   const params = {
     Source: from,
     Destination: {

@@ -32,7 +32,8 @@ resource "aws_iam_policy" "services_consumer_role_policy" {
           "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
-          "ses:*"
+          "ses:*",
+          "s3:GetObject"
         ],
         "Resource" : "*"
       }
