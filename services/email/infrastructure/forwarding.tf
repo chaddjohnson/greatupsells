@@ -1,3 +1,9 @@
+# Reference: https://github.com/onnimonni/terraform-ses-lambda-demo
+
+provider "archive" {}
+
+data "aws_caller_identity" "current" {}
+
 # Create S3 bucket for storing emails.
 resource "aws_s3_bucket" "email" {
   bucket        = var.email_bucket
@@ -12,15 +18,39 @@ resource "aws_s3_bucket" "email" {
           "Service" : "ses.amazonaws.com"
         },
         "Action" : "s3:PutObject",
-        "Resource" : "arn:aws:s3:::${var.email_bucket}/*"
+        "Resource" : "arn:aws:s3:::${var.email_bucket}/*",
+        "Condition" : {
+          "StringEquals" : {
+            "aws:Referer" : data.aws_caller_identity.current.account_id
+          }
+        }
       }
     ]
   })
 }
 
+# Create Lambda role.
 resource "aws_iam_role" "forward_lambda_role" {
   name = "forward-lambda-role-${terraform.workspace}"
   assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
+        },
+        "Effect" : "Allow",
+      }
+    ]
+  })
+  depends_on = [aws_route53_record.domain_mx]
+}
+
+# Create Lambda policy.
+resource "aws_iam_policy" "forward_lambda_policy" {
+  name = "forward-lambda-policy-${terraform.workspace}"
+  policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
@@ -49,15 +79,46 @@ resource "aws_iam_role" "forward_lambda_role" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "forward_lambda_policy" {
+  role       = aws_iam_role.forward_lambda_role.name
+  policy_arn = aws_iam_policy.forward_lambda_policy.arn
+}
+
+# Zip the Lambda function.
+data "archive_file" "forward_handler" {
+  type        = "zip"
+  source_file = "${path.root}/forward.js"
+  output_path = "${path.root}/forward.zip"
+}
+
+# Create the Lambda function.
 resource "aws_lambda_function" "forward" {
-  filename      = "infrastructure/forward.zip"
-  function_name = "forward-${terraform.workspace}"
-  role          = aws_iam_role.forward_lambda_role.arn
-  handler       = "forward.handler"
-  runtime       = "nodejs14.x"
-  memory_size   = 128
-  timeout       = 10
-  publish       = true
+  filename         = data.archive_file.forward_handler.output_path
+  function_name    = "forward-${terraform.workspace}"
+  role             = aws_iam_role.forward_lambda_role.arn
+  handler          = "forward.handler"
+  runtime          = "nodejs14.x"
+  memory_size      = 128
+  timeout          = 10
+  source_code_hash = data.archive_file.forward_handler.output_base64sha256
+  publish          = true
+
+  environment {
+    variables = {
+      DOMAIN                   = data.terraform_remote_state.greatupsells_infrastructure.outputs.domain
+      EMAIL_BUCKET             = var.email_bucket
+      INFO_EMAIL               = var.info_email
+      SUPPORT_EMAIL            = var.support_email
+      INFO_FORWARDING_EMAIL    = var.info_forwarding_email
+      SUPPORT_FORWARDING_EMAIL = var.support_forwarding_email
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = "true"
+  }
+
+  depends_on = [aws_iam_role_policy_attachment.forward_lambda_policy]
 }
 
 # Create inbound MX record.
@@ -70,12 +131,13 @@ resource "aws_route53_record" "inbound_mx" {
 }
 
 resource "aws_ses_receipt_rule_set" "forward_rules" {
-  rule_set_name = "forward-rules"
+  rule_set_name = "forward-rules-${terraform.workspace}"
 }
 
-resource "aws_ses_receipt_rule" "forward_rules_support" {
+# Create forwarding rules.
+resource "aws_ses_receipt_rule" "forward_rule" {
   name          = "store"
-  rule_set_name = "forward-rules"
+  rule_set_name = "forward-rules-${terraform.workspace}"
   recipients = [
     var.info_email,
     var.support_email,
@@ -95,4 +157,33 @@ resource "aws_ses_receipt_rule" "forward_rules_support" {
     invocation_type = "Event"
     position        = 2
   }
+
+  bounce_action {
+    message         = "This is an unattended mailbox. Your message has been discarded."
+    sender          = "postmaster@${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+    smtp_reply_code = "550"
+    status_code     = "5.5.1"
+    position        = "3"
+  }
+
+  stop_action {
+    scope    = "RuleSet"
+    position = "4"
+  }
+
+  depends_on = [aws_s3_bucket.email, aws_lambda_permission.allow_ses]
+}
+
+resource "aws_ses_active_receipt_rule_set" "main" {
+  rule_set_name = "forward-rules-${terraform.workspace}"
+  depends_on    = [aws_ses_receipt_rule_set.forward_rules]
+}
+
+# Allow SES to run the Lambda function.
+resource "aws_lambda_permission" "allow_ses" {
+  statement_id   = "AllowExecutionFromSES"
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.forward.function_name
+  source_account = data.aws_caller_identity.current.account_id
+  principal      = "ses.amazonaws.com"
 }

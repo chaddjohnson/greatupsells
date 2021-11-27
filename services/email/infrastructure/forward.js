@@ -45,7 +45,6 @@ const {
 //
 //   To match all email addresses matching no other mapping, use "@" as a key.
 const defaultConfig = {
-  fromEmail: SUPPORT_EMAIL,
   subjectPrefix: '',
   emailBucket: EMAIL_BUCKET,
   emailKeyPrefix: 'messages/',
@@ -53,8 +52,8 @@ const defaultConfig = {
   forwardMapping: {
     [INFO_EMAIL]: [INFO_FORWARDING_EMAIL],
     [SUPPORT_EMAIL]: [SUPPORT_FORWARDING_EMAIL],
-    [`abuse@${DOMAIN}`]: INFO_FORWARDING_EMAIL,
-    [`@${DOMAIN}`]: INFO_FORWARDING_EMAIL
+    [`abuse@${DOMAIN}`]: [INFO_FORWARDING_EMAIL],
+    [`@${DOMAIN}`]: [INFO_FORWARDING_EMAIL]
   }
 };
 
@@ -80,7 +79,7 @@ exports.parseEvent = function (data) {
       level: 'error',
       event: JSON.stringify(data.event)
     });
-    return Promise.reject(new Error('Error: Received invalid SES message.'));
+    return Promise.reject(new Error('Received invalid SES message.'));
   }
 
   data.email = data.event.Records[0].ses.mail;
@@ -187,9 +186,7 @@ exports.fetchMessage = function (data) {
             error: err,
             stack: err.stack
           });
-          return reject(
-            new Error('Error: Could not make readable copy of email.')
-          );
+          return reject(new Error('Could not make readable copy of email.'));
         }
 
         // Load the raw email from S3
@@ -206,9 +203,7 @@ exports.fetchMessage = function (data) {
                 error: err,
                 stack: err.stack
               });
-              return reject(
-                new Error('Error: Failed to load message body from S3.')
-              );
+              return reject(new Error('Failed to load message body from S3.'));
             }
             data.emailData = result.Body.toString();
             return resolve(data);
@@ -339,7 +334,7 @@ exports.sendMessage = function (data) {
           error: err,
           stack: err.stack
         });
-        return reject(new Error('Error: Email sending failed.'));
+        return reject(new Error('Email sending failed.'));
       }
       data.log({
         level: 'info',
@@ -399,16 +394,14 @@ exports.handler = function (event, context, callback, overrides) {
         error: err,
         stack: err.stack
       });
-      return data.callback(new Error('Error: Step returned error.'));
+      return data.callback(new Error('Step returned error.'));
     });
 };
 
 Promise.series = function (promises, initValue) {
   return promises.reduce(function (chain, promise) {
     if (typeof promise !== 'function') {
-      return Promise.reject(
-        new Error(`Error: Invalid promise item: ${promise}`)
-      );
+      return Promise.reject(new Error(`Invalid promise item: ${promise}`));
     }
     return chain.then(promise);
   }, Promise.resolve(initValue));

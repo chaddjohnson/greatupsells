@@ -24,9 +24,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.17.0
-      - name: Prepare Lambda resources
-        run: zip forward.zip forward.js
-        working-directory: services/email/infrastructure
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
