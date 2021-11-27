@@ -35,7 +35,7 @@ const send = async ({ from, to, subject = '', body = '' }) => {
   const params = {
     Source: from,
     Destination: {
-      ToAddresses: [to]
+      ToAddresses: Array.isArray(to) ? to : [to]
     },
     ReplyToAddresses: [],
     Message: {

@@ -15,7 +15,7 @@ const processRecord = async (record) => {
   // Enqueue an email notification for error logs.
   if (type === 'ERROR') {
     await emailClient.enqueue({
-      to: LOGS_NOTIFICATION_EMAIL,
+      to: [LOGS_NOTIFICATION_EMAIL],
       from: `noreply@${BASE_DOMAIN}`,
       subject: `[${type}] - ${message}`,
       body: `${stackTrace}\n\n${JSON.stringify(data, null, 2)}`
