@@ -8,6 +8,7 @@ terraform init
 terraform validate
 terraform workspace select $STAGE || terraform workspace new $STAGE
 terraform apply \
+  -var-file=./config/$STAGE.tfvars \
   -var="mongodb_app_password=$MONGODB_APP_PASSWORD" \
   -var="elasticsearch_app_password=$ELASTICSEARCH_APP_PASSWORD" \
   -auto-approve
