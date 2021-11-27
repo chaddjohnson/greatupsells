@@ -18,7 +18,13 @@ const processRecord = async (record) => {
       to: [LOGS_NOTIFICATION_EMAIL],
       from: `noreply@${DOMAIN}`,
       subject: `[${type}] - ${message}`,
-      body: `<pre>${stackTrace}\n\n${JSON.stringify(data, null, 2)}</pre>`
+      body: `
+        <pre>
+          ${message}\n\n
+          ${stackTrace}\n\n
+          ${JSON.stringify(data, null, 2)}
+        </pre>
+      `
     });
   }
 };
