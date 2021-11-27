@@ -20,7 +20,7 @@ provider:
     MONGODB_URL_LOGS: ${env:MONGODB_URL_LOGS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-logs/url}
     BASE_DOMAIN: ${env:BASE_DOMAIN, ssm:/greatupsells/${self:provider.stage}/base-domain}
     LOGS_NOTIFICATION_EMAIL: ${env:LOGS_NOTIFICATION_EMAIL, ssm:/greatupsells/${self:provider.stage}/logs-notification-email}
-    EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email/url, ''}
+    EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
 
 custom:
   serverless-offline:
