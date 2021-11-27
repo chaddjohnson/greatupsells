@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongodbClient = require('./mongodbClient');
+const mongodbClient = require('../mongodbClient');
 const search = require('./search');
 const hooks = require('./hooks');
 
