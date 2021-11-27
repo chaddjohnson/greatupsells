@@ -7,7 +7,9 @@ on:
     paths:
       - .github/workflows/shopify-admin.yml
       - applications/shopify-admin/**
-      - packages/**
+      - packages/http-client
+      - packages/react-components
+      - packages/react-hooks
 jobs:
   deploy:
     name: Deploy
