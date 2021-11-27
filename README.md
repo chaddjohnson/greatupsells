@@ -162,7 +162,6 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
-1. Ensure the domain name (e.g., greatupsells.com) exists in AWS within Route 53 with nameserver DNS set up correctly.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -215,6 +214,8 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `ELASTICSEARCH_ROOT_PASSWORD` (the Elasticsearch "elastic" user password)
    1. `ELASTICSEARCH_APP_PASSWORD` (the Elasticsearch "app" user password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
+1. Trigger deployments in the order shown below.
+1. Add name servers to domain registrar settings once `infrastructure` setup has run.
 
 ### Triggering
 

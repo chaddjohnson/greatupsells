@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "assets" {
 }
 
 resource "aws_route53_record" "assets" {
-  zone_id = var.hosted_zone_id
+  zone_id = aws_route53_zone.domain.zone_id
   name    = var.assets_domain
   type    = "A"
 

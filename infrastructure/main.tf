@@ -20,27 +20,6 @@ provider "aws" {
   region = "ap-northeast-1"
 }
 
-resource "aws_s3_bucket" "backups" {
-  bucket        = "greatupsells-backups"
-  acl           = "private"
-  force_destroy = false
-
-  lifecycle_rule {
-    enabled                                = true
-    prefix                                 = "database/"
-    abort_incomplete_multipart_upload_days = 1
-
-    transition {
-      days          = 7
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = 90
-    }
-  }
-}
-
 module "us_east_1" {
   source = "./region"
   providers = {
@@ -49,8 +28,9 @@ module "us_east_1" {
 
   region                           = "us-east-1"
   public_key                       = var.public_key
-  hosted_zone_id                   = var.hosted_zone_id
+  hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
+  domain                           = var.domain
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
@@ -71,8 +51,9 @@ module "eu_west_1" {
 
   region                           = "eu-west-1"
   public_key                       = var.public_key
-  hosted_zone_id                   = var.hosted_zone_id
+  hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
+  domain                           = var.domain
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
@@ -93,8 +74,9 @@ module "ap_northeast_1" {
 
   region                           = "ap-northeast-1"
   public_key                       = var.public_key
-  hosted_zone_id                   = var.hosted_zone_id
+  hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
+  domain                           = var.domain
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
@@ -107,7 +89,7 @@ module "ap_northeast_1" {
 }
 
 output "hosted_zone_id" {
-  value = var.hosted_zone_id
+  value = aws_route53_zone.domain.zone_id
 }
 
 output "domain" {
