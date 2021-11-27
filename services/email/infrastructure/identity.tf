@@ -5,6 +5,10 @@ resource "aws_ses_domain_identity" "domain" {
   domain = data.terraform_remote_state.greatupsells_infrastructure.outputs.domain
 }
 
+resource "aws_ses_email_identity" "example" {
+  email = "noreply@${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+}
+
 # Use custom MAIL FROM.
 resource "aws_ses_domain_mail_from" "domain" {
   domain           = data.terraform_remote_state.greatupsells_infrastructure.outputs.domain
