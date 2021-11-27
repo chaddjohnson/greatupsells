@@ -18,7 +18,7 @@ provider:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/greatupsells/${self:provider.stage}/database/elasticsearch-logs/url, ''}
     MONGODB_URL_LOGS: ${env:MONGODB_URL_LOGS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-logs/url}
-    BASE_DOMAIN: ${env:BASE_DOMAIN, ssm:/greatupsells/${self:provider.stage}/base-domain}
+    DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
     LOGS_NOTIFICATION_EMAIL: ${env:LOGS_NOTIFICATION_EMAIL, ssm:/greatupsells/${self:provider.stage}/logs-notification-email}
     EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
 
