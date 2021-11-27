@@ -11,15 +11,9 @@ const processRecord = async (record) => {
 
   // Create log in MongoDB. Middleware will then create Elasticsearch document.
   await Log.create({ source, type, message, stackTrace, data });
-  console.log(type);
+
   // Enqueue an email notification for error logs.
   if (type === 'ERROR') {
-    console.log('ENQUEUING', {
-      to: [LOGS_NOTIFICATION_EMAIL],
-      from: `noreply@${BASE_DOMAIN}`,
-      subject: `[${type}] - ${message}`,
-      body: `${stackTrace}\n\n${JSON.stringify(data, null, 2)}`
-    });
     await emailClient.enqueue({
       to: [LOGS_NOTIFICATION_EMAIL],
       from: `noreply@${BASE_DOMAIN}`,
