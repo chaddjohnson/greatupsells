@@ -10,6 +10,9 @@ import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
+// Tracked outside the component to prevent duplicate offer impressions.
+let offerViewed = false;
+
 const PageScrollOffer = ({
   offer,
   popupTheme,
@@ -23,7 +26,6 @@ const PageScrollOffer = ({
   onClose
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [offerViewed, setOfferViewed] = useState(false);
   const [delayFinished, setDelayFinished] = useState(false);
   const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(
@@ -39,7 +41,8 @@ const PageScrollOffer = ({
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
   const openPopup = useCallback(() => {
-    setOfferViewed(true);
+    offerViewed = true;
+
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
@@ -141,7 +144,7 @@ const PageScrollOffer = ({
 
   // Listen to pushState events.
   usePushStateListener(() => {
-    setOfferViewed(false);
+    offerViewed = false;
     setPopupOpen(false);
     setIsOnPageRequiredSeconds(false);
     setLastScrollTop(0);
