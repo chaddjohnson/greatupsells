@@ -6,6 +6,7 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const { aws4Interceptor } = require('aws4-axios');
+const qs = require('querystringify');
 const HttpClient = require('@greatupsells/http-client').default;
 
 const { AWS_REGION, SHOPS_API_URL } = process.env;
@@ -32,8 +33,9 @@ const handler = middy(async (event, context) => {
   try {
     const { shopId } = event.requestContext.authorizer;
     const { startAt, endAt } = event.queryStringParameters || {};
+    const params = qs.stringify({ startAt, endAt }, true);
     const shopAcceptances = await httpClient.get(
-      `/shops/${shopId}/acceptances?startAt=${startAt}&endAt=${endAt}`
+      `/shops/${shopId}/acceptances${params}`
     );
 
     return {
