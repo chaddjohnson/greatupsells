@@ -17,6 +17,7 @@ const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
 const fixWebhooks = require('./fixWebhooks');
 const updateActiveStatuses = require('./updateActiveStatuses');
+const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItem = require('./addDraftOrderLineItem');
@@ -111,6 +112,10 @@ schema.statics.fixWebhooks = function () {
 
 schema.statics.updateActiveStatuses = function () {
   return updateActiveStatuses();
+};
+
+schema.methods.searchOffers = async function (params) {
+  return searchOffers(this, params);
 };
 
 schema.methods.findImpressions = async function (startAt, endAt) {

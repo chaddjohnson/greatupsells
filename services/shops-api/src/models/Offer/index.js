@@ -3,6 +3,7 @@ const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const findOneRandom = require('./findOneRandom');
 const findRandomProducts = require('./findRandomProducts');
+const search = require('./search');
 const calculateDiscountedPrice = require('./calculateDiscountedPrice');
 const trackImpression = require('./trackImpression');
 const clone = require('./clone');
@@ -177,6 +178,10 @@ schema.statics.findOneRandom = function (shop, params) {
 
 schema.methods.findRandomProducts = function () {
   return findRandomProducts(this);
+};
+
+schema.statics.search = function (params) {
+  return search(params);
 };
 
 schema.methods.calculateDiscountedPrice = function (price) {

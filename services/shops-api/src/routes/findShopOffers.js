@@ -15,8 +15,10 @@ const handler = async (event, context) => {
 
   try {
     const { shopId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offers = await Offer.findByShopId(shopId);
+    const { query, status } = event.queryStringParameters || {};
+    const Shop = await models.get('Shop');
+    const shop = await Shop.findById(shopId);
+    const offers = await shop.searchOffers({ query, status });
 
     return {
       statusCode: StatusCodes.OK,
