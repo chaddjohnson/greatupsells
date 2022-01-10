@@ -10,13 +10,14 @@ const useOffers = (filters) => {
     `/offers${qs.stringify(filters, true)}`,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false,
-      onSuccess: () => {
-        setOffersLoaded(true);
-      }
+      revalidateOnFocus: false
     }
   );
   const offersLoading = !offers && !offersError;
+
+  if (!offersLoaded && !offersLoading) {
+    setOffersLoaded(true);
+  }
 
   return { offers, offersLoading, offersLoaded, offersError };
 };

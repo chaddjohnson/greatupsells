@@ -13,10 +13,7 @@ const usePopupTheme = (id) => {
     id ? `/popup-themes/${id}` : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false,
-      onSuccess: () => {
-        setPopupThemeLoaded(true);
-      }
+      revalidateOnFocus: false
     }
   );
   const popupThemeLoading = !popupTheme && !popupThemeError;
@@ -57,6 +54,10 @@ const usePopupTheme = (id) => {
       throw error;
     }
   };
+
+  if (!popupThemeLoaded && !popupThemeLoading) {
+    setPopupThemeLoaded(true);
+  }
 
   return {
     popupTheme,

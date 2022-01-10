@@ -16,10 +16,7 @@ const ShopProvider = ({ children }) => {
     '/shop',
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setShopLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const shopLoading = !shop && !shopError;
@@ -38,6 +35,10 @@ const ShopProvider = ({ children }) => {
       throw error;
     }
   };
+
+  if (!shopLoaded && !shopLoading) {
+    setShopLoaded(true);
+  }
 
   return (
     <ShopContext.Provider

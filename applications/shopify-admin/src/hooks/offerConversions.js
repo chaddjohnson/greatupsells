@@ -20,13 +20,14 @@ const useOfferConversions = (offerId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setOfferConversionsLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const offerConversionsLoading = !offerConversions && !offerConversionsError;
+
+  if (!offerConversionsLoaded && !offerConversionsLoading) {
+    setOfferConversionsLoaded(true);
+  }
 
   return {
     offerConversions,

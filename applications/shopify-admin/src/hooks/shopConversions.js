@@ -20,13 +20,14 @@ const useShopConversions = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setShopConversionsLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const shopConversionsLoading = !shopConversions && !shopConversionsError;
+
+  if (!shopConversionsLoaded && !shopConversionsLoading) {
+    setShopConversionsLoaded(true);
+  }
 
   return {
     shopConversions,

@@ -12,12 +12,13 @@ const usePopupThemes = () => {
     error: popupThemesError,
     mutate: fetchPopupThemes
   } = useSWR(`/popup-themes`, httpClient.get.bind(httpClient), {
-    revalidateOnFocus: false,
-    onSuccess: () => {
-      setPopupThemesLoaded(true);
-    }
+    revalidateOnFocus: false
   });
   const popupThemesLoading = !popupThemes && !popupThemesError;
+
+  if (!popupThemesLoaded && !popupThemesLoading) {
+    setPopupThemesLoaded(true);
+  }
 
   return {
     popupThemes,

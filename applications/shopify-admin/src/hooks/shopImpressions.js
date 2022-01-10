@@ -20,13 +20,14 @@ const useShopImpressions = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setShopImpressionsLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const shopImpressionsLoading = !shopImpressions && !shopImpressionsError;
+
+  if (!shopImpressionsLoaded && !shopImpressionsLoading) {
+    setShopImpressionsLoaded(true);
+  }
 
   return {
     shopImpressions,

@@ -15,10 +15,7 @@ const useOffer = (offerId) => {
     offerId ? `/offers/${offerId}` : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false,
-      onSuccess: () => {
-        setOfferLoaded(true);
-      }
+      revalidateOnFocus: false
     }
   );
   const offerLoading = !offer && !offerError;
@@ -102,6 +99,10 @@ const useOffer = (offerId) => {
       throw error;
     }
   };
+
+  if (!offerLoaded && !offerLoading) {
+    setOfferLoaded(true);
+  }
 
   return {
     offer,

@@ -20,13 +20,14 @@ const useShopAcceptances = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setShopAcceptancesLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const shopAcceptancesLoading = !shopAcceptances && !shopAcceptancesError;
+
+  if (!shopAcceptancesLoaded && !shopAcceptancesLoading) {
+    setShopAcceptancesLoaded(true);
+  }
 
   return {
     shopAcceptances,

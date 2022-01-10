@@ -9,13 +9,14 @@ const useOfferPopupThemes = (offerId) => {
     offerId ? `/offers/${offerId}/popup-themes` : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false,
-      onSuccess: () => {
-        setOfferPopupThemesLoaded(true);
-      }
+      revalidateOnFocus: false
     }
   );
   const offerPopupThemesLoading = !offerPopupThemes && !offerPopupThemesError;
+
+  if (!offerPopupThemesLoaded && !offerPopupThemesLoading) {
+    setOfferPopupThemesLoaded(true);
+  }
 
   return {
     offerPopupThemes,

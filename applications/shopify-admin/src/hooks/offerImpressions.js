@@ -20,13 +20,14 @@ const useOfferImpressions = (offerId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setOfferImpressionsLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const offerImpressionsLoading = !offerImpressions && !offerImpressionsError;
+
+  if (!offerImpressionsLoaded && !offerImpressionsLoading) {
+    setOfferImpressionsLoaded(true);
+  }
 
   return {
     offerImpressions,

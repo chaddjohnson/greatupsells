@@ -11,13 +11,14 @@ const useShop = () => {
     '/shop',
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false,
-      onSuccess: () => {
-        setShopLoaded(true);
-      }
+      revalidateOnFocus: false
     }
   );
   const shopLoading = !shop && !shopError;
+
+  if (!shopLoaded && !shopLoading) {
+    setShopLoaded(true);
+  }
 
   return { shop, shopError, shopLoading, shopLoaded };
 };

@@ -20,13 +20,14 @@ const useOfferAcceptances = (offerId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true,
-      onSuccess: () => {
-        setOfferAcceptancesLoaded(true);
-      }
+      revalidateOnFocus: true
     }
   );
   const offerAcceptancesLoading = !offerAcceptances && !offerAcceptancesError;
+
+  if (!offerAcceptancesLoaded && !offerAcceptancesLoading) {
+    setOfferAcceptancesLoaded(true);
+  }
 
   return {
     offerAcceptances,
