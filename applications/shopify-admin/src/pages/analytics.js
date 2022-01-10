@@ -5,15 +5,12 @@ import {
   Layout,
   Card,
   Stack,
-  Popover,
-  Button,
   DisplayText,
   TextStyle,
   Banner,
   SkeletonPage,
   SkeletonBodyText
 } from '@shopify/polaris';
-import { CalendarMajor } from '@shopify/polaris-icons';
 import {
   useNumberFormatter,
   useDateTime,
@@ -90,7 +87,7 @@ const AnalyticsPage = () => {
   const [chartDateChanged, setChartDateChanged] = useState(false);
   const [datePickerActive, setDatePickerActive] = useState(false);
 
-  const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
@@ -103,7 +100,7 @@ const AnalyticsPage = () => {
     shopConversionRates,
     shopRevenueIncreases,
     shopImpressions,
-    shopAnalyticsLoading,
+    shopAnalyticsLoaded,
     shopAnalyticsError,
     fetchShopAnalytics
   } = useShopAnalytics(shop?._id, chartStartAt, chartEndAt);
@@ -149,7 +146,7 @@ const AnalyticsPage = () => {
     [shopImpressions, startOfDay]
   );
 
-  const loading = shopLoading || shopAnalyticsLoading;
+  const loaded = shopLoaded && shopAnalyticsLoaded;
   const error = !!shopError || !!shopAnalyticsError;
 
   // Refresh data at an interval.
@@ -165,7 +162,7 @@ const AnalyticsPage = () => {
 
   return (
     <Loader
-      isLoading={loading}
+      isLoading={!loaded}
       isError={error}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}

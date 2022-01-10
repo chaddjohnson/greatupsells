@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useShopAcceptances from './shopAcceptances';
 import useShopConversionRates from './shopConversionRates';
 import useShopConversions from './shopConversions';
@@ -5,6 +6,8 @@ import useShopRevenueIncreases from './shopRevenueIncreases';
 import useShopImpressions from './shopImpressions';
 
 const useShopAnalytics = (shopId, startAt, endAt) => {
+  const [shopAnalyticsLoaded, setShopAnalyticsLoaded] = useState(false);
+
   const {
     shopAcceptances,
     shopAcceptancesLoading,
@@ -60,6 +63,10 @@ const useShopAnalytics = (shopId, startAt, endAt) => {
     ]);
   };
 
+  if (!shopAnalyticsLoaded && !shopAnalyticsLoading) {
+    setShopAnalyticsLoaded(true);
+  }
+
   return {
     shopAcceptances,
     shopConversions,
@@ -67,6 +74,7 @@ const useShopAnalytics = (shopId, startAt, endAt) => {
     shopRevenueIncreases,
     shopImpressions,
     shopAnalyticsLoading,
+    shopAnalyticsLoaded,
     shopAnalyticsError,
     fetchShopAnalytics
   };

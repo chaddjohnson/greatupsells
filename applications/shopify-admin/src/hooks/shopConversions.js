@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import useSWR from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
 
 const useShopConversions = (shopId, startAt, endAt) => {
   const { httpClient } = useHttpClient();
+
+  const [shopConversionsLoaded, setShopConversionsLoaded] = useState(false);
 
   const startAtDate = startAt && new Date(startAt).toISOString();
   const endAtDate = endAt && new Date(endAt).toISOString();
@@ -17,7 +20,10 @@ const useShopConversions = (shopId, startAt, endAt) => {
       : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: true
+      revalidateOnFocus: true,
+      onSuccess: () => {
+        setShopConversionsLoaded(true);
+      }
     }
   );
   const shopConversionsLoading = !shopConversions && !shopConversionsError;
@@ -25,6 +31,7 @@ const useShopConversions = (shopId, startAt, endAt) => {
   return {
     shopConversions,
     shopConversionsLoading,
+    shopConversionsLoaded,
     shopConversionsError,
     fetchShopConversions
   };

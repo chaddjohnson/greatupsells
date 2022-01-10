@@ -5,6 +5,7 @@ export { default as LineChart } from './LineChart';
 export { default as Link } from './Link';
 export { default as OfferForm } from './OfferForm';
 export { default as OfferList } from './OfferList';
+export { default as OfferStatus } from './OfferStatus';
 export { default as RoutePropagator } from './RoutePropagator';
 export { default as SkeletonChart } from './SkeletonChart';
 export { default as TitleBar } from './TitleBar';

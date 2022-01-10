@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
@@ -8,11 +9,16 @@ const useOffer = (offerId) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
+  const [offerLoaded, setOfferLoaded] = useState(false);
+
   const { data: offer, error: offerError } = useSWR(
     offerId ? `/offers/${offerId}` : null,
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false
+      revalidateOnFocus: false,
+      onSuccess: () => {
+        setOfferLoaded(true);
+      }
     }
   );
   const offerLoading = !offer && !offerError;
@@ -100,6 +106,7 @@ const useOffer = (offerId) => {
   return {
     offer,
     offerLoading,
+    offerLoaded,
     offerError,
     saveOffer,
     deleteOffer,

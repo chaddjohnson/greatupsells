@@ -104,10 +104,10 @@ const OfferEditPage = () => {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const { shop, shopLoading, shopError } = useShop();
+  const { shop, shopLoaded, shopError } = useShop();
   const {
     offer,
-    offerLoading,
+    offerLoaded,
     offerError,
     saveOffer,
     deleteOffer,
@@ -116,14 +116,10 @@ const OfferEditPage = () => {
     disableOffer
   } = useOffer(offerId);
   const { savePopupTheme } = usePopupTheme();
-  const {
-    popupThemes,
-    popupThemesLoading,
-    popupThemesError
-  } = usePopupThemes();
+  const { popupThemes, popupThemesLoaded, popupThemesError } = usePopupThemes();
   const {
     offerPopupThemes,
-    offerPopupThemesLoading,
+    offerPopupThemesLoaded,
     offerPopupThemesError
   } = useOfferPopupThemes(offerId);
 
@@ -133,11 +129,8 @@ const OfferEditPage = () => {
     [offerPopupThemes, offer]
   );
 
-  const loading =
-    shopLoading ||
-    offerLoading ||
-    popupThemesLoading ||
-    offerPopupThemesLoading;
+  const loaded =
+    shopLoaded && offerLoaded && popupThemesLoaded && offerPopupThemesLoaded;
 
   const error = !!(
     shopError ||
@@ -245,7 +238,7 @@ const OfferEditPage = () => {
   return (
     <>
       <Loader
-        isLoading={loading}
+        isLoading={!loaded}
         isError={error}
         loadingComponent={loadingComponent}
         errorComponent={errorComponent}
@@ -260,7 +253,7 @@ const OfferEditPage = () => {
           secondaryActions={secondaryActions}
         >
           <PageTitleBar />
-          {!loading && !error && (
+          {loaded && !error && (
             <OfferForm
               initialValues={{
                 offer,

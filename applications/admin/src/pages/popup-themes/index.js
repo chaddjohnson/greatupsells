@@ -21,11 +21,7 @@ const ErrorComponent = () => <p>Unable to load popup themes.</p>;
 const PopupThemesPage = () => {
   const router = useRouter();
 
-  const {
-    popupThemes,
-    popupThemesLoading,
-    popupThemesError
-  } = usePopupThemes();
+  const { popupThemes, popupThemesLoaded, popupThemesError } = usePopupThemes();
   const { clonePopupTheme } = usePopupTheme();
 
   const handleClonePopupTheme = async (popupTheme) => {
@@ -40,7 +36,7 @@ const PopupThemesPage = () => {
       </Head>
       <Layout title="Popup Themes" icon={<PopupThemesIcon />}>
         <Loader
-          isLoading={popupThemesLoading}
+          isLoading={!popupThemesLoaded}
           isError={!!popupThemesError}
           loadingComponent={LoadingComponent}
           errorComponent={ErrorComponent}

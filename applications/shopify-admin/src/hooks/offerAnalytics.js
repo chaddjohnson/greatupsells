@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useOfferAcceptances from './offerAcceptances';
 import useOfferConversionRates from './offerConversionRates';
 import useOfferConversions from './offerConversions';
@@ -5,6 +6,8 @@ import useOfferRevenueIncreases from './offerRevenueIncreases';
 import useOfferImpressions from './offerImpressions';
 
 const useOfferAnalytics = (offerId, startAt, endAt) => {
+  const [offerAnalyticsLoaded, setOfferAnalyticsLoaded] = useState(false);
+
   const {
     offerAcceptances,
     offerAcceptancesLoading,
@@ -60,6 +63,10 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     ]);
   };
 
+  if (!offerAnalyticsLoaded && !offerAnalyticsLoading) {
+    setOfferAnalyticsLoaded(true);
+  }
+
   return {
     offerAcceptances,
     offerConversions,
@@ -67,6 +74,7 @@ const useOfferAnalytics = (offerId, startAt, endAt) => {
     offerRevenueIncreases,
     offerImpressions,
     offerAnalyticsLoading,
+    offerAnalyticsLoaded,
     offerAnalyticsError,
     fetchOfferAnalytics
   };

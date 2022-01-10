@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
@@ -10,10 +10,17 @@ const ShopProvider = ({ children }) => {
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
+  const [shopLoaded, setShopLoaded] = useState(false);
+
   const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
     '/shop',
     httpClient.get.bind(httpClient),
-    { revalidateOnFocus: true }
+    {
+      revalidateOnFocus: true,
+      onSuccess: () => {
+        setShopLoaded(true);
+      }
+    }
   );
   const shopLoading = !shop && !shopError;
 
@@ -37,6 +44,7 @@ const ShopProvider = ({ children }) => {
       value={{
         shop,
         shopLoading,
+        shopLoaded,
         shopError,
         fetchShop,
         saveShop

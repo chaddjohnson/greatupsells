@@ -122,14 +122,10 @@ const initialOffer = {
 const NewOfferPage = () => {
   const router = useRouter();
   const { showSuccessToast, showErrorToast } = useToast();
-  const { shop, shopLoading, shopError } = useShop();
+  const { shop, shopLoaded, shopError } = useShop();
   const { saveOffer } = useOffer();
   const { savePopupTheme } = usePopupTheme();
-  const {
-    popupThemes,
-    popupThemesLoading,
-    popupThemesError
-  } = usePopupThemes();
+  const { popupThemes, popupThemesLoaded, popupThemesError } = usePopupThemes();
 
   // Use a copy of the first theme as the default theme. Remove _id to ensure
   // the copy will have its own ID when saved.
@@ -141,7 +137,7 @@ const NewOfferPage = () => {
     ['_id', '__v', 'updatedAt', 'createdAt']
   );
 
-  const loading = shopLoading || popupThemesLoading;
+  const loaded = shopLoaded && popupThemesLoaded;
   const error = !!(shopError || popupThemesError);
 
   const handleSubmit = async (data) => {
@@ -184,7 +180,7 @@ const NewOfferPage = () => {
 
   return (
     <Loader
-      isLoading={loading}
+      isLoading={!loaded}
       isError={error}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}
@@ -198,7 +194,7 @@ const NewOfferPage = () => {
         }
       >
         <PageTitleBar />
-        {!loading && !error && (
+        {loaded && !error && (
           <OfferForm
             initialValues={{
               offer: initialOffer,

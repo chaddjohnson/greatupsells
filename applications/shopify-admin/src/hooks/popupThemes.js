@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import useSWR from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
 
 const usePopupThemes = () => {
   const { httpClient } = useHttpClient();
+  const [popupThemesLoaded, setPopupThemesLoaded] = useState(false);
   const { data: popupThemes, error: popupThemesError } = useSWR(
     '/popup-themes',
     httpClient.get.bind(httpClient),
     {
-      revalidateOnFocus: false
+      revalidateOnFocus: false,
+      onSuccess: () => {
+        setPopupThemesLoaded(true);
+      }
     }
   );
   const popupThemesLoading = !popupThemes && !popupThemesError;
@@ -15,6 +20,7 @@ const usePopupThemes = () => {
   return {
     popupThemes,
     popupThemesLoading,
+    popupThemesLoaded,
     popupThemesError
   };
 };

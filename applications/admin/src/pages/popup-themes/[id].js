@@ -23,7 +23,7 @@ const EditPopupThemePage = () => {
   const {
     popupTheme,
     popupThemeError,
-    popupThemeLoading,
+    popupThemeLoaded,
     savePopupTheme
   } = usePopupTheme(popupThemeId);
 
@@ -58,7 +58,7 @@ const EditPopupThemePage = () => {
         }}
       >
         <Loader
-          isLoading={popupThemeLoading}
+          isLoading={!popupThemeLoaded}
           isError={!!popupThemeError}
           loadingComponent={LoadingComponent}
           errorComponent={ErrorComponent}

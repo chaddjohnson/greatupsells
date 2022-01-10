@@ -20,12 +20,7 @@ import {
 
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
-import {
-  TitleBar,
-  LineChart,
-  DateRangePicker,
-  SkeletonChart
-} from '../../../components';
+import { TitleBar, LineChart, SkeletonChart } from '../../../components';
 
 const PageTitleBar = memo(({ offer }) => (
   <TitleBar
@@ -116,7 +111,7 @@ const OfferAnalyticsPage = () => {
     offerConversionRates,
     offerRevenueIncreases,
     offerImpressions,
-    offerAnalyticsLoading,
+    offerAnalyticsLoaded,
     offerAnalyticsError,
     fetchOfferAnalytics
   } = useOfferAnalytics(offerId, chartStartAt, chartEndAt);
@@ -174,7 +169,7 @@ const OfferAnalyticsPage = () => {
 
   return (
     <Loader
-      isLoading={offerAnalyticsLoading}
+      isLoading={!offerAnalyticsLoaded}
       isError={!!offerAnalyticsError}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}

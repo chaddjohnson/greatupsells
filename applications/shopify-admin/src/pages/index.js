@@ -73,7 +73,7 @@ const DashboardPage = () => {
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
 
-  const { shop, shopLoading, shopError, fetchShop } = useShop();
+  const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
   const {
     formatNumber,
@@ -82,7 +82,7 @@ const DashboardPage = () => {
   } = useNumberFormatter({ locale, countryCode, currency });
   const {
     shopAcceptances,
-    shopAcceptancesLoading,
+    shopAcceptancesLoaded,
     shopAcceptancesError,
     fetchShopAcceptances
   } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
@@ -96,7 +96,7 @@ const DashboardPage = () => {
     [shopAcceptances, startOfDay]
   );
 
-  const loading = shopLoading || shopAcceptancesLoading;
+  const loaded = shopLoaded && shopAcceptancesLoaded;
   const error = !!shopError || !!shopAcceptancesError;
 
   const errorComponent = memo(() => (
@@ -127,7 +127,7 @@ const DashboardPage = () => {
 
   return (
     <Loader
-      isLoading={loading}
+      isLoading={!loaded}
       isError={error}
       loadingComponent={loadingComponent}
       errorComponent={errorComponent}

@@ -15,7 +15,7 @@ import { ErrorBoundary } from '@greatupsells/react-components';
 import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
 import { ShopProvider } from '../hooks';
 import { Link, RoutePropagator } from '../components';
-import '@shopify/polaris/dist/styles.css';
+import '@shopify/polaris/build/esm/styles.css';
 
 const apiKey = process.env.SHOPIFY_ADMIN_APP_API_KEY;
 

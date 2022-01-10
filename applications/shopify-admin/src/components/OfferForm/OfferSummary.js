@@ -7,11 +7,11 @@ import {
   TextStyle,
   Stack,
   List,
-  Button,
-  Badge
+  Button
 } from '@shopify/polaris';
 import { useNumberFormatter, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
+import OfferStatus from '../OfferStatus';
 
 const HeadingWrapper = styled.div`
   .Polaris-Stack {
@@ -22,34 +22,6 @@ const HeadingWrapper = styled.div`
     flex: 1 1 auto;
   }
 `;
-
-const StatusBadge = ({ offer }) => {
-  if (!offer._id) {
-    return null;
-  }
-
-  if (!offer.enabled) {
-    return <Badge>Disabled</Badge>;
-  }
-
-  if (offer.endAt && new Date(offer.endAt) < new Date()) {
-    return <Badge status="warning">Expired</Badge>;
-  }
-
-  if (new Date(offer.startAt) > new Date()) {
-    return <Badge status="info">Pending</Badge>;
-  }
-
-  if (offer.enabled) {
-    return <Badge status="success">Active</Badge>;
-  }
-
-  return null;
-};
-
-StatusBadge.propTypes = {
-  offer: PropTypes.object.isRequired
-};
 
 const OfferSummary = ({ offer }) => {
   const [items, setItems] = useState([]);
@@ -118,7 +90,7 @@ const OfferSummary = ({ offer }) => {
             <HeadingWrapper>
               <Stack distribution="equalSpacing">
                 <Heading element="h3">{offer.name}</Heading>
-                <StatusBadge offer={offer} />
+                <OfferStatus offer={offer} />
               </Stack>
             </HeadingWrapper>
             {items.length > 0 && (

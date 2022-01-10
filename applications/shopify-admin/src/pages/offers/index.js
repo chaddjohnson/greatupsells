@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
@@ -10,7 +10,7 @@ import {
   EmptyState
 } from '@shopify/polaris';
 import { Loader } from '@greatupsells/react-components';
-import { useShop, useOffers } from '../../hooks';
+import { useOffers } from '../../hooks';
 import { TitleBar, OfferList } from '../../components';
 
 const PageTitleBar = memo(() => <TitleBar title="Offers" />);
@@ -41,8 +41,10 @@ const EmptyComponent = () => (
 );
 
 const OffersPage = () => {
-  const { shop } = useShop();
-  const { offers, offersLoading, offersError } = useOffers();
+  const [filters, setFilters] = useState({});
+  const { offers, offersLoaded, offersError } = useOffers(filters);
+
+  const hasFilters = Object.keys(filters).length > 0;
 
   const ErrorComponent = memo(() => (
     <Page title="Offers" fullWidth>
@@ -61,16 +63,24 @@ const OffersPage = () => {
 
   return (
     <Loader
-      isLoading={offersLoading}
+      isLoading={!offersLoaded}
       isError={!!offersError && !offers}
-      isEmpty={!offers?.length}
+      isEmpty={!offers?.length && !hasFilters}
       loadingComponent={LoadingComponent}
       errorComponent={ErrorComponent}
       emptyStateComponent={EmptyComponent}
     >
       <Page title="Offers" fullWidth>
         <PageTitleBar />
-        <OfferList offers={offers} currency={shop?.currency} />
+        <Layout>
+          <Layout.Section>
+            <OfferList
+              offers={offers}
+              filters={filters}
+              onFilter={setFilters}
+            />
+          </Layout.Section>
+        </Layout>
       </Page>
     </Loader>
   );
