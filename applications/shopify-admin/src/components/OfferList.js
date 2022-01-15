@@ -161,6 +161,22 @@ const OfferList = ({ offers, filters, onFilter }) => {
     onFilter(updatedFilters);
   };
 
+  const handlePaginatePrevious = () => {
+    //   if () {
+    //     return;
+    //   }
+    //   const status = tabs[selectedTabIndex].id;
+    //   const cursor = offers?.[offers.length - 1]?._id;
+    //   const updatedFilters = { query, status, cursor };
+    //   onFilter(updatedFilters);
+  };
+
+  const handlePaginateNext = () => {
+    //   if () {
+    //     return;
+    //   }
+  };
+
   return (
     <Card>
       <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
@@ -199,10 +215,10 @@ const OfferList = ({ offers, filters, onFilter }) => {
             <PaginationWrapper>
               <Stack distribution="center">
                 <Pagination
-                  hasPrevious
-                  hasNext
-                  onPrevious={() => {}}
-                  onNext={() => {}}
+                  hasPrevious={true}
+                  hasNext={true}
+                  onPrevious={handlePaginatePrevious}
+                  onNext={handlePaginateNext}
                 />
               </Stack>
             </PaginationWrapper>
