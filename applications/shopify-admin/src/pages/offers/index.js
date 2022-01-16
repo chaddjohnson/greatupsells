@@ -62,29 +62,27 @@ const OffersPage = () => {
   ));
 
   return (
-    <>
-      <PageTitleBar />
-      <Loader
-        isLoading={!offersLoaded}
-        isError={!!offersError && !offers}
-        isEmpty={!offers?.length && !hasFilters}
-        loadingComponent={LoadingComponent}
-        errorComponent={ErrorComponent}
-        emptyStateComponent={EmptyComponent}
-      >
-        <Page title="Offers" fullWidth>
-          <Layout>
-            <Layout.Section>
-              <OfferList
-                offers={offers}
-                filters={filters}
-                onFilter={setFilters}
-              />
-            </Layout.Section>
-          </Layout>
-        </Page>
-      </Loader>
-    </>
+    <Loader
+      isLoading={!offersLoaded}
+      isError={!!offersError && !offers}
+      isEmpty={!offers?.length && !hasFilters}
+      loadingComponent={LoadingComponent}
+      errorComponent={ErrorComponent}
+      emptyStateComponent={EmptyComponent}
+    >
+      <Page title="Offers" fullWidth>
+        <PageTitleBar />
+        <Layout>
+          <Layout.Section>
+            <OfferList
+              offers={offers}
+              filters={filters}
+              onFilter={setFilters}
+            />
+          </Layout.Section>
+        </Layout>
+      </Page>
+    </Loader>
   );
 };
 

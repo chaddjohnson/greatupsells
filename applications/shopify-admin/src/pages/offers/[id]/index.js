@@ -237,7 +237,6 @@ const OfferEditPage = () => {
 
   return (
     <>
-      <PageTitleBar />
       <Loader
         isLoading={!loaded}
         isError={error}
@@ -253,6 +252,7 @@ const OfferEditPage = () => {
           }
           secondaryActions={secondaryActions}
         >
+          <PageTitleBar />
           {loaded && !error && (
             <OfferForm
               initialValues={{

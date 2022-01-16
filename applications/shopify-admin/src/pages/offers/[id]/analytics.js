@@ -27,11 +27,11 @@ const PageTitleBar = memo(({ offer }) => (
     title="Analytics"
     breadcrumbs={[
       { content: 'Offers', url: '/offers/' },
-      offer && {
+      {
         content: offer?.name,
         url: `/offers/${offer?._id}/`
       }
-    ].filter(Boolean)}
+    ]}
   />
 ));
 
@@ -104,7 +104,7 @@ const OfferAnalyticsPage = () => {
     formatCurrency,
     formatPercentage
   } = useNumberFormatter({ locale, countryCode, currency });
-  const { offer, offerLoaded } = useOffer(offerId);
+  const { offer } = useOffer(offerId);
   const {
     offerAcceptances,
     offerConversions,
@@ -168,145 +168,141 @@ const OfferAnalyticsPage = () => {
   }, 60);
 
   return (
-    <>
-      <PageTitleBar offer={offer} />
-      <Loader
-        isLoading={!offerLoaded || !offerAnalyticsLoaded}
-        isError={!!offerAnalyticsError}
-        loadingComponent={loadingComponent}
-        errorComponent={errorComponent}
-      >
-        <Page title="Analytics for offer" fullWidth>
-          <Stack vertical>
-            <Stack distribution="equalSpacing">
-              <DisplayText size="medium">
-                <TextStyle variation="subdued">
-                  Here&rsquo;s a summary of how your offer is performing
-                </TextStyle>
-              </DisplayText>
-              {/* <DateRangePicker
+    <Loader
+      isLoading={!offerAnalyticsLoaded}
+      isError={!!offerAnalyticsError}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+    >
+      <Page title="Analytics for offer" fullWidth>
+        <PageTitleBar offer={offer} />
+        <Stack vertical>
+          <Stack distribution="equalSpacing">
+            <DisplayText size="medium">
+              <TextStyle variation="subdued">
+                Here&rsquo;s a summary of how your offer is performing
+              </TextStyle>
+            </DisplayText>
+            {/* <DateRangePicker
               active={datePickerActive}
               onActivate={() => setDatePickerActive(!datePickerActive)}
               onClose={() => setDatePickerActive(false)}
             /> */}
-            </Stack>
-            <Layout>
-              <Layout.Section fullWidth>
-                <Card sectioned>
-                  <Stack distribution="fillEvenly" wrap>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatNumber(offer?.impressionCount)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">Impressions</TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatNumber(offer?.acceptanceCount)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">Acceptances</TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatCurrency(offer?.revenueIncrease)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">
-                          Revenue increase
-                        </TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatPercentage(offer?.conversionRate, 1)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">
-                          Conversion rate
-                        </TextStyle>
-                      </TextStyle>
-                    </Stack>
-                  </Stack>
-                </Card>
-              </Layout.Section>
-              <Layout.Section oneHalf>
-                <Card sectioned>
-                  <LineChart
-                    title="Impressions growth"
-                    subtitle="Impressions over last 90 days"
-                    tooltipText="impressions"
-                    rangeDescription="January to December"
-                    data={offerImpressionsChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Conversions growth"
-                    subtitle="Conversions over last 90 days"
-                    tooltipText="conversions"
-                    rangeDescription="January to December"
-                    data={offerConversionsChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Conversion rate growth"
-                    subtitle="Conversion rate over last 90 days"
-                    tooltipText="conversion rate"
-                    rangeDescription="January to December"
-                    data={offerConversionRatesChartData}
-                    formatters={{
-                      number: formatPercentage,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-              </Layout.Section>
-              <Layout.Section oneHalf>
-                <Card sectioned>
-                  <LineChart
-                    title="Acceptances growth"
-                    subtitle="Acceptances over last 90 days"
-                    tooltipText="acceptances"
-                    rangeDescription="January to December"
-                    data={offerAcceptancesChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Revenue increase growth"
-                    subtitle="Revenue increase from offers over last 90 days"
-                    tooltipText="revenue increase from offers"
-                    rangeDescription="January to December"
-                    data={offerRevenueIncreasesChartData}
-                    formatters={{
-                      number: formatCurrency,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-              </Layout.Section>
-            </Layout>
           </Stack>
-        </Page>
-      </Loader>
-    </>
+          <Layout>
+            <Layout.Section fullWidth>
+              <Card sectioned>
+                <Stack distribution="fillEvenly" wrap>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(offer?.impressionCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Impressions</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(offer?.acceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Acceptances</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(offer?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(offer?.conversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
+                  title="Impressions growth"
+                  subtitle="Impressions over last 90 days"
+                  tooltipText="impressions"
+                  rangeDescription="January to December"
+                  data={offerImpressionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversions growth"
+                  subtitle="Conversions over last 90 days"
+                  tooltipText="conversions"
+                  rangeDescription="January to December"
+                  data={offerConversionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversion rate growth"
+                  subtitle="Conversion rate over last 90 days"
+                  tooltipText="conversion rate"
+                  rangeDescription="January to December"
+                  data={offerConversionRatesChartData}
+                  formatters={{
+                    number: formatPercentage,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
+                  title="Acceptances growth"
+                  subtitle="Acceptances over last 90 days"
+                  tooltipText="acceptances"
+                  rangeDescription="January to December"
+                  data={offerAcceptancesChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Revenue increase growth"
+                  subtitle="Revenue increase from offers over last 90 days"
+                  tooltipText="revenue increase from offers"
+                  rangeDescription="January to December"
+                  data={offerRevenueIncreasesChartData}
+                  formatters={{
+                    number: formatCurrency,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+            </Layout.Section>
+          </Layout>
+        </Stack>
+      </Page>
+    </Loader>
   );
 };
 

@@ -126,101 +126,97 @@ const DashboardPage = () => {
   }, 60);
 
   return (
-    <>
-      <PageTitleBar />
-      <Loader
-        isLoading={!loaded}
-        isError={error}
-        loadingComponent={loadingComponent}
-        errorComponent={errorComponent}
-      >
-        <Page title="Overview dashboard">
-          <Layout>
-            <Layout.Section>
-              <Card sectioned>
-                <Stack distribution="fillEvenly" wrap>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatNumber(shop?.offerAcceptanceCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Accepted offers</TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatCurrency(shop?.revenueIncrease)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">
-                        Revenue increase
-                      </TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatPercentage(shop?.offerConversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
-                    </TextStyle>
-                  </Stack>
+    <Loader
+      isLoading={!loaded}
+      isError={error}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+    >
+      <Page title="Overview dashboard">
+        <PageTitleBar />
+        <Layout>
+          <Layout.Section>
+            <Card sectioned>
+              <Stack distribution="fillEvenly" wrap>
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatNumber(shop?.offerAcceptanceCount)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Accepted offers</TextStyle>
+                  </TextStyle>
                 </Stack>
-              </Card>
-            </Layout.Section>
-            <Layout.Section>
-              <Card sectioned>
-                <LineChart
-                  title={
-                    <Stack distribution="equalSpacing">
-                      <Heading>Accepted offers growth</Heading>
-                      <Button plain url="/analytics/">
-                        View all analytics
-                      </Button>
-                    </Stack>
-                  }
-                  subtitle="Offers over last 90 days"
-                  rangeDescription="January to December"
-                  tooltipText="accepted offers"
-                  data={shopAcceptancesChartData}
-                  emptyMessage="No acceptance data available."
-                  formatters={{
-                    number: formatNumber,
-                    percentage: formatPercentage
-                  }}
-                />
-              </Card>
-            </Layout.Section>
-            <Layout.Section>
-              <CalloutCard
-                title="Add upsell, cross-sell, and popup offers to your store"
-                primaryAction={{
-                  content: 'Create offer',
-                  url: '/offers/new/'
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatCurrency(shop?.revenueIncrease)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Revenue increase</TextStyle>
+                  </TextStyle>
+                </Stack>
+                <Stack spacing="tight" alignment="center" vertical>
+                  <DisplayText size="extraLarge">
+                    {formatPercentage(shop?.offerConversionRate, 1)}
+                  </DisplayText>
+                  <TextStyle variation="strong">
+                    <TextStyle variation="subdued">Conversion rate</TextStyle>
+                  </TextStyle>
+                </Stack>
+              </Stack>
+            </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <Card sectioned>
+              <LineChart
+                title={
+                  <Stack distribution="equalSpacing">
+                    <Heading>Accepted offers growth</Heading>
+                    <Button plain url="/analytics/">
+                      View all analytics
+                    </Button>
+                  </Stack>
+                }
+                subtitle="Offers over last 90 days"
+                rangeDescription="January to December"
+                tooltipText="accepted offers"
+                data={shopAcceptancesChartData}
+                emptyMessage="No acceptance data available."
+                formatters={{
+                  number: formatNumber,
+                  percentage: formatPercentage
                 }}
-                secondaryAction={{
-                  content: 'Manage your offers',
-                  url: '/offers/'
-                }}
-              >
-                Upselling and cross-selling are two of the most effective ways
-                to increase sales in your store.
-              </CalloutCard>
-              <MediaCard
-                title="Getting Started"
-                primaryAction={{
-                  content: 'Visit the tutorials',
-                  url: 'https://help.domain.com/tutorials'
-                }}
-                description="Learn how upselling and cross-selling can boost your sales and revenue."
-              >
-                <TutorialsImage alt="Tutorials" src={`/images/tutorials.svg`} />
-              </MediaCard>
-            </Layout.Section>
-          </Layout>
-        </Page>
-      </Loader>
-    </>
+              />
+            </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <CalloutCard
+              title="Add upsell, cross-sell, and popup offers to your store"
+              primaryAction={{
+                content: 'Create offer',
+                url: '/offers/new/'
+              }}
+              secondaryAction={{
+                content: 'Manage your offers',
+                url: '/offers/'
+              }}
+            >
+              Upselling and cross-selling are two of the most effective ways to
+              increase sales in your store.
+            </CalloutCard>
+            <MediaCard
+              title="Getting Started"
+              primaryAction={{
+                content: 'Visit the tutorials',
+                url: 'https://help.domain.com/tutorials'
+              }}
+              description="Learn how upselling and cross-selling can boost your sales and revenue."
+            >
+              <TutorialsImage alt="Tutorials" src={`/images/tutorials.svg`} />
+            </MediaCard>
+          </Layout.Section>
+        </Layout>
+      </Page>
+    </Loader>
   );
 };
 

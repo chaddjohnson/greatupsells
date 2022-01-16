@@ -161,23 +161,22 @@ const AnalyticsPage = () => {
   }, 60);
 
   return (
-    <>
-      <PageTitleBar />
-      <Loader
-        isLoading={!loaded}
-        isError={error}
-        loadingComponent={loadingComponent}
-        errorComponent={errorComponent}
-      >
-        <Page title="Analytics for all offers" fullWidth>
-          <Stack vertical>
-            <Stack distribution="equalSpacing">
-              <DisplayText size="medium">
-                <TextStyle variation="subdued">
-                  Here&rsquo;s a summary of how your offers are performing
-                </TextStyle>
-              </DisplayText>
-              {/* <Popover
+    <Loader
+      isLoading={!loaded}
+      isError={error}
+      loadingComponent={loadingComponent}
+      errorComponent={errorComponent}
+    >
+      <Page title="Analytics for all offers" fullWidth>
+        <PageTitleBar />
+        <Stack vertical>
+          <Stack distribution="equalSpacing">
+            <DisplayText size="medium">
+              <TextStyle variation="subdued">
+                Here&rsquo;s a summary of how your offers are performing
+              </TextStyle>
+            </DisplayText>
+            {/* <Popover
               active={datePickerActive}
               activator={
                 <Button
@@ -193,124 +192,121 @@ const AnalyticsPage = () => {
             >
               Date picker here
             </Popover> */}
-            </Stack>
-            <Layout>
-              <Layout.Section fullWidth>
-                <Card sectioned>
-                  <Stack distribution="fillEvenly" wrap>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatNumber(shop?.offerImpressionCount)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">Impressions</TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatNumber(shop?.offerAcceptanceCount)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">Acceptances</TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatCurrency(shop?.revenueIncrease)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">
-                          Revenue increase
-                        </TextStyle>
-                      </TextStyle>
-                    </Stack>
-                    <Stack spacing="tight" alignment="center" vertical>
-                      <DisplayText size="extraLarge">
-                        {formatPercentage(shop?.offerConversionRate, 1)}
-                      </DisplayText>
-                      <TextStyle variation="strong">
-                        <TextStyle variation="subdued">
-                          Conversion rate
-                        </TextStyle>
-                      </TextStyle>
-                    </Stack>
-                  </Stack>
-                </Card>
-              </Layout.Section>
-              <Layout.Section oneHalf>
-                <Card sectioned>
-                  <LineChart
-                    title="Offer impressions growth"
-                    subtitle="Offer impressions over last 90 days"
-                    tooltipText="offer impressions"
-                    rangeDescription="January to December"
-                    data={shopImpressionsChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Conversions growth"
-                    subtitle="Conversions over last 90 days"
-                    tooltipText="conversions"
-                    rangeDescription="January to December"
-                    data={shopConversionsChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Conversion rate growth"
-                    subtitle="Conversion rate over last 90 days"
-                    tooltipText="conversion rate"
-                    rangeDescription="January to December"
-                    data={shopConversionRatesChartData}
-                    formatters={{
-                      number: formatPercentage,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-              </Layout.Section>
-              <Layout.Section oneHalf>
-                <Card sectioned>
-                  <LineChart
-                    title="Accepted offers growth"
-                    subtitle="Accepted offers over last 90 days"
-                    tooltipText="accepted offers"
-                    rangeDescription="January to December"
-                    data={shopAcceptancesChartData}
-                    formatters={{
-                      number: formatNumber,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-                <Card sectioned>
-                  <LineChart
-                    title="Revenue increase growth"
-                    subtitle="Revenue increase from offers over last 90 days"
-                    tooltipText="revenue increase from offers"
-                    rangeDescription="January to December"
-                    data={shopRevenueIncreasesChartData}
-                    formatters={{
-                      number: formatCurrency,
-                      percentage: formatPercentage
-                    }}
-                  />
-                </Card>
-              </Layout.Section>
-            </Layout>
           </Stack>
-        </Page>
-      </Loader>
-    </>
+          <Layout>
+            <Layout.Section fullWidth>
+              <Card sectioned>
+                <Stack distribution="fillEvenly" wrap>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(shop?.offerImpressionCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Impressions</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(shop?.offerAcceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Acceptances</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(shop?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(shop?.offerConversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
+                  title="Offer impressions growth"
+                  subtitle="Offer impressions over last 90 days"
+                  tooltipText="offer impressions"
+                  rangeDescription="January to December"
+                  data={shopImpressionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversions growth"
+                  subtitle="Conversions over last 90 days"
+                  tooltipText="conversions"
+                  rangeDescription="January to December"
+                  data={shopConversionsChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Conversion rate growth"
+                  subtitle="Conversion rate over last 90 days"
+                  tooltipText="conversion rate"
+                  rangeDescription="January to December"
+                  data={shopConversionRatesChartData}
+                  formatters={{
+                    number: formatPercentage,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+            </Layout.Section>
+            <Layout.Section oneHalf>
+              <Card sectioned>
+                <LineChart
+                  title="Accepted offers growth"
+                  subtitle="Accepted offers over last 90 days"
+                  tooltipText="accepted offers"
+                  rangeDescription="January to December"
+                  data={shopAcceptancesChartData}
+                  formatters={{
+                    number: formatNumber,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+              <Card sectioned>
+                <LineChart
+                  title="Revenue increase growth"
+                  subtitle="Revenue increase from offers over last 90 days"
+                  tooltipText="revenue increase from offers"
+                  rangeDescription="January to December"
+                  data={shopRevenueIncreasesChartData}
+                  formatters={{
+                    number: formatCurrency,
+                    percentage: formatPercentage
+                  }}
+                />
+              </Card>
+            </Layout.Section>
+          </Layout>
+        </Stack>
+      </Page>
+    </Loader>
   );
 };
 
