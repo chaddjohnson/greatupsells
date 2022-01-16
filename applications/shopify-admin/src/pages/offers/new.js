@@ -179,36 +179,38 @@ const NewOfferPage = () => {
   };
 
   return (
-    <Loader
-      isLoading={!loaded}
-      isError={error}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-    >
-      <Page
-        title={
-          <Stack alignment="center">
-            <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
-            <span>Create offer</span>
-          </Stack>
-        }
+    <>
+      <PageTitleBar />
+      <Loader
+        isLoading={!loaded}
+        isError={error}
+        loadingComponent={loadingComponent}
+        errorComponent={errorComponent}
       >
-        <PageTitleBar />
-        {loaded && !error && (
-          <OfferForm
-            initialValues={{
-              offer: initialOffer,
-              popupTheme: offerPopupTheme,
-              offerPopupThemes: [offerPopupTheme]
-            }}
-            shop={shop}
-            popupThemes={popupThemes}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-          />
-        )}
-      </Page>
-    </Loader>
+        <Page
+          title={
+            <Stack alignment="center">
+              <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
+              <span>Create offer</span>
+            </Stack>
+          }
+        >
+          {loaded && !error && (
+            <OfferForm
+              initialValues={{
+                offer: initialOffer,
+                popupTheme: offerPopupTheme,
+                offerPopupThemes: [offerPopupTheme]
+              }}
+              shop={shop}
+              popupThemes={popupThemes}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+            />
+          )}
+        </Page>
+      </Loader>
+    </>
   );
 };
 
