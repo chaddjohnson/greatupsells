@@ -19,6 +19,7 @@ const LoadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage title="Offers" fullWidth>
+      <PageTitleBar />
       <Layout>
         <Layout.Section>
           <Card sectioned>
@@ -48,6 +49,7 @@ const OffersPage = () => {
 
   const ErrorComponent = memo(() => (
     <Page title="Offers" fullWidth>
+      <PageTitleBar />
       <Banner
         title="Unable to load offers"
         status="critical"

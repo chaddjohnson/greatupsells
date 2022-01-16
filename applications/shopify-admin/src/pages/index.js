@@ -41,6 +41,7 @@ const loadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage title="Overview dashboard">
+      <PageTitleBar />
       <Layout>
         <Layout.Section>
           <Card sectioned>
@@ -101,6 +102,7 @@ const DashboardPage = () => {
 
   const errorComponent = memo(() => (
     <Page title="Overview dashboard">
+      <PageTitleBar />
       <Banner
         title="Unable to load dashboad"
         status="critical"

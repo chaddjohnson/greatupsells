@@ -27,11 +27,11 @@ const PageTitleBar = memo(({ offer }) => (
     title="Analytics"
     breadcrumbs={[
       { content: 'Offers', url: '/offers/' },
-      {
+      offer && {
         content: offer?.name,
         url: `/offers/${offer?._id}/`
       }
-    ]}
+    ].filter(Boolean)}
   />
 ));
 
@@ -39,6 +39,7 @@ const loadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage title="Analytics for offer" fullWidth>
+      <PageTitleBar />
       <Layout>
         <Layout.Section fullWidth>
           <Card sectioned>
@@ -71,6 +72,7 @@ const loadingComponent = () => (
 
 const errorComponent = memo(() => (
   <Page fullWidth>
+    <PageTitleBar />
     <Banner
       title="Unable to load analytics"
       status="critical"

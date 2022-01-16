@@ -26,6 +26,7 @@ const loadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage title="Analytics for offer" fullWidth>
+      <PageTitleBar />
       <Stack vertical>
         <DisplayText size="medium">
           <TextStyle variation="subdued">
@@ -65,6 +66,7 @@ const loadingComponent = () => (
 
 const errorComponent = memo(() => (
   <Page fullWidth>
+    <PageTitleBar />
     <Banner
       title="Unable to load analytics"
       status="critical"

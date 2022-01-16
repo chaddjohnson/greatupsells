@@ -36,6 +36,7 @@ const loadingComponent = () => (
   <>
     <Loading />
     <SkeletonPage secondaryActions={3}>
+      <PageTitleBar />
       <Layout>
         <Layout.Section>
           <Card sectioned>
@@ -77,6 +78,7 @@ const loadingComponent = () => (
 
 const errorComponent = () => (
   <Page fullWidth>
+    <PageTitleBar />
     <Banner
       title="Unable to load new offer page"
       status="critical"
