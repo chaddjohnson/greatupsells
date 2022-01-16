@@ -53,16 +53,18 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
     authtoken: tokenhere
     region: us
     tunnels:
-      upselling-shopify-admin:
+      greatupsells-shopify-admin:
          addr: 4001
          proto: http
-         subdomain: chaddjohnson-shopify-admin
-      upselling-webhooks-service:
+         subdomain: yourname-shopify-admin
+      greatupsells-storefront-api:
+         addr: 4006
+         proto: http
+         subdomain: yourname-storefront-api
+      greatupsells-webhooks-service:
          addr: 4008
          proto: http
-         subdomain: chaddjohnson-webhooks
-
-Note that the tunnel names (e.g., `upselling-shopify-admin-api`) must remain unchanged.
+         subdomain: yourname-webhooks
 
 Please follow instructions [here](https://ngrok.com/download) to install the `ngrok` binary and authorize your machine. Once done, ngrok will start automatically with `yarn start`.
 
