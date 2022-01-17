@@ -115,13 +115,11 @@ const Main = styled.main`
   padding-bottom: 120px;
 `;
 
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
 
-  const shop = getShop();
-  const host = getHost();
   const forceRedirect = true;
   const appBridgeConfig = { apiKey, host, forceRedirect };
 
@@ -160,6 +158,13 @@ const App = ({ Component, pageProps }) => {
       </AppBridgeProvider>
     </AppProvider>
   );
+};
+
+App.getInitialProps = async ({ ctx }) => {
+  return {
+    host: ctx.query.host,
+    shop: ctx.query.shop
+  };
 };
 
 export default App;
