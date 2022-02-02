@@ -142,6 +142,15 @@
     group: root
     mode: 0744
 
+# Source: https://github.com/spyoungtech/certbot-route53-hook
+- name: Create Certbot hook script
+  copy:
+    src: certbot_hook.py
+    dest: /root/certbot_hook.py
+    owner: root
+    group: root
+    mode: 0744
+
 - name: Inject domain into certificate update script
   replace:
     path: /root/update-certificates.sh
@@ -154,7 +163,7 @@
     minute: '0'
     hour: '0,12'
     user: root
-    job: 'certbot renew --renew-hook "/root/update-certificates.sh && reboot" >> /root/certbot-cron.log 2>&1'
+    job: 'certbot renew --manual-auth-hook=/root/certbot_hook.py --manual-cleanup-hook=/root/certbot_hook.py --renew-hook "/root/update-certificates.sh && reboot" >> /root/certbot-cron.log 2>&1'
 
 - name: Generate certificate files
   command: /root/update-certificates.sh
