@@ -6,9 +6,13 @@ const models = require('../models');
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  console.log('Connecting to MongoDB');
   await mongodbClient.connect();
+  console.log('Connected to MongoDB');
 
+  console.log('Before warming up');
   if (event.source === 'serverless-plugin-warmup') {
+    console.log('Warming up');
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
