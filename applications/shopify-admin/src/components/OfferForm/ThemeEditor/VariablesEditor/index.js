@@ -26,7 +26,7 @@ import {
 import styled from 'styled-components';
 import ContentEditor from './ContentEditor';
 import ColorEditor from './ColorEditor';
-import FontEditor from './FontEditor';
+// import FontEditor from './FontEditor';
 import OptionsEditor from './OptionsEditor';
 import MetadataEditor from './MetadataEditor';
 
@@ -43,12 +43,12 @@ const sections = [
     variableTypes: ['COLOR'],
     icon: ColorsMajor
   },
-  {
-    id: 'typography',
-    name: 'Typography',
-    variableTypes: ['FONT', 'FONTSIZE'],
-    icon: TypeMajor
-  },
+  // {
+  //   id: 'typography',
+  //   name: 'Typography',
+  //   variableTypes: ['FONT', 'FONTSIZE'],
+  //   icon: TypeMajor
+  // },
   {
     id: 'options',
     name: 'Options',
@@ -210,13 +210,13 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
                     onChange={handleVariableChange}
                   />
                 )}
-              {sectionVariables?.length > 0 &&
+              {/* {sectionVariables?.length > 0 &&
                 selectedSection.id === 'typography' && (
                   <FontEditor
                     variables={sectionVariables}
                     onChange={handleVariableChange}
                   />
-                )}
+                )} */}
               {sectionVariables?.length > 0 &&
                 selectedSection.id === 'options' && (
                   <OptionsEditor
