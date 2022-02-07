@@ -42,7 +42,6 @@ const useDataBinding = ({
   // Define Knockout bindings for use within the popup.
   const ViewModel = useCallback(
     function () {
-      this.disableOutOfStockVariants = () => offer.disableOutOfStockVariants;
       this.offeredProducts = () => offeredProducts;
       this.addedQuantities = () => addedQuantities;
 
@@ -79,13 +78,9 @@ const useDataBinding = ({
           );
           const firstVariant = variants[0];
 
-          if (offer.disableOutOfStockVariants) {
-            return knockout.observable(
-              firstVariantHavingInventory?.id || firstVariant?.id
-            );
-          } else {
-            return knockout.observable(firstVariant?.id);
-          }
+          return knockout.observable(
+            firstVariantHavingInventory?.id || firstVariant?.id
+          );
         })
       );
 
@@ -150,7 +145,7 @@ const useDataBinding = ({
             addedQuantityBelowMax &&
             selectedQuantityAtOrBelowRemaining &&
             selectedQuantityValid &&
-            (!offer.disableOutOfStockVariants || selectedVariantHasInventory)
+            selectedVariantHasInventory
           );
         }, this);
 
@@ -161,10 +156,7 @@ const useDataBinding = ({
         const selectedVariantHasInventory = this.selectedVariants()[index]
           ?.hasInventory;
 
-        return (
-          !itemReplaced &&
-          (!offer.disableOutOfStockVariants || selectedVariantHasInventory)
-        );
+        return !itemReplaced && selectedVariantHasInventory;
       };
 
       this.addingProductBundleEnabled = knockout.computed(

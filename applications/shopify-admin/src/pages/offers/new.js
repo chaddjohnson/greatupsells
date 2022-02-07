@@ -108,7 +108,6 @@ const initialOffer = {
   startAt: new Date().toISOString(),
   enableVariantSelection: true,
   enableQuantitySelection: true,
-  disableOutOfStockVariants: true,
   enableEscClose: false,
   enableMaskClose: false,
   animation: 'effect-slide-in-scale',

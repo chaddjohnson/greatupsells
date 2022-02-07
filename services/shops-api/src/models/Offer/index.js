@@ -162,7 +162,6 @@ const schema = new mongoose.Schema(
     onPageRequiredSeconds: { type: Number, required: false, min: 0 },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
-    disableOutOfStockVariants: { type: Boolean, required: true, default: true },
     enableEscClose: { type: Boolean, required: false, default: false },
     enableMaskClose: { type: Boolean, required: false, default: false },
     enabled: { type: Boolean, required: true, default: true }

@@ -218,9 +218,6 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [showEndDate, startAt.value]
   );
-  const disableOutOfStockVariants = useField(
-    initialOffer.disableOutOfStockVariants
-  );
   const delaySeconds = useField({
     value: initialOffer.delaySeconds?.toString(),
     validates: [
@@ -282,7 +279,6 @@ const useFields = (initialOffer, showEndDate) => {
     geotargetingCountries,
     startAt,
     endAt,
-    disableOutOfStockVariants,
     delaySeconds,
     onPageRequiredSeconds,
     enableEscClose,

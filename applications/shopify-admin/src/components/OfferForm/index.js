@@ -120,7 +120,6 @@ const OfferForm = ({
     viewAllowanceDays,
     startAt,
     endAt,
-    disableOutOfStockVariants,
     delaySeconds,
     onPageRequiredSeconds,
     enableEscClose,
@@ -157,7 +156,6 @@ const OfferForm = ({
       geotargetingCountries,
       startAt,
       endAt,
-      disableOutOfStockVariants,
       delaySeconds,
       onPageRequiredSeconds,
       enableEscClose,
@@ -476,7 +474,6 @@ const OfferForm = ({
             offer={offer}
             enableVariantSelection={enableVariantSelection}
             enableQuantitySelection={enableQuantitySelection}
-            disableOutOfStockVariants={disableOutOfStockVariants}
             delaySeconds={delaySeconds}
             onPageRequiredSeconds={onPageRequiredSeconds}
             enableEscClose={enableEscClose}

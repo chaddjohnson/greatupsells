@@ -18,7 +18,6 @@
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableProductLinks": true,
-    "disableOutOfStockVariants": true,
     "delaySeconds": 0,
     "enableEscClose": true,
     "enableMaskClose": true,

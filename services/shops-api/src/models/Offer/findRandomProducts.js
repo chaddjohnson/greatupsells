@@ -25,7 +25,6 @@ const findRandomProducts = async (offer) => {
   const offeredShopifyCollectionIds = offeredCollections.map(
     ({ shopifyCollectionId }) => shopifyCollectionId
   );
-  const { disableOutOfStockVariants } = offer;
   const andCriteria = [];
 
   // Filter for offered products.
@@ -36,26 +35,24 @@ const findRandomProducts = async (offer) => {
     ]
   });
 
-  if (disableOutOfStockVariants) {
-    // Filter for only products that have one or more variants in stock.
-    andCriteria.push({
-      $or: [
-        {
-          'shopifyProductData.variants.inventory_management': {
-            $ne: 'shopify'
-          }
-        },
-        {
-          'shopifyProductData.variants.inventory_quantity': {
-            $gt: 0
-          }
-        },
-        {
-          'shopifyProductData.variants.inventory_policy': 'continue'
+  // Filter for only products that have one or more variants in stock.
+  andCriteria.push({
+    $or: [
+      {
+        'shopifyProductData.variants.inventory_management': {
+          $ne: 'shopify'
         }
-      ]
-    });
-  }
+      },
+      {
+        'shopifyProductData.variants.inventory_quantity': {
+          $gt: 0
+        }
+      },
+      {
+        'shopifyProductData.variants.inventory_policy': 'continue'
+      }
+    ]
+  });
 
   const criteria = {
     shop: shop._id,

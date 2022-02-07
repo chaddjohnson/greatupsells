@@ -35,7 +35,6 @@ const OfferOptionsEditor = ({
   offer,
   enableVariantSelection,
   enableQuantitySelection,
-  disableOutOfStockVariants,
   delaySeconds,
   onPageRequiredSeconds,
   enableEscClose,
@@ -97,11 +96,6 @@ const OfferOptionsEditor = ({
           label="Allow customers to change quantities"
           helpText="Customers may change quantities for products."
           {...asChoiceField(enableQuantitySelection)}
-        />
-        <Checkbox
-          label="Disable out of stock variants"
-          helpText="Variants with no inventory will be disabled, and products with no inventory variants will not be offered."
-          {...asChoiceField(disableOutOfStockVariants)}
         />
         {offer.strategy !== 'THANK_YOU_PAGE' &&
           ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
@@ -240,7 +234,6 @@ OfferOptionsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
   enableVariantSelection: PropTypes.object.isRequired,
   enableQuantitySelection: PropTypes.object.isRequired,
-  disableOutOfStockVariants: PropTypes.object.isRequired,
   delaySeconds: PropTypes.object.isRequired,
   onPageRequiredSeconds: PropTypes.object.isRequired,
   enableEscClose: PropTypes.object.isRequired,
