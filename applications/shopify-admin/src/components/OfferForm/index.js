@@ -237,7 +237,7 @@ const OfferForm = ({
 
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
-  const isInline = ['POST_CHECKOUT', 'THANK_YOU_PAGE'].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
 
   const handleStrategyChange = (value) => {
     const selectedThemeUsesSelectedStrategy =
@@ -276,7 +276,7 @@ const OfferForm = ({
       setTheme(firstStrategyOfferTheme);
     }
 
-    if (!shop.onlineStore2Theme && value === 'POST_CHECKOUT') {
+    if (!shop.onlineStore2Theme && value === 'POST_PURCHASE') {
       setThemeIncompatible(true);
     }
 

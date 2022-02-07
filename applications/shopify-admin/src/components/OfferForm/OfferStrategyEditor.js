@@ -22,10 +22,10 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
               value: 'UPSELL'
             },
             {
-              label: 'Post-checkout cross-sell',
+              label: 'Post-purchase cross-sell',
               helpText:
                 'Encourage customers to purchase a related or complementary product after completing checkout.',
-              value: 'POST_CHECKOUT',
+              value: 'POST_PURCHASE',
               renderChildren: (isSelected) =>
                 isSelected &&
                 !shop.onlineStore2Theme && (
@@ -33,7 +33,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                     title="Incompatible with your theme"
                     status="critical"
                   >
-                    Your current theme does not support post-checkout features.
+                    Your current theme does not support post-purchase features.
                     A{' '}
                     <Link
                       url="https://themes.shopify.com/collections/os2-themes"
