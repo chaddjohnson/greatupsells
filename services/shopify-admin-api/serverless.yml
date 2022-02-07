@@ -97,12 +97,12 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-  createPopupTheme:
+  createTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createPopupTheme.handler
+    handler: src/routes/createTheme.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: post
           cors: true
           authorizer:
@@ -175,12 +175,12 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-  findOfferPopupThemes:
+  findOfferThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferPopupThemes.handler
+    handler: src/routes/findOfferThemes.handler
     events:
       - http:
-          path: /offers/{offerId}/popup-themes
+          path: /offers/{offerId}/themes
           method: get
           cors: true
           authorizer:
@@ -240,12 +240,12 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-  findPopupThemes:
+  findThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findPopupThemes.handler
+    handler: src/routes/findThemes.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: get
           cors: true
           authorizer:
@@ -331,12 +331,12 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-  updatePopupTheme:
+  updateTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updatePopupTheme.handler
+    handler: src/routes/updateTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}
+          path: /themes/{themeId}
           method: put
           cors: true
           authorizer:

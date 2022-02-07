@@ -20,8 +20,9 @@ const updateActiveStatuses = require('./updateActiveStatuses');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
-const addDraftOrderLineItem = require('./addDraftOrderLineItem');
+const addDraftOrderLineItems = require('./addDraftOrderLineItems');
 const updateShopifyDraftOrderVariantQuantity = require('./updateShopifyDraftOrderVariantQuantity');
+const checkThemeCompatibility = require('./checkThemeCompatibility');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -79,7 +80,8 @@ const schema = new mongoose.Schema(
     offerAcceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionRate: { type: Number, required: true, default: 0.0, min: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 }
+    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
+    onlineStore2Theme: { type: Boolean, required: true, default: false }
   },
   schemaOptions
 );
@@ -209,15 +211,8 @@ schema.methods.createDraftOrder = function (data) {
   return createDraftOrder(this, data);
 };
 
-schema.methods.addDraftOrderLineItem = function (
-  draftOrderId,
-  { offerId, shopifyVariantId, quantity }
-) {
-  return addDraftOrderLineItem(this, draftOrderId, {
-    offerId,
-    shopifyVariantId,
-    quantity
-  });
+schema.methods.addDraftOrderLineItems = function (draftOrderId, items) {
+  return addDraftOrderLineItems(this, draftOrderId, items);
 };
 
 schema.methods.updateShopifyDraftOrderVariantQuantity = function (
@@ -231,6 +226,10 @@ schema.methods.updateShopifyDraftOrderVariantQuantity = function (
     shopifyVariantId,
     quantity
   );
+};
+
+schema.methods.checkThemeCompatibility = function () {
+  return checkThemeCompatibility(this);
 };
 
 schema.methods.toString = function () {

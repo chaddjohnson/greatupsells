@@ -61,19 +61,11 @@ const useOfferTracking = () => {
     offerHitId = offerHit._id;
   };
 
-  const trackOfferAcceptance = async (
-    offerId,
-    shopifyDraftOrderId,
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
+  const trackOfferAcceptance = async (offerId, shopifyDraftOrderId, items) => {
     const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
+      items
     });
 
     return offerHit;

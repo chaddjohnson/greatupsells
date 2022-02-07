@@ -77,9 +77,11 @@ const ThemeEditor = ({
               </ButtonGroup>
             </DeviceToggle>
             {previewElement}
-            <Button fullWidth onClick={onPreview}>
-              Preview full size
-            </Button>
+            {strategy !== 'THANK_YOU_PAGE' && (
+              <Button fullWidth onClick={onPreview}>
+                Preview full size
+              </Button>
+            )}
           </Stack>
         </Card.Section>
       </Card>

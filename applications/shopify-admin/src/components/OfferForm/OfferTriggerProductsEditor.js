@@ -111,12 +111,15 @@ const OfferTriggerProductsEditor = ({
     <>
       <Card
         title={`Cart trigger products${
-          offer.strategy === 'CROSS_SELL' ? ' and collections' : ''
+          offer.strategy === 'CROSS_SELL' || offer.strategy === 'THANK_YOU_PAGE'
+            ? ' and collections'
+            : ''
         }`}
       >
         <Card.Section>
           <FormLayout>
-            {offer.strategy === 'CROSS_SELL' && (
+            {(offer.strategy === 'CROSS_SELL' ||
+              offer.strategy === 'THANK_YOU_PAGE') && (
               <ChoiceList
                 title="Applies to"
                 titleHidden

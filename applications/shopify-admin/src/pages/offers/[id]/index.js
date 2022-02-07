@@ -22,9 +22,9 @@ import { Loader } from '@greatupsells/react-components';
 import {
   useShop,
   useOffer,
-  usePopupTheme,
-  usePopupThemes,
-  useOfferPopupThemes,
+  useTheme,
+  useThemes,
+  useOfferThemes,
   useToast
 } from '../../../hooks';
 
@@ -117,58 +117,47 @@ const OfferEditPage = () => {
     enableOffer,
     disableOffer
   } = useOffer(offerId);
-  const { savePopupTheme } = usePopupTheme();
-  const { popupThemes, popupThemesLoaded, popupThemesError } = usePopupThemes();
-  const {
-    offerPopupThemes,
-    offerPopupThemesLoaded,
-    offerPopupThemesError
-  } = useOfferPopupThemes(offerId);
-
-  // Get a reference to the offer's popup theme.
-  const offerPopupTheme = useMemo(
-    () => offerPopupThemes?.find(({ _id }) => _id === offer?.popupTheme),
-    [offerPopupThemes, offer]
+  const { saveTheme } = useTheme();
+  const { themes, themesLoaded, themesError } = useThemes();
+  const { offerThemes, offerThemesLoaded, offerThemesError } = useOfferThemes(
+    offerId
   );
 
-  const loaded =
-    shopLoaded && offerLoaded && popupThemesLoaded && offerPopupThemesLoaded;
-
-  const error = !!(
-    shopError ||
-    offerError ||
-    popupThemesError ||
-    offerPopupThemesError
+  // Get a reference to the offer's theme.
+  const offerTheme = useMemo(
+    () => offerThemes?.find(({ _id }) => _id === offer?.theme),
+    [offerThemes, offer]
   );
+
+  const loaded = shopLoaded && offerLoaded && themesLoaded && offerThemesLoaded;
+
+  const error = !!(shopError || offerError || themesError || offerThemesError);
 
   const handleSubmit = async (data) => {
     try {
       // Save the offer.
       const updatedOffer = await saveOffer(data.offer);
 
-      // Associate the offer popup themes with the offer.
-      data.popupTheme.offer = updatedOffer._id;
-      data.offerPopupThemes = data.offerPopupThemes.map((current) => ({
+      // Associate the offer themes with the offer.
+      data.theme.offer = updatedOffer._id;
+      data.offerThemes = data.offerThemes.map((current) => ({
         ...current,
         offer: updatedOffer._id
       }));
 
-      // Save the selected popup theme and the other popup themes in parallel.
-      const [updatedPopupTheme] = await Promise.all([
-        savePopupTheme(data.popupTheme),
-        ...data.offerPopupThemes
-          .filter(({ _id }) => _id !== data.popupTheme._id)
+      // Save the selected theme and the other themes in parallel.
+      const [updatedTheme] = await Promise.all([
+        saveTheme(data.theme),
+        ...data.offerThemes
+          .filter(({ _id }) => _id !== data.theme._id)
           .map(async (current) => {
-            return await savePopupTheme(current);
+            return await saveTheme(current);
           })
       ]);
 
-      if (
-        updatedPopupTheme?._id &&
-        updatedOffer.popupTheme !== updatedPopupTheme._id
-      ) {
-        // Associate the selected popup theme with the offer.
-        updatedOffer.popupTheme = updatedPopupTheme._id;
+      if (updatedTheme?._id && updatedOffer.theme !== updatedTheme._id) {
+        // Associate the selected theme with the offer.
+        updatedOffer.theme = updatedTheme._id;
 
         // Update the offer.
         await saveOffer(updatedOffer);
@@ -259,11 +248,11 @@ const OfferEditPage = () => {
             <OfferForm
               initialValues={{
                 offer,
-                popupTheme: offerPopupTheme,
-                offerPopupThemes
+                theme: offerTheme,
+                offerThemes
               }}
               shop={shop}
-              popupThemes={popupThemes}
+              themes={themes}
               onSubmit={handleSubmit}
               onCancel={handleCancel}
               onDelete={handleDelete}

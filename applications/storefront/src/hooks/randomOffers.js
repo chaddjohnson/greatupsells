@@ -12,6 +12,7 @@ const useRandomOffers = ({
   shopifyVariantIds = [],
   shopifyCartTotal = 0,
   shopifyCartItemCount = 0,
+  shopifyOrderId = undefined,
   shouldQuery = true
 }) => {
   // Ensure Shopify product IDs is an array.
@@ -52,6 +53,7 @@ const useRandomOffers = ({
           shopifyVariantIds,
           shopifyCartTotal,
           shopifyCartItemCount,
+          shopifyOrderId,
           offerImpressions,
           sessionOfferImpressions,
           pagePath
@@ -64,6 +66,7 @@ const useRandomOffers = ({
         shopifyVariantIds,
         shopifyCartTotal,
         shopifyCartItemCount,
+        shopifyOrderId,
         offerImpressions,
         sessionOfferImpressions,
         pagePath

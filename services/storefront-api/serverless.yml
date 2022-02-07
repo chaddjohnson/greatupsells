@@ -67,9 +67,9 @@ functions:
     warmup:
       default:
         enabled: false
-  addDraftOrderLineItem:
+  addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/addDraftOrderLineItem.handler
+    handler: src/routes/addDraftOrderLineItems.handler
     events:
       - http:
           path: /draft-orders/{draftOrderId}/line-items

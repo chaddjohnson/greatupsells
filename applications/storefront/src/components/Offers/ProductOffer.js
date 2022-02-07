@@ -46,10 +46,10 @@ const ProductOffer = ({
       !!shopifyVariantIds?.length &&
       !shopifyCartLoading
   });
-  const { addProduct, replaceProduct } = useOfferAcceptance();
+  const { addProducts, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
-  const { offer, popupTheme, triggerProduct, offeredProducts } =
+  const { offer, theme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
@@ -184,14 +184,14 @@ const ProductOffer = ({
     <OfferPopup
       open={popupOpen}
       shop={shop}
-      theme={popupTheme}
+      theme={theme}
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
       shopifyCartTotal={shopifyCartTotal}
       shopifyCartItemCount={shopifyCartItemCount}
-      onAddProduct={addProduct}
+      onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />

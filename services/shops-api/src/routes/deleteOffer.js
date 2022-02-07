@@ -15,9 +15,9 @@ const handler = async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const [Offer, PopupTheme] = await Promise.all([
+    const [Offer, Theme] = await Promise.all([
       models.get('Offer'),
-      models.get('PopupTheme')
+      models.get('Theme')
     ]);
     const offer = await Offer.findById(offerId);
 
@@ -29,7 +29,7 @@ const handler = async (event, context) => {
     }
 
     // Delete themes associated with the offer.
-    await PopupTheme.deleteMany({ offer: offer._id });
+    await Theme.deleteMany({ offer: offer._id });
 
     // Delete the offer.
     await Offer.findByIdAndDelete(offerId);

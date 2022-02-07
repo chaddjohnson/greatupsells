@@ -11,6 +11,7 @@ import LostBrowserFocusOffer from './LostBrowserFocusOffer';
 import PageLoadOffer from './PageLoadOffer';
 import PageScrollOffer from './PageScrollOffer';
 import ProductOffer from './ProductOffer';
+import ThankYouPageOffer from './ThankYouPageOffer';
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
@@ -31,6 +32,7 @@ const Offers = () => {
     () => shopifyCartItems?.map((item) => item.variant_id),
     [shopifyCartItems]
   );
+  const shopifyOrderId = window.Shopify?.checkout?.order_id;
 
   // Combine requests to reduce cost and minimize chances of exceeding Lambda concurrency limit.
   const { offersData = [] } = useRandomOffers({
@@ -39,6 +41,7 @@ const Offers = () => {
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    shopifyOrderId,
     shouldQuery: !!shopifyCartItems && !shopifyCartLoading
   });
 
@@ -46,9 +49,14 @@ const Offers = () => {
   const offerDataByTriggerEvent = useMemo(
     () =>
       offersData?.reduce((map, data) => {
+        const strategy = data?.offer?.strategy;
         const triggerEvent = data?.offer?.triggerEvent;
 
         if (!triggerEvent) {
+          return map;
+        }
+
+        if (strategy === 'THANK_YOU_PAGE') {
           return map;
         }
 
@@ -59,6 +67,11 @@ const Offers = () => {
       }, {}),
     [offersData]
   );
+  const thankYouPageOfferData = useMemo(() => {
+    return offersData?.find(
+      ({ offer }) => offer?.strategy === 'THANK_YOU_PAGE'
+    );
+  }, [offersData]);
 
   const handleOfferOpen = () => {
     setViewingOffer(true);
@@ -84,7 +97,7 @@ const Offers = () => {
     <>
       <ExitIntentOffer
         offer={offerDataByTriggerEvent.EXIT?.offer}
-        popupTheme={offerDataByTriggerEvent.EXIT?.popupTheme}
+        theme={offerDataByTriggerEvent.EXIT?.theme}
         triggerProduct={offerDataByTriggerEvent.EXIT?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.EXIT?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -96,7 +109,7 @@ const Offers = () => {
       />
       <LinkClickOffer
         offer={offerDataByTriggerEvent.LINK?.offer}
-        popupTheme={offerDataByTriggerEvent.LINK?.popupTheme}
+        theme={offerDataByTriggerEvent.LINK?.theme}
         triggerProduct={offerDataByTriggerEvent.LINK?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.LINK?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -108,7 +121,7 @@ const Offers = () => {
       />
       <LostBrowserFocusOffer
         offer={offerDataByTriggerEvent.FOCUS?.offer}
-        popupTheme={offerDataByTriggerEvent.FOCUS?.popupTheme}
+        theme={offerDataByTriggerEvent.FOCUS?.theme}
         triggerProduct={offerDataByTriggerEvent.FOCUS?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.FOCUS?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -121,7 +134,7 @@ const Offers = () => {
       {!productAdded && (
         <PageLoadOffer
           offer={offerDataByTriggerEvent.LOAD?.offer}
-          popupTheme={offerDataByTriggerEvent.LOAD?.popupTheme}
+          theme={offerDataByTriggerEvent.LOAD?.theme}
           triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
           offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
           shopifyCartItems={shopifyCartItems}
@@ -134,7 +147,7 @@ const Offers = () => {
       )}
       <PageScrollOffer
         offer={offerDataByTriggerEvent.SCROLL?.offer}
-        popupTheme={offerDataByTriggerEvent.SCROLL?.popupTheme}
+        theme={offerDataByTriggerEvent.SCROLL?.theme}
         triggerProduct={offerDataByTriggerEvent.SCROLL?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.SCROLL?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -151,6 +164,12 @@ const Offers = () => {
         viewingOffer={viewingOffer}
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
+      />
+      <ThankYouPageOffer
+        offer={thankYouPageOfferData?.offer}
+        theme={thankYouPageOfferData?.theme}
+        triggerProduct={thankYouPageOfferData?.triggerProduct}
+        offeredProducts={thankYouPageOfferData?.offeredProducts}
       />
     </>
   );

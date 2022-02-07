@@ -2,13 +2,7 @@ const logger = require('@greatupsells/logger');
 const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
-const trackAcceptance = async (
-  offerHit,
-  shopifyDraftOrderId,
-  shopifyProductId = undefined,
-  shopifyVariantId = undefined,
-  quantity = 0
-) => {
+const trackAcceptance = async (offerHit, shopifyDraftOrderId, items) => {
   const [Offer, Shop, session] = await Promise.all([
     models.get('Offer'),
     models.get('Shop'),
@@ -28,17 +22,8 @@ const trackAcceptance = async (
 
       offerHit.$session(session);
 
-      // If a product is associated with this acceptance, track it.
-      if (shopifyProductId && shopifyVariantId) {
-        promises.push(
-          offerHit.trackAcceptedProduct(
-            shopifyDraftOrderId,
-            shopifyProductId,
-            shopifyVariantId,
-            quantity
-          )
-        );
-      }
+      // Track products associated with this acceptance.
+      promises.push(offerHit.trackAcceptedProducts(shopifyDraftOrderId, items));
 
       // Track acceptance one time per offer hit (and not once per product per offer hit).
       if (!acceptanceTracked) {

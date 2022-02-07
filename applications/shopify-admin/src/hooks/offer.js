@@ -26,7 +26,7 @@ const useOffer = (offerId) => {
     let updatedData = null;
 
     if (isNew) {
-      // Use a different key than the URL here to avoid a cache conflict with GET /popup-themes.
+      // Use a different key than the URL here to avoid a cache conflict with GET /themes.
       updatedData = await httpClient.post(url, data);
     } else {
       updatedData = await mutate(url, httpClient.put(url, data));

@@ -148,6 +148,16 @@ functions:
       - http:
           path: /shopify/shop
           method: post
+  themePublish:
+    reservedConcurrency: 1
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/themePublish.handler
+    events:
+      - sqs:
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/theme-publish/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:theme-publish-queue-dev'}
+      - http:
+          path: /shopify/theme-publish
+          method: post
 
 plugins:
   - serverless-offline

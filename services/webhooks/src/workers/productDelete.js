@@ -52,7 +52,7 @@ const processData = async (metadata, data, rawData) => {
 
     await logger.info(
       `Deleting product ${product.title} via ${topic} webhook`,
-      { data }
+      { metadata, data }
     );
 
     await httpClient.delete(`/products/${product._id}`);

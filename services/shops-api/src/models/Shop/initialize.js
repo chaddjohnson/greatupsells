@@ -1,6 +1,7 @@
 const logger = require('@greatupsells/logger');
 const createWebhooks = require('./createWebhooks');
 const addScripts = require('./addScripts');
+const checkThemeCompatibility = require('./checkThemeCompatibility');
 const enqueueCollectionImport = require('./enqueueCollectionImport');
 const enqueueProductImport = require('./enqueueProductImport');
 
@@ -10,6 +11,7 @@ const initialize = async (shop) => {
   await Promise.all([
     createWebhooks(shop),
     addScripts(shop),
+    checkThemeCompatibility(shop),
     enqueueCollectionImport(shop),
     enqueueProductImport(shop)
   ]);

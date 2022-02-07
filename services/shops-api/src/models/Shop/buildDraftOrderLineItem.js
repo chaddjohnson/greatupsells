@@ -20,6 +20,8 @@ const buildDraftOrderLineItem = async ({
   );
   const price = parseFloat(variant.price);
 
+  quantity = parseInt(quantity);
+
   // Build the base line item.
   const lineItem = {
     variant_id: shopifyVariantId,

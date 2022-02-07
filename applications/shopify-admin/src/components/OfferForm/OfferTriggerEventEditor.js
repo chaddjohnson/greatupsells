@@ -17,6 +17,7 @@ const TriggerScrollThresholdWrapper = styled.div`
 `;
 
 const OfferTriggerEventEditor = ({
+  offer,
   triggerEvent,
   triggerExternalLinksOnly,
   triggerScrollThreshold,
@@ -29,6 +30,10 @@ const OfferTriggerEventEditor = ({
 
     triggerEvent.onChange(value);
   };
+
+  if (offer.strategy === 'THANK_YOU_PAGE') {
+    return null;
+  }
 
   return (
     <Card title="Trigger event" sectioned>
@@ -97,6 +102,7 @@ const OfferTriggerEventEditor = ({
 };
 
 OfferTriggerEventEditor.propTypes = {
+  offer: PropTypes.object.isRequired,
   triggerEvent: PropTypes.object.isRequired,
   triggerExternalLinksOnly: PropTypes.object.isRequired,
   triggerScrollThreshold: PropTypes.object.isRequired,

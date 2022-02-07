@@ -7,34 +7,122 @@ import {
   ChoiceList,
   Popover,
   Button,
+  Select,
   Heading,
   TextContainer
 } from '@shopify/polaris';
 import Link from '../Link';
 
-const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
+const pageOptions = [
+  {
+    value: '/',
+    label: 'Home page'
+  },
+  {
+    value: '/collections/all',
+    label: 'Catalog page'
+  },
+  {
+    value: '/collections/*',
+    label: 'Collection pages'
+  },
+  {
+    value: '*/products/*',
+    label: 'Product pages'
+  },
+  {
+    value: '*/blog/*',
+    label: 'Blog pages'
+  },
+  {
+    value: '/cart',
+    label: 'Cart page'
+  },
+  {
+    value: '*/orders/*',
+    label: 'Order Status page'
+  },
+  {
+    value: '*/checkouts/*/thank_you',
+    label: 'Checkout Thank You page'
+  }
+];
+
+const OfferPagesEditor = ({
+  offer,
+  triggerPage,
+  triggerPagePath,
+  submitted
+}) => {
+  let initialTriggerPageType = 'ANY';
+
+  if (triggerPage.value !== 'ANY') {
+    if (pageOptions.map(({ value }) => value).includes(triggerPagePath.value)) {
+      initialTriggerPageType = 'PAGE';
+    } else {
+      initialTriggerPageType = 'PATTERN';
+    }
+  }
+
+  const [triggerPageType, setTriggerPageType] = useState(
+    initialTriggerPageType
+  );
+  const [triggerPageSpecificPath, setTriggerPageSpecificPath] = useState(
+    initialTriggerPageType === 'PAGE' && triggerPagePath.value
+  );
+  const [triggerPagePathPattern, setTriggerPagePathPattern] = useState(
+    initialTriggerPageType === 'PATTERN' && triggerPagePath.value
+  );
   const [
     triggerPagePathPopoverActive,
     setTriggerPagePathPopoverActive
   ] = useState(false);
 
-  const handleTriggerPageChange = (value) => {
-    if (triggerPage.value !== 'PAGE') {
+  const handleTriggerPageTypeChange = (value) => {
+    setTriggerPageType(value);
+
+    if (value === 'ANY') {
+      triggerPage.onChange('ANY');
       triggerPagePath.onChange(undefined);
     }
 
-    triggerPage.onChange(value);
-  };
-
-  const handleTriggerPagePathBlur = (event) => {
-    const hasLeadingSlash = !!triggerPagePath.value?.match(/^\//);
-
-    if (triggerPagePath.value && !hasLeadingSlash) {
-      triggerPagePath.onChange(`/${triggerPagePath.value}`);
+    if (value === 'PAGE') {
+      triggerPage.onChange('PAGE');
+      triggerPagePath.onChange('/');
+      setTriggerPageSpecificPath('/');
     }
 
-    triggerPagePath.onBlur(event);
+    if (value === 'PATTERN') {
+      triggerPage.onChange('PAGE');
+      triggerPagePath.onChange(undefined);
+      setTriggerPagePathPattern(undefined);
+    }
   };
+
+  const handleTriggerPageSpecificPathChange = (value) => {
+    setTriggerPageSpecificPath(value);
+    triggerPagePath.onChange(value);
+  };
+
+  const handleTriggerPagePathPatternChange = (value) => {
+    setTriggerPagePathPattern(value);
+    triggerPagePath.onChange(value);
+  };
+
+  const handleTriggerPagePathPatternBlur = () => {
+    if (!triggerPagePathPattern || triggerPagePathPattern === '/') {
+      return;
+    }
+
+    const sanitized = triggerPagePathPattern.replace(/(\/*$|\/*?\?.*)/g, '');
+
+    setTriggerPagePathPattern(sanitized);
+    triggerPagePath.onChange(sanitized);
+  };
+
+  if (offer.strategy === 'THANK_YOU_PAGE') {
+    return null;
+  }
 
   return (
     <Card title="Pages" sectioned>
@@ -47,12 +135,29 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
               value: 'ANY'
             },
             {
-              label: 'Specific pages',
-              helpText: 'Offer may show only on one or more specific pages.',
+              label: 'Page',
+              helpText: 'Offer may show only on a specific page.',
+              value: 'PAGE',
+              renderChildren: (isSelected) =>
+                isSelected && (
+                  <Select
+                    label="Page"
+                    labelHidden
+                    options={pageOptions}
+                    value={triggerPageSpecificPath}
+                    onChange={handleTriggerPageSpecificPathChange}
+                  />
+                )
+            },
+            {
+              label: 'URL pattern',
+              helpText:
+                'Offer may show only on one or more pages matching a URL pattern.',
+              value: 'PATTERN',
               renderChildren: (isSelected) =>
                 isSelected && (
                   <TextField
-                    value={triggerPagePath.value}
+                    value={triggerPagePathPattern}
                     placeholder="/page-url/here"
                     helpText={
                       <>
@@ -80,7 +185,6 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
                         >
                           <TextContainer spacing="loose">
                             <Heading>Glob syntax</Heading>
-                            <p>The path</p>
                             <p>
                               <code>*/products/*</code>
                             </p>
@@ -98,6 +202,12 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
                                 /collections/shoes/products/silly-socks
                               </code>
                             </p>
+                            <hr />
+                            <p>
+                              <code>*/products/fancy-shoes</code>
+                            </p>
+                            <p>will match the product page for Fancy Shoes.</p>
+                            <hr />
                             <p>
                               <Link
                                 url="https://en.wikipedia.org/wiki/Glob_(programming)"
@@ -114,16 +224,15 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
                         </Popover>
                       </>
                     }
-                    {...triggerPagePath}
+                    onChange={handleTriggerPagePathPatternChange}
                     error={submitted && triggerPagePath.error}
-                    onBlur={handleTriggerPagePathBlur}
+                    onBlur={handleTriggerPagePathPatternBlur}
                   />
-                ),
-              value: 'PAGE'
+                )
             }
           ]}
-          selected={triggerPage.value}
-          onChange={([value]) => handleTriggerPageChange(value)}
+          selected={triggerPageType}
+          onChange={([value]) => handleTriggerPageTypeChange(value)}
         />
       </FormLayout>
     </Card>
@@ -131,6 +240,7 @@ const OfferPagesEditor = ({ triggerPage, triggerPagePath, submitted }) => {
 };
 
 OfferPagesEditor.propTypes = {
+  offer: PropTypes.object.isRequired,
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
   submitted: PropTypes.bool

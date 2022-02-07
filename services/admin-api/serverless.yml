@@ -72,12 +72,12 @@ functions:
       default:
         enabled: false
   # findLogs:
-  clonePopupTheme:
+  cloneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/clonePopupTheme.handler
+    handler: src/routes/cloneTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}/clone
+          path: /themes/{themeId}/clone
           method: post
           cors: true
           # authorizer:
@@ -85,12 +85,12 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-  createPopupTheme:
+  createTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createPopupTheme.handler
+    handler: src/routes/createTheme.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: post
           cors: true
           # authorizer:
@@ -111,12 +111,12 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-  findOnePopupTheme:
+  findOneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOnePopupTheme.handler
+    handler: src/routes/findOneTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}
+          path: /themes/{themeId}
           method: get
           cors: true
           # authorizer:
@@ -124,12 +124,12 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-  findPopupThemes:
+  findThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findPopupThemes.handler
+    handler: src/routes/findThemes.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: get
           cors: true
           # authorizer:
@@ -139,12 +139,12 @@ functions:
           #   resultTtlInSeconds: 0
   # findShops:
   # findStats:
-  updatePopupTheme:
+  updateTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updatePopupTheme.handler
+    handler: src/routes/updateTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}
+          path: /themes/{themeId}
           method: put
           cors: true
           # authorizer:

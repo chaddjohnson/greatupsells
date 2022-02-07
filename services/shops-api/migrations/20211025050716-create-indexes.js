@@ -6,7 +6,7 @@ module.exports = {
     const OfferHit = await models.get('OfferHit');
     const Offer = await models.get('Offer');
     const Order = await models.get('Order');
-    const PopupTheme = await models.get('PopupTheme');
+    const Theme = await models.get('Theme');
     const Product = await models.get('Product');
     const Shop = await models.get('Shop');
     const Stats = await models.get('Stats');
@@ -16,7 +16,7 @@ module.exports = {
     await OfferHit.createIndexes();
     await Offer.createIndexes();
     await Order.createIndexes();
-    await PopupTheme.createIndexes();
+    await Theme.createIndexes();
     await Product.createIndexes();
     await Shop.createIndexes();
     await Stats.createIndexes();

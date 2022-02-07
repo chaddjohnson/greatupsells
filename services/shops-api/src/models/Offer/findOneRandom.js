@@ -142,6 +142,30 @@ const sanitizePagePath = (pagePath) => {
   return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
 };
 
+const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
+  // Query Shopify for order data because the order may have just been created.
+  const shopifyApiClient = shop.getShopifyApiClient();
+  const shopifyOrderData = await shopifyApiClient.order.get(shopifyOrderId);
+  const {
+    line_items: lineItems = [],
+    subtotal_price: subtotalPrice = 0
+  } = shopifyOrderData;
+  const shopifyProductIds = lineItems.map((item) => item.product_id);
+  const shopifyVariantIds = lineItems.map((item) => item.variant_id);
+  const shopifyCartTotal = parseFloat(subtotalPrice) || 0;
+  const shopifyCartItemCount = lineItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
+  return {
+    shopifyProductIds,
+    shopifyVariantIds,
+    shopifyCartTotal,
+    shopifyCartItemCount
+  };
+};
+
 const buildCriteria = async (
   shop,
   {
@@ -150,6 +174,7 @@ const buildCriteria = async (
     shopifyVariantIds = [],
     shopifyCartTotal = 0,
     shopifyCartItemCount = 0,
+    shopifyOrderId = undefined,
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = []
@@ -157,6 +182,20 @@ const buildCriteria = async (
 ) => {
   const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
+  let shopifyOrderCartData = null;
+
+  if (shopifyOrderId) {
+    shopifyOrderCartData = await getShopifyCartDataFromShopifyOrder(
+      shop,
+      shopifyOrderId
+    );
+
+    // Prioritize using order data over provided data.
+    shopifyProductIds = shopifyOrderCartData.shopifyProductIds;
+    shopifyVariantIds = shopifyOrderCartData.shopifyVariantIds;
+    shopifyCartTotal = shopifyOrderCartData.shopifyCartTotal;
+    shopifyCartItemCount = shopifyOrderCartData.shopifyCartItemCount;
+  }
 
   const criteria = {
     shop: shop._id,
@@ -198,6 +237,7 @@ const findOneRandom = async (
     shopifyVariantIds = [],
     shopifyCartTotal = 0,
     shopifyCartItemCount = 0,
+    shopifyOrderId = undefined,
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = [],
@@ -227,21 +267,29 @@ const findOneRandom = async (
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    shopifyOrderId,
     ipAddress,
     offerImpressions,
     sessionOfferImpressions
   });
   const pagePathSanitized = sanitizePagePath(pagePath);
+  const isThankYouPage = !!pagePath.match(/\/checkouts\/[^\/]+\/thank_you/);
 
-  // Randomly find an offer.
+  // Find an offer.
   let offers = await Offer.find(criteria);
 
-  // Filter trigger path based on regex if trigger page is a specific page.
   offers = offers.filter((offer) => {
+    // Filter for offers targeting the Order Status page if that is the current page.
+    if (offer.strategy === 'THANK_YOU_PAGE') {
+      return isThankYouPage;
+    }
+
+    // Include the offer if there is no trigger page to filter for.
     if (offer.triggerPage !== 'PAGE') {
       return true;
     }
 
+    // Filter trigger path based on regex if trigger page is a specific page.
     return (
       offer.triggerPagePath &&
       pagePathSanitized.match(

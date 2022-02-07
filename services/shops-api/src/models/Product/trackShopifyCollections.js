@@ -78,7 +78,8 @@ const addProductToCollections = async (product, collections) => {
 };
 
 const trackShopifyCollections = async (product) => {
-  const [Collection] = await Promise.all([
+  const [Product, Collection] = await Promise.all([
+    models.get('Product'),
     models.get('Collection'),
     models.get('Shop')
   ]);
@@ -93,10 +94,7 @@ const trackShopifyCollections = async (product) => {
   });
 
   // Track the collections for the product.
-  product.shopifyCollectionIds = shopifyCollectionIds;
-  product.markModified('shopifyCollectionIds');
-
-  await product.save();
+  await Product.findByIdAndUpdate(product.id, { shopifyCollectionIds });
 
   // Update the collections to reference the product.
   await addProductToCollections(product, collections);

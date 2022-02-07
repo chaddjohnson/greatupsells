@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, FormLayout, ChoiceList } from '@shopify/polaris';
 
 const OfferBundlingEditor = ({ offer, enableBundling }) =>
-  offer.strategy === 'CROSS_SELL' && (
+  (offer.strategy === 'CROSS_SELL' || offer.strategy === 'THANK_YOU_PAGE') && (
     <Card title="Bundling" sectioned>
       <FormLayout>
         <ChoiceList

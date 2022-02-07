@@ -12,7 +12,7 @@ const findConversionsByShopId = require('./findConversionsByShopId');
 const findConversionRatesByOfferId = require('./findConversionRatesByOfferId');
 const findConversionRatesByShopId = require('./findConversionRatesByShopId');
 const trackOfferedProducts = require('./trackOfferedProducts');
-const trackAcceptedProduct = require('./trackAcceptedProduct');
+const trackAcceptedProducts = require('./trackAcceptedProducts');
 const trackAcceptance = require('./trackAcceptance');
 const trackConversion = require('./trackConversion');
 
@@ -34,7 +34,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['UPSELL', 'CROSS_SELL', 'POPUP']
+      enum: ['UPSELL', 'CROSS_SELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE', 'POPUP']
     },
     triggerEvent: {
       type: String,
@@ -136,34 +136,12 @@ schema.methods.trackOfferedProducts = function (
   return trackOfferedProducts(this, shopifyProductIds, shopifyVariantIds);
 };
 
-schema.methods.trackAcceptedProduct = function (
-  shopifyDraftOrderId,
-  shopifyProductId,
-  shopifyVariantId,
-  quantity
-) {
-  return trackAcceptedProduct(
-    this,
-    shopifyDraftOrderId,
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  );
+schema.methods.trackAcceptedProducts = function (shopifyDraftOrderId, items) {
+  return trackAcceptedProducts(this, shopifyDraftOrderId, items);
 };
 
-schema.methods.trackAcceptance = function (
-  shopifyDraftOrderId,
-  shopifyProductId,
-  shopifyVariantId,
-  quantity
-) {
-  return trackAcceptance(
-    this,
-    shopifyDraftOrderId,
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  );
+schema.methods.trackAcceptance = function (shopifyDraftOrderId, items) {
+  return trackAcceptance(this, shopifyDraftOrderId, items);
 };
 
 schema.methods.trackConversion = function (order) {

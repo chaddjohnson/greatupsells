@@ -65,6 +65,11 @@ const definitions = [
     topic: 'shop/update',
     address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/shop`,
     format: 'json'
+  },
+  {
+    topic: 'themes/publish',
+    address: WEBHOOK_ARN || `${WEBHOOK_API_URL}/shopify/theme-publish`,
+    format: 'json'
   }
 ];
 

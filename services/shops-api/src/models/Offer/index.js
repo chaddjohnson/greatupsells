@@ -43,7 +43,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['CROSS_SELL', 'UPSELL', 'POPUP']
+      enum: ['CROSS_SELL', 'UPSELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE', 'POPUP']
     },
     impressionCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
@@ -52,7 +52,9 @@ const schema = new mongoose.Schema(
     revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
     actionButtonBehavior: {
       type: String,
-      required: true,
+      required() {
+        return this.strategy !== 'THANK_YOU_PAGE';
+      },
       enum: ['CHECKOUT', 'CART', 'PAGE', 'LINK']
     },
     actionButtonLink: {
@@ -136,10 +138,10 @@ const schema = new mongoose.Schema(
       }
     },
     enableBundling: { type: Boolean, required: true, default: false },
-    popupTheme: {
+    theme: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'PopupTheme',
-      required: false // false because PopupTheme requires an offer to be saved.
+      ref: 'Theme',
+      required: false // false because Theme requires an offer to be saved.
     },
     geotargetingCountries: [{ type: String, required: true, trim: true }],
     animation: { type: String, required: false },
@@ -223,11 +225,11 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
   return OfferHit.findConversionRatesByOfferId(this._id, startAt, endAt);
 };
 
-schema.methods.findPopupThemes = async function () {
+schema.methods.findThemes = async function () {
   const models = require('..');
-  const PopupTheme = await models.get('PopupTheme');
+  const Theme = await models.get('Theme');
 
-  return PopupTheme.findByOfferId(this._id);
+  return Theme.findByOfferId(this._id);
 };
 
 schema.methods.trackImpression = function (params) {

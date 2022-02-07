@@ -15,11 +15,26 @@ const useShopifyDraftOrder = () => {
     { offerId, shopifyVariantId, quantity = 1 }
   ) => {
     const url = `/draft-orders/${draftOrderId}/line-items`;
-    const draftOrder = await httpClient.post(url, {
+    const data = [
+      {
+        offerId,
+        shopifyVariantId,
+        quantity: parseInt(quantity)
+      }
+    ];
+    const draftOrder = await httpClient.post(url, data);
+
+    return draftOrder;
+  };
+
+  const addVariantsToShopifyDraftOrder = async (draftOrderId, items) => {
+    const url = `/draft-orders/${draftOrderId}/line-items`;
+    const data = items.map(({ offerId, shopifyVariantId, quantity }) => ({
       offerId,
       shopifyVariantId,
       quantity: parseInt(quantity)
-    });
+    }));
+    const draftOrder = await httpClient.post(url, data);
 
     return draftOrder;
   };
@@ -30,9 +45,8 @@ const useShopifyDraftOrder = () => {
     quantity
   ) => {
     const url = `/draft-orders/${draftOrderId}/line-items/${shopifyVariantId}`;
-    const draftOrder = await httpClient.post(url, {
-      quantity: parseInt(quantity)
-    });
+    const data = { quantity: parseInt(quantity) };
+    const draftOrder = await httpClient.post(url, data);
 
     return draftOrder;
   };
@@ -51,6 +65,7 @@ const useShopifyDraftOrder = () => {
   return {
     createShopifyDraftOrder,
     addVariantToShopifyDraftOrder,
+    addVariantsToShopifyDraftOrder,
     updateShopifyDraftOrderVariantQuantity,
     removeShopifyDraftOrderVariant
   };

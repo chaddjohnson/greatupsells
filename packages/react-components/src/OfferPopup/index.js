@@ -1,13 +1,10 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
 import { createGlobalStyle, StyleSheetManager } from 'styled-components';
-import { useLiquid } from 'react-liquid';
-import { useCookies, useNumberFormatter } from '@greatupsells/react-hooks';
-import useDataTranslation from './dataTranslation';
-import useDataBinding from './dataBinding';
+import OfferTheme from '../OfferTheme';
 import Overlay from './Overlay';
 import Content from './Content';
 import ContentContainer from './ContentContainer';
@@ -36,20 +33,11 @@ const OfferPopup = ({
   shopifyCartItems,
   shopifyCartTotal,
   shopifyCartItemCount,
-  onAddProduct,
+  onAddProducts,
   onReplaceProduct,
   onClose,
   onClick
 }) => {
-  const { getCookie } = useCookies();
-
-  const { locale, countryCode, currency } = shop;
-  const { formatCurrency } = useNumberFormatter({
-    locale,
-    countryCode,
-    currency
-  });
-
   const [frameRef, setFrameRef] = useState(null);
   const [frameDocument, setFrameDocument] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
@@ -57,22 +45,11 @@ const OfferPopup = ({
   const [modalContentContainerRef, setModalContentContainerRef] = useState(
     null
   );
-  const [checkoutUrl, setCheckoutUrl] = useState(
-    getCookie('greatupsellsDraftOrderCheckoutUrl') || '/checkout'
-  );
-  const [addedQuantities, setAddedQuantities] = useState(
-    [...Array(offeredProducts.length).keys()].map(() => 0)
-  );
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
   const [modalOpen, setModalOpen] = useState(designMode);
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
-
-  const {
-    translateProductData,
-    translateTriggerProductData
-  } = useDataTranslation(shop, offer);
 
   const fixIframeHeight = () => {
     if (!frameDocument || !modalRef) {
@@ -114,108 +91,20 @@ const OfferPopup = ({
     });
   };
 
-  const actionButtonUrl = useMemo(() => {
-    if (offer.actionButtonBehavior === 'CHECKOUT') {
-      return checkoutUrl;
-    } else if (offer.actionButtonBehavior === 'CART') {
-      return '/cart';
-    } else if (offer.actionButtonBehavior === 'PAGE') {
-      return 'javascript:window.parent.OfferPopup.close()'; // eslint-disable-line no-script-url
-    } else if (offer.actionButtonBehavior === 'LINK') {
-      return offer.actionButtonLink;
-    }
+  const maskBackgroundColor = useMemo(() => {
+    const defaultMaskBackgroundColor = [
+      'POST_CHECKOUT',
+      'THANK_YOU_PAGE'
+    ].includes(offer.strategy)
+      ? '#FFFFFF'
+      : 'rgba(0, 0, 0, 0.5)';
 
-    return checkoutUrl;
-  }, [offer.actionButtonBehavior, offer.actionButtonLink, checkoutUrl]);
-
-  const actionButtonTarget = useMemo(() => {
-    const openInNewTab =
-      offer.actionButtonBehavior === 'LINK' &&
-      offer.actionButtonLinkOpenInNewTab;
-
-    if (openInNewTab) {
-      return '_blank';
-    }
-
-    return '_top';
-  }, [offer.actionButtonBehavior, offer.actionButtonLinkOpenInNewTab]);
-
-  // Set up template variables.
-  const mappedVariables = useMemo(
-    () =>
-      theme.variables.reduce((map, { name, type, value, options = {} }) => {
-        // Optionally filter by strategy.
-        if (options.strategy && options.strategy !== offer.strategy) {
-          return map;
-        }
-
-        // Cast "option" variables to boolean.
-        if (type === 'OPTION') {
-          value = value === 'true';
-        }
-
-        return {
-          ...map,
-          [name]: value
-        };
-      }, {}),
-    [theme.variables, offer]
-  );
-
-  const maskBackgroundColor =
-    mappedVariables.maskBackgroundColor || 'rgba(0, 0, 0, 0.5)';
-
-  const translatedTriggerProduct = useMemo(() => {
-    if (triggerProduct) {
-      return translateTriggerProductData(triggerProduct, shopifyCartItems);
-    }
-  }, [offer, triggerProduct]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const translatedOfferedProducts = useMemo(() => {
-    if (offeredProducts) {
-      return offeredProducts.map(translateProductData);
-    }
-  }, [offer, offeredProducts]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const templateVariables = useMemo(
-    () => ({
-      ...mappedVariables,
-      triggerProduct: translatedTriggerProduct,
-      offeredProducts: translatedOfferedProducts,
-      actionButtonUrl,
-      actionButtonTarget,
-      shopifyCartTotal: formatCurrency(shopifyCartTotal || 0),
-      shopifyCartItemCount: shopifyCartItemCount || 0,
-      strategy: offer.strategy,
-      enableBundling: offer.enableBundling,
-      enableVariantSelection: offer.enableVariantSelection,
-      enableQuantitySelection: offer.enableQuantitySelection
-    }),
-    [
-      mappedVariables,
-      translatedTriggerProduct,
-      translatedOfferedProducts,
-      offer,
-      actionButtonUrl,
-      actionButtonTarget,
-      shopifyCartTotal,
-      shopifyCartItemCount,
-      formatCurrency
-    ]
-  );
-
-  // Generate the markup.
-  const { markup: html } = useLiquid(theme.template.html, {
-    ...templateVariables,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
-  let { markup: css } = useLiquid(theme.template.css, templateVariables);
-  const { markup: javascript } = useLiquid(theme.template.javascript, {
-    ...templateVariables,
-    submitHandler: 'window.parent.OfferPopup.submit(event)',
-    closeHandler: 'window.parent.OfferPopup.close()'
-  });
+    return (
+      theme?.variables.find(({ name }) => {
+        return name === 'maskBackgroundColor';
+      })?.value || defaultMaskBackgroundColor
+    );
+  }, [theme, offer]);
 
   const handleSubmit = async (event) => {
     if (!event) {
@@ -260,98 +149,17 @@ const OfferPopup = ({
     }
   };
 
-  const handleQuantityAdd = (index, quantity) =>
-    setAddedQuantities(
-      addedQuantities.map((addedQuantity, addedQuantityIndex) => {
-        return addedQuantityIndex === index
-          ? addedQuantity + quantity
-          : addedQuantity;
-      })
-    );
-
-  // Replace device-specific media queries if forcing display type.
-  // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
-  if (forceDisplayType === 'desktop') {
-    // Add "device" to media queries if missing.
-    css = css?.replace(
-      /(\(\s*)(min|max)-(width|height)(\s*:)/g,
-      '$1$2-device-$3$4'
-    );
-  } else if (forceDisplayType === 'mobile') {
-    // Remove "device" from media queries if present.
-    css = css?.replace(
-      /(\(\s*)(min|max)-device-(width|height)(\s*:)/g,
-      '$1$2-$3$4'
-    );
-  }
-
   // Expose methods globally to enable themes to programmatically interface with popups.
   if (typeof window !== 'undefined') {
-    window.OfferPopup.submit = handleSubmit;
-    window.OfferPopup.close = handleClose;
+    window.Offer.submit = handleSubmit;
+    window.Offer.close = handleClose;
   }
-
-  // Set up data binding for popup.
-  useDataBinding({
-    iframe: frameRef,
-    shop,
-    offer,
-    offeredProducts: translatedOfferedProducts,
-    addedQuantities,
-    html,
-    css,
-    javascript,
-    modalContentContainer: modalContentContainerRef,
-    onAddProduct,
-    onReplaceProduct,
-    onCheckoutUrlUpdate: setCheckoutUrl,
-    onQuantityAdd: handleQuantityAdd
-  });
-
-  // Inject scripts. These must be added programmatically instead of via markup, or they will be ignored.
-  useEffect(() => {
-    const externalScripts = [];
-    let externalScript;
-    let customScript;
-
-    if (frameDocument) {
-      // Link to external scripts.
-      theme.template.scripts?.forEach((scriptUrl) => {
-        externalScript = frameDocument.createElement('script');
-        externalScript.type = 'text/javascript';
-        externalScript.src = scriptUrl;
-        externalScripts.push(externalScript);
-        frameDocument.head.appendChild(externalScript);
-      });
-
-      // Inject custom JavaScript.
-      customScript = frameDocument.createElement('script');
-      customScript.type = 'text/javascript';
-      customScript.text = javascript;
-      frameDocument.head.appendChild(customScript);
-    }
-
-    return () => {
-      if (frameDocument) {
-        externalScripts.forEach((current) =>
-          frameDocument.head.removeChild(current)
-        );
-        frameDocument.head.removeChild(customScript);
-      }
-    };
-  }, [
-    frameRef,
-    frameDocument,
-    translatedOfferedProducts,
-    javascript,
-    theme.template.scripts
-  ]);
 
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
     frameDocument,
     modalRef,
-    theme.template,
+    theme?.template,
     designMode,
     designModeZoom
   ]);
@@ -378,10 +186,6 @@ const OfferPopup = ({
   //     window.removeEventListener('scroll', fixIframeHeight);
   //   };
   // });
-
-  if (!offer || !html) {
-    return null;
-  }
 
   if (!open) {
     return null;
@@ -418,7 +222,6 @@ const OfferPopup = ({
                   * {
                     box-sizing: border-box;
                   }
-                  ${css}
                 `
               }}
             />
@@ -491,8 +294,26 @@ const OfferPopup = ({
                   <ContentContainer
                     className="content-container"
                     ref={setModalContentContainerRef}
-                    dangerouslySetInnerHTML={{ __html: html }}
-                  />
+                  >
+                    <OfferTheme
+                      shop={shop}
+                      offer={offer}
+                      triggerProduct={triggerProduct}
+                      offeredProducts={offeredProducts}
+                      theme={theme}
+                      shopifyCartItems={shopifyCartItems}
+                      shopifyCartTotal={shopifyCartTotal}
+                      shopifyCartItemCount={shopifyCartItemCount}
+                      handlers={{
+                        closeHandler: 'window.parent.Offer.close()'
+                      }}
+                      forceDisplayType={forceDisplayType}
+                      context={frameRef?.contentWindow}
+                      container={modalContentContainerRef}
+                      onAddProducts={onAddProducts}
+                      onReplaceProduct={onReplaceProduct}
+                    />
+                  </ContentContainer>
                   {designMode && <Mask onClick={onClick} />}
                 </ReactModal>
               </StyleSheetManager>
@@ -510,6 +331,7 @@ OfferPopup.propTypes = {
   designMode: PropTypes.bool,
   designModeZoom: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
+  theme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shopifyCartItems: PropTypes.array,
@@ -517,7 +339,7 @@ OfferPopup.propTypes = {
   shopifyCartItemCount: PropTypes.number,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
-  onAddProduct: PropTypes.func,
+  onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,
   onClick: PropTypes.func
@@ -530,7 +352,7 @@ OfferPopup.defaultProps = {
   triggerProduct: {},
   offeredProducts: [],
   shopifyCartItems: [],
-  onAddProduct: () => {},
+  onAddProducts: () => {},
   onReplaceProduct: () => {},
   onClose: () => {}
 };

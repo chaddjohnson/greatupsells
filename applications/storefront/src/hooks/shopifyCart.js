@@ -70,14 +70,12 @@ const CartProvider = ({ children }) => {
     [shopifyCartItems]
   );
 
-  const addVariantToShopifyCart = async (shopifyVariantId, quantity) => {
+  const addVariantsToShopifyCart = async (variants) => {
     await httpClient.post('/cart/add.js', {
-      items: [
-        {
-          id: shopifyVariantId,
-          quantity
-        }
-      ]
+      items: variants.map(({ shopifyVariantId, quantity }) => ({
+        id: shopifyVariantId,
+        quantity
+      }))
     });
   };
 
@@ -98,7 +96,7 @@ const CartProvider = ({ children }) => {
     await removeVariantFromShopifyCart(originalShopifyVariantId);
 
     // Add the new variant to the cart.
-    await addVariantToShopifyCart(shopifyVariantId, quantity);
+    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
   };
 
   // Refresh the cart when an item is added.
@@ -124,7 +122,7 @@ const CartProvider = ({ children }) => {
         shopifyCartError,
         shopifyCartLoading,
         fetchShopifyCart,
-        addVariantToShopifyCart,
+        addVariantsToShopifyCart,
         removeVariantFromShopifyCart,
         replaceVariantInShopifyCart
       }}

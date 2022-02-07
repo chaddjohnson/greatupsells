@@ -27,15 +27,16 @@ const findPopupData = async (
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    shopifyOrderId,
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
     pagePath
   }
 ) => {
-  const [Offer, PopupTheme] = await Promise.all([
+  const [Offer, Theme] = await Promise.all([
     models.get('Offer'),
-    models.get('PopupTheme')
+    models.get('Theme')
   ]);
   const offer = await Offer.findOneRandom(shop, {
     triggerEvent,
@@ -43,6 +44,7 @@ const findPopupData = async (
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    shopifyOrderId,
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
@@ -54,18 +56,18 @@ const findPopupData = async (
   }
 
   // Parallelize to minimize latency.
-  const [popupTheme, triggerProduct, offeredProducts] = await Promise.all([
-    PopupTheme.findById(offer.popupTheme),
+  const [theme, triggerProduct, offeredProducts] = await Promise.all([
+    Theme.findById(offer.theme),
     findRandomProduct(shopifyProductIds),
     offer.findRandomProducts()
   ]);
 
   // Reduce payload size.
-  delete popupTheme.thumbnailImageUrl;
+  delete theme.thumbnailImageUrl;
 
   return {
     offer,
-    popupTheme,
+    theme,
     triggerProduct,
     offeredProducts
   };
@@ -91,6 +93,7 @@ const handler = async (event, context) => {
       shopifyVariantIds,
       shopifyCartTotal,
       shopifyCartItemCount,
+      shopifyOrderId,
       ipAddress,
       offerImpressions,
       sessionOfferImpressions,
@@ -113,6 +116,7 @@ const handler = async (event, context) => {
           shopifyVariantIds,
           shopifyCartTotal,
           shopifyCartItemCount,
+          shopifyOrderId,
           ipAddress,
           offerImpressions,
           sessionOfferImpressions,

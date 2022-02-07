@@ -72,84 +72,85 @@ const OfferDiscountEditor = ({
     discountValue.onBlur();
   };
 
+  if (offer.strategy === 'POPUP') {
+    return null;
+  }
+
   return (
-    (offer.strategy === 'UPSELL' || offer.strategy === 'CROSS_SELL') &&
-    offer.strategy !== 'POPUP' && (
-      <Card title="Discount" sectioned>
-        <FormLayout>
-          <ChoiceList
-            choices={[
-              {
-                label: 'Percentage off',
-                value: 'PERCENTAGE'
-              },
-              {
-                label: `${currency} off`,
-                value: 'AMOUNT'
-              },
-              {
-                label: 'Set price',
-                value: 'SET_PRICE'
-              },
-              {
-                label: 'No discount',
-                value: 'NO_DISCOUNT'
-              }
-            ]}
-            selected={discountType.value}
-            onChange={([value]) => handleDiscountTypeChange(value)}
-          />
-          {discountType.value !== 'NO_DISCOUNT' && (
-            <DiscountValueInputWrapper>
-              <TextField
-                label="Discount value"
-                prefix={
-                  (discountType.value === 'AMOUNT' && currencySymbol) ||
-                  (discountType.value === 'SET_PRICE' && currencySymbol)
-                }
-                suffix={discountType.value === 'PERCENTAGE' && '%'}
-                placeholder={
-                  (discountType.value === 'AMOUNT' && '0.00') ||
-                  (discountType.value === 'SET_PRICE' && '0.00') ||
-                  undefined
-                }
-                helpText={
-                  discountType.value !== 'SET_PRICE'
-                    ? 'The discount amount applied to each offered item added to the cart.'
-                    : 'The price for each offered item added to the cart.'
-                }
-                inputMode="numeric"
-                {...discountValue}
-                value={discountValueInternal?.toString()}
-                error={submitted && discountValue.error}
-                onChange={handleDiscountValueChange}
-                onBlur={handleDiscountValueBlur}
-              />
-            </DiscountValueInputWrapper>
-          )}
-          {discountType.value !== 'NO_DISCOUNT' && (
+    <Card title="Discount" sectioned>
+      <FormLayout>
+        <ChoiceList
+          choices={[
+            {
+              label: 'Percentage off',
+              value: 'PERCENTAGE'
+            },
+            {
+              label: `${currency} off`,
+              value: 'AMOUNT'
+            },
+            {
+              label: 'Set price',
+              value: 'SET_PRICE'
+            },
+            {
+              label: 'No discount',
+              value: 'NO_DISCOUNT'
+            }
+          ]}
+          selected={discountType.value}
+          onChange={([value]) => handleDiscountTypeChange(value)}
+        />
+        {discountType.value !== 'NO_DISCOUNT' && (
+          <DiscountValueInputWrapper>
             <TextField
-              label="Discount description"
+              label="Discount value"
+              prefix={
+                (discountType.value === 'AMOUNT' && currencySymbol) ||
+                (discountType.value === 'SET_PRICE' && currencySymbol)
+              }
+              suffix={discountType.value === 'PERCENTAGE' && '%'}
               placeholder={
-                (discountType.value === 'PERCENTAGE' && '10% off') ||
-                (discountType.value === 'AMOUNT' && '$10 off') ||
-                (discountType.value === 'SET_PRICE' && 'Discounted price') ||
+                (discountType.value === 'AMOUNT' && '0.00') ||
+                (discountType.value === 'SET_PRICE' && '0.00') ||
                 undefined
               }
-              helpText="This will show as a description for discounted order line items."
-              {...discountTitle}
-              error={submitted && discountTitle.error}
+              helpText={
+                discountType.value !== 'SET_PRICE'
+                  ? 'The discount amount applied to each offered item added to the cart.'
+                  : 'The price for each offered item added to the cart.'
+              }
+              inputMode="numeric"
+              {...discountValue}
+              value={discountValueInternal?.toString()}
+              error={submitted && discountValue.error}
+              onChange={handleDiscountValueChange}
+              onBlur={handleDiscountValueBlur}
             />
-          )}
-          {discountType.value !== 'NO_DISCOUNT' && (
-            <Banner title="Can't combine with discounts" status="info">
-              Customers won&apos;t be able to enter a discount code or use an
-              automatic discount if this offer is accepted.
-            </Banner>
-          )}
-        </FormLayout>
-      </Card>
-    )
+          </DiscountValueInputWrapper>
+        )}
+        {discountType.value !== 'NO_DISCOUNT' && (
+          <TextField
+            label="Discount description"
+            placeholder={
+              (discountType.value === 'PERCENTAGE' && '10% off') ||
+              (discountType.value === 'AMOUNT' && '$10 off') ||
+              (discountType.value === 'SET_PRICE' && 'Discounted price') ||
+              undefined
+            }
+            helpText="This will show as a description for discounted order line items."
+            {...discountTitle}
+            error={submitted && discountTitle.error}
+          />
+        )}
+        {discountType.value !== 'NO_DISCOUNT' && (
+          <Banner title="Can't combine with discounts" status="info">
+            Customers won&apos;t be able to enter a discount code or use an
+            automatic discount if this offer is accepted.
+          </Banner>
+        )}
+      </FormLayout>
+    </Card>
   );
 };
 

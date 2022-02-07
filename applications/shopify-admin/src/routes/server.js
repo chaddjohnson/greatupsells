@@ -51,7 +51,8 @@ Shopify.Context.initialize({
     'read_script_tags',
     'read_draft_orders',
     'write_script_tags',
-    'write_draft_orders'
+    'write_draft_orders',
+    'read_themes'
   ],
   HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
   API_VERSION: ApiVersion.January21,

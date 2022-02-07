@@ -30,7 +30,7 @@ let onPageRequiredSecondsTimeout = 0;
 
 const LinkClickOffer = ({
   offer,
-  popupTheme,
+  theme,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -47,7 +47,7 @@ const LinkClickOffer = ({
   const [openLinkInNewWindow, setOpenLinkInNewWindow] = useState(false);
 
   const { trackOfferImpression } = useOfferTracking();
-  const { addProduct, replaceProduct } = useOfferAcceptance();
+  const { addProducts, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -206,14 +206,14 @@ const LinkClickOffer = ({
     <OfferPopup
       open={popupOpen}
       shop={shop}
-      theme={popupTheme}
+      theme={theme}
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
       shopifyCartTotal={shopifyCartTotal}
       shopifyCartItemCount={shopifyCartItemCount}
-      onAddProduct={addProduct}
+      onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
@@ -222,7 +222,7 @@ const LinkClickOffer = ({
 
 LinkClickOffer.propTypes = {
   offer: PropTypes.object.isRequired,
-  popupTheme: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

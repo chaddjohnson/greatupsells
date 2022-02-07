@@ -48,6 +48,11 @@ resource "aws_sqs_queue" "shop_update_dlq" {
   message_retention_seconds = 259200 # 3 days
 }
 
+resource "aws_sqs_queue" "theme_publish_dlq" {
+  name                      = "theme-publish-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
 resource "aws_sqs_queue" "app_uninstall" {
   name                       = "app-uninstall-queue-${terraform.workspace}"
   visibility_timeout_seconds = 60
@@ -134,6 +139,15 @@ resource "aws_sqs_queue" "shop_update" {
   visibility_timeout_seconds = 60
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.shop_update_dlq.arn
+    maxReceiveCount     = 10
+  })
+}
+
+resource "aws_sqs_queue" "theme_publish" {
+  name                       = "theme-publish-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.theme_publish_dlq.arn
     maxReceiveCount     = 10
   })
 }
@@ -273,6 +287,21 @@ resource "aws_sqs_queue_policy" "shop_update_policy" {
   })
 }
 
+resource "aws_sqs_queue_policy" "theme_publish_policy" {
+  queue_url = aws_sqs_queue.theme_publish.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.theme_publish.arn}"
+      }
+    ]
+  })
+}
+
 resource "aws_ssm_parameter" "app_uninstall_queue_arn" {
   name      = "/greatupsells/${terraform.workspace}/queues/app-uninstall/arn"
   type      = "String"
@@ -340,5 +369,12 @@ resource "aws_ssm_parameter" "shop_update_queue_arn" {
   name      = "/greatupsells/${terraform.workspace}/queues/shop-update/arn"
   type      = "String"
   value     = aws_sqs_queue.shop_update.arn
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "theme_publish_queue_arn" {
+  name      = "/greatupsells/${terraform.workspace}/queues/theme-publish/arn"
+  type      = "String"
+  value     = aws_sqs_queue.theme_publish.arn
   overwrite = true
 }

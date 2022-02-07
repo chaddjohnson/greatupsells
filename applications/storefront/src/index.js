@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-// TODO: Inject jQuery if unavailable and it is needed.
-
 const root = document.createElement('div');
 const rootId = 'greatupsells-popup-root';
 

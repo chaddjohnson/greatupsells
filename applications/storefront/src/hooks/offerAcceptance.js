@@ -8,47 +8,39 @@ const useOfferAcceptance = () => {
   const { trackOfferAcceptance } = useOfferTracking();
   const {
     shopifyCartItems,
-    addVariantToShopifyCart,
+    addVariantsToShopifyCart,
     replaceVariantInShopifyCart
   } = useShopifyCart();
   const {
     createShopifyDraftOrder,
     addVariantToShopifyDraftOrder,
+    addVariantsToShopifyDraftOrder,
     removeShopifyDraftOrderVariant
   } = useShopifyDraftOrder();
 
-  const addProduct = async (
-    offerId,
-    shopifyProductId,
-    shopifyVariantId,
-    quantity
-  ) => {
+  const addProducts = async (offerId, items) => {
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
 
     // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
-    await addVariantToShopifyCart(shopifyVariantId, quantity);
+    await addVariantsToShopifyCart(items);
 
     // Add the variant to the existing draft order if one exists.
     if (shopifyDraftOrderId) {
-      await addVariantToShopifyDraftOrder(shopifyDraftOrderId, {
-        offerId,
-        shopifyVariantId,
-        quantity
-      });
+      await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, items);
     }
 
     // Create a new draft order if one does not exist.
     if (!shopifyDraftOrderId) {
-      // Create a new draft order. Include the offered item and items already in the cart.
+      // Create a new draft order. Include the offered items and items already in the cart.
       // Associate the new item with the offer.
       draftOrder = await createShopifyDraftOrder({
         lineItems: [
-          {
+          ...items.map(({ shopifyVariantId, quantity }) => ({
             offerId,
             shopifyVariantId,
             quantity
-          },
+          })),
           ...shopifyCartItems.map((item) => ({
             shopifyVariantId: item.variant_id,
             quantity: item.quantity
@@ -71,17 +63,7 @@ const useOfferAcceptance = () => {
     }
 
     // Accept the offer.
-    await trackOfferAcceptance(
-      offerId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
-  };
-
-  const addProductBundle = async (offerId, bundle) => {
-    // TODO
+    await trackOfferAcceptance(offerId, shopifyDraftOrderId, items);
   };
 
   const replaceProduct = async (
@@ -164,16 +146,12 @@ const useOfferAcceptance = () => {
     }
 
     // Accept the offer.
-    await trackOfferAcceptance(
-      offerId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
+    await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
+      { shopifyProductId, shopifyVariantId, quantity }
+    ]);
   };
 
-  return { addProduct, addProductBundle, replaceProduct };
+  return { addProducts, replaceProduct };
 };
 
 export default useOfferAcceptance;

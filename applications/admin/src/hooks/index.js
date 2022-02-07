@@ -1,4 +1,4 @@
 export { ToastProvider, useToast } from './toast';
 
-export { default as usePopupTheme } from './popupTheme';
-export { default as usePopupThemes } from './popupThemes';
+export { default as useTheme } from './theme';
+export { default as useThemes } from './themes';

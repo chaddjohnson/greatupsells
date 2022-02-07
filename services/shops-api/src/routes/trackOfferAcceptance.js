@@ -15,13 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const OfferHit = await models.get('OfferHit');
-    const {
-      offerHitId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    } = JSON.parse(event.body);
+    const { offerHitId, shopifyDraftOrderId, items } = JSON.parse(event.body);
     const offerHit = await OfferHit.findById(offerHitId);
 
     if (!offerHitId) {
@@ -31,12 +25,7 @@ const handler = async (event, context) => {
       };
     }
 
-    await offerHit.trackAcceptance(
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    );
+    await offerHit.trackAcceptance(shopifyDraftOrderId, items);
 
     return {
       statusCode: StatusCodes.CREATED,

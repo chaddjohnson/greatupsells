@@ -59,9 +59,9 @@ custom:
         - schedule: rate(5 minutes)
 
 functions:
-  addDraftOrderLineItem:
+  addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/addDraftOrderLineItem.handler
+    handler: src/routes/addDraftOrderLineItems.handler
     events:
       - http:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
@@ -75,6 +75,14 @@ functions:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
+  checkShopThemeCompatibility:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/checkShopThemeCompatibility.handler
+    events:
+      - http:
+          path: /shops/{shopId}/theme-compatibility
+          method: post
+          authorizer: aws_iam
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -83,12 +91,12 @@ functions:
           path: /offers/{offerId}/clone
           method: post
           authorizer: aws_iam
-  clonePopupTheme:
+  cloneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/clonePopupTheme.handler
+    handler: src/routes/cloneTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}/clone
+          path: /themes/{themeId}/clone
           method: post
           authorizer: aws_iam
   createCollection:
@@ -123,12 +131,12 @@ functions:
           path: /orders
           method: post
           authorizer: aws_iam
-  createPopupTheme:
+  createTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createPopupTheme.handler
+    handler: src/routes/createTheme.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: post
           authorizer: aws_iam
   createProduct:
@@ -219,12 +227,12 @@ functions:
           path: /offers/{offerId}/revenue-increases
           method: get
           authorizer: aws_iam
-  findPopupThemes:
+  findThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findPopupThemes.handler
+    handler: src/routes/findThemes.handler
     events:
       - http:
-          path: /popup-themes
+          path: /themes
           method: get
           authorizer: aws_iam
   findShopAcceptances:
@@ -267,12 +275,12 @@ functions:
           path: /shops/{shopId}/revenue-increases
           method: get
           authorizer: aws_iam
-  findOfferPopupThemes:
+  findOfferThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOfferPopupThemes.handler
+    handler: src/routes/findOfferThemes.handler
     events:
       - http:
-          path: /offers/{offerId}/popup-themes
+          path: /offers/{offerId}/themes
           method: get
           authorizer: aws_iam
   findOffers:
@@ -323,12 +331,12 @@ functions:
           path: /orders/shopify-order-id/{shopifyOrderId}
           method: get
           authorizer: aws_iam
-  findOnePopupTheme:
+  findOneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOnePopupTheme.handler
+    handler: src/routes/findOneTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}
+          path: /themes/{themeId}
           method: get
           authorizer: aws_iam
   findOneProductByShopifyProductId:
@@ -371,12 +379,12 @@ functions:
           path: /shops/{shopId}/offers
           method: get
           authorizer: aws_iam
-  findShopPopupThemes:
+  findShopThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findShopPopupThemes.handler
+    handler: src/routes/findShopThemes.handler
     events:
       - http:
-          path: /shops/{shopId}/popup-themes
+          path: /shops/{shopId}/themes
           method: get
           authorizer: aws_iam
   health:
@@ -454,12 +462,12 @@ functions:
           path: /orders/{orderId}
           method: put
           authorizer: aws_iam
-  updatePopupTheme:
+  updateTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updatePopupTheme.handler
+    handler: src/routes/updateTheme.handler
     events:
       - http:
-          path: /popup-themes/{popupThemeId}
+          path: /themes/{themeId}
           method: put
           authorizer: aws_iam
   updateProduct:

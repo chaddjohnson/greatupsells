@@ -41,6 +41,7 @@ const handler = middy(async (event, context) => {
       shopifyVariantIds,
       shopifyCartTotal,
       shopifyCartItemCount,
+      shopifyOrderId,
       offerImpressions,
       sessionOfferImpressions,
       pagePath
@@ -58,6 +59,7 @@ const handler = middy(async (event, context) => {
         shopifyVariantIds,
         shopifyCartTotal,
         shopifyCartItemCount,
+        shopifyOrderId,
         ipAddress,
         offerImpressions,
         sessionOfferImpressions,
@@ -65,7 +67,7 @@ const handler = middy(async (event, context) => {
       }
     );
 
-    offersData.forEach(({ offer, popupTheme }) => {
+    offersData.forEach(({ offer, theme }) => {
       if (offer) {
         // Exclude stats from the offer response payload.
         delete offer.acceptanceCount;
@@ -75,10 +77,10 @@ const handler = middy(async (event, context) => {
         delete offer.revenueIncrease;
       }
 
-      if (popupTheme) {
+      if (theme) {
         // Exclude internal data.
-        delete popupTheme.referenceUrl;
-        delete popupTheme.notes;
+        delete theme.referenceUrl;
+        delete theme.notes;
       }
     });
 

@@ -38,7 +38,7 @@ const assignId = (object) => {
     return object;
   }
 
-  // Define an internal ID for unsaved popup themes.
+  // Define an internal ID for unsaved themes.
   return Object.defineProperty(object, '__id_offerForm', {
     value: ++themeCount,
     enumerable: false
@@ -59,6 +59,7 @@ const PreviewOfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
   display: none;
+  padding: 1rem;
 
   @media screen and (min-width: 768px) {
     display: block;
@@ -68,11 +69,11 @@ const PreviewOfferPopupContainer = styled.div`
 const OfferForm = ({
   initialValues: {
     offer: initialOffer,
-    popupTheme: initialPopupTheme,
-    offerPopupThemes: initialOfferPopupThemes
+    theme: initialTheme,
+    offerThemes: initialOfferThemes
   },
   shop,
-  popupThemes,
+  themes,
   onSubmit,
   onCancel,
   onDelete
@@ -85,13 +86,12 @@ const OfferForm = ({
   const [showEndDate, setShowEndDate] = useState(false);
   const [designMode, setDesignMode] = useState(true);
   const [previewActive, setPreviewActive] = useState(false);
-  const [popupTheme, setPopupTheme] = useState(assignId(initialPopupTheme));
-  const [offerPopupThemes, setOfferPopupThemes] = useState(
-    assignIds(initialOfferPopupThemes)
-  );
+  const [theme, setTheme] = useState(assignId(initialTheme));
+  const [offerThemes, setOfferThemes] = useState(assignIds(initialOfferThemes));
   const [themeDisplayType, setThemeDisplayType] = useState(
     window.innerWidth >= 768 ? 'desktop' : 'mobile'
   );
+  const [themeIncompatible, setThemeIncompatible] = useState(false);
 
   const {
     name,
@@ -176,8 +176,8 @@ const OfferForm = ({
 
         await onSubmit({
           offer: formValues,
-          popupTheme,
-          offerPopupThemes
+          theme,
+          offerThemes
         });
       } catch (error) {
         return { status: 'fail', errors: error };
@@ -201,25 +201,25 @@ const OfferForm = ({
     }
   }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const popupThemeDirty = useMemo(
-    () => JSON.stringify(popupTheme) !== JSON.stringify(initialPopupTheme),
-    [popupTheme, initialPopupTheme]
+  const themeDirty = useMemo(
+    () => JSON.stringify(theme) !== JSON.stringify(initialTheme),
+    [theme, initialTheme]
   );
 
   contextualSaveBar = useMemo(
     () =>
       ContextualSaveBar.create(app, {
         saveAction: {
-          disabled: !dirty && !popupThemeDirty,
+          disabled: (!dirty && !themeDirty) || themeIncompatible,
           loading: submitting
         },
         discardAction: {
           disabled: false,
           loading: false,
-          discardConfirmationModal: dirty || popupThemeDirty
+          discardConfirmationModal: dirty || themeDirty
         }
       }),
-    [app, dirty, popupThemeDirty, submitting]
+    [app, dirty, themeDirty, submitting, themeIncompatible]
   );
 
   const offer = useMemo(
@@ -239,16 +239,17 @@ const OfferForm = ({
 
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
+  const isInline = ['POST_CHECKOUT', 'THANK_YOU_PAGE'].includes(offer.strategy);
 
   const handleStrategyChange = (value) => {
     const selectedThemeUsesSelectedStrategy =
-      popupTheme.strategies.indexOf(value) > -1;
-    const firstStrategyPopupTheme = popupThemes.find(
+      theme?.strategies.indexOf(value) > -1;
+    const firstStrategyTheme = themes.find(
       (current) => current.strategies.indexOf(value) > -1
     );
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
-    let firstStrategyOfferPopupTheme = offerPopupThemes.find(
+    let firstStrategyOfferTheme = offerThemes.find(
       (current) => current.strategies.indexOf(value) > -1
     );
 
@@ -265,24 +266,32 @@ const OfferForm = ({
 
     // If there is not yet a theme associated with the offer for the selected
     // strategy, then copy the first available theme for that strategy.
-    if (!firstStrategyOfferPopupTheme && firstStrategyPopupTheme) {
-      firstStrategyOfferPopupTheme = copyTheme(firstStrategyPopupTheme);
+    if (!firstStrategyOfferTheme && firstStrategyTheme) {
+      firstStrategyOfferTheme = copyTheme(firstStrategyTheme);
 
       // Copy over changes to the current theme to history.
-      setOfferPopupThemes([firstStrategyOfferPopupTheme, ...offerPopupThemes]);
+      setOfferThemes([firstStrategyOfferTheme, ...offerThemes]);
     }
 
     // Switch to the first strategy theme.
-    if (firstStrategyOfferPopupTheme && !selectedThemeUsesSelectedStrategy) {
-      setPopupTheme(firstStrategyOfferPopupTheme);
+    if (firstStrategyOfferTheme && !selectedThemeUsesSelectedStrategy) {
+      setTheme(firstStrategyOfferTheme);
+    }
+
+    if (!shop.onlineStore2Theme && value === 'POST_CHECKOUT') {
+      setThemeIncompatible(true);
+    }
+
+    if (value === 'THANK_YOU_PAGE') {
+      triggerEvent.onChange('LOAD');
     }
   };
 
   const handleThemeChange = (value) => {
-    setPopupTheme(value);
+    setTheme(value);
 
-    setOfferPopupThemes([
-      ...offerPopupThemes.map((current) =>
+    setOfferThemes([
+      ...offerThemes.map((current) =>
         current.__id_offerForm === value.__id_offerForm ? value : current
       )
     ]);
@@ -293,10 +302,10 @@ const OfferForm = ({
 
     // Make a copy of the theme and add it as history for the offer, and then
     // copy over changes to the current theme to history.
-    setOfferPopupThemes([copiedTheme, ...offerPopupThemes]);
+    setOfferThemes([copiedTheme, ...offerThemes]);
 
     // Use the copied theme.
-    setPopupTheme(copiedTheme);
+    setTheme(copiedTheme);
   };
 
   const handleThemeDisplayTypeChange = (value) => {
@@ -367,47 +376,50 @@ const OfferForm = ({
         <Layout.Section>
           <OfferNameEditor name={name} submitted={submitted} />
           <OfferStrategyEditor
+            shop={shop}
             strategy={strategy}
             onStrategyChange={handleStrategyChange}
           />
           <ThemeEditor
             strategy={offer.strategy}
-            theme={popupTheme}
-            themes={popupThemes}
-            offerThemes={offerPopupThemes}
+            theme={theme}
+            themes={themes}
+            offerThemes={offerThemes}
             displayType={themeDisplayType}
             previewElement={
               <OfferPopupContainer>
                 <OfferPopup
                   open={designMode || previewActive}
                   designMode={designMode}
-                  designModeZoom={0.8}
+                  designModeZoom={isInline ? 1.0 : 0.8}
                   forceDisplayType={
                     !previewActive ? themeDisplayType : undefined
                   }
                   shop={shop}
-                  theme={popupTheme}
+                  theme={theme}
                   offer={offer}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
                   onClose={handleClosePreview}
-                  onClick={handlePreview}
+                  onClick={!isInline ? handlePreview : undefined}
                 />
               </OfferPopupContainer>
             }
-            onPreview={handlePreview}
+            onPreview={!isInline ? handlePreview : undefined}
             onChange={handleThemeChange}
             onThemeSelect={handleThemeSelect}
-            onOfferThemeSelect={setPopupTheme}
+            onOfferThemeSelect={setTheme}
             onDisplayTypeChange={handleThemeDisplayTypeChange}
           />
           <OfferTriggerEventEditor
+            offer={offer}
             triggerEvent={triggerEvent}
             triggerExternalLinksOnly={triggerExternalLinksOnly}
             triggerScrollThreshold={triggerScrollThreshold}
             submitted={submitted}
           />
           <OfferPagesEditor
+            offer={offer}
             triggerPage={triggerPage}
             triggerPagePath={triggerPagePath}
             submitted={submitted}
@@ -418,6 +430,7 @@ const OfferForm = ({
             submitted={submitted}
           />
           <OfferActionButtonEditor
+            offer={offer}
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
@@ -476,30 +489,30 @@ const OfferForm = ({
         <Layout.Section secondary>
           <Sticky offset={16} disableWhenStacked={true}>
             <OfferSummary offer={offer} />
-            <Card.Section fullWidth>
+            <Card>
               <PreviewOfferPopupContainer>
                 <OfferPopup
                   open={true}
                   designMode={true}
-                  designModeZoom={0.3}
+                  designModeZoom={isInline ? 0.6 : 0.3}
                   forceDisplayType="desktop"
                   shop={shop}
-                  theme={popupTheme}
+                  theme={theme}
                   offer={offer}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
                   onClose={handleClosePreview}
-                  onClick={handlePreview}
+                  onClick={!isInline ? handlePreview : undefined}
                 />
               </PreviewOfferPopupContainer>
-            </Card.Section>
+            </Card>
           </Sticky>
         </Layout.Section>
         <Layout.Section>
           <PageActions
             primaryAction={{
               content: 'Save offer',
-              disabled: !dirty && !popupThemeDirty,
+              disabled: (!dirty && !themeDirty) || themeIncompatible,
               loading: submitting,
               submit: true,
               onAction: handleSubmit
@@ -526,11 +539,11 @@ const OfferForm = ({
 OfferForm.propTypes = {
   initialValues: PropTypes.shape({
     offer: PropTypes.object,
-    popupTheme: PropTypes.object,
-    offerPopupThemes: PropTypes.array
+    theme: PropTypes.object,
+    offerThemes: PropTypes.array
   }),
   shop: PropTypes.object.isRequired,
-  popupThemes: PropTypes.array.isRequired,
+  themes: PropTypes.array.isRequired,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   onDelete: PropTypes.func
@@ -539,8 +552,8 @@ OfferForm.propTypes = {
 OfferForm.defaultProps = {
   initialValues: {
     offer: {},
-    popupTheme: {},
-    offerPopupThemes: []
+    theme: {},
+    offerThemes: []
   },
   onSubmit: () => {},
   onCancel: () => {},

@@ -29,20 +29,12 @@ const handler = middy(async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const {
-      offerHitId,
-      shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
-    } = JSON.parse(event.body);
+    const { offerHitId, shopifyDraftOrderId, items } = JSON.parse(event.body);
 
     const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
       shopifyDraftOrderId,
-      shopifyProductId,
-      shopifyVariantId,
-      quantity
+      items
     });
 
     return {

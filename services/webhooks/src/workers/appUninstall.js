@@ -45,6 +45,7 @@ const processData = async (metadata, data, rawData) => {
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
     await logger.info(`Deactivating shop ${shop.domain} via ${topic} webhook`, {
+      metadata,
       data
     });
 

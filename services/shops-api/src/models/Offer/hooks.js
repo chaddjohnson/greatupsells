@@ -8,8 +8,8 @@ const preValidate = async (offer, next) => {
   if (typeof offer.shop === 'string') {
     offer.shop = mongoose.Types.ObjectId(offer.shop);
   }
-  if (typeof offer.popupTheme === 'string') {
-    offer.popupTheme = mongoose.Types.ObjectId(offer.popupTheme);
+  if (typeof offer.theme === 'string') {
+    offer.theme = mongoose.Types.ObjectId(offer.theme);
   }
 
   // Set up reference to the shop if missing.
@@ -21,13 +21,20 @@ const preValidate = async (offer, next) => {
     }
   }
 
-  if (offer.triggerPagePath) {
-    // Sanitize `triggerPagePath`. This removes leading slashes (and re-adds
-    // only one), trailing slashes, and query strings.
-    offer.triggerPagePath = `/${offer.triggerPagePath.replace(
-      /(^\/*|\/*$|\/*?\?.*)/g,
+  if (offer.triggerPagePath && offer.triggerPagePath !== '/') {
+    // Sanitize `triggerPagePath`. This removes trailing slashes and query strings.
+    offer.triggerPagePath = offer.triggerPagePath.replace(
+      /(\/*$|\/*?\?.*)/g,
       ''
-    )}`;
+    );
+  }
+
+  if (!offer.shop.onlineStore2Theme && offer.strategy === 'POST_CHECKOUT') {
+    return next(
+      new Error(
+        'A Shopify 2.0 theme is required to use post-checkout features.'
+      )
+    );
   }
 
   next();

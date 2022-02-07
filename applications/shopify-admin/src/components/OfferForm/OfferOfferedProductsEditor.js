@@ -86,7 +86,11 @@ const OfferOfferedProductsEditor = ({
     }
   }, [offeredProducts.value, offeredCollections.value]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (offer.strategy !== 'UPSELL' && offer.strategy !== 'CROSS_SELL') {
+  if (
+    offer.strategy !== 'UPSELL' &&
+    offer.strategy !== 'CROSS_SELL' &&
+    offer.strategy !== 'THANK_YOU_PAGE'
+  ) {
     return null;
   }
 
@@ -145,7 +149,8 @@ const OfferOfferedProductsEditor = ({
             )}
           </FormLayout>
         </Card.Section>
-        {offer.strategy === 'CROSS_SELL' && (
+        {(offer.strategy === 'CROSS_SELL' ||
+          offer.strategy === 'THANK_YOU_PAGE') && (
           <Card.Section>
             <FormLayout>
               <Checkbox

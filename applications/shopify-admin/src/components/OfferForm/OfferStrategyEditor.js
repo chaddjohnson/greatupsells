@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, ChoiceList } from '@shopify/polaris';
+import { Card, FormLayout, ChoiceList, Banner } from '@shopify/polaris';
+import Link from '../Link';
 
-const OfferBasicsEditor = ({ strategy, onStrategyChange }) => (
+const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
   <>
     <Card title="Strategy" sectioned>
       <FormLayout>
@@ -11,14 +12,44 @@ const OfferBasicsEditor = ({ strategy, onStrategyChange }) => (
             {
               label: 'Cross-sell',
               helpText:
-                'Encourage customers to purchase a related or complementary product.',
+                'Encourage customers to purchase a related or complementary product via a popup.',
               value: 'CROSS_SELL'
             },
             {
               label: 'Upsell',
               helpText:
-                'Encourage customers to purchase a comparable, more expensive product.',
+                'Encourage customers to purchase a comparable, more expensive product via a popup.',
               value: 'UPSELL'
+            },
+            {
+              label: 'Post-checkout cross-sell',
+              helpText:
+                'Encourage customers to purchase a related or complementary product after completing checkout.',
+              value: 'POST_CHECKOUT',
+              renderChildren: (isSelected) =>
+                isSelected &&
+                !shop.onlineStore2Theme && (
+                  <Banner
+                    title="Incompatible with your theme"
+                    status="critical"
+                  >
+                    Your current theme does not support post-checkout features.
+                    A{' '}
+                    <Link
+                      url="https://themes.shopify.com/collections/os2-themes"
+                      external
+                    >
+                      Shopify 2.0 theme
+                    </Link>{' '}
+                    is required to use this feature.
+                  </Banner>
+                )
+            },
+            {
+              label: 'Post-checkout Thank You page cross-sell',
+              helpText:
+                'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
+              value: 'THANK_YOU_PAGE'
             }
             // {
             //   label: 'Popup',
@@ -35,13 +66,14 @@ const OfferBasicsEditor = ({ strategy, onStrategyChange }) => (
   </>
 );
 
-OfferBasicsEditor.propTypes = {
+OfferStrategyEditor.propTypes = {
+  shop: PropTypes.object.isRequired,
   strategy: PropTypes.object.isRequired,
   onStrategyChange: PropTypes.func
 };
 
-OfferBasicsEditor.defaultProps = {
+OfferStrategyEditor.defaultProps = {
   onStrategyChange: () => {}
 };
 
-export default OfferBasicsEditor;
+export default OfferStrategyEditor;

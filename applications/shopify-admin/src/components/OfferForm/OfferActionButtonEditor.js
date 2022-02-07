@@ -4,6 +4,7 @@ import { Card, TextField, Checkbox, ChoiceList, Stack } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
 
 const OfferActionButtonEditor = ({
+  offer,
   actionButtonBehavior,
   actionButtonLink,
   actionButtonLinkOpenInNewTab,
@@ -17,6 +18,10 @@ const OfferActionButtonEditor = ({
       actionButtonLinkOpenInNewTab.onChange(false);
     }
   };
+
+  if (offer.strategy === 'THANK_YOU_PAGE') {
+    return null;
+  }
 
   return (
     <Card title="Action button behavior" sectioned>
@@ -63,6 +68,7 @@ const OfferActionButtonEditor = ({
 };
 
 OfferActionButtonEditor.propTypes = {
+  offer: PropTypes.object.isRequired,
   actionButtonBehavior: PropTypes.object.isRequired,
   actionButtonLink: PropTypes.object.isRequired,
   actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,

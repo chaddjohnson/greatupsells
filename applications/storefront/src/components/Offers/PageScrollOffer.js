@@ -15,7 +15,7 @@ let offerViewed = false;
 
 const PageScrollOffer = ({
   offer,
-  popupTheme,
+  theme,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -33,7 +33,7 @@ const PageScrollOffer = ({
   );
 
   const { trackOfferImpression } = useOfferTracking();
-  const { addProduct, replaceProduct } = useOfferAcceptance();
+  const { addProducts, replaceProduct } = useOfferAcceptance();
   const { shop } = useShop();
 
   const offerId = offer?._id;
@@ -186,14 +186,14 @@ const PageScrollOffer = ({
     <OfferPopup
       open={popupOpen}
       shop={shop}
-      theme={popupTheme}
+      theme={theme}
       offer={offer}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
       shopifyCartTotal={shopifyCartTotal}
       shopifyCartItemCount={shopifyCartItemCount}
-      onAddProduct={addProduct}
+      onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
       onClose={handleClosePopup}
     />
@@ -202,7 +202,7 @@ const PageScrollOffer = ({
 
 PageScrollOffer.propTypes = {
   offer: PropTypes.object.isRequired,
-  popupTheme: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,
