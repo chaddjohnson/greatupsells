@@ -1,4 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { omit } = require('lodash');
 const logger = require('@greatupsells/logger');
 const mongodbClient = require('../models/mongodbClient');
 const models = require('../models');
@@ -28,7 +29,9 @@ const handler = async (event, context) => {
     }
 
     await theme.save();
-    await logger.info(`Theme created`, { theme });
+    await logger.info(`Theme created`, {
+      theme: omit(theme, ['thumbnailImageUrl'])
+    });
 
     return {
       statusCode: StatusCodes.CREATED,
