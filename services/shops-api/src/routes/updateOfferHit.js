@@ -16,7 +16,7 @@ const handler = async (event, context) => {
   try {
     const { offerHitId } = event.pathParameters;
     const OfferHit = await models.get('OfferHit');
-    const offerHit = await OfferHit.findById(offerHitId);
+    let offerHit = await OfferHit.findById(offerHitId);
     const {
       offer,
       shop,
@@ -75,6 +75,8 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    offerHit = await OfferHit.findById(offerHitId);
     await offerHit.save();
 
     return {

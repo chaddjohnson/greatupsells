@@ -19,7 +19,7 @@ const handler = async (event, context) => {
       models.get('Order'),
       models.get('Shop')
     ]);
-    const order = await Order.findById(orderId);
+    let order = await Order.findById(orderId);
     const { revenueIncrease } = order;
     const data = JSON.parse(event.body);
 
@@ -46,9 +46,11 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    order = await Order.findById(orderId);
     await order.save();
-    await order.execPopulate('shop');
 
+    await order.execPopulate('shop');
     await logger.info(`Order updated (${order.toString()})`, { order });
 
     return {

@@ -19,7 +19,7 @@ const handler = async (event, context) => {
       models.get('Offer'),
       models.get('Shop')
     ]);
-    const offer = await Offer.findById(offerId);
+    let offer = await Offer.findById(offerId);
     const {
       impressionCount,
       acceptanceCount,
@@ -56,9 +56,11 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    offer = await Offer.findById(offerId);
     await offer.save();
-    await offer.execPopulate('shop');
 
+    await offer.execPopulate('shop');
     await logger.info(`Offer updated (${offer.toString()})`, { offer });
 
     return {

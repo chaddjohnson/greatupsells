@@ -16,7 +16,7 @@ const handler = async (event, context) => {
   try {
     const { themeId } = event.pathParameters;
     const Theme = await models.get('Theme');
-    const theme = await Theme.findById(themeId);
+    let theme = await Theme.findById(themeId);
     const data = JSON.parse(event.body);
 
     if (!theme) {
@@ -37,6 +37,8 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    theme = await Theme.findById(themeId);
     await theme.save();
 
     return {

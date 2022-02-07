@@ -19,7 +19,7 @@ const handler = async (event, context) => {
       models.get('Product'),
       models.get('Shop')
     ]);
-    const product = await Product.findById(productId);
+    let product = await Product.findById(productId);
     const { shopifyCollectionIds, title } = product;
     const data = JSON.parse(event.body);
 
@@ -47,7 +47,10 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    product = await Product.findById(productId);
     await product.save();
+
     await product.trackShopifyCollections();
     await product.updateDependentOffers();
     await product.execPopulate('shop');

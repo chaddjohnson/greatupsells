@@ -16,7 +16,7 @@ const handler = async (event, context) => {
   try {
     const { shopId } = event.pathParameters;
     const Shop = await models.get('Shop');
-    const shop = await Shop.findById(shopId);
+    let shop = await Shop.findById(shopId);
     const {
       shopifyShopId,
       plan,
@@ -58,6 +58,8 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    shop = await Shop.findById(shopId);
     await shop.save();
 
     // Deactivate the shop for our app if the Shopify shop plan is canceled.

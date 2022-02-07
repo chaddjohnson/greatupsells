@@ -20,7 +20,7 @@ const handler = async (event, context) => {
       models.get('Collection'),
       models.get('Shop')
     ]);
-    const collection = await Collection.findById(collectionId);
+    let collection = await Collection.findById(collectionId);
     const { shopifyProductIds, title, productCount } = collection;
     const data = JSON.parse(event.body);
 
@@ -49,11 +49,13 @@ const handler = async (event, context) => {
       };
     }
 
+    // Refresh document, and force middleware to run.
+    collection = await Collection.findById(collectionId);
     await collection.save();
+
     await collection.trackShopifyProducts();
     await collection.updateDependentOffers();
     await collection.execPopulate('shop');
-
     await logger.info(`Collection updated (${collection.toString()})`, {
       data
     });
