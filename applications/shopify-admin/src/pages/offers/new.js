@@ -165,7 +165,7 @@ const NewOfferPage = () => {
 
       showSuccessToast('Offer created.');
     } catch (saveError) {
-      showErrorToast(`Error creating offer.`);
+      showErrorToast('Error creating offer.');
     }
   };
 

@@ -165,7 +165,7 @@ const OfferEditPage = () => {
 
       showSuccessToast('Offer updated.');
     } catch (saveError) {
-      showErrorToast(`Error updating offer.`);
+      showErrorToast('Error updating offer.');
     }
   };
 

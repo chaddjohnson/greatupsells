@@ -88,6 +88,7 @@ const OfferForm = ({
   const [previewActive, setPreviewActive] = useState(false);
   const [theme, setTheme] = useState(assignId(initialTheme));
   const [offerThemes, setOfferThemes] = useState(assignIds(initialOfferThemes));
+  const [themeDirty, setThemeDirty] = useState(false);
   const [themeDisplayType, setThemeDisplayType] = useState(
     window.innerWidth >= 768 ? 'desktop' : 'mobile'
   );
@@ -170,16 +171,19 @@ const OfferForm = ({
       contextualSaveBar.set({ saveAction: { loading: true } });
 
       try {
-        formValues._id = initialOffer._id;
-
         await onSubmit({
-          offer: formValues,
+          offer: {
+            ...initialOffer,
+            formValues
+          },
           theme,
           offerThemes
         });
       } catch (error) {
         return { status: 'fail', errors: error };
       }
+
+      setThemeDirty(false);
 
       contextualSaveBar.set({ saveAction: { loading: false } });
       contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
@@ -198,11 +202,6 @@ const OfferForm = ({
       firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const themeDirty = useMemo(
-    () => JSON.stringify(theme) !== JSON.stringify(initialTheme),
-    [theme, initialTheme]
-  );
 
   contextualSaveBar = useMemo(
     () =>
@@ -287,12 +286,12 @@ const OfferForm = ({
 
   const handleThemeChange = (value) => {
     setTheme(value);
-
     setOfferThemes([
       ...offerThemes.map((current) =>
         current.__id_offerForm === value.__id_offerForm ? value : current
       )
     ]);
+    setThemeDirty(true);
   };
 
   const handleThemeSelect = (value) => {
@@ -304,6 +303,13 @@ const OfferForm = ({
 
     // Use the copied theme.
     setTheme(copiedTheme);
+
+    setThemeDirty(true);
+  };
+
+  const handleOfferThemeSelect = (value) => {
+    setTheme(value);
+    setThemeDirty(true);
   };
 
   const handleThemeDisplayTypeChange = (value) => {
@@ -346,12 +352,12 @@ const OfferForm = ({
   }, [contextualSaveBar, onCancel, handleSubmit]);
 
   useEffect(() => {
-    if (dirty) {
+    if (dirty || themeDirty) {
       contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
     } else {
       contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
     }
-  }, [contextualSaveBar, dirty]);
+  }, [contextualSaveBar, dirty, themeDirty]);
 
   useEffect(() => {
     return () => {
@@ -406,7 +412,7 @@ const OfferForm = ({
             onPreview={!isInline ? handlePreview : undefined}
             onChange={handleThemeChange}
             onThemeSelect={handleThemeSelect}
-            onOfferThemeSelect={setTheme}
+            onOfferThemeSelect={handleOfferThemeSelect}
             onDisplayTypeChange={handleThemeDisplayTypeChange}
           />
           <OfferTriggerEventEditor
