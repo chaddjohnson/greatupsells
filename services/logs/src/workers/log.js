@@ -6,6 +6,8 @@ const { DOMAIN, LOGS_NOTIFICATION_EMAIL } = process.env;
 const processRecord = async (record) => {
   const Log = await models.get('Log');
 
+  console.log(record.body);
+
   // Parse the message.
   const { source, type, message, stackTrace, data } = JSON.parse(record.body);
 
