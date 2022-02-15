@@ -486,74 +486,74 @@ functions:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam
-  calculateStats:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/calculateStats.handler
-    events:
-      - schedule: cron(1 5,6 * * ? *)
-    timeout: 900
-    enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
-  fixShopWebhooks:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/fixShopWebhooks.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
-    enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
-  importShopCollections:
-    memorySize: 512
-    reservedConcurrency: 2
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopCollections.handler
-    events:
-      - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
-    timeout: 900
-    warmup:
-      default:
-        enabled: false
-  importShopProducts:
-    memorySize: 512
-    reservedConcurrency: 2
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopProducts.handler
-    events:
-      - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
-    timeout: 900
-    warmup:
-      default:
-        enabled: false
-  updateShopActiveStatuses:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/updateShopActiveStatuses.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
-    enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
-  updateShopPlans:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/updateShopPlans.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
-    enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
+  # calculateStats:
+  #   memorySize: 512
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/calculateStats.handler
+  #   events:
+  #     - schedule: cron(1 5,6 * * ? *)
+  #   timeout: 900
+  #   enabled: '"${self:provider.region}" == "us-east-1"'
+  #   warmup:
+  #     default:
+  #       enabled: false
+  # fixShopWebhooks:
+  #   memorySize: 512
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/fixShopWebhooks.handler
+  #   events:
+  #     - schedule: rate(1 day)
+  #   timeout: 900
+  #   enabled: '"${self:provider.region}" == "us-east-1"'
+  #   warmup:
+  #     default:
+  #       enabled: false
+  # importShopCollections:
+  #   memorySize: 512
+  #   reservedConcurrency: 2
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/importShopCollections.handler
+  #   events:
+  #     - sqs:
+  #         arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
+  #   timeout: 900
+  #   warmup:
+  #     default:
+  #       enabled: false
+  # importShopProducts:
+  #   memorySize: 512
+  #   reservedConcurrency: 2
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/importShopProducts.handler
+  #   events:
+  #     - sqs:
+  #         arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
+  #   timeout: 900
+  #   warmup:
+  #     default:
+  #       enabled: false
+  # updateShopActiveStatuses:
+  #   memorySize: 512
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/updateShopActiveStatuses.handler
+  #   events:
+  #     - schedule: rate(1 day)
+  #   timeout: 900
+  #   enabled: '"${self:provider.region}" == "us-east-1"'
+  #   warmup:
+  #     default:
+  #       enabled: false
+  # updateShopPlans:
+  #   memorySize: 512
+  #   role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+  #   handler: src/workers/updateShopPlans.handler
+  #   events:
+  #     - schedule: rate(1 day)
+  #   timeout: 900
+  #   enabled: '"${self:provider.region}" == "us-east-1"'
+  #   warmup:
+  #     default:
+  #       enabled: false
 
 plugins:
   - serverless-offline
