@@ -44,11 +44,11 @@ jobs:
         run: yarn install
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
-      # - name: Run Data Migrations
-      #   run: yarn migrate
-      #   working-directory: services/shops-api
-      #   env:
-      #     MONGODB_URL_SHOPS: ${{ env.MONGODB_URL_SHOPS }}
+      - name: Run Data Migrations
+        run: yarn migrate
+        working-directory: services/shops-api
+        env:
+          MONGODB_URL_SHOPS: ${{ env.MONGODB_URL_SHOPS }}
       - name: Download .serverless directory
         run: aws s3 sync s3://greatupsells-infrastructure/serverless/shops-api . --region us-east-1
         working-directory: services/shops-api
