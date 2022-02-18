@@ -18,7 +18,7 @@ import {
   ProductsMajor,
   TextBlockMajor,
   ColorsMajor,
-  TypeMajor,
+  // TypeMajor,
   SettingsMajor,
   // CodeMajor,
   ArrowLeftMinor
