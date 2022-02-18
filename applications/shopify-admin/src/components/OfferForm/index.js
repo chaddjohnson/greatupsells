@@ -174,7 +174,7 @@ const OfferForm = ({
         await onSubmit({
           offer: {
             ...initialOffer,
-            formValues
+            ...formValues
           },
           theme,
           offerThemes
