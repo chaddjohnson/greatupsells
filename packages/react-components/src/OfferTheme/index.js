@@ -5,20 +5,6 @@ import { useCookies, useCurrency } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 
-const loadScripts = () => {
-  const scriptUrls = ['https://cdn.shopify.com/s/javascripts/currencies.js'];
-
-  scriptUrls.forEach((scriptUrl) => {
-    const script = document.createElement('script');
-
-    script.type = 'text/javascript';
-    script.src = scriptUrl;
-    script.async = true;
-
-    document.head.appendChild(script);
-  });
-};
-
 const OfferTheme = ({
   shop,
   offer,
@@ -304,9 +290,5 @@ OfferTheme.propTypes = {
 OfferTheme.defaultProps = {
   handlers: {}
 };
-
-if (typeof window !== 'undefined') {
-  loadScripts();
-}
 
 export default OfferTheme;

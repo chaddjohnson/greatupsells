@@ -1,5 +1,19 @@
 import React, { useMemo, useCallback } from 'react';
 
+const loadScripts = () => {
+  const scriptUrls = ['https://cdn.shopify.com/s/javascripts/currencies.js'];
+
+  scriptUrls.forEach((scriptUrl) => {
+    const script = document.createElement('script');
+
+    script.type = 'text/javascript';
+    script.src = scriptUrl;
+    script.async = true;
+
+    document.head.appendChild(script);
+  });
+};
+
 const useCurrency = ({ locale, countryCode, currency }) => {
   const currencyFormatter = useMemo(() => {
     if (!locale || !countryCode || !currency) {
@@ -46,5 +60,9 @@ const useCurrency = ({ locale, countryCode, currency }) => {
     getCurrencySymbol
   };
 };
+
+if (typeof window !== 'undefined') {
+  loadScripts();
+}
 
 export default useCurrency;
