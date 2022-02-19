@@ -48,7 +48,7 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
 
   const getCurrencySymbol = useCallback(() => {
     const parts = currencyFormatter?.formatToParts(currency);
-    const currencyPart = parts?.find(({ type }) => type === 'currenct');
+    const currencyPart = parts?.find(({ type }) => type === 'currency');
     const currencySymbol = currencyPart?.value;
 
     return currencySymbol || '$';
