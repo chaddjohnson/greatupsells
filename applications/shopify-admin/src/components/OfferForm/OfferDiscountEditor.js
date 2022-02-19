@@ -8,7 +8,7 @@ import {
   Banner
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCurrency } from '@greatupsells/react-hooks';
 
 const DiscountValueInputWrapper = styled.div`
   .Polaris-TextField {
@@ -30,7 +30,7 @@ const OfferDiscountEditor = ({
       : discountValue.value
   );
   const { locale, countryCode, currency } = shop || {};
-  const { getCurrencySymbol } = useNumberFormatter({
+  const { getCurrencySymbol } = useCurrency({
     locale,
     countryCode,
     currency

@@ -14,6 +14,7 @@ import {
 } from '@shopify/polaris';
 import {
   useNumberFormatter,
+  useCurrency,
   useDateTime,
   useInterval
 } from '@greatupsells/react-hooks';
@@ -101,11 +102,12 @@ const OfferAnalyticsPage = () => {
 
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const { offer } = useOffer(offerId);
   const {
     offerAcceptances,

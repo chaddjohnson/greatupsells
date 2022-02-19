@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLiquid } from 'react-liquid';
-import { useCookies, useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCookies, useCurrency } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 
@@ -71,7 +71,7 @@ const OfferTheme = ({
   const defaultCurrency = 'USD';
   const { locale, countryCode, currency: shopCurrency } = shop;
   const currency = selectedCurrency || shopCurrency || defaultCurrency;
-  const { formatCurrency, convertCurrency } = useNumberFormatter({
+  const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
     currency

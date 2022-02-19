@@ -9,7 +9,11 @@ import {
   List,
   Button
 } from '@shopify/polaris';
-import { useNumberFormatter, useDateTime } from '@greatupsells/react-hooks';
+import {
+  useNumberFormatter,
+  useCurrency,
+  useDateTime
+} from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
 import OfferStatus from '../OfferStatus';
 
@@ -28,11 +32,12 @@ const OfferSummary = ({ offer }) => {
 
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const { formatDate } = useDateTime();
 
   const buildItems = useCallback(() => {

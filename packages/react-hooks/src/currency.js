@@ -1,0 +1,50 @@
+import React, { useMemo, useCallback } from 'react';
+
+const useCurrency = ({ locale, countryCode, currency }) => {
+  const currencyFormatter = useMemo(() => {
+    if (!locale || !countryCode || !currency) {
+      return;
+    }
+
+    return new Intl.NumberFormat(`${locale}-${countryCode}`, {
+      style: 'currency',
+      currency
+    });
+  }, [locale, countryCode, currency]);
+
+  const formatCurrency = useCallback(
+    (value) => {
+      if (currencyFormatter?.format) {
+        return currencyFormatter.format(value) || value;
+      }
+
+      return value;
+    },
+    [currencyFormatter]
+  );
+
+  // Depends on https://cdn.shopify.com/s/javascripts/currencies.js being loaded.
+  const convertCurrency = (amount, from, to) => {
+    if (!window.Currency?.convert) {
+      return amount;
+    }
+
+    return window.Currency.convert(amount, from, to);
+  };
+
+  const getCurrencySymbol = useCallback(() => {
+    const parts = currencyFormatter?.formatToParts(currency);
+    const currencyPart = parts?.find(({ type }) => type === 'currency');
+    const currencySymbol = currencyPart?.value;
+
+    return currencySymbol || '$';
+  }, [currency, currencyFormatter]);
+
+  return {
+    formatCurrency,
+    convertCurrency,
+    getCurrencySymbol
+  };
+};
+
+export default useCurrency;

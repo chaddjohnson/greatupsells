@@ -10,7 +10,7 @@ import {
   Pagination,
   EmptyState
 } from '@shopify/polaris';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useNumberFormatter, useCurrency } from '@greatupsells/react-hooks';
 import styled from 'styled-components';
 import { useShop } from '../hooks';
 import OfferStatus from './OfferStatus';
@@ -33,11 +33,12 @@ const OfferLink = styled(Link)`
 const OfferListRow = ({ offer }) => {
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
 
   const description = useMemo(() => {
     if (!offer.discountValue) {

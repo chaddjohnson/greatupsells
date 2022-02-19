@@ -20,6 +20,7 @@ import {
 import styled from 'styled-components';
 import {
   useNumberFormatter,
+  useCurrency,
   useDateTime,
   useInterval
 } from '@greatupsells/react-hooks';
@@ -76,11 +77,12 @@ const DashboardPage = () => {
 
   const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const {
     shopAcceptances,
     shopAcceptancesLoaded,

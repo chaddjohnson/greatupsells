@@ -9,17 +9,6 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     return new Intl.NumberFormat(`${locale}-${countryCode}`);
   }, [locale, countryCode]);
 
-  const currencyFormatter = useMemo(() => {
-    if (!locale || !countryCode || !currency) {
-      return;
-    }
-
-    return new Intl.NumberFormat(`${locale}-${countryCode}`, {
-      style: 'currency',
-      currency
-    });
-  }, [locale, countryCode, currency]);
-
   const formatNumber = useCallback(
     (value, decimals = 2) => {
       if (numberFormatter?.format) {
@@ -34,34 +23,6 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     },
     [numberFormatter]
   );
-
-  const formatCurrency = useCallback(
-    (value) => {
-      if (currencyFormatter?.format) {
-        return currencyFormatter.format(value) || value;
-      }
-
-      return value;
-    },
-    [currencyFormatter]
-  );
-
-  // Depends on https://cdn.shopify.com/s/javascripts/currencies.js being loaded.
-  const convertCurrency = (amount, from, to) => {
-    if (!window.Currency?.convert) {
-      return amount;
-    }
-
-    return window.Currency.convert(amount, from, to);
-  };
-
-  const getCurrencySymbol = useCallback(() => {
-    const parts = currencyFormatter?.formatToParts(currency);
-    const currencyPart = parts?.find(({ type }) => type === 'currency');
-    const currencySymbol = currencyPart?.value;
-
-    return currencySymbol || '$';
-  }, [currency, currencyFormatter]);
 
   const formatPercentage = useCallback(
     (value, decimals = 2) => {
@@ -81,9 +42,6 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
 
   return {
     formatNumber,
-    formatCurrency,
-    convertCurrency,
-    getCurrencySymbol,
     formatPercentage
   };
 };

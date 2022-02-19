@@ -8,7 +8,7 @@ import {
   InlineError
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCurrency } from '@greatupsells/react-hooks';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
 
@@ -38,7 +38,7 @@ const OfferTriggerProductsEditor = ({
   const [appliesTo, setAppliesTo] = useState(initialAppliesTo);
 
   const { locale, countryCode, currency } = shop || {};
-  const { getCurrencySymbol } = useNumberFormatter({
+  const { getCurrencySymbol } = useCurrency({
     locale,
     countryCode,
     currency

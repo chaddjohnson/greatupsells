@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCurrency } from '@greatupsells/react-hooks';
 import calculateDiscountedPrice from './calculateDiscountedPrice';
 
 const getThumbnailImageUrl = (url) => {
@@ -8,7 +8,7 @@ const getThumbnailImageUrl = (url) => {
 
 const useDataTranslation = (shop, offer, currency) => {
   const { locale, countryCode, currency: shopCurrency } = shop;
-  const { formatCurrency, convertCurrency } = useNumberFormatter({
+  const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
     currency

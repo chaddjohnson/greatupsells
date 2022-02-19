@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useEffect } from 'react';
 import knockout from 'knockout';
-import { useCookies, useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCookies, useCurrency } from '@greatupsells/react-hooks';
 
 const useDataBinding = ({
   context,
@@ -20,7 +20,7 @@ const useDataBinding = ({
 }) => {
   const { getCookie } = useCookies();
   const { locale, countryCode, currency: shopCurrency } = shop;
-  const { formatCurrency, convertCurrency } = useNumberFormatter({
+  const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
     currency
