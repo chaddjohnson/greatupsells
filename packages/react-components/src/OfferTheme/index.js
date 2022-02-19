@@ -5,6 +5,20 @@ import { useCookies, useNumberFormatter } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 
+const loadScripts = () => {
+  const scriptUrls = ['https://cdn.shopify.com/s/javascripts/currencies.js'];
+
+  scriptUrls.forEach((scriptUrl) => {
+    const script = document.createElement('script');
+
+    script.type = 'text/javascript';
+    script.src = scriptUrl;
+    script.async = true;
+
+    document.head.appendChild(script);
+  });
+};
+
 const OfferTheme = ({
   shop,
   offer,
@@ -30,8 +44,34 @@ const OfferTheme = ({
     getCookie('greatupsellsDraftOrderCheckoutUrl') || '/checkout'
   );
 
-  const { locale, countryCode, currency } = shop;
-  const { formatCurrency } = useNumberFormatter({
+  // Determine the customer's selected currency. Different Shopify apps track this in different ways.
+  const selectedCurrency =
+    getCookie('currencynewcookie') ||
+    localStorage.getItem('currency') ||
+    getCookie('boldCurrencyCookie') ||
+    getCookie('acscurrency') ||
+    localStorage.getItem('__v_cc__s_c__') ||
+    (localStorage.getItem('cbb-currency-converter-currency') &&
+      JSON.parse(localStorage.getItem('cbb-currency-converter-currency'))
+        ?.value) ||
+    (localStorage.getItem('spurit-global-multitabs.cart') &&
+      JSON.parse(localStorage.getItem('spurit-global-multitabs.cart'))
+        ?.currency) ||
+    localStorage.getItem('T4Currency') ||
+    localStorage.getItem('currencyWidget') ||
+    getCookie('pb_cur_65271') ||
+    getCookie('currency') ||
+    document.querySelector('.currency-switcher .current')?.innerText.trim() ||
+    document.querySelector('.pb_currency_name')?.innerText.trim() ||
+    (sessionStorage.getItem('bacurr_user_cur') &&
+      JSON.parse(sessionStorage.getItem('bacurr_user_cur'))) ||
+    document.querySelector('.ba-chosen')?.innerText.trim() ||
+    getCookie('cart_currency');
+
+  const defaultCurrency = 'USD';
+  const { locale, countryCode, currency: shopCurrency } = shop;
+  const currency = selectedCurrency || shopCurrency || defaultCurrency;
+  const { formatCurrency, convertCurrency } = useNumberFormatter({
     locale,
     countryCode,
     currency
@@ -40,7 +80,7 @@ const OfferTheme = ({
   const {
     translateProductData,
     translateTriggerProductData
-  } = useDataTranslation(shop, offer);
+  } = useDataTranslation(shop, offer, currency);
 
   const actionButtonUrl = useMemo(() => {
     if (offer.actionButtonBehavior === 'CHECKOUT') {
@@ -109,7 +149,9 @@ const OfferTheme = ({
       offeredProducts: translatedOfferedProducts,
       actionButtonUrl,
       actionButtonTarget,
-      shopifyCartTotal: formatCurrency(shopifyCartTotal || 0),
+      shopifyCartTotal: formatCurrency(
+        convertCurrency(shopifyCartTotal || 0, shopCurrency, currency)
+      ),
       shopifyCartItemCount: shopifyCartItemCount || 0,
       strategy: offer.strategy,
       enableBundling: offer.enableBundling,
@@ -125,7 +167,10 @@ const OfferTheme = ({
       actionButtonTarget,
       shopifyCartTotal,
       shopifyCartItemCount,
-      formatCurrency
+      formatCurrency,
+      convertCurrency,
+      shopCurrency,
+      currency
     ]
   );
 
@@ -172,6 +217,7 @@ const OfferTheme = ({
     context,
     shop,
     offer,
+    currency,
     offeredProducts: translatedOfferedProducts,
     addedQuantities,
     html,
@@ -258,5 +304,9 @@ OfferTheme.propTypes = {
 OfferTheme.defaultProps = {
   handlers: {}
 };
+
+if (typeof window !== 'undefined') {
+  loadScripts();
+}
 
 export default OfferTheme;

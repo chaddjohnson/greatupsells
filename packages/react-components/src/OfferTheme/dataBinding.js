@@ -6,6 +6,7 @@ const useDataBinding = ({
   context,
   shop,
   offer,
+  currency,
   offeredProducts,
   addedQuantities,
   html,
@@ -18,8 +19,8 @@ const useDataBinding = ({
   onQuantityAdd
 }) => {
   const { getCookie } = useCookies();
-  const { locale, countryCode, currency } = shop;
-  const { formatCurrency } = useNumberFormatter({
+  const { locale, countryCode, currency: shopCurrency } = shop;
+  const { formatCurrency, convertCurrency } = useNumberFormatter({
     locale,
     countryCode,
     currency
@@ -55,7 +56,9 @@ const useDataBinding = ({
           0
         );
 
-        return formatCurrency(subtotal);
+        return formatCurrency(
+          convertCurrency(subtotal, shopCurrency, currency)
+        );
       };
 
       this.savingsFormatted = () => {
@@ -68,7 +71,7 @@ const useDataBinding = ({
           0
         );
 
-        return formatCurrency(savings);
+        return formatCurrency(convertCurrency(savings, shopCurrency, currency));
       };
 
       this.selectedVariantIds = knockout.observableArray(

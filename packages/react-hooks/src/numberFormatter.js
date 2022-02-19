@@ -46,6 +46,15 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     [currencyFormatter]
   );
 
+  // Depends on https://cdn.shopify.com/s/javascripts/currencies.js being loaded.
+  const convertCurrency = (amount, from, to) => {
+    if (!window.Currency?.convert) {
+      return amount;
+    }
+
+    return window.Currency.convert(amount, from, to);
+  };
+
   const getCurrencySymbol = useCallback(() => {
     const parts = currencyFormatter?.formatToParts(currency);
     const currencyPart = parts?.find(({ type }) => type === 'currency');
@@ -70,7 +79,13 @@ const useNumberFormatter = ({ locale, countryCode, currency }) => {
     [numberFormatter]
   );
 
-  return { formatNumber, formatCurrency, getCurrencySymbol, formatPercentage };
+  return {
+    formatNumber,
+    formatCurrency,
+    convertCurrency,
+    getCurrencySymbol,
+    formatPercentage
+  };
 };
 
 export default useNumberFormatter;
