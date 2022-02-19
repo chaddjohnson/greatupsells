@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 
-const useNumberFormatter = ({ locale, countryCode, currency }) => {
+const useNumberFormatter = ({ locale, countryCode }) => {
   const numberFormatter = useMemo(() => {
     if (!locale || !countryCode) {
       return;
