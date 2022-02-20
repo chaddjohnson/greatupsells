@@ -14,7 +14,11 @@ const loadScripts = () => {
   });
 };
 
-const useCurrency = ({ locale, countryCode, currency }) => {
+const useCurrency = ({
+  locale = 'en',
+  countryCode = 'US',
+  currency = 'USD'
+}) => {
   const currencyFormatter = useMemo(() => {
     if (!locale || !countryCode || !currency) {
       return;
