@@ -9919,6 +9919,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+iso-country-currency@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/iso-country-currency/-/iso-country-currency-0.6.0.tgz#c0dbddd42b6b7604d8fbccb58466bfede242b905"
+  integrity sha512-OPocsi53/vS0VblF4HV4k/jnz9xXoCTWxKqOgdcdfFgIBcgS3qNP0n9p5AJAqaz3aQNf4xndereV1LhDggeKUA==
+
 isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"

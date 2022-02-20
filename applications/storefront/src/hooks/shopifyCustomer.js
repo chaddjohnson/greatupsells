@@ -1,36 +1,57 @@
 import React from 'react';
+import { getParamByISO } from 'iso-country-currency';
 import { useCookies } from '@greatupsells/react-hooks';
 
 const useShopifyCustomer = () => {
   const { getCookie } = useCookies();
 
   const getCustomerLocale = () => {
-    const language = navigator.languages?.length
-      ? navigator.languages[0]
-      : navigator.userLanguage ||
-        navigator.language ||
-        navigator.browserLanguage ||
-        navigator.systemLanguage ||
-        'en-US';
+    const urlLocale = window.location.pathname.match(
+      /\/([a-z]{2})-[a-z]{2}/
+    )?.[1];
+
+    const language =
+      urlLocale ||
+      (navigator.languages?.length
+        ? navigator.languages[0]
+        : navigator.userLanguage ||
+          navigator.language ||
+          navigator.browserLanguage ||
+          navigator.systemLanguage ||
+          'en-US');
     const parts = language.split('-');
 
     return parts[0] || 'en';
   };
 
   const getCustomerCountryCode = () => {
-    const language = navigator.languages?.length
-      ? navigator.languages[0]
-      : navigator.userLanguage ||
-        navigator.language ||
-        navigator.browserLanguage ||
-        navigator.systemLanguage ||
-        'en-US';
+    const urlCountryCode = window.location.pathname
+      .match(/\/[a-z]{2}-([a-z]{2})/)?.[1]
+      ?.toUpperCase();
+    const language =
+      urlCountryCode ||
+      (navigator.languages?.length
+        ? navigator.languages[0]
+        : navigator.userLanguage ||
+          navigator.language ||
+          navigator.browserLanguage ||
+          navigator.systemLanguage ||
+          'en-US');
     const parts = language.split('-');
 
-    return parts[1] || 'US';
+    return parts[1]?.toUpperCase() || 'US';
   };
 
   const getCustomerCurrency = () => {
+    const urlCountryCode = window.location.pathname
+      .match(/\/[a-z]{2}-([a-z]{2})/)?.[1]
+      ?.toUpperCase();
+
+    if (urlCountryCode) {
+      // Get the currency code for the country code.
+      return getParamByISO(urlCountryCode, 'currency');
+    }
+
     // Determine the customer's selected currency. Different Shopify apps track this in different ways.
     return (
       getCookie('currencynewcookie') ||
