@@ -6,6 +6,8 @@ const useDataBinding = ({
   context,
   shop,
   offer,
+  locale,
+  countryCode,
   currency,
   offeredProducts,
   addedQuantities,
@@ -19,7 +21,7 @@ const useDataBinding = ({
   onQuantityAdd
 }) => {
   const { getCookie } = useCookies();
-  const { locale, countryCode, currency: shopCurrency } = shop;
+  const { currency: shopCurrency } = shop;
   const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
@@ -309,7 +311,10 @@ const useDataBinding = ({
       onReplaceProduct,
       onCheckoutUrlUpdate,
       onQuantityAdd,
-      formatCurrency
+      formatCurrency,
+      convertCurrency,
+      currency,
+      shopCurrency
     ]
   );
 

@@ -8,6 +8,9 @@ import useDataBinding from './dataBinding';
 const OfferTheme = ({
   shop,
   offer,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   theme,
@@ -30,33 +33,7 @@ const OfferTheme = ({
     getCookie('greatupsellsDraftOrderCheckoutUrl') || '/checkout'
   );
 
-  // Determine the customer's selected currency. Different Shopify apps track this in different ways.
-  const selectedCurrency =
-    getCookie('currencynewcookie') ||
-    localStorage.getItem('currency') ||
-    getCookie('boldCurrencyCookie') ||
-    getCookie('acscurrency') ||
-    localStorage.getItem('__v_cc__s_c__') ||
-    (localStorage.getItem('cbb-currency-converter-currency') &&
-      JSON.parse(localStorage.getItem('cbb-currency-converter-currency'))
-        ?.value) ||
-    (localStorage.getItem('spurit-global-multitabs.cart') &&
-      JSON.parse(localStorage.getItem('spurit-global-multitabs.cart'))
-        ?.currency) ||
-    localStorage.getItem('T4Currency') ||
-    localStorage.getItem('currencyWidget') ||
-    getCookie('pb_cur_65271') ||
-    getCookie('currency') ||
-    document.querySelector('.currency-switcher .current')?.innerText.trim() ||
-    document.querySelector('.pb_currency_name')?.innerText.trim() ||
-    (sessionStorage.getItem('bacurr_user_cur') &&
-      JSON.parse(sessionStorage.getItem('bacurr_user_cur'))) ||
-    document.querySelector('.ba-chosen')?.innerText.trim() ||
-    getCookie('cart_currency');
-
-  const defaultCurrency = 'USD';
-  const { locale, countryCode, currency: shopCurrency } = shop;
-  const currency = selectedCurrency || shopCurrency || defaultCurrency;
+  const { currency: shopCurrency } = shop;
   const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
@@ -66,7 +43,7 @@ const OfferTheme = ({
   const {
     translateProductData,
     translateTriggerProductData
-  } = useDataTranslation(shop, offer, currency);
+  } = useDataTranslation({ shop, offer, locale, countryCode, currency });
 
   const actionButtonUrl = useMemo(() => {
     if (offer.actionButtonBehavior === 'CHECKOUT') {
@@ -273,6 +250,9 @@ const OfferTheme = ({
 OfferTheme.propTypes = {
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
+  locale: PropTypes.string,
+  countryCode: PropTypes.string,
+  currency: PropTypes.string,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   theme: PropTypes.object.isRequired,
@@ -288,6 +268,9 @@ OfferTheme.propTypes = {
 };
 
 OfferTheme.defaultProps = {
+  locale: 'en',
+  countryCode: 'US',
+  currency: 'USD',
   handlers: {}
 };
 

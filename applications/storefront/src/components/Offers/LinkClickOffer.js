@@ -5,7 +5,7 @@ import {
   usePushStateListener,
   useEventListener
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
 // IE9+ polyfill for `.closest()`.
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
@@ -29,8 +29,12 @@ if (!Element.prototype.closest) {
 let onPageRequiredSecondsTimeout = 0;
 
 const LinkClickOffer = ({
+  shop,
   offer,
   theme,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -48,7 +52,6 @@ const LinkClickOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const offerId = offer?._id;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -208,6 +211,9 @@ const LinkClickOffer = ({
       shop={shop}
       theme={theme}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -221,8 +227,12 @@ const LinkClickOffer = ({
 };
 
 LinkClickOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

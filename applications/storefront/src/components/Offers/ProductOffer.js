@@ -6,7 +6,6 @@ import {
   useOfferTracking,
   useRandomOffers,
   useOfferAcceptance,
-  useShop,
   useShopifyCart,
   useShopifyCartAddListener
 } from '../../hooks';
@@ -17,6 +16,10 @@ let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
 const ProductOffer = ({
+  shop,
+  locale,
+  countryCode,
+  currency,
   shopifyCartItems,
   shopifyCartTotal,
   shopifyCartItemCount,
@@ -47,7 +50,6 @@ const ProductOffer = ({
       !shopifyCartLoading
   });
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const { offer, theme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
@@ -186,6 +188,9 @@ const ProductOffer = ({
       shop={shop}
       theme={theme}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -199,6 +204,10 @@ const ProductOffer = ({
 };
 
 ProductOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   shopifyCartItems: PropTypes.array,
   shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,

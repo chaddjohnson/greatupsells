@@ -6,8 +6,8 @@ const getThumbnailImageUrl = (url) => {
   return url && url.replace(/\.(jpg|png)(\?|$)/i, '_400x.$1$2');
 };
 
-const useDataTranslation = (shop, offer, currency) => {
-  const { locale, countryCode, currency: shopCurrency } = shop;
+const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
+  const { currency: shopCurrency } = shop;
   const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,

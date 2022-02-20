@@ -5,13 +5,17 @@ import {
   usePushStateListener,
   useEventListener
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
 let onPageRequiredSecondsTimeout = 0;
 
 const ExitIntentOffer = ({
+  shop,
   offer,
   theme,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -27,7 +31,6 @@ const ExitIntentOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const offerId = offer?._id;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -218,6 +221,9 @@ const ExitIntentOffer = ({
       shop={shop}
       theme={theme}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -231,8 +237,12 @@ const ExitIntentOffer = ({
 };
 
 ExitIntentOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

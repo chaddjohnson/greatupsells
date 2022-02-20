@@ -5,7 +5,7 @@ import {
   usePushStateListener,
   useEventListener
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -14,8 +14,12 @@ let onPageRequiredSecondsTimeout = 0;
 let offerViewed = false;
 
 const PageScrollOffer = ({
+  shop,
   offer,
   theme,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -34,7 +38,6 @@ const PageScrollOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
@@ -188,6 +191,9 @@ const PageScrollOffer = ({
       shop={shop}
       theme={theme}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -201,8 +207,12 @@ const PageScrollOffer = ({
 };
 
 PageScrollOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

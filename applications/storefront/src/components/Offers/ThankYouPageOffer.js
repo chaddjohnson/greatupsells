@@ -2,18 +2,21 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { OfferTheme } from '@greatupsells/react-components';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
 const ThankYouPageOffer = ({
+  shop,
   offer,
   theme,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts
 }) => {
   const [added, setAdded] = useState(false);
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const offerId = offer?._id;
   const offeredShopifyProductIds = useMemo(
@@ -84,6 +87,9 @@ const ThankYouPageOffer = ({
     <OfferTheme
       shop={shop}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       theme={theme}
@@ -97,6 +103,7 @@ const ThankYouPageOffer = ({
 };
 
 ThankYouPageOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,

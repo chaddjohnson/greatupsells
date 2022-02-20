@@ -28,6 +28,9 @@ const OfferPopup = ({
   theme,
   shop,
   offer,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -298,6 +301,9 @@ const OfferPopup = ({
                     <OfferTheme
                       shop={shop}
                       offer={offer}
+                      locale={locale}
+                      countryCode={countryCode}
+                      currency={currency}
                       triggerProduct={triggerProduct}
                       offeredProducts={offeredProducts}
                       theme={theme}
@@ -339,6 +345,9 @@ OfferPopup.propTypes = {
   shopifyCartItemCount: PropTypes.number,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,

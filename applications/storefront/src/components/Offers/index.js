@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { usePushStateListener } from '@greatupsells/react-hooks';
 import {
+  useShop,
   useRandomOffers,
   useShopifyCart,
-  useShopifyCartAddListener
+  useShopifyCartAddListener,
+  useShopifyCustomer
 } from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
 import LinkClickOffer from './LinkClickOffer';
@@ -23,6 +25,32 @@ const Offers = () => {
     shopifyCartItemCount,
     shopifyCartLoading
   } = useShopifyCart();
+
+  const { shop } = useShop();
+  const {
+    getCustomerLocale,
+    getCustomerCountryCode,
+    getCustomerCurrency
+  } = useShopifyCustomer();
+
+  // Get locale.
+  const customerLocale = getCustomerLocale();
+  const shopLocale = shop?.locale;
+  const defaultLocale = 'en';
+  const locale = customerLocale || shopLocale || defaultLocale;
+
+  // Get country code.
+  const customerCountryCode = getCustomerCountryCode();
+  const shopCountryCode = shop?.countryCode;
+  const defaultCountryCode = 'US';
+  const countryCode =
+    customerCountryCode || shopCountryCode || defaultCountryCode;
+
+  // Get currency.
+  const customerCurrency = getCustomerCurrency();
+  const shopCurrency = shop?.currency;
+  const defaultCurrency = 'USD';
+  const currency = customerCurrency || shopCurrency || defaultCurrency;
 
   const shopifyProductIds = useMemo(
     () => shopifyCartItems?.map((item) => item.product_id),
@@ -96,8 +124,12 @@ const Offers = () => {
   return (
     <>
       <ExitIntentOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.EXIT?.offer}
         theme={offerDataByTriggerEvent.EXIT?.theme}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.EXIT?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.EXIT?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -108,8 +140,12 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <LinkClickOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.LINK?.offer}
         theme={offerDataByTriggerEvent.LINK?.theme}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.LINK?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.LINK?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -120,8 +156,12 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <LostBrowserFocusOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.FOCUS?.offer}
         theme={offerDataByTriggerEvent.FOCUS?.theme}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.FOCUS?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.FOCUS?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -133,8 +173,12 @@ const Offers = () => {
       />
       {!productAdded && (
         <PageLoadOffer
+          shop={shop}
           offer={offerDataByTriggerEvent.LOAD?.offer}
           theme={offerDataByTriggerEvent.LOAD?.theme}
+          locale={locale}
+          countryCode={countryCode}
+          currency={currency}
           triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
           offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
           shopifyCartItems={shopifyCartItems}
@@ -146,8 +190,12 @@ const Offers = () => {
         />
       )}
       <PageScrollOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.SCROLL?.offer}
         theme={offerDataByTriggerEvent.SCROLL?.theme}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.SCROLL?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.SCROLL?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -158,6 +206,10 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <ProductOffer
+        shop={shop}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         shopifyCartItems={shopifyCartItems}
         shopifyCartTotal={shopifyCartTotal}
         shopifyCartItemCount={shopifyCartItemCount}
@@ -166,8 +218,12 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <ThankYouPageOffer
+        shop={shop}
         offer={thankYouPageOfferData?.offer}
         theme={thankYouPageOfferData?.theme}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={thankYouPageOfferData?.triggerProduct}
         offeredProducts={thankYouPageOfferData?.offeredProducts}
       />
