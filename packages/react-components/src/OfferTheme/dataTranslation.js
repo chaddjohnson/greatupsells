@@ -47,7 +47,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
             currency
           );
           const salePrice = convertCurrency(
-            calculateDiscountedPrice(offer, price),
+            calculateDiscountedPrice(offer, variant.price),
             shopCurrency,
             currency
           );
