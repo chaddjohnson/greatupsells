@@ -1,43 +1,28 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 
-const useNumberFormatter = ({ locale, countryCode }) => {
-  const numberFormatter = useMemo(() => {
-    if (!locale || !countryCode) {
-      return;
-    }
-
-    return new Intl.NumberFormat(`${locale}-${countryCode}`);
-  }, [locale, countryCode]);
-
+const useNumberFormatter = ({ locale = 'en', countryCode = 'US' }) => {
   const formatNumber = useCallback(
     (value, decimals = 2) => {
-      if (numberFormatter?.format) {
-        return (
-          numberFormatter.format(
-            Math.round(parseFloat(value) * 10 ** decimals) / 10 ** decimals
-          ) || value
-        );
-      }
+      const formatter = new Intl.NumberFormat(`${locale}-${countryCode}`, {
+        style: 'decimal',
+        maximumFractionDigits: decimals
+      });
 
-      return value;
+      return formatter.format(value);
     },
-    [numberFormatter]
+    [locale, countryCode]
   );
 
   const formatPercentage = useCallback(
     (value, decimals = 2) => {
-      if (numberFormatter?.format) {
-        const formattedValue =
-          Math.round(parseFloat(value) * 100 * 10 ** decimals) / 10 ** decimals;
+      const formatter = new Intl.NumberFormat(`${locale}-${countryCode}`, {
+        style: 'percent',
+        maximumFractionDigits: decimals
+      });
 
-        return typeof formattedValue === 'number'
-          ? `${numberFormatter.format(formattedValue)}%`
-          : value;
-      }
-
-      return value;
+      return formatter.format(value);
     },
-    [numberFormatter]
+    [locale, countryCode]
   );
 
   return {
