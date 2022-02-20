@@ -7,7 +7,7 @@ const useShopifyCustomer = () => {
 
   const getCustomerLocale = () => {
     const urlLocale = window.location.pathname.match(
-      /\/([a-z]{2})-[a-z]{2}/
+      /^\/([a-z]{2})-[a-z]{2}(\/|$)/
     )?.[1];
 
     const language =
@@ -26,7 +26,7 @@ const useShopifyCustomer = () => {
 
   const getCustomerCountryCode = () => {
     const urlCountryCode = window.location.pathname
-      .match(/\/[a-z]{2}-([a-z]{2})/)?.[1]
+      .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
       ?.toUpperCase();
     const language =
       urlCountryCode ||
@@ -44,7 +44,7 @@ const useShopifyCustomer = () => {
 
   const getCustomerCurrency = () => {
     const urlCountryCode = window.location.pathname
-      .match(/\/[a-z]{2}-([a-z]{2})/)?.[1]
+      .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
       ?.toUpperCase();
 
     if (urlCountryCode) {
