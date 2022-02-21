@@ -26,7 +26,8 @@ const useCurrency = ({
 
     return new Intl.NumberFormat(`${locale}-${countryCode}`, {
       style: 'currency',
-      currency
+      currency,
+      currencyDisplay: 'narrowSymbol'
     });
   }, [locale, countryCode, currency]);
 
