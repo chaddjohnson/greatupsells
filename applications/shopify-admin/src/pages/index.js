@@ -147,7 +147,7 @@ const DashboardPage = () => {
                     {formatNumber(shop?.offerAcceptanceCount)}
                   </DisplayText>
                   <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Accepted offers</TextStyle>
+                    <TextStyle variation="subdued">Acceptances</TextStyle>
                   </TextStyle>
                 </Stack>
                 <Stack spacing="tight" alignment="center" vertical>
