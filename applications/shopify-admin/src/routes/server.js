@@ -145,6 +145,19 @@ const createServer = () => {
     }
   });
 
+  router.get('/', async (ctx) => {
+    const { shop: shopDomain } = ctx.query;
+    const shop = await shopsServiceHttpClient.get(
+      `/shops/domain/${shopDomain}`
+    );
+
+    if (!shop || !shop.active) {
+      ctx.redirect(`/auth?shop=${shopDomain}`);
+    } else {
+      await handleRequest(ctx);
+    }
+  });
+
   router.get('(/_next/static/.*)', handleRequest);
   router.get('/_next/webpack-hmr', handleRequest);
   router.get('(.*)', handleRequest);
