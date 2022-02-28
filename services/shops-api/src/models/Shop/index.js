@@ -8,11 +8,10 @@ const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
-const initiatePlanUpgrade = require('./initiatePlanUpgrade');
-const activatePlanUpgrade = require('./activatePlanUpgrade');
+const activatePlan = require('./activatePlan');
 const cancelPlan = require('./cancelPlan');
 const resetPlan = require('./resetPlan');
-const downgradePlan = require('./downgradePlan');
+const changePlan = require('./changePlan');
 const updatePlan = require('./updatePlan');
 const updatePlans = require('./updatePlans');
 const fixWebhooks = require('./fixWebhooks');
@@ -23,6 +22,7 @@ const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
 const updateShopifyDraftOrderVariantQuantity = require('./updateShopifyDraftOrderVariantQuantity');
 const checkThemeCompatibility = require('./checkThemeCompatibility');
+const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -61,18 +61,19 @@ const schema = new mongoose.Schema(
     active: { type: Boolean, required: true, default: true },
     shopifyPlan: { type: String, required: true },
     plan: {
+      name: { type: String, required: false },
       level: {
         type: String,
-        required: true,
-        enum: ['FREE', 'BASIC', 'PLUS', 'PRO'],
-        default: 'FREE'
+        enum: ['BASIC', 'PLUS', 'PRO']
       },
-      price: { type: Number, required: false, default: 0.0, min: 0 },
+      price: { type: Number, required: false, min: 0 },
       active: { type: Boolean, required: false, default: false },
       chargeId: { type: String, required: false },
       billingOn: { type: Date, required: false },
-      upgradedAt: { type: Date, required: false },
-      canceledAt: { type: Date, required: false }
+      startedAt: { type: Date, required: false },
+      canceledAt: { type: Date, required: false },
+      monthUpsellRevenue: { type: Number, required: false },
+      monthUpsellRevenueLimit: { type: Number }
     },
     appLastOpenedAt: { type: Date, required: false },
     uninstalledAt: { type: Date, required: false },
@@ -179,12 +180,8 @@ schema.methods.updateActiveStatus = function () {
   return updateActiveStatus(this);
 };
 
-schema.methods.initiatePlanUpgrade = function () {
-  return initiatePlanUpgrade(this);
-};
-
-schema.methods.activatePlanUpgrade = function () {
-  return activatePlanUpgrade(this);
+schema.methods.activatePlan = function () {
+  return activatePlan(this);
 };
 
 schema.methods.cancelPlan = function () {
@@ -195,8 +192,8 @@ schema.methods.resetPlan = function () {
   return resetPlan(this);
 };
 
-schema.methods.downgradePlan = function () {
-  return downgradePlan(this);
+schema.methods.changePlan = function (level) {
+  return changePlan(this, level);
 };
 
 schema.methods.updatePlan = function () {
@@ -230,6 +227,10 @@ schema.methods.updateShopifyDraftOrderVariantQuantity = function (
 
 schema.methods.checkThemeCompatibility = function () {
   return checkThemeCompatibility(this);
+};
+
+schema.methods.calculateMonthUpsellRevenue = function () {
+  return calculateMonthUpsellRevenue(this);
 };
 
 schema.methods.toString = function () {

@@ -257,6 +257,21 @@ const findOneRandom = async (
     );
   }
 
+  // Disallow showing offers if the shop is not active.
+  if (!shop.active) {
+    return;
+  }
+
+  // Disallow showing offers if the shop plan is not active.
+  if (!shop.plan.active) {
+    return;
+  }
+
+  // Disallow showing offers if upsell revenue has reached the tier max for the period.
+  if (shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit) {
+    return;
+  }
+
   const [Offer] = await Promise.all([
     models.get('Offer'),
     models.get('Collection')

@@ -5,7 +5,7 @@ const updatePlans = async () => {
   const Shop = await models.get('Shop');
   const criteria = {
     active: true,
-    'plan.level': { $ne: 'FREE' }
+    'plan.chargeId': { $ne: null }
   };
   const cursor = Shop.find(criteria).cursor({ batchSize: 100 });
 

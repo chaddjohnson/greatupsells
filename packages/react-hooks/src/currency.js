@@ -17,7 +17,10 @@ const loadScripts = () => {
 const useCurrency = ({
   locale = 'en',
   countryCode = 'US',
-  currency = 'USD'
+  currency = 'USD',
+  options = {
+    decimals: 2
+  }
 }) => {
   const currencyFormatter = useMemo(() => {
     if (!locale || !countryCode || !currency) {
@@ -27,9 +30,10 @@ const useCurrency = ({
     return new Intl.NumberFormat(`${locale}-${countryCode}`, {
       style: 'currency',
       currency,
-      currencyDisplay: 'narrowSymbol'
+      currencyDisplay: 'narrowSymbol',
+      maximumFractionDigits: options.decimals
     });
-  }, [locale, countryCode, currency]);
+  }, [locale, countryCode, currency, options]);
 
   const formatCurrency = useCallback(
     (value) => {

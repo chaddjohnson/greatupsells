@@ -36,6 +36,33 @@ const ShopProvider = ({ children }) => {
     }
   };
 
+  const changePlan = async (level) => {
+    const url = '/plan';
+    const data = { level };
+
+    try {
+      const { redirectUrl } = await mutate(url, httpClient.post(url, data));
+
+      window.top.location.href = redirectUrl;
+    } catch (error) {
+      showErrorToast('Error changing plan.');
+      throw error;
+    }
+  };
+
+  const activatePlan = async () => {
+    const url = '/plan/activation';
+
+    try {
+      await mutate(url, httpClient.post(url));
+      await fetchShop();
+      showSuccessToast('Plan activated.');
+    } catch (error) {
+      showErrorToast('Error activating plan.');
+      throw error;
+    }
+  };
+
   if (!shopLoaded && !shopLoading) {
     setShopLoaded(true);
   }
@@ -48,7 +75,9 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
-        saveShop
+        saveShop,
+        changePlan,
+        activatePlan
       }}
     >
       {children}

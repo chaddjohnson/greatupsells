@@ -18,7 +18,7 @@ const calculateMonthlyGrossProfit = async () => {
     }
   ];
 
-  const { total } = await Shop.aggregate(pipelines);
+  const [{ total }] = await Shop.aggregate(pipelines);
 
   return total;
 };

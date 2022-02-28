@@ -55,7 +55,7 @@ Shopify.Context.initialize({
     'read_themes'
   ],
   HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
-  API_VERSION: ApiVersion.January21,
+  API_VERSION: ApiVersion.January22,
   IS_EMBEDDED_APP: true,
   SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
     sessionStorage.storeCallback,

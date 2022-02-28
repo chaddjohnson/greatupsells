@@ -10,7 +10,7 @@ const promiseWhile = (conditionFn, fn) => {
 };
 
 const trackConversions = async (order) => {
-  const [OfferHit] = await Promise.all([
+  const [OfferHit, Shop] = await Promise.all([
     models.get('OfferHit'),
     models.get('Shop')
   ]);
@@ -18,7 +18,7 @@ const trackConversions = async (order) => {
   await order.execPopulate('shop');
 
   // Find all offer hits associated with the order.
-  const { shopifyOrderId } = order;
+  const { shop, shopifyOrderId } = order;
   let offerHits = [];
   let attempts = 0;
   const conditionFn = () => offerHits.length === 0 && attempts < 7;
@@ -60,6 +60,13 @@ const trackConversions = async (order) => {
 
     await order.save();
   }, transactionOptions);
+
+  // Calculate month upsell revenue for the shop.
+  const monthUpsellRevenue = await shop.calculateMonthUpsellRevenue();
+
+  await Shop.findByIdAndUpdate(shop.id, {
+    'plan.monthUpsellRevenue': monthUpsellRevenue
+  });
 
   return offerHits;
 };

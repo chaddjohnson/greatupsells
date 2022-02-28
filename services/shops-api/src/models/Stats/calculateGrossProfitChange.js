@@ -24,7 +24,7 @@ const calculateGrossProfitChange = async (startDate, endDate) => {
     }
   ];
 
-  const { total } = await Shop.aggregate(pipelines);
+  const [{ total }] = await Shop.aggregate(pipelines);
 
   return total;
 };

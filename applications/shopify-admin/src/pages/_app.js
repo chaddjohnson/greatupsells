@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { ErrorBoundary } from '@greatupsells/react-components';
 import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
 import { ShopProvider } from '../hooks';
-import { Link, RoutePropagator } from '../components';
+import { Link, RoutePropagator, RouteGuard } from '../components';
 import '@shopify/polaris/build/esm/styles.css';
 
 const apiKey = process.env.SHOPIFY_ADMIN_APP_API_KEY;
@@ -140,7 +140,7 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
             {mounted &&
               typeof window !== 'undefined' &&
               window.top !== window.self && (
-                <>
+                <RouteGuard>
                   <ClientRouter history={router} />
                   <RoutePropagator />
                   <ErrorBoundary>
@@ -148,7 +148,7 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
                       <Component {...pageProps} />
                     </Main>
                   </ErrorBoundary>
-                </>
+                </RouteGuard>
               )}
             {mounted &&
               typeof window !== 'undefined' &&

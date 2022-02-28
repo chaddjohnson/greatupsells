@@ -59,6 +59,14 @@ custom:
         - schedule: rate(5 minutes)
 
 functions:
+  activateShopPlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/activateShopPlan.handler
+    events:
+      - http:
+          path: /shops/{shopId}/plan/activation
+          method: post
+          authorizer: aws_iam
   addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
@@ -73,6 +81,14 @@ functions:
     events:
       - http:
           path: /orders/{orderId}/cancelation
+          method: post
+          authorizer: aws_iam
+  changeShopPlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/changeShopPlan.handler
+    events:
+      - http:
+          path: /shops/{shopId}/plan
           method: post
           authorizer: aws_iam
   checkShopThemeCompatibility:
@@ -486,6 +502,17 @@ functions:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam
+  calculateShopMonthUpsellRevenue:
+    memorySize: 512
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/calculateShopMonthUpsellRevenue.handler
+    events:
+      - schedule: cron(1 0,12 * * ? *)
+    timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
   calculateStats:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}

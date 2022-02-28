@@ -13,6 +13,7 @@ import {
   Button,
   Banner,
   TextContainer,
+  ProgressBar,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -26,7 +27,32 @@ import {
 } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAcceptances } from '../hooks';
-import { TitleBar, LineChart, SkeletonChart } from '../components';
+import { TitleBar, LineChart, SkeletonChart, Link } from '../components';
+
+const PlanContainer = styled.div`
+  text-align: center;
+`;
+
+const PlanProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+
+  > * {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+`;
+
+const PlanProgressMeterContainer = styled.div`
+  flex: 1 1 0%;
+`;
+
+const PlanProgressAmount = styled.div`
+  white-space: nowrap;
+  font-weight: 500;
+`;
 
 const TutorialsImage = styled.img`
   display: block;
@@ -82,7 +108,18 @@ const DashboardPage = () => {
     countryCode,
     currency
   });
-  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
+  const { formatCurrency } = useCurrency({
+    locale,
+    countryCode,
+    currency,
+    options: { decimals: 0 }
+  });
+  const { formatCurrency: formatCurrencyUSD } = useCurrency({
+    locale,
+    countryCode,
+    currency: 'USD',
+    options: { decimals: 0 }
+  });
   const {
     shopAcceptances,
     shopAcceptancesLoaded,
@@ -118,6 +155,17 @@ const DashboardPage = () => {
     </Page>
   ));
 
+  const planUsagePercentage = useMemo(() => {
+    if (typeof shop?.plan.monthUpsellRevenueLimit !== 'number') {
+      return 0;
+    }
+
+    return Math.min(
+      shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit,
+      1
+    );
+  }, [shop]);
+
   // Refresh data at an interval.
   useInterval(() => {
     if (!chartDateChanged) {
@@ -140,33 +188,89 @@ const DashboardPage = () => {
         <PageTitleBar />
         <Layout>
           <Layout.Section>
-            <Card sectioned>
-              <Stack distribution="fillEvenly" wrap>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatNumber(shop?.offerAcceptanceCount)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Acceptances</TextStyle>
-                  </TextStyle>
+            <Card>
+              <Card.Section>
+                <Stack distribution="fillEvenly" wrap>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(shop?.offerAcceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Acceptances</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(shop?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(shop?.offerConversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
                 </Stack>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatCurrency(shop?.revenueIncrease)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Revenue increase</TextStyle>
-                  </TextStyle>
-                </Stack>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatPercentage(shop?.offerConversionRate, 1)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Conversion rate</TextStyle>
-                  </TextStyle>
-                </Stack>
-              </Stack>
+              </Card.Section>
+              {shop?.plan.active && (
+                <Card.Section subdued>
+                  <PlanContainer>
+                    <Stack vertical>
+                      <Heading>{shop?.plan.name} plan</Heading>
+                      {typeof shop?.plan.monthUpsellRevenueLimit ===
+                        'number' && (
+                        <PlanProgressContainer>
+                          <PlanProgressAmount>
+                            {formatCurrencyUSD(shop?.plan.monthUpsellRevenue)}{' '}
+                            USD
+                          </PlanProgressAmount>
+                          <PlanProgressMeterContainer>
+                            <ProgressBar
+                              progress={planUsagePercentage * 100 || 0}
+                              size="small"
+                              color={
+                                planUsagePercentage < 0.8
+                                  ? 'highlight'
+                                  : 'critical'
+                              }
+                            />
+                          </PlanProgressMeterContainer>
+                          <PlanProgressAmount>
+                            {formatCurrencyUSD(
+                              shop?.plan.monthUpsellRevenueLimit
+                            )}{' '}
+                            USD
+                          </PlanProgressAmount>
+                        </PlanProgressContainer>
+                      )}
+                      {typeof shop?.plan.monthUpsellRevenueLimit ===
+                        'number' && (
+                        <p>
+                          You have earned{' '}
+                          {formatPercentage(planUsagePercentage, 0)} of your
+                          plan&apos;s monthly upsell revenue.{' '}
+                          <Link url="/plan">Manage your plan</Link>
+                        </p>
+                      )}
+                      {typeof shop?.plan.monthUpsellRevenueLimit !==
+                        'number' && (
+                        <p>
+                          You have an unlimited monthly upsell revenue allowance
+                          with your plan.{' '}
+                          <Link url="/plan">Manage your plan</Link>
+                        </p>
+                      )}
+                    </Stack>
+                  </PlanContainer>
+                </Card.Section>
+              )}
             </Card>
           </Layout.Section>
           <Layout.Section>

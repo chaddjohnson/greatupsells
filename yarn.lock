@@ -3146,10 +3146,25 @@
   resolved "https://registry.yarnpkg.com/@shopify/react-hooks/-/react-hooks-2.1.5.tgz#81f26ada20e27e9aa01e75fc76bed4c421d3b0cc"
   integrity sha512-HyOUuqf9+D4oWUxIQ0q7E+F6/NKrYJJAt5G6Eyt22Ej2F380yXNBHlfK4f+QERhuKE0FMF1Qqe0OjttP6QaysQ==
 
-"@shopify/shopify-api@^1.2.1", "@shopify/shopify-api@^1.4.1":
+"@shopify/shopify-api@^1.2.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-1.4.1.tgz#8247037cacca274130e6dcdd974a6bd69057690d"
   integrity sha512-aZhPRyPTZvTwIvsqodShVa02mwrz4P2ShpBnbbvp614eCJkYALRtXKNSmEPjoPnmKmYfKjFkz+fsVtzsKLgbow==
+  dependencies:
+    "@shopify/network" "^1.5.1"
+    "@types/jsonwebtoken" "^8.5.0"
+    "@types/node-fetch" "^2.5.7"
+    "@types/supertest" "^2.0.10"
+    cookies "^0.8.0"
+    jsonwebtoken "^8.5.1"
+    node-fetch "^2.6.1"
+    tslib "^2.0.3"
+    uuid "^8.3.1"
+
+"@shopify/shopify-api@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-2.1.0.tgz#750519188cf4cad8c65170ed05e4bd4aa65a5285"
+  integrity sha512-CI+CUc0b2+Iv4AFhKaIAvMpbTddyTIKM3O2Qk0wS1gcj5nRdSFg6JbeVThNOYYu/7rzf93J8qYF1E4OZl920CQ==
   dependencies:
     "@shopify/network" "^1.5.1"
     "@types/jsonwebtoken" "^8.5.0"

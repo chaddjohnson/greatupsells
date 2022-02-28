@@ -21,7 +21,7 @@
     "@shopify/polaris": "^7.4.0",
     "@shopify/polaris-icons": "^4.10.0",
     "@shopify/react-form": "^1.1.5",
-    "@shopify/shopify-api": "^1.4.1",
+    "@shopify/shopify-api": "^2.1.0",
     "aws4-axios": "^2.2.0",
     "colr": "^1.2.2",
     "compression-webpack-plugin": "^9.0.0",

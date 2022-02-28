@@ -43,7 +43,7 @@ const useOfferTracking = () => {
     // Track the offer impression via cookie.
     setCookie('greatupsellsOfferImpressions', offerImpressions, {
       sameSite: 'Strict',
-      maxAge: 60 * 60 * 24 // 1 day
+      maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
     });
 
     // Track the offer impression via sessionStorage.
