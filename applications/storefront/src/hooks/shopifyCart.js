@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import useSWR from 'swr';
 import {
   useHttpRequestListener,
   usePushStateListener,
+  useCookies,
   HttpClient
 } from '@greatupsells/react-hooks';
 
@@ -42,6 +43,8 @@ const httpClient = new HttpClient({
 });
 
 const CartProvider = ({ children }) => {
+  const { removeCookie } = useCookies();
+
   const {
     data: shopifyCart,
     error: shopifyCartError,
@@ -112,6 +115,14 @@ const CartProvider = ({ children }) => {
   usePushStateListener(() => {
     fetchShopifyCart();
   });
+
+  useEffect(() => {
+    // Remove cookies related to draft orders when there are no cart items.
+    if (shopifyCartItems.length === 0) {
+      removeCookie('greatupsellsDraftOrderId');
+      removeCookie('greatupsellsDraftOrderCheckoutUrl');
+    }
+  }, [shopifyCartItems, removeCookie]);
 
   return (
     <CartContext.Provider
