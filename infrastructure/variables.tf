@@ -2,6 +2,10 @@ variable "public_key" {
   type = string
 }
 
+variable "app_name" {
+  type = string
+}
+
 variable "base_domain" {
   type = string
 }

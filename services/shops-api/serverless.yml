@@ -26,7 +26,10 @@ provider:
         Resource: 'execute-api:/*/GET/health'
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
+    APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
+    DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
+    EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shops-api'
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}

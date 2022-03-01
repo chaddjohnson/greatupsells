@@ -268,7 +268,10 @@ const findOneRandom = async (
   }
 
   // Disallow showing offers if upsell revenue has reached the tier max for the period.
-  if (shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit) {
+  if (
+    shop.plan.monthUpsellRevenueLimit &&
+    shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit
+  ) {
     return;
   }
 
