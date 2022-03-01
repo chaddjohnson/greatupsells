@@ -13,9 +13,6 @@ const cancelPlan = require('./cancelPlan');
 const resetPlan = require('./resetPlan');
 const changePlan = require('./changePlan');
 const updatePlan = require('./updatePlan');
-const updatePlans = require('./updatePlans');
-const fixWebhooks = require('./fixWebhooks');
-const updateActiveStatuses = require('./updateActiveStatuses');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
@@ -103,18 +100,6 @@ schema.statics.findOneByShopifyShopId = function (shopifyShopId) {
 
 schema.statics.createOrUpdate = function (shopDomain, accessToken) {
   return createOrUpdate(shopDomain, accessToken);
-};
-
-schema.statics.updatePlans = function () {
-  return updatePlans();
-};
-
-schema.statics.fixWebhooks = function () {
-  return fixWebhooks();
-};
-
-schema.statics.updateActiveStatuses = function () {
-  return updateActiveStatuses();
 };
 
 schema.methods.searchOffers = async function (params) {
