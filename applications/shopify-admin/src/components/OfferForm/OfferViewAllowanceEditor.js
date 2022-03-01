@@ -38,6 +38,7 @@ const OfferSettingsEditor = ({
                   <TextField
                     inputMode="numeric"
                     suffix="days"
+                    min={1}
                     {...viewAllowanceDays}
                     error={submitted && viewAllowanceDays.error}
                   />

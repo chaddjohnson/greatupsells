@@ -79,7 +79,7 @@ const schema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 7,
-      min: 0
+      min: 1
     },
     triggerEvent: {
       type: String,
