@@ -21,6 +21,29 @@ const plans = {
   }
 };
 
+const getTrialDays = async (shop) => {
+  const { chargeId } = shop.plan;
+
+  if (!chargeId) {
+    return 7;
+  }
+
+  const shopifyApiClient = shop.getShopifyApiClient();
+  const existingRecurringCharge = await shopifyApiClient.recurringApplicationCharge.get(
+    chargeId
+  );
+  const trialEndsOn = existingRecurringCharge.trial_ends_on;
+  const remainingDays = Math.round(
+    (new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60
+  );
+
+  if (!remainingDays || remainingDays < 0 || remainingDays > 7) {
+    return 0;
+  }
+
+  return remainingDays;
+};
+
 const changePlan = async (shop, level) => {
   try {
     const plan = plans[level];
@@ -32,11 +55,12 @@ const changePlan = async (shop, level) => {
     // Create a new recurring application charge which will replace the existing one.
     // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
     const shopifyApiClient = shop.getShopifyApiClient();
+    const trialDays = await getTrialDays(shop);
     const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create(
       {
         name: plan.name,
         price: plan.price,
-        trial_days: shop.plan.chargeId ? undefined : 7,
+        trial_days: trialDays,
         return_url: `https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan/`,
         test: getenv.bool('SANDBOX', true) || null
       }
