@@ -10,6 +10,7 @@ const useShopifyCustomer = () => {
       /^\/([a-z]{2})-[a-z]{2}(\/|$)/
     )?.[1];
 
+    // Reference: https://stackoverflow.com/a/52112155/83897
     const language =
       urlLocale ||
       (navigator.languages?.length
@@ -28,6 +29,8 @@ const useShopifyCustomer = () => {
     const urlCountryCode = window.location.pathname
       .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
       ?.toUpperCase();
+
+    // Reference: https://stackoverflow.com/a/52112155/83897
     const language =
       urlCountryCode ||
       (navigator.languages?.length
