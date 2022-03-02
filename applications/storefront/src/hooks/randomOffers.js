@@ -15,9 +15,12 @@ const useRandomOffers = ({
   shopifyOrderId = undefined,
   shouldQuery = true
 }) => {
-  // Ensure Shopify product IDs is an array.
+  // Ensure Shopify product and variant IDs is an array.
   if (!Array.isArray(shopifyProductIds)) {
-    shopifyProductIds = [shopifyProductIds].filter(Boolean);
+    shopifyProductIds = [shopifyProductIds];
+  }
+  if (!Array.isArray(shopifyVariantIds)) {
+    shopifyVariantIds = [shopifyVariantIds];
   }
 
   // Ensure Shopify IDs are numeric.
@@ -27,6 +30,10 @@ const useRandomOffers = ({
   shopifyVariantIds = shopifyVariantIds.map((shopifyVariantId) =>
     parseInt(shopifyVariantId)
   );
+
+  // Filter out empty values.
+  shopifyProductIds = shopifyProductIds.filter(Boolean);
+  shopifyVariantIds = shopifyVariantIds.filter(Boolean);
 
   const { httpClient } = useHttpClient();
   const { getCookie } = useCookies();
