@@ -12,7 +12,9 @@ const CartContext = createContext(null);
 
 const useShopifyCartAddListener = (listener) => {
   const handler = (requestData, responseData) => {
-    const productData = JSON.parse(responseData);
+    const productData = responseData?.items
+      ? responseData.items[0]
+      : responseData;
 
     if (listener) {
       listener.call(listener, productData);
