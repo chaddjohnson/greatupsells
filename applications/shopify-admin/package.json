@@ -17,7 +17,7 @@
     "@shopify/app-bridge": "^2.0.3",
     "@shopify/app-bridge-react": "^2.0.3",
     "@shopify/app-bridge-utils": "^2.0.3",
-    "@shopify/koa-shopify-auth": "^4.1.4",
+    "@shopify/koa-shopify-auth": "^5.0.3",
     "@shopify/polaris": "^7.4.0",
     "@shopify/polaris-icons": "^4.10.0",
     "@shopify/react-form": "^1.1.5",
