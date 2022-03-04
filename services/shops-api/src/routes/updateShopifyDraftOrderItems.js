@@ -14,23 +14,21 @@ const handler = async (event, context) => {
   }
 
   try {
-    const { shopId, draftOrderId, shopifyVariantId } = event.pathParameters;
+    const { shopId, draftOrderId } = event.pathParameters;
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
-    const { quantity } = JSON.parse(event.body);
-
-    const draftOrder = await shop.updateShopifyDraftOrderVariantQuantity(
+    const shopifyCartItems = JSON.parse(event.body);
+    const draftOrder = await shop.updateShopifyDraftOrderItems(
       draftOrderId,
-      shopifyVariantId,
-      quantity
+      shopifyCartItems
     );
 
     return {
-      statusCode: StatusCodes.OK,
+      statusCode: StatusCodes.CREATED,
       body: JSON.stringify(draftOrder)
     };
   } catch (error) {
-    await logger.error(`Error updating draft order line item`, error, {
+    await logger.error(`Error updating draft order line items`, error, {
       event
     });
 

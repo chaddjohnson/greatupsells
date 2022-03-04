@@ -34,10 +34,10 @@ const updateDependentOffers = async (product) => {
       });
 
       if (changed) {
-        offer.markModified('offeredProducts');
-        offer.markModified('triggerProducts');
-
-        return await offer.save();
+        await Offer.findByIdAndUpdate(offer.id, {
+          offeredProducts: offer.offeredProducts,
+          triggerProducts: offer.triggerProducts
+        });
       }
     })
   );

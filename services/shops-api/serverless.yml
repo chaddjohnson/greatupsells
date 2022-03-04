@@ -457,14 +457,6 @@ functions:
           path: /offer-hits/{offerHitId}
           method: put
           authorizer: aws_iam
-  updateShopifyDraftOrder:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateShopifyDraftOrder.handler
-    events:
-      - http:
-          path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items/{shopifyVariantId}
-          method: post
-          authorizer: aws_iam
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -479,6 +471,14 @@ functions:
     events:
       - http:
           path: /orders/{orderId}
+          method: put
+          authorizer: aws_iam
+  updateShopifyDraftOrderItems:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateShopifyDraftOrderItems.handler
+    events:
+      - http:
+          path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: put
           authorizer: aws_iam
   updateTheme:

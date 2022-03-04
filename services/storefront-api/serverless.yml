@@ -115,13 +115,13 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           cors: true
-  updateShopifyDraftOrder:
+  updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateShopifyDraftOrder.handler
+    handler: src/routes/updateShopifyDraftOrderItems.handler
     events:
       - http:
-          path: /draft-orders/{draftOrderId}/line-items/{shopifyVariantId}
-          method: post
+          path: /draft-orders/{draftOrderId}/line-items
+          method: put
           cors: true
 
 plugins:

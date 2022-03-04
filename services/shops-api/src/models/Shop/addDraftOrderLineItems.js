@@ -11,10 +11,10 @@ const addDraftOrderLineItems = async (shop, draftOrderId, items) => {
   await Promise.mapSeries(
     items,
     async ({ offerId, shopifyVariantId, quantity }) => {
-      // Determine if there is an existing non-discounted line item.
-      const lineItem = draftOrder.line_items.find(
-        (current) =>
-          current.variant_id === shopifyVariantId && !current.applied_discount
+      const lineItem = draftOrder.line_items.find((current) =>
+        current.variant_id === shopifyVariantId && offerId
+          ? !!current.applied_discount
+          : current.applied_discount
       );
 
       quantity = parseInt(quantity);

@@ -17,7 +17,7 @@ const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
-const updateShopifyDraftOrderVariantQuantity = require('./updateShopifyDraftOrderVariantQuantity');
+const updateShopifyDraftOrderItems = require('./updateShopifyDraftOrderItems');
 const checkThemeCompatibility = require('./checkThemeCompatibility');
 const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
 const toString = require('./toString');
@@ -197,17 +197,11 @@ schema.methods.addDraftOrderLineItems = function (draftOrderId, items) {
   return addDraftOrderLineItems(this, draftOrderId, items);
 };
 
-schema.methods.updateShopifyDraftOrderVariantQuantity = function (
+schema.methods.updateShopifyDraftOrderItems = function (
   draftOrderId,
-  shopifyVariantId,
-  quantity
+  shopifyCartItems
 ) {
-  return updateShopifyDraftOrderVariantQuantity(
-    this,
-    draftOrderId,
-    shopifyVariantId,
-    quantity
-  );
+  return updateShopifyDraftOrderItems(this, draftOrderId, shopifyCartItems);
 };
 
 schema.methods.checkThemeCompatibility = function () {

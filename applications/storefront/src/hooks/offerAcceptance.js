@@ -9,21 +9,16 @@ const useOfferAcceptance = () => {
   const {
     shopifyCartItems,
     addVariantsToShopifyCart,
-    replaceVariantInShopifyCart
+    removeVariantFromShopifyCart
   } = useShopifyCart();
   const {
     createShopifyDraftOrder,
-    addVariantToShopifyDraftOrder,
-    addVariantsToShopifyDraftOrder,
-    removeShopifyDraftOrderVariant
+    addVariantsToShopifyDraftOrder
   } = useShopifyDraftOrder();
 
   const addProducts = async (offerId, items) => {
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
-
-    // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
-    await addVariantsToShopifyCart(items);
 
     // Add the variant to the existing draft order if one exists.
     if (shopifyDraftOrderId) {
@@ -62,6 +57,9 @@ const useOfferAcceptance = () => {
       });
     }
 
+    // Add the accepted variant to the Shopify cart.
+    await addVariantsToShopifyCart(items);
+
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, items);
   };
@@ -82,7 +80,7 @@ const useOfferAcceptance = () => {
       ...shopifyCartItems.slice(0, triggerShopifyCartItemIndex),
       ...shopifyCartItems.slice(triggerShopifyCartItemIndex + 1)
     ];
-    const quantity = triggerShopifyCartItem?.quantity;
+    const quantity = 1;
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
 
@@ -91,26 +89,18 @@ const useOfferAcceptance = () => {
       return;
     }
 
-    // Add the accepted variant to the Shopify cart (so that it shows on the Cart page).
-    await replaceVariantInShopifyCart(
-      triggerShopifyVariantId,
-      shopifyVariantId,
-      quantity
-    );
-
     if (shopifyDraftOrderId) {
-      // Remove the trigger product from draft order.
-      await removeShopifyDraftOrderVariant(
-        shopifyDraftOrderId,
-        triggerShopifyVariantId
-      );
+      // Add the new variant to the draft order.
+      await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, [
+        {
+          offerId,
+          shopifyVariantId,
+          quantity
+        }
+      ]);
 
-      // Add the new variant to the existing draft order if one exists.
-      await addVariantToShopifyDraftOrder(shopifyDraftOrderId, {
-        offerId,
-        shopifyVariantId,
-        quantity
-      });
+      // Remove the trigger product from Shopify cart.
+      await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
     }
 
     // Create a new draft order if one does not exist.
@@ -144,6 +134,9 @@ const useOfferAcceptance = () => {
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
     }
+
+    // Add the accepted variant to the Shopify cart.
+    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
 
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, [

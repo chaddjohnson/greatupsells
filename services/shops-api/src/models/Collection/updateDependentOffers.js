@@ -31,10 +31,10 @@ const updateDependentOffers = async (collection) => {
       });
 
       if (changed) {
-        offer.markModified('offeredCollection');
-        offer.markModified('triggerCollections');
-
-        return await offer.save();
+        await Offer.findByIdAndUpdate(offer.id, {
+          offeredCollection: offer.offeredCollection,
+          triggerCollections: offer.triggerCollections
+        });
       }
     })
   );
