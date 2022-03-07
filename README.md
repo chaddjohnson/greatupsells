@@ -107,6 +107,33 @@ Sometimes Node processes hang and become "zombie" processes, and then you receiv
 
 Occasionally ngrok tunnels will fail to start because ngrok is running in the background. In this case, try running `killall -9 ngrok`.
 
+## Package Management
+
+### Adding a shared dependency for all projects
+
+To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn add foo`.
+
+Note that `lerna add foo` will add `foo` to package.json in all packages and _not_ to the high-level `package.json`.
+
+### Adding dependencies for packages
+
+To add a dependency for an individual package, use the following command:
+
+    lerna add foo --scope @org-name/package-name
+
+For example:
+
+    lerna add http-status-codes --scope @zeitcode/smithfield-myxx-api-client
+
+Please find more examples [here](https://github.com/lerna/lerna/tree/master/commands/add#examples).
+
+### Removing dependencies for packages
+
+Unfortunately [there is no](https://github.com/lerna/lerna/issues/1886) `lerna remove` command. Here are possible workarounds for removing dependencies from individual package:
+
+1. Run `lerna exec 'yarn remove foo' --scope @org-name/package-name`.
+1. Manually remove dependencies from `@org-name/package-name/package.json` and then run `lerna bootstrap --scope @org-name/package-name --force-local`.
+
 ### Tooling
 
 The following are used:
