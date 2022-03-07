@@ -132,11 +132,11 @@ Note that `lerna add foo` will add `foo` to package.json in all packages and _no
 
 To add a dependency for an individual package, use the following command:
 
-    lerna add foo --scope @org-name/application-name
+    lerna add foo --scope application-name
 
 For example:
 
-    lerna add http-status-codes --scope @greatupsells/greatupsells-shopify-admin
+    lerna add http-status-codes --scope greatupsells-shopify-admin
 
 Please find more examples [here](https://github.com/lerna/lerna/tree/master/commands/add#examples).
 
