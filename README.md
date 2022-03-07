@@ -74,7 +74,20 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 
 1. Clone this repository.
 1. Create a top-level `.env` file by copying `.env.example` and fill in values.
-1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
+1. Create symlinks (e.g., `ln -s ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
+1. Ask Chad to create an AWS IAM account for you and give you your credentials.
+1. Add AWS credentials to `~/.aws/credentials`:
+   ```
+   [greatupsells]
+   aws_access_key_id = <your key>
+   aws_secret_access_key = <your secret key>
+   ```
+1. Create `~/.aws/config` if it doesn't exist:
+   ```
+   [default]
+   region = us-east-1
+   ```
+1. Run `yarn global add lerna`.
 1. Run `yarn start`. This automatically does the following:
    1. Installs dependencies.
    1. Runs Lerna bootstrapping.
