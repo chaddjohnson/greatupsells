@@ -22,7 +22,7 @@ const findConversionsByOfferId = async (offerId, startAt, endAt) => {
       $project: {
         date: {
           $dateToString: {
-            format: '%Y-%m-%d',
+            format: '%Y-%m-%dT12:00:00Z',
             date: '$convertedAt'
           }
         }

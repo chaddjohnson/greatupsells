@@ -3075,13 +3075,13 @@
   dependencies:
     base64url "^3.0.1"
 
-"@shopify/koa-shopify-auth@^4.1.4":
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/@shopify/koa-shopify-auth/-/koa-shopify-auth-4.1.4.tgz#22232bd9deb7e44dd2ec83f0bd525a7166f92a91"
-  integrity sha512-IcTnJTWewr60lRU04jOgtDm/KeRMi2PKHqRAuS3wjru9GRMHAxJhmEqPoEREWRPOxf8SnOPS4nyq5VsVOHoeqg==
+"@shopify/koa-shopify-auth@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@shopify/koa-shopify-auth/-/koa-shopify-auth-5.0.3.tgz#54ebea4613dd5661cc3d9e7b12e9c0252e7272c3"
+  integrity sha512-dhe7mI1UXSYPRc8gMfSLjcvMCqne2UMfAY7XZZoyVPtRysrDLgIN8N0ZfdL9QGJ7ed5v1nAdGM+Q095JYCZVJg==
   dependencies:
     "@shopify/network" "^1.5.0"
-    "@shopify/shopify-api" "^1.2.1"
+    "@shopify/shopify-api" "^2.1.0"
     koa-compose ">=3.0.0 <4.0.0"
     nonce "^1.0.4"
     tslib "^1.9.3"
@@ -3145,21 +3145,6 @@
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@shopify/react-hooks/-/react-hooks-2.1.5.tgz#81f26ada20e27e9aa01e75fc76bed4c421d3b0cc"
   integrity sha512-HyOUuqf9+D4oWUxIQ0q7E+F6/NKrYJJAt5G6Eyt22Ej2F380yXNBHlfK4f+QERhuKE0FMF1Qqe0OjttP6QaysQ==
-
-"@shopify/shopify-api@^1.2.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@shopify/shopify-api/-/shopify-api-1.4.1.tgz#8247037cacca274130e6dcdd974a6bd69057690d"
-  integrity sha512-aZhPRyPTZvTwIvsqodShVa02mwrz4P2ShpBnbbvp614eCJkYALRtXKNSmEPjoPnmKmYfKjFkz+fsVtzsKLgbow==
-  dependencies:
-    "@shopify/network" "^1.5.1"
-    "@types/jsonwebtoken" "^8.5.0"
-    "@types/node-fetch" "^2.5.7"
-    "@types/supertest" "^2.0.10"
-    cookies "^0.8.0"
-    jsonwebtoken "^8.5.1"
-    node-fetch "^2.6.1"
-    tslib "^2.0.3"
-    uuid "^8.3.1"
 
 "@shopify/shopify-api@^2.1.0":
   version "2.1.0"
