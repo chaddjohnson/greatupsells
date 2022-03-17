@@ -22,11 +22,13 @@ const useOfferAcceptance = () => {
 
     // Add the variant to the existing draft order if one exists.
     if (shopifyDraftOrderId) {
-      await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, items);
+      draftOrder = await addVariantsToShopifyDraftOrder(
+        shopifyDraftOrderId,
+        items
+      );
     }
-
     // Create a new draft order if one does not exist.
-    if (!shopifyDraftOrderId) {
+    else {
       // Create a new draft order. Include the offered items and items already in the cart.
       // Associate the new item with the offer.
       draftOrder = await createShopifyDraftOrder({
@@ -42,6 +44,7 @@ const useOfferAcceptance = () => {
           }))
         ]
       });
+
       shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
@@ -91,7 +94,8 @@ const useOfferAcceptance = () => {
 
     if (shopifyDraftOrderId) {
       // Add the new variant to the draft order.
-      await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, [
+
+      draftOrder = await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, [
         {
           offerId,
           shopifyVariantId,
@@ -102,9 +106,8 @@ const useOfferAcceptance = () => {
       // Remove the trigger product from Shopify cart.
       await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
     }
-
     // Create a new draft order if one does not exist.
-    if (!shopifyDraftOrderId) {
+    else {
       // Create a new draft order. Include the offered item and items already in the cart.
       // Associate the new item with the offer.
       draftOrder = await createShopifyDraftOrder({
@@ -120,6 +123,7 @@ const useOfferAcceptance = () => {
           }))
         ]
       });
+
       shopifyDraftOrderId = draftOrder.id;
 
       // Track the draft order ID.
@@ -140,7 +144,11 @@ const useOfferAcceptance = () => {
 
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
-      { shopifyProductId, shopifyVariantId, quantity }
+      {
+        shopifyProductId,
+        shopifyVariantId,
+        quantity
+      }
     ]);
   };
 

@@ -201,7 +201,7 @@ const useDataBinding = ({
 
         try {
           await onAddProducts(offerId, [
-            { shopifyProductId, shopifyVariantId, quantity }
+            { offerId, shopifyProductId, shopifyVariantId, quantity }
           ]);
           onQuantityAdd(productIndex, quantity);
           onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
@@ -222,6 +222,7 @@ const useDataBinding = ({
         const offerId = offer._id;
         const productCount = offeredProducts.length;
         const items = [...Array(productCount).keys()].map((productIndex) => ({
+          offerId,
           shopifyProductId: viewModel.offeredProducts()[productIndex].id,
           shopifyVariantId: viewModel.selectedVariants()[productIndex].id,
           quantity: parseInt(
