@@ -279,6 +279,7 @@ const OfferForm = ({
       setThemeIncompatible(true);
     }
 
+    // Use page load as trigger event for Thank You Page offers.
     if (value === 'THANK_YOU_PAGE') {
       triggerEvent.onChange('LOAD');
     }
