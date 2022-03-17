@@ -27,11 +27,16 @@ const calculateCrossSellRevenueIncrease = (offerHit) => {
 const calculateRevenueIncrease = (offerHit) => {
   const { strategy } = offerHit;
   let revenueIncrease = 0;
+  const isUpsell = strategy === 'UPSELL';
+  const isCrossSell =
+    strategy === 'CROSS_SELL' ||
+    strategy === 'POST_CHECKOUT' ||
+    strategy === 'THANK_YOU_PAGE';
 
-  if (strategy === 'UPSELL') {
+  if (isUpsell) {
     // A comparable, more expensive product was purchased, so calculate the increase in price.
     revenueIncrease = calculateUpsellRevenueIncrease(offerHit);
-  } else if (strategy === 'CROSS_SELL') {
+  } else if (isCrossSell) {
     // A related or complimentary product was purchased, so calculate the additional price.
     revenueIncrease = calculateCrossSellRevenueIncrease(offerHit);
   }
