@@ -49,7 +49,8 @@ const trackAcceptedProducts = async (offerHit, shopifyDraftOrderId, items) => {
   offerHit.shopifyDraftOrderId = shopifyDraftOrderId;
 
   // Track the accepted product data for the offer hit.
-  offerHit.acceptedProducts = (offerHit.acceptedProducts || []).concat(
+  offerHit.acceptedProducts = offerHit.acceptedProducts || [];
+  offerHit.acceptedProducts = offerHit.acceptedProducts.concat(
     acceptedProducts.filter(Boolean)
   );
 
