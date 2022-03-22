@@ -30,7 +30,7 @@ const OfferTheme = ({
     [...Array(offeredProducts.length).keys()].map(() => 0)
   );
   const [checkoutUrl, setCheckoutUrl] = useState(
-    getCookie('greatupsellsDraftOrderCheckoutUrl') || '/checkout'
+    getCookie('greatupsellsDraftOrderInvoiceUrl') || '/checkout'
   );
 
   const { currency: shopCurrency } = shop;

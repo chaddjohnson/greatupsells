@@ -204,7 +204,7 @@ const useDataBinding = ({
             { offerId, shopifyProductId, shopifyVariantId, quantity }
           ]);
           onQuantityAdd(productIndex, quantity);
-          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
+          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
           productButton.removeAttribute('disabled');
           productButton.classList.remove('loading');
@@ -240,7 +240,7 @@ const useDataBinding = ({
             onQuantityAdd(productIndex, items[productIndex].quantity)
           );
 
-          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
+          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
           bundleButton.classList.remove('loading');
         } catch (error) {
@@ -273,7 +273,7 @@ const useDataBinding = ({
             shopifyVariantId
           );
           onQuantityAdd(productIndex, 1);
-          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderCheckoutUrl'));
+          onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
           productButton.removeAttribute('disabled');
         } catch (error) {
@@ -303,7 +303,7 @@ const useDataBinding = ({
         // seems to remedy the problem.
         setTimeout(() => {
           // Redirect to the draft order checkout URL.
-          window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+          window.location.href = getCookie('greatupsellsDraftOrderInvoiceUrl');
         }, 100);
       };
 
@@ -318,7 +318,7 @@ const useDataBinding = ({
         // seems to remedy the problem.
         setTimeout(() => {
           // Redirect to the draft order checkout URL.
-          window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+          window.location.href = getCookie('greatupsellsDraftOrderInvoiceUrl');
         }, 100);
       };
     },

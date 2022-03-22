@@ -54,7 +54,7 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie('greatupsellsDraftOrderCheckoutUrl', draftOrder.invoice_url, {
+      setCookie('greatupsellsDraftOrderInvoiceUrl', draftOrder.invoice_url, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });
@@ -133,7 +133,7 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie('greatupsellsDraftOrderCheckoutUrl', draftOrder.invoice_url, {
+      setCookie('greatupsellsDraftOrderInvoiceUrl', draftOrder.invoice_url, {
         sameSite: 'Strict',
         maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
       });

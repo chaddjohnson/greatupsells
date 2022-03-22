@@ -131,9 +131,7 @@ const CartProvider = ({ children }) => {
     event.preventDefault();
 
     const draftOrderId = getCookie('greatupsellsDraftOrderId');
-    const draftOrderCheckoutUrl = getCookie(
-      'greatupsellsDraftOrderCheckoutUrl'
-    );
+    const draftOrderCheckoutUrl = getCookie('greatupsellsDraftOrderInvoiceUrl');
 
     if (!draftOrderId || !draftOrderCheckoutUrl) {
       return;
@@ -145,9 +143,7 @@ const CartProvider = ({ children }) => {
 
   const overrideCartForm = useCallback(() => {
     const draftOrderId = getCookie('greatupsellsDraftOrderId');
-    const draftOrderCheckoutUrl = getCookie(
-      'greatupsellsDraftOrderCheckoutUrl'
-    );
+    const draftOrderCheckoutUrl = getCookie('greatupsellsDraftOrderInvoiceUrl');
     const cartForms = Array.from(document.forms).filter((form) =>
       form.action.match(/\/cart$/)
     );
@@ -222,7 +218,7 @@ const CartProvider = ({ children }) => {
       } else {
         // Remove cookies as draft order no longer exists.
         removeCookie('greatupsellsDraftOrderId');
-        removeCookie('greatupsellsDraftOrderCheckoutUrl');
+        removeCookie('greatupsellsDraftOrderInvoiceUrl');
 
         // Undo cart form overrides.
         removeCartFormOverrides();
@@ -242,7 +238,7 @@ const CartProvider = ({ children }) => {
     // Remove cookies relaeted to draft orders when there are no cart items.
     if (response?.items.length === 0) {
       removeCookie('greatupsellsDraftOrderId');
-      removeCookie('greatupsellsDraftOrderCheckoutUrl');
+      removeCookie('greatupsellsDraftOrderInvoiceUrl');
     }
   });
 
