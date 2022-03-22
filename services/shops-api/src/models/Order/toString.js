@@ -2,7 +2,7 @@ const toString = (order) => {
   const { shop } = order;
   const data = [];
 
-  data.push(`ID = ${order.id}`);
+  data.push(`Order ID = ${order.id}`);
   data.push(`Shopify Shop ID = ${order.shopifyShopId}`);
   data.push(`Order Number = ${order.orderNumber}`);
 
