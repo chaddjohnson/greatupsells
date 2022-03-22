@@ -101,6 +101,8 @@ const Offers = () => {
     );
   }, [offersData]);
 
+  const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
+
   const handleOfferOpen = () => {
     setViewingOffer(true);
   };
@@ -171,7 +173,7 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      {!productAdded && (
+      {!productAdded && !isThankYouPage && (
         <PageLoadOffer
           shop={shop}
           offer={offerDataByTriggerEvent.LOAD?.offer}
@@ -217,16 +219,18 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      <ThankYouPageOffer
-        shop={shop}
-        offer={thankYouPageOfferData?.offer}
-        theme={thankYouPageOfferData?.theme}
-        locale={locale}
-        countryCode={countryCode}
-        currency={currency}
-        triggerProduct={thankYouPageOfferData?.triggerProduct}
-        offeredProducts={thankYouPageOfferData?.offeredProducts}
-      />
+      {isThankYouPage && (
+        <ThankYouPageOffer
+          shop={shop}
+          offer={thankYouPageOfferData?.offer}
+          theme={thankYouPageOfferData?.theme}
+          locale={locale}
+          countryCode={countryCode}
+          currency={currency}
+          triggerProduct={thankYouPageOfferData?.triggerProduct}
+          offeredProducts={thankYouPageOfferData?.offeredProducts}
+        />
+      )}
     </>
   );
 };

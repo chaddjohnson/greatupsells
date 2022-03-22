@@ -14,6 +14,8 @@ const ThankYouPageOffer = ({
   triggerProduct,
   offeredProducts
 }) => {
+  const [lastShop, setLastShop] = useState(shop);
+  const [lastOffer, setLastOffer] = useState(offer);
   const [added, setAdded] = useState(false);
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
@@ -38,6 +40,20 @@ const ThankYouPageOffer = ({
     '.step__sections > .section > .section__content .content-box:nth-of-type(2) .content-box__row:nth-of-type(2)'
   );
 
+  // Use the last non-empty values.
+  const cachedShop = useMemo(() => shop || lastShop, [shop, lastShop]);
+  const cachedOffer = useMemo(() => offer || lastOffer, [offer, lastOffer]);
+
+  // Track the last non-empty values.
+  useEffect(() => {
+    if (shop) {
+      setLastShop(shop);
+    }
+    if (offer) {
+      setLastOffer(offer);
+    }
+  }, [shop, offer]);
+
   useEffect(() => {
     if (!headerContainer) {
       return;
@@ -49,15 +65,11 @@ const ThankYouPageOffer = ({
   }, [headerContainer]);
 
   useEffect(() => {
-    if (!window.Shopify.Checkout) {
+    if (window.Shopify?.Checkout?.page !== 'thank_you') {
       return;
     }
 
-    if (window.Shopify.Checkout.page !== 'thank_you') {
-      return;
-    }
-
-    if (!offerId) {
+    if (!cachedOffer) {
       return;
     }
 
@@ -73,20 +85,27 @@ const ThankYouPageOffer = ({
       offerId,
       offeredShopifyProductIds
     });
-  }, [offerId, added, offeredShopifyProductIds, trackOfferImpression, title]);
+  }, [
+    cachedOffer,
+    offerId,
+    added,
+    offeredShopifyProductIds,
+    trackOfferImpression,
+    title
+  ]);
 
   if (!contentContainer) {
     return null;
   }
 
-  if (!offer || !shop || !added) {
+  if (!cachedOffer || !cachedShop || !added) {
     return null;
   }
 
   return createPortal(
     <OfferTheme
-      shop={shop}
-      offer={offer}
+      shop={cachedShop}
+      offer={cachedOffer}
       locale={locale}
       countryCode={countryCode}
       currency={currency}

@@ -288,17 +288,38 @@ const useDataBinding = ({
       // };
 
       this.handleThankYouPageAddProduct = async (event, productIndex) => {
+        const productButton = event.target;
+
         await this.handleAddProduct(event, productIndex);
 
-        // Redirect to the draft order checkout URL.
-        window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+        productButton.setAttribute('disabled', 'disabled');
+        productButton.classList.add('loading');
+
+        // This timeout serves as a workaround. For some strange reason, with
+        // Thank You Page offers (and maybe other offer types), sometimes,
+        // despite the redirection URL used here, the actual checkout URL is
+        // different than the checkout URL associated with the invoice URL.
+        // If this occurs, no conversion is tracked for the order. Somehow this
+        // seems to remedy the problem.
+        setTimeout(() => {
+          // Redirect to the draft order checkout URL.
+          window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+        }, 100);
       };
 
       this.handleThankYouPageAddProductBundle = async (event) => {
         await this.handleAddProductBundle(event);
 
-        // Redirect to the draft order checkout URL.
-        window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+        // This timeout serves as a workaround. For some strange reason, with
+        // Thank You Page offers (and maybe other offer types), sometimes,
+        // despite the redirection URL used here, the actual checkout URL is
+        // different than the checkout URL associated with the invoice URL.
+        // If this occurs, no conversion is tracked for the order. Somehow this
+        // seems to remedy the problem.
+        setTimeout(() => {
+          // Redirect to the draft order checkout URL.
+          window.location.href = getCookie('greatupsellsDraftOrderCheckoutUrl');
+        }, 100);
       };
     },
     [
