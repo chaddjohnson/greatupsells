@@ -129,11 +129,8 @@ schema.statics.findConversionRatesByShopId = function (shopId, startAt, endAt) {
   return findConversionRatesByShopId(shopId, startAt, endAt);
 };
 
-schema.methods.trackOfferedProducts = function (
-  shopifyProductIds,
-  shopifyVariantIds
-) {
-  return trackOfferedProducts(this, shopifyProductIds, shopifyVariantIds);
+schema.methods.trackOfferedProducts = function (shopifyProductIds) {
+  return trackOfferedProducts(this, shopifyProductIds);
 };
 
 schema.methods.trackAcceptedProducts = function (shopifyDraftOrderId, items) {
