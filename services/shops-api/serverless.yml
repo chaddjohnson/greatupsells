@@ -145,6 +145,7 @@ functions:
   createOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOrder.handler
+    timeout: 15
     events:
       - http:
           path: /orders

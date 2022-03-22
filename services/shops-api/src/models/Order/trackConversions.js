@@ -78,7 +78,7 @@ const trackConversions = async (order) => {
   const { shop, shopifyOrderId } = order;
   let offerHits = [];
   let attempts = 0;
-  const conditionFn = () => offerHits.length === 0 && attempts < 7;
+  const conditionFn = () => offerHits.length === 0 && attempts < 12;
 
   // Try multiple times to find offer hits for the shopify order. This is due
   // to a race condition where that an order may be created at the same time as
