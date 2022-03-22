@@ -83,7 +83,9 @@ const logInfo = async (message, data = {}) => {
 
   data = formatData(data);
 
-  console.info(JSON.stringify(data, null, 2));
+  if (Object.keys(data).length > 0) {
+    console.info(JSON.stringify(data, null, 2));
+  }
 
   await sendMessage('INFO', message, undefined, data);
 };
