@@ -35,7 +35,7 @@ const ProductOffer = ({
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const { shopifyCartLoading } = useShopifyCart();
+  const { shopifyCartLoaded } = useShopifyCart();
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
@@ -47,7 +47,7 @@ const ProductOffer = ({
       productAdded &&
       !!shopifyProductIds?.length &&
       !!shopifyVariantIds?.length &&
-      !shopifyCartLoading
+      shopifyCartLoaded
   });
   const { addProducts, replaceProduct } = useOfferAcceptance();
 
