@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { usePushStateListener } from '@greatupsells/react-hooks';
 import {
   useShop,
   useRandomOffers,
   useShopifyCart,
-  useShopifyCartAddListener,
   useShopifyCustomer
 } from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
@@ -17,13 +15,12 @@ import ThankYouPageOffer from './ThankYouPageOffer';
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
-  const [productAdded, setProductAdded] = useState(false);
 
   const {
     shopifyCartItems,
     shopifyCartTotal,
     shopifyCartItemCount,
-    shopifyCartLoading
+    shopifyCartLoaded
   } = useShopifyCart();
 
   const { shop } = useShop();
@@ -70,7 +67,7 @@ const Offers = () => {
     shopifyCartTotal,
     shopifyCartItemCount,
     shopifyOrderId,
-    shouldQuery: !!shopifyCartItems && !shopifyCartLoading
+    shouldQuery: !!shopifyCartItems && shopifyCartLoaded
   });
 
   // Group data by trigger event.
@@ -110,18 +107,6 @@ const Offers = () => {
   const handleOfferClose = () => {
     setViewingOffer(false);
   };
-
-  // Subscribe to product add events.
-  useShopifyCartAddListener((addedProduct) => {
-    if (addedProduct?.product_id) {
-      setProductAdded(true);
-    }
-  });
-
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setProductAdded(false);
-  });
 
   return (
     <>
@@ -173,7 +158,7 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      {!productAdded && !isThankYouPage && (
+      {!isThankYouPage && (
         <PageLoadOffer
           shop={shop}
           offer={offerDataByTriggerEvent.LOAD?.offer}

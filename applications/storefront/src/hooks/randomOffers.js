@@ -56,10 +56,6 @@ const useRandomOffers = ({
     shouldQuery
       ? JSON.stringify([
           events,
-          shopifyProductIds,
-          shopifyVariantIds,
-          shopifyCartTotal,
-          shopifyCartItemCount,
           shopifyOrderId,
           offerImpressions,
           sessionOfferImpressions,

@@ -86,7 +86,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
 
       return translatedData;
     },
-    [formatCurrency, offer]
+    [convertCurrency, currency, formatCurrency, offer, shopCurrency]
   );
 
   const translateTriggerProductData = useCallback(

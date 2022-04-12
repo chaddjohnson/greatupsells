@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLiquid } from 'react-liquid';
-import { useCookies, useCurrency } from '@greatupsells/react-hooks';
+import { useCookies } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 import useDataBinding from './dataBinding';
 
@@ -32,13 +32,6 @@ const OfferTheme = ({
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('greatupsellsDraftOrderInvoiceUrl') || '/checkout'
   );
-
-  const { currency: shopCurrency } = shop;
-  const { formatCurrency, convertCurrency } = useCurrency({
-    locale,
-    countryCode,
-    currency
-  });
 
   const {
     translateProductData,
@@ -112,10 +105,6 @@ const OfferTheme = ({
       offeredProducts: translatedOfferedProducts,
       actionButtonUrl,
       actionButtonTarget,
-      shopifyCartTotal: formatCurrency(
-        convertCurrency(shopifyCartTotal || 0, shopCurrency, currency)
-      ),
-      shopifyCartItemCount: shopifyCartItemCount || 0,
       strategy: offer.strategy,
       enableBundling: offer.enableBundling,
       enableVariantSelection: offer.enableVariantSelection,
@@ -127,13 +116,7 @@ const OfferTheme = ({
       translatedOfferedProducts,
       offer,
       actionButtonUrl,
-      actionButtonTarget,
-      shopifyCartTotal,
-      shopifyCartItemCount,
-      formatCurrency,
-      convertCurrency,
-      shopCurrency,
-      currency
+      actionButtonTarget
     ]
   );
 
@@ -183,6 +166,8 @@ const OfferTheme = ({
     currency,
     offeredProducts: translatedOfferedProducts,
     addedQuantities,
+    shopifyCartTotal,
+    shopifyCartItemCount,
     html,
     css,
     javascript,

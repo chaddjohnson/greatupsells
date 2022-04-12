@@ -91,7 +91,7 @@ resource "aws_instance" "services_server" {
   provider                = aws.region
 
   tags = {
-    Name = "services-server"
+    Name = "services-server-${terraform.workspace}"
   }
 }
 

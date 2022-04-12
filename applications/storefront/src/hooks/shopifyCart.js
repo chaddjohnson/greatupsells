@@ -69,6 +69,7 @@ const httpClient = new HttpClient({
 
 const CartProvider = ({ children }) => {
   const [cartFormOverridden, setCartFormOverridden] = useState(false);
+  const [shopifyCartLoaded, setShopifyCartLoaded] = useState(false);
 
   const { getCookie, removeCookie } = useCookies();
   const { updateShopifyDraftOrderItems } = useShopifyDraftOrder();
@@ -226,6 +227,10 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  if (!shopifyCartLoaded && !shopifyCartLoading) {
+    setShopifyCartLoaded(true);
+  }
+
   useShopifyCartAddListener(shopifyCartChangeListener);
   useShopifyCartQuantityListener(shopifyCartChangeListener);
 
@@ -263,6 +268,7 @@ const CartProvider = ({ children }) => {
         shopifyCartItemCount,
         shopifyCartError,
         shopifyCartLoading,
+        shopifyCartLoaded,
         fetchShopifyCart,
         addVariantsToShopifyCart,
         removeVariantFromShopifyCart

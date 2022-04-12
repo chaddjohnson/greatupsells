@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useState, useMemo, useEffect } from 'react';
 import knockout from 'knockout';
 import { useCookies, useCurrency } from '@greatupsells/react-hooks';
 
@@ -11,6 +11,8 @@ const useDataBinding = ({
   currency,
   offeredProducts,
   addedQuantities,
+  shopifyCartTotal,
+  shopifyCartItemCount,
   html,
   css,
   javascript,
@@ -27,6 +29,8 @@ const useDataBinding = ({
     countryCode,
     currency
   });
+
+  const [bindingsApplied, setBindingsApplied] = useState(false);
 
   const addedQuantity = useMemo(
     () =>
@@ -47,6 +51,16 @@ const useDataBinding = ({
     function () {
       this.offeredProducts = () => offeredProducts;
       this.addedQuantities = () => addedQuantities;
+
+      this.shopifyCartTotal = knockout.observable(shopifyCartTotal);
+      this.shopifyCartTotalFormatted = () =>
+        formatCurrency(
+          convertCurrency(this.shopifyCartTotal() || 0, shopCurrency, currency)
+        );
+
+      this.shopifyCartItemCount = knockout.observable(
+        shopifyCartItemCount || 0
+      );
 
       this.subtotalFormatted = () => {
         const subtotal = this.selectedVariants().reduce(
@@ -328,6 +342,8 @@ const useDataBinding = ({
       offeredProducts,
       addedQuantities,
       addedQuantity,
+      shopifyCartTotal,
+      shopifyCartItemCount,
       getCookie,
       onAddProducts,
       onReplaceProduct,
@@ -346,26 +362,47 @@ const useDataBinding = ({
       return;
     }
 
-    // Add a reference to the data binding library.
-    context.ko = knockout;
+    if (bindingsApplied) {
+      if (context.viewModel) {
+        context.viewModel.shopifyCartTotal(shopifyCartTotal);
+        context.viewModel.shopifyCartItemCount(shopifyCartItemCount);
+      }
 
-    // Workaround for issue https://github.com/knockout/knockout/issues/912.
-    if (container) {
-      container.innerHTML = html;
+      return;
     }
 
-    // (Re)initialize data bindings.
-    context.viewModel = new ViewModel();
-    context.ko.cleanNode(body);
-    context.ko.applyBindings(context.viewModel, body);
+    setBindingsApplied(true);
 
-    // Remove bindings on cleanup.
+    // Not sure why a timeout is necessary...
+    setTimeout(() => {
+      // Add a reference to the data binding library.
+      context.ko = knockout;
+
+      // (Re)initialize data bindings.
+      context.viewModel = new ViewModel();
+      context.ko.applyBindings(context.viewModel, body);
+    });
+  }, [
+    context,
+    body,
+    ViewModel,
+    container,
+    html,
+    css,
+    javascript,
+    bindingsApplied,
+    shopifyCartTotal,
+    shopifyCartItemCount
+  ]);
+
+  useEffect(() => {
+    // Remove Knockout bindings on unmount.
     return () => {
       if (context?.ko) {
         context.ko.cleanNode(body);
       }
     };
-  }, [context, body, ViewModel, container, html, css, javascript]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 };
 
 export default useDataBinding;
