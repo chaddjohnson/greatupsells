@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "lerna run lint",
     "format": "lerna run format",
+    "clean": "find . -iname node_modules -exec rm -rf {} + ; rm -rf applications/*/.next packages/*/dist",
     "bootstrap": "dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@greatupsells/*",
     "prestart": "yarn install && dotenv -- yarn bootstrap",
