@@ -13,6 +13,7 @@ const useDataBinding = ({
   addedQuantities,
   shopifyCartTotal,
   shopifyCartItemCount,
+  actionButtonUrl,
   html,
   css,
   javascript,
@@ -61,6 +62,8 @@ const useDataBinding = ({
       this.shopifyCartItemCount = knockout.observable(
         shopifyCartItemCount || 0
       );
+
+      this.actionButtonUrl = knockout.observable(actionButtonUrl);
 
       this.subtotalFormatted = () => {
         const subtotal = this.selectedVariants().reduce(
@@ -344,6 +347,7 @@ const useDataBinding = ({
       addedQuantity,
       shopifyCartTotal,
       shopifyCartItemCount,
+      actionButtonUrl,
       getCookie,
       onAddProducts,
       onReplaceProduct,
@@ -366,6 +370,7 @@ const useDataBinding = ({
       if (context.viewModel) {
         context.viewModel.shopifyCartTotal(shopifyCartTotal);
         context.viewModel.shopifyCartItemCount(shopifyCartItemCount);
+        context.viewModel.actionButtonUrl(actionButtonUrl);
       }
 
       return;
@@ -392,7 +397,8 @@ const useDataBinding = ({
     javascript,
     bindingsApplied,
     shopifyCartTotal,
-    shopifyCartItemCount
+    shopifyCartItemCount,
+    actionButtonUrl
   ]);
 
   useEffect(() => {

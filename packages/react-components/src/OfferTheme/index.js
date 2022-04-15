@@ -168,6 +168,7 @@ const OfferTheme = ({
     addedQuantities,
     shopifyCartTotal,
     shopifyCartItemCount,
+    actionButtonUrl,
     html,
     css,
     javascript,
