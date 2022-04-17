@@ -103,7 +103,6 @@ const OfferTheme = ({
       ...mappedVariables,
       triggerProduct: translatedTriggerProduct,
       offeredProducts: translatedOfferedProducts,
-      actionButtonUrl,
       actionButtonTarget,
       strategy: offer.strategy,
       enableBundling: offer.enableBundling,
@@ -115,7 +114,6 @@ const OfferTheme = ({
       translatedTriggerProduct,
       translatedOfferedProducts,
       offer,
-      actionButtonUrl,
       actionButtonTarget
     ]
   );

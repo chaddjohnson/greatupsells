@@ -223,6 +223,9 @@ const useDataBinding = ({
           onQuantityAdd(productIndex, quantity);
           onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
+          // Impose a delay to allow the checkout URL update to propagate.
+          await new Promise((resolve) => setTimeout(resolve, 25));
+
           productButton.removeAttribute('disabled');
           productButton.classList.remove('loading');
         } catch (error) {
@@ -259,6 +262,9 @@ const useDataBinding = ({
 
           onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
+          // Impose a delay to allow the checkout URL update to propagate.
+          await new Promise((resolve) => setTimeout(resolve, 25));
+
           bundleButton.classList.remove('loading');
         } catch (error) {
           bundleButton.removeAttribute('disabled');
@@ -291,6 +297,9 @@ const useDataBinding = ({
           );
           onQuantityAdd(productIndex, 1);
           onCheckoutUrlUpdate(getCookie('greatupsellsDraftOrderInvoiceUrl'));
+
+          // Impose a delay to allow the checkout URL update to propagate.
+          await new Promise((resolve) => setTimeout(resolve, 25));
 
           productButton.removeAttribute('disabled');
         } catch (error) {
