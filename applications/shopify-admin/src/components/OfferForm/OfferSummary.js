@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -28,8 +28,6 @@ const HeadingWrapper = styled.div`
 `;
 
 const OfferSummary = ({ offer }) => {
-  const [items, setItems] = useState([]);
-
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
   const { formatNumber, formatPercentage } = useNumberFormatter({
@@ -40,7 +38,7 @@ const OfferSummary = ({ offer }) => {
   const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const { formatDate } = useDateTime();
 
-  const buildItems = useCallback(() => {
+  const items = useMemo(() => {
     const newItems = [];
 
     if (offer.discountType === 'PERCENTAGE' && offer.discountValue) {
@@ -82,10 +80,6 @@ const OfferSummary = ({ offer }) => {
 
     return newItems;
   }, [offer, formatCurrency, formatDate]);
-
-  useEffect(() => {
-    setItems(buildItems());
-  }, [buildItems]);
 
   return (
     <Card title="Summary" subdued>
