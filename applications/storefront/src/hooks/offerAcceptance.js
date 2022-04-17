@@ -2,6 +2,7 @@ import { useCookies } from '@greatupsells/react-hooks';
 import useOfferTracking from './offerTracking';
 import { useShopifyCart } from './shopifyCart';
 import useShopifyDraftOrder from './shopifyDraftOrder';
+import useShopifyCustomer from './shopifyCustomer';
 
 const useOfferAcceptance = () => {
   const { getCookie, setCookie } = useCookies();
@@ -15,6 +16,9 @@ const useOfferAcceptance = () => {
     createShopifyDraftOrder,
     addVariantsToShopifyDraftOrder
   } = useShopifyDraftOrder();
+  const { getCustomerLocale } = useShopifyCustomer();
+
+  const locale = getCustomerLocale();
 
   const addProducts = async (offerId, items) => {
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
@@ -54,10 +58,14 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie('greatupsellsDraftOrderInvoiceUrl', draftOrder.invoice_url, {
-        sameSite: 'Strict',
-        maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
-      });
+      setCookie(
+        'greatupsellsDraftOrderInvoiceUrl',
+        `${draftOrder.invoice_url}?locale=${locale}`,
+        {
+          sameSite: 'Strict',
+          maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
+        }
+      );
     }
 
     // Add the accepted variant to the Shopify cart.
@@ -133,10 +141,14 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie('greatupsellsDraftOrderInvoiceUrl', draftOrder.invoice_url, {
-        sameSite: 'Strict',
-        maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
-      });
+      setCookie(
+        'greatupsellsDraftOrderInvoiceUrl',
+        `${draftOrder.invoice_url}?locale=${locale}`,
+        {
+          sameSite: 'Strict',
+          maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
+        }
+      );
     }
 
     // Add the accepted variant to the Shopify cart.
