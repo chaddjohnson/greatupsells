@@ -135,6 +135,9 @@ const OfferPopup = ({
       return;
     }
 
+    const isCartUpsell =
+      offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
+
     setModalOpen(false);
     setModalAfterOpen(false);
 
@@ -143,6 +146,11 @@ const OfferPopup = ({
     // work without this.
     setTimeout(() => {
       onClose();
+
+      // Reload the cart on upsell so that new items show.
+      if (isCartUpsell) {
+        window.location.reload();
+      }
     }, 350);
   };
 

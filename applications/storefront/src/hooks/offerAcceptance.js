@@ -87,10 +87,6 @@ const useOfferAcceptance = () => {
     const triggerShopifyCartItem =
       shopifyCartItems[triggerShopifyCartItemIndex];
     const triggerShopifyVariantId = triggerShopifyCartItem?.variant_id;
-    const nonTriggerShopifyCartItems = [
-      ...shopifyCartItems.slice(0, triggerShopifyCartItemIndex),
-      ...shopifyCartItems.slice(triggerShopifyCartItemIndex + 1)
-    ];
     const quantity = 1;
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
@@ -110,9 +106,6 @@ const useOfferAcceptance = () => {
           quantity
         }
       ]);
-
-      // Remove the trigger product from Shopify cart.
-      await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
     }
     // Create a new draft order if one does not exist.
     else {
@@ -125,7 +118,7 @@ const useOfferAcceptance = () => {
             shopifyVariantId,
             quantity
           },
-          ...nonTriggerShopifyCartItems.map((item) => ({
+          ...shopifyCartItems.map((item) => ({
             shopifyVariantId: item.variant_id,
             quantity: item.quantity
           }))
@@ -153,6 +146,9 @@ const useOfferAcceptance = () => {
 
     // Add the accepted variant to the Shopify cart.
     await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
+
+    // Remove the trigger product from Shopify cart.
+    await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
 
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
