@@ -55,9 +55,17 @@ const useOffer = (offerId) => {
     }
 
     const url = `/offers/${offerId}`;
+    const options = {
+      optimisticData: { ...offer, enabled: true },
+      rollbackOnError: true
+    };
 
     try {
-      await mutate(url, httpClient.put(url, { ...offer, enabled: true }));
+      await mutate(
+        url,
+        httpClient.put(url, { ...offer, enabled: true }),
+        options
+      );
 
       showSuccessToast('Offer enabled.');
     } catch (error) {
@@ -72,9 +80,17 @@ const useOffer = (offerId) => {
     }
 
     const url = `/offers/${offerId}`;
+    const options = {
+      optimisticData: { ...offer, enabled: false },
+      rollbackOnError: true
+    };
 
     try {
-      await mutate(url, httpClient.put(url, { ...offer, enabled: false }));
+      await mutate(
+        url,
+        httpClient.put(url, { ...offer, enabled: false }),
+        options
+      );
 
       showSuccessToast('Offer disabled.');
     } catch (error) {
