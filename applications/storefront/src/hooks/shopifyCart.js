@@ -15,10 +15,15 @@ import {
   HttpClient
 } from '@greatupsells/react-hooks';
 import useShopifyDraftOrder from './shopifyDraftOrder';
+import useShopifyCustomer from './shopifyCustomer';
 
 const CartContext = createContext(null);
 
 const useShopifyCartListener = (listener) => {
+  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
+  const urlLocale = getUrlLocaleAndCountryCode();
+  const url = urlLocale ? `/${urlLocale}/cart.js` : '/cart.js';
+
   const handler = (requestData, responseData) => {
     const cartData =
       typeof responseData === 'string'
@@ -30,10 +35,15 @@ const useShopifyCartListener = (listener) => {
     }
   };
 
-  useHttpRequestListener('/cart.js', handler);
+  useHttpRequestListener(url, handler);
 };
 
 const useShopifyCartAddListener = (listener) => {
+  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
+  const urlLocale = getUrlLocaleAndCountryCode();
+  const url1 = urlLocale ? `/${urlLocale}/cart/add.js` : '/cart/add.js';
+  const url2 = urlLocale ? `/${urlLocale}/cart/add` : '/cart/add';
+
   const handler1 = (requestData, responseData) => {
     const productData = responseData?.items?.[0];
 
@@ -48,19 +58,24 @@ const useShopifyCartAddListener = (listener) => {
     }
   };
 
-  useHttpRequestListener('/cart/add.js', handler1);
-  useHttpRequestListener('/cart/add', handler2);
+  useHttpRequestListener(url1, handler1);
+  useHttpRequestListener(url2, handler2);
 };
 
 const useShopifyCartQuantityListener = (listener) => {
+  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
+  const urlLocale = getUrlLocaleAndCountryCode();
+  const url1 = urlLocale ? `/${urlLocale}/cart/change.js` : '/cart/change.js';
+  const url2 = urlLocale ? `/${urlLocale}/cart/change` : '/cart/change';
+
   const handler = () => {
     if (listener) {
       listener.call(listener);
     }
   };
 
-  useHttpRequestListener('/cart/change.js', handler);
-  useHttpRequestListener('/cart/change', handler);
+  useHttpRequestListener(url1, handler);
+  useHttpRequestListener(url2, handler);
 };
 
 const httpClient = new HttpClient({

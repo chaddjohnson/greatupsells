@@ -45,6 +45,10 @@ const useShopifyCustomer = () => {
     return parts[1]?.toUpperCase() || 'US';
   };
 
+  const getUrlLocaleAndCountryCode = () => {
+    return window.location.pathname.match(/^\/([a-z]{2}-[a-z]{2})(\/|$)/)?.[1];
+  };
+
   const getCustomerCurrency = () => {
     const urlCountryCode = window.location.pathname
       .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
@@ -81,7 +85,12 @@ const useShopifyCustomer = () => {
     );
   };
 
-  return { getCustomerLocale, getCustomerCountryCode, getCustomerCurrency };
+  return {
+    getCustomerLocale,
+    getCustomerCountryCode,
+    getUrlLocaleAndCountryCode,
+    getCustomerCurrency
+  };
 };
 
 export default useShopifyCustomer;
