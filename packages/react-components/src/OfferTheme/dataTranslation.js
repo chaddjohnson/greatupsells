@@ -99,7 +99,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
 
       // Find the cart item corresponding to the product.
       const shopifyCartItem = shopifyCartItems.find(
-        (item) => item.product_id === translatedData.id
+        (item) => item.product_id === translatedData?.id
       );
 
       // Find the specific variant.
