@@ -219,20 +219,20 @@ const AnalyticsPage = () => {
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
                     <DisplayText size="extraLarge">
+                      {formatPercentage(shop?.offerConversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
                       {formatCurrency(shop?.revenueIncrease)}
                     </DisplayText>
                     <TextStyle variation="strong">
                       <TextStyle variation="subdued">
                         Revenue increase
                       </TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatPercentage(shop?.offerConversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
                     </TextStyle>
                   </Stack>
                 </Stack>

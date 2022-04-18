@@ -72,10 +72,10 @@ const OfferListRow = ({ offer }) => {
         <OfferStatus offer={offer} />
       </IndexTable.Cell>
       <IndexTable.Cell>{formatNumber(offer.impressionCount)}</IndexTable.Cell>
+      <IndexTable.Cell>{formatNumber(offer.acceptanceCount)}</IndexTable.Cell>
       <IndexTable.Cell>
         {formatPercentage(offer.conversionRate, 1)}
       </IndexTable.Cell>
-      <IndexTable.Cell>{formatNumber(offer.acceptanceCount)}</IndexTable.Cell>
       <IndexTable.Cell>{formatCurrency(offer.revenueIncrease)}</IndexTable.Cell>
     </IndexTable.Row>
   );
@@ -203,8 +203,8 @@ const OfferList = ({ offers, filters, onFilter }) => {
                 { title: 'Name' },
                 { title: 'Status' },
                 { title: 'Impressions' },
-                { title: 'Conversion rate' },
                 { title: 'Acceptances' },
+                { title: 'Conversion rate' },
                 { title: 'Revenue increase' }
               ]}
               selectable={false}
