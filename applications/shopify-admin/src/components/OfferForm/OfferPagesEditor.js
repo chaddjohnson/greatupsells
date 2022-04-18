@@ -19,11 +19,11 @@ const pageOptions = [
     label: 'Home page'
   },
   {
-    value: '/collections/all',
+    value: '*/collections/all',
     label: 'Catalog page'
   },
   {
-    value: '/collections/*',
+    value: '*/collections/*',
     label: 'Collection pages'
   },
   {
@@ -35,7 +35,7 @@ const pageOptions = [
     label: 'Blog pages'
   },
   {
-    value: '/cart',
+    value: '*/cart',
     label: 'Cart page'
   },
   {
@@ -114,6 +114,7 @@ const OfferPagesEditor = ({
       return;
     }
 
+    // Remove trailing slash and query string parameters.
     const sanitized = triggerPagePathPattern.replace(/(\/*$|\/*?\?.*)/g, '');
 
     setTriggerPagePathPattern(sanitized);

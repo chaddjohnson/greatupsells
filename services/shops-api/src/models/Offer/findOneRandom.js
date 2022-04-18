@@ -307,6 +307,11 @@ const findOneRandom = async (
       return true;
     }
 
+    // Match home page with or without locale prefix.
+    if (offer.triggerPagePath === '/') {
+      return pagePathSanitized.match(/^(?:\/[a-z]{2}-[a-z]{2})?\/?$/);
+    }
+
     // Filter trigger path based on regex if trigger page is a specific page.
     return (
       offer.triggerPagePath &&
