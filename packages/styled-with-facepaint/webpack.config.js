@@ -8,7 +8,7 @@ const dev = process.env.NODE_ENV !== 'production';
 module.exports = {
   target: 'web',
   mode: dev ? 'development' : 'production',
-  entry: './src/index.js',
+  entry: './index.js',
   devtool: false,
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -31,10 +31,6 @@ module.exports = {
           cacheCompression: false,
           cacheDirectory: true
         }
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
       }
     ]
   },
@@ -44,13 +40,5 @@ module.exports = {
     dev && new ESLintPlugin({ cache: true })
   ].filter(Boolean),
   stats: 'errors-warnings',
-  externals: [
-    '@greatupsells/react-hooks',
-    '@greatupsells/styled-with-facepaint',
-    'facepaint',
-    'prop-types',
-    'react',
-    'react-dom',
-    'styled-components'
-  ]
+  externals: ['facepaint', 'styled-components']
 };

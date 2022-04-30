@@ -160,12 +160,6 @@ const OfferPopup = ({
     }
   };
 
-  // Expose methods globally to enable themes to programmatically interface with popups.
-  if (typeof window !== 'undefined') {
-    window.Offer.submit = handleSubmit;
-    window.Offer.close = handleClose;
-  }
-
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
     frameDocument,
@@ -318,9 +312,7 @@ const OfferPopup = ({
                       shopifyCartItems={shopifyCartItems}
                       shopifyCartTotal={shopifyCartTotal}
                       shopifyCartItemCount={shopifyCartItemCount}
-                      handlers={{
-                        closeHandler: 'window.parent.Offer.close()'
-                      }}
+                      handlers={{ handleClose, handleSubmit }}
                       forceDisplayType={forceDisplayType}
                       context={frameRef?.contentWindow}
                       container={modalContentContainerRef}

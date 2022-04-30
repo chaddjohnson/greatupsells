@@ -44,13 +44,5 @@ module.exports = {
     dev && new ESLintPlugin({ cache: true })
   ].filter(Boolean),
   stats: 'errors-warnings',
-  externals: [
-    '@greatupsells/react-hooks',
-    '@greatupsells/styled-with-facepaint',
-    'facepaint',
-    'prop-types',
-    'react',
-    'react-dom',
-    'styled-components'
-  ]
+  externals: ['facepaint', 'react', 'react-dom', 'styled-components']
 };
