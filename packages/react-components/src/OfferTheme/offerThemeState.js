@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useCookies, useCurrency } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 
@@ -17,7 +17,9 @@ const useOfferThemeState = ({
   onReplaceProduct,
   handlers
 }) => {
-  const [addingProduct, setAddingProduct] = useState([]);
+  const [addingProduct, setAddingProduct] = useState(
+    Array(offeredProducts.length).fill(false)
+  );
   const [addingProductBundle, setAddingProductBundle] = useState(false);
 
   const { getCookie } = useCookies();
@@ -166,7 +168,7 @@ const useOfferThemeState = ({
         selectedQuantityAtOrBelowRemaining &&
         selectedQuantityValid &&
         selectedVariantHasInventory &&
-        !addingProduct
+        !addingProduct[index]
       );
     });
   }, [
@@ -184,7 +186,7 @@ const useOfferThemeState = ({
         const selectedVariantHasInventory =
           selectedVariants[index]?.hasInventory;
 
-        return selectedVariantHasInventory && !addingProduct;
+        return selectedVariantHasInventory && !addingProduct[index];
       }),
     [addingProduct, translatedOfferedProducts, selectedVariants]
   );
@@ -293,7 +295,7 @@ const useOfferThemeState = ({
 
     // Flag that the product is being added.
     updatedAddingProduct[productIndex] = true;
-    setAddingProduct(updatedAddingProduct);
+    setAddingProduct([...updatedAddingProduct]);
 
     try {
       await onAddProducts(offerId, [
@@ -307,11 +309,11 @@ const useOfferThemeState = ({
 
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
-      setAddingProduct(updatedAddingProduct);
+      setAddingProduct([...updatedAddingProduct]);
     } catch (error) {
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
-      setAddingProduct(updatedAddingProduct);
+      setAddingProduct([...updatedAddingProduct]);
 
       throw error;
     }
@@ -360,7 +362,7 @@ const useOfferThemeState = ({
 
     // Flag that the product is being added.
     updatedAddingProduct[productIndex] = true;
-    setAddingProduct(updatedAddingProduct);
+    setAddingProduct([...updatedAddingProduct]);
 
     try {
       await onReplaceProduct(
@@ -377,11 +379,11 @@ const useOfferThemeState = ({
 
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
-      setAddingProduct(updatedAddingProduct);
+      setAddingProduct([...updatedAddingProduct]);
     } catch (error) {
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
-      setAddingProduct(updatedAddingProduct);
+      setAddingProduct([...updatedAddingProduct]);
 
       throw error;
     }
@@ -394,7 +396,7 @@ const useOfferThemeState = ({
 
     // Flag that the product is being added.
     updatedAddingProduct[productIndex] = true;
-    setAddingProduct(updatedAddingProduct);
+    setAddingProduct([...updatedAddingProduct]);
 
     // This timeout serves as a workaround. For some strange reason, with
     // Thank You Page offers (and maybe other offer types), sometimes,
