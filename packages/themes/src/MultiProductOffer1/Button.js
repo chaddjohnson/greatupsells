@@ -2,22 +2,19 @@ import React from 'react';
 import clsx from 'clsx';
 import styled from '@greatupsells/styled-with-facepaint';
 
-// Source: https://stackoverflow.com/a/51567564/83897
-const colorIsLight = (color) => {
-  const hex = color.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-
-  return brightness > 155;
-};
-
 const Button = styled(
-  ({ className, type = 'button', loading = false, children, ...props }) => (
+  ({
+    className,
+    type = 'button',
+    loading = false,
+    disabled = false,
+    children,
+    ...props
+  }) => (
     <button
       className={clsx(className, loading && 'loading')}
       type={type}
+      disabled={loading || disabled}
       {...props}
     >
       <span>{children}</span>
@@ -63,16 +60,12 @@ const Button = styled(
     }
   },
 
-  // TODO Rely on React state?
   '&.loading': {
     '&::after': {
       content: '""',
       height: '16px',
       width: '16px',
-      color: ({ theme }) =>
-        colorIsLight(theme.buttonBackgroundColor)
-          ? 'rgba(0, 0, 0, 0.75)'
-          : 'rgba(255, 255, 255, 0.75)',
+      color: 'rgba(140, 145, 150, 0.65)',
       position: 'absolute',
       display: 'inline-block',
       border: '3px solid',

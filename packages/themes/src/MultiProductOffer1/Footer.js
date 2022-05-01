@@ -54,7 +54,7 @@ const Footer = styled(({ className }) => {
     savingsFormatted,
     handleAddProductBundle,
     addProductBundleEnabled,
-    addProductBundle
+    addingProductBundle
   } = useContext(StateContext);
 
   const { bundleAddButtonText } = theme;
@@ -74,8 +74,8 @@ const Footer = styled(({ className }) => {
       <BundleOptions>
         <AddBundleButton
           onClick={handleAddProductBundle}
-          enabled={addProductBundleEnabled}
-          loading={addProductBundle}
+          disabled={!addProductBundleEnabled}
+          loading={addingProductBundle}
         >
           {bundleAddButtonText}
         </AddBundleButton>
