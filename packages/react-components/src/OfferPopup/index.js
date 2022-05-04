@@ -170,7 +170,6 @@ const OfferPopup = ({
   useEffect(fixIframeHeight, [
     frameDocument,
     modalRef,
-    theme?.template,
     designMode,
     designModeZoom
   ]);
