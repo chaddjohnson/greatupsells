@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const models = require('..');
+const fillResults = require('./fillResults');
 
 const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
   if (typeof offerId !== 'object') {
@@ -49,6 +50,7 @@ const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
     results.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) ||
     [];
   results = sortBy(results, ({ date }) => new Date(date));
+  results = fillResults(results, 'revenueIncrease');
 
   return results;
 };
