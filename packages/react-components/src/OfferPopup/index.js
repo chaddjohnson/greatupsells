@@ -45,9 +45,6 @@ const OfferPopup = ({
   const [frameDocument, setFrameDocument] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
-  const [modalContentContainerRef, setModalContentContainerRef] = useState(
-    null
-  );
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
@@ -295,11 +292,9 @@ const OfferPopup = ({
                   onRequestClose={handleClose}
                   onAfterOpen={handleAfterOpen}
                 >
-                  <ContentContainer
-                    className="content-container"
-                    ref={setModalContentContainerRef}
-                  >
+                  <ContentContainer className="content-container">
                     <OfferTheme
+                      context={frameRef?.contentWindow}
                       shop={shop}
                       offer={offer}
                       locale={locale}
@@ -313,8 +308,6 @@ const OfferPopup = ({
                       shopifyCartItemCount={shopifyCartItemCount}
                       handlers={{ handleClose, handleSubmit }}
                       forceDisplayType={forceDisplayType}
-                      context={frameRef?.contentWindow}
-                      container={modalContentContainerRef}
                       onAddProducts={onAddProducts}
                       onReplaceProduct={onReplaceProduct}
                     />

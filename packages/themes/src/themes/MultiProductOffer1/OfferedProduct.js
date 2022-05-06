@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'styled-components';
 import styled from '@greatupsells/styled-with-facepaint';
-import StateContext from '../StateContext';
+import { StateContext } from '../../components';
 import ProductImageContainer from './ProductImageContainer';
 import ProductImage from './ProductImage';
 import Button from './Button';

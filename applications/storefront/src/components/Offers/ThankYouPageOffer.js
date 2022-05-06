@@ -104,6 +104,7 @@ const ThankYouPageOffer = ({
 
   return createPortal(
     <OfferTheme
+      context={window}
       shop={cachedShop}
       offer={cachedOffer}
       locale={locale}
@@ -112,8 +113,6 @@ const ThankYouPageOffer = ({
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       theme={theme}
-      context={window}
-      container={contentContainer}
       onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
     />,

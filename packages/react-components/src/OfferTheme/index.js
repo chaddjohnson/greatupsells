@@ -5,6 +5,7 @@ import useOfferThemeState from './offerThemeState';
 import useOfferThemeVariables from './offerThemeVariables';
 
 const OfferTheme = ({
+  context,
   shop,
   offer,
   locale,
@@ -60,10 +61,17 @@ const OfferTheme = ({
     return null;
   }
 
-  return <MultiProductOffer1 theme={themeVariables} state={state} />;
+  return (
+    <MultiProductOffer1
+      context={context}
+      theme={themeVariables}
+      state={state}
+    />
+  );
 };
 
 OfferTheme.propTypes = {
+  context: PropTypes.object,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   locale: PropTypes.string,
@@ -77,7 +85,6 @@ OfferTheme.propTypes = {
   shopifyCartItemCount: PropTypes.number,
   handlers: PropTypes.object,
   // forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
-  container: PropTypes.object,
   onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func
 };

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from '@greatupsells/styled-with-facepaint';
-import StateContext from '../StateContext';
+import { StateContext } from '../../components';
 
 const CloseButton = styled(({ className }) => {
   const { handleClose } = useContext(StateContext);
