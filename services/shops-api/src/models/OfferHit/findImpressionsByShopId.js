@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const models = require('..');
+const fillResults = require('./fillResults');
 
 const findImpressionsByShopId = async (shopId, startAt, endAt) => {
   if (typeof shopId !== 'object') {
@@ -47,6 +48,7 @@ const findImpressionsByShopId = async (shopId, startAt, endAt) => {
   results =
     results.map(({ date, impressions }) => ({ date, impressions })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
+  results = fillResults(results, 'impressions');
 
   return results;
 };

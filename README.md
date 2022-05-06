@@ -293,6 +293,12 @@ Initial deployments should occur in the following order:
 1. `applications/storefront`
 1. `applications/admin`
 
+## Destruction
+
+Run the following:
+
+    AWS_PROFILE=greatupsells STAGE=test yarn destroy
+
 ## Infrastructure
 
 All infrastructure is managed via Serverless, Terraform, and Ansible with each deployment. Linux and AWS are used for hosting. The following AWS services are used:
