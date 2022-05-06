@@ -198,7 +198,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
   '&:not(:last-of-type)::after': {
     content: 'add_circle',
     fontFamily: 'Material Icons',
-    fontSize: '32px',
+    fontSize: '2rem',
     color: '#999999',
     position: 'absolute',
     zIndex: 10,

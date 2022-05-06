@@ -18,10 +18,10 @@ const Subtotal = styled.div({
   marginBottom: '0.25rem',
 
   '& > span': {
-    fontSize: '17px'
+    fontSize: '1.0625rem'
   },
   '& > span + span': {
-    fontSize: '18px'
+    fontSize: '1.125rem'
   }
 });
 
@@ -30,10 +30,10 @@ const Savings = styled.div({
   marginTop: '0.25rem',
 
   '&.savings > span': {
-    fontSize: '15px'
+    fontSize: '0.9375rem'
   },
   '&.savings > span + span': {
-    fontSize: '16px'
+    fontSize: '1rem'
   }
 });
 

@@ -22,7 +22,7 @@ const Button = styled(
   )
 )({
   fontFamily: ({ theme }) => theme.bodyFont,
-  fontSize: ({ theme }) => `${theme.buttonsFontSize}px`,
+  fontSize: ({ theme }) => `${theme.buttonsFontSize / 16}rem`,
   fontWeight: 600,
   color: ({ theme }) => theme.buttonTextColor,
   backgroundColor: ({ theme }) => theme.buttonBackgroundColor,

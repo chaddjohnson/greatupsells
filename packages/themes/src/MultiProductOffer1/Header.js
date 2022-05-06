@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components';
 import styled from '@greatupsells/styled-with-facepaint';
 
 const Title = styled.div({
-  fontSize: '26px',
+  fontSize: '1.625rem',
   fontWeight: 600,
   marginBottom: ['1rem', '1.5rem', '1.5rem', '1.5rem']
 });

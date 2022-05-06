@@ -3,7 +3,7 @@ import styled from '@greatupsells/styled-with-facepaint';
 
 const Container = styled.div({
   fontFamily: ({ theme }) => theme.bodyFont,
-  fontSize: ({ theme }) => `${theme.bodyFontSize}px`,
+  fontSize: ({ theme }) => `${theme.bodyFontSize / 16}rem`,
   color: ({ theme }) => theme.bodyTextColor,
   backgroundColor: ({ theme }) => theme.popupBackgroundColor,
   width: '600px',
