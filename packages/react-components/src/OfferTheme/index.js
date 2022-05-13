@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MultiProductOffer1 } from '@greatupsells/themes';
+import { SingleProductOffer1 } from '@greatupsells/themes';
 import useOfferThemeState from './offerThemeState';
 import useOfferThemeVariables from './offerThemeVariables';
 
@@ -62,7 +62,7 @@ const OfferTheme = ({
   }
 
   return (
-    <MultiProductOffer1
+    <SingleProductOffer1
       context={context}
       theme={themeVariables}
       state={state}

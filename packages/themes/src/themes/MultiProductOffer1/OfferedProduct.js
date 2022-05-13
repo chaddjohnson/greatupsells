@@ -65,8 +65,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     selectedVariants,
     selectedQuantities,
     addedQuantities,
-    maxQuantity,
-    addProductEnabled,
+    maxQuantities,
+    addingProductEnabled,
     addingProduct,
     enableBundling,
     enableVariantSelection,
@@ -142,7 +142,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               type="number"
               value={selectedQuantities[index]}
               min={1}
-              max={maxQuantity[index]}
+              max={maxQuantities[index]}
               // onChange={} // TODO
             />
           </div>
@@ -152,7 +152,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
             {strategy === 'CROSS_SELL' && (
               <AddButton
                 onClick={() => handleAddProduct(index)}
-                disabled={!addProductEnabled[index]}
+                disabled={!addingProductEnabled[index]}
                 loading={addingProduct[index]}
               >
                 {addButtonText}

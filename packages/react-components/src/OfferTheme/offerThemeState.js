@@ -110,11 +110,11 @@ const useOfferThemeState = ({
     [translatedOfferedProducts.length]
   );
 
-  const maxQuantity = useMemo(() => {
-    const { maximumOfferedProductQuantity } = offer;
-    const hasMaxQuantity = typeof maximumOfferedProductQuantity === 'number';
+  const maxQuantities = useMemo(() => {
+    const { maximumAcceptedProductQuantity } = offer;
+    const hasMaxQuantity = typeof maximumAcceptedProductQuantity === 'number';
     const remainingQuantity =
-      hasMaxQuantity && maximumOfferedProductQuantity - addedQuantity;
+      hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
 
     return translatedOfferedProducts.map((offeredProduct, index) => {
       const maxInventory = selectedVariants[index]?.maxInventory;
@@ -143,11 +143,11 @@ const useOfferThemeState = ({
     selectedVariants
   ]);
 
-  const addProductEnabled = useMemo(() => {
-    const { maximumOfferedProductQuantity } = offer;
-    const hasMaxQuantity = typeof maximumOfferedProductQuantity === 'number';
+  const addingProductEnabled = useMemo(() => {
+    const { maximumAcceptedProductQuantity } = offer;
+    const hasMaxQuantity = typeof maximumAcceptedProductQuantity === 'number';
     const remainingQuantity =
-      hasMaxQuantity && maximumOfferedProductQuantity - addedQuantity;
+      hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
 
     return translatedOfferedProducts.map((offeredProduct, index) => {
       const selectedQuantity = parseInt(selectedQuantities[index]);
@@ -160,7 +160,7 @@ const useOfferThemeState = ({
         !hasMaxQuantity ||
         (selectedQuantityValid && selectedQuantity <= remainingQuantity);
       const addedQuantityBelowMax =
-        !hasMaxQuantity || addedQuantity < maximumOfferedProductQuantity;
+        !hasMaxQuantity || addedQuantity < maximumAcceptedProductQuantity;
       const selectedVariantHasInventory = selectedVariants[index]?.hasInventory;
 
       return (
@@ -194,9 +194,9 @@ const useOfferThemeState = ({
   const addProductBundleEnabled = useMemo(
     () =>
       selectedQuantities.every((selectedQuantity, index) => {
-        const { maximumOfferedProductQuantity } = offer;
+        const { maximumAcceptedProductQuantity } = offer;
         const hasMaxQuantity =
-          typeof maximumOfferedProductQuantity === 'number';
+          typeof maximumAcceptedProductQuantity === 'number';
         const selectedQuantityValue = parseInt(selectedQuantities[index]);
         const selectedQuantityValid =
           typeof selectedQuantityValue === 'number' &&
@@ -206,7 +206,7 @@ const useOfferThemeState = ({
         const selectedQuantityAtOrBelowMax =
           !hasMaxQuantity ||
           (selectedQuantityValid &&
-            selectedQuantityValue <= maximumOfferedProductQuantity);
+            selectedQuantityValue <= maximumAcceptedProductQuantity);
 
         return (
           selectedQuantityValid &&
@@ -305,7 +305,7 @@ const useOfferThemeState = ({
       setCheckoutUrl(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
       // Impose a delay to allow the checkout URL update to propagate.
-      await new Promise((resolve) => setTimeout(resolve, 25));
+      await new Promise((resolve) => setTimeout(resolve, 125));
 
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
@@ -444,8 +444,8 @@ const useOfferThemeState = ({
     savingsFormatted,
     selectedVariants,
     selectedQuantities,
-    maxQuantity,
-    addProductEnabled,
+    maxQuantities,
+    addingProductEnabled,
     replacingProductEnabled,
     addProductBundleEnabled,
     addingProduct,

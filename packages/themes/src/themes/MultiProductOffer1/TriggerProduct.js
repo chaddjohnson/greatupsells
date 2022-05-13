@@ -67,7 +67,7 @@ const ActionButton = styled(Button)({
 });
 
 const TriggerProduct = styled(({ className }) => {
-  const theme = useTheme();
+  const { addedText, actionButtonText } = useTheme();
   const {
     triggerProduct,
     shopifyCartTotalFormatted,
@@ -88,7 +88,7 @@ const TriggerProduct = styled(({ className }) => {
       </TriggerProductImageContainer>
       <TriggerProductDetails>
         <div>
-          <strong>{theme.addedText}</strong>
+          <strong>{addedText}</strong>
         </div>
         <TriggerProductTitle>{triggerProduct.title}</TriggerProductTitle>
       </TriggerProductDetails>
@@ -100,7 +100,7 @@ const TriggerProduct = styled(({ className }) => {
         </div>
         <CartItems>({shopifyCartItemCount} items)</CartItems>
         <ActionButton as="a" href={actionButtonUrl} target={actionButtonTarget}>
-          {theme.actionButtonText}
+          {actionButtonText}
         </ActionButton>
       </TriggerProductOptions>
     </div>

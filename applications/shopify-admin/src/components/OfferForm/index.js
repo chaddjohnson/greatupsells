@@ -109,7 +109,7 @@ const OfferForm = ({
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
-    maximumOfferedProductQuantity,
+    maximumAcceptedProductQuantity,
     triggerProducts,
     triggerCollections,
     geotargetingCountries,
@@ -150,7 +150,7 @@ const OfferForm = ({
       minimumRequiredAmount,
       offeredProducts,
       offeredCollections,
-      maximumOfferedProductQuantity,
+      maximumAcceptedProductQuantity,
       discountType,
       discountValue,
       discountTitle,
@@ -253,7 +253,7 @@ const OfferForm = ({
     strategy.onChange(value);
 
     if (value !== 'CROSS_SELL') {
-      maximumOfferedProductQuantity.onChange(undefined);
+      maximumAcceptedProductQuantity.onChange(undefined);
     }
 
     // Bundling is only available with cross-selling.
@@ -457,7 +457,7 @@ const OfferForm = ({
             offer={offer}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
-            maximumOfferedProductQuantity={maximumOfferedProductQuantity}
+            maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
             submitted={submitted}
           />
           <OfferDiscountEditor

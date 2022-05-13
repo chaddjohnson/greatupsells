@@ -10,21 +10,31 @@ const CloseButton = styled(({ className }) => {
       className={className}
       aria-label="Close offer"
       onClick={handleClose}
-      dangerouslySetInnerHTML={{ __html: '&#x2715' }}
+      dangerouslySetInnerHTML={{ __html: '&times;' }}
     />
   );
 })({
   position: 'absolute',
-  right: '0.25rem',
-  top: ['1rem', '0.5rem', '0.5rem', '0.5rem'],
-  fontWeight: 500,
-  fontSize: '1rem',
+  zIndex: 1,
+  right: '-10px',
+  top: '-10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 0,
+  fontWeight: 'bold',
+  fontFamily: 'Garamond, "Apple Garamond"',
+  fontSize: '21px',
   lineHeight: 1,
-  color: '#3D4246',
+  color: 'white',
+  backgroundColor: 'black',
+  width: '24px',
+  height: '24px',
   cursor: 'pointer',
   userSelect: 'none',
-  border: 'none',
-  background: 'none'
+  border: '3px solid white',
+  borderRadius: '50%',
+  boxShadow: '0 2px 2px #888888'
 });
 
 export default CloseButton;

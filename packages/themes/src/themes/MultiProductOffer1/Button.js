@@ -50,16 +50,6 @@ const Button = styled(
   '& > span': {
     pointerEvents: 'none'
   },
-
-  '@keyframes rotate': {
-    '0%': {
-      transform: 'rotate(0)'
-    },
-    '100%': {
-      transform: 'rotate(360deg)'
-    }
-  },
-
   '&.loading': {
     '&::after': {
       content: '""',
@@ -75,6 +65,14 @@ const Button = styled(
     },
     '& > span': {
       visibility: 'hidden'
+    }
+  },
+  '@keyframes rotate': {
+    '0%': {
+      transform: 'rotate(0)'
+    },
+    '100%': {
+      transform: 'rotate(360deg)'
     }
   }
 });

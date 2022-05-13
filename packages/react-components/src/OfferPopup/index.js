@@ -15,7 +15,7 @@ const initialIframeHeight = 1000;
 const GlobalStyle = createGlobalStyle`
   body {
     overflow: ${(props) =>
-      props.modalOpen && !props.designMode ? 'hidden !important' : 'auto'};
+      props.open && !props.designMode ? 'hidden !important' : 'auto'};
   }
 `;
 
@@ -48,7 +48,6 @@ const OfferPopup = ({
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
-  const [modalOpen, setModalOpen] = useState(designMode);
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
 
   const fixIframeHeight = () => {
@@ -135,7 +134,6 @@ const OfferPopup = ({
     const isCartUpsell =
       offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
 
-    setModalOpen(false);
     setModalAfterOpen(false);
 
     // Delay calling the onClose callback (which unmounts this component) until
@@ -154,6 +152,10 @@ const OfferPopup = ({
   const handleAfterOpen = () => {
     if (!designMode) {
       setModalAfterOpen(true);
+
+      setTimeout(() => {
+        modalRef.focus();
+      });
     }
   };
 
@@ -164,20 +166,6 @@ const OfferPopup = ({
     designMode,
     designModeZoom
   ]);
-
-  useEffect(() => {
-    if (open) {
-      setModalOpen(true);
-
-      if (!designMode) {
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            setModalAfterOpen(true);
-          });
-        }, 20);
-      }
-    }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fix the iframe height when scrolling occurs.
   // useEffect(() => {
@@ -195,7 +183,7 @@ const OfferPopup = ({
   // Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
   return (
     <>
-      <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
+      <GlobalStyle open={open} designMode={designMode} />
       <Frame
         className={className}
         title="Offer"
@@ -253,14 +241,14 @@ const OfferPopup = ({
                   contentRef={setModalRef}
                   closeTimeoutMS={333}
                   parentSelector={() => document.body}
-                  isOpen={modalOpen}
+                  isOpen={open}
                   shouldFocusAfterRender={!designMode}
                   shouldCloseOnOverlayClick={offer.enableMaskClose}
                   shouldCloseOnEsc={offer.enableEscClose}
                   contentLabel="Offer Modal"
                   className={clsx(
                     designMode && 'design-mode',
-                    modalOpen && designMode && 'open',
+                    open && designMode && 'open',
                     modalAfterOpen && 'open',
                     !!offer.animation && !designMode && offer.animation
                   )}

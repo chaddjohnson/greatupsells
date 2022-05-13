@@ -29,7 +29,7 @@
     "strategy": "CROSS_SELL",
     "actionButtonBehavior": "CHECKOUT",
     "minimumRequirement": "NONE",
-    "maximumOfferedProductQuantity": 4,
+    "maximumAcceptedProductQuantity": 4,
     "offeredProducts": [
       {
         "title": "Fancy Hat",
