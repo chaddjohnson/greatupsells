@@ -292,6 +292,7 @@ const useOfferThemeState = ({
     const shopifyVariantId = selectedVariants[productIndex].id;
     const quantity = parseInt(selectedQuantities[productIndex]);
     const updatedAddingProduct = [...addingProduct];
+    const singleOfferedProduct = offeredProducts.length === 1;
 
     // Flag that the product is being added.
     updatedAddingProduct[productIndex] = true;
@@ -307,9 +308,11 @@ const useOfferThemeState = ({
       // Impose a delay to allow the checkout URL update to propagate.
       await new Promise((resolve) => setTimeout(resolve, 125));
 
-      // Unflag that the product is being added.
-      updatedAddingProduct[productIndex] = false;
-      setAddingProduct([...updatedAddingProduct]);
+      if (!singleOfferedProduct) {
+        // Unflag that the product is being added.
+        updatedAddingProduct[productIndex] = false;
+        setAddingProduct([...updatedAddingProduct]);
+      }
     } catch (error) {
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
@@ -359,6 +362,7 @@ const useOfferThemeState = ({
     const shopifyProductId = translatedOfferedProducts[productIndex].id;
     const shopifyVariantId = selectedVariants[productIndex].id;
     const updatedAddingProduct = [...addingProduct];
+    const singleOfferedProduct = offeredProducts.length === 1;
 
     // Flag that the product is being added.
     updatedAddingProduct[productIndex] = true;
@@ -377,9 +381,11 @@ const useOfferThemeState = ({
       // Impose a delay to allow the checkout URL update to propagate.
       await new Promise((resolve) => setTimeout(resolve, 25));
 
-      // Unflag that the product is being added.
-      updatedAddingProduct[productIndex] = false;
-      setAddingProduct([...updatedAddingProduct]);
+      if (!singleOfferedProduct) {
+        // Unflag that the product is being added.
+        updatedAddingProduct[productIndex] = false;
+        setAddingProduct([...updatedAddingProduct]);
+      }
     } catch (error) {
       // Unflag that the product is being added.
       updatedAddingProduct[productIndex] = false;
