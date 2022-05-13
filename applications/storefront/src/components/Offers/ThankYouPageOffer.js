@@ -107,12 +107,12 @@ const ThankYouPageOffer = ({
       context={window}
       shop={cachedShop}
       offer={cachedOffer}
+      theme={theme}
       locale={locale}
       countryCode={countryCode}
       currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
-      theme={theme}
       onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
     />,
