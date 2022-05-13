@@ -109,6 +109,7 @@ const OfferForm = ({
     minimumRequiredAmount,
     offeredProducts,
     offeredCollections,
+    maximumOfferedProductQuantity,
     maximumAcceptedProductQuantity,
     triggerProducts,
     triggerCollections,
@@ -150,6 +151,7 @@ const OfferForm = ({
       minimumRequiredAmount,
       offeredProducts,
       offeredCollections,
+      maximumOfferedProductQuantity,
       maximumAcceptedProductQuantity,
       discountType,
       discountValue,
@@ -293,6 +295,10 @@ const OfferForm = ({
       )
     ]);
     setThemeDirty(true);
+
+    maximumOfferedProductQuantity.onChange(
+      value.maximumOfferedProductQuantity || 3
+    );
   };
 
   const handleThemeSelect = (value) => {
@@ -455,8 +461,10 @@ const OfferForm = ({
           />
           <OfferOfferedProductsEditor
             offer={offer}
+            theme={theme}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
+            maximumOfferedProductQuantity={maximumOfferedProductQuantity}
             maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
             submitted={submitted}
           />

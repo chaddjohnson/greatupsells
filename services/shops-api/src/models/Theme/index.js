@@ -58,6 +58,7 @@ const schema = new mongoose.Schema(
     description: { type: String, required: false },
     variables: [variablesSchema],
     formFields: [formFieldsSchema],
+    maximumOfferedProductQuantity: { type: Number, required: true, min: 1 },
     referenceUrl: { type: String, required: false },
     notes: { type: String, required: false },
     enabled: { type: Boolean, required: true, default: false }

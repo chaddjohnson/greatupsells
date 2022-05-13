@@ -29,6 +29,7 @@
     "strategy": "CROSS_SELL",
     "actionButtonBehavior": "CHECKOUT",
     "minimumRequirement": "NONE",
+    "maximumOfferedProductQuantity": 3,
     "maximumAcceptedProductQuantity": 4,
     "offeredProducts": [
       {
