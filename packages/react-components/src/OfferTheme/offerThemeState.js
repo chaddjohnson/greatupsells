@@ -77,13 +77,13 @@ const useOfferThemeState = ({
     } else if (offer.actionButtonBehavior === 'CART') {
       return '/cart';
     } else if (offer.actionButtonBehavior === 'PAGE') {
-      return 'javascript:window.parent.Offer.close()'; // eslint-disable-line no-script-url
+      return handlers.handleClose;
     } else if (offer.actionButtonBehavior === 'LINK') {
       return offer.actionButtonLink;
     }
 
     return checkoutUrl;
-  }, [offer.actionButtonBehavior, offer.actionButtonLink, checkoutUrl]);
+  }, [offer, checkoutUrl, handlers]);
 
   const actionButtonTarget = useMemo(() => {
     const openInNewTab =

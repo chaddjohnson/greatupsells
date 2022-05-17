@@ -108,8 +108,14 @@ const Actions = styled(({ className }) => {
   };
 
   useEffect(() => {
-    if (actionDone) {
+    if (!actionDone) {
+      return;
+    }
+
+    if (typeof actionButtonUrl === 'string') {
       window.location.href = actionButtonUrl;
+    } else if (typeof actionButtonUrl === 'function') {
+      actionButtonUrl();
     }
   }, [actionButtonUrl, actionDone]);
 

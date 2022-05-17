@@ -120,7 +120,16 @@ const TriggerProduct = styled(({ className }) => {
           </CartSubtotal>
         </div>
         <CartItems>({shopifyCartItemCount} items)</CartItems>
-        <ActionButton as="a" href={actionButtonUrl} target={actionButtonTarget}>
+        <ActionButton
+          as="a"
+          href={
+            typeof actionButtonUrl === 'string' ? actionButtonUrl : undefined
+          }
+          onClick={
+            typeof actionButtonUrl === 'function' ? actionButtonUrl : undefined
+          }
+          target={actionButtonTarget}
+        >
           {actionButtonText}
         </ActionButton>
       </TriggerProductOptions>
