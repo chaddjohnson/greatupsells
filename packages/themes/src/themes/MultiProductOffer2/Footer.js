@@ -29,10 +29,10 @@ const Savings = styled.div({
   color: ({ theme }) => theme.originalPriceTextColor,
   marginTop: '0.25rem',
 
-  '&.savings > span': {
+  '& > span': {
     fontSize: '0.9375rem'
   },
-  '&.savings > span + span': {
+  '& > span + span': {
     fontSize: '1rem'
   }
 });
@@ -43,8 +43,7 @@ const BundleOptions = styled.div({
 });
 
 const AddBundleButton = styled(Button)({
-  width: '100%',
-  minWidth: '100px'
+  width: '100%'
 });
 
 const Footer = styled(({ className }) => {
@@ -82,10 +81,17 @@ const Footer = styled(({ className }) => {
     </footer>
   );
 })({
-  display: ['block', 'block', 'block', 'flex'],
-  alignItems: ['left', 'left', 'left', 'center'],
+  display: ['block', 'flex', 'flex', 'flex'],
+  marginTop: ['0.5rem', '1.25rem', '1.25rem', '1.25rem'],
+  alignItems: 'center',
   justifyContent: 'space-between',
-  marginTop: '0.5rem'
+  borderTop: [
+    'none',
+    '1px solid rgba(0, 0, 0, 0.2)',
+    '1px solid rgba(0, 0, 0, 0.2)',
+    '1px solid rgba(0, 0, 0, 0.2)'
+  ],
+  paddingTop: [0, '1.5rem', '1.5rem', '1.5rem']
 });
 
 export default Footer;

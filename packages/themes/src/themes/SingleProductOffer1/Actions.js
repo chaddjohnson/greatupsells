@@ -25,7 +25,7 @@ const AddButton = styled(
 )({
   width: '100%',
   height: '39px',
-  fontSize: '14px',
+  fontSize: '0.875rem',
   fontWeight: 600,
   letterSpacing: '1px',
   display: 'block',
@@ -70,7 +70,7 @@ const AddButton = styled(
 });
 
 const CancelButton = styled.button({
-  fontSize: '13px',
+  fontSize: '0.8125rem',
   width: 'auto',
   display: 'block',
   background: 'none',

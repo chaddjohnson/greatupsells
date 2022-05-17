@@ -24,7 +24,7 @@ const OfferedProductPrices = styled.span({
 
 const OfferedProductSalePrice = styled.strong({
   color: ({ theme }) => theme.salePriceTextColor,
-  fontSize: '20px',
+  fontSize: '1.25rem',
   fontWeight: 600,
   marginRight: '0.25rem'
 });

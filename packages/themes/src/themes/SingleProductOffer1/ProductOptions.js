@@ -7,7 +7,7 @@ const VariantSelect = styled.select({
   padding: '0.5rem',
   borderRadius: '2px',
   fontFamily: ({ theme }) => theme.bodyFont,
-  fontSize: '14px',
+  fontSize: '0.875rem',
   width: ['150px', '175px', '175px', '175px'],
   height: '36px',
   background:
@@ -22,15 +22,15 @@ const QuantityInput = styled.input({
   padding: '0.5rem',
   borderRadius: '2px',
   fontFamily: ({ theme }) => theme.bodyFont,
-  fontSize: '14px',
+  fontSize: '0.875rem',
   width: ['50px', '75px', '75px', '75px'],
   height: '36px',
   textAlign: 'center',
 
-  '&[type=number]::-webkit-inner-spin-button': {
+  '&::-webkit-inner-spin-button': {
     opacity: 1
   },
-  '&[type=number]::-webkit-outer-spin-button': {
+  '&::-webkit-outer-spin-button': {
     opacity: 1
   }
 });
@@ -47,18 +47,19 @@ const ProductOptions = styled(({ className }) => {
     handleVariantChange
   } = useContext(StateContext);
   const offeredProduct = offeredProducts[0];
+  const { variants } = offeredProduct;
   const selectedVariant = selectedVariants[0];
   const selectedQuantity = selectedQuantities[0];
   const maxQuantity = maxQuantities[0];
 
   return (
     <div className={className}>
-      {enableVariantSelection && offeredProduct.variants.length > 1 && (
+      {enableVariantSelection && variants.length > 1 && (
         <VariantSelect
           value={selectedVariant.id}
           onChange={(event) => handleVariantChange(0, event.target.value)}
         >
-          {offeredProduct.variants.map((variant, index) => (
+          {variants.map((variant, index) => (
             <option
               key={index}
               value={variant.id}

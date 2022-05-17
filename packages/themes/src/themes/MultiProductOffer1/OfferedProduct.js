@@ -151,9 +151,9 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
           <>
             {strategy === 'CROSS_SELL' && (
               <AddButton
-                onClick={() => handleAddProduct(index)}
                 disabled={!addingProductEnabled[index]}
                 loading={addingProduct[index]}
+                onClick={() => handleAddProduct(index)}
               >
                 {addButtonText}
               </AddButton>
@@ -162,11 +162,11 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               <>
                 {addedQuantities[index] === 0 && (
                   <AddButton
+                    disabled={!replacingProductEnabled[index]}
+                    loading={addingProduct[index]}
                     onClick={() =>
                       handleReplaceProduct(triggerProduct.id, index)
                     }
-                    disabled={!replacingProductEnabled[index]}
-                    loading={addingProduct[index]}
                   >
                     {addButtonText}
                   </AddButton>

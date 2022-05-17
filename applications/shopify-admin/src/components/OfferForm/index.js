@@ -295,10 +295,6 @@ const OfferForm = ({
       )
     ]);
     setThemeDirty(true);
-
-    maximumOfferedProductQuantity.onChange(
-      value.maximumOfferedProductQuantity || 3
-    );
   };
 
   const handleThemeSelect = (value) => {
@@ -317,6 +313,10 @@ const OfferForm = ({
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
+
+    maximumOfferedProductQuantity.onChange(
+      (value.maximumOfferedProductQuantity || 3).toString()
+    );
   };
 
   const handleThemeDisplayTypeChange = (value) => {
