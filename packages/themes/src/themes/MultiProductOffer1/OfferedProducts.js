@@ -7,17 +7,7 @@ const OfferedProducts = styled.div({
   justifyContent: 'space-around',
   marginTop: '1rem',
   width: '100%',
-  overflowX: 'auto',
-
-  select: {
-    width: '150px',
-    marginBottom: ['0.5rem', 0, 0, 0],
-    marginTop: ({ theme }) => (theme.showPrices ? '0.75rem' : 0)
-  },
-  input: {
-    width: '75px',
-    textAlign: 'center'
-  }
+  overflowX: 'auto'
 });
 
 export default OfferedProducts;

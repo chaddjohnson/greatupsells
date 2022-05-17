@@ -7,7 +7,9 @@ const Input = styled.input({
   borderRadius: '2px',
   fontFamily: ({ theme }) => theme.bodyFont,
   fontSize: '0.875rem',
+  width: '75px',
   height: '34px',
+  textAlign: 'center',
   color: ({ theme }) => theme.inputTextColor,
   backgroundColor: ({ theme }) => theme.inputBackgroundColor,
 
