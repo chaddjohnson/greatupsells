@@ -10,7 +10,7 @@ const Container = styled.div({
   height: 'auto',
   maxWidth: '100%',
   maxHeight: '100vh',
-  overflow: 'scroll',
+  overflow: ['clip', 'clip', 'auto', 'auto'],
   margin: 'auto',
   padding: '2.15rem',
   boxSizing: 'border-box',

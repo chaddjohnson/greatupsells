@@ -13,15 +13,15 @@ const OfferedProductImageContainer = styled.div({
   display: ['block', 'flex', 'flex', 'flex'],
   justifyContent: 'center',
   alignItems: 'center',
-  width: ['auto', '150px', '150px', '150px'],
-  height: ['auto', '150px', '150px', '150px']
+  width: '150px',
+  height: '150px'
 });
 
 const OfferedProductImage = styled.img({
   width: 'auto',
   height: 'auto',
-  maxWidth: ['none', '100%', '100%', '100%'],
-  maxHeight: ['none', 'none', 'none', '134px']
+  maxWidth: '134px',
+  maxHeight: '134px'
 });
 
 const OfferedProductPrices = styled.div({
@@ -220,8 +220,6 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     </figure>
   );
 })({
-  display: 'flex',
-  flexDirection: 'column',
   margin: 0,
   position: 'relative',
 
