@@ -18,27 +18,10 @@ const OfferTheme = ({
   shopifyCartTotal,
   shopifyCartItemCount,
   handlers,
-  // forceDisplayType,
   onAddProducts,
   onReplaceProduct
 }) => {
   const themeVariables = useOfferThemeVariables(offer, theme);
-
-  // Replace device-specific media queries if forcing display type.
-  // Reference: https://github.com/cypress-io/cypress/issues/970#issuecomment-767860917
-  // if (forceDisplayType === 'desktop') {
-  //   // Add "device" to media queries if missing.
-  //   css = css?.replace(
-  //     /(\(\s*)(min|max)-(width|height)(\s*:)/g,
-  //     '$1$2-device-$3$4'
-  //   );
-  // } else if (forceDisplayType === 'mobile') {
-  //   // Remove "device" from media queries if present.
-  //   css = css?.replace(
-  //     /(\(\s*)(min|max)-device-(width|height)(\s*:)/g,
-  //     '$1$2-$3$4'
-  //   );
-  // }
 
   // Set up data binding for popup.
   const state = useOfferThemeState({
