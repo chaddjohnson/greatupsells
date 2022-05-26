@@ -3,7 +3,6 @@ import facepaint from 'facepaint';
 
 // Define breakpoints.
 const mq = facepaint([
-  '@media (min-width: 320px), (min-device-width: 320px)',
   '@media (min-width: 768px), (min-device-width: 768px)',
   '@media (min-width: 1024px), (min-device-width: 1024px)',
   '@media (min-width: 1440px), (min-device-width: 1440px)'
