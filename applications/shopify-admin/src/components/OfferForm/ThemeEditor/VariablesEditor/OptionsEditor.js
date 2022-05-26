@@ -29,6 +29,7 @@ const OptionsEditor = ({ variables, onChange }) => {
                 <Checkbox
                   key={variableIndex}
                   label={variable.label}
+                  helpText={variable.helpText}
                   checked={variable.value === 'true'}
                   onChange={(value) =>
                     onChange(variable.name, value.toString())

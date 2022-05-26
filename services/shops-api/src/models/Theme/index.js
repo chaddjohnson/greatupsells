@@ -13,6 +13,7 @@ const schemaOptions = {
 const variablesSchema = new mongoose.Schema({
   name: { type: String, required: true },
   label: { type: String, required: true },
+  helpText: { type: String, required: false },
   type: {
     type: String,
     required: true,
