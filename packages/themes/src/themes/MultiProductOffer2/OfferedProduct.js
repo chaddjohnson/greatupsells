@@ -10,7 +10,7 @@ const OfferedProductImageContainer = styled.div({
   backgroundColor: '#FFFFFF',
   margin: '0 auto',
   textAlign: 'center',
-  display: ['block', 'flex', 'flex', 'flex'],
+  display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   width: '150px',

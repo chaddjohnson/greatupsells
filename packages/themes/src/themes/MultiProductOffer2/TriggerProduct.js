@@ -6,7 +6,7 @@ import Button from './Button';
 
 const TriggerProductImageContainer = styled.div({
   order: [2, 1, 1, 1],
-  display: 'flex',
+  display: ['none', 'flex', 'flex', 'flex'],
   alignItems: 'center',
   justifyContent: 'center',
   padding: '0.15rem',
@@ -27,8 +27,8 @@ const TriggerProductImageContainer = styled.div({
 const TriggerProductImage = styled.img({
   width: 'auto',
   height: 'auto',
-  maxWidth: '80px',
-  maxHeight: '80px'
+  maxWidth: '75px',
+  maxHeight: '75px'
 });
 
 const TriggerProductDetails = styled.div({
@@ -46,20 +46,16 @@ const TriggerProductOptions = styled.div({
   order: 3
 });
 
-const CartSubtotal = styled.span({
+const CartSubtotal = styled.div({
   fontWeight: 500,
-  whiteSpace: 'nowrap'
-});
-
-const CartItems = styled.div({
-  color: ({ theme }) => theme.cartItemsTextColor,
+  whiteSpace: 'nowrap',
   display: ['none', 'block', 'block', 'block']
 });
 
 const ActionButton = styled(Button)({
   backgroundColor: ({ theme }) => theme.actionButtonBackgroundColor,
   color: ({ theme }) => theme.actionButtonTextColor,
-  marginTop: '0.75rem',
+  marginTop: ['0.5rem', '0.75rem', '0.75rem', '0.75rem'],
   marginLeft: ['2rem', 0, 0, 0],
   marginRight: ['2rem', 0, 0, 0],
 
@@ -69,9 +65,13 @@ const ActionButton = styled(Button)({
   }
 });
 
-const AddedIconContainer = styled.span({
+const AddedIconContainer = styled.div({
   display: 'inline-block',
-  position: 'relative',
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
 
   '::after': {
     content: "'check_circle'",
@@ -92,7 +92,6 @@ const TriggerProduct = styled(({ className }) => {
     actionButtonUrl,
     actionButtonTarget,
     triggerProduct,
-    shopifyCartItemCount,
     shopifyCartTotalFormatted
   } = useContext(StateContext);
   const { addedText, actionButtonText } = theme;
@@ -100,12 +99,11 @@ const TriggerProduct = styled(({ className }) => {
   return (
     <div className={className}>
       <TriggerProductImageContainer>
-        <AddedIconContainer>
-          <TriggerProductImage
-            src={triggerProduct.image.src}
-            alt={triggerProduct.image.alt}
-          />
-        </AddedIconContainer>
+        <AddedIconContainer />
+        <TriggerProductImage
+          src={triggerProduct.image.src}
+          alt={triggerProduct.image.alt}
+        />
       </TriggerProductImageContainer>
       <TriggerProductDetails>
         <div>
@@ -114,12 +112,7 @@ const TriggerProduct = styled(({ className }) => {
         <TriggerProductTitle>{triggerProduct.title}</TriggerProductTitle>
       </TriggerProductDetails>
       <TriggerProductOptions>
-        <div>
-          <CartSubtotal>
-            Cart subtotal: {shopifyCartTotalFormatted}
-          </CartSubtotal>
-        </div>
-        <CartItems>({shopifyCartItemCount} items)</CartItems>
+        <CartSubtotal>Cart subtotal: {shopifyCartTotalFormatted}</CartSubtotal>
         <ActionButton
           as="a"
           href={
@@ -139,17 +132,15 @@ const TriggerProduct = styled(({ className }) => {
   display: 'flex',
   flexWrap: ['wrap', 'nowrap', 'nowrap', 'nowrap'],
   alignItems: 'center',
-  padding: '1.5rem 1.5rem',
+  padding: '1rem',
   color: ({ theme }) => theme.triggerProductTextColor,
   backgroundColor: ({ theme }) => theme.triggerProductBackgroundColor,
-  border: '2px solid #E3E3E3',
-  borderRadius: ['5px', '4.375px'],
-  height: '5rem',
+  borderRadius: '5px',
   minWidth: '11rem',
   marginTop: '1rem',
   marginBottom: [0, '-0.5rem', '-0.5rem', '-0.5rem'],
-  marginLeft: '1.5rem',
-  marginRight: '1.5rem',
+  marginLeft: ['1rem', '1.75rem', '1.75rem', '1.75rem'],
+  marginRight: ['1rem', '1.75rem', '1.75rem', '1.75rem'],
   textAlign: ['center', 'left', 'left', 'left'],
 
   '> *': {

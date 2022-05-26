@@ -91,7 +91,7 @@ const OfferedProducts = styled(({ className, children }) => {
     </Slider>
   );
 })({
-  marginTop: '2rem',
+  marginTop: ['1rem', '2rem', '2rem', '2rem'],
 
   '& .slick-track': {
     display: 'flex'
