@@ -1,5 +1,9 @@
-import { useState, useMemo } from 'react';
-import { useCookies, useCurrency } from '@greatupsells/react-hooks';
+import { useState, useMemo, useEffect } from 'react';
+import {
+  useCookies,
+  useCurrency,
+  usePushStateListener
+} from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 
 const useOfferThemeState = ({
@@ -21,6 +25,7 @@ const useOfferThemeState = ({
     Array(offeredProducts.length).fill(false)
   );
   const [addingProductBundle, setAddingProductBundle] = useState(false);
+  const [productBundleAdded, setProductBundleAdded] = useState(false);
 
   const { getCookie } = useCookies();
   const {
@@ -347,6 +352,7 @@ const useOfferThemeState = ({
       await new Promise((resolve) => setTimeout(resolve, 25));
 
       setAddingProductBundle(false);
+      setProductBundleAdded(true);
     } catch (error) {
       setAddingProductBundle(false);
 
@@ -432,6 +438,16 @@ const useOfferThemeState = ({
       window.location.href = getCookie('greatupsellsDraftOrderInvoiceUrl');
     }, 100);
   };
+
+  usePushStateListener(() => {
+    setProductBundleAdded(false);
+  });
+
+  useEffect(() => {
+    if (productBundleAdded) {
+      window.location.href = actionButtonUrl;
+    }
+  }, [productBundleAdded, actionButtonUrl]);
 
   return {
     strategy,
