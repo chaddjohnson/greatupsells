@@ -38,7 +38,6 @@ const TriggerProductTitle = styled.figcaption({
 });
 
 const TriggerProduct = styled(({ className }) => {
-  const theme = useTheme();
   const { triggerProduct } = useContext(StateContext);
 
   return (
