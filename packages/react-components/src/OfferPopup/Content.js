@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Modal = styled.div`
+const Content = styled.div`
   position: fixed;
   background: none;
   border: none;
@@ -17,10 +17,6 @@ const Modal = styled.div`
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
-
-  @media screen and (min-height: 768px) {
-    top: 8%;
-  }
 
   @media screen and (min-width: 1024px) {
     left: 50%;
@@ -414,4 +410,4 @@ const Modal = styled.div`
   }
 `;
 
-export default Modal;
+export default Content;
