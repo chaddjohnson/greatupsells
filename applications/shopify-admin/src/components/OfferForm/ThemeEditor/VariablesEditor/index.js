@@ -127,9 +127,9 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
     return filteredVariables;
   }, [selectedSection, variables, strategy]);
 
-  const handleVariableChange = (variableName, value) => {
+  const handleVariableChange = (variableId, value) => {
     const index = variables.findIndex(
-      (variable) => variable.name === variableName
+      (variable) => variable._id === variableId
     );
 
     onChange({
