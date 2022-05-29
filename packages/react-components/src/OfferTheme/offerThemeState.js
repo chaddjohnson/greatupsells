@@ -351,7 +351,6 @@ const useOfferThemeState = ({
       // Impose a delay to allow the checkout URL update to propagate.
       await new Promise((resolve) => setTimeout(resolve, 25));
 
-      setAddingProductBundle(false);
       setProductBundleAdded(true);
     } catch (error) {
       setAddingProductBundle(false);
