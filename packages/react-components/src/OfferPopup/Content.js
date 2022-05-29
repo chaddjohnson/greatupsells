@@ -9,11 +9,10 @@ const Content = styled.div`
   visibility: hidden;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
+  top: 50%;
   padding: 14px;
   margin-right: 0;
-  transform: none;
+  transform: translateY(-50%);
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -22,10 +21,8 @@ const Content = styled.div`
     left: 50%;
     right: auto;
     top: 30%;
-    bottom: auto;
     padding: 0;
-    margin-right: -50%;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%, -30%);
   }
 
   &.design-mode {
