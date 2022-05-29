@@ -314,8 +314,14 @@ const OfferForm = ({
     setTheme(value);
     setThemeDirty(true);
 
+    const newMaximumOfferedProductQuantity =
+      Math.min(
+        value.maximumOfferedProductQuantity ||
+          maximumOfferedProductQuantity.value
+      ) || 3;
+
     maximumOfferedProductQuantity.onChange(
-      (value.maximumOfferedProductQuantity || 3).toString()
+      newMaximumOfferedProductQuantity.toString()
     );
   };
 
