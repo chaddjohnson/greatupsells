@@ -12,7 +12,7 @@ import OfferedProduct from './OfferedProduct';
 import Footer from './Footer';
 
 const MultiProductOffer1 = ({ context, theme, state }) => {
-  const { strategy, triggerProduct, offeredProducts, enableBundling } = state;
+  const { strategy, triggerProduct, offeredProducts } = state;
   const showTriggerProduct =
     (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
 
@@ -29,25 +29,19 @@ const MultiProductOffer1 = ({ context, theme, state }) => {
           <CloseButton />
           <Header />
           <Body>
-            <>
-              {showTriggerProduct && (
-                <>
-                  <TriggerProduct />
-                  <Divider />
-                </>
-              )}
-              <OfferedProducts>
-                {offeredProducts.map((offeredProduct, index) => (
-                  <OfferedProduct
-                    key={index}
-                    offeredProduct={offeredProduct}
-                    index={index}
-                  />
-                ))}
-              </OfferedProducts>
-            </>
+            <TriggerProduct />
+            {showTriggerProduct && <Divider />}
+            <OfferedProducts>
+              {offeredProducts.map((offeredProduct, index) => (
+                <OfferedProduct
+                  key={index}
+                  offeredProduct={offeredProduct}
+                  index={index}
+                />
+              ))}
+            </OfferedProducts>
           </Body>
-          {enableBundling && <Footer />}
+          <Footer />
         </Container>
       </StateContext.Provider>
     </ThemeProvider>

@@ -16,7 +16,7 @@ const CloseButton = styled(({ className }) => {
 })({
   position: 'absolute',
   right: '0.25rem',
-  top: ['1rem', '0.5rem', '0.5rem', '0.5rem'],
+  top: '0.5rem',
   fontWeight: 500,
   fontSize: '1rem',
   lineHeight: 1,

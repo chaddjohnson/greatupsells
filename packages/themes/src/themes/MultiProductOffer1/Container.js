@@ -10,12 +10,13 @@ const Container = styled.div({
   height: 'auto',
   maxWidth: '100%',
   maxHeight: '100vh',
+  overflowX: 'clip',
+  overflowY: ['clip', 'auto', 'auto', 'auto'],
   margin: 'auto',
   padding: ['1rem', '1.5rem', '1.5rem', '1.5rem'],
   boxSizing: 'border-box',
   position: 'relative',
   borderRadius: '5px',
-  overflowY: 'auto',
 
   /* Reference: https://gist.github.com/hsleonis/55712b0eafc9b25f1944 */
   WebkitTextSizeAdjust: '100%',

@@ -15,7 +15,7 @@ const AddedIconContainer = styled.span({
   position: 'relative',
 
   '&::after': {
-    content: 'check_circle',
+    content: '"check_circle"',
     fontFamily: 'Material Icons',
     fontSize: ['1.25rem', '1.5rem', '1.5rem', '1.5rem'],
     position: 'absolute',
@@ -47,11 +47,6 @@ const CartSubtotal = styled.span({
   whiteSpace: 'nowrap'
 });
 
-const CartItems = styled.div({
-  color: ({ theme }) => theme.originalPriceTextColor,
-  display: ['none', 'block', 'block', 'block']
-});
-
 const ActionButton = styled(Button)({
   backgroundColor: ({ theme }) => theme.actionButtonBackgroundColor,
   color: ({ theme }) => theme.actionButtonTextColor,
@@ -67,14 +62,21 @@ const ActionButton = styled(Button)({
 });
 
 const TriggerProduct = styled(({ className }) => {
-  const { addedText, actionButtonText } = useTheme();
+  const theme = useTheme();
   const {
+    strategy,
     triggerProduct,
     shopifyCartTotalFormatted,
-    shopifyCartItemCount,
     actionButtonUrl,
     actionButtonTarget
   } = useContext(StateContext);
+  const { addedText, actionButtonText } = theme;
+  const showTriggerProduct =
+    (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
+
+  if (!showTriggerProduct) {
+    return null;
+  }
 
   return (
     <div className={className}>
@@ -98,7 +100,6 @@ const TriggerProduct = styled(({ className }) => {
             Cart subtotal: {shopifyCartTotalFormatted}
           </CartSubtotal>
         </div>
-        <CartItems>({shopifyCartItemCount} items)</CartItems>
         <ActionButton
           as="a"
           href={
@@ -115,7 +116,12 @@ const TriggerProduct = styled(({ className }) => {
     </div>
   );
 })({
-  display: 'flex',
+  display: [
+    ({ theme }) => (theme.enableBundling ? 'none' : 'flex'),
+    'flex',
+    'flex',
+    'flex'
+  ],
   flexWrap: ['wrap', 'nowrap', 'nowrap', 'nowrap'],
   alignItems: 'center',
   padding: '1rem 1.5rem',

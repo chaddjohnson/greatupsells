@@ -10,9 +10,7 @@ import OfferedProduct from './OfferedProduct';
 import Footer from './Footer';
 
 const MultiProductOffer2 = ({ context, theme, state }) => {
-  const { strategy, triggerProduct, offeredProducts, enableBundling } = state;
-  const showTriggerProduct =
-    (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
+  const { offeredProducts } = state;
 
   return (
     <ThemeProvider theme={theme}>
@@ -26,7 +24,7 @@ const MultiProductOffer2 = ({ context, theme, state }) => {
         <Container>
           <Header />
           <Body>
-            {showTriggerProduct && <TriggerProduct />}
+            <TriggerProduct />
             <OfferedProducts>
               {offeredProducts.map((offeredProduct, index) => (
                 <OfferedProduct
@@ -37,7 +35,7 @@ const MultiProductOffer2 = ({ context, theme, state }) => {
               ))}
             </OfferedProducts>
           </Body>
-          {enableBundling && <Footer />}
+          <Footer />
         </Container>
       </StateContext.Provider>
     </ThemeProvider>

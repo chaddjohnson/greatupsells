@@ -43,25 +43,28 @@ const Button = styled(
     backgroundColor: ({ theme }) => theme.buttonHoverBackgroundColor
   },
   '&:disabled': {
-    backgroundColor: '#F1F1F1'
+    backgroundColor: '#F1F1F1',
+    cursor: 'default'
+  },
+  '& > span': {
+    pointerEvents: 'none'
   },
   '&.loading': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textIndent: '-9999px'
-  },
-  '&.loading::after': {
-    content: '""',
-    height: '16px',
-    width: '16px',
-    color: 'rgba(140, 145, 150, 0.65)',
-    position: 'absolute',
-    display: 'inline-block',
-    border: '3px solid',
-    borderRadius: '50%',
-    borderTopColor: 'transparent',
-    animation: 'rotate 1s linear infinite'
+    '&::after': {
+      content: '""',
+      height: '16px',
+      width: '16px',
+      color: 'rgba(140, 145, 150, 0.65)',
+      position: 'absolute',
+      display: 'inline-block',
+      border: '3px solid',
+      borderRadius: '50%',
+      borderTopColor: 'transparent',
+      animation: 'rotate 1s linear infinite'
+    },
+    '& > span': {
+      visibility: 'hidden'
+    }
   },
   '@keyframes rotate': {
     '0%': {

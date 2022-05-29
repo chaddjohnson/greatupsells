@@ -195,27 +195,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
   textAlign: ['center', 'left', 'left', 'left'],
   position: 'relative',
 
-  '&:not(:last-of-type)::after': {
-    content: 'add_circle',
-    fontFamily: 'Material Icons',
-    fontSize: '2rem',
-    color: '#999999',
-    position: 'absolute',
-    zIndex: 10,
-    right: [0, 'auto', 'auto', 'auto'],
-    left: ['auto', '50%', '50%', '50%'],
-    top: ['50%', 'auto', 'auto', 'auto'],
-    bottom: ['auto', 0, 0, 0],
-    transform: [
-      'translate(65%, -50%)',
-      'translate(-50%, 65%)',
-      'translate(-50%, 65%)',
-      'translate(-50%, 65%)'
-    ],
-    backgroundColor: ({ theme }) => theme.productBackgroundColor,
-    borderRadius: '50%',
-    display: ({ theme }) =>
-      !theme.enableBundling || !theme.showBundlePlusSymbol ? 'none' : 'block'
+  '&:last-of-type': {
+    marginBottom: 0
   }
 });
 

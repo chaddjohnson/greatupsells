@@ -74,8 +74,8 @@ const AddedIconContainer = styled.div({
   right: 0,
 
   '::after': {
-    content: "'check_circle'",
-    fontFamily: "'Material Icons'",
+    content: '"check_circle"',
+    fontFamily: 'Material Icons',
     fontSize: ['1.25rem', '1.5rem', '1.5rem', '1.5rem'],
     position: 'absolute',
     top: '-0.5rem',
@@ -89,12 +89,19 @@ const AddedIconContainer = styled.div({
 const TriggerProduct = styled(({ className }) => {
   const theme = useTheme();
   const {
+    strategy,
+    triggerProduct,
     actionButtonUrl,
     actionButtonTarget,
-    triggerProduct,
     shopifyCartTotalFormatted
   } = useContext(StateContext);
   const { addedText, actionButtonText } = theme;
+  const showTriggerProduct =
+    (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
+
+  if (!showTriggerProduct) {
+    return null;
+  }
 
   return (
     <div className={className}>
@@ -129,7 +136,12 @@ const TriggerProduct = styled(({ className }) => {
     </div>
   );
 })({
-  display: 'flex',
+  display: [
+    ({ theme }) => (theme.enableBundling ? 'none' : 'flex'),
+    'flex',
+    'flex',
+    'flex'
+  ],
   flexWrap: ['wrap', 'nowrap', 'nowrap', 'nowrap'],
   alignItems: 'center',
   padding: '1rem',

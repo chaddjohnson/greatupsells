@@ -21,7 +21,8 @@ const Subtotal = styled.div({
     fontSize: '1.0625rem'
   },
   '& > span + span': {
-    fontSize: '1.125rem'
+    fontSize: '1.125rem',
+    marginLeft: '0.25rem'
   }
 });
 
@@ -33,7 +34,8 @@ const Savings = styled.div({
     fontSize: '0.9375rem'
   },
   '& > span + span': {
-    fontSize: '1rem'
+    fontSize: '1rem',
+    marginLeft: '0.25rem'
   }
 });
 
@@ -49,6 +51,7 @@ const AddBundleButton = styled(Button)({
 const Footer = styled(({ className }) => {
   const theme = useTheme();
   const {
+    enableBundling,
     subtotalFormatted,
     savingsFormatted,
     handleAddProductBundle,
@@ -56,6 +59,10 @@ const Footer = styled(({ className }) => {
     addingProductBundle
   } = useContext(StateContext);
   const { bundleAddButtonText } = theme;
+
+  if (!enableBundling) {
+    return null;
+  }
 
   return (
     <footer className={className}>
@@ -82,15 +89,12 @@ const Footer = styled(({ className }) => {
   );
 })({
   display: ['block', 'flex', 'flex', 'flex'],
-  marginTop: ['0.5rem', '1.25rem', '1.25rem', '1.25rem'],
   alignItems: 'center',
   justifyContent: 'space-between',
-  borderTop: [
-    'none',
-    '1px solid rgba(0, 0, 0, 0.2)',
-    '1px solid rgba(0, 0, 0, 0.2)',
-    '1px solid rgba(0, 0, 0, 0.2)'
-  ],
+  marginLeft: '1.75rem',
+  marginRight: '1.75rem',
+  marginTop: ['0.5rem', '1rem', '1rem', '1rem'],
+  borderTop: '1px solid rgba(0, 0, 0, 0.2)',
   paddingTop: [0, '1.5rem', '1.5rem', '1.5rem']
 });
 

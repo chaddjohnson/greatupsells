@@ -13,7 +13,8 @@
     "clsx": "^1.1.1",
     "css-loader": "^3.5.3",
     "react-slick": "^0.29.0",
-    "style-loader": "^1.2.1"
+    "style-loader": "^1.2.1",
+    "tinycolor2": "^1.4.2"
   },
   "peerDependencies": {
     "facepaint": "^1.2.0",

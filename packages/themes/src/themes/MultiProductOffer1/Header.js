@@ -26,7 +26,9 @@ const Header = styled(({ className }) => {
   );
 })({
   maxWidth: '550px',
-  margin: '0 auto'
+  margin: '0 auto',
+  paddingLeft: ['1rem', '1rem', 0, 0],
+  paddingRight: ['1rem', '1rem', 0, 0]
 });
 
 export default Header;

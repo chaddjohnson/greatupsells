@@ -220,24 +220,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     </figure>
   );
 })({
-  margin: 0,
-  position: 'relative',
-
-  '&:not(:last-of-type)::after': {
-    content: "'add_circle'",
-    fontFamily: "'Material Icons'",
-    fontSize: '32px',
-    color: '#999999',
-    position: 'absolute',
-    zIndex: 10,
-    right: '-1.25rem',
-    top: '50%',
-    transform: 'translate(65%, -50%)',
-    backgroundColor: ({ theme }) => theme.productBackgroundColor,
-    borderRadius: '50%',
-    display: ({ theme }) =>
-      !theme.enableBundling || !theme.showBundlePlusSymbol ? 'none' : 'block'
-  }
+  margin: 0
 });
 
 export default OfferedProduct;

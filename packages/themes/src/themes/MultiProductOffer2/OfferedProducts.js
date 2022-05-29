@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from '@greatupsells/styled-with-facepaint';
 import Slider from 'react-slick';
 
@@ -11,8 +11,8 @@ const Dots = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: '2.25rem',
-  marginBottom: '0.5rem'
+  marginTop: ({ theme }) => (theme.enableBundling ? '2rem' : '2.25rem'),
+  marginBottom: ({ theme }) => (theme.enableBundling ? '2rem' : '0.5rem')
 });
 
 const DotContainer = styled.div({
@@ -45,13 +45,12 @@ const OfferedProducts = styled(({ className, children }) => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: false,
+    arrows: true,
     responsive: [
       {
         breakpoint: 767,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
           centerMode: true,
           centerPadding: '40px'
         }
@@ -91,10 +90,59 @@ const OfferedProducts = styled(({ className, children }) => {
     </Slider>
   );
 })({
-  marginTop: ['1rem', '2rem', '2rem', '2rem'],
+  marginTop: ['1rem', '1.75rem', '1.75rem', '1.75rem'],
 
   '& .slick-track': {
     display: 'flex'
+  },
+  '& .slick-arrow': {
+    border: 'none',
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    zIndex: 1,
+    top: '50%',
+    display: 'block',
+    width: '32px',
+    height: '32px',
+    padding: 0,
+    transform: 'translateY(-50%)',
+    fontSize: 0,
+    lineHeight: 0,
+
+    '&::before': {
+      color: '#FFFFFF',
+      backgroundColor: 'rgba(100, 100, 100, 0.9)',
+      borderRadius: '50%',
+      fontFamily: 'Material Icons',
+      fontSize: '2rem',
+      cursor: 'pointer'
+    },
+    '&:not(.slick-disabled):hover::before': {
+      backgroundColor: 'rgba(100, 100, 100, 1)'
+    },
+    '&:not(.slick-disabled):active::before': {
+      backgroundColor: 'rgba(100, 100, 100, 1)'
+    }
+  },
+  '& .slick-prev': {
+    left: '16px',
+    right: 'auto',
+
+    '&::before': {
+      content: '"chevron_left"'
+    }
+  },
+  '& .slick-next': {
+    left: 'auto',
+    right: '17px',
+
+    '&::before': {
+      content: '"chevron_right"'
+    }
+  },
+  '& .slick-disabled:before': {
+    opacity: 0.4,
+    display: ['inline', 'none', 'none', 'none']
   }
 });
 

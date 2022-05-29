@@ -14,7 +14,7 @@ const AddedIconContainer = styled.span({
   position: 'relative',
 
   '::after': {
-    content: 'check_circle',
+    content: '"check_circle"',
     fontFamily: 'Material Icons',
     fontSize: ['1.25rem', '1.5rem', '1.5rem', '1.5rem'],
     position: 'absolute',
