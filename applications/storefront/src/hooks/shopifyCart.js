@@ -103,15 +103,40 @@ const CartProvider = ({ children }) => {
       revalidateOnFocus: false
     }
   );
+
   const shopifyCartLoading =
     (!shopifyCart && !shopifyCartError) || isValidating;
-  const shopifyCartItems = useMemo(() => shopifyCart?.items || [], [
-    shopifyCart
-  ]);
-  const shopifyCartTotal = useMemo(
-    () => shopifyCart?.total_price && shopifyCart?.total_price / 100,
-    [shopifyCart]
-  );
+
+  const shopifyCartItems = useMemo(() => {
+    // Use checkout data if on the Thank You page.
+    if (window.Shopify?.Checkout?.page === 'thank_you') {
+      return window.Shopify.checkout.line_items.map((lineItem) => ({
+        product_id: lineItem.product_id,
+        variant_id: lineItem.variant_id,
+        quantity: lineItem.quantity
+      }));
+    }
+
+    // Use Shopify cart data.
+    return (
+      shopifyCart?.items.map((lineItem) => ({
+        product_id: lineItem.product_id,
+        variant_id: lineItem.variant_id,
+        quantity: lineItem.quantity
+      })) || []
+    );
+  }, [shopifyCart]);
+
+  const shopifyCartTotal = useMemo(() => {
+    // Use checkout data if on the Thank You page.
+    if (window.Shopify?.Checkout?.page === 'thank_you') {
+      return parseFloat(window.Shopify.checkout.total_price);
+    }
+
+    // Use Shopify cart data.
+    return (shopifyCart?.total_price && shopifyCart?.total_price / 100) || 0;
+  }, [shopifyCart]);
+
   const shopifyCartItemCount = useMemo(
     () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
     [shopifyCartItems]
