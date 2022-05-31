@@ -22,25 +22,23 @@ const Button = styled(
     </button>
   )
 )({
-  fontFamily: ({ theme }) => theme.bodyFont,
-  fontSize: ({ theme }) => `${theme.buttonsFontSize / 16}rem`,
-  fontWeight: 700,
+  fontWeight: 500,
   color: ({ theme }) => theme.buttonTextColor,
   backgroundColor: ({ theme }) => theme.buttonBackgroundColor,
   border: 'none',
-  borderRadius: '4.375px',
+  borderRadius: '5px',
   textDecoration: 'none',
-  letterSpacing: '0.5px',
   paddingLeft: '1rem',
   paddingRight: '1rem',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  height: '43.75px',
+  height: '44px',
   cursor: 'pointer',
+  transition: 'background-color 0.2s ease-in-out 0s',
 
   '&:hover:not(:disabled)': {
-    color: ({ theme }) => theme.buttonTextColor,
+    color: ({ theme }) => theme.buttonHoverTextColor,
     backgroundColor: ({ theme }) => theme.buttonHoverBackgroundColor
   },
   '&:disabled': {

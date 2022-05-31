@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import clsx from 'clsx';
 import { useTheme } from 'styled-components';
+import tinycolor from 'tinycolor2';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 
@@ -38,7 +39,10 @@ const AddButton = styled(
   maxWidth: '400px',
 
   '&:disabled': {
-    backgroundColor: '#F1F1F1',
+    backgroundColor: ({ theme }) =>
+      tinycolor(theme.popupBackgroundColor).isLight()
+        ? tinycolor(theme.popupBackgroundColor).darken(10)
+        : tinycolor(theme.popupBackgroundColor).lighten(10),
     cursor: 'default'
   },
   '&.loading': {

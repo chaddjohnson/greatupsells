@@ -95,7 +95,7 @@ const Footer = styled(({ className }) => {
   marginRight: '1.75rem',
   marginTop: ['0.5rem', '1rem', '1rem', '1rem'],
   borderTop: '1px solid rgba(0, 0, 0, 0.2)',
-  paddingTop: [0, '1.5rem', '1.5rem', '1.5rem']
+  paddingTop: [0, '1rem', '1rem', '1rem']
 });
 
 export default Footer;

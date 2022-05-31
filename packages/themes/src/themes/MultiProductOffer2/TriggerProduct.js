@@ -5,30 +5,52 @@ import { StateContext } from '../../components';
 import Button from './Button';
 
 const TriggerProductImageContainer = styled.div({
+  backgroundColor: '#FFFFFF',
   order: [2, 1, 1, 1],
   display: ['none', 'flex', 'flex', 'flex'],
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '0.15rem',
   marginRight: ['auto', '1.5rem', '1.5rem', '1.5rem'],
   marginLeft: 'auto',
   marginTop: [0, 'auto', 'auto', 'auto'],
   marginBottom: ['0.5rem', 'auto', 'auto', 'auto'],
-  borderRadius: '0.625em',
-  border: '1px solid rgba(0, 0, 0, 0.2)',
   textAlign: 'center',
   width: '80px',
   height: '80px',
   flexBasis: ['100%', 'auto', 'auto', 'auto'],
   position: 'relative',
-  backgroundColor: ({ theme }) => theme.popupBackgroundColor
+
+  '&::after': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: '8px',
+    border: '1px solid rgba(0, 0, 0, 0.1)',
+    zIndex: 2
+  }
+});
+
+const TriggerProductImageContainerInner = styled.div({
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: '8px',
+  zIndex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '100%'
 });
 
 const TriggerProductImage = styled.img({
   width: 'auto',
   height: 'auto',
-  maxWidth: '75px',
-  maxHeight: '75px'
+  maxWidth: '100%',
+  maxHeight: '100%'
 });
 
 const TriggerProductDetails = styled.div({
@@ -72,6 +94,7 @@ const AddedIconContainer = styled.div({
   bottom: 0,
   left: 0,
   right: 0,
+  zIndex: 3,
 
   '::after': {
     content: '"check_circle"',
@@ -107,10 +130,12 @@ const TriggerProduct = styled(({ className }) => {
     <div className={className}>
       <TriggerProductImageContainer>
         <AddedIconContainer />
-        <TriggerProductImage
-          src={triggerProduct.image.src}
-          alt={triggerProduct.image.alt}
-        />
+        <TriggerProductImageContainerInner>
+          <TriggerProductImage
+            src={triggerProduct.image.src}
+            alt={triggerProduct.image.alt}
+          />
+        </TriggerProductImageContainerInner>
       </TriggerProductImageContainer>
       <TriggerProductDetails>
         <div>

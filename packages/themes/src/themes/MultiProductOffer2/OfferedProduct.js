@@ -5,8 +5,6 @@ import { StateContext } from '../../components';
 import Button from './Button';
 
 const OfferedProductImageContainer = styled.div({
-  border: '1px solid rgba(0, 0, 0, 0.2)',
-  borderRadius: '0.625rem',
   backgroundColor: '#FFFFFF',
   margin: '0 auto',
   textAlign: 'center',
@@ -14,14 +12,40 @@ const OfferedProductImageContainer = styled.div({
   justifyContent: 'center',
   alignItems: 'center',
   width: '150px',
-  height: '150px'
+  height: '150px',
+  position: 'relative',
+
+  '&::after': {
+    content: '""',
+    display: 'block',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: '8px',
+    border: '1px solid rgba(0, 0, 0, 0.1)',
+    zIndex: 2
+  }
+});
+
+const OfferedProductImageContainerInner = styled.div({
+  width: '100%',
+  height: '100%',
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: '8px',
+  zIndex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
 });
 
 const OfferedProductImage = styled.img({
   width: 'auto',
   height: 'auto',
-  maxWidth: '134px',
-  maxHeight: '134px'
+  maxWidth: '100%',
+  maxHeight: '100%'
 });
 
 const OfferedProductPrices = styled.div({
@@ -137,12 +161,12 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
   return (
     <figure className={className}>
       <OfferedProductImageContainer>
-        <a href={selectedVariant.url} target="_blank" rel="noopener noreferrer">
+        <OfferedProductImageContainerInner>
           <OfferedProductImage
             src={selectedVariant.image.src}
             alt={selectedVariant.image.alt}
           />
-        </a>
+        </OfferedProductImageContainerInner>
       </OfferedProductImageContainer>
       <FigureCaption>
         <OfferedProductDetails>

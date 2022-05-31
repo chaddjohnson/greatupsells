@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import tinycolor from 'tinycolor2';
 import styled from '@greatupsells/styled-with-facepaint';
 
 const Button = styled(
@@ -44,7 +45,10 @@ const Button = styled(
     backgroundColor: ({ theme }) => theme.buttonHoverBackgroundColor
   },
   '&:disabled': {
-    backgroundColor: '#F1F1F1',
+    backgroundColor: ({ theme }) =>
+      tinycolor(theme.popupBackgroundColor).isLight()
+        ? tinycolor(theme.popupBackgroundColor).darken(10)
+        : tinycolor(theme.popupBackgroundColor).lighten(10),
     cursor: 'default'
   },
   '& > span': {

@@ -5,11 +5,8 @@ import { StateContext } from '../../components';
 import Button from './Button';
 
 const Totals = styled.div({
-  textAlign: ['center', 'right', 'right', 'right'],
   flex: 0,
-  whiteSpace: 'nowrap',
-  marginTop: ['1rem', 0, 0, 0],
-  marginBottom: ['1rem', 0, 0, 0]
+  whiteSpace: 'nowrap'
 });
 
 const Subtotal = styled.div({
@@ -18,11 +15,10 @@ const Subtotal = styled.div({
   marginBottom: '0.25rem',
 
   '& > span': {
-    fontSize: '1.0625rem'
+    fontSize: '16px'
   },
   '& > span + span': {
-    fontSize: '1.125rem',
-    marginLeft: '0.25rem'
+    fontSize: '17px'
   }
 });
 
@@ -31,22 +27,22 @@ const Savings = styled.div({
   marginTop: '0.25rem',
 
   '& > span': {
-    fontSize: '0.9375rem'
+    fontSize: '14px'
   },
   '& > span + span': {
-    fontSize: '1rem',
-    marginLeft: '0.25rem'
+    fontSize: '15px'
   }
 });
 
-const BundleOptions = styled.div({
+const BundleActions = styled.div({
   display: 'flex',
   justifyContent: 'center'
 });
 
 const AddBundleButton = styled(Button)({
   width: '100%',
-  minWidth: '100px'
+  minWidth: '100px',
+  maxWidth: ['150px', 'none', 'none', 'none']
 });
 
 const Footer = styled(({ className }) => {
@@ -55,9 +51,9 @@ const Footer = styled(({ className }) => {
     enableBundling,
     subtotalFormatted,
     savingsFormatted,
-    handleAddProductBundle,
     addProductBundleEnabled,
-    addingProductBundle
+    addingProductBundle,
+    handleThankYouPageAddProductBundle
   } = useContext(StateContext);
   const { bundleAddButtonText } = theme;
 
@@ -77,22 +73,22 @@ const Footer = styled(({ className }) => {
           <span>{savingsFormatted}</span>
         </Savings>
       </Totals>
-      <BundleOptions>
+      <BundleActions>
         <AddBundleButton
-          onClick={handleAddProductBundle}
+          onClick={handleThankYouPageAddProductBundle}
           disabled={!addProductBundleEnabled}
           loading={addingProductBundle}
         >
           {bundleAddButtonText}
         </AddBundleButton>
-      </BundleOptions>
+      </BundleActions>
     </footer>
   );
 })({
-  display: ['block', 'flex', 'flex', 'flex'],
+  display: 'flex',
+  marginTop: '1.5rem',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  marginTop: ['0.5rem', '1.25rem', '1.25rem', '1.25rem']
+  justifyContent: 'space-between'
 });
 
 export default Footer;
