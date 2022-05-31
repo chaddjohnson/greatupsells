@@ -81,7 +81,7 @@ const ActionButton = styled(Button)({
   marginLeft: ['2rem', 0, 0, 0],
   marginRight: ['2rem', 0, 0, 0],
 
-  '&:hover': {
+  '&&:hover': {
     backgroundColor: ({ theme }) => theme.actionButtonHoverBackgroundColor,
     color: ({ theme }) => theme.actionButtonTextHoverColor
   }
