@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { useTheme } from 'styled-components';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 
