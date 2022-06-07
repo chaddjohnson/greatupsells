@@ -318,10 +318,7 @@ const OfferForm = ({
     setThemeDirty(true);
 
     const newMaximumOfferedProductQuantity =
-      Math.min(
-        value.maximumOfferedProductQuantity ||
-          maximumOfferedProductQuantity.value
-      ) || 3;
+      value.maximumOfferedProductQuantity || 3;
 
     maximumOfferedProductQuantity.onChange(
       newMaximumOfferedProductQuantity.toString()
