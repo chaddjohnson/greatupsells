@@ -3,7 +3,8 @@ import {
   useShop,
   useRandomOffers,
   useShopifyCart,
-  useShopifyCustomer
+  useShopifyCustomer,
+  useThemeComponent
 } from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
 import LinkClickOffer from './LinkClickOffer';
@@ -97,8 +98,26 @@ const Offers = () => {
       ({ offer }) => offer?.strategy === 'THANK_YOU_PAGE'
     );
   }, [offersData]);
-
   const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
+
+  const ExitIntentThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.EXIT?.theme.key
+  );
+  const LinkClickThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.LINK?.theme.key
+  );
+  const LostBrowserFocusThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.FOCUS?.theme.key
+  );
+  const PageLoadThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.LOAD?.theme.key
+  );
+  const PageScrollThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.SCROLL?.theme.key
+  );
+  const ThankYouPageThemeComponent = useThemeComponent(
+    thankYouPageOfferData?.theme.key
+  );
 
   const handleOfferOpen = () => {
     setViewingOffer(true);
@@ -114,6 +133,7 @@ const Offers = () => {
         shop={shop}
         offer={offerDataByTriggerEvent.EXIT?.offer}
         theme={offerDataByTriggerEvent.EXIT?.theme}
+        ThemeComponent={ExitIntentThemeComponent}
         locale={locale}
         countryCode={countryCode}
         currency={currency}
@@ -130,6 +150,7 @@ const Offers = () => {
         shop={shop}
         offer={offerDataByTriggerEvent.LINK?.offer}
         theme={offerDataByTriggerEvent.LINK?.theme}
+        ThemeComponent={LinkClickThemeComponent}
         locale={locale}
         countryCode={countryCode}
         currency={currency}
@@ -146,6 +167,7 @@ const Offers = () => {
         shop={shop}
         offer={offerDataByTriggerEvent.FOCUS?.offer}
         theme={offerDataByTriggerEvent.FOCUS?.theme}
+        ThemeComponent={LostBrowserFocusThemeComponent}
         locale={locale}
         countryCode={countryCode}
         currency={currency}
@@ -163,6 +185,7 @@ const Offers = () => {
           shop={shop}
           offer={offerDataByTriggerEvent.LOAD?.offer}
           theme={offerDataByTriggerEvent.LOAD?.theme}
+          ThemeComponent={PageLoadThemeComponent}
           locale={locale}
           countryCode={countryCode}
           currency={currency}
@@ -180,6 +203,7 @@ const Offers = () => {
         shop={shop}
         offer={offerDataByTriggerEvent.SCROLL?.offer}
         theme={offerDataByTriggerEvent.SCROLL?.theme}
+        ThemeComponent={PageScrollThemeComponent}
         locale={locale}
         countryCode={countryCode}
         currency={currency}
@@ -209,6 +233,7 @@ const Offers = () => {
           shop={shop}
           offer={thankYouPageOfferData?.offer}
           theme={thankYouPageOfferData?.theme}
+          ThemeComponent={ThankYouPageThemeComponent}
           locale={locale}
           countryCode={countryCode}
           currency={currency}

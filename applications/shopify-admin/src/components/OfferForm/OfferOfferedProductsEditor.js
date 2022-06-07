@@ -12,6 +12,12 @@ import styled from 'styled-components';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
 
+const MaximumOfferedProductQuantityWrapper = styled.div`
+  .Polaris-TextField {
+    max-width: 170px;
+  }
+`;
+
 const QuantityInputWrapper = styled.div`
   .Polaris-TextField {
     max-width: 170px;
@@ -20,18 +26,20 @@ const QuantityInputWrapper = styled.div`
 
 const OfferOfferedProductsEditor = ({
   offer,
+  theme,
   offeredProducts,
   offeredCollections,
   maximumOfferedProductQuantity,
+  maximumAcceptedProductQuantity,
   submitted
 }) => {
   const [appliesTo, setAppliesTo] = useState(
     offeredCollections.value.length ? 'COLLECTIONS' : 'PRODUCTS'
   );
   const [
-    maximumOfferedProductQuantityActive,
-    setMaximumOfferedProductQuantityActive
-  ] = useState(!!maximumOfferedProductQuantity.value);
+    maximumAcceptedProductQuantityActive,
+    setmaximumAcceptedProductQuantityActive
+  ] = useState(!!maximumAcceptedProductQuantity.value);
 
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
@@ -43,11 +51,11 @@ const OfferOfferedProductsEditor = ({
     }
   };
 
-  const handleMaximumOfferedProductQuantityActiveChange = (checked) => {
-    setMaximumOfferedProductQuantityActive(checked);
+  const handleMaximumAcceptedProductQuantityActiveChange = (checked) => {
+    setmaximumAcceptedProductQuantityActive(checked);
 
     if (!checked) {
-      maximumOfferedProductQuantity.onChange(undefined);
+      maximumAcceptedProductQuantity.onChange(undefined);
     }
   };
 
@@ -153,23 +161,37 @@ const OfferOfferedProductsEditor = ({
           offer.strategy === 'THANK_YOU_PAGE') && (
           <Card.Section>
             <FormLayout>
+              <MaximumOfferedProductQuantityWrapper>
+                <TextField
+                  label="Maximum offered products"
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={theme.maximumOfferedProductQuantity}
+                  helpText="Maximum number of products to offer. This is limited to what the selected theme supports."
+                  {...maximumOfferedProductQuantity}
+                  error={submitted && maximumOfferedProductQuantity.error}
+                />
+              </MaximumOfferedProductQuantityWrapper>
               <Checkbox
-                label={`Set a maximum number of cross-sell items for this offer`}
+                label={`Set a maximum number of cross-sell items that may be accepted for this offer`}
                 helpText={
-                  maximumOfferedProductQuantityActive && (
+                  maximumAcceptedProductQuantityActive && (
                     <QuantityInputWrapper>
                       <TextField
                         inputMode="numeric"
                         min={1}
                         helpText="Applies to offered products."
-                        {...maximumOfferedProductQuantity}
-                        error={submitted && maximumOfferedProductQuantity.error}
+                        {...maximumAcceptedProductQuantity}
+                        error={
+                          submitted && maximumAcceptedProductQuantity.error
+                        }
                       />
                     </QuantityInputWrapper>
                   )
                 }
-                checked={maximumOfferedProductQuantityActive}
-                onChange={handleMaximumOfferedProductQuantityActiveChange}
+                checked={maximumAcceptedProductQuantityActive}
+                onChange={handleMaximumAcceptedProductQuantityActiveChange}
               />
             </FormLayout>
           </Card.Section>
@@ -181,9 +203,11 @@ const OfferOfferedProductsEditor = ({
 
 OfferOfferedProductsEditor.propTypes = {
   offer: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   offeredProducts: PropTypes.object.isRequired,
   offeredCollections: PropTypes.object.isRequired,
   maximumOfferedProductQuantity: PropTypes.object.isRequired,
+  maximumAcceptedProductQuantity: PropTypes.object.isRequired,
   submitted: PropTypes.bool
 };
 

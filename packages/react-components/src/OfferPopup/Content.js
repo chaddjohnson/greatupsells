@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Modal = styled.div`
+const Content = styled.div`
   position: fixed;
   background: none;
   border: none;
@@ -9,27 +9,20 @@ const Modal = styled.div`
   visibility: hidden;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
+  top: 50%;
   padding: 14px;
   margin-right: 0;
-  transform: none;
+  transform: translateY(-50%);
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
-
-  @media screen and (min-height: 768px) {
-    top: 8%;
-  }
 
   @media screen and (min-width: 1024px) {
     left: 50%;
     right: auto;
     top: 30%;
-    bottom: auto;
     padding: 0;
-    margin-right: -50%;
-    transform: translate(-50%, -25%);
+    transform: translate(-50%, -30%);
   }
 
   &.design-mode {
@@ -414,4 +407,4 @@ const Modal = styled.div`
   }
 `;
 
-export default Modal;
+export default Content;

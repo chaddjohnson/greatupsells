@@ -28,6 +28,7 @@
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
     "eslint-webpack-plugin": "^2.5.3",
+    "facepaint": "^1.2.1",
     "getenv": "^1.0.0",
     "highcharts": "^8.1.2",
     "highcharts-react-official": "^3.0.0",

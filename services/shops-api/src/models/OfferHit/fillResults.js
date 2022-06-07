@@ -2,6 +2,10 @@ const { min } = require('lodash');
 const { DateTime, Interval } = require('luxon');
 
 const fillResults = (results, valueKey) => {
+  if (!results?.length) {
+    return [];
+  }
+
   const firstResult = min(results, (result) => new Date(result.date));
   const firstDate = DateTime.fromISO(firstResult.date);
   const today = DateTime.fromISO('12:00:00Z');

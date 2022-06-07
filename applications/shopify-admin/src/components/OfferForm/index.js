@@ -7,6 +7,7 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
+import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
@@ -110,6 +111,7 @@ const OfferForm = ({
     offeredProducts,
     offeredCollections,
     maximumOfferedProductQuantity,
+    maximumAcceptedProductQuantity,
     triggerProducts,
     triggerCollections,
     geotargetingCountries,
@@ -151,6 +153,7 @@ const OfferForm = ({
       offeredProducts,
       offeredCollections,
       maximumOfferedProductQuantity,
+      maximumAcceptedProductQuantity,
       discountType,
       discountValue,
       discountTitle,
@@ -227,6 +230,8 @@ const OfferForm = ({
     [initialOffer, fields]
   );
 
+  const ThemeComponent = useThemeComponent(theme?.key);
+
   const copyTheme = (value) => {
     return assignId({
       ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
@@ -253,7 +258,7 @@ const OfferForm = ({
     strategy.onChange(value);
 
     if (value !== 'CROSS_SELL') {
-      maximumOfferedProductQuantity.onChange(undefined);
+      maximumAcceptedProductQuantity.onChange(undefined);
     }
 
     // Bundling is only available with cross-selling.
@@ -311,6 +316,13 @@ const OfferForm = ({
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
+
+    const newMaximumOfferedProductQuantity =
+      value.maximumOfferedProductQuantity || 3;
+
+    maximumOfferedProductQuantity.onChange(
+      newMaximumOfferedProductQuantity.toString()
+    );
   };
 
   const handleThemeDisplayTypeChange = (value) => {
@@ -402,6 +414,7 @@ const OfferForm = ({
                   }
                   shop={shop}
                   theme={theme}
+                  ThemeComponent={ThemeComponent}
                   offer={offer}
                   locale="en"
                   countryCode="US"
@@ -455,9 +468,11 @@ const OfferForm = ({
           />
           <OfferOfferedProductsEditor
             offer={offer}
+            theme={theme}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
             maximumOfferedProductQuantity={maximumOfferedProductQuantity}
+            maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
             submitted={submitted}
           />
           <OfferDiscountEditor

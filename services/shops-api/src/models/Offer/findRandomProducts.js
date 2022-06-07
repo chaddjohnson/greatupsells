@@ -10,6 +10,8 @@ const findRandomProducts = async (offer) => {
   await offer.execPopulate('shop');
 
   const { shop, offeredProducts, offeredCollections } = offer;
+  const maximumOfferedProductQuantity =
+    offer.maximumOfferedProductQuantity || 3;
 
   // Return no product if the offer has neither products nor collections.
   if (offeredProducts.length === 0 && offeredCollections.length === 0) {
@@ -63,7 +65,7 @@ const findRandomProducts = async (offer) => {
   // Randomly select a product for the offer OR a product in a collection for the offer.
   let randomProducts = await Product.aggregate([
     { $match: criteria },
-    { $sample: { size: 3 } },
+    { $sample: { size: maximumOfferedProductQuantity } },
     { $project: { _id: 1 } }
   ]);
 

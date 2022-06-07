@@ -80,11 +80,23 @@ const createServer = () => {
 
   // Set up dev proxies.
   if (dev) {
+    // Necessary as Shopify script tags must be hosted on a public URL.
     server.use(
       connect(
         createProxyMiddleware('/storefront.js', {
           target: `http://localhost:${STOREFRONT_PORT}`,
           changeOrigin: true
+        })
+      )
+    );
+
+    // Necessary to allow use of ASSETS_URL in dev mode.
+    server.use(
+      connect(
+        createProxyMiddleware('/themes', {
+          target: `http://localhost:${STOREFRONT_PORT}`,
+          changeOrigin: true,
+          pathRewrite: { '^/themes': '' }
         })
       )
     );

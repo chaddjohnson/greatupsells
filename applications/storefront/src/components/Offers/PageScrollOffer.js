@@ -17,6 +17,7 @@ const PageScrollOffer = ({
   shop,
   offer,
   theme,
+  ThemeComponent,
   locale,
   countryCode,
   currency,
@@ -190,6 +191,7 @@ const PageScrollOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
       locale={locale}
       countryCode={countryCode}
@@ -210,6 +212,7 @@ PageScrollOffer.propTypes = {
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.node,
   locale: PropTypes.string.isRequired,
   countryCode: PropTypes.string.isRequired,
   currency: PropTypes.string.isRequired,

@@ -7,7 +7,8 @@ import {
   useRandomOffers,
   useOfferAcceptance,
   useShopifyCart,
-  useShopifyCartAddListener
+  useShopifyCartAddListener,
+  useThemeComponent
 } from '../../hooks';
 
 const triggerEvent = 'ADD';
@@ -56,6 +57,8 @@ const ProductOffer = ({
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
+
+  const ThemeComponent = useThemeComponent(theme?.key);
 
   const openPopup = useCallback(() => {
     setOfferViewed(true);
@@ -187,6 +190,7 @@ const ProductOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
       locale={locale}
       countryCode={countryCode}

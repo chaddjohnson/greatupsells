@@ -15,7 +15,7 @@ const initialIframeHeight = 1000;
 const GlobalStyle = createGlobalStyle`
   body {
     overflow: ${(props) =>
-      props.modalOpen && !props.designMode ? 'hidden !important' : 'auto'};
+      props.open && !props.designMode ? 'hidden !important' : 'auto'};
   }
 `;
 
@@ -26,6 +26,7 @@ const OfferPopup = ({
   designModeZoom,
   forceDisplayType,
   theme,
+  ThemeComponent,
   shop,
   offer,
   locale,
@@ -45,13 +46,9 @@ const OfferPopup = ({
   const [frameDocument, setFrameDocument] = useState(null);
   const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
-  const [modalContentContainerRef, setModalContentContainerRef] = useState(
-    null
-  );
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
-  const [modalOpen, setModalOpen] = useState(designMode);
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
 
   const fixIframeHeight = () => {
@@ -138,7 +135,6 @@ const OfferPopup = ({
     const isCartUpsell =
       offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
 
-    setModalOpen(false);
     setModalAfterOpen(false);
 
     // Delay calling the onClose callback (which unmounts this component) until
@@ -157,14 +153,12 @@ const OfferPopup = ({
   const handleAfterOpen = () => {
     if (!designMode) {
       setModalAfterOpen(true);
+
+      setTimeout(() => {
+        modalRef.focus();
+      });
     }
   };
-
-  // Expose methods globally to enable themes to programmatically interface with popups.
-  if (typeof window !== 'undefined') {
-    window.Offer.submit = handleSubmit;
-    window.Offer.close = handleClose;
-  }
 
   // Fix the iframe height as dependencies change.
   useEffect(fixIframeHeight, [
@@ -173,20 +167,6 @@ const OfferPopup = ({
     designMode,
     designModeZoom
   ]);
-
-  useEffect(() => {
-    if (open) {
-      setModalOpen(true);
-
-      if (!designMode) {
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            setModalAfterOpen(true);
-          });
-        }, 20);
-      }
-    }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fix the iframe height when scrolling occurs.
   // useEffect(() => {
@@ -204,7 +184,7 @@ const OfferPopup = ({
   // Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
   return (
     <>
-      <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
+      <GlobalStyle open={open} designMode={designMode} />
       <Frame
         className={className}
         title="Offer"
@@ -262,14 +242,14 @@ const OfferPopup = ({
                   contentRef={setModalRef}
                   closeTimeoutMS={333}
                   parentSelector={() => document.body}
-                  isOpen={modalOpen}
+                  isOpen={open}
                   shouldFocusAfterRender={!designMode}
                   shouldCloseOnOverlayClick={offer.enableMaskClose}
                   shouldCloseOnEsc={offer.enableEscClose}
                   contentLabel="Offer Modal"
                   className={clsx(
                     designMode && 'design-mode',
-                    modalOpen && designMode && 'open',
+                    open && designMode && 'open',
                     modalAfterOpen && 'open',
                     !!offer.animation && !designMode && offer.animation
                   )}
@@ -301,28 +281,23 @@ const OfferPopup = ({
                   onRequestClose={handleClose}
                   onAfterOpen={handleAfterOpen}
                 >
-                  <ContentContainer
-                    className="content-container"
-                    ref={setModalContentContainerRef}
-                  >
+                  <ContentContainer className="content-container">
                     <OfferTheme
+                      context={frameRef?.contentWindow}
                       shop={shop}
                       offer={offer}
+                      theme={theme}
+                      ThemeComponent={ThemeComponent}
                       locale={locale}
                       countryCode={countryCode}
                       currency={currency}
                       triggerProduct={triggerProduct}
                       offeredProducts={offeredProducts}
-                      theme={theme}
                       shopifyCartItems={shopifyCartItems}
                       shopifyCartTotal={shopifyCartTotal}
                       shopifyCartItemCount={shopifyCartItemCount}
-                      handlers={{
-                        closeHandler: 'window.parent.Offer.close()'
-                      }}
+                      handlers={{ handleClose, handleSubmit }}
                       forceDisplayType={forceDisplayType}
-                      context={frameRef?.contentWindow}
-                      container={modalContentContainerRef}
                       onAddProducts={onAddProducts}
                       onReplaceProduct={onReplaceProduct}
                     />
@@ -345,6 +320,7 @@ OfferPopup.propTypes = {
   designModeZoom: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.node,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shopifyCartItems: PropTypes.array,

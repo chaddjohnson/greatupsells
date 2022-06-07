@@ -8,6 +8,7 @@ const ThankYouPageOffer = ({
   shop,
   offer,
   theme,
+  ThemeComponent,
   locale,
   countryCode,
   currency,
@@ -104,16 +105,16 @@ const ThankYouPageOffer = ({
 
   return createPortal(
     <OfferTheme
+      context={window}
       shop={cachedShop}
       offer={cachedOffer}
+      theme={theme}
+      ThemeComponent={ThemeComponent}
       locale={locale}
       countryCode={countryCode}
       currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
-      theme={theme}
-      context={window}
-      container={contentContainer}
       onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
     />,

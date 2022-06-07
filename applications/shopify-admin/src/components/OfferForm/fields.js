@@ -138,6 +138,9 @@ const useFields = (initialOffer, showEndDate) => {
   const maximumOfferedProductQuantity = useField(
     initialOffer.maximumOfferedProductQuantity?.toString()
   );
+  const maximumAcceptedProductQuantity = useField(
+    initialOffer.maximumAcceptedProductQuantity?.toString()
+  );
   const discountType = useField(initialOffer.discountType);
   const discountValue = useField(
     {
@@ -273,6 +276,7 @@ const useFields = (initialOffer, showEndDate) => {
     offeredProducts,
     offeredCollections,
     maximumOfferedProductQuantity,
+    maximumAcceptedProductQuantity,
     discountType,
     discountValue,
     discountTitle,

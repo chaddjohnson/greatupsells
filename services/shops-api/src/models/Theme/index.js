@@ -13,6 +13,7 @@ const schemaOptions = {
 const variablesSchema = new mongoose.Schema({
   name: { type: String, required: true },
   label: { type: String, required: true },
+  helpText: { type: String, required: false },
   type: {
     type: String,
     required: true,
@@ -33,6 +34,7 @@ const formFieldsSchema = new mongoose.Schema({
 });
 const schema = new mongoose.Schema(
   {
+    key: { type: String, required: true },
     name: { type: String, required: false },
     offer: {
       type: mongoose.Schema.Types.ObjectId,
@@ -58,6 +60,7 @@ const schema = new mongoose.Schema(
     description: { type: String, required: false },
     variables: [variablesSchema],
     formFields: [formFieldsSchema],
+    maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
     referenceUrl: { type: String, required: false },
     notes: { type: String, required: false },
     enabled: { type: Boolean, required: true, default: false }
@@ -78,6 +81,7 @@ schema.pre('validate', function (next) {
 });
 
 schema.index({ offer: 1 }, { sparse: true });
+schema.index({ 'variables.name': 1 }, { unique: true });
 
 Theme = mongodbClient.connection.model('Theme', schema);
 
