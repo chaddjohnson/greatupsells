@@ -11,3 +11,4 @@ export { default as useRandomOffers } from './randomOffers';
 export { default as useShop } from './shop';
 export { default as useShopifyCustomer } from './shopifyCustomer';
 export { default as useShopifyDraftOrder } from './shopifyDraftOrder';
+export { default as useThemeComponent } from './themeComponent';

@@ -8,6 +8,7 @@ const ThankYouPageOffer = ({
   shop,
   offer,
   theme,
+  ThemeComponent,
   locale,
   countryCode,
   currency,
@@ -108,6 +109,7 @@ const ThankYouPageOffer = ({
       shop={cachedShop}
       offer={cachedOffer}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       locale={locale}
       countryCode={countryCode}
       currency={currency}

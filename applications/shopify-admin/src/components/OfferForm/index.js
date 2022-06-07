@@ -7,6 +7,7 @@ import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
+import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
@@ -229,6 +230,8 @@ const OfferForm = ({
     [initialOffer, fields]
   );
 
+  const ThemeComponent = useThemeComponent(theme?.key);
+
   const copyTheme = (value) => {
     return assignId({
       ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
@@ -414,6 +417,7 @@ const OfferForm = ({
                   }
                   shop={shop}
                   theme={theme}
+                  ThemeComponent={ThemeComponent}
                   offer={offer}
                   locale="en"
                   countryCode="US"

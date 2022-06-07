@@ -1,7 +1,6 @@
 {
   "name": "@greatupsells/themes",
   "version": "0.0.0",
-  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
@@ -10,8 +9,10 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
+    "@greatupsells/styled-with-facepaint": "0.0.0",
     "clsx": "^1.1.1",
     "css-loader": "^3.5.3",
+    "preact": "^10.5.13",
     "react-slick": "^0.29.0",
     "style-loader": "^1.2.1",
     "tinycolor2": "^1.4.2"
@@ -28,5 +29,11 @@
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
     "start": "webpack --watch"
+  },
+  "exports": {
+    "./MultiProductOffer1": "./dist/MultiProductOffer1",
+    "./MultiProductOffer2": "./dist/MultiProductOffer2",
+    "./MultiProductThankYouOffer1": "./dist/MultiProductThankYouOffer1",
+    "./SingleProductOffer1": "./dist/SingleProductOffer1"
   }
 }

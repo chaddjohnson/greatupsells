@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MultiProductOffer2 } from '@greatupsells/themes';
 import useOfferThemeState from './offerThemeState';
 import useOfferThemeVariables from './offerThemeVariables';
 
@@ -9,6 +8,7 @@ const OfferTheme = ({
   shop,
   offer,
   theme,
+  ThemeComponent,
   locale,
   countryCode,
   currency,
@@ -40,16 +40,12 @@ const OfferTheme = ({
     handlers
   });
 
-  if (!offer) {
+  if (!offer || !ThemeComponent) {
     return null;
   }
 
   return (
-    <MultiProductOffer2
-      context={context}
-      theme={themeVariables}
-      state={state}
-    />
+    <ThemeComponent context={context} theme={themeVariables} state={state} />
   );
 };
 
@@ -57,12 +53,13 @@ OfferTheme.propTypes = {
   context: PropTypes.object,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.node,
   locale: PropTypes.string,
   countryCode: PropTypes.string,
   currency: PropTypes.string,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
-  theme: PropTypes.object.isRequired,
   shopifyCartItems: PropTypes.array,
   shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,

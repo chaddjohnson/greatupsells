@@ -34,6 +34,7 @@ const formFieldsSchema = new mongoose.Schema({
 });
 const schema = new mongoose.Schema(
   {
+    key: { type: String, required: true },
     name: { type: String, required: false },
     offer: {
       type: mongoose.Schema.Types.ObjectId,

@@ -14,7 +14,6 @@
     "@greatupsells/http-client": "0.0.0",
     "@greatupsells/react-components": "0.0.0",
     "@greatupsells/react-hooks": "0.0.0",
-    "@greatupsells/styled-with-facepaint": "0.0.0",
     "@shopify/app-bridge": "^2.0.3",
     "@shopify/app-bridge-react": "^2.0.3",
     "@shopify/app-bridge-utils": "^2.0.3",

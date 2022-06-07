@@ -26,6 +26,7 @@ const OfferPopup = ({
   designModeZoom,
   forceDisplayType,
   theme,
+  ThemeComponent,
   shop,
   offer,
   locale,
@@ -286,6 +287,7 @@ const OfferPopup = ({
                       shop={shop}
                       offer={offer}
                       theme={theme}
+                      ThemeComponent={ThemeComponent}
                       locale={locale}
                       countryCode={countryCode}
                       currency={currency}
@@ -318,6 +320,7 @@ OfferPopup.propTypes = {
   designModeZoom: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.node,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shopifyCartItems: PropTypes.array,

@@ -13,6 +13,7 @@ const ExitIntentOffer = ({
   shop,
   offer,
   theme,
+  ThemeComponent,
   locale,
   countryCode,
   currency,
@@ -220,6 +221,7 @@ const ExitIntentOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
       locale={locale}
       countryCode={countryCode}
@@ -240,6 +242,7 @@ ExitIntentOffer.propTypes = {
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.node,
   locale: PropTypes.string.isRequired,
   countryCode: PropTypes.string.isRequired,
   currency: PropTypes.string.isRequired,
