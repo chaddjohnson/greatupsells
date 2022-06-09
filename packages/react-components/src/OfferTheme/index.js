@@ -17,6 +17,7 @@ const OfferTheme = ({
   shopifyCartItems,
   shopifyCartTotal,
   shopifyCartItemCount,
+  forceDisplayType,
   handlers,
   onAddProducts,
   onReplaceProduct
@@ -45,7 +46,11 @@ const OfferTheme = ({
   }
 
   return (
-    <ThemeComponent context={context} theme={themeVariables} state={state} />
+    <ThemeComponent
+      context={context}
+      theme={themeVariables}
+      state={{ ...state, forceDisplayType }}
+    />
   );
 };
 
@@ -63,6 +68,7 @@ OfferTheme.propTypes = {
   shopifyCartItems: PropTypes.array,
   shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,
+  forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   handlers: PropTypes.object,
   // forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   onAddProducts: PropTypes.func,

@@ -10,7 +10,7 @@ const Content = styled.div`
   left: 0;
   right: 0;
   top: 50%;
-  padding: 14px;
+  padding: 10px;
   margin-right: 0;
   transform: translateY(-50%);
   -webkit-backface-visibility: hidden;
@@ -27,7 +27,7 @@ const Content = styled.div`
 
   &.design-mode {
     position: static;
-    padding: 14px;
+    padding: 10px;
     margin-right: 0;
     transform: none;
   }

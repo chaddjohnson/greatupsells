@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import styled from '@greatupsells/styled-with-facepaint';
 import Slider from 'react-slick';
+import { StateContext } from '../../components';
 
 const Slide = styled.div({
   position: 'relative',
@@ -39,20 +40,23 @@ const OfferedProducts = styled(({ className, children }) => {
   const sliderRef = useRef();
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const { forceDisplayType } = useContext(StateContext);
+
   const settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: forceDisplayType === 'mobile' ? 1 : 3,
     slidesToScroll: 1,
+    centerMode: forceDisplayType === 'mobile',
+    centerPadding: '40px',
     arrows: true,
     responsive: [
       {
         breakpoint: 767,
         settings: {
           slidesToShow: 1,
-          centerMode: true,
-          centerPadding: '40px'
+          centerMode: true
         }
       }
     ],

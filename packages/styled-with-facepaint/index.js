@@ -3,9 +3,9 @@ import facepaint from 'facepaint';
 
 // Define breakpoints.
 const mq = facepaint([
-  '@media (min-width: 768px), (min-device-width: 768px)',
-  '@media (min-width: 1024px), (min-device-width: 1024px)',
-  '@media (min-width: 1440px), (min-device-width: 1440px)'
+  '@media (min-width: 768px)',
+  '@media (min-width: 1024px)',
+  '@media (min-width: 1440px)'
 ]);
 
 // Get list of helper functions.

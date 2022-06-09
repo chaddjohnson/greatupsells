@@ -54,6 +54,7 @@ const OfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
   min-height: 300px;
+  overflow: hidden;
 `;
 
 const PreviewOfferPopupContainer = styled.div`
@@ -61,6 +62,10 @@ const PreviewOfferPopupContainer = styled.div`
   justify-content: center;
   display: none;
   padding: 1rem;
+
+  iframe {
+    min-width: 0;
+  }
 
   @media screen and (min-width: 768px) {
     display: block;
@@ -408,7 +413,7 @@ const OfferForm = ({
                 <OfferPopup
                   open={designMode || previewActive}
                   designMode={designMode}
-                  designModeZoom={isInline ? 1.0 : 0.8}
+                  designModeZoom={isInline ? 1.0 : 0.79}
                   forceDisplayType={
                     !previewActive ? themeDisplayType : undefined
                   }

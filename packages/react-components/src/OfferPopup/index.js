@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
-import { createGlobalStyle, StyleSheetManager } from 'styled-components';
+import styled, {
+  createGlobalStyle,
+  StyleSheetManager
+} from 'styled-components';
 import OfferTheme from '../OfferTheme';
 import Overlay from './Overlay';
 import Content from './Content';
@@ -16,6 +19,26 @@ const GlobalStyle = createGlobalStyle`
   body {
     overflow: ${(props) =>
       props.open && !props.designMode ? 'hidden !important' : 'auto'};
+  }
+`;
+
+const StyledFrame = styled(Frame)`
+  border: 0;
+  position: ${(props) => (props.designMode ? 'static' : 'fixed')};
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: ${(props) => (props.designMode ? '100%' : '100vw')};
+  height: ${(props) => (props.designMode ? '100%' : '100vh')};
+  max-width: ${(props) =>
+    props.forceDisplayType === 'mobile' ? '375px' : 'none'};
+  min-height: ${(props) => (props.designMode ? `${props.iframeHeight}px` : 0)};
+  z-index: ${(props) => (props.designMode ? 1 : 2147483647)};
+
+  @media screen and (min-width: 768px) {
+    min-width: ${(props) =>
+      props.designMode && props.forceDisplayType === 'desktop' ? '768px' : 0};
   }
 `;
 
@@ -185,7 +208,7 @@ const OfferPopup = ({
   return (
     <>
       <GlobalStyle open={open} designMode={designMode} />
-      <Frame
+      <StyledFrame
         className={className}
         title="Offer"
         ref={(frame) => frame && setFrameRef(frame?.node || frame?.base)}
@@ -217,19 +240,9 @@ const OfferPopup = ({
             />
           </>
         }
-        style={{
-          border: 0,
-          position: designMode ? 'static' : 'fixed',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          width: designMode ? '100%' : '100vw',
-          height: designMode ? '100%' : '100vh',
-          maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none',
-          minHeight: designMode ? `${iframeHeight}px` : 0,
-          zIndex: designMode ? 1 : 2147483647
-        }}
+        designMode={designMode}
+        forceDisplayType={forceDisplayType}
+        iframeHeight={iframeHeight}
       >
         <FrameContextConsumer>
           {({ document }) => {
@@ -296,8 +309,8 @@ const OfferPopup = ({
                       shopifyCartItems={shopifyCartItems}
                       shopifyCartTotal={shopifyCartTotal}
                       shopifyCartItemCount={shopifyCartItemCount}
-                      handlers={{ handleClose, handleSubmit }}
                       forceDisplayType={forceDisplayType}
+                      handlers={{ handleClose, handleSubmit }}
                       onAddProducts={onAddProducts}
                       onReplaceProduct={onReplaceProduct}
                     />
@@ -308,7 +321,7 @@ const OfferPopup = ({
             );
           }}
         </FrameContextConsumer>
-      </Frame>
+      </StyledFrame>
     </>
   );
 };
