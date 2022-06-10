@@ -109,7 +109,8 @@ const useOffer = (offerId) => {
 
       showSuccessToast('Offer duplicated.');
 
-      router.push(`/offers/${duplicatedOffer._id}/`);
+      // Do not use router.push() because state will be stale.
+      window.location.href = `/offers/${duplicatedOffer._id}/`;
     } catch (error) {
       showErrorToast(`Error duplicating offer.`);
       throw error;
