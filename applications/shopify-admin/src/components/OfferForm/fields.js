@@ -135,9 +135,25 @@ const useFields = (initialOffer, showEndDate) => {
       }
     ]
   });
-  const maximumOfferedProductQuantity = useField(
-    initialOffer.maximumOfferedProductQuantity?.toString()
-  );
+  const maximumOfferedProductQuantity = useField({
+    value: initialOffer.maximumOfferedProductQuantity?.toString(),
+    validates: [
+      (value) =>
+        notEmpty("Maximum offered products value can't be blank")(
+          value?.toString()
+        ),
+      (value) =>
+        value &&
+        numericString('Maximum offered products value must be a number')(
+          value?.toString()
+        ),
+      (value) => {
+        if (value && Number(value) <= 0) {
+          return 'Maximum offered products value must be greater than zero';
+        }
+      }
+    ]
+  });
   const maximumAcceptedProductQuantity = useField(
     initialOffer.maximumAcceptedProductQuantity?.toString()
   );
