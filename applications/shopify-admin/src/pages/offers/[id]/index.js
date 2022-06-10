@@ -130,7 +130,6 @@ const OfferEditPage = () => {
   );
 
   const loaded = shopLoaded && offerLoaded && themesLoaded && offerThemesLoaded;
-
   const error = !!(shopError || offerError || themesError || offerThemesError);
 
   const handleSubmit = async (data) => {
