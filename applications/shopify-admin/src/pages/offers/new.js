@@ -173,6 +173,9 @@ const NewOfferPage = () => {
     router.push('/offers/');
   };
 
+  initialOffer.maximumOfferedProductQuantity =
+    offerTheme.maximumOfferedProductQuantity || 3;
+
   return (
     <Loader
       isLoading={!loaded}
