@@ -68,7 +68,8 @@ const PreviewOfferPopupContainer = styled.div`
 const SmallPreviewOfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
+  background-color: white;
+  margin-top: 1rem;
   height: ${(props) =>
     props.smallPreviewContentHeight
       ? `${props.smallPreviewContentHeight}px`
@@ -260,7 +261,7 @@ const OfferForm = ({
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
   const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
   const designModeZoom = isInline ? 1.0 : 0.79;
-  const smallDesignModeZoom = isInline ? 0.6 : 0.4;
+  const smallDesignModeZoom = isInline ? 0.5 : 0.4;
 
   const updatePreviewContentHeight = useCallback(() => {
     const context = offerPopupContext?.current;
@@ -273,7 +274,7 @@ const OfferForm = ({
     // Workaround to ensure preview area fits iframe.
     setPreviewContentHeight(container.offsetHeight * designModeZoom + 16);
     setSmallPreviewContentHeight(
-      container.offsetHeight * smallDesignModeZoom + 18
+      container.offsetHeight * smallDesignModeZoom + 8
     );
   }, [offerPopupContext, designModeZoom, smallDesignModeZoom]);
 
