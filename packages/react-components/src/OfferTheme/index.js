@@ -70,7 +70,6 @@ OfferTheme.propTypes = {
   shopifyCartItemCount: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   handlers: PropTypes.object,
-  // forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func
 };

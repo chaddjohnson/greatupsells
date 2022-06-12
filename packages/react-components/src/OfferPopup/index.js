@@ -13,8 +13,6 @@ import Content from './Content';
 import ContentContainer from './ContentContainer';
 import Mask from './Mask';
 
-const initialIframeHeight = 1000;
-
 const GlobalStyle = createGlobalStyle`
   body {
     overflow: ${(props) =>
@@ -32,18 +30,23 @@ const StyledFrame = styled(Frame)`
   width: ${(props) => (props.designMode ? '100%' : '100vw')};
   height: ${(props) => (props.designMode ? '100%' : '100vh')};
   max-width: ${(props) =>
-    props.forceDisplayType === 'mobile' ? '375px' : 'none'};
-  min-height: ${(props) => (props.designMode ? `${props.iframeHeight}px` : 0)};
+    props.forceDisplayType === 'mobile'
+      ? `${375 * props.designModeZoom}px`
+      : 'none'};
+  min-height: ${(props) => (props.designMode ? '1500px' : 0)};
   z-index: ${(props) => (props.designMode ? 1 : 2147483647)};
 
   @media screen and (min-width: 768px) {
-    min-width: ${(props) =>
-      props.designMode && props.forceDisplayType === 'desktop' ? '768px' : 0};
+    &&& {
+      min-width: ${(props) =>
+        props.designMode && props.forceDisplayType === 'desktop' ? '768px' : 0};
+    }
   }
 `;
 
 const OfferPopup = ({
   className,
+  contextRef,
   open,
   designMode,
   designModeZoom,
@@ -66,53 +69,11 @@ const OfferPopup = ({
   onClick
 }) => {
   const [frameRef, setFrameRef] = useState(null);
-  const [frameDocument, setFrameDocument] = useState(null);
-  const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
-
-  const fixIframeHeight = () => {
-    if (!frameDocument || !modalRef) {
-      return;
-    }
-
-    // This only applies to design mode.
-    if (!designMode) {
-      return;
-    }
-
-    setTimeout(async () => {
-      // Wait for all images to load so that we can get an accurate measure of
-      // the content height.
-      // Reference: https://stackoverflow.com/a/60949881/83897
-      await Promise.all(
-        Array.from(frameDocument.images).map((image) => {
-          if (image.complete) {
-            return Promise.resolve(image.naturalHeight !== 0);
-          }
-          return new Promise((resolve) => {
-            image.addEventListener('load', () => resolve());
-            image.addEventListener('error', () => resolve());
-          });
-        })
-      );
-
-      // Workaround: Set the iframe height to some large -- taller than the content
-      // will likely actually be. Do so because `offsetHeight` does not reflect the
-      // iframe's content height unless the iframe is actualy tall enough to
-      // accommodate the content.
-      setIframeHeight(initialIframeHeight);
-
-      // Set the iframe height to approximately the modal content height. Do so via
-      // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(() => {
-        setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom);
-      });
-    });
-  };
 
   const maskBackgroundColor = useMemo(() => {
     const defaultMaskBackgroundColor = [
@@ -183,23 +144,6 @@ const OfferPopup = ({
     }
   };
 
-  // Fix the iframe height as dependencies change.
-  useEffect(fixIframeHeight, [
-    frameDocument,
-    modalRef,
-    designMode,
-    designModeZoom
-  ]);
-
-  // Fix the iframe height when scrolling occurs.
-  // useEffect(() => {
-  //   window.addEventListener('scroll', fixIframeHeight);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', fixIframeHeight);
-  //   };
-  // });
-
   if (!open) {
     return null;
   }
@@ -241,13 +185,16 @@ const OfferPopup = ({
           </>
         }
         designMode={designMode}
+        designModeZoom={designModeZoom}
         forceDisplayType={forceDisplayType}
-        iframeHeight={iframeHeight}
       >
         <FrameContextConsumer>
           {({ document }) => {
-            setFrameDocument(document);
             ReactModal.setAppElement(document.body);
+
+            if (contextRef) {
+              contextRef.current = document;
+            }
 
             return (
               <StyleSheetManager target={document.head}>

@@ -1,12 +1,19 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect
+} from 'react';
 import PropTypes from 'prop-types';
-import { Form, Layout, Card, PageActions, Sticky } from '@shopify/polaris';
+import { Form, Layout, PageActions, Sticky } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
+import { useInterval } from '@greatupsells/react-hooks';
 import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
@@ -50,25 +57,26 @@ const assignIds = (objects) => {
   return objects.map(assignId);
 };
 
-const OfferPopupContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  min-height: 300px;
-  overflow: hidden;
-`;
-
 const PreviewOfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
-  display: none;
-  padding: 1rem;
+  height: ${(props) =>
+    props.previewContentHeight ? `${props.previewContentHeight}px` : '300px'};
+  overflow: hidden;
+`;
+
+const SmallPreviewOfferPopupContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  height: ${(props) =>
+    props.smallPreviewContentHeight
+      ? `${props.smallPreviewContentHeight}px`
+      : '300px'};
+  overflow: hidden;
 
   iframe {
     min-width: 0;
-  }
-
-  @media screen and (min-width: 768px) {
-    display: block;
   }
 `;
 
@@ -88,6 +96,8 @@ const OfferForm = ({
 
   const app = useAppBridge();
 
+  const offerPopupContext = useRef();
+
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
   const [designMode, setDesignMode] = useState(true);
@@ -98,6 +108,8 @@ const OfferForm = ({
   const [themeDisplayType, setThemeDisplayType] = useState(
     window.innerWidth >= 768 ? 'desktop' : 'mobile'
   );
+  const [previewContentHeight, setPreviewContentHeight] = useState();
+  const [smallPreviewContentHeight, setSmallPreviewContentHeight] = useState();
   const [themeIncompatible, setThemeIncompatible] = useState(false);
 
   const {
@@ -247,6 +259,23 @@ const OfferForm = ({
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
   const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
+  const designModeZoom = isInline ? 1.0 : 0.79;
+  const smallDesignModeZoom = isInline ? 0.6 : 0.4;
+
+  const updatePreviewContentHeight = useCallback(() => {
+    const context = offerPopupContext?.current;
+    const container = context?.querySelector('.content-container');
+
+    if (!context || !container) {
+      return;
+    }
+
+    // Workaround to ensure preview area fits iframe.
+    setPreviewContentHeight(container.offsetHeight * designModeZoom + 16);
+    setSmallPreviewContentHeight(
+      container.offsetHeight * smallDesignModeZoom + 18
+    );
+  }, [offerPopupContext, designModeZoom, smallDesignModeZoom]);
 
   const handleStrategyChange = (value) => {
     const selectedThemeUsesSelectedStrategy =
@@ -303,6 +332,7 @@ const OfferForm = ({
       )
     ]);
     setThemeDirty(true);
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleThemeSelect = (value) => {
@@ -316,11 +346,15 @@ const OfferForm = ({
     setTheme(copiedTheme);
 
     setThemeDirty(true);
+
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
+
+    setTimeout(() => updatePreviewContentHeight());
 
     const newMaximumOfferedProductQuantity =
       value.maximumOfferedProductQuantity || 3;
@@ -332,16 +366,20 @@ const OfferForm = ({
 
   const handleThemeDisplayTypeChange = (value) => {
     setThemeDisplayType(value);
+
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleClosePreview = () => {
     setPreviewActive(false);
     setTimeout(() => setDesignMode(true));
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handlePreview = () => {
     setDesignMode(false);
     setTimeout(() => setPreviewActive(true));
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleDiscard = () => {
@@ -392,6 +430,14 @@ const OfferForm = ({
     [showEndDate] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  useEffect(() => {
+    updatePreviewContentHeight();
+  }, [updatePreviewContentHeight, offer, theme]);
+
+  useInterval(() => {
+    updatePreviewContentHeight();
+  }, 0.5);
+
   return (
     <Form noValidate onSubmit={submit}>
       <Layout>
@@ -409,11 +455,14 @@ const OfferForm = ({
             offerThemes={offerThemes}
             displayType={themeDisplayType}
             previewElement={
-              <OfferPopupContainer>
+              <PreviewOfferPopupContainer
+                previewContentHeight={previewContentHeight}
+              >
                 <OfferPopup
+                  contextRef={offerPopupContext}
                   open={designMode || previewActive}
                   designMode={designMode}
-                  designModeZoom={isInline ? 1.0 : 0.79}
+                  designModeZoom={designModeZoom}
                   forceDisplayType={
                     !previewActive ? themeDisplayType : undefined
                   }
@@ -429,7 +478,7 @@ const OfferForm = ({
                   onClose={handleClosePreview}
                   onClick={!isInline ? handlePreview : undefined}
                 />
-              </OfferPopupContainer>
+              </PreviewOfferPopupContainer>
             }
             onPreview={!isInline ? handlePreview : undefined}
             onChange={handleThemeChange}
@@ -516,26 +565,27 @@ const OfferForm = ({
         <Layout.Section secondary>
           <Sticky offset={16} disableWhenStacked={true}>
             <OfferSummary offer={offer} />
-            <Card>
-              <PreviewOfferPopupContainer>
-                <OfferPopup
-                  open={true}
-                  designMode={true}
-                  designModeZoom={isInline ? 0.6 : 0.3}
-                  forceDisplayType="desktop"
-                  shop={shop}
-                  theme={theme}
-                  offer={offer}
-                  locale="en"
-                  countryCode="US"
-                  currency="USD"
-                  triggerProduct={dummyData.triggerProduct}
-                  offeredProducts={dummyData.offeredProducts}
-                  onClose={handleClosePreview}
-                  onClick={!isInline ? handlePreview : undefined}
-                />
-              </PreviewOfferPopupContainer>
-            </Card>
+            <SmallPreviewOfferPopupContainer
+              smallPreviewContentHeight={smallPreviewContentHeight}
+            >
+              <OfferPopup
+                open={designMode && !previewActive}
+                designMode={true}
+                designModeZoom={smallDesignModeZoom}
+                forceDisplayType={!previewActive ? themeDisplayType : undefined}
+                shop={shop}
+                theme={theme}
+                ThemeComponent={ThemeComponent}
+                offer={offer}
+                locale="en"
+                countryCode="US"
+                currency="USD"
+                triggerProduct={dummyData.triggerProduct}
+                offeredProducts={dummyData.offeredProducts}
+                onClose={handleClosePreview}
+                onClick={!isInline ? handlePreview : undefined}
+              />
+            </SmallPreviewOfferPopupContainer>
           </Sticky>
         </Layout.Section>
         <Layout.Section>
