@@ -13,8 +13,8 @@ const Dots = styled.div({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: ({ theme }) => (theme.enableBundling ? '2rem' : '2.25rem'),
-  marginBottom: ({ theme }) => (theme.enableBundling ? '2rem' : '0.5rem')
+  marginTop: '2rem',
+  marginBottom: ({ theme }) => (theme.enableBundling ? '2rem' : '1rem')
 });
 
 const DotContainer = styled.div({
@@ -103,11 +103,12 @@ const OfferedProducts = styled(({ className, children }) => {
     </>
   );
 })({
-  marginTop: '1rem',
+  marginTop: ['0.5rem', '1rem', '1rem', '1rem'],
   width: '100%',
   maxHeight: '460px',
   overflowY: ['initial', 'auto', 'auto', 'auto'],
   display: ['none', 'block', 'block', 'block'],
+  position: 'relative',
 
   '&.slider': {
     display: ['block', 'none', 'none', 'none'],
