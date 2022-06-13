@@ -59,14 +59,6 @@ const OfferOfferedProductsEditor = ({
     }
   };
 
-  const handleProductSelection = (value) => {
-    offeredProducts.onChange(value);
-  };
-
-  const handleCollectionSelection = (value) => {
-    offeredCollections.onChange(value);
-  };
-
   const removeProduct = (shopifyProductId) => {
     offeredProducts.onChange(
       offeredProducts.value.filter(
@@ -121,12 +113,10 @@ const OfferOfferedProductsEditor = ({
                   {
                     label: 'Specific products',
                     value: 'PRODUCTS'
-                    // helpText: `Up to three selected products will be shown at random and offered as ${offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'}s.`
                   },
                   {
                     label: 'Specific collections',
                     value: 'COLLECTIONS'
-                    // helpText: `Up to three products from selected collections will be shown at random and offered as ${offer.strategy === 'UPSELL' ? 'upsell' : 'cross-sell'}s.`
                   }
                 ]}
                 selected={[appliesTo]}
@@ -137,7 +127,7 @@ const OfferOfferedProductsEditor = ({
               <ProductResourceList
                 label="Offered products"
                 items={offeredProducts.value}
-                onChange={handleProductSelection}
+                onChange={offeredProducts.onChange}
                 onRemoveItem={removeProduct}
               />
             )}
@@ -145,7 +135,7 @@ const OfferOfferedProductsEditor = ({
               <CollectionResourceList
                 label="Offered collections"
                 items={offeredCollections.value}
-                onChange={handleCollectionSelection}
+                onChange={offeredCollections.onChange}
                 onRemoveItem={removeCollection}
               />
             )}
