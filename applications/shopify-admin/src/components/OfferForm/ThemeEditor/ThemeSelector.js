@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import {
   OptionList,
   DisplayText,
-  TextField,
   Button,
   Card,
   Tabs,
-  Icon,
   Sheet,
   TextContainer,
   Heading,
@@ -17,7 +15,7 @@ import {
   EmptyState,
   Stack
 } from '@shopify/polaris';
-import { SearchMinor, MobileCancelMajor } from '@shopify/polaris-icons';
+import { MobileCancelMajor } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import styled from 'styled-components';
 
@@ -143,7 +141,7 @@ const ThemeSelector = ({
   onOfferThemeSelect,
   onClose
 }) => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(theme?._id ? 0 : 1);
   const [selectedTheme, setSelectedTheme] = useState([
     offerThemes.find(
       (current) => current.__id_offerForm === theme?.__id_offerForm
@@ -275,12 +273,6 @@ const ThemeSelector = ({
                 <>
                   {themeOptions?.length > 0 && (
                     <Stack vertical spacing="tight">
-                      <TextField
-                        type="search"
-                        placeholder="Search"
-                        prefix={<Icon source={SearchMinor} />}
-                        onChange={() => {}}
-                      />
                       {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
                         <TextContainer>
                           <Banner>
