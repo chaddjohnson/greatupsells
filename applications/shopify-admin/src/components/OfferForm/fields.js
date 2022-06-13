@@ -125,16 +125,19 @@ const useFields = (initialOffer, showEndDate) => {
     [minimumRequirement.value]
   );
   const offeredCollections = useField(initialOffer.offeredCollections);
-  const offeredProducts = useField({
-    value: initialOffer.offeredProducts,
-    validates: [
-      (value) => {
-        if (!value?.length && !offeredCollections.value.length) {
-          return 'One or more offered products or collections are required';
+  const offeredProducts = useField(
+    {
+      value: initialOffer.offeredProducts,
+      validates: [
+        (value) => {
+          if (!value?.length && !offeredCollections.value.length) {
+            return 'One or more offered products or collections are required';
+          }
         }
-      }
-    ]
-  });
+      ]
+    },
+    [offeredCollections.value]
+  );
   const maximumOfferedProductQuantity = useField({
     value: initialOffer.maximumOfferedProductQuantity?.toString(),
     validates: [
