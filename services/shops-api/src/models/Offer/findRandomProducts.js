@@ -79,11 +79,13 @@ const findRandomProducts = async (offer) => {
   );
 
   // Filter variants for only those offered.
-  randomProducts.forEach((randomProduct) => {
-    randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
-      (variant) => offeredShopifyVariantIds.includes(variant.id)
-    );
-  });
+  if (offeredShopifyVariantIds.length > 0 && offeredCollections.length === 0) {
+    randomProducts.forEach((randomProduct) => {
+      randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
+        (variant) => offeredShopifyVariantIds.includes(variant.id)
+      );
+    });
+  }
 
   return randomProducts;
 };
