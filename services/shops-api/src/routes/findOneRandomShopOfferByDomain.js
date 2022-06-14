@@ -59,7 +59,7 @@ const findPopupData = async (
   const [theme, triggerProduct, offeredProducts] = await Promise.all([
     Theme.findById(offer.theme),
     findRandomProduct(shopifyProductIds),
-    offer.findRandomProducts()
+    offer.findRandomProducts(shopifyProductIds)
   ]);
 
   // Reduce payload size.

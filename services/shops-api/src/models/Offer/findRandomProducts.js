@@ -1,7 +1,7 @@
 const { flatten, uniq } = require('lodash');
 const models = require('..');
 
-const findRandomProducts = async (offer) => {
+const findRandomProducts = async (offer, shopifyCartProductIds = []) => {
   const [Product] = await Promise.all([
     models.get('Product'),
     models.get('Shop')
@@ -59,6 +59,7 @@ const findRandomProducts = async (offer) => {
   const criteria = {
     shop: shop._id,
     $and: andCriteria,
+    shopifyProductId: { $nin: shopifyCartProductIds },
     'shopifyProductData.published_at': { $ne: null }
   };
 
