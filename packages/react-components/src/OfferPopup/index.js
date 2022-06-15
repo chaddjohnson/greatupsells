@@ -70,6 +70,7 @@ const OfferPopup = ({
 }) => {
   const [frameRef, setFrameRef] = useState(null);
   const [modalRef, setModalRef] = useState(null);
+  const [upsellAccepted, setUpsellAccepted] = useState(false);
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
@@ -128,7 +129,7 @@ const OfferPopup = ({
       onClose();
 
       // Reload the cart on upsell so that new items show.
-      if (isCartUpsell) {
+      if (isCartUpsell && upsellAccepted) {
         window.location.reload();
       }
     }, 350);
@@ -142,6 +143,11 @@ const OfferPopup = ({
         modalRef.focus();
       });
     }
+  };
+
+  const handleReplaceProduct = async (...args) => {
+    setUpsellAccepted(true);
+    await onReplaceProduct(...args);
   };
 
   if (!open) {
@@ -259,7 +265,7 @@ const OfferPopup = ({
                       forceDisplayType={forceDisplayType}
                       handlers={{ handleClose, handleSubmit }}
                       onAddProducts={onAddProducts}
-                      onReplaceProduct={onReplaceProduct}
+                      onReplaceProduct={handleReplaceProduct}
                     />
                   </ContentContainer>
                   {designMode && <Mask onClick={onClick} />}
