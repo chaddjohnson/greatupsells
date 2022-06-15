@@ -5,7 +5,11 @@ import {
   usePushStateListener,
   useDocumentVisibility
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance } from '../../hooks';
+import {
+  useOfferTracking,
+  useOfferAcceptance,
+  useShopifyCart
+} from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -35,6 +39,7 @@ const LostBrowserFocusOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
+  const { findTriggerProductShopifyVariantId } = useShopifyCart();
 
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
@@ -45,6 +50,9 @@ const LostBrowserFocusOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
+      triggerProduct
+    );
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -54,9 +62,17 @@ const LostBrowserFocusOffer = ({
     trackOfferImpression({
       offerId,
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    onOpen,
+    triggerProduct,
+    offeredProducts,
+    findTriggerProductShopifyVariantId,
+    trackOfferImpression,
+    offerId
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);

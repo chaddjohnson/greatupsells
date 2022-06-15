@@ -5,7 +5,11 @@ import {
   usePushStateListener,
   useEventListener
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance } from '../../hooks';
+import {
+  useOfferTracking,
+  useOfferAcceptance,
+  useShopifyCart
+} from '../../hooks';
 
 // IE9+ polyfill for `.closest()`.
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
@@ -53,6 +57,7 @@ const LinkClickOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
+  const { findTriggerProductShopifyVariantId } = useShopifyCart();
 
   const offerId = offer?._id;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -62,6 +67,9 @@ const LinkClickOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
+      triggerProduct
+    );
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -71,9 +79,17 @@ const LinkClickOffer = ({
     trackOfferImpression({
       offerId,
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    onOpen,
+    triggerProduct,
+    offeredProducts,
+    findTriggerProductShopifyVariantId,
+    trackOfferImpression,
+    offerId
+  ]);
 
   const handleLinkClick = useCallback(
     (event) => {

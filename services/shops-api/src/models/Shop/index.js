@@ -78,7 +78,7 @@ const schema = new mongoose.Schema(
     offerAcceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionRate: { type: Number, required: true, default: 0.0, min: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
     onlineStore2Theme: { type: Boolean, required: true, default: false }
   },
   schemaOptions

@@ -11,6 +11,7 @@ const useOfferTracking = () => {
   const trackOfferImpression = async ({
     offerId,
     triggerShopifyProductId = undefined,
+    triggerShopifyVariantId = undefined,
     offeredShopifyProductIds = []
   }) => {
     // Retrieve local event and offer tracking data.
@@ -54,6 +55,7 @@ const useOfferTracking = () => {
     // Record an offer hit.
     const offerHit = await httpClient.post(`/offers/${offerId}/impressions`, {
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
 

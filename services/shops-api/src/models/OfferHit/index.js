@@ -42,7 +42,10 @@ const schema = new mongoose.Schema(
       enum: ['ADD', 'EXIT', 'LOAD', 'FOCUS', 'SCROLL', 'LINK']
     },
     triggerPagePath: { type: String, required: false },
-    triggerShopifyProductId: { type: Number, required: false },
+    triggerProduct: {
+      shopifyProductId: { type: Number, required: false },
+      shopifyVariantId: { type: Number, required: false }
+    },
     offeredProducts: [
       {
         shopifyProductId: { type: Number, required: true }
@@ -68,7 +71,7 @@ const schema = new mongoose.Schema(
     ipAddress: { type: String, required: false },
     acceptedAt: { type: Date, required: false },
     convertedAt: { type: Date, required: false },
-    revenueIncrease: { type: Number, required: false, min: 0 }
+    revenueIncrease: { type: Number, required: false }
   },
   schemaOptions
 );

@@ -6,6 +6,7 @@ const trackImpression = async (
   offer,
   {
     triggerShopifyProductId = undefined,
+    triggerShopifyVariantId = undefined,
     offeredShopifyProductIds = [],
     ipAddress = undefined
   }
@@ -25,6 +26,11 @@ const trackImpression = async (
     triggerEvent,
     triggerPagePath
   } = offer;
+  const triggerProduct = triggerShopifyProductId &&
+    triggerShopifyVariantId && {
+      shopifyProductId: triggerShopifyProductId,
+      shopifyVariantId: triggerShopifyVariantId
+    };
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,
@@ -32,7 +38,7 @@ const trackImpression = async (
     strategy,
     triggerEvent,
     triggerPagePath,
-    triggerShopifyProductId,
+    triggerProduct,
     ipAddress
   });
 

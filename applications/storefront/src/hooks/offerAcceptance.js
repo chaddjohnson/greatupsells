@@ -98,7 +98,6 @@ const useOfferAcceptance = () => {
 
     if (shopifyDraftOrderId) {
       // Add the new variant to the draft order.
-
       draftOrder = await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, [
         {
           offerId,

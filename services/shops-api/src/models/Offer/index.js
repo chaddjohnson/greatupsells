@@ -49,7 +49,7 @@ const schema = new mongoose.Schema(
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionRate: { type: Number, required: true, default: 0.0, min: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
     actionButtonBehavior: {
       type: String,
       required() {

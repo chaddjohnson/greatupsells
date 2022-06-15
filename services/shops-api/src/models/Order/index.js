@@ -17,7 +17,7 @@ const schema = new mongoose.Schema(
     shopifyOrderId: { type: Number, required: true },
     shopifyOrderNumber: { type: Int32, required: true },
     shopifyOrderData: { type: mongoose.Schema.Types.Mixed, required: true },
-    revenueIncrease: { type: Number, required: true, default: 0, min: 0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
     canceledAt: { type: Date, required: false }
   },
   schemaOptions

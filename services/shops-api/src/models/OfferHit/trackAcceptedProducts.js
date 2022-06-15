@@ -14,26 +14,55 @@ const trackAcceptedProducts = async (offerHit, shopifyDraftOrderId, items) => {
         return;
       }
 
-      const product = await Product.findOneByShopifyProductId(shopifyProductId);
-      const { offer } = offerHit;
+      const { offer, triggerProduct } = offerHit;
+      const {
+        shopifyProductId: triggerShopifyProductId,
+        shopifyVariantId: triggerShopifyVariantId
+      } = triggerProduct;
+      const { strategy } = offer;
+      const originalShopifyProductId =
+        strategy === 'UPSELL' ? triggerShopifyProductId : shopifyProductId;
+      const originalShopifyVariantId =
+        strategy === 'UPSELL' ? triggerShopifyVariantId : shopifyVariantId;
+      const originalProduct = await Product.findOneByShopifyProductId(
+        originalShopifyProductId
+      );
+      const acceptedProduct = await Product.findOneByShopifyProductId(
+        shopifyProductId
+      );
 
       // Get a reference to the variant in the Shopify data.
-      const variant = product?.shopifyProductData?.variants.find(
+      const originalVariant = originalProduct?.shopifyProductData?.variants.find(
+        ({ id }) => id === originalShopifyVariantId
+      );
+      const acceptedVariant = acceptedProduct?.shopifyProductData?.variants.find(
         ({ id }) => id === shopifyVariantId
       );
 
-      if (!product) {
+      if (!originalProduct) {
+        throw new Error(
+          `Unable to find Shopify product ${originalShopifyProductId}`
+        );
+      }
+      if (!acceptedProduct) {
         throw new Error(`Unable to find Shopify product ${shopifyProductId}`);
       }
-
-      if (!variant) {
+      if (!originalVariant) {
         throw new Error(
-          `Unable to find Shopify product variant ${shopifyVariantId} for product (${product.toString()})`
+          `Unable to find Shopify product variant ${originalShopifyVariantId} for product (${originalProduct.toString()})`
+        );
+      }
+      if (!acceptedVariant) {
+        throw new Error(
+          `Unable to find Shopify product variant ${shopifyVariantId} for product (${acceptedProduct.toString()})`
         );
       }
 
-      const originalPrice = parseFloat(variant.price);
-      const acceptedPrice = offer.calculateDiscountedPrice(originalPrice);
+      const originalPrice = parseFloat(originalVariant.price);
+      const acceptedProductPrice = parseFloat(acceptedVariant.price);
+      const acceptedPrice = offer.calculateDiscountedPrice(
+        acceptedProductPrice
+      );
 
       return {
         shopifyProductId,
