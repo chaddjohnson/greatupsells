@@ -117,10 +117,12 @@ const useOfferAcceptance = () => {
             shopifyVariantId,
             quantity
           },
-          ...shopifyCartItems.map((item) => ({
-            shopifyVariantId: item.variant_id,
-            quantity: item.quantity
-          }))
+          ...shopifyCartItems
+            .filter((item, index) => index !== triggerShopifyCartItemIndex)
+            .map((item) => ({
+              shopifyVariantId: item.variant_id,
+              quantity: item.quantity
+            }))
         ]
       });
 
@@ -143,11 +145,11 @@ const useOfferAcceptance = () => {
       );
     }
 
-    // Add the accepted variant to the Shopify cart.
-    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
-
     // Remove the trigger product from Shopify cart.
     await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
+
+    // Add the accepted variant to the Shopify cart.
+    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
 
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
