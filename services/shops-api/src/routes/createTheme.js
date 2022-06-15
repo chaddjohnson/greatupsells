@@ -29,9 +29,6 @@ const handler = async (event, context) => {
     }
 
     await theme.save();
-    await logger.info(`Theme created`, {
-      theme: omit(theme, ['thumbnailImageUrl'])
-    });
 
     return {
       statusCode: StatusCodes.CREATED,
