@@ -55,7 +55,6 @@ const schema = new mongoose.Schema(
         ]
       }
     ],
-    categories: [{ type: String, required: true, trim: true }],
     thumbnailImageUrl: { type: String, required: true },
     description: { type: String, required: false },
     variables: [variablesSchema],

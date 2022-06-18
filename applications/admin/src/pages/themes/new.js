@@ -92,7 +92,6 @@ const initialValues = {
   name: '',
   displayOrder: 1,
   strategies: ['UPSELL', 'CROSS_SELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE'],
-  categories: [],
   thumbnailImageUrl: '',
   description: '',
   template: {
