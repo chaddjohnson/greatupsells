@@ -538,7 +538,13 @@ const OfferForm = ({
             discountTitle={discountTitle}
             submitted={submitted}
           />
-          <OfferBundlingEditor offer={offer} enableBundling={enableBundling} />
+          {(!theme.maximumOfferedProductQuantity ||
+            theme.maximumOfferedProductQuantity > 1) && (
+            <OfferBundlingEditor
+              offer={offer}
+              enableBundling={enableBundling}
+            />
+          )}
           <OfferDatesEditor
             offer={offer}
             startAt={startAt}
