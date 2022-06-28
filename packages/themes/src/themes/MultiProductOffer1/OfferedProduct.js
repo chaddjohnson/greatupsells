@@ -98,9 +98,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
             href={selectedVariant.url}
             target="_blank"
             rel="noopener noreferrer"
-          >
-            {offeredProduct.title}
-          </OfferedProductTitle>
+            dangerouslySetInnerHTML={{ __html: offeredProduct.title }}
+          />
         </div>
         {showPrices && (
           <OfferedProductPrices>

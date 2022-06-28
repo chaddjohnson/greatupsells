@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useTheme } from 'styled-components';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 
@@ -36,9 +37,8 @@ const OfferedProductPrice = styled.s({
 });
 
 const OfferedProduct = styled(({ className }) => {
-  const { offeredProducts, selectedVariants, showOriginalPrice } = useContext(
-    StateContext
-  );
+  const { showOriginalPrice } = useTheme();
+  const { offeredProducts, selectedVariants } = useContext(StateContext);
   const offeredProduct = offeredProducts[0];
   const selectedVariant = selectedVariants[0];
 
@@ -54,7 +54,9 @@ const OfferedProduct = styled(({ className }) => {
           src={selectedVariant.image.src}
           alt={selectedVariant.image.alt}
         />
-        <OfferedProductTitle>{offeredProduct.title}</OfferedProductTitle>
+        <OfferedProductTitle
+          dangerouslySetInnerHTML={{ __html: offeredProduct.title }}
+        />
         <OfferedProductPrices>
           <OfferedProductSalePrice>
             {selectedVariant.salePriceFormatted}
