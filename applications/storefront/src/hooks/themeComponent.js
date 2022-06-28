@@ -44,6 +44,12 @@ const useThemeComponent = (key) => {
         );
         break;
 
+      case 'SingleProductOffer2':
+        themeModule = await import(
+          /* webpackChunkName: "SingleProductOffer2" */ '@greatupsells/themes/SingleProductOffer2'
+        );
+        break;
+
       default:
         break;
     }

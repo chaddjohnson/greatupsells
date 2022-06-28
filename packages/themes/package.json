@@ -34,6 +34,7 @@
     "./MultiProductOffer1": "./dist/MultiProductOffer1",
     "./MultiProductOffer2": "./dist/MultiProductOffer2",
     "./MultiProductThankYouOffer1": "./dist/MultiProductThankYouOffer1",
-    "./SingleProductOffer1": "./dist/SingleProductOffer1"
+    "./SingleProductOffer1": "./dist/SingleProductOffer1",
+    "./SingleProductOffer2": "./dist/SingleProductOffer2"
   }
 }
