@@ -35,6 +35,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
       const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
+        description: shopifyProductData.body_html,
         url: `/products/${shopifyProductData.handle}`,
         image: {
           src: getThumbnailImageUrl(shopifyProductData.image?.src),
