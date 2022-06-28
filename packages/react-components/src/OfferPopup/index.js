@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
@@ -149,6 +149,12 @@ const OfferPopup = ({
     setUpsellAccepted(true);
     await onReplaceProduct(...args);
   };
+
+  useEffect(() => {
+    // Reload the iframe if the strategy changes (in design mode) to ensure the correct dummy data displays.
+    // This is a workaround for images not showing correctly.
+    frameRef?.contentWindow.location.reload();
+  }, [frameRef, offer.strategy]);
 
   if (!open) {
     return null;
