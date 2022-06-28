@@ -259,13 +259,15 @@ const ThemeSelector = ({
                       remain available here.
                     </Banner>
                   </TextContainer>
-                  <Card>
-                    <OptionList
-                      options={offerThemeOptions}
-                      selected={selectedTheme}
-                      onChange={handleThemeSelect}
-                    />
-                  </Card>
+                  {offerThemeOptions?.length > 0 && (
+                    <Card>
+                      <OptionList
+                        options={offerThemeOptions}
+                        selected={selectedTheme}
+                        onChange={handleThemeSelect}
+                      />
+                    </Card>
+                  )}
                   {!offerThemeOptions?.length && <EmptyComponent />}
                 </Stack>
               )}
