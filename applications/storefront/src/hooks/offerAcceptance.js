@@ -96,6 +96,12 @@ const useOfferAcceptance = () => {
       return;
     }
 
+    // Remove the trigger product from Shopify cart.
+    await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
+
+    // Add the accepted variant to the Shopify cart.
+    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
+
     if (shopifyDraftOrderId) {
       // Add the new variant to the draft order.
       draftOrder = await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, [
@@ -144,12 +150,6 @@ const useOfferAcceptance = () => {
         }
       );
     }
-
-    // Remove the trigger product from Shopify cart.
-    await removeVariantFromShopifyCart(triggerShopifyVariantId, 1);
-
-    // Add the accepted variant to the Shopify cart.
-    await addVariantsToShopifyCart([{ shopifyVariantId, quantity }]);
 
     // Accept the offer.
     await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
