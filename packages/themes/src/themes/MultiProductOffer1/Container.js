@@ -9,7 +9,7 @@ const Container = styled.div({
   width: '600px',
   height: 'auto',
   maxWidth: '100%',
-  maxHeight: '100vh',
+  maxHeight: 'calc(100vh - 5rem)',
   overflowX: 'clip',
   overflowY: ['clip', 'auto', 'auto', 'auto'],
   margin: 'auto',
@@ -31,7 +31,11 @@ const Container = styled.div({
   /* Reference: https://gist.github.com/chemicaloliver/1234670 */
   WebkitBackgroundClip: 'padding-box',
   MozBackgroundClip: 'padding-box',
-  backgroundClip: 'padding-box'
+  backgroundClip: 'padding-box',
+
+  '@media (max-width: 1023px) and (orientation: landscape)': {
+    maxHeight: 'calc(100vh - 1.5rem)'
+  }
 });
 
 export default Container;

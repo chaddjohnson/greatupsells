@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
@@ -247,7 +247,11 @@ const OfferPopup = ({
                   onRequestClose={handleClose}
                   onAfterOpen={handleAfterOpen}
                 >
-                  <ContentContainer className="content-container">
+                  <ContentContainer
+                    className="content-container"
+                    designMode={designMode}
+                    forceDisplayType={forceDisplayType}
+                  >
                     <OfferTheme
                       context={frameRef?.contentWindow}
                       shop={shop}

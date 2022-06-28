@@ -10,7 +10,6 @@ const Container = styled.div({
   height: 'auto',
   maxWidth: '100%',
   maxHeight: '100vh',
-  padding: ['1.5rem', '2.5rem', '2.5rem', '2.5rem'],
   margin: 'auto',
   borderRadius: '6px',
   textAlign: 'center',
