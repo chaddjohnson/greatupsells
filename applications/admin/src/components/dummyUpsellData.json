@@ -64,6 +64,7 @@
     "shopifyProductData": {
       "id": 6671365177389.0,
       "title": "Simple Shoes",
+      "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
       "handle": "simple-shoes",
       "variants": [
         {
@@ -356,6 +357,7 @@
       "shopifyProductData": {
         "id": 6671390801965.0,
         "title": "Better Shoes",
+        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
         "handle": "better-shoes",
         "variants": [
           {
@@ -482,6 +484,7 @@
       "shopifyProductData": {
         "id": 6671402762285.0,
         "title": "Fancy Shoes",
+        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
         "handle": "fancy-shoes-1",
         "variants": [
           {
@@ -663,6 +666,7 @@
       "shopifyProductData": {
         "id": 6671415181357.0,
         "title": "Super Fancy Shoes",
+        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
         "handle": "super-fancy-shoes",
         "variants": [
           {
