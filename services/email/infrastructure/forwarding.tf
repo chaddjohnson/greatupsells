@@ -97,7 +97,7 @@ resource "aws_lambda_function" "forward" {
   function_name    = "forward-${terraform.workspace}"
   role             = aws_iam_role.forward_lambda_role.arn
   handler          = "forward.handler"
-  runtime          = "nodejs14.x"
+  runtime          = "nodejs16.x"
   memory_size      = 128
   timeout          = 10
   source_code_hash = data.archive_file.forward_handler.output_base64sha256
