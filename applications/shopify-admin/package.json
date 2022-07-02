@@ -58,6 +58,9 @@
     "@greatupsells/http-client": "0.0.0",
     "@greatupsells/react-components": "0.0.0",
     "@greatupsells/react-hooks": "0.0.0",
+    "@shopify/app": "3.0.25",
+    "@shopify/cli": "3.0.25",
+    "@shopify/post-purchase-ui-extensions-react": "^0.13.3",
     "babel-plugin-styled-components": "^1.10.7",
     "babel-plugin-transform-imports": "^2.0.0",
     "nodemon": "^2.0.7",
@@ -71,6 +74,12 @@
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
     "destroy": "cd infrastructure && ./destroy.sh",
-    "start": "nodemon -e js --exec \"node src/routes/server\" --watch src/routes"
+    "start": "nodemon -e js --exec \"node src/routes/server\" --watch src/routes",
+    "shopify": "shopify",
+    "extensions:build": "shopify app build",
+    "extensions:start": "shopify app dev",
+    "extensions:info": "shopify app info",
+    "extensions:scaffold": "shopify app scaffold",
+    "extensions:deploy": "shopify app deploy"
   }
 }
