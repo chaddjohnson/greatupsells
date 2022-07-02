@@ -20,3 +20,4 @@ pm2.json
 /archive
 .warmup
 **/infrastructure/**/*.zip
+package-lock.json
