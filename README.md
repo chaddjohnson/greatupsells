@@ -110,6 +110,15 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 
 Please use the `master` branch for main development.
 
+### Shopify App Extensions
+
+To run and develop Shopify app extensions locally (such as post-checkout upsells):
+
+1. Open a terminal, and change the working directory to `applications/shopify-admin`.
+1. Run `yarn extensions:start` to start extensions.
+1. Follow instructions on screen.
+1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
+
 ### Troubleshooting
 
 #### Ports already in use
