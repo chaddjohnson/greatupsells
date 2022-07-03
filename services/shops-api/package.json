@@ -35,11 +35,11 @@
   "devDependencies": {
     "aws-sdk": "^2.1032.0",
     "nodemon": "^2.0.7",
-    "serverless": "^2.43.1",
+    "serverless": "^3.19.0",
     "serverless-domain-manager": "git+https://github.com/neatowebsolutions/serverless-domain-manager.git#166aff6a8bcb09047e344e1fd6d67638bbfaeaed",
-    "serverless-offline": "^8.3.1",
+    "serverless-offline": "^8.8.0",
     "serverless-plugin-conditional-functions": "^1.0.6",
     "serverless-plugin-monorepo": "^0.10.0",
-    "serverless-plugin-warmup": "^5.3.1"
+    "serverless-plugin-warmup": "^7.1.0"
   }
 }
