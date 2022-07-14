@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/shopify-admin.yml
       - applications/shopify-admin/**
-      - packages/http-client
+      - packages/gateway-http-client
       - packages/react-components
       - packages/react-hooks
 jobs:

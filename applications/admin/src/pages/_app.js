@@ -2,25 +2,22 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
+import { HttpClientProvider } from '@greatupsells/react-hooks';
 import theme from '../theme';
 import { ToastProvider } from '../hooks';
 import '../theme/index.css';
 
-const httpClient = new HttpClient({
-  baseUrl: process.env.ADMIN_API_URL
-});
-
 // Add the token to each request.
-httpClient.addRequestInterceptor((config) => {
+const httpRequestInterceptor = (config) => {
   const token = sessionStorage.authToken;
 
   if (token) {
+    config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;
-});
+};
 
 const App = ({ Component, ...pageProps }) => {
   // Remove the server-side injected CSS.
@@ -37,7 +34,10 @@ const App = ({ Component, ...pageProps }) => {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <HttpClientProvider httpClient={httpClient}>
+      <HttpClientProvider
+        baseUrl={process.env.ADMIN_API_URL}
+        requestInterceptor={httpRequestInterceptor}
+      >
         <ThemeProvider theme={theme}>
           <ToastProvider>
             <CssBaseline />

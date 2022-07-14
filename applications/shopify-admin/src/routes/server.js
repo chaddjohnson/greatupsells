@@ -10,13 +10,11 @@ const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const shopifyAuth = require('@shopify/koa-shopify-auth').default;
 const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 const RedisStore = require('../utilities/RedisStore');
 
 const {
   NODE_ENV,
-  AWS_REGION,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_APP_API_SECRET_KEY,
   SHOPIFY_ADMIN_APP_URL,
@@ -34,13 +32,6 @@ const shopsServiceHttpClient = new HttpClient({
 });
 
 const sessionStorage = new RedisStore(REDIS_URL_APP);
-
-shopsServiceHttpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 Shopify.Context.initialize({
   API_KEY: SHOPIFY_ADMIN_APP_API_KEY,

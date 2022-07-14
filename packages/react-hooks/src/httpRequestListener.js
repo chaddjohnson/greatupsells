@@ -89,7 +89,7 @@ if (originalFetch) {
     const response = await request;
     const clonedResponse = response.clone();
     const isJson =
-      config?.headers?.['Content-Type'].toLowerCase() === 'application/json';
+      config?.headers?.['Content-Type']?.toLowerCase() === 'application/json';
     const responseData = isJson
       ? await clonedResponse.json()
       : await clonedResponse.text();

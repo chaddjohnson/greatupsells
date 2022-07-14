@@ -5,22 +5,14 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
-const { aws4Interceptor } = require('aws4-axios');
 const qs = require('qs');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 
-const { AWS_REGION, LOGS_API_URL } = process.env;
+const { LOGS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: LOGS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

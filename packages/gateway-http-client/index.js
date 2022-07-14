@@ -1,4 +1,7 @@
-import axios from 'axios';
+const axios = require('axios');
+const { aws4Interceptor } = require('aws4-axios');
+
+const { AWS_REGION } = process.env;
 
 class HttpClient {
   constructor({ baseUrl, ...options }) {
@@ -21,13 +24,19 @@ class HttpClient {
       ...options
     };
 
+    client.interceptors.request.use(
+      aws4Interceptor({
+        region: AWS_REGION,
+        service: 'execute-api'
+      })
+    );
+
     this.client = client;
   }
 
   // Axios options may be passed for `options`. See https://www.npmjs.com/package/axios#request-config.
   async request(method, url, data = null, options = {}) {
     const response = await this.client({ method, url, data, ...options });
-
     return response && response.data;
   }
 
@@ -52,4 +61,4 @@ class HttpClient {
   }
 }
 
-export default HttpClient;
+module.exports = HttpClient;
