@@ -14,6 +14,7 @@ module.exports = {
     MultiProductOffer1: './src/themes/MultiProductOffer1',
     MultiProductOffer2: './src/themes/MultiProductOffer2',
     MultiProductThankYouOffer1: './src/themes/MultiProductThankYouOffer1',
+    PostCheckoutOffer1: './src/themes/PostCheckoutOffer1',
     SingleProductOffer1: './src/themes/SingleProductOffer1',
     SingleProductOffer2: './src/themes/SingleProductOffer2'
   },

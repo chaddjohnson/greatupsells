@@ -38,6 +38,12 @@ const useThemeComponent = (key) => {
         );
         break;
 
+      case 'PostCheckoutOffer1':
+        themeModule = await import(
+          /* webpackChunkName: "PostCheckoutOffer1" */ '@greatupsells/themes/PostCheckoutOffer1'
+        );
+        break;
+
       case 'SingleProductOffer1':
         themeModule = await import(
           /* webpackChunkName: "SingleProductOffer1" */ '@greatupsells/themes/SingleProductOffer1'

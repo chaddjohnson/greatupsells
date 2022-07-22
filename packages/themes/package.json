@@ -10,6 +10,7 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
     "@greatupsells/styled-with-facepaint": "0.0.0",
+    "@shopify/post-purchase-ui-extensions-react": "^0.13.3",
     "clsx": "^1.1.1",
     "css-loader": "^3.5.3",
     "preact": "^10.5.13",
@@ -34,6 +35,7 @@
     "./MultiProductOffer1": "./dist/MultiProductOffer1",
     "./MultiProductOffer2": "./dist/MultiProductOffer2",
     "./MultiProductThankYouOffer1": "./dist/MultiProductThankYouOffer1",
+    "./PostCheckoutOffer1": "./dist/PostCheckoutOffer1",
     "./SingleProductOffer1": "./dist/SingleProductOffer1",
     "./SingleProductOffer2": "./dist/SingleProductOffer2"
   }

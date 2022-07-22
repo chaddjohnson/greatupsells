@@ -1,6 +1,7 @@
 import MultiProductOffer1 from '@greatupsells/themes/MultiProductOffer1';
 import MultiProductOffer2 from '@greatupsells/themes/MultiProductOffer2';
 import MultiProductThankYouOffer1 from '@greatupsells/themes/MultiProductThankYouOffer1';
+import PostCheckoutOffer1 from '@greatupsells/themes/PostCheckoutOffer1';
 import SingleProductOffer1 from '@greatupsells/themes/SingleProductOffer1';
 import SingleProductOffer2 from '@greatupsells/themes/SingleProductOffer2';
 
@@ -9,6 +10,7 @@ const useThemeComponent = (key) => {
     MultiProductOffer1,
     MultiProductOffer2,
     MultiProductThankYouOffer1,
+    PostCheckoutOffer1,
     SingleProductOffer1,
     SingleProductOffer2
   };

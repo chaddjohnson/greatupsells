@@ -9,19 +9,8 @@
  */
 import React from 'react';
 
-import {
-  extend,
-  render,
-  BlockStack,
-  Button,
-  CalloutBanner,
-  Heading,
-  Image,
-  Layout,
-  TextBlock,
-  TextContainer,
-  View
-} from '@shopify/post-purchase-ui-extensions-react';
+import { extend, render } from '@shopify/post-purchase-ui-extensions-react';
+import PostCheckoutOffer1 from '../../../../../packages/themes/dist/PostCheckoutOffer1';
 
 /**
  * Entry point for the `ShouldRender` Extension Point.
@@ -63,47 +52,26 @@ render('Checkout::PostPurchase::Render', App);
 // Top-level React component
 export function App({ extensionPoint, storage }) {
   const initialState = storage.initialData;
+  const state = {};
+  const forceDisplayType = 'desktop';
+  // const ThemeComponent = useThemeComponent('PostCheckoutOffer1');
+  // const themeVariables = useOfferThemeVariables(offer, theme);
+  const themeVariables = {
+    showOriginalPrice: 'true',
+    salePriceTextColor: '#3D4246',
+    buttonTextColor: '#FFFFFF',
+    buttonBackgroundColor: '#1878b9',
+    addButtonText: 'Buy now',
+    originalPriceTextColor: '#999999',
+    productTitleTextColor: '#3D4246',
+    showPrices: 'true',
+    titleText: 'Recommended'
+  };
 
   return (
-    <BlockStack spacing="loose">
-      <CalloutBanner title="Post-purchase extension template">
-        Use this template as a starting point to build a great post-purchase
-        extension.
-      </CalloutBanner>
-      <Layout
-        maxInlineSize={0.95}
-        media={[
-          { viewportSize: 'small', sizes: [1, 30, 1] },
-          { viewportSize: 'medium', sizes: [300, 30, 0.5] },
-          { viewportSize: 'large', sizes: [400, 30, 0.33] }
-        ]}
-      >
-        <View>
-          <Image
-            source="https://cdn.shopify.com/static/images/examples/img-placeholder-1120x1120.png"
-            alt="Placeholder"
-          />
-        </View>
-        <View />
-        <BlockStack spacing="xloose">
-          <TextContainer>
-            <Heading>Post-purchase extension</Heading>
-            <TextBlock>
-              Here you can cross-sell other products, request a product review
-              based on a previous purchase, and much more.
-            </TextBlock>
-          </TextContainer>
-          <Button
-            submit
-            onPress={() => {
-              // eslint-disable-next-line no-console
-              console.log(`Extension point ${extensionPoint}`, initialState);
-            }}
-          >
-            Primary button
-          </Button>
-        </BlockStack>
-      </Layout>
-    </BlockStack>
+    <PostCheckoutOffer1
+      theme={themeVariables}
+      state={{ ...state, forceDisplayType }}
+    />
   );
 }
