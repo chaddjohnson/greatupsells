@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 /**
  * Extend Shopify Checkout with a custom Post Purchase user experience.
  * This template provides two extension points:
@@ -8,9 +10,13 @@
  *     completes
  */
 import React from 'react';
-
 import { extend, render } from '@shopify/post-purchase-ui-extensions-react';
 import PostCheckoutOffer1 from '../../../../../packages/themes/dist/PostCheckoutOffer1';
+import useOfferThemeState from '../../../../../packages/react-components/src/OfferTheme/offerThemeState';
+import useOfferThemeVariables from '../../../../../packages/react-components/src/OfferTheme/offerThemeVariables';
+
+// TODO
+import dummyData from './dummyData.json';
 
 /**
  * Entry point for the `ShouldRender` Extension Point.
@@ -21,7 +27,7 @@ import PostCheckoutOffer1 from '../../../../../packages/themes/dist/PostCheckout
  */
 extend('Checkout::PostPurchase::ShouldRender', async ({ storage }) => {
   const initialState = await getRenderData();
-  const render = true;
+  const render = true; // eslint-disable-line no-shadow
 
   if (render) {
     // Saves initial state, provided to `Render` via `storage.initialData`
@@ -35,9 +41,7 @@ extend('Checkout::PostPurchase::ShouldRender', async ({ storage }) => {
 
 // Simulate results of network call, etc.
 async function getRenderData() {
-  return {
-    couldBe: 'anything'
-  };
+  return dummyData;
 }
 
 /**
@@ -49,29 +53,60 @@ async function getRenderData() {
  */
 render('Checkout::PostPurchase::Render', App);
 
-// Top-level React component
-export function App({ extensionPoint, storage }) {
-  const initialState = storage.initialData;
-  const state = {};
-  const forceDisplayType = 'desktop';
-  // const ThemeComponent = useThemeComponent('PostCheckoutOffer1');
-  // const themeVariables = useOfferThemeVariables(offer, theme);
-  const themeVariables = {
-    showOriginalPrice: 'true',
-    salePriceTextColor: '#3D4246',
-    buttonTextColor: '#FFFFFF',
-    buttonBackgroundColor: '#1878b9',
-    addButtonText: 'Buy now',
-    originalPriceTextColor: '#999999',
-    productTitleTextColor: '#3D4246',
-    showPrices: 'true',
-    titleText: 'Recommended'
-  };
+const OfferTheme = ({
+  offer,
+  theme,
+  triggerProduct,
+  offeredProducts,
+  forceDisplayType
+}) => {
+  const themeVariables = useOfferThemeVariables(offer, theme);
+
+  // TODO
+  const state = useOfferThemeState({
+    // TODO
+    shop: {
+      countryCode: 'US',
+      currency: 'USD',
+      locale: 'en',
+      timezone: 'America/New_York'
+    },
+    offer,
+    locale: 'en', // TODO
+    countryCode: 'US', // TODO
+    currency: 'USD', // TODO
+    triggerProduct,
+    offeredProducts,
+    shopifyCartItems: [], // TODO
+    shopifyCartTotal: 0, // TODO
+    shopifyCartItemCount: 0, // TODO
+    onAddProducts: () => {}, // TODO
+    onReplaceProduct: () => {}, // TODO
+    handlers: {
+      //
+    }
+  });
 
   return (
     <PostCheckoutOffer1
       theme={themeVariables}
       state={{ ...state, forceDisplayType }}
+    />
+  );
+};
+
+// Top-level React component
+export function App({ extensionPoint, storage }) {
+  const { offer, theme, triggerProduct, offeredProducts } = storage.initialData;
+  const forceDisplayType = 'desktop';
+
+  return (
+    <OfferTheme
+      offer={offer}
+      theme={theme}
+      triggerProduct={triggerProduct}
+      offeredProducts={offeredProducts}
+      forceDisplayType={forceDisplayType}
     />
   );
 }

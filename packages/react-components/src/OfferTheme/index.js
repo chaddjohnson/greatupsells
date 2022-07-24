@@ -24,7 +24,7 @@ const OfferTheme = ({
 }) => {
   const themeVariables = useOfferThemeVariables(offer, theme);
 
-  // Set up data binding for popup.
+  // Set up data binding for theme.
   const state = useOfferThemeState({
     shop,
     offer,

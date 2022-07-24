@@ -1,9 +1,9 @@
 import React, { useMemo, useCallback } from 'react';
 
-const loadScripts = () => {
-  const scriptUrls = ['https://cdn.shopify.com/s/javascripts/currencies.js'];
+const loadScripts = async () => {
+  const scriptUrl = 'https://cdn.shopify.com/s/javascripts/currencies.js';
 
-  scriptUrls.forEach((scriptUrl) => {
+  if (typeof window !== 'undefined') {
     const script = document.createElement('script');
 
     script.type = 'text/javascript';
@@ -11,7 +11,14 @@ const loadScripts = () => {
     script.async = true;
 
     document.head.appendChild(script);
-  });
+  } else {
+    // Load within web worker using fetch.
+    const response = await fetch(scriptUrl);
+    const text = await response.text();
+
+    // eslint-disable-next-line no-restricted-globals
+    self.eval(text);
+  }
 };
 
 const useCurrency = ({
@@ -48,11 +55,13 @@ const useCurrency = ({
 
   // Depends on https://cdn.shopify.com/s/javascripts/currencies.js being loaded.
   const convertCurrency = (amount, from, to) => {
-    if (!window.Currency?.convert) {
+    // eslint-disable-next-line no-restricted-globals
+    if (typeof self !== 'undefined' && !self?.Currency?.convert) {
       return amount;
     }
 
-    return window.Currency.convert(amount, from, to);
+    // eslint-disable-next-line no-restricted-globals
+    return self.Currency.convert(amount, from, to);
   };
 
   const getCurrencySymbol = useCallback(() => {
@@ -70,8 +79,6 @@ const useCurrency = ({
   };
 };
 
-if (typeof window !== 'undefined') {
-  loadScripts();
-}
+loadScripts();
 
 export default useCurrency;

@@ -57,10 +57,10 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
          addr: 4001
          proto: http
          subdomain: yourname-shopify-admin
-      greatupsells-storefront-api:
-         addr: 4006
+      greatupsells-shopify-extension:
+         addr: 4010
          proto: http
-         subdomain: yourname-storefront-api
+         subdomain: yourname-shopify-extension
       greatupsells-webhooks-service:
          addr: 4008
          proto: http
@@ -114,7 +114,8 @@ Please use the `master` branch for main development.
 
 To run and develop Shopify app extensions locally (such as post-checkout upsells):
 
-1. Open a terminal, and change the working directory to `applications/shopify-admin`.
+1. Run the app with `yarn start` from the top-level project directory.
+1. Open another terminal, and change the working directory to `applications/shopify-admin`.
 1. Run `yarn extensions:start` to start extensions.
 1. Follow instructions on screen.
 1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
