@@ -14,8 +14,7 @@
     "bootstrap": "dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@greatupsells/*",
     "prestart": "rm -f package-lock.json; yarn install && dotenv -- yarn bootstrap",
-    "start": "(ngrok start greatupsells-shopify-admin greatupsells-webhooks-service > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel",
-    "start:notunnel": "COLUMNS=120 dotenv -- lerna run start --parallel"
+    "start": "(ngrok start greatupsells-shopify-admin greatupsells-shopify-extension greatupsells-webhooks-service > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
