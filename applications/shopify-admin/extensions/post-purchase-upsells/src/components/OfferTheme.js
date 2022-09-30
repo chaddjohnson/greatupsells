@@ -99,7 +99,7 @@ const OfferTheme = ({
   });
 
   const subtotalPrice = useMemo(
-    () => calculateSubtotalPrice(calculatedPurchase),
+    () => calculateSubtotalPrice(calculatedPurchase)?.[0],
     [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const subtotalPriceFormatted = useMemo(() => {
@@ -115,7 +115,7 @@ const OfferTheme = ({
   }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const shippingPrice = useMemo(
-    () => calculateShippingPrice(calculatedPurchase),
+    () => calculateShippingPrice(calculatedPurchase)?.[0],
     [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const shippingPriceFormatted = useMemo(() => {
@@ -131,7 +131,7 @@ const OfferTheme = ({
   }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const taxPrice = useMemo(
-    () => calculateTaxPrice(calculatedPurchase),
+    () => calculateTaxPrice(calculatedPurchase)?.[0],
     [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const taxPriceFormatted = useMemo(() => {
@@ -147,7 +147,7 @@ const OfferTheme = ({
   }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const totalPrice = useMemo(
-    () => calculateTotalPrice(calculatedPurchase),
+    () => calculateTotalPrice(calculatedPurchase)?.[0],
     [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
   );
   const totalPriceFormatted = useMemo(() => {

@@ -161,15 +161,12 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
               <Separator />
               <Button
                 submit
-                loading={addingProduct[0]}
+                loading={addingProduct[0] || pricesLoading}
                 disabled={addingProduct[0]}
                 onPress={() => handleAddProduct(0)}
               >
-                {totalPrice > 0 ? (
-                  <>Pay now • {totalPriceFormatted}</>
-                ) : (
-                  <>Add now • Free</>
-                )}
+                {totalPrice > 0 && <>Pay now • {totalPriceFormatted}</>}
+                {totalPrice === 0 && <>Add now • Free</>}
               </Button>
               <Button subdued onPress={handleClose}>
                 Decline this offer
