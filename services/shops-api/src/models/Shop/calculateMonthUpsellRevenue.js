@@ -73,7 +73,7 @@ const calculateMonthUpsellRevenue = async (shop) => {
     try {
       total = await convertToUSD(total, shop.currency);
     } catch (error) {
-      await logger.error('Unable to convert currency');
+      await logger.error('Unable to convert currency', error, { shop });
     }
   }
 
