@@ -24,6 +24,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
   const {
     offeredProducts,
     selectedVariants,
+    maxQuantities,
     subtotalPriceFormatted,
     shippingPriceFormatted,
     taxPriceFormatted,
@@ -126,12 +127,12 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                 <Select
                   label="Quantity"
                   value="1"
-                  options={[...Array(Math.min(25, 100)).keys()].map(
-                    (index) => ({
-                      label: index + 1,
-                      value: index + 1
-                    })
-                  )}
+                  options={[
+                    ...Array(Math.min(maxQuantities[0], 25, 100)).keys()
+                  ].map((index) => ({
+                    label: index + 1,
+                    value: index + 1
+                  }))}
                 />
               </BlockStack>
               <BlockStack spacing="tight">
