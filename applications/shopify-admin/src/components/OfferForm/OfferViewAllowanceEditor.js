@@ -9,7 +9,8 @@ const ViewAllowanceDaysInputWrapper = styled.div`
   }
 `;
 
-const OfferSettingsEditor = ({
+const OfferViewAllowanceEditor = ({
+  offer,
   viewAllowance,
   viewAllowanceDays,
   submitted
@@ -23,6 +24,11 @@ const OfferSettingsEditor = ({
 
     viewAllowance.onChange(value);
   };
+
+  // Do not render this component for post-checkout offers.
+  if (offer.strategy === 'POST_PURCHASE') {
+    return null;
+  }
 
   return (
     <Card title="View frequency allowance" sectioned>
@@ -71,14 +77,15 @@ const OfferSettingsEditor = ({
   );
 };
 
-OfferSettingsEditor.propTypes = {
+OfferViewAllowanceEditor.propTypes = {
+  offer: PropTypes.object.isRequired,
   viewAllowance: PropTypes.object.isRequired,
   viewAllowanceDays: PropTypes.object.isRequired,
   submitted: PropTypes.bool
 };
 
-OfferSettingsEditor.defaultProps = {
+OfferViewAllowanceEditor.defaultProps = {
   submitted: false
 };
 
-export default OfferSettingsEditor;
+export default OfferViewAllowanceEditor;

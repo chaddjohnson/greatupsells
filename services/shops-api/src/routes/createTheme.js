@@ -1,5 +1,4 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { omit } = require('lodash');
 const logger = require('@greatupsells/logger');
 const mongodbClient = require('../models/mongodbClient');
 const models = require('../models');
@@ -22,6 +21,8 @@ const handler = async (event, context) => {
     try {
       await theme.validate();
     } catch (error) {
+      logger.debug(`ERROR: ${error.message}`);
+
       return {
         statusCode: StatusCodes.BAD_REQUEST,
         body: ReasonPhrases.BAD_REQUEST

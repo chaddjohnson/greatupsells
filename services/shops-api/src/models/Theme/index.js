@@ -49,7 +49,7 @@ const schema = new mongoose.Schema(
         enum: [
           'UPSELL',
           'CROSS_SELL',
-          'POST_CHECKOUT',
+          'POST_PURCHASE',
           'THANK_YOU_PAGE',
           'POPUP'
         ]

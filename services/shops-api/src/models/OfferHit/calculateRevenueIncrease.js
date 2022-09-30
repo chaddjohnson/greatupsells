@@ -30,7 +30,7 @@ const calculateRevenueIncrease = (offerHit) => {
   const isUpsell = strategy === 'UPSELL';
   const isCrossSell =
     strategy === 'CROSS_SELL' ||
-    strategy === 'POST_CHECKOUT' ||
+    strategy === 'POST_PURCHASE' ||
     strategy === 'THANK_YOU_PAGE';
 
   if (isUpsell) {

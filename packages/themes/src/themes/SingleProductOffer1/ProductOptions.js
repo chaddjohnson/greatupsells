@@ -76,6 +76,7 @@ const ProductOptions = styled(({ className }) => {
           value={selectedQuantity}
           min={1}
           max={maxQuantity}
+          // onChange={} // TODO
         />
       )}
     </div>

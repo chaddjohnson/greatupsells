@@ -1,21 +1,78 @@
-import MultiProductOffer1 from '@greatupsells/themes/MultiProductOffer1';
-import MultiProductOffer2 from '@greatupsells/themes/MultiProductOffer2';
-import MultiProductThankYouOffer1 from '@greatupsells/themes/MultiProductThankYouOffer1';
-import PostCheckoutOffer1 from '@greatupsells/themes/PostCheckoutOffer1';
-import SingleProductOffer1 from '@greatupsells/themes/SingleProductOffer1';
-import SingleProductOffer2 from '@greatupsells/themes/SingleProductOffer2';
+import React, { useState, useCallback, useEffect } from 'react';
+
+// Store theme components in a non-state, module-level variable because components
+// cannot be stored in React state.
+const themes = {};
 
 const useThemeComponent = (key) => {
-  const themeComponents = {
-    MultiProductOffer1,
-    MultiProductOffer2,
-    MultiProductThankYouOffer1,
-    PostCheckoutOffer1,
-    SingleProductOffer1,
-    SingleProductOffer2
-  };
+  const [themesLoaded, setThemesLoaded] = useState({});
 
-  return themeComponents[key];
+  const importTheme = useCallback(async () => {
+    if (!key) {
+      return;
+    }
+
+    if (themes[key]) {
+      return themes[key];
+    }
+
+    let themeModule;
+
+    switch (key) {
+      case 'MultiProductOffer1':
+        themeModule = await import(
+          '@greatupsells/themes-admin/MultiProductOffer1'
+        );
+        break;
+
+      case 'MultiProductOffer2':
+        themeModule = await import(
+          '@greatupsells/themes-admin/MultiProductOffer2'
+        );
+        break;
+
+      case 'MultiProductThankYouOffer1':
+        themeModule = await import(
+          '@greatupsells/themes-admin/MultiProductThankYouOffer1'
+        );
+        break;
+
+      case 'SingleProductOffer1':
+        themeModule = await import(
+          '@greatupsells/themes-admin/SingleProductOffer1'
+        );
+        break;
+
+      case 'PostPurchaseOffer1':
+        themeModule = await import(
+          '@greatupsells/themes-admin/PostPurchaseOffer1'
+        );
+        // import('@greatupsells/themes-admin/PostPurchaseOffer1/dist/PostPurchaseOffer1.css');
+        break;
+
+      case 'SingleProductOffer2':
+        themeModule = await import(
+          '@greatupsells/themes-admin/SingleProductOffer2'
+        );
+        break;
+
+      default:
+        break;
+    }
+
+    if (themeModule) {
+      themes[key] = themeModule?.default;
+
+      // Flag the theme as loaded to trigger a re-render.
+      setThemesLoaded({ ...themesLoaded, [key]: true });
+    }
+  }, [key, themesLoaded]);
+
+  useEffect(() => {
+    importTheme();
+  }, [importTheme]);
+
+  return themes[key];
 };
 
 export default useThemeComponent;

@@ -90,9 +90,13 @@ if (originalFetch) {
     const clonedResponse = response.clone();
     const isJson =
       config?.headers?.['Content-Type']?.toLowerCase() === 'application/json';
-    const responseData = isJson
-      ? await clonedResponse.json()
-      : await clonedResponse.text();
+    let responseData = null;
+
+    if (response.status !== 204) {
+      responseData = isJson
+        ? await clonedResponse.json()
+        : await clonedResponse.text();
+    }
 
     // Call listeners.
     if (listeners[path]) {

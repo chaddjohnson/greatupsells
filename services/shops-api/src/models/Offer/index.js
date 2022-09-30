@@ -43,7 +43,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['CROSS_SELL', 'UPSELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE', 'POPUP']
+      enum: ['CROSS_SELL', 'UPSELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'POPUP']
     },
     impressionCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
@@ -53,7 +53,10 @@ const schema = new mongoose.Schema(
     actionButtonBehavior: {
       type: String,
       required() {
-        return this.strategy !== 'THANK_YOU_PAGE';
+        return (
+          this.strategy !== 'POST_PURCHASE' &&
+          this.strategy !== 'THANK_YOU_PAGE'
+        );
       },
       enum: ['CHECKOUT', 'CART', 'PAGE', 'LINK']
     },

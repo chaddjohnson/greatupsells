@@ -31,6 +31,8 @@ const handler = async (event, context) => {
     try {
       await offer.validate();
     } catch (error) {
+      logger.debug(`ERROR: ${error.message}`);
+
       return {
         statusCode: StatusCodes.BAD_REQUEST,
         body: ReasonPhrases.BAD_REQUEST

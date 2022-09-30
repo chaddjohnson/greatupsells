@@ -129,7 +129,7 @@ const ThemeSettingsEditor = ({ theme, onChange }) => {
           >
             <MenuItem value="UPSELL">Upsell</MenuItem>
             <MenuItem value="CROSS_SELL">Cross-sell</MenuItem>
-            <MenuItem value="POST_CHECKOUT">Post-checkout cross-sell</MenuItem>
+            <MenuItem value="POST_PURCHASE">Post-purchase cross-sell</MenuItem>
             <MenuItem value="THANK_YOU_PAGE">Thank You Page</MenuItem>
             <MenuItem value="POPUP">Popup</MenuItem>
           </Select>

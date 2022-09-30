@@ -19,7 +19,11 @@ const OfferActionButtonEditor = ({
     }
   };
 
-  if (offer.strategy === 'THANK_YOU_PAGE') {
+  // Do not display action button actions for Post Purchase or Thank You Page offers.
+  if (
+    offer.strategy === 'POST_PURCHASE' ||
+    offer.strategy === 'THANK_YOU_PAGE'
+  ) {
     return null;
   }
 

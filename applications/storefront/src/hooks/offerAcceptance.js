@@ -17,7 +17,6 @@ const useOfferAcceptance = () => {
     addVariantsToShopifyDraftOrder
   } = useShopifyDraftOrder();
   const { getCustomerLocale } = useShopifyCustomer();
-
   const locale = getCustomerLocale();
 
   const addProducts = async (offerId, items) => {
@@ -72,7 +71,7 @@ const useOfferAcceptance = () => {
     await addVariantsToShopifyCart(items);
 
     // Accept the offer.
-    await trackOfferAcceptance(offerId, shopifyDraftOrderId, items);
+    await trackOfferAcceptance(offerId, items, shopifyDraftOrderId);
   };
 
   const replaceProduct = async (
@@ -152,13 +151,17 @@ const useOfferAcceptance = () => {
     }
 
     // Accept the offer.
-    await trackOfferAcceptance(offerId, shopifyDraftOrderId, [
-      {
-        shopifyProductId,
-        shopifyVariantId,
-        quantity
-      }
-    ]);
+    await trackOfferAcceptance(
+      offerId,
+      [
+        {
+          shopifyProductId,
+          shopifyVariantId,
+          quantity
+        }
+      ],
+      shopifyDraftOrderId
+    );
   };
 
   return { addProducts, replaceProduct };

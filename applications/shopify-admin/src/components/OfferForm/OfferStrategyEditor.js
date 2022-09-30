@@ -46,7 +46,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                 )
             },
             {
-              label: 'Post-checkout Thank You page cross-sell',
+              label: 'Thank You page cross-sell',
               helpText:
                 'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
               value: 'THANK_YOU_PAGE'

@@ -12,6 +12,10 @@ const preValidate = async (offer, next) => {
     offer.theme = mongoose.Types.ObjectId(offer.theme);
   }
 
+  if (offer.shop) {
+    await offer.execPopulate('shop');
+  }
+
   // Set up reference to the shop if missing.
   if (offer.shopifyShopId && !offer.shop) {
     try {
@@ -29,7 +33,12 @@ const preValidate = async (offer, next) => {
     );
   }
 
-  if (!offer.shop.onlineStore2Theme && offer.strategy === 'POST_CHECKOUT') {
+  if (offer.strategy === 'POST_PURCHASE') {
+    offer.viewAllowance = 'PAGE';
+    offer.viewAllowanceDays = undefined;
+  }
+
+  if (!offer.shop.onlineStore2Theme && offer.strategy === 'POST_PURCHASE') {
     return next(
       new Error(
         'A Shopify 2.0 theme is required to use post-checkout features.'

@@ -91,7 +91,7 @@ const initialVariables = [
 const initialValues = {
   name: '',
   displayOrder: 1,
-  strategies: ['UPSELL', 'CROSS_SELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE'],
+  strategies: ['UPSELL', 'CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE'],
   thumbnailImageUrl: '',
   description: '',
   template: {

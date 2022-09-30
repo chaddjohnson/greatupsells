@@ -78,7 +78,8 @@ const OfferPopup = ({
 
   const maskBackgroundColor = useMemo(() => {
     const defaultMaskBackgroundColor = [
-      'POST_CHECKOUT',
+      'POST_PURCHASE',
+      'POST_PURCHASE',
       'THANK_YOU_PAGE'
     ].includes(offer.strategy)
       ? '#FFFFFF'
@@ -165,7 +166,7 @@ const OfferPopup = ({
     <>
       <GlobalStyle open={open} designMode={designMode} />
       <StyledFrame
-        className={className}
+        className={clsx('offer-iframe', className)}
         title="Offer"
         ref={(frame) => frame && setFrameRef(frame?.node || frame?.base)}
         head={

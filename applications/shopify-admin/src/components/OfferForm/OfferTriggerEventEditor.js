@@ -31,7 +31,10 @@ const OfferTriggerEventEditor = ({
     triggerEvent.onChange(value);
   };
 
-  if (offer.strategy === 'THANK_YOU_PAGE') {
+  if (
+    offer.strategy === 'POST_PURCHASE' ||
+    offer.strategy === 'THANK_YOU_PAGE'
+  ) {
     return null;
   }
 

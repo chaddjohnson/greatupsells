@@ -86,11 +86,7 @@ const OfferOfferedProductsEditor = ({
     }
   }, [offeredProducts.value, offeredCollections.value]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (
-    offer.strategy !== 'UPSELL' &&
-    offer.strategy !== 'CROSS_SELL' &&
-    offer.strategy !== 'THANK_YOU_PAGE'
-  ) {
+  if (offer.strategy === 'POPUP') {
     return null;
   }
 
@@ -98,14 +94,18 @@ const OfferOfferedProductsEditor = ({
     <>
       <Card
         title={`Offered ${
-          offer.strategy === 'CROSS_SELL'
+          ['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE'].includes(
+            offer.strategy
+          )
             ? 'products and collections'
             : 'products'
         }`}
       >
         <Card.Section>
           <FormLayout>
-            {offer.strategy === 'CROSS_SELL' && (
+            {['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE'].includes(
+              offer.strategy
+            ) && (
               <ChoiceList
                 title="Applies to"
                 titleHidden
@@ -148,6 +148,7 @@ const OfferOfferedProductsEditor = ({
           </FormLayout>
         </Card.Section>
         {(offer.strategy === 'CROSS_SELL' ||
+          offer.strategy === 'POST_PURCHASE' ||
           offer.strategy === 'THANK_YOU_PAGE') && (
           <Card.Section>
             <FormLayout>

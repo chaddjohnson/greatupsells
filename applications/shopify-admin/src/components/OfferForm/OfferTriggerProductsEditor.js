@@ -111,7 +111,9 @@ const OfferTriggerProductsEditor = ({
     <>
       <Card
         title={`Cart trigger products${
-          offer.strategy === 'CROSS_SELL' || offer.strategy === 'THANK_YOU_PAGE'
+          offer.strategy === 'CROSS_SELL' ||
+          offer.strategy === 'POST_PURCHASE' ||
+          offer.strategy === 'THANK_YOU_PAGE'
             ? ' and collections'
             : ''
         }`}
@@ -119,6 +121,7 @@ const OfferTriggerProductsEditor = ({
         <Card.Section>
           <FormLayout>
             {(offer.strategy === 'CROSS_SELL' ||
+              offer.strategy === 'POST_PURCHASE' ||
               offer.strategy === 'THANK_YOU_PAGE') && (
               <ChoiceList
                 title="Applies to"
@@ -178,7 +181,7 @@ const OfferTriggerProductsEditor = ({
                   value: 'NONE'
                 },
                 {
-                  label: `Minimum purchase amount (${currencySymbol})`,
+                  label: `Minimum purchase amount (${currency})`,
                   value: 'AMOUNT',
                   renderChildren: (isSelected) =>
                     isSelected && (
@@ -187,7 +190,7 @@ const OfferTriggerProductsEditor = ({
                           inputMode="numeric"
                           prefix={currencySymbol}
                           placeholder="0.00"
-                          helpText="Applies to trigger products."
+                          helpText="Amount before taxes and shipping."
                           {...minimumRequiredAmount}
                           error={submitted && minimumRequiredAmount.error}
                         />
@@ -202,7 +205,6 @@ const OfferTriggerProductsEditor = ({
                       <MinimumRequiredAmountWrapper>
                         <TextField
                           inputMode="numeric"
-                          helpText="Applies to trigger products."
                           {...minimumRequiredAmount}
                           error={submitted && minimumRequiredAmount.error}
                         />

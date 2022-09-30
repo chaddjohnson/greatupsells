@@ -260,8 +260,30 @@ const OfferForm = ({
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
   const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
-  const designModeZoom = isInline ? 1.0 : 0.79;
-  const smallDesignModeZoom = isInline ? 0.5 : 0.4;
+  const zoomByStrategy = {
+    CROSS_SELL: {
+      designModeZoom: 0.79,
+      smallDesignModeZoom: 0.4
+    },
+    UPSELL: {
+      designModeZoom: 0.79,
+      smallDesignModeZoom: 0.4
+    },
+    THANK_YOU_PAGE: {
+      designModeZoom: 1.0,
+      smallDesignModeZoom: 0.5
+    },
+    POST_PURCHASE: {
+      designModeZoom: 0.79,
+      smallDesignModeZoom: 0.4
+    },
+    POPUP: {
+      designModeZoom: 0.79,
+      smallDesignModeZoom: 0.4
+    }
+  };
+  const { designModeZoom } = zoomByStrategy[offer.strategy];
+  const { smallDesignModeZoom } = zoomByStrategy[offer.strategy];
 
   const updatePreviewContentHeight = useCallback(() => {
     const context = offerPopupContext?.current;
@@ -319,8 +341,8 @@ const OfferForm = ({
       setThemeIncompatible(true);
     }
 
-    // Use page load as trigger event for Thank You Page offers.
-    if (value === 'THANK_YOU_PAGE') {
+    // Use page load as trigger event for Post Purchase and Thank You Page offers.
+    if (value === 'POST_PURCHASE' || value === 'THANK_YOU_PAGE') {
       triggerEvent.onChange('LOAD');
     }
   };
@@ -471,9 +493,9 @@ const OfferForm = ({
                   theme={theme}
                   ThemeComponent={ThemeComponent}
                   offer={offer}
-                  locale="en"
-                  countryCode="US"
-                  currency="USD"
+                  locale={shop.locale || 'en'}
+                  countryCode={shop.countryCode || 'US'}
+                  currency={shop.currency || 'USD'}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
                   onClose={handleClosePreview}
@@ -501,6 +523,7 @@ const OfferForm = ({
             submitted={submitted}
           />
           <OfferViewAllowanceEditor
+            offer={offer}
             viewAllowance={viewAllowance}
             viewAllowanceDays={viewAllowanceDays}
             submitted={submitted}
@@ -542,6 +565,7 @@ const OfferForm = ({
             theme.maximumOfferedProductQuantity > 1) && (
             <OfferBundlingEditor
               offer={offer}
+              theme={theme}
               enableBundling={enableBundling}
             />
           )}
@@ -584,9 +608,9 @@ const OfferForm = ({
                 theme={theme}
                 ThemeComponent={ThemeComponent}
                 offer={offer}
-                locale="en"
-                countryCode="US"
-                currency="USD"
+                locale={shop.locale || 'en'}
+                countryCode={shop.countryCode || 'US'}
+                currency={shop.currency || 'USD'}
                 triggerProduct={dummyData.triggerProduct}
                 offeredProducts={dummyData.offeredProducts}
                 onClose={handleClosePreview}

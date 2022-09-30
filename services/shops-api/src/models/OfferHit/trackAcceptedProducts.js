@@ -1,6 +1,10 @@
 const models = require('..');
 
-const trackAcceptedProducts = async (offerHit, shopifyDraftOrderId, items) => {
+const trackAcceptedProducts = async (
+  offerHit,
+  items,
+  { shopifyDraftOrderId, shopifyOrderId }
+) => {
   const [Product] = await Promise.all([
     models.get('Product'),
     models.get('Offer')
@@ -74,8 +78,11 @@ const trackAcceptedProducts = async (offerHit, shopifyDraftOrderId, items) => {
     })
   );
 
-  // Track the draft order for the offer hit.
+  // Track the draft order for the offer hit (if available).
   offerHit.shopifyDraftOrderId = shopifyDraftOrderId;
+
+  // Track the  order for the offer hit (if available).
+  offerHit.shopifyOrderId = shopifyOrderId;
 
   // Track the accepted product data for the offer hit.
   offerHit.acceptedProducts = offerHit.acceptedProducts || [];

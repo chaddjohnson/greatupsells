@@ -24,7 +24,7 @@ const handler = async (event, context) => {
             'plan.monthUpsellRevenue': monthUpsellRevenue
           });
         } catch (error) {
-          await logger.warn(
+          await logger.error(
             `Error calculating month upsell revenue for shop (${shop.toString()})`,
             error
           );

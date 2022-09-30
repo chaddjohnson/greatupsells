@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
 import useToast from './toast';
 
 const useOffer = (offerId) => {
-  const router = useRouter();
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 

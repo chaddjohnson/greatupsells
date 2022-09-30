@@ -11,7 +11,9 @@ const loadScripts = async () => {
     script.async = true;
 
     document.head.appendChild(script);
-  } else {
+  }
+  // eslint-disable-next-line no-restricted-globals
+  else if (typeof self !== 'undefined') {
     // Load within web worker using fetch.
     const response = await fetch(scriptUrl);
     const text = await response.text();

@@ -11,48 +11,44 @@ const useThemeComponent = (key) => {
   const [themesLoaded, setThemesLoaded] = useState({});
 
   const importTheme = useCallback(async () => {
-    if (!key || themesLoaded[key]) {
+    if (!key) {
       return;
+    }
+
+    if (themes[key]) {
+      return themes[key];
     }
 
     let themeModule;
 
-    // Explicit, non-dynamic imports must be used so that webpack actually builds the files.
-    // Hence this switch statement.
     switch (key) {
       case 'MultiProductOffer1':
         themeModule = await import(
-          /* webpackChunkName: "MultiProductOffer1" */ '@greatupsells/themes/MultiProductOffer1'
+          /* webpackChunkName: "MultiProductOffer1" */ '@greatupsells/themes-storefront/MultiProductOffer1'
         );
         break;
 
       case 'MultiProductOffer2':
         themeModule = await import(
-          /* webpackChunkName: "MultiProductOffer2" */ '@greatupsells/themes/MultiProductOffer2'
+          /* webpackChunkName: "MultiProductOffer2" */ '@greatupsells/themes-storefront/MultiProductOffer2'
         );
         break;
 
       case 'MultiProductThankYouOffer1':
         themeModule = await import(
-          /* webpackChunkName: "MultiProductThankYouOffer1" */ '@greatupsells/themes/MultiProductThankYouOffer1'
-        );
-        break;
-
-      case 'PostCheckoutOffer1':
-        themeModule = await import(
-          /* webpackChunkName: "PostCheckoutOffer1" */ '@greatupsells/themes/PostCheckoutOffer1'
+          /* webpackChunkName: "MultiProductThankYouOffer1" */ '@greatupsells/themes-storefront/MultiProductThankYouOffer1'
         );
         break;
 
       case 'SingleProductOffer1':
         themeModule = await import(
-          /* webpackChunkName: "SingleProductOffer1" */ '@greatupsells/themes/SingleProductOffer1'
+          /* webpackChunkName: "SingleProductOffer1" */ '@greatupsells/themes-storefront/SingleProductOffer1'
         );
         break;
 
       case 'SingleProductOffer2':
         themeModule = await import(
-          /* webpackChunkName: "SingleProductOffer2" */ '@greatupsells/themes/SingleProductOffer2'
+          /* webpackChunkName: "SingleProductOffer2" */ '@greatupsells/themes-storefront/SingleProductOffer2'
         );
         break;
 

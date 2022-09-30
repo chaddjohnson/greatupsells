@@ -112,7 +112,7 @@ Please use the `master` branch for main development.
 
 ### Shopify App Extensions
 
-To run and develop Shopify app extensions locally (such as post-checkout upsells):
+To run and develop Shopify app extensions locally (such as post-purchase upsells):
 
 1. Run the app with `yarn start` from the top-level project directory.
 1. Open another terminal, and change the working directory to `applications/shopify-admin`.

@@ -139,7 +139,11 @@ const buildGeotargetingCriteria = (countryCode) => ({
 
 // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
 const sanitizePagePath = (pagePath) => {
-  return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+  if (!pagePath) {
+    return '';
+  }
+
+  return `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
 };
 
 const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
@@ -241,7 +245,7 @@ const findOneRandom = async (
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = [],
-    pagePath
+    pagePath = ''
   }
 ) => {
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
@@ -297,6 +301,12 @@ const findOneRandom = async (
   let offers = await Offer.find(criteria);
 
   offers = offers.filter((offer) => {
+    // There should be no page path provided for Post-Purchase offers. Exclude
+    // Post-Purchase offers if there is a page path.
+    if (offer.strategy === 'POST_PURCHASE') {
+      return !pagePath;
+    }
+
     // Filter for offers targeting the Order Status page if that is the current page.
     if (offer.strategy === 'THANK_YOU_PAGE') {
       return isThankYouPage;

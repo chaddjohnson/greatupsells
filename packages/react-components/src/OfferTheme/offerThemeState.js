@@ -9,9 +9,9 @@ import useDataTranslation from './dataTranslation';
 const useOfferThemeState = ({
   shop,
   offer,
-  locale,
-  countryCode,
-  currency,
+  locale = 'en',
+  countryCode = 'US',
+  currency = 'USD',
   triggerProduct,
   offeredProducts,
   shopifyCartItems,

@@ -3,7 +3,7 @@
     "shopifyProductData": {
       "id": 4474376290349.0,
       "title": "Fancy Dress Shoes",
-      "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
+      "body_html": "<p>Duis sit nostrud nostrud cillum. Non excepteur nulla culpa incididunt irure eu ex eu velit sint excepteur.</p>\n<p>Proident labore officia mollit anim aliquip incididunt fugiat.</p>",
       "handle": "fancy-dress-shoes",
       "variants": [
         {
@@ -281,7 +281,7 @@
       "shopifyProductData": {
         "id": 4552007483437.0,
         "title": "Fancy Hat",
-        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
+        "body_html": "<p>Duis sit nostrud nostrud cillum. Non excepteur nulla culpa incididunt irure eu ex eu velit sint excepteur.</p>\n<p>Proident labore officia mollit anim aliquip incididunt fugiat.</p>",
         "handle": "fancy-hat",
         "variants": [
           {
@@ -358,7 +358,7 @@
       "shopifyProductData": {
         "id": 6547332923437.0,
         "title": "Fancy Socks",
-        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
+        "body_html": "<p>Duis sit nostrud nostrud cillum. Non excepteur nulla culpa incididunt irure eu ex eu velit sint excepteur.</p>\n<p>Proident labore officia mollit anim aliquip incididunt fugiat.</p>",
         "handle": "fancy-socks",
         "variants": [
           {
@@ -480,7 +480,7 @@
       "shopifyProductData": {
         "id": 6680527274029.0,
         "title": "Fancy Scarf",
-        "body_html": "Aliqua aliquip ipsum cillum fugiat irure officia consequat tempor exercitation cupidatat amet ea.",
+        "body_html": "<p>Duis sit nostrud nostrud cillum. Non excepteur nulla culpa incididunt irure eu ex eu velit sint excepteur.</p>\n<p>Proident labore officia mollit anim aliquip incididunt fugiat.</p>",
         "handle": "fancy-scarf",
         "variants": [
           {

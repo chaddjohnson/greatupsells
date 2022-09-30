@@ -77,8 +77,8 @@
     "destroy": "cd infrastructure && ./destroy.sh",
     "start": "nodemon -e js --exec \"node src/routes/server\" --watch src/routes",
     "shopify": "shopify",
-    "extensions:build": "shopify app build",
-    "extensions:start": "dotenv -- bash -c 'shopify app dev --tunnel-url=$POST_CHECKOUT_APP_URL'",
+    "extensions:build": "dotenv -- bash -c 'shopify app build'",
+    "extensions:start": "dotenv -- bash -c 'shopify app dev --tunnel-url=$POST_PURCHASE_APP_URL'",
     "extensions:info": "shopify app info",
     "extensions:scaffold": "shopify app scaffold",
     "extensions:deploy": "shopify app deploy"

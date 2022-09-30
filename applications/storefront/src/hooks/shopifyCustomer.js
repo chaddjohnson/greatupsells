@@ -5,21 +5,21 @@ import { useCookies } from '@greatupsells/react-hooks';
 const useShopifyCustomer = () => {
   const { getCookie } = useCookies();
 
+  const localeAndCountryCode = navigator.languages?.length
+    ? navigator.languages[0]
+    : navigator.userLanguage ||
+      navigator.language ||
+      navigator.browserLanguage ||
+      navigator.systemLanguage ||
+      'en-US';
+
   const getCustomerLocale = () => {
     const urlLocale = window.location.pathname.match(
       /^\/([a-z]{2})-[a-z]{2}(\/|$)/
     )?.[1];
 
     // Reference: https://stackoverflow.com/a/52112155/83897
-    const language =
-      urlLocale ||
-      (navigator.languages?.length
-        ? navigator.languages[0]
-        : navigator.userLanguage ||
-          navigator.language ||
-          navigator.browserLanguage ||
-          navigator.systemLanguage ||
-          'en-US');
+    const language = urlLocale || localeAndCountryCode;
     const parts = language.split('-');
 
     return parts[0] || 'en';
@@ -31,15 +31,7 @@ const useShopifyCustomer = () => {
       ?.toUpperCase();
 
     // Reference: https://stackoverflow.com/a/52112155/83897
-    const language =
-      urlCountryCode ||
-      (navigator.languages?.length
-        ? navigator.languages[0]
-        : navigator.userLanguage ||
-          navigator.language ||
-          navigator.browserLanguage ||
-          navigator.systemLanguage ||
-          'en-US');
+    const language = urlCountryCode || localeAndCountryCode;
     const parts = language.split('-');
 
     return parts[1]?.toUpperCase() || 'US';

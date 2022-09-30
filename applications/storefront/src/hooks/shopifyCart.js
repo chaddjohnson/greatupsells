@@ -11,8 +11,7 @@ import useSWR from 'swr';
 import {
   useHttpRequestListener,
   usePushStateListener,
-  useCookies,
-  HttpClient
+  useCookies
 } from '@greatupsells/react-hooks';
 import useShopifyDraftOrder from './shopifyDraftOrder';
 import useShopifyCustomer from './shopifyCustomer';
@@ -78,10 +77,6 @@ const useShopifyCartQuantityListener = (listener) => {
   useHttpRequestListener(url2, handler);
 };
 
-const httpClient = new HttpClient({
-  baseUrl: window.location.origin
-});
-
 const CartProvider = ({ children }) => {
   const [cartFormOverridden, setCartFormOverridden] = useState(false);
   const [shopifyCartLoaded, setShopifyCartLoaded] = useState(false);
@@ -97,7 +92,10 @@ const CartProvider = ({ children }) => {
   } = useSWR(
     '/cart.js',
     async () => {
-      return await httpClient.get('/cart.js');
+      const response = await fetch('/cart.js');
+      const data = response.json();
+
+      return data;
     },
     {
       revalidateOnFocus: false
@@ -143,11 +141,17 @@ const CartProvider = ({ children }) => {
   );
 
   const addVariantsToShopifyCart = async (variants) => {
-    await httpClient.post('/cart/add.js', {
-      items: variants.map(({ shopifyVariantId, quantity }) => ({
-        id: shopifyVariantId,
-        quantity
-      }))
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        items: variants.map(({ shopifyVariantId, quantity }) => ({
+          id: shopifyVariantId,
+          quantity
+        }))
+      })
     });
   };
 
@@ -160,10 +164,16 @@ const CartProvider = ({ children }) => {
     );
     const newQuantity = Math.max(variant.quantity - quantity, 0);
 
-    await httpClient.post('/cart/update.js', {
-      updates: {
-        [shopifyVariantId]: newQuantity
-      }
+    await fetch('/cart/update.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        updates: {
+          [shopifyVariantId]: newQuantity
+        }
+      })
     });
   };
 
@@ -187,7 +197,7 @@ const CartProvider = ({ children }) => {
       shopifyCartItem &&
       variants.find((current) => current.id === shopifyCartItem.variant_id);
 
-    return variant.id;
+    return variant?.id;
   };
 
   const handleCartFormSubmit = useCallback((event) => {

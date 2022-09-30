@@ -19,6 +19,8 @@ provider:
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'storefront-api'
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
+    SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
+    SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-secret-key}
 
 custom:
   serverless-offline:
@@ -98,6 +100,14 @@ functions:
       - http:
           path: /shop
           method: get
+          cors: true
+  signPostPurchaseChangeset:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/signPostPurchaseChangeset.handler
+    events:
+      - http:
+          path: /post-purchase/changeset-signature
+          method: post
           cors: true
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}

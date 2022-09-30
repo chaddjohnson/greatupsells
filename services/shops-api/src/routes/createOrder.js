@@ -25,6 +25,8 @@ const handler = async (event, context) => {
     try {
       await order.validate();
     } catch (error) {
+      logger.debug(`ERROR: ${error.message}`);
+
       return {
         statusCode: StatusCodes.BAD_REQUEST,
         body: ReasonPhrases.BAD_REQUEST
@@ -34,6 +36,7 @@ const handler = async (event, context) => {
     await order.save();
     await order.execPopulate('shop');
 
+    // Track conversions for the order.
     offerHits = await order.trackConversions();
 
     // Only track orders resulting in offer conversions.

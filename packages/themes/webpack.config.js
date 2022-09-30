@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -14,7 +13,7 @@ module.exports = {
     MultiProductOffer1: './src/themes/MultiProductOffer1',
     MultiProductOffer2: './src/themes/MultiProductOffer2',
     MultiProductThankYouOffer1: './src/themes/MultiProductThankYouOffer1',
-    PostCheckoutOffer1: './src/themes/PostCheckoutOffer1',
+    PostPurchaseOffer1: './src/themes/PostPurchaseOffer1',
     SingleProductOffer1: './src/themes/SingleProductOffer1',
     SingleProductOffer2: './src/themes/SingleProductOffer2'
   },
@@ -23,8 +22,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     libraryTarget: 'umd',
-    globalObject: 'this',
-    publicPath: '/themes/'
+    globalObject: 'this'
   },
   cache: {
     type: 'filesystem'
@@ -50,28 +48,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    dev && new ESLintPlugin({ cache: true }),
-    !dev &&
-      new CompressionWebpackPlugin({
-        filename: '[path][base].gz',
-        algorithm: 'gzip',
-        test: /\.(js|css|html)$/,
-        threshold: 10240,
-        minRatio: 0.8
-      }),
-    !dev &&
-      new CompressionWebpackPlugin({
-        filename: '[path][base].br',
-        algorithm: 'brotliCompress',
-        test: /\.(js|css|html|svg)$/,
-        compressionOptions: {
-          params: {
-            [zlib.constants.BROTLI_PARAM_QUALITY]: 11
-          }
-        },
-        threshold: 10240,
-        minRatio: 0.8
-      })
+    dev && new ESLintPlugin({ cache: true })
   ].filter(Boolean),
   stats: 'errors-warnings',
   externals: [
@@ -83,10 +60,6 @@ module.exports = {
   ],
   resolve: {
     // Setting this to `true` allows dependency packages to be watched.
-    symlinks: true,
-    alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat'
-    }
+    symlinks: true
   }
 };

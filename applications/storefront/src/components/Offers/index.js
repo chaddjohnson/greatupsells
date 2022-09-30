@@ -86,6 +86,11 @@ const Offers = () => {
           return map;
         }
 
+        // Do not render Post-Purchase offers in the storefront.
+        if (strategy === 'POST_PURCHASE') {
+          return map;
+        }
+
         return {
           ...map,
           [triggerEvent]: data
@@ -93,6 +98,7 @@ const Offers = () => {
       }, {}),
     [offersData]
   );
+
   const thankYouPageOfferData = useMemo(() => {
     return offersData?.find(
       ({ offer }) => offer?.strategy === 'THANK_YOU_PAGE'

@@ -50,6 +50,9 @@ const handler = async (event, context) => {
     order = await Order.findById(orderId);
     await order.save();
 
+    // Track conversions for the order.
+    await order.trackConversions();
+
     await order.execPopulate('shop');
     await logger.info(`Order updated (${order.toString()})`, { order });
 

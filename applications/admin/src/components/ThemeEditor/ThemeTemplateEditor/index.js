@@ -103,9 +103,9 @@ const ThemeTemplateEditor = ({ theme, onChange }) => {
             shop={dummyData.shop}
             theme={theme}
             offer={dummyData.offer}
-            locale="en"
-            countryCode="US"
-            currency="USD"
+            locale={dummyData.shop.locale || 'en'}
+            countryCode={dummyData.shop.countryCode || 'US'}
+            currency={dummyData.shop.currency || 'USD'}
             triggerProduct={dummyData.triggerProduct}
             offeredProducts={dummyData.offeredProducts}
             onClose={handleClosePreview}

@@ -1,7 +1,7 @@
 import { useHttpClient, useCookies } from '@greatupsells/react-hooks';
 
 // Intentionally track offer hit ID at module level as this hook may be used in
-// multiple places, and state won't be shared.
+// multiple places, and we want this state to be shared.
 let offerHitId = '';
 
 const useOfferTracking = () => {
@@ -63,11 +63,11 @@ const useOfferTracking = () => {
     offerHitId = offerHit._id;
   };
 
-  const trackOfferAcceptance = async (offerId, shopifyDraftOrderId, items) => {
+  const trackOfferAcceptance = async (offerId, items, shopifyDraftOrderId) => {
     const offerHit = await httpClient.post(`/offers/${offerId}/acceptances`, {
       offerHitId,
-      shopifyDraftOrderId,
-      items
+      items,
+      shopifyDraftOrderId
     });
 
     return offerHit;

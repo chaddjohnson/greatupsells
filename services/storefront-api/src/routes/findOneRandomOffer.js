@@ -26,7 +26,9 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = new URL(event.headers.origin || event.headers.Origin).host;
+    const domain = new URL(
+      event.headers.shop || event.headers.origin || event.headers.Origin
+    ).host;
     const {
       events: triggerEvents,
       shopifyProductIds,
@@ -38,6 +40,13 @@ const handler = middy(async (event, context) => {
       sessionOfferImpressions,
       pagePath
     } = JSON.parse(event.body);
+
+    if (!domain) {
+      return {
+        statusCode: StatusCodes.FORBIDDEN,
+        body: ReasonPhrases.FORBIDDEN
+      };
+    }
 
     // Look up offer by domain to minimize this method's latency. Multiple data
     // items are combined into one response to reduce latency.

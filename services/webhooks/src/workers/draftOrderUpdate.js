@@ -42,7 +42,7 @@ const processData = async (metadata, data, rawData) => {
       `/offer-hits/shopify-draft-order-id/${shopifyDraftOrderId}`
     );
 
-    // Update each offer hit to reference the order associated wtih the draft order.
+    // Update each offer hit to reference the order associated with the draft order.
     await Promise.all(
       offerHits.map(async (offerHit) => {
         await httpClient.put(`/offer-hits/${offerHit._id}`, {

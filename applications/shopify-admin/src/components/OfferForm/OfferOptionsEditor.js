@@ -97,7 +97,7 @@ const OfferOptionsEditor = ({
           helpText="Customers may change quantities for products."
           {...asChoiceField(enableQuantitySelection)}
         />
-        {offer.strategy !== 'THANK_YOU_PAGE' &&
+        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) &&
           ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
             <Checkbox
               label="Delay showing offer after trigger event"
@@ -118,7 +118,7 @@ const OfferOptionsEditor = ({
               onChange={handleDelaySecondsActiveChange}
             />
           )}
-        {offer.strategy !== 'THANK_YOU_PAGE' && (
+        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
           <Checkbox
             label="Require customer be on page for a specified amount of time before allowing offer to show"
             helpText={
@@ -137,7 +137,7 @@ const OfferOptionsEditor = ({
             onChange={handleOnPageRequiredSecondsActiveChange}
           />
         )}
-        {offer.strategy !== 'THANK_YOU_PAGE' && (
+        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
           <Checkbox
             label={
               <>
@@ -147,13 +147,13 @@ const OfferOptionsEditor = ({
             {...asChoiceField(enableEscClose)}
           />
         )}
-        {offer.strategy !== 'THANK_YOU_PAGE' && (
+        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
           <Checkbox
             label="Allow clicking outside to close the offer"
             {...asChoiceField(enableMaskClose)}
           />
         )}
-        {offer.strategy !== 'THANK_YOU_PAGE' && (
+        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
           <Checkbox
             label="Use an animation when showing and hiding the offer"
             helpText={

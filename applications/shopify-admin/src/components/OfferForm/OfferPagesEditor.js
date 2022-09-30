@@ -121,7 +121,10 @@ const OfferPagesEditor = ({
     triggerPagePath.onChange(sanitized);
   };
 
-  if (offer.strategy === 'THANK_YOU_PAGE') {
+  if (
+    offer.strategy === 'POST_PURCHASE' ||
+    offer.strategy === 'THANK_YOU_PAGE'
+  ) {
     return null;
   }
 

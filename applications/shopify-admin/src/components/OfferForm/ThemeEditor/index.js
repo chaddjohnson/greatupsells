@@ -77,7 +77,7 @@ const ThemeEditor = ({
               </ButtonGroup>
             </DeviceToggle>
             {previewElement}
-            {strategy !== 'THANK_YOU_PAGE' && (
+            {strategy !== 'POST_PURCHASE' && strategy !== 'THANK_YOU_PAGE' && (
               <Button fullWidth onClick={onPreview}>
                 Preview full size
               </Button>

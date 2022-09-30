@@ -11,7 +11,7 @@ import dummyData from '../dummyCrossSellData.json';
 const strategyMap = {
   UPSELL: 'Upsell',
   CROSS_SELL: 'Cross-sell',
-  POST_CHECKOUT: 'Post-checkout cross-sell',
+  POST_PURCHASE: 'Post-purchase cross-sell',
   THANK_YOU_PAGE: 'Thank You Page',
   POPUP: 'Popup'
 };
@@ -111,9 +111,9 @@ const ThemeListRow = ({ theme, onCloneTheme, ...props }) => {
             shop={dummyData.shop}
             theme={theme}
             offer={dummyData.offer}
-            locale="en"
-            countryCode="US"
-            currency="USD"
+            locale={dummyData.shop.locale || 'en'}
+            countryCode={dummyData.shop.countryCode || 'US'}
+            currency={dummyData.shop.currency || 'USD'}
             triggerProduct={dummyData.triggerProduct}
             offeredProducts={dummyData.offeredProducts}
             onClose={handleClosePreview}

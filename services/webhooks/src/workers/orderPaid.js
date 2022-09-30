@@ -35,6 +35,11 @@ const processData = async (metadata, data, rawData) => {
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
 
+    // Skip unpaid orders.
+    if (shopifyOrderData.financial_status !== 'paid') {
+      return;
+    }
+
     // Track the order if it is not already tracked. We ONLY track paid orders;
     // unpaid orders are not counted as conversions.
     try {

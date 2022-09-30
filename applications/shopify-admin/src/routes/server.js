@@ -43,7 +43,8 @@ Shopify.Context.initialize({
     'read_draft_orders',
     'write_script_tags',
     'write_draft_orders',
-    'read_themes'
+    'read_themes',
+    'read_checkouts'
   ],
   HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
   API_VERSION: ApiVersion.January22,
@@ -81,7 +82,7 @@ const createServer = () => {
       )
     );
 
-    // Necessary to allow use of ASSETS_URL in dev mode.
+    // Necessary to enable tunneling for themes in storefront.
     server.use(
       connect(
         createProxyMiddleware('/themes', {
@@ -157,6 +158,10 @@ const createServer = () => {
     if (!shop || !shop.active) {
       ctx.redirect(`/auth?shop=${shopDomain}`);
     } else {
+      ctx.response.set(
+        'Content-Security-Policy',
+        `frame-ancestors https://${shopDomain} https://admin.shopify.com`
+      );
       await handleRequest(ctx);
     }
   });

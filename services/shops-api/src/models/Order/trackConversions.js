@@ -82,7 +82,7 @@ const trackConversions = async (order) => {
 
   // Try multiple times to find offer hits for the shopify order. This is due
   // to a race condition where that an order may be created at the same time as
-  // a draft order being updated. In draft order updates, offer hits are
+  // a draft order being updated. During draft order updates, offer hits are
   // associated with completed orders.
   await promiseWhile(conditionFn, async () => {
     offerHits = await OfferHit.find({ shopifyOrderId });
@@ -94,6 +94,11 @@ const trackConversions = async (order) => {
     return [];
   }
 
+  // Filter out offer hits marked as converted.
+  const unConvertedOfferHits = offerHits.filter(
+    (offerHit) => !offerHit.convertedAt
+  );
+
   const session = await mongodbClient.connection.startSession();
   const transactionOptions = { readPreference: 'primary' };
 
@@ -102,7 +107,7 @@ const trackConversions = async (order) => {
     order.$session(session);
 
     // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
-    await Promise.mapSeries(offerHits, async (offerHit) => {
+    await Promise.mapSeries(unConvertedOfferHits, async (offerHit) => {
       await offerHit.trackConversion(order);
     });
 

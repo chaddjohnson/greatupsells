@@ -9,14 +9,45 @@
  *  2. Render - If requested by `ShouldRender`, will be rendered after checkout
  *     completes
  */
+
 import React from 'react';
 import { extend, render } from '@shopify/post-purchase-ui-extensions-react';
-import PostCheckoutOffer1 from '../../../../../packages/themes/dist/PostCheckoutOffer1';
-import useOfferThemeState from '../../../../../packages/react-components/src/OfferTheme/offerThemeState';
-import useOfferThemeVariables from '../../../../../packages/react-components/src/OfferTheme/offerThemeVariables';
+import { OfferTheme } from './components';
+import loadData from './utilities/loadData';
 
-// TODO
-import dummyData from './dummyData.json';
+const App = ({ storage }) => {
+  const {
+    shop,
+    shopifyCartItems,
+    shopifyCartTotal,
+    shopifyCartItemCount,
+    offer,
+    theme,
+    triggerProduct,
+    offeredProducts,
+    referenceId,
+    token
+  } = storage.initialData || {};
+
+  if (!storage.initialData) {
+    return null;
+  }
+
+  return (
+    <OfferTheme
+      shop={shop}
+      offer={offer}
+      theme={theme}
+      triggerProduct={triggerProduct}
+      offeredProducts={offeredProducts}
+      shopifyCartItems={shopifyCartItems}
+      shopifyCartTotal={shopifyCartTotal}
+      shopifyCartItemCount={shopifyCartItemCount}
+      referenceId={referenceId}
+      token={token}
+    />
+  );
+};
 
 /**
  * Entry point for the `ShouldRender` Extension Point.
@@ -25,24 +56,26 @@ import dummyData from './dummyData.json';
  * optionally allows data to be stored on the client for use in the `Render`
  * extension point.
  */
-extend('Checkout::PostPurchase::ShouldRender', async ({ storage }) => {
-  const initialState = await getRenderData();
-  const render = true; // eslint-disable-line no-shadow
+extend(
+  'Checkout::PostPurchase::ShouldRender',
+  async ({ inputData, storage }) => {
+    const { shop, initialPurchase, token } = inputData;
+    const { referenceId } = initialPurchase;
+    const { domain } = shop;
+    const data = await loadData(domain, initialPurchase);
+    const { offer } = data;
+    const shouldRender = !!offer;
 
-  if (render) {
-    // Saves initial state, provided to `Render` via `storage.initialData`
-    await storage.update(initialState);
+    if (shouldRender) {
+      // Saves initial state, provided to `Render` via `storage.initialData`.
+      await storage.update({ ...data, referenceId, token });
+    }
+
+    return {
+      render: shouldRender
+    };
   }
-
-  return {
-    render
-  };
-});
-
-// Simulate results of network call, etc.
-async function getRenderData() {
-  return dummyData;
-}
+);
 
 /**
  * Entry point for the `Render` Extension Point
@@ -53,60 +86,4 @@ async function getRenderData() {
  */
 render('Checkout::PostPurchase::Render', App);
 
-const OfferTheme = ({
-  offer,
-  theme,
-  triggerProduct,
-  offeredProducts,
-  forceDisplayType
-}) => {
-  const themeVariables = useOfferThemeVariables(offer, theme);
-
-  // TODO
-  const state = useOfferThemeState({
-    // TODO
-    shop: {
-      countryCode: 'US',
-      currency: 'USD',
-      locale: 'en',
-      timezone: 'America/New_York'
-    },
-    offer,
-    locale: 'en', // TODO
-    countryCode: 'US', // TODO
-    currency: 'USD', // TODO
-    triggerProduct,
-    offeredProducts,
-    shopifyCartItems: [], // TODO
-    shopifyCartTotal: 0, // TODO
-    shopifyCartItemCount: 0, // TODO
-    onAddProducts: () => {}, // TODO
-    onReplaceProduct: () => {}, // TODO
-    handlers: {
-      //
-    }
-  });
-
-  return (
-    <PostCheckoutOffer1
-      theme={themeVariables}
-      state={{ ...state, forceDisplayType }}
-    />
-  );
-};
-
-// Top-level React component
-export function App({ extensionPoint, storage }) {
-  const { offer, theme, triggerProduct, offeredProducts } = storage.initialData;
-  const forceDisplayType = 'desktop';
-
-  return (
-    <OfferTheme
-      offer={offer}
-      theme={theme}
-      triggerProduct={triggerProduct}
-      offeredProducts={offeredProducts}
-      forceDisplayType={forceDisplayType}
-    />
-  );
-}
+export { App };
