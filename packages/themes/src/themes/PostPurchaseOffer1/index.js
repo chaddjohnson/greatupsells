@@ -120,9 +120,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                     value: variant.id,
                     disabled: !variant.hasInventory
                   }))}
-                  onChange={(event) =>
-                    handleVariantChange(0, event.target.value)
-                  }
+                  onChange={(value) => handleVariantChange(0, value)}
                 />
                 <Select
                   label="Quantity"
