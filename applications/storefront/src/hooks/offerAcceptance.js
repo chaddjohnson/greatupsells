@@ -16,8 +16,8 @@ const useOfferAcceptance = () => {
     createShopifyDraftOrder,
     addVariantsToShopifyDraftOrder
   } = useShopifyDraftOrder();
-  const { getCustomerLocale } = useShopifyCustomer();
-  const locale = getCustomerLocale();
+  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
+  const locale = getUrlLocaleAndCountryCode();
 
   const addProducts = async (offerId, items) => {
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
