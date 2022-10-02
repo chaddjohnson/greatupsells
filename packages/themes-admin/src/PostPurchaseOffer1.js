@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   BlockStack,
   Button,
+  Banner,
   CalloutBanner,
   Heading,
   Image,
@@ -20,6 +21,7 @@ import PostPurchaseOffer1 from '@greatupsells/themes/PostPurchaseOffer1';
 const components = {
   BlockStack,
   Button,
+  Banner,
   CalloutBanner,
   Heading,
   Image,

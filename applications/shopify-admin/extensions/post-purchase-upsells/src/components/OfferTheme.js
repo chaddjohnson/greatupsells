@@ -28,6 +28,7 @@ const OfferTheme = ({
 }) => {
   const [changes, setChanges] = useState([]);
   const [calculatedPurchase, setCalculatedPurchase] = useState();
+  const [pricesError, setPricesError] = useState();
 
   const themeVariables = useOfferThemeVariables(offer, theme);
   const ThemeComponent = useThemeComponent(theme?.key);
@@ -53,31 +54,41 @@ const OfferTheme = ({
   const singleOfferedProduct = offeredProducts.length === 1;
 
   const handleAddProduct = async (offerId, items) => {
-    // TODO Handle multiple items (bundle offers)?
-    const [{ shopifyProductId, shopifyVariantId, quantity }] = items;
-    const product = offeredProducts.find(
-      ({ shopifyProductData }) => shopifyProductData.id === shopifyProductId
-    );
-    const variant = product?.shopifyProductData.variants.find(
-      ({ id }) => id === shopifyVariantId
-    );
-    const change = buildChange(offer, variant, quantity);
-    const updatedChanges = [...changes, change];
-    const changeset = await calculateChangeset({
-      changes: updatedChanges
-    });
-    let changesetToken;
+    try {
+      // TODO Handle multiple items (bundle offers)?
+      const [{ shopifyProductId, shopifyVariantId, quantity }] = items;
+      const product = offeredProducts.find(
+        ({ shopifyProductData }) => shopifyProductData.id === shopifyProductId
+      );
+      const variant = product?.shopifyProductData.variants.find(
+        ({ id }) => id === shopifyVariantId
+      );
+      const change = buildChange(offer, variant, quantity);
+      const updatedChanges = [...changes, change];
+      const changeset = await calculateChangeset({
+        changes: updatedChanges
+      });
+      let changesetToken;
 
-    setChanges(updatedChanges);
-    setCalculatedPurchase(changeset.calculatedPurchase);
+      setChanges(updatedChanges);
+      setCalculatedPurchase(changeset.calculatedPurchase);
 
-    if (singleOfferedProduct) {
-      changesetToken = await signChangeset(referenceId, updatedChanges, token);
+      if (singleOfferedProduct) {
+        changesetToken = await signChangeset(
+          referenceId,
+          updatedChanges,
+          token
+        );
 
-      await trackOfferAcceptance(offerId, items, referenceId);
-      await applyChangeset(changesetToken);
+        await trackOfferAcceptance(offerId, items, referenceId);
+        await applyChangeset(changesetToken);
 
-      done();
+        done();
+      }
+    } catch (error) {
+      setPricesError(
+        `There was an error adding the product: ${error.code || error.message}`
+      );
     }
   };
 
@@ -163,21 +174,27 @@ const OfferTheme = ({
   }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const calculatePrices = useCallback(async () => {
-    const potentialChanges = [...changes];
-    const { selectedVariants, selectedQuantities } = state;
+    try {
+      const potentialChanges = [...changes];
+      const { selectedVariants, selectedQuantities } = state;
 
-    // Include the offered product in the changeset calculation if there is only one offered product.
-    if (singleOfferedProduct) {
-      potentialChanges.push(
-        buildChange(offer, selectedVariants[0], selectedQuantities[0])
+      // Include the offered product in the changeset calculation if there is only one offered product.
+      if (singleOfferedProduct) {
+        potentialChanges.push(
+          buildChange(offer, selectedVariants[0], selectedQuantities[0])
+        );
+      }
+
+      const changeset = await calculateChangeset({
+        changes: potentialChanges
+      });
+
+      setCalculatedPurchase(changeset.calculatedPurchase);
+    } catch (error) {
+      setPricesError(
+        `There was an error calculating prices: ${error.code || error.message}`
       );
     }
-
-    const changeset = await calculateChangeset({
-      changes: potentialChanges
-    });
-
-    setCalculatedPurchase(changeset.calculatedPurchase);
   }, [changes, state.selectedVariants, state.selectedQuantities]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Calculate prices.
@@ -223,7 +240,8 @@ const OfferTheme = ({
         shippingPriceFormatted,
         taxPriceFormatted,
         totalPriceFormatted,
-        pricesLoading: !calculatedPurchase
+        pricesLoading: !calculatedPurchase,
+        pricesError
       }}
     />
   );

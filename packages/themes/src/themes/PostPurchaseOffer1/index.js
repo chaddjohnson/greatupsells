@@ -8,6 +8,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
   const {
     BlockStack,
     Button,
+    Banner,
     CalloutBanner,
     Heading,
     Image,
@@ -32,6 +33,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
     totalPrice,
     totalPriceFormatted,
     pricesLoading,
+    pricesError,
     addingProduct,
     handleVariantChange,
     handleQuantityChange,
@@ -98,6 +100,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
             </BlockStack>
             <View />
             <BlockStack spacing="extraLoose">
+              {pricesError && <Banner status="critical">{pricesError}</Banner>}
               <BlockStack spacing="extraTight">
                 <Heading>{offeredProduct.title}</Heading>
                 <PriceHeader
