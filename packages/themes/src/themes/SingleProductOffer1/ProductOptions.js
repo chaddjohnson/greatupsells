@@ -44,7 +44,8 @@ const ProductOptions = styled(({ className }) => {
     selectedVariants,
     selectedQuantities,
     maxQuantities,
-    handleVariantChange
+    handleVariantChange,
+    handleQuantityChange
   } = useContext(StateContext);
   const offeredProduct = offeredProducts[0];
   const { variants } = offeredProduct;
@@ -76,7 +77,7 @@ const ProductOptions = styled(({ className }) => {
           value={selectedQuantity}
           min={1}
           max={maxQuantity}
-          // onChange={} // TODO
+          onChange={(value) => handleQuantityChange(0, value)}
         />
       )}
     </div>

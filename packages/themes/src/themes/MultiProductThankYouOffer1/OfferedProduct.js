@@ -152,6 +152,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     enableVariantSelection,
     enableQuantitySelection,
     handleVariantChange,
+    handleQuantityChange,
     handleThankYouPageAddProduct
   } = useContext(StateContext);
   const { showPrices, showOriginalPrice, addButtonText } = theme;
@@ -216,7 +217,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
                 value={selectedQuantity}
                 min={1}
                 max={maxQuantity}
-                // onChange={} // TODO
+                onChange={(value) => handleQuantityChange(index, value)}
               />
             )}
           </OfferedProductInputs>

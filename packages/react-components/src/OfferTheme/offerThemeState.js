@@ -75,6 +75,9 @@ const useOfferThemeState = ({
       return firstVariantHavingInventory || firstVariant;
     })
   );
+  const [selectedQuantities, setSelectedQuantities] = useState(
+    translatedOfferedProducts.map(() => 1)
+  );
 
   const actionButtonUrl = useMemo(() => {
     if (offer.actionButtonBehavior === 'CHECKOUT') {
@@ -108,11 +111,6 @@ const useOfferThemeState = ({
         return sum + quantity;
       }, 0),
     [addedQuantities]
-  );
-
-  const selectedQuantities = useMemo(
-    () => [...Array(translatedOfferedProducts.length)].map(() => 1),
-    [translatedOfferedProducts.length]
   );
 
   const maxQuantities = useMemo(() => {
@@ -233,8 +231,11 @@ const useOfferThemeState = ({
     setSelectedVariants(updatedSelectedVariants);
   };
 
-  const handlePostPurchaseAddProduct = async (productIndex) => {
-    // TODO
+  const handleQuantityChange = (productIndex, quantity) => {
+    const updatedSelectedQuantities = [...selectedQuantities];
+
+    updatedSelectedQuantities[productIndex] = quantity;
+    setSelectedQuantities(updatedSelectedQuantities);
   };
 
   const shopifyCartTotalFormatted = useMemo(
@@ -472,7 +473,7 @@ const useOfferThemeState = ({
     addingProduct,
     addingProductBundle,
     handleVariantChange,
-    handlePostPurchaseAddProduct,
+    handleQuantityChange,
     handleAddProduct,
     handleAddProductBundle,
     handleReplaceProduct,

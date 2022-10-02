@@ -74,6 +74,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     triggerProduct,
     replacingProductEnabled,
     handleVariantChange,
+    handleQuantityChange,
     handleAddProduct,
     handleReplaceProduct,
     strategy
@@ -142,7 +143,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               value={selectedQuantities[index]}
               min={1}
               max={maxQuantities[index]}
-              // onChange={} // TODO
+              onChange={(value) => handleQuantityChange(index, value)}
             />
           </div>
         )}

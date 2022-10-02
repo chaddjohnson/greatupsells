@@ -24,6 +24,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
   const {
     offeredProducts,
     selectedVariants,
+    selectedQuantities,
     maxQuantities,
     subtotalPriceFormatted,
     shippingPriceFormatted,
@@ -33,6 +34,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
     pricesLoading,
     addingProduct,
     handleVariantChange,
+    handleQuantityChange,
     handleAddProduct,
     handleClose
   } = state;
@@ -124,13 +126,14 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                 />
                 <Select
                   label="Quantity"
-                  value="1"
+                  value={selectedQuantities[0]}
                   options={[
                     ...Array(Math.min(maxQuantities[0], 25, 100)).keys()
                   ].map((index) => ({
                     label: index + 1,
                     value: index + 1
                   }))}
+                  onChange={(value) => handleQuantityChange(0, value)}
                 />
               </BlockStack>
               <BlockStack spacing="tight">
