@@ -19,9 +19,9 @@ import useShopifyCustomer from './shopifyCustomer';
 const CartContext = createContext(null);
 
 const useShopifyCartListener = (listener) => {
-  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
-  const urlLocale = getUrlLocaleAndCountryCode();
-  const url = urlLocale ? `/${urlLocale}/cart.js` : '/cart.js';
+  const { getUrlPrefix } = useShopifyCustomer();
+  const urlPrefix = getUrlPrefix();
+  const url = `${urlPrefix}/cart.js`;
 
   const handler = (requestData, responseData) => {
     const cartData =
@@ -38,10 +38,10 @@ const useShopifyCartListener = (listener) => {
 };
 
 const useShopifyCartAddListener = (listener) => {
-  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
-  const urlLocale = getUrlLocaleAndCountryCode();
-  const url1 = urlLocale ? `/${urlLocale}/cart/add.js` : '/cart/add.js';
-  const url2 = urlLocale ? `/${urlLocale}/cart/add` : '/cart/add';
+  const { getUrlPrefix } = useShopifyCustomer();
+  const urlPrefix = getUrlPrefix();
+  const url1 = `${urlPrefix}/cart/add.js`;
+  const url2 = `${urlPrefix}/cart/add`;
 
   const handler1 = (requestData, responseData) => {
     const productData = responseData?.items?.[0];
@@ -62,10 +62,10 @@ const useShopifyCartAddListener = (listener) => {
 };
 
 const useShopifyCartQuantityListener = (listener) => {
-  const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
-  const urlLocale = getUrlLocaleAndCountryCode();
-  const url1 = urlLocale ? `/${urlLocale}/cart/change.js` : '/cart/change.js';
-  const url2 = urlLocale ? `/${urlLocale}/cart/change` : '/cart/change';
+  const { getUrlPrefix } = useShopifyCustomer();
+  const urlPrefix = getUrlPrefix();
+  const url1 = `${urlPrefix}/cart/change.js`;
+  const url2 = `${urlPrefix}/cart/change`;
 
   const handler = () => {
     if (listener) {
@@ -83,6 +83,8 @@ const CartProvider = ({ children }) => {
 
   const { getCookie, removeCookie } = useCookies();
   const { updateShopifyDraftOrderItems } = useShopifyDraftOrder();
+  const { getUrlPrefix } = useShopifyCustomer();
+  const urlPrefix = getUrlPrefix();
 
   const {
     data: shopifyCart,
@@ -90,9 +92,9 @@ const CartProvider = ({ children }) => {
     mutate: fetchShopifyCart,
     isValidating
   } = useSWR(
-    '/cart.js',
+    `${urlPrefix}/cart.js`,
     async () => {
-      const response = await fetch('/cart.js');
+      const response = await fetch(`${urlPrefix}/cart.js`);
       const data = response.json();
 
       return data;
@@ -141,7 +143,7 @@ const CartProvider = ({ children }) => {
   );
 
   const addVariantsToShopifyCart = async (variants) => {
-    await fetch('/cart/add.js', {
+    await fetch(`${urlPrefix}/cart/add.js`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -164,7 +166,7 @@ const CartProvider = ({ children }) => {
     );
     const newQuantity = Math.max(variant.quantity - quantity, 0);
 
-    await fetch('/cart/update.js', {
+    await fetch(`${urlPrefix}/cart/update.js`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

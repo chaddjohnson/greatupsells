@@ -38,7 +38,17 @@ const useShopifyCustomer = () => {
   };
 
   const getUrlLocaleAndCountryCode = () => {
+    if (window.Shopify?.routes.root) {
+      return window.Shopify.routes.root.replace(/\//g, '');
+    }
+
     return window.location.pathname.match(/^\/([a-z]{2}-[a-z]{2})(\/|$)/)?.[1];
+  };
+
+  const getUrlPrefix = () => {
+    const urlLocale = getUrlLocaleAndCountryCode();
+
+    return `/${urlLocale}`.replace(/\/$/, '');
   };
 
   const getCustomerCurrency = () => {
@@ -81,6 +91,7 @@ const useShopifyCustomer = () => {
     getCustomerLocale,
     getCustomerCountryCode,
     getUrlLocaleAndCountryCode,
+    getUrlPrefix,
     getCustomerCurrency
   };
 };

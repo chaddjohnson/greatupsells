@@ -83,7 +83,9 @@ const useOfferThemeState = ({
     if (offer.actionButtonBehavior === 'CHECKOUT') {
       return checkoutUrl;
     } else if (offer.actionButtonBehavior === 'CART') {
-      return '/cart';
+      return window.Shopify?.routes.root
+        ? `${window.Shopify?.routes.root}cart`
+        : '/cart';
     } else if (offer.actionButtonBehavior === 'PAGE') {
       return handlers.handleClose;
     } else if (offer.actionButtonBehavior === 'LINK') {
