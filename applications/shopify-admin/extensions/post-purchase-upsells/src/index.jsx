@@ -63,8 +63,8 @@ extend(
     const { referenceId } = initialPurchase;
     const { domain } = shop;
     const data = await loadData(domain, initialPurchase);
-    const { offer } = data;
-    const shouldRender = !!offer;
+    const { offer, offeredProducts } = data;
+    const shouldRender = !!offer && offeredProducts.length > 0;
 
     if (shouldRender) {
       // Saves initial state, provided to `Render` via `storage.initialData`.
