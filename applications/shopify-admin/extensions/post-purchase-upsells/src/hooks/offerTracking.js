@@ -5,8 +5,6 @@ const STOREFRONT_API_URL = JSON.parse(process.env.STOREFRONT_API_URL);
 let offerHitId = '';
 
 const useOfferTracking = () => {
-  // TODO
-
   const trackOfferImpression = async ({
     domain,
     offerId,
@@ -14,8 +12,6 @@ const useOfferTracking = () => {
     triggerShopifyVariantId = undefined,
     offeredShopifyProductIds = []
   }) => {
-    // TODO
-
     const url = `${STOREFRONT_API_URL}/offers/${offerId}/impressions`;
     const data = {
       triggerShopifyProductId,
