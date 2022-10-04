@@ -43,7 +43,7 @@ const useOfferThemeState = ({
 
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('greatupsellsDraftOrderInvoiceUrl') ||
-      (window.Shopify?.routes.root
+      (typeof window !== 'undefined' && window.Shopify?.routes.root
         ? `${window.Shopify?.routes.root}checkout`
         : '/checkout')
   );
@@ -86,7 +86,7 @@ const useOfferThemeState = ({
     if (offer.actionButtonBehavior === 'CHECKOUT') {
       return checkoutUrl;
     } else if (offer.actionButtonBehavior === 'CART') {
-      return window.Shopify?.routes.root
+      return typeof window !== 'undefined' && window.Shopify?.routes.root
         ? `${window.Shopify?.routes.root}cart`
         : '/cart';
     } else if (offer.actionButtonBehavior === 'PAGE') {
