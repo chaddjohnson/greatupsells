@@ -128,16 +128,22 @@ const OfferTriggerProductsEditor = ({
                 titleHidden
                 choices={[
                   {
-                    label: 'All products (including none)',
-                    value: 'ALL'
+                    label: 'All products',
+                    value: 'ALL',
+                    helpText:
+                      'Offer is shown if any products (including none) are in the cart.'
                   },
                   {
                     label: 'Specific products',
-                    value: 'PRODUCTS'
+                    value: 'PRODUCTS',
+                    helpText:
+                      'Offer is shown if one or more specific products are in the cart.'
                   },
                   {
                     label: 'Specific collections',
-                    value: 'COLLECTIONS'
+                    value: 'COLLECTIONS',
+                    helpText:
+                      'Offer is shown if one or more products from one or more specific collections are in the cart.'
                   }
                 ]}
                 selected={[appliesTo]}
