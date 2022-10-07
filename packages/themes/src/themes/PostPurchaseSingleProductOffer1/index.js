@@ -18,6 +18,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
     TextContainer,
     Text,
     Select,
+    Tiles,
     View
   } = components;
 
@@ -25,7 +26,8 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
     bannerTitle,
     bannerText,
     showOriginalPrice,
-    showProductDescription
+    showProductDescription,
+    showVariantThumbnails
   } = theme;
   const {
     offeredProducts,
@@ -111,6 +113,27 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                     alt={selectedVariant.image.alt}
                   />
                 </View>
+                <View blockPadding="tight" />
+                {showVariantThumbnails && variants.length > 0 ? (
+                  <Tiles maxPerLine={4} spacing="tight">
+                    {variants.map((variant, variantIndex) => (
+                      <View key={variantIndex}>
+                        <Button
+                          plain
+                          onPress={() => handleVariantChange(0, variant.id)}
+                        >
+                          <Image
+                            source={variant.thumbnailImage.src}
+                            alt={variant.thumbnailImage.alt}
+                          />
+                        </Button>
+                      </View>
+                    ))}
+                  </Tiles>
+                ) : (
+                  showVariantThumbnails && <View blockPadding="loose" />
+                )}
+
                 <View />
               </BlockStack>
               <View />
