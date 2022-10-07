@@ -93,7 +93,7 @@ const config = addWebpackConfig(
     }
   },
   {
-    preact: false
+    preact: true
   }
 );
 
