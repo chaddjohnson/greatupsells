@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ComponentContext, StateContext } from '../../components';
+import { ComponentContext, StateContext, ThemeContext } from '../../components';
 import PriceHeader from './PriceHeader';
 import MoneyLine from './MoneyLine';
 import MoneySummary from './MoneySummary';
@@ -49,6 +49,12 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
   const { variants } = offeredProduct;
   const selectedVariant = selectedVariants[0];
 
+  const savings = useMemo(
+    () =>
+      Math.round((1 - selectedVariant.salePrice / selectedVariant.price) * 100),
+    [selectedVariant.price, selectedVariant.salePrice]
+  );
+
   // Limit total description character count.
   const descriptionParagraphs = useMemo(() => {
     let descriptionLength = 0;
@@ -78,116 +84,123 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
   return (
     <ComponentContext.Provider value={components}>
       <StateContext.Provider value={state}>
-        <BlockStack spacing="loose">
-          <CalloutBanner>
-            <BlockStack spacing="tight">
-              <TextContainer>
-                <Text size="medium" emphasized>
-                  {bannerTitle}
-                </Text>
-              </TextContainer>
-              <TextContainer>{bannerText}</TextContainer>
-            </BlockStack>
-          </CalloutBanner>
-          <Layout
-            maxInlineSize={0.95}
-            media={[
-              { viewportSize: 'small', sizes: [1, 30, 1] },
-              { viewportSize: 'medium', sizes: [300, 30, 0.5] },
-              { viewportSize: 'large', sizes: [400, 30, 0.33] }
-            ]}
-          >
-            <BlockStack alignment="center">
-              <View>
-                <Image
-                  source={selectedVariant.image.src}
-                  alt={selectedVariant.image.alt}
-                />
-              </View>
-              <View />
-            </BlockStack>
-            <View />
-            <BlockStack spacing="extraLoose">
-              {pricesError && <Banner status="critical">{pricesError}</Banner>}
-              <BlockStack>
-                <Heading>{offeredProduct.title}</Heading>
-                <PriceHeader
-                  originalPrice={
-                    showOriginalPrice && selectedVariant.priceFormatted
-                  }
-                  discountedPrice={selectedVariant.salePriceFormatted}
-                  loading={pricesLoading}
-                />
-                {showProductDescription &&
-                  descriptionParagraphs.map((paragraph, index) => (
-                    <TextBlock key={index} subdued>
-                      {paragraph}
-                    </TextBlock>
-                  ))}
-              </BlockStack>
-              <BlockStack>
-                <Select
-                  label="Variant"
-                  value={selectedVariant.id}
-                  options={variants.map((variant) => ({
-                    label: variant.title,
-                    value: variant.id,
-                    disabled: !variant.hasInventory
-                  }))}
-                  onChange={(value) => handleVariantChange(0, value)}
-                />
-                <Select
-                  label="Quantity"
-                  value={selectedQuantities[0]}
-                  options={[
-                    ...Array(Math.min(maxQuantities[0], 25, 100)).keys()
-                  ].map((index) => ({
-                    label: index + 1,
-                    value: index + 1
-                  }))}
-                  onChange={(value) => handleQuantityChange(0, value)}
-                />
-              </BlockStack>
+        <ThemeContext.Provider value={theme}>
+          <BlockStack spacing="loose">
+            <CalloutBanner>
               <BlockStack spacing="tight">
-                <Separator />
-                <MoneyLine
-                  label="Subtotal"
-                  amount={subtotalPricesFormatted[0]}
-                  loading={pricesLoading}
-                />
-                <MoneyLine
-                  label="Shipping"
-                  amount={shippingPricesFormatted[0]}
-                  loading={pricesLoading}
-                />
-                <MoneyLine
-                  label="Taxes"
-                  amount={taxPricesFormatted[0]}
-                  loading={pricesLoading}
-                />
-                <Separator />
-                <MoneySummary
-                  label="Total"
-                  amount={totalPricesFormatted[0]}
-                  loading={pricesLoading}
-                />
+                <TextContainer>
+                  <Text size="medium" emphasized>
+                    {bannerTitle}
+                  </Text>
+                </TextContainer>
+                <TextContainer>{bannerText}</TextContainer>
               </BlockStack>
-              <Separator />
-              <Button
-                submit
-                loading={addingProduct[0] || pricesLoading}
-                disabled={addingProduct[0]}
-                onPress={() => handleAddProduct(0)}
-              >
-                {totalPrices[0] > 0 && <>Pay now • {totalPricesFormatted[0]}</>}
-                {totalPrices[0] === 0 && <>Add now • Free</>}
-              </Button>
-              <Button subdued onPress={handleClose}>
-                Decline this offer
-              </Button>
-            </BlockStack>
-          </Layout>
-        </BlockStack>
+            </CalloutBanner>
+            <Layout
+              maxInlineSize={0.95}
+              media={[
+                { viewportSize: 'small', sizes: [1, 30, 1] },
+                { viewportSize: 'medium', sizes: [300, 30, 0.5] },
+                { viewportSize: 'large', sizes: [400, 30, 0.33] }
+              ]}
+            >
+              <BlockStack alignment="center">
+                <View>
+                  <Image
+                    source={selectedVariant.image.src}
+                    alt={selectedVariant.image.alt}
+                  />
+                </View>
+                <View />
+              </BlockStack>
+              <View />
+              <BlockStack spacing="extraLoose">
+                {pricesError && (
+                  <Banner status="critical">{pricesError}</Banner>
+                )}
+                <BlockStack>
+                  <Heading>{offeredProduct.title}</Heading>
+                  <PriceHeader
+                    originalPrice={
+                      showOriginalPrice && selectedVariant.priceFormatted
+                    }
+                    discountedPrice={selectedVariant.salePriceFormatted}
+                    savings={savings}
+                    loading={pricesLoading}
+                  />
+                  {showProductDescription &&
+                    descriptionParagraphs.map((paragraph, index) => (
+                      <TextBlock key={index} subdued>
+                        {paragraph}
+                      </TextBlock>
+                    ))}
+                </BlockStack>
+                <BlockStack>
+                  <Select
+                    label="Variant"
+                    value={selectedVariant.id}
+                    options={variants.map((variant) => ({
+                      label: variant.title,
+                      value: variant.id,
+                      disabled: !variant.hasInventory
+                    }))}
+                    onChange={(value) => handleVariantChange(0, value)}
+                  />
+                  <Select
+                    label="Quantity"
+                    value={selectedQuantities[0]}
+                    options={[
+                      ...Array(Math.min(maxQuantities[0], 25, 100)).keys()
+                    ].map((index) => ({
+                      label: index + 1,
+                      value: index + 1
+                    }))}
+                    onChange={(value) => handleQuantityChange(0, value)}
+                  />
+                </BlockStack>
+                <BlockStack spacing="tight">
+                  <Separator />
+                  <MoneyLine
+                    label="Subtotal"
+                    amount={subtotalPricesFormatted[0]}
+                    loading={pricesLoading}
+                  />
+                  <MoneyLine
+                    label="Shipping"
+                    amount={shippingPricesFormatted[0]}
+                    loading={pricesLoading}
+                  />
+                  <MoneyLine
+                    label="Taxes"
+                    amount={taxPricesFormatted[0]}
+                    loading={pricesLoading}
+                  />
+                  <Separator />
+                  <MoneySummary
+                    label="Total"
+                    amount={totalPricesFormatted[0]}
+                    loading={pricesLoading}
+                  />
+                </BlockStack>
+                <Separator />
+                <Button
+                  submit
+                  loading={addingProduct[0] || pricesLoading}
+                  disabled={addingProduct[0]}
+                  onPress={() => handleAddProduct(0)}
+                >
+                  {totalPrices[0] > 0 && (
+                    <>Pay now • {totalPricesFormatted[0]}</>
+                  )}
+                  {totalPrices[0] === 0 && <>Add now • Free</>}
+                </Button>
+                <Button subdued onPress={handleClose}>
+                  Decline this offer
+                </Button>
+              </BlockStack>
+            </Layout>
+          </BlockStack>
+        </ThemeContext.Provider>
       </StateContext.Provider>
     </ComponentContext.Provider>
   );
