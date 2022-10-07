@@ -21,7 +21,12 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
     View
   } = components;
 
-  const { bannerTitle, bannerText, showOriginalPrice } = theme;
+  const {
+    bannerTitle,
+    bannerText,
+    showOriginalPrice,
+    showProductDescription
+  } = theme;
   const {
     offeredProducts,
     selectedVariants,
@@ -48,6 +53,10 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
   const descriptionParagraphs = useMemo(() => {
     let descriptionLength = 0;
 
+    if (!showProductDescription) {
+      return [];
+    }
+
     // Split paragraphs and remove tags.
     const splitDescriptionParagraphs = offeredProduct.description
       ?.match(/<p>([^<]*?)<\/p>/g)
@@ -64,7 +73,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
 
       return [...paragraphs, paragraph];
     }, []);
-  }, [offeredProduct.description]);
+  }, [offeredProduct.description, showProductDescription]);
 
   return (
     <ComponentContext.Provider value={components}>
@@ -109,11 +118,12 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                   discountedPrice={selectedVariant.salePriceFormatted}
                   loading={pricesLoading}
                 />
-                {descriptionParagraphs.map((paragraph, index) => (
-                  <TextBlock key={index} subdued>
-                    {paragraph}
-                  </TextBlock>
-                ))}
+                {showProductDescription &&
+                  descriptionParagraphs.map((paragraph, index) => (
+                    <TextBlock key={index} subdued>
+                      {paragraph}
+                    </TextBlock>
+                  ))}
               </BlockStack>
               <BlockStack>
                 <Select
