@@ -1,52 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
+import PostPurchaseMultiProductOffer1 from '../../../../../../packages/themes-storefront/dist/PostPurchaseMultiProductOffer1';
+import PostPurchaseSingleProductOffer1 from '../../../../../../packages/themes-storefront/dist/PostPurchaseSingleProductOffer1';
 
-// Store theme components in a non-state, module-level variable because components
-// cannot be stored in React state.
-const themes = {};
+const themes = {
+  PostPurchaseMultiProductOffer1,
+  PostPurchaseSingleProductOffer1
+};
 
 const useThemeComponent = (key) => {
-  const [themesLoaded, setThemesLoaded] = useState({});
-
-  const importTheme = useCallback(async () => {
-    if (!key) {
-      return;
-    }
-
-    if (themes[key]) {
-      return themes[key];
-    }
-
-    let themeModule;
-
-    switch (key) {
-      case 'PostPurchaseMultiProductOffer1':
-        themeModule = await import(
-          '../../../../../../packages/themes-storefront/dist/PostPurchaseMultiProductOffer1'
-        );
-        break;
-
-      case 'PostPurchaseSingleProductOffer1':
-        themeModule = await import(
-          '../../../../../../packages/themes-storefront/dist/PostPurchaseSingleProductOffer1'
-        );
-        break;
-
-      default:
-        break;
-    }
-
-    if (themeModule) {
-      themes[key] = themeModule?.default;
-
-      // Flag the theme as loaded to trigger a re-render.
-      setThemesLoaded({ ...themesLoaded, [key]: true });
-    }
-  }, [key, themesLoaded]);
-
-  useEffect(() => {
-    importTheme();
-  }, [importTheme]);
-
   return themes[key];
 };
 
