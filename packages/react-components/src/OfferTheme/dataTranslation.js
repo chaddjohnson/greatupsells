@@ -38,6 +38,10 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
         description: shopifyProductData.body_html,
         url: `/products/${shopifyProductData.handle}`,
         image: {
+          src: shopifyProductData.image?.src,
+          alt: shopifyProductData.image?.alt || shopifyProductData.title
+        },
+        thumbnailImage: {
           src: getThumbnailImageUrl(shopifyProductData.image?.src),
           alt: shopifyProductData.image?.alt || shopifyProductData.title
         },
@@ -63,6 +67,15 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
             salePriceFormatted: formatCurrency(salePrice),
             sku: variant.sku,
             image: {
+              src:
+                imagesById[variant.image_id]?.src ||
+                shopifyProductData.image?.src,
+              alt:
+                imagesById[variant.image_id]?.alt ||
+                shopifyProductData.image?.alt ||
+                shopifyProductData.title
+            },
+            thumbnailImage: {
               src: getThumbnailImageUrl(
                 imagesById[variant.image_id]?.src ||
                   shopifyProductData.image?.src

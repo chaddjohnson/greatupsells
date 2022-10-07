@@ -166,8 +166,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
       <ProductImageContainer>
         <ProductImageContainerInner>
           <ProductImage
-            src={selectedVariant.image.src}
-            alt={selectedVariant.image.alt}
+            src={selectedVariant.thumbnailImage.src}
+            alt={selectedVariant.thumbnailImage.alt}
           />
         </ProductImageContainerInner>
       </ProductImageContainer>

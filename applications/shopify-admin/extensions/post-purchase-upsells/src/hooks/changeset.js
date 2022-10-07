@@ -31,9 +31,6 @@ const useChangeset = () => {
   };
 
   const calculateSubtotalPrice = (calculatedPurchase) => {
-    const presentmentCurrency =
-      calculatedPurchase?.updatedLineItems[0]?.priceSet?.presentmentMoney
-        ?.currencyCode;
     const presentmentAmount = calculatedPurchase?.updatedLineItems.reduce(
       (sum, line) => {
         const amount =
@@ -43,14 +40,14 @@ const useChangeset = () => {
       },
       0
     );
+    const presentmentCurrency =
+      calculatedPurchase?.updatedLineItems[0]?.priceSet?.presentmentMoney
+        ?.currencyCode;
 
     return [presentmentAmount, presentmentCurrency];
   };
 
   const calculateShippingPrice = (calculatedPurchase) => {
-    const presentmentCurrency =
-      calculatedPurchase?.addedShippingLines[0]?.priceSet?.presentmentMoney
-        ?.currencyCode;
     const presentmentAmount = calculatedPurchase?.addedShippingLines.reduce(
       (sum, line) => {
         const amount = parseFloat(line.priceSet?.presentmentMoney?.amount) || 0;
@@ -59,6 +56,9 @@ const useChangeset = () => {
       },
       0
     );
+    const presentmentCurrency =
+      calculatedPurchase?.addedShippingLines[0]?.priceSet?.presentmentMoney
+        ?.currencyCode;
 
     return [presentmentAmount, presentmentCurrency];
   };

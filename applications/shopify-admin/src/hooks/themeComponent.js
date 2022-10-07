@@ -43,11 +43,16 @@ const useThemeComponent = (key) => {
         );
         break;
 
-      case 'PostPurchaseOffer1':
+      case 'PostPurchaseMultiProductOffer1':
         themeModule = await import(
-          '@greatupsells/themes-admin/PostPurchaseOffer1'
+          '@greatupsells/themes-admin/PostPurchaseMultiProductOffer1'
         );
-        // import('@greatupsells/themes-admin/PostPurchaseOffer1/dist/PostPurchaseOffer1.css');
+        break;
+
+      case 'PostPurchaseSingleProductOffer1':
+        themeModule = await import(
+          '@greatupsells/themes-admin/PostPurchaseSingleProductOffer1'
+        );
         break;
 
       case 'SingleProductOffer2':

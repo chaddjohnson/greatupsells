@@ -26,8 +26,8 @@ const OfferTheme = ({
   referenceId,
   token
 }) => {
-  const [changes, setChanges] = useState([]);
-  const [calculatedPurchase, setCalculatedPurchase] = useState();
+  const [calculatedPurchases, setCalculatedPurchases] = useState([]);
+  const [pricesLoading, setPricesLoading] = useState(false);
   const [pricesError, setPricesError] = useState();
 
   const themeVariables = useOfferThemeVariables(offer, theme);
@@ -46,12 +46,11 @@ const OfferTheme = ({
   const locale = getCustomerLocale();
   const countryCode = getCustomerCountryCode();
   const currency =
-    calculatedPurchase?.totalOutstandingSet.presentmentMoney.currencyCode;
+    calculatedPurchases[0]?.totalOutstandingSet.presentmentMoney.currencyCode;
   const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const { findTriggerProductShopifyVariantId } = useShopifyCart(
     shopifyCartItems
   );
-  const singleOfferedProduct = offeredProducts.length === 1;
 
   const handleAddProduct = async (offerId, items) => {
     try {
@@ -64,27 +63,12 @@ const OfferTheme = ({
         ({ id }) => id === shopifyVariantId
       );
       const change = buildChange(offer, variant, quantity);
-      const updatedChanges = [...changes, change];
-      const changeset = await calculateChangeset({
-        changes: updatedChanges
-      });
-      let changesetToken;
+      const changesetToken = await signChangeset(referenceId, [change], token);
 
-      setChanges(updatedChanges);
-      setCalculatedPurchase(changeset.calculatedPurchase);
+      await trackOfferAcceptance(offerId, items, referenceId);
+      await applyChangeset(changesetToken);
 
-      if (singleOfferedProduct) {
-        changesetToken = await signChangeset(
-          referenceId,
-          updatedChanges,
-          token
-        );
-
-        await trackOfferAcceptance(offerId, items, referenceId);
-        await applyChangeset(changesetToken);
-
-        done();
-      }
+      done();
     } catch (error) {
       setPricesError(
         `There was an error adding the product: ${error.code || error.message}`
@@ -109,93 +93,106 @@ const OfferTheme = ({
     }
   });
 
-  const subtotalPrice = useMemo(
-    () => calculateSubtotalPrice(calculatedPurchase)?.[0],
-    [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
+  const subtotalPricesFormatted = useMemo(() => {
+    return calculatedPurchases.map((calculatedPurchase) => {
+      const [presentmentAmount, presentmentCurrency] = calculateSubtotalPrice(
+        calculatedPurchase
+      );
+      const formattedPresentmentAmount = formatCurrency(
+        presentmentAmount,
+        presentmentCurrency
+      );
+
+      return formattedPresentmentAmount;
+    });
+  }, [formatCurrency, calculatedPurchases]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const shippingPricesFormatted = useMemo(
+    () =>
+      calculatedPurchases.map((calculatedPurchase) => {
+        const [presentmentAmount, presentmentCurrency] = calculateShippingPrice(
+          calculatedPurchase
+        );
+        const formattedPresentmentAmount = formatCurrency(
+          presentmentAmount,
+          presentmentCurrency
+        );
+
+        return formattedPresentmentAmount;
+      }),
+    [formatCurrency, calculatedPurchases] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const subtotalPriceFormatted = useMemo(() => {
-    const [presentmentAmount, presentmentCurrency] = calculateSubtotalPrice(
-      calculatedPurchase
-    );
-    const formattedPresentmentAmount = formatCurrency(
-      presentmentAmount,
-      presentmentCurrency
-    );
 
-    return formattedPresentmentAmount;
-  }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
+  const taxPricesFormatted = useMemo(
+    () =>
+      calculatedPurchases.map((calculatedPurchase) => {
+        const [presentmentAmount, presentmentCurrency] = calculateTaxPrice(
+          calculatedPurchase
+        );
+        const formattedPresentmentAmount = formatCurrency(
+          presentmentAmount,
+          presentmentCurrency
+        );
 
-  const shippingPrice = useMemo(
-    () => calculateShippingPrice(calculatedPurchase)?.[0],
-    [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
+        return formattedPresentmentAmount;
+      }),
+    [formatCurrency, calculatedPurchases] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const shippingPriceFormatted = useMemo(() => {
-    const [presentmentAmount, presentmentCurrency] = calculateShippingPrice(
-      calculatedPurchase
-    );
-    const formattedPresentmentAmount = formatCurrency(
-      presentmentAmount,
-      presentmentCurrency
-    );
 
-    return formattedPresentmentAmount;
-  }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const taxPrice = useMemo(
-    () => calculateTaxPrice(calculatedPurchase)?.[0],
-    [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
+  const totalPrices = useMemo(
+    () =>
+      calculatedPurchases.map(
+        (calculatedPurchase) => calculateTotalPrice(calculatedPurchase)?.[0]
+      ),
+    [calculatedPurchases] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const taxPriceFormatted = useMemo(() => {
-    const [presentmentAmount, presentmentCurrency] = calculateTaxPrice(
-      calculatedPurchase
-    );
-    const formattedPresentmentAmount = formatCurrency(
-      presentmentAmount,
-      presentmentCurrency
-    );
 
-    return formattedPresentmentAmount;
-  }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
+  const totalPricesFormatted = useMemo(
+    () =>
+      calculatedPurchases.map((calculatedPurchase) => {
+        const [presentmentAmount, presentmentCurrency] = calculateTotalPrice(
+          calculatedPurchase
+        );
+        const formattedPresentmentAmount = formatCurrency(
+          presentmentAmount,
+          presentmentCurrency
+        );
 
-  const totalPrice = useMemo(
-    () => calculateTotalPrice(calculatedPurchase)?.[0],
-    [calculatedPurchase] // eslint-disable-line react-hooks/exhaustive-deps
+        return formattedPresentmentAmount;
+      }),
+    [formatCurrency, calculatedPurchases] // eslint-disable-line react-hooks/exhaustive-deps
   );
-  const totalPriceFormatted = useMemo(() => {
-    const [presentmentAmount, presentmentCurrency] = calculateTotalPrice(
-      calculatedPurchase
-    );
-    const formattedPresentmentAmount = formatCurrency(
-      presentmentAmount,
-      presentmentCurrency
-    );
-
-    return formattedPresentmentAmount;
-  }, [formatCurrency, calculatedPurchase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const calculatePrices = useCallback(async () => {
+    const { selectedVariants, selectedQuantities } = state;
+
+    setPricesLoading(true);
+
     try {
-      const potentialChanges = [...changes];
-      const { selectedVariants, selectedQuantities } = state;
+      const results = await Promise.all(
+        offeredProducts.map(async (offeredProduct, index) => {
+          const change = buildChange(
+            offer,
+            selectedVariants[index],
+            selectedQuantities[index]
+          );
 
-      // Include the offered product in the changeset calculation if there is only one offered product.
-      if (singleOfferedProduct) {
-        potentialChanges.push(
-          buildChange(offer, selectedVariants[0], selectedQuantities[0])
-        );
-      }
+          const changeset = await calculateChangeset({
+            changes: [change]
+          });
 
-      const changeset = await calculateChangeset({
-        changes: potentialChanges
-      });
+          return changeset.calculatedPurchase;
+        })
+      );
 
-      setCalculatedPurchase(changeset.calculatedPurchase);
+      setCalculatedPurchases(results);
     } catch (error) {
       setPricesError(
         `There was an error calculating prices: ${error.code || error.message}`
       );
     }
-  }, [changes, state.selectedVariants, state.selectedQuantities]); // eslint-disable-line react-hooks/exhaustive-deps
+    setPricesLoading(false);
+  }, [state.selectedVariants, state.selectedQuantities]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Calculate prices.
   useEffect(() => {
@@ -232,15 +229,12 @@ const OfferTheme = ({
       theme={themeVariables}
       state={{
         ...state,
-        subtotalPrice,
-        shippingPrice,
-        taxPrice,
-        totalPrice,
-        subtotalPriceFormatted,
-        shippingPriceFormatted,
-        taxPriceFormatted,
-        totalPriceFormatted,
-        pricesLoading: !calculatedPurchase,
+        subtotalPricesFormatted,
+        shippingPricesFormatted,
+        taxPricesFormatted,
+        totalPrices,
+        totalPricesFormatted,
+        pricesLoading,
         pricesError
       }}
     />

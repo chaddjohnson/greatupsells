@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   BlockStack,
+  InlineStack,
   Button,
   Banner,
   CalloutBanner,
@@ -11,14 +12,15 @@ import {
   Text,
   TextBlock,
   TextContainer,
-  Tiles,
   Select,
+  Tiles,
   View
 } from '@shopify/post-purchase-ui-extensions-react';
-import PostPurchaseOffer1 from '@greatupsells/themes/PostPurchaseOffer1';
+import PostPurchaseMultiProductOffer1 from '@greatupsells/themes/PostPurchaseMultiProductOffer1';
 
 const components = {
   BlockStack,
+  InlineStack,
   Button,
   Banner,
   CalloutBanner,
@@ -29,11 +31,11 @@ const components = {
   Text,
   TextBlock,
   TextContainer,
-  Tiles,
   Select,
+  Tiles,
   View
 };
 
 export default (props) => (
-  <PostPurchaseOffer1 components={components} {...props} />
+  <PostPurchaseMultiProductOffer1 components={components} {...props} />
 );

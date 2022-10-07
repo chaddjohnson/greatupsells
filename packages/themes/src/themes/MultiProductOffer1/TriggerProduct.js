@@ -83,8 +83,8 @@ const TriggerProduct = styled(({ className }) => {
       <TriggerProductImageContainer>
         <AddedIconContainer>
           <ProductImage
-            src={triggerProduct.image.src}
-            alt={triggerProduct.image.src}
+            src={triggerProduct.thumbnailImage.src}
+            alt={triggerProduct.thumbnailImage.src}
           />
         </AddedIconContainer>
       </TriggerProductImageContainer>

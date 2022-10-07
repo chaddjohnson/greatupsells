@@ -38,7 +38,7 @@ const useShopifyCustomer = () => {
   };
 
   const getUrlLocaleAndCountryCode = () => {
-    if (window.Shopify?.routes.root) {
+    if (window.Shopify?.routes?.root) {
       return window.Shopify.routes.root.replace(/\//g, '') || undefined;
     }
 

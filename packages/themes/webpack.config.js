@@ -13,7 +13,10 @@ module.exports = {
     MultiProductOffer1: './src/themes/MultiProductOffer1',
     MultiProductOffer2: './src/themes/MultiProductOffer2',
     MultiProductThankYouOffer1: './src/themes/MultiProductThankYouOffer1',
-    PostPurchaseOffer1: './src/themes/PostPurchaseOffer1',
+    PostPurchaseMultiProductOffer1:
+      './src/themes/PostPurchaseMultiProductOffer1',
+    PostPurchaseSingleProductOffer1:
+      './src/themes/PostPurchaseSingleProductOffer1',
     SingleProductOffer1: './src/themes/SingleProductOffer1',
     SingleProductOffer2: './src/themes/SingleProductOffer2'
   },

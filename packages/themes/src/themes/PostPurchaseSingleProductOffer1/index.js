@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ComponentContext, StateContext } from '../../components';
 import PriceHeader from './PriceHeader';
 import MoneyLine from './MoneyLine';
 import MoneySummary from './MoneySummary';
 
-const PostPurchaseOffer1 = ({ theme, state, components }) => {
+const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
   const {
     BlockStack,
     Button,
@@ -27,11 +27,11 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
     selectedVariants,
     selectedQuantities,
     maxQuantities,
-    subtotalPriceFormatted,
-    shippingPriceFormatted,
-    taxPriceFormatted,
-    totalPrice,
-    totalPriceFormatted,
+    subtotalPricesFormatted,
+    shippingPricesFormatted,
+    taxPricesFormatted,
+    totalPrices,
+    totalPricesFormatted,
     pricesLoading,
     pricesError,
     addingProduct,
@@ -43,19 +43,19 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
   const offeredProduct = offeredProducts[0];
   const { variants } = offeredProduct;
   const selectedVariant = selectedVariants[0];
-  let descriptionParagraphs = [];
-  let descriptionLength = 0;
-
-  // Split paragraphs and remove tags.
-  descriptionParagraphs = offeredProduct.description
-    ?.match(/<p>([^<]*?)<\/p>/g)
-    ?.map((item) => item.replace(/<[^>]+>/g, '')) || [
-    offeredProduct.description
-  ];
 
   // Limit total description character count.
-  descriptionParagraphs = descriptionParagraphs.reduce(
-    (paragraphs, paragraph) => {
+  const descriptionParagraphs = useMemo(() => {
+    let descriptionLength = 0;
+
+    // Split paragraphs and remove tags.
+    const splitDescriptionParagraphs = offeredProduct.description
+      ?.match(/<p>([^<]*?)<\/p>/g)
+      ?.map((item) => item.replace(/<[^>]+>/g, '')) || [
+      offeredProduct.description
+    ];
+
+    return splitDescriptionParagraphs.reduce((paragraphs, paragraph) => {
       if (descriptionLength >= 1000 || paragraphs.length >= 8) {
         return paragraphs;
       }
@@ -63,9 +63,8 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
       descriptionLength += paragraph.length;
 
       return [...paragraphs, paragraph];
-    },
-    []
-  );
+    }, []);
+  }, [offeredProduct.description]);
 
   return (
     <ComponentContext.Provider value={components}>
@@ -101,7 +100,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
             <View />
             <BlockStack spacing="extraLoose">
               {pricesError && <Banner status="critical">{pricesError}</Banner>}
-              <BlockStack spacing="extraTight">
+              <BlockStack>
                 <Heading>{offeredProduct.title}</Heading>
                 <PriceHeader
                   originalPrice={
@@ -116,7 +115,7 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                   </TextBlock>
                 ))}
               </BlockStack>
-              <BlockStack spacing="extraTight">
+              <BlockStack>
                 <Select
                   label="Variant"
                   value={selectedVariant.id}
@@ -143,23 +142,23 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                 <Separator />
                 <MoneyLine
                   label="Subtotal"
-                  amount={subtotalPriceFormatted}
+                  amount={subtotalPricesFormatted[0]}
                   loading={pricesLoading}
                 />
                 <MoneyLine
                   label="Shipping"
-                  amount={shippingPriceFormatted}
+                  amount={shippingPricesFormatted[0]}
                   loading={pricesLoading}
                 />
                 <MoneyLine
                   label="Taxes"
-                  amount={taxPriceFormatted}
+                  amount={taxPricesFormatted[0]}
                   loading={pricesLoading}
                 />
                 <Separator />
                 <MoneySummary
                   label="Total"
-                  amount={totalPriceFormatted}
+                  amount={totalPricesFormatted[0]}
                   loading={pricesLoading}
                 />
               </BlockStack>
@@ -170,8 +169,8 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
                 disabled={addingProduct[0]}
                 onPress={() => handleAddProduct(0)}
               >
-                {totalPrice > 0 && <>Pay now • {totalPriceFormatted}</>}
-                {totalPrice === 0 && <>Add now • Free</>}
+                {totalPrices[0] > 0 && <>Pay now • {totalPricesFormatted[0]}</>}
+                {totalPrices[0] === 0 && <>Add now • Free</>}
               </Button>
               <Button subdued onPress={handleClose}>
                 Decline this offer
@@ -184,4 +183,4 @@ const PostPurchaseOffer1 = ({ theme, state, components }) => {
   );
 };
 
-export default PostPurchaseOffer1;
+export default PostPurchaseSingleProductOffer1;

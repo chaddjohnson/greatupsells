@@ -19,9 +19,15 @@ const useThemeComponent = (key) => {
     let themeModule;
 
     switch (key) {
-      case 'PostPurchaseOffer1':
+      case 'PostPurchaseMultiProductOffer1':
         themeModule = await import(
-          '../../../../../../packages/themes-storefront/dist/PostPurchaseOffer1'
+          '../../../../../../packages/themes-storefront/dist/PostPurchaseMultiProductOffer1'
+        );
+        break;
+
+      case 'PostPurchaseSingleProductOffer1':
+        themeModule = await import(
+          '../../../../../../packages/themes-storefront/dist/PostPurchaseSingleProductOffer1'
         );
         break;
 

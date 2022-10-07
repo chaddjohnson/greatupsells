@@ -51,8 +51,8 @@ const OfferedProduct = styled(({ className }) => {
         title="Click to view this product in a new tab"
       >
         <OfferedProductThumbnail
-          src={selectedVariant.image.src}
-          alt={selectedVariant.image.alt}
+          src={selectedVariant.thumbnailImage.src}
+          alt={selectedVariant.thumbnailImage.alt}
         />
         <OfferedProductTitle
           dangerouslySetInnerHTML={{ __html: offeredProduct.title }}

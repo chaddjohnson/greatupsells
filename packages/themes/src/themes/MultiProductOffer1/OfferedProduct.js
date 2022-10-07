@@ -88,8 +88,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
       <ProductImageContainer>
         <a href={selectedVariant.url} target="_blank" rel="noopener noreferrer">
           <ProductImage
-            src={selectedVariant.image.src}
-            alt={selectedVariant.image.alt}
+            src={selectedVariant.thumbnailImage.src}
+            alt={selectedVariant.thumbnailImage.alt}
           />
         </a>
       </ProductImageContainer>

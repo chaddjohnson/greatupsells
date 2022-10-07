@@ -39,7 +39,9 @@ const StyledFrame = styled(Frame)`
   @media screen and (min-width: 768px) {
     &&& {
       min-width: ${(props) =>
-        props.designMode && props.forceDisplayType === 'desktop' ? '768px' : 0};
+        props.designMode && props.forceDisplayType === 'desktop'
+          ? '1200px'
+          : 0};
     }
   }
 `;

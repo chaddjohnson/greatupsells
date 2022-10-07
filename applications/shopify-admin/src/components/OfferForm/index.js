@@ -74,10 +74,12 @@ const SmallPreviewOfferPopupContainer = styled.div`
     props.smallPreviewContentHeight
       ? `${props.smallPreviewContentHeight}px`
       : '300px'};
-  overflow: hidden;
+  max-height: 350px;
+  overflow-y: auto;
 
   iframe {
     min-width: 0;
+    min-height: 0;
   }
 `;
 
@@ -262,24 +264,24 @@ const OfferForm = ({
   const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
   const zoomByStrategy = {
     CROSS_SELL: {
-      designModeZoom: 0.79,
-      smallDesignModeZoom: 0.4
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
     },
     UPSELL: {
-      designModeZoom: 0.79,
-      smallDesignModeZoom: 0.4
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
     },
     THANK_YOU_PAGE: {
       designModeZoom: 1.0,
       smallDesignModeZoom: 0.5
     },
     POST_PURCHASE: {
-      designModeZoom: 0.79,
-      smallDesignModeZoom: 0.4
+      designModeZoom: 0.65,
+      smallDesignModeZoom: 0.33
     },
     POPUP: {
-      designModeZoom: 0.79,
-      smallDesignModeZoom: 0.4
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
     }
   };
   const { designModeZoom } = zoomByStrategy[offer.strategy];

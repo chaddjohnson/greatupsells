@@ -209,8 +209,8 @@ const Body = styled(({ className }) => {
       <Columns>
         <ImageContainer>
           <Image
-            src={selectedVariant.image.src}
-            alt={selectedVariant.image.alt}
+            src={selectedVariant.thumbnailImage.src}
+            alt={selectedVariant.thumbnailImage.alt}
           />
         </ImageContainer>
         <Details>
