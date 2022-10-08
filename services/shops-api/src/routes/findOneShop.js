@@ -25,9 +25,15 @@ const handler = async (event, context) => {
       };
     }
 
+    // Determine whether this app is currently selected as the post-purchase app for the shop.
+    const isPostPurchaseAppInUse = await shop.getIsPostPurchaseAppInUse();
+
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(shop)
+      body: JSON.stringify({
+        ...shop.toObject(),
+        isPostPurchaseAppInUse
+      })
     };
   } catch (error) {
     await logger.error(`Error retrieving shop`, error, { event });

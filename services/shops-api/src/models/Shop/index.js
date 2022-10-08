@@ -6,6 +6,7 @@ const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
+const getIsPostPurchaseAppInUse = require('./getIsPostPurchaseAppInUse');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
 const activatePlan = require('./activatePlan');
@@ -155,6 +156,10 @@ schema.methods.importCollections = function () {
 
 schema.methods.importProducts = function () {
   return importProducts(this);
+};
+
+schema.methods.getIsPostPurchaseAppInUse = function () {
+  return getIsPostPurchaseAppInUse(this);
 };
 
 schema.methods.deactivate = function () {

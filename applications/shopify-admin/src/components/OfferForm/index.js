@@ -6,7 +6,7 @@ import React, {
   useEffect
 } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Layout, PageActions, Sticky } from '@shopify/polaris';
+import { Form, Layout, PageActions, Sticky, Banner } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
@@ -34,6 +34,7 @@ import OfferOptionsEditor from './OfferOptionsEditor';
 import dummyCrossSellData from './dummyCrossSellData.json';
 import dummyUpsellData from './dummyUpsellData.json';
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
 let themeCount = 0;
 
 const assignId = (object) => {
@@ -460,6 +461,32 @@ const OfferForm = ({
   return (
     <Form noValidate onSubmit={submit}>
       <Layout>
+        <Layout.Section>
+          {!isDevelopment &&
+            offer.strategy === 'POST_PURCHASE' &&
+            !shop.isPostPurchaseAppInUse && (
+              <Banner
+                title="Great Upsells isn't the selected app on the checkout post-purchase page."
+                status="critical"
+                action={{
+                  content: 'Open checkout settings',
+                  url: `https://${sessionStorage.shop}/admin/settings/checkout`,
+                  external: true
+                }}
+                secondaryAction={{
+                  content: 'Learn more',
+                  url:
+                    'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
+                  external: true
+                }}
+              >
+                <p>
+                  To use it on your store&apos;s post-purchase page, select it
+                  in checkout settings.
+                </p>
+              </Banner>
+            )}
+        </Layout.Section>
         <Layout.Section>
           <OfferNameEditor name={name} submitted={submitted} />
           <OfferStrategyEditor
