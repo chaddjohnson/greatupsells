@@ -35,10 +35,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                   >
                     Your current theme does not support post-purchase features.
                     A{' '}
-                    <Link
-                      url="https://themes.shopify.com/collections/os2-themes"
-                      external
-                    >
+                    <Link url="https://themes.shopify.com" external>
                       Shopify 2.0 theme
                     </Link>{' '}
                     is required to use this feature.
