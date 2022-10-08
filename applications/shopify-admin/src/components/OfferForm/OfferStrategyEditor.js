@@ -23,8 +23,19 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
             },
             {
               label: 'Post-purchase cross-sell',
-              helpText:
-                'Encourage customers to purchase a related or complementary product after completing checkout.',
+              helpText: (
+                <>
+                  Encourage customers to purchase a related or complementary
+                  product after completing checkout. Please review{' '}
+                  <Link
+                    url="https://shopify.dev/apps/checkout/post-purchase#limitations-and-considerations"
+                    external
+                  >
+                    limitations
+                  </Link>
+                  .
+                </>
+              ),
               value: 'POST_PURCHASE',
               renderChildren: (isSelected) =>
                 isSelected &&
