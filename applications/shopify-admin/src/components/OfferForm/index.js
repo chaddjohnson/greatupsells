@@ -112,7 +112,6 @@ const OfferForm = ({
   );
   const [previewContentHeight, setPreviewContentHeight] = useState();
   const [smallPreviewContentHeight, setSmallPreviewContentHeight] = useState();
-  const [themeIncompatible, setThemeIncompatible] = useState(false);
 
   const {
     name,
@@ -229,7 +228,7 @@ const OfferForm = ({
     () =>
       ContextualSaveBar.create(app, {
         saveAction: {
-          disabled: (!dirty && !themeDirty) || themeIncompatible,
+          disabled: !dirty && !themeDirty,
           loading: submitting
         },
         discardAction: {
@@ -238,7 +237,7 @@ const OfferForm = ({
           discardConfirmationModal: dirty || themeDirty
         }
       }),
-    [app, dirty, themeDirty, submitting, themeIncompatible]
+    [app, dirty, themeDirty, submitting]
   );
 
   const offer = useMemo(
@@ -336,10 +335,6 @@ const OfferForm = ({
     // Switch to the first strategy theme.
     if (firstStrategyOfferTheme && !selectedThemeUsesSelectedStrategy) {
       setTheme(firstStrategyOfferTheme);
-    }
-
-    if (!shop.onlineStore2Theme && value === 'POST_PURCHASE') {
-      setThemeIncompatible(true);
     }
 
     // Use page load as trigger event for Post Purchase and Thank You Page offers.
@@ -624,7 +619,7 @@ const OfferForm = ({
           <PageActions
             primaryAction={{
               content: 'Save offer',
-              disabled: (!dirty && !themeDirty) || themeIncompatible,
+              disabled: !dirty && !themeDirty,
               loading: submitting,
               submit: true,
               onAction: handleSubmit
