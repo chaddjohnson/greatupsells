@@ -41,8 +41,8 @@ const Button = styled(
   cursor: 'pointer',
 
   '&:hover:not(:disabled)': {
-    color: ({ theme }) => theme.buttonHoverTextColor,
-    backgroundColor: ({ theme }) => theme.buttonHoverBackgroundColor
+    backgroundColor: ({ theme }) =>
+      tinycolor(theme.buttonBackgroundColor).darken(10)
   },
   '&:disabled': {
     backgroundColor: ({ theme }) =>

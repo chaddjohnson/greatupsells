@@ -38,8 +38,8 @@ const Button = styled(
   transition: 'background-color 0.2s ease-in-out 0s',
 
   '&:hover:not(:disabled)': {
-    color: ({ theme }) => theme.buttonHoverTextColor,
-    backgroundColor: ({ theme }) => theme.buttonHoverBackgroundColor
+    backgroundColor: ({ theme }) =>
+      tinycolor(theme.buttonBackgroundColor).darken(10)
   },
   '&:disabled': {
     backgroundColor: ({ theme }) =>

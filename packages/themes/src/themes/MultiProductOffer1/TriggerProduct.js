@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'styled-components';
+import tinycolor from 'tinycolor2';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 import Button from './Button';
@@ -56,8 +57,8 @@ const ActionButton = styled(Button)({
   marginRight: ['2rem', 0, 0, 0],
 
   '&&:hover': {
-    backgroundColor: ({ theme }) => theme.actionButtonHoverBackgroundColor,
-    color: ({ theme }) => theme.actionButtonTextHoverColor
+    backgroundColor: ({ theme }) =>
+      tinycolor(theme.actionButtonBackgroundColor).darken(10)
   }
 });
 
