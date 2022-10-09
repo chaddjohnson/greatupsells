@@ -159,6 +159,9 @@ const OfferPopup = ({
     frameRef?.contentWindow.location.reload();
   }, [frameRef, offer.strategy]);
 
+  if (!offer) {
+    return null;
+  }
   if (!open) {
     return null;
   }
