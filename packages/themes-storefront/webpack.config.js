@@ -26,7 +26,7 @@ module.exports = addWebpackConfig({
     filename: '[name].js',
     libraryTarget: 'umd',
     globalObject: 'this',
-    publicPath: '/themes/'
+    publicPath: dev ? '/themes/' : '/'
   },
   cache: {
     type: 'filesystem'

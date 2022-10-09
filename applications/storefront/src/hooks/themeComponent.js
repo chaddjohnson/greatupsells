@@ -1,7 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
+const dev = process.env.NODE_ENV !== 'production';
+
 // eslint-disable-next-line
-__webpack_public_path__ = `${process.env.ASSETS_URL}/themes/`;
+__webpack_public_path__ = dev
+  ? `${process.env.ASSETS_URL}/themes/`
+  : `${process.env.ASSETS_URL}/`;
 
 // Store theme components in a non-state, module-level variable because components
 // cannot be stored in React state.

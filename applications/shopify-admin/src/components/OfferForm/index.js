@@ -34,7 +34,7 @@ import OfferOptionsEditor from './OfferOptionsEditor';
 import dummyCrossSellData from './dummyCrossSellData.json';
 import dummyUpsellData from './dummyUpsellData.json';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== 'production';
 let themeCount = 0;
 
 const assignId = (object) => {
@@ -462,7 +462,7 @@ const OfferForm = ({
     <Form noValidate onSubmit={submit}>
       <Layout>
         <Layout.Section>
-          {!isDevelopment &&
+          {!dev &&
             offer.strategy === 'POST_PURCHASE' &&
             !shop.isPostPurchaseAppInUse && (
               <Banner
