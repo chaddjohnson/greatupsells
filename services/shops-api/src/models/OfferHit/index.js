@@ -160,11 +160,6 @@ schema.methods.trackConversion = function (order) {
   return trackConversion(this, order);
 };
 
-// TODO: Validate values conditionally based on offer.
-// schema.pre('validate', function (next) {
-//   hooks.preValidate(this, next);
-// });
-
 schema.index({ shop: 1 });
 schema.index({ offer: 1 });
 schema.index({ order: 1 });

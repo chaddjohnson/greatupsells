@@ -54,7 +54,6 @@ const OfferTheme = ({
 
   const handleAddProduct = async (offerId, items) => {
     try {
-      // TODO Handle multiple items (bundle offers)?
       const [{ shopifyProductId, shopifyVariantId, quantity }] = items;
       const product = offeredProducts.find(
         ({ shopifyProductData }) => shopifyProductData.id === shopifyProductId

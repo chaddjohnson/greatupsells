@@ -1,8 +1,6 @@
 const models = require('..');
 
 const calculateGrossProfitChange = async (startDate, endDate) => {
-  // TODO: Sum shop.plan.price for active shops installed today.
-
   const Shop = await models.get('Shop');
   const pipelines = [
     {
