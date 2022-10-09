@@ -186,25 +186,23 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      {!isThankYouPage && (
-        <PageLoadOffer
-          shop={shop}
-          offer={offerDataByTriggerEvent.LOAD?.offer}
-          theme={offerDataByTriggerEvent.LOAD?.theme}
-          ThemeComponent={PageLoadThemeComponent}
-          locale={locale}
-          countryCode={countryCode}
-          currency={currency}
-          triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
-          offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
-          shopifyCartItems={shopifyCartItems}
-          shopifyCartTotal={shopifyCartTotal}
-          shopifyCartItemCount={shopifyCartItemCount}
-          viewingOffer={viewingOffer}
-          onOpen={handleOfferOpen}
-          onClose={handleOfferClose}
-        />
-      )}
+      <PageLoadOffer
+        shop={shop}
+        offer={offerDataByTriggerEvent.LOAD?.offer}
+        theme={offerDataByTriggerEvent.LOAD?.theme}
+        ThemeComponent={PageLoadThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
+        triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
+        offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
+        shopifyCartTotal={shopifyCartTotal}
+        shopifyCartItemCount={shopifyCartItemCount}
+        viewingOffer={viewingOffer}
+        onOpen={handleOfferOpen}
+        onClose={handleOfferClose}
+      />
       <PageScrollOffer
         shop={shop}
         offer={offerDataByTriggerEvent.SCROLL?.offer}

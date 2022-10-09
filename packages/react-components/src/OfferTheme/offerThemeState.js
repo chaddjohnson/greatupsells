@@ -43,8 +43,8 @@ const useOfferThemeState = ({
 
   const [checkoutUrl, setCheckoutUrl] = useState(
     getCookie('greatupsellsDraftOrderInvoiceUrl') ||
-      (typeof window !== 'undefined' && window.Shopify?.routes.root
-        ? `${window.Shopify?.routes.root}checkout`
+      (typeof window !== 'undefined' && window.Shopify?.routes?.root
+        ? `${window.Shopify?.routes?.root}checkout`
         : '/checkout')
   );
   const [addedQuantities, setAddedQuantities] = useState(
