@@ -203,7 +203,6 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
                   <option
                     key={variant.id}
                     value={variant.id}
-                    selected={selectedVariant[index]?.id === variant.id}
                     disabled={!variant.hasInventory}
                   >
                     {variant.title}
