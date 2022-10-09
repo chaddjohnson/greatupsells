@@ -35,10 +35,10 @@ const ThankYouPageOffer = ({
   );
 
   const headerContainer = document.querySelector(
-    '.step__sections > .section > .section__content .content-box:nth-of-type(2) .content-box__row:nth-of-type(1)'
+    '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(1)'
   );
   const contentContainer = document.querySelector(
-    '.step__sections > .section > .section__content .content-box:nth-of-type(2) .content-box__row:nth-of-type(2)'
+    '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(2)'
   );
 
   // Use the last non-empty values.
@@ -60,10 +60,13 @@ const ThankYouPageOffer = ({
       return;
     }
 
-    if (!headerContainer.classList.contains('content-box__row--no-border')) {
+    if (
+      added &&
+      !headerContainer.classList.contains('content-box__row--no-border')
+    ) {
       headerContainer.classList.add('content-box__row--no-border');
     }
-  }, [headerContainer]);
+  }, [added, headerContainer]);
 
   useEffect(() => {
     if (window.Shopify?.Checkout?.page !== 'thank_you') {
