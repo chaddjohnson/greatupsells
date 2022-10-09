@@ -23,6 +23,17 @@ const useOfferAcceptance = () => {
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
     let draftOrder = null;
 
+    // Do not add Shopify cart items to draft order for Order Status or Thank You pages.
+    const includeShopifyCartItems =
+      !window.Shopify?.Checkout?.isOrderStatusPage &&
+      window.Shopify?.Checkout?.page !== 'thank_you';
+    const includedCartItems = includeShopifyCartItems
+      ? shopifyCartItems.map((item) => ({
+          shopifyVariantId: item.variant_id,
+          quantity: item.quantity
+        }))
+      : [];
+
     // Add the variant to the existing draft order if one exists.
     if (shopifyDraftOrderId) {
       draftOrder = await addVariantsToShopifyDraftOrder(
@@ -41,10 +52,7 @@ const useOfferAcceptance = () => {
             shopifyVariantId,
             quantity
           })),
-          ...shopifyCartItems.map((item) => ({
-            shopifyVariantId: item.variant_id,
-            quantity: item.quantity
-          }))
+          ...includedCartItems
         ]
       });
 
