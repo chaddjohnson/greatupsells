@@ -199,7 +199,7 @@ LostBrowserFocusOffer.propTypes = {
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  ThemeComponent: PropTypes.node,
+  ThemeComponent: PropTypes.func,
   locale: PropTypes.string.isRequired,
   countryCode: PropTypes.string.isRequired,
   currency: PropTypes.string.isRequired,

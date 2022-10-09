@@ -299,7 +299,7 @@ OfferPopup.propTypes = {
   designModeZoom: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   theme: PropTypes.object.isRequired,
-  ThemeComponent: PropTypes.node,
+  ThemeComponent: PropTypes.func,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shopifyCartItems: PropTypes.array,
