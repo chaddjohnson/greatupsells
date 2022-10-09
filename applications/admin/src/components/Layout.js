@@ -20,7 +20,6 @@ import {
   PieChartOutlined as DashboardIcon,
   BarChart as StatsIcon,
   Store as ShopIcon,
-  Brush as ThemesIcon,
   Notes as LogsIcon
 } from '@material-ui/icons';
 import Link from './Link';
@@ -136,14 +135,6 @@ const Layout = ({ title, icon, contentProps, children }) => {
               <ShopIcon />
             </ListItemIcon>
             <ListItemText primary="Shops" />
-          </Link>
-        </ListItem>
-        <ListItem button component="li">
-          <Link className={classes.link} href="/themes">
-            <ListItemIcon>
-              <ThemesIcon />
-            </ListItemIcon>
-            <ListItemText primary="Themes" />
           </Link>
         </ListItem>
       </List>
