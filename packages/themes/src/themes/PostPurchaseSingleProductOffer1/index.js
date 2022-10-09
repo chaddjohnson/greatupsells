@@ -178,7 +178,9 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                       label: index + 1,
                       value: index + 1
                     }))}
-                    onChange={(value) => handleQuantityChange(0, value)}
+                    onChange={(event) =>
+                      handleQuantityChange(0, event.target.value)
+                    }
                   />
                 </BlockStack>
                 <BlockStack spacing="tight">

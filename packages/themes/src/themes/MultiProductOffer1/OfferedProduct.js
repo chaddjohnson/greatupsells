@@ -143,7 +143,9 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               value={selectedQuantities[index]}
               min={1}
               max={maxQuantities[index]}
-              onChange={(value) => handleQuantityChange(index, value)}
+              onChange={(event) =>
+                handleQuantityChange(index, event.target.value)
+              }
             />
           </div>
         )}

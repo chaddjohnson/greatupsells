@@ -77,7 +77,7 @@ const ProductOptions = styled(({ className }) => {
           value={selectedQuantity}
           min={1}
           max={maxQuantity}
-          onChange={(value) => handleQuantityChange(0, value)}
+          onChange={(event) => handleQuantityChange(0, event.target.value)}
         />
       )}
     </div>
