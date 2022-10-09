@@ -117,8 +117,8 @@ const OfferDiscountEditor = ({
               }
               helpText={
                 discountType.value !== 'SET_PRICE'
-                  ? 'The discount amount applied to each offered item added to the cart.'
-                  : 'The price for each offered item added to the cart.'
+                  ? 'The discount amount applied to each offered item added to the cart. Discounts are applied during checkout.'
+                  : 'The price for each offered item added to the cart. Discounts are applied during checkout.'
               }
               inputMode="numeric"
               {...discountValue}

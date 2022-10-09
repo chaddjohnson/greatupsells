@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTheme } from 'styled-components';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
@@ -60,6 +60,8 @@ const AddedProductIcon = styled(Icon)({
 });
 
 const OfferedProduct = styled(({ className, offeredProduct, index }) => {
+  const [actionDone, setActionDone] = useState(false);
+
   const theme = useTheme();
   const {
     selectedVariants,
@@ -73,6 +75,8 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     enableQuantitySelection,
     triggerProduct,
     replacingProductEnabled,
+    actionButtonUrl,
+    performActionOnAdd,
     handleVariantChange,
     handleQuantityChange,
     handleAddProduct,
@@ -82,6 +86,31 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
   const { showPrices, showOriginalPrice, addButtonText } = theme;
   const { variants } = offeredProduct;
   const selectedVariant = selectedVariants[index];
+
+  const handleAddButton = async () => {
+    await handleAddProduct(index);
+    setActionDone(true);
+  };
+
+  const handleReplaceButton = async () => {
+    await handleReplaceProduct(triggerProduct.id, index);
+    setActionDone(true);
+  };
+
+  useEffect(() => {
+    if (!actionDone) {
+      return;
+    }
+    if (!performActionOnAdd) {
+      return;
+    }
+
+    if (typeof actionButtonUrl === 'string') {
+      window.location.href = actionButtonUrl;
+    } else if (typeof actionButtonUrl === 'function') {
+      actionButtonUrl();
+    }
+  }, [actionButtonUrl, actionDone, performActionOnAdd]);
 
   return (
     <div className={className}>
@@ -154,7 +183,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               <AddButton
                 disabled={!addingProductEnabled[index]}
                 loading={addingProduct[index]}
-                onClick={() => handleAddProduct(index)}
+                onClick={handleAddButton}
               >
                 {addButtonText}
               </AddButton>
@@ -165,9 +194,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
                   <AddButton
                     disabled={!replacingProductEnabled[index]}
                     loading={addingProduct[index]}
-                    onClick={() =>
-                      handleReplaceProduct(triggerProduct.id, index)
-                    }
+                    onClick={handleReplaceButton}
                   >
                     {addButtonText}
                   </AddButton>

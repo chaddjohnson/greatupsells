@@ -106,6 +106,7 @@ const initialOffer = {
   minimumRequirement: 'NONE',
   geotargetingCountries: [],
   startAt: new Date().toISOString(),
+  performActionOnAdd: true,
   enableVariantSelection: true,
   enableQuantitySelection: true,
   enableEscClose: false,

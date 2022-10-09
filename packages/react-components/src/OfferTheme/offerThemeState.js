@@ -31,6 +31,7 @@ const useOfferThemeState = ({
   const {
     strategy,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection
   } = offer;
@@ -457,6 +458,7 @@ const useOfferThemeState = ({
   return {
     strategy,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection,
     triggerProduct: translatedTriggerProduct,

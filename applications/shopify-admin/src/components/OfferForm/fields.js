@@ -269,6 +269,7 @@ const useFields = (initialOffer, showEndDate) => {
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
   const enableBundling = useField(initialOffer.enableBundling);
+  const performActionOnAdd = useField(initialOffer.performActionOnAdd);
   const enableVariantSelection = useField(initialOffer.enableVariantSelection);
   const enableQuantitySelection = useField(
     initialOffer.enableQuantitySelection
@@ -307,6 +308,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableEscClose,
     enableMaskClose,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection,
     animation

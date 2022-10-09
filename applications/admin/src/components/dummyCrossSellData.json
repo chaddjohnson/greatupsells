@@ -15,6 +15,7 @@
     "viewAllowance": "DAYS",
     "viewAllowanceDays": 7,
     "enableBundling": false,
+    "performActionOnAdd": false,
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableProductLinks": true,

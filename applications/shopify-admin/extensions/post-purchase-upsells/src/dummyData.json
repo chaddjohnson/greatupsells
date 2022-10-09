@@ -8,6 +8,7 @@
     "minimumRequirement": "NONE",
     "enableBundling": false,
     "geotargetingCountries": [],
+    "performActionOnAdd": false,
     "enableVariantSelection": true,
     "enableQuantitySelection": true,
     "enableEscClose": true,

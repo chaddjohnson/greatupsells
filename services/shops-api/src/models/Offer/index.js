@@ -162,6 +162,7 @@ const schema = new mongoose.Schema(
         message: 'End date must be on or after start date'
       }
     },
+    performActionOnAdd: { type: Boolean, required: false, default: true },
     delaySeconds: { type: Number, required: false, min: 0 },
     onPageRequiredSeconds: { type: Number, required: false, min: 0 },
     enableVariantSelection: { type: Boolean, required: false, default: true },

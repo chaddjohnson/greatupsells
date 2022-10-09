@@ -147,6 +147,7 @@ const OfferForm = ({
     enableEscClose,
     enableMaskClose,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection
   } = useFields(initialOffer, showEndDate);
@@ -184,6 +185,7 @@ const OfferForm = ({
       enableEscClose,
       enableMaskClose,
       enableBundling,
+      performActionOnAdd,
       enableVariantSelection,
       enableQuantitySelection,
       animation
@@ -556,6 +558,7 @@ const OfferForm = ({
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+            performActionOnAdd={performActionOnAdd}
             submitted={submitted}
           />
           <OfferTriggerProductsEditor
