@@ -30,6 +30,7 @@ const handler = middy(async (event, context) => {
       httpClient.get(`/offers/${offerId}/themes`)
     ]);
     const offerShopId = offer && offer.shop;
+    const enabledOfferThemes = offerThemes.filter(({ enabled }) => enabled);
 
     if (shopId !== offerShopId) {
       await logger.warn(
@@ -46,7 +47,7 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offerThemes)
+      body: JSON.stringify(enabledOfferThemes)
     };
   } catch (error) {
     if (error.response && error.response.status) {
