@@ -2,6 +2,11 @@ import React, { useContext } from 'react';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 
+const Inner = styled.span({
+  position: 'absolute',
+  top: '-2px'
+});
+
 const CloseButton = styled(({ className }) => {
   const { handleClose } = useContext(StateContext);
 
@@ -10,8 +15,9 @@ const CloseButton = styled(({ className }) => {
       className={className}
       aria-label="Close offer"
       onClick={handleClose}
-      dangerouslySetInnerHTML={{ __html: '&times;' }}
-    />
+    >
+      <Inner dangerouslySetInnerHTML={{ __html: '&times;' }} />
+    </button>
   );
 })({
   position: 'absolute',
