@@ -178,7 +178,7 @@ The following are used:
 Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
-2. Create a server configuration for the Shopify Admin app URL; for example:
+1. Create a server configuration for the Shopify Admin app URL; for example:
 
    ```
    server {
@@ -191,7 +191,7 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
 
        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
        ssl_ciphers         HIGH:!aNULL:!MD5;
-       ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
+       ssl_dhparam /usr/local/etc/ssl/certs/dehparam.pem;
 
        location / {
            proxy_pass http://127.0.0.1:3000/;
@@ -199,8 +199,11 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
    }
    ```
 
-3. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Change all instances of "test.cpming.top" to "\*.ngrok.io". use "2048" instead of "128" for the `openssl dhparam` command.
-4. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
+1. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx).
+   1. Change all instances of "test.cpming.top" to "\*.ngrok.io".
+   1. Use "2048" instead of "128" for the `openssl dhparam` command.
+1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
+1. Do the same as the previous two steps but for domains admin-api, shopify-admin-api, and storefront-api (but with no `\*.` prefix).
 
 Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
@@ -217,6 +220,7 @@ The following coding conventions are adhered to except in special cases:
 - Hyphens for image and media file names.
 - Hyphens for directory names.
 - Default exports are used for modules and components (with the exception of index.js files).
+- In general, abide by the Airbnb [JavaScript](https://github.com/airbnb/javascript) and [React](https://airbnb.io/javascript/react/) standards.
 
 Code consistency is important. In order to maintain consistency, convention changes should be openly discussed and decisions made as a team. Please do your best to respect conventions established throughout this code base.
 
