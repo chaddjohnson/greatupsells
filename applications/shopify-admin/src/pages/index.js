@@ -205,7 +205,7 @@ const DashboardPage = () => {
                   url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
                 }}
                 secondaryAction={{
-                  content: 'Learn more',
+                  content: 'View instructions',
                   onAction: () => setOnboardingModalShown(true)
                 }}
               >
