@@ -27,7 +27,6 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
-    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
     DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
     EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
@@ -36,6 +35,7 @@ provider:
     MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-shops/url}
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
+    SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
@@ -424,6 +424,14 @@ functions:
     events:
       - http:
           path: /shops/domain/{domain}/initialization
+          method: post
+          authorizer: aws_iam
+  installAppEmbedBlock:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/installAppEmbedBlock.handler
+    events:
+      - http:
+          path: /shops/{shopId}/themes/{shopifyThemeId}/app-embed-block-install
           method: post
           authorizer: aws_iam
   trackOfferAcceptance:

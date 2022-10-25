@@ -31,6 +31,7 @@ const processData = async (metadata, data, rawData) => {
     }
 
     const shopifyThemeData = data;
+    const shopifyThemeId = shopifyThemeData.id;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
     await logger.info(
@@ -39,6 +40,9 @@ const processData = async (metadata, data, rawData) => {
     );
 
     await httpClient.post(`/shops/${shop._id}/theme-compatibility`);
+    await httpClient.post(
+      `/shops/${shop._id}/themes/${shopifyThemeId}/app-embed-block-install`
+    );
   } catch (error) {
     await logger.error(`Error processing theme publish webhook data`, error, {
       metadata,

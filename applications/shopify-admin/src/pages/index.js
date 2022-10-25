@@ -8,10 +8,12 @@ import {
   MediaCard,
   Stack,
   Heading,
+  List,
   DisplayText,
   TextStyle,
   Button,
   Banner,
+  Modal,
   TextContainer,
   ProgressBar,
   SkeletonPage,
@@ -100,6 +102,7 @@ const DashboardPage = () => {
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
+  const [onboardingModalShown, setOnboardingModalShown] = useState(false);
 
   const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
@@ -166,6 +169,11 @@ const DashboardPage = () => {
     );
   }, [shop]);
 
+  const handleOnboardingModalClose = async () => {
+    setOnboardingModalShown(false);
+    await fetchShop();
+  };
+
   // Refresh data at an interval.
   useInterval(() => {
     if (!chartDateChanged) {
@@ -187,6 +195,59 @@ const DashboardPage = () => {
       <Page title="Overview dashboard">
         <PageTitleBar />
         <Layout>
+          {shop && !shop.isEmbedBlockEnabled && (
+            <Layout.Section>
+              <Banner
+                status="critical"
+                title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
+                action={{
+                  content: 'Activate app embed',
+                  url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
+                }}
+                secondaryAction={{
+                  content: 'Learn more',
+                  onAction: () => setOnboardingModalShown(true)
+                }}
+              >
+                <p>
+                  To use this app, you will need to activate the app embed
+                  entitled &ldquo;Great Upsells Offers&rdquo; and then save your
+                  theme.
+                </p>
+              </Banner>
+              <Modal
+                open={onboardingModalShown}
+                title="Activation"
+                onClose={handleOnboardingModalClose}
+              >
+                <Modal.Section>
+                  <Stack vertical>
+                    <TextContainer>
+                      <Heading>Instructions</Heading>
+                      <List type="number">
+                        <List.Item>
+                          Click the &ldquo;Activate app embed&rdquo; button in
+                          the banner.
+                        </List.Item>
+                        <List.Item>
+                          Make sure the toggle is on for &ldquo;Great Upsells
+                          Offers.&rdquo;
+                        </List.Item>
+                        <List.Item>Click Save.</List.Item>
+                      </List>
+                    </TextContainer>
+                    <video
+                      autoPlay
+                      loop
+                      style={{ width: '100%', height: 'auto' }}
+                    >
+                      <source src="/videos/onboarding.mp4" />
+                    </video>
+                  </Stack>
+                </Modal.Section>
+              </Modal>
+            </Layout.Section>
+          )}
           <Layout.Section>
             <Card>
               <Card.Section>

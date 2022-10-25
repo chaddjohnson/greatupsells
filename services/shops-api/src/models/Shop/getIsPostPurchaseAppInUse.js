@@ -1,4 +1,4 @@
-module.exports = async (shop) => {
+const getIsPostPurchaseAppInUse = async (shop) => {
   const shopifyApiClient = shop.getShopifyApiClient();
   const appData = await shopifyApiClient.graphql(`{
     app  {
@@ -9,3 +9,5 @@ module.exports = async (shop) => {
 
   return isPostPurchaseAppInUse;
 };
+
+module.exports = getIsPostPurchaseAppInUse;

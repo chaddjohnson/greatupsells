@@ -14,7 +14,7 @@ const handler = async (event, context) => {
   }
 
   try {
-    const { shopId } = event.pathParameters;
+    const { shopId, shopifyThemeId } = event.pathParameters;
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
 
@@ -25,23 +25,15 @@ const handler = async (event, context) => {
       };
     }
 
-    // Determine whether this app is currently selected as the post-purchase app for the shop.
-    // Determine whether the app embed block is enabled for the current theme.
-    const [isPostPurchaseAppInUse, isEmbedBlockEnabled] = await Promise.all([
-      shop.getIsPostPurchaseAppInUse(),
-      shop.getAppEmbedBlockIsInstalledAndEnabled()
-    ]);
+    await shop.installAppEmbedBlock(shopifyThemeId);
 
     return {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify({
-        ...shop.toObject(),
-        isPostPurchaseAppInUse,
-        isEmbedBlockEnabled
-      })
+      statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
-    await logger.error(`Error retrieving shop`, error, { event });
+    await logger.error(`Error installing app block for shop`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

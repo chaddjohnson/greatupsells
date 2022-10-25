@@ -20,6 +20,8 @@ const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
 const updateShopifyDraftOrderItems = require('./updateShopifyDraftOrderItems');
 const checkThemeCompatibility = require('./checkThemeCompatibility');
+const installAppEmbedBlock = require('./installAppEmbedBlock');
+const getAppEmbedBlockIsInstalledAndEnabled = require('./getAppEmbedBlockIsInstalledAndEnabled');
 const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
 const toString = require('./toString');
 const hooks = require('./hooks');
@@ -211,6 +213,14 @@ schema.methods.updateShopifyDraftOrderItems = function (
 
 schema.methods.checkThemeCompatibility = function () {
   return checkThemeCompatibility(this);
+};
+
+schema.methods.installAppEmbedBlock = function (shopifyThemeId) {
+  return installAppEmbedBlock(this, shopifyThemeId);
+};
+
+schema.methods.getAppEmbedBlockIsInstalledAndEnabled = function () {
+  return getAppEmbedBlockIsInstalledAndEnabled(this);
 };
 
 schema.methods.calculateMonthUpsellRevenue = function () {

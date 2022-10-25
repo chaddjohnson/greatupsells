@@ -37,14 +37,15 @@ Shopify.Context.initialize({
   API_KEY: SHOPIFY_ADMIN_APP_API_KEY,
   API_SECRET_KEY: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
   SCOPES: [
-    'read_products',
-    'read_orders',
-    'read_script_tags',
+    'read_checkouts',
     'read_draft_orders',
-    'write_script_tags',
-    'write_draft_orders',
+    'read_orders',
+    'read_products',
+    'read_script_tags',
     'read_themes',
-    'read_checkouts'
+    'write_draft_orders',
+    'write_script_tags',
+    'write_themes'
   ],
   HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
   API_VERSION: ApiVersion.January22,
@@ -77,7 +78,10 @@ const createServer = () => {
       connect(
         createProxyMiddleware('/storefront.js', {
           target: `http://localhost:${STOREFRONT_PORT}`,
-          changeOrigin: true
+          changeOrigin: true,
+          onProxyRes: (proxyResponse) => {
+            proxyResponse.headers['Accept-Encoding'] = 'gzip';
+          }
         })
       )
     );
@@ -88,7 +92,10 @@ const createServer = () => {
         createProxyMiddleware('/themes', {
           target: `http://localhost:${STOREFRONT_PORT}`,
           changeOrigin: true,
-          pathRewrite: { '^/themes': '' }
+          pathRewrite: { '^/themes': '' },
+          onProxyRes: (proxyResponse) => {
+            proxyResponse.headers['Accept-Encoding'] = 'gzip';
+          }
         })
       )
     );

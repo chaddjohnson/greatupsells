@@ -6,6 +6,7 @@ const {
   NODE_ENV,
   SHOPIFY_ADMIN_APP_API_KEY,
   SHOPIFY_ADMIN_API_URL,
+  SHOPIFY_EMBED_BLOCK_ID,
   ASSETS_URL
 } = process.env;
 const dev = NODE_ENV !== 'production';
@@ -60,6 +61,7 @@ module.exports = {
   env: {
     SHOPIFY_ADMIN_APP_API_KEY,
     SHOPIFY_ADMIN_API_URL,
+    SHOPIFY_EMBED_BLOCK_ID,
     ASSETS_URL
   }
 };

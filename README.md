@@ -195,6 +195,7 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
 
        location / {
            proxy_pass http://127.0.0.1:3000/;
+           proxy_buffering off;
        }
    }
    ```
@@ -204,6 +205,27 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
    1. Use "2048" instead of "128" for the `openssl dhparam` command.
 1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
 1. Do the same as the previous two steps but for domains admin-api, shopify-admin-api, and storefront-api (but with no `\*.` prefix).
+1. Add nginx configs for admin-api, shopify-admin-api, and storefront-api:
+
+   ```
+   server {
+     listen 80;
+     listen 443 ssl;
+     server_name admin-api;
+
+     ssl_certificate     /usr/local/etc/ssl/certs/admin-api.crt;
+     ssl_certificate_key /usr/local/etc/ssl/private/admin-api.key;
+
+     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+     ssl_ciphers         HIGH:!aNULL:!MD5;
+     ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
+
+     location / {
+        proxy_pass http://127.0.0.1:4005/;
+        proxy_buffering off;
+     }
+   }
+   ```
 
 Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
