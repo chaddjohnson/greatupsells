@@ -25,7 +25,6 @@ const handler = async (event, context) => {
       };
     }
 
-    await shop.cancelPlan();
     await shop.deactivate();
 
     return {
