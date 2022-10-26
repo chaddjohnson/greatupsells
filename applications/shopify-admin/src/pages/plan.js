@@ -73,6 +73,14 @@ const PlanPage = () => {
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
+      <TextStyle key="feature3" variation="strong">
+        Order Status page offers
+      </TextStyle>,
+      <Icon key="1" source={TickMinor} color="success" />,
+      <Icon key="2" source={TickMinor} color="success" />,
+      <Icon key="3" source={TickMinor} color="success" />
+    ],
+    [
       <TextStyle key="feature4" variation="strong">
         Themes
       </TextStyle>,
