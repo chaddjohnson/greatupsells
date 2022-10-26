@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
   Page,
+  Breadcrumbs,
   Layout,
   Card,
   DataTable,
@@ -183,7 +184,18 @@ const PlanPage = () => {
   }, [chargeId, activatingPlan, activatePlan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Page title={shop?.plan.active ? 'Plan' : undefined}>
+    <Page
+      title={
+        shop?.plan.active ? (
+          <>
+            <Stack alignment="center">
+              <Breadcrumbs breadcrumbs={[{ url: '/' }]} />
+              <span>Plan</span>
+            </Stack>
+          </>
+        ) : undefined
+      }
+    >
       {shop?.plan.active && <PageTitleBar />}
       <Layout>
         {!shop?.plan.active && (
