@@ -262,7 +262,11 @@ const OfferForm = ({
 
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
-  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
   const zoomByStrategy = {
     CROSS_SELL: {
       designModeZoom: 0.69,
@@ -273,6 +277,10 @@ const OfferForm = ({
       smallDesignModeZoom: 0.365
     },
     THANK_YOU_PAGE: {
+      designModeZoom: 1.0,
+      smallDesignModeZoom: 0.5
+    },
+    ORDER_STATUS_PAGE: {
       designModeZoom: 1.0,
       smallDesignModeZoom: 0.5
     },
@@ -309,6 +317,11 @@ const OfferForm = ({
     const firstStrategyTheme = themes.find(
       (current) => current.strategies.indexOf(value) > -1
     );
+    const valueIsInline = [
+      'POST_PURCHASE',
+      'THANK_YOU_PAGE',
+      'ORDER_STATUS_PAGE'
+    ].includes(value);
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
     let firstStrategyOfferTheme = offerThemes.find(
@@ -340,8 +353,8 @@ const OfferForm = ({
       setTheme(firstStrategyOfferTheme);
     }
 
-    // Use page load as trigger event for Post Purchase and Thank You Page offers.
-    if (value === 'POST_PURCHASE' || value === 'THANK_YOU_PAGE') {
+    // Use page load as trigger event for some types of offers.
+    if (valueIsInline) {
       triggerEvent.onChange('LOAD');
     }
   };

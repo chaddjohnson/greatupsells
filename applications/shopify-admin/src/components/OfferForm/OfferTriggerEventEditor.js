@@ -23,6 +23,12 @@ const OfferTriggerEventEditor = ({
   triggerScrollThreshold,
   submitted
 }) => {
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleTriggerEventChange = (value) => {
     if (value !== 'SCROLL') {
       triggerScrollThreshold.onChange(undefined);
@@ -31,10 +37,7 @@ const OfferTriggerEventEditor = ({
     triggerEvent.onChange(value);
   };
 
-  if (
-    offer.strategy === 'POST_PURCHASE' ||
-    offer.strategy === 'THANK_YOU_PAGE'
-  ) {
+  if (isInline) {
     return null;
   }
 

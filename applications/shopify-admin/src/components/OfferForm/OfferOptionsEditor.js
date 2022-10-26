@@ -52,6 +52,12 @@ const OfferOptionsEditor = ({
   ] = useState(offer?.onPageRequiredSeconds > 0);
   const [animationActive, setAnimationActive] = useState(!!animation.value);
 
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleDelaySecondsActiveChange = (checked) => {
     setDelaySecondsActive(checked);
 
@@ -97,7 +103,7 @@ const OfferOptionsEditor = ({
           helpText="Customers may change quantities for products."
           {...asChoiceField(enableQuantitySelection)}
         />
-        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) &&
+        {!isInline &&
           ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
             <Checkbox
               label="Delay showing offer after trigger event"
@@ -118,7 +124,7 @@ const OfferOptionsEditor = ({
               onChange={handleDelaySecondsActiveChange}
             />
           )}
-        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
+        {!isInline && (
           <Checkbox
             label="Require customer be on page for a specified amount of time before allowing offer to show"
             helpText={
@@ -137,7 +143,7 @@ const OfferOptionsEditor = ({
             onChange={handleOnPageRequiredSecondsActiveChange}
           />
         )}
-        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
+        {!isInline && (
           <Checkbox
             label={
               <>
@@ -147,13 +153,13 @@ const OfferOptionsEditor = ({
             {...asChoiceField(enableEscClose)}
           />
         )}
-        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
+        {!isInline && (
           <Checkbox
             label="Allow clicking outside to close the offer"
             {...asChoiceField(enableMaskClose)}
           />
         )}
-        {!['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy) && (
+        {!isInline && (
           <Checkbox
             label="Use an animation when showing and hiding the offer"
             helpText={

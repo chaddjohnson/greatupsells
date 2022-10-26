@@ -13,6 +13,7 @@ import PageLoadOffer from './PageLoadOffer';
 import PageScrollOffer from './PageScrollOffer';
 import ProductOffer from './ProductOffer';
 import ThankYouPageOffer from './ThankYouPageOffer';
+import OrderStatusPageOffer from './OrderStatusPageOffer';
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
@@ -82,7 +83,7 @@ const Offers = () => {
           return map;
         }
 
-        if (strategy === 'THANK_YOU_PAGE') {
+        if (strategy === 'THANK_YOU_PAGE' || strategy === 'ORDER_STATUS_PAGE') {
           return map;
         }
 
@@ -106,6 +107,13 @@ const Offers = () => {
   }, [offersData]);
   const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
 
+  const orderStatusPageOfferData = useMemo(() => {
+    return offersData?.find(
+      ({ offer }) => offer?.strategy === 'ORDER_STATUS_PAGE'
+    );
+  }, [offersData]);
+  const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
+
   const ExitIntentThemeComponent = useThemeComponent(
     offerDataByTriggerEvent.EXIT?.theme.key
   );
@@ -123,6 +131,9 @@ const Offers = () => {
   );
   const ThankYouPageThemeComponent = useThemeComponent(
     thankYouPageOfferData?.theme.key
+  );
+  const OrderStatusPageThemeComponent = useThemeComponent(
+    orderStatusPageOfferData?.theme.key
   );
 
   const handleOfferOpen = () => {
@@ -243,6 +254,19 @@ const Offers = () => {
           currency={currency}
           triggerProduct={thankYouPageOfferData?.triggerProduct}
           offeredProducts={thankYouPageOfferData?.offeredProducts}
+        />
+      )}
+      {isOrderStatusPage && (
+        <OrderStatusPageOffer
+          shop={shop}
+          offer={orderStatusPageOfferData?.offer}
+          theme={orderStatusPageOfferData?.theme}
+          ThemeComponent={OrderStatusPageThemeComponent}
+          locale={locale}
+          countryCode={countryCode}
+          currency={currency}
+          triggerProduct={orderStatusPageOfferData?.triggerProduct}
+          offeredProducts={orderStatusPageOfferData?.offeredProducts}
         />
       )}
     </>

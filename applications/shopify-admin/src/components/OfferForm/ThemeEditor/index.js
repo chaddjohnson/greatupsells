@@ -30,6 +30,12 @@ const ThemeEditor = ({
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
 
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(strategy);
+
   const handleChange = (value) => {
     onChange({
       ...value,
@@ -77,7 +83,7 @@ const ThemeEditor = ({
               </ButtonGroup>
             </DeviceToggle>
             {previewElement}
-            {strategy !== 'POST_PURCHASE' && strategy !== 'THANK_YOU_PAGE' && (
+            {!isInline && (
               <Button fullWidth onClick={onPreview}>
                 Preview full size
               </Button>

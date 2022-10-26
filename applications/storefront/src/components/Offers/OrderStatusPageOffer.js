@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { OfferTheme } from '@greatupsells/react-components';
 import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
-const ThankYouPageOffer = ({
+const OrderStatusPageOffer = ({
   shop,
   offer,
   theme,
@@ -34,7 +34,7 @@ const ThankYouPageOffer = ({
     [theme]
   );
 
-  const isThankYouPage = window.Shopify?.Checkout?.page !== 'thank_you';
+  const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
 
   const headerContainer = document.querySelector(
     '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(1)'
@@ -71,7 +71,7 @@ const ThankYouPageOffer = ({
   }, [added, headerContainer]);
 
   useEffect(() => {
-    if (!isThankYouPage) {
+    if (!isOrderStatusPage) {
       return;
     }
 
@@ -98,7 +98,7 @@ const ThankYouPageOffer = ({
     offeredShopifyProductIds,
     trackOfferImpression,
     title,
-    isThankYouPage
+    isOrderStatusPage
   ]);
 
   if (!contentContainer) {
@@ -128,7 +128,7 @@ const ThankYouPageOffer = ({
   );
 };
 
-ThankYouPageOffer.propTypes = {
+OrderStatusPageOffer.propTypes = {
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
@@ -136,4 +136,4 @@ ThankYouPageOffer.propTypes = {
   offeredProducts: PropTypes.array.isRequired
 };
 
-export default ThankYouPageOffer;
+export default OrderStatusPageOffer;

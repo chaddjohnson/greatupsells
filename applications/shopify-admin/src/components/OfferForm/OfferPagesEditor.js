@@ -78,6 +78,12 @@ const OfferPagesEditor = ({
     setTriggerPagePathPopoverActive
   ] = useState(false);
 
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleTriggerPageTypeChange = (value) => {
     setTriggerPageType(value);
 
@@ -121,10 +127,7 @@ const OfferPagesEditor = ({
     triggerPagePath.onChange(sanitized);
   };
 
-  if (
-    offer.strategy === 'POST_PURCHASE' ||
-    offer.strategy === 'THANK_YOU_PAGE'
-  ) {
+  if (isInline) {
     return null;
   }
 

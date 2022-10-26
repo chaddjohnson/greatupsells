@@ -296,6 +296,7 @@ const findOneRandom = async (
   });
   const pagePathSanitized = sanitizePagePath(pagePath);
   const isThankYouPage = !!pagePath.match(/\/checkouts\/[^\/]+\/thank_you/);
+  const isOrderStatusPage = !!pagePath.match(/\/orders\/[^\/]+/);
 
   // Find an offer.
   let offers = await Offer.find(criteria);
@@ -310,6 +311,11 @@ const findOneRandom = async (
     // Filter for offers targeting the Order Status page if that is the current page.
     if (offer.strategy === 'THANK_YOU_PAGE') {
       return isThankYouPage;
+    }
+
+    // Filter for offers targeting the Order Status page if that is the current page.
+    if (offer.strategy === 'ORDER_STATUS_PAGE') {
+      return isOrderStatusPage;
     }
 
     // Include the offer if there is no trigger page to filter for.

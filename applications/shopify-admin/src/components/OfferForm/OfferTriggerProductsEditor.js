@@ -45,6 +45,13 @@ const OfferTriggerProductsEditor = ({
   });
   const currencySymbol = getCurrencySymbol();
 
+  const isCrossSellStrategy = [
+    'CROSS_SELL',
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
 
@@ -111,18 +118,12 @@ const OfferTriggerProductsEditor = ({
     <>
       <Card
         title={`Cart trigger products${
-          offer.strategy === 'CROSS_SELL' ||
-          offer.strategy === 'POST_PURCHASE' ||
-          offer.strategy === 'THANK_YOU_PAGE'
-            ? ' and collections'
-            : ''
+          isCrossSellStrategy ? ' and collections' : ''
         }`}
       >
         <Card.Section>
           <FormLayout>
-            {(offer.strategy === 'CROSS_SELL' ||
-              offer.strategy === 'POST_PURCHASE' ||
-              offer.strategy === 'THANK_YOU_PAGE') && (
+            {isCrossSellStrategy && (
               <ChoiceList
                 title="Applies to"
                 titleHidden

@@ -58,6 +58,12 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
               helpText:
                 'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
               value: 'THANK_YOU_PAGE'
+            },
+            {
+              label: 'Order Status page cross-sell',
+              helpText:
+                'Encourage customers to purchase a related or complementary product on the Order Status page.',
+              value: 'ORDER_STATUS_PAGE'
             }
             // {
             //   label: 'Popup',

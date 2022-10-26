@@ -41,6 +41,13 @@ const OfferOfferedProductsEditor = ({
     setmaximumAcceptedProductQuantityActive
   ] = useState(!!maximumAcceptedProductQuantity.value);
 
+  const isCrossSellStrategy = [
+    'CROSS_SELL',
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
 
@@ -94,18 +101,12 @@ const OfferOfferedProductsEditor = ({
     <>
       <Card
         title={`Offered ${
-          ['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE'].includes(
-            offer.strategy
-          )
-            ? 'products and collections'
-            : 'products'
+          isCrossSellStrategy ? 'products and collections' : 'products'
         }`}
       >
         <Card.Section>
           <FormLayout>
-            {['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE'].includes(
-              offer.strategy
-            ) && (
+            {isCrossSellStrategy && (
               <ChoiceList
                 title="Applies to"
                 titleHidden
@@ -147,9 +148,7 @@ const OfferOfferedProductsEditor = ({
             )}
           </FormLayout>
         </Card.Section>
-        {(offer.strategy === 'CROSS_SELL' ||
-          offer.strategy === 'POST_PURCHASE' ||
-          offer.strategy === 'THANK_YOU_PAGE') && (
+        {isCrossSellStrategy && (
           <Card.Section>
             <FormLayout>
               <MaximumOfferedProductQuantityWrapper>

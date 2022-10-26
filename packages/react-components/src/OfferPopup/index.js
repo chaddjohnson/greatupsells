@@ -81,8 +81,8 @@ const OfferPopup = ({
   const maskBackgroundColor = useMemo(() => {
     const defaultMaskBackgroundColor = [
       'POST_PURCHASE',
-      'POST_PURCHASE',
-      'THANK_YOU_PAGE'
+      'THANK_YOU_PAGE',
+      'ORDER_STATUS_PAGE'
     ].includes(offer.strategy)
       ? '#FFFFFF'
       : 'rgba(0, 0, 0, 0.5)';

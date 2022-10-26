@@ -34,7 +34,14 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['UPSELL', 'CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'POPUP']
+      enum: [
+        'UPSELL',
+        'CROSS_SELL',
+        'POST_PURCHASE',
+        'THANK_YOU_PAGE',
+        'ORDER_STATUS_PAGE',
+        'POPUP'
+      ]
     },
     triggerEvent: {
       type: String,

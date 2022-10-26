@@ -51,6 +51,7 @@ const schema = new mongoose.Schema(
           'CROSS_SELL',
           'POST_PURCHASE',
           'THANK_YOU_PAGE',
+          'ORDER_STATUS_PAGE',
           'POPUP'
         ]
       }

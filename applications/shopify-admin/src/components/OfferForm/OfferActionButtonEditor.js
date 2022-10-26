@@ -11,6 +11,12 @@ const OfferActionButtonEditor = ({
   performActionOnAdd,
   submitted
 }) => {
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
   const handleActionButtonBehaviorChange = (value) => {
     actionButtonBehavior.onChange(value);
 
@@ -20,11 +26,8 @@ const OfferActionButtonEditor = ({
     }
   };
 
-  // Do not display action button actions for Post Purchase or Thank You Page offers.
-  if (
-    offer.strategy === 'POST_PURCHASE' ||
-    offer.strategy === 'THANK_YOU_PAGE'
-  ) {
+  // Do not display action button actions for some types of offers.
+  if (isInline) {
     return null;
   }
 

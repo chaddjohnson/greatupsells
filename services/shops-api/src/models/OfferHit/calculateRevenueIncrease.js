@@ -31,7 +31,8 @@ const calculateRevenueIncrease = (offerHit) => {
   const isCrossSell =
     strategy === 'CROSS_SELL' ||
     strategy === 'POST_PURCHASE' ||
-    strategy === 'THANK_YOU_PAGE';
+    strategy === 'THANK_YOU_PAGE' ||
+    strategy === 'ORDER_STATUS_PAGE';
 
   if (isUpsell) {
     // A comparable, more expensive product was purchased, so calculate the increase in price.
