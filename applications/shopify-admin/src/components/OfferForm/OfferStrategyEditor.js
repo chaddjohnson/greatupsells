@@ -22,7 +22,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
               value: 'UPSELL'
             },
             {
-              label: 'Post-purchase cross-sell',
+              label: 'Post-purchase offer',
               helpText: (
                 <>
                   Encourage customers to purchase a related or complementary
@@ -54,13 +54,13 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                 )
             },
             {
-              label: 'Thank You page cross-sell',
+              label: 'Thank You page offer',
               helpText:
                 'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
               value: 'THANK_YOU_PAGE'
             },
             {
-              label: 'Order Status page cross-sell',
+              label: 'Order Status page offer',
               helpText:
                 'Encourage customers to purchase a related or complementary product on the Order Status page.',
               value: 'ORDER_STATUS_PAGE'
