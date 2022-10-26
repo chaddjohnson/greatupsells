@@ -57,7 +57,6 @@ const schema = new mongoose.Schema(
       }
     ],
     thumbnailImageUrl: { type: String, required: true },
-    description: { type: String, required: false },
     variables: [variablesSchema],
     formFields: [formFieldsSchema],
     maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
