@@ -23,6 +23,10 @@ const InnerWrapper = styled.div`
   flex-direction: column;
   height: 100%;
   background-color: #f4f6f8;
+
+  .Polaris-OptionList-Option {
+    margin-bottom: 2rem;
+  }
 `;
 
 const HeaderWrapper = styled.div`
