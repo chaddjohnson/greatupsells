@@ -7,7 +7,7 @@ import OfferedProducts from './OfferedProducts';
 import OfferedProduct from './OfferedProduct';
 import Footer from './Footer';
 
-const MultiProductThankYouOffer1 = ({ theme, state }) => {
+const MultiProductOrderPageOffer1 = ({ theme, state }) => {
   const { offeredProducts } = state;
 
   return (
@@ -32,4 +32,4 @@ const MultiProductThankYouOffer1 = ({ theme, state }) => {
   );
 };
 
-export default MultiProductThankYouOffer1;
+export default MultiProductOrderPageOffer1;

@@ -12,7 +12,7 @@ module.exports = {
   entry: {
     MultiProductOffer1: './src/themes/MultiProductOffer1',
     MultiProductOffer2: './src/themes/MultiProductOffer2',
-    MultiProductThankYouOffer1: './src/themes/MultiProductThankYouOffer1',
+    MultiProductOrderPageOffer1: './src/themes/MultiProductOrderPageOffer1',
     PostPurchaseMultiProductOffer1:
       './src/themes/PostPurchaseMultiProductOffer1',
     PostPurchaseSingleProductOffer1:

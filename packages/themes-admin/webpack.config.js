@@ -15,7 +15,7 @@ const config = addWebpackConfig(
     entry: {
       MultiProductOffer1: './src/MultiProductOffer1',
       MultiProductOffer2: './src/MultiProductOffer2',
-      MultiProductThankYouOffer1: './src/MultiProductThankYouOffer1',
+      MultiProductOrderPageOffer1: './src/MultiProductOrderPageOffer1',
       PostPurchaseMultiProductOffer1: './src/PostPurchaseMultiProductOffer1',
       PostPurchaseSingleProductOffer1: './src/PostPurchaseSingleProductOffer1',
       SingleProductOffer1: './src/SingleProductOffer1',

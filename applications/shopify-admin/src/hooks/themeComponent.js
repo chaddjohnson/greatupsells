@@ -31,9 +31,9 @@ const useThemeComponent = (key) => {
         );
         break;
 
-      case 'MultiProductThankYouOffer1':
+      case 'MultiProductOrderPageOffer1':
         themeModule = await import(
-          '@greatupsells/themes-admin/MultiProductThankYouOffer1'
+          '@greatupsells/themes-admin/MultiProductOrderPageOffer1'
         );
         break;
 

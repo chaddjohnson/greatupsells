@@ -26,7 +26,7 @@
   "exports": {
     "./MultiProductOffer1": "./dist/MultiProductOffer1",
     "./MultiProductOffer2": "./dist/MultiProductOffer2",
-    "./MultiProductThankYouOffer1": "./dist/MultiProductThankYouOffer1",
+    "./MultiProductOrderPageOffer1": "./dist/MultiProductOrderPageOffer1",
     "./PostPurchaseMultiProductOffer1": "./dist/PostPurchaseMultiProductOffer1",
     "./PostPurchaseSingleProductOffer1": "./dist/PostPurchaseSingleProductOffer1",
     "./SingleProductOffer1": "./dist/SingleProductOffer1",
