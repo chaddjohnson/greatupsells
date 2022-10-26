@@ -34,6 +34,7 @@ const activatePlan = async (shop) => {
     // Update the shop plan details.
     shop.plan.billingOn = new Date(recurringCharge.billing_on);
     shop.plan.startedAt = Date.now();
+    shop.plan.trialStartedAt = shop.plan.trialStartedAt || Date.now();
     shop.plan.active = true;
     await shop.save();
 

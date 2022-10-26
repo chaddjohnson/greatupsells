@@ -22,7 +22,11 @@ const plans = {
 };
 
 const getTrialDays = async (shop) => {
-  const { chargeId } = shop.plan;
+  const { chargeId, trialStartedAt } = shop.plan;
+
+  if (trialStartedAt) {
+    return Math.round((new Date() - trialStartedAt) / 1000 / 24 / 60 / 60);
+  }
 
   if (!chargeId) {
     return 7;
