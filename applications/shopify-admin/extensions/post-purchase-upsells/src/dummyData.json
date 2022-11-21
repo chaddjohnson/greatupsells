@@ -271,7 +271,7 @@
         "label": "Font",
         "type": "FONT",
         "group": "Body text",
-        "value": "'Work Sans'"
+        "value": "Assistant, sans-serif"
       },
       {
         "_id": "6112fabf59bfae08b0d22616",
