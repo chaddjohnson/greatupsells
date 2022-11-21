@@ -1,5 +1,4 @@
 service: greatupsells-shopify-admin-api
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
