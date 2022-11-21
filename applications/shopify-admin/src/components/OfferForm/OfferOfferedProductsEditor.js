@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -33,9 +33,20 @@ const OfferOfferedProductsEditor = ({
   maximumAcceptedProductQuantity,
   submitted
 }) => {
-  const [appliesTo, setAppliesTo] = useState(
-    offeredCollections.value.length ? 'COLLECTIONS' : 'PRODUCTS'
-  );
+  const defaultAppliesTo = useMemo(() => {
+    if (
+      offeredCollections.value.length === 0 &&
+      offeredProducts.value.length === 0
+    ) {
+      return 'INTELLIGENT';
+    } else if (offeredCollections.value.length > 0) {
+      return 'COLLECTIONS';
+    } else {
+      return 'PRODUCTS';
+    }
+  }, [offeredCollections.value, offeredProducts.value]);
+
+  const [appliesTo, setAppliesTo] = useState(defaultAppliesTo);
   const [
     maximumAcceptedProductQuantityActive,
     setmaximumAcceptedProductQuantityActive
@@ -51,6 +62,10 @@ const OfferOfferedProductsEditor = ({
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
 
+    if (value === 'INTELLIGENT') {
+      offeredProducts.onChange([]);
+      offeredCollections.onChange([]);
+    }
     if (value === 'PRODUCTS') {
       offeredCollections.onChange([]);
     } else if (value === 'COLLECTIONS') {
@@ -84,7 +99,11 @@ const OfferOfferedProductsEditor = ({
   };
 
   useEffect(() => {
-    if (!offeredProducts.value.length && !offeredCollections.value.length) {
+    if (
+      offer.strategy.value === 'UPSELL' &&
+      !offeredProducts.value.length &&
+      !offeredCollections.value.length
+    ) {
       offeredProducts.setError(
         'One or more offered products or collections are required'
       );
@@ -111,15 +130,25 @@ const OfferOfferedProductsEditor = ({
                 title="Applies to"
                 titleHidden
                 choices={[
-                  {
-                    label: 'Specific products',
-                    value: 'PRODUCTS'
+                  offer.strategy !== 'UPSELL' && {
+                    label: 'Intelligent',
+                    value: 'INTELLIGENT',
+                    helpText:
+                      'Products will be offered intelligently based on past order history. Random products will be offered if there is insufficient history.'
                   },
                   {
-                    label: 'Specific collections',
-                    value: 'COLLECTIONS'
+                    label: 'Specific products',
+                    value: 'PRODUCTS',
+                    helpText:
+                      'Only specific products selected below will be offered.'
+                  },
+                  {
+                    label: 'Products from specific collections',
+                    value: 'COLLECTIONS',
+                    helpText:
+                      'Only products from specific collections selected below will be offered.'
                   }
-                ]}
+                ].filter(Boolean)}
                 selected={[appliesTo]}
                 onChange={([value]) => handleAppliesToChange(value)}
               />

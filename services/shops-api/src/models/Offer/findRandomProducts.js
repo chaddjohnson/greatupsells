@@ -2,20 +2,28 @@ const { flatten, uniq } = require('lodash');
 const models = require('..');
 
 const findRandomProducts = async (offer, shopifyCartProductIds = []) => {
-  const [Product] = await Promise.all([
+  const [Product, PairedPurchase] = await Promise.all([
     models.get('Product'),
+    models.get('PairedPurchase'),
     models.get('Shop')
   ]);
 
   await offer.execPopulate('shop');
 
-  const { shop, offeredProducts, offeredCollections } = offer;
+  const { shop, offeredCollections } = offer;
+  const { offeredProducts } = offer;
   const maximumOfferedProductQuantity =
     offer.maximumOfferedProductQuantity || 3;
+  const hasOfferedProducts = offeredProducts.length > 0;
+  const hasOfferedCollections = offeredCollections.length > 0;
 
-  // Return no product if the offer has neither products nor collections.
-  if (offeredProducts.length === 0 && offeredCollections.length === 0) {
-    return [];
+  // Intelligently find products if the offer has neither offered products nor offered collections.
+  if (!hasOfferedProducts && !hasOfferedCollections) {
+    return await PairedPurchase.findPairedProducts(
+      shop,
+      shopifyCartProductIds,
+      maximumOfferedProductQuantity
+    );
   }
 
   const offeredShopifyProductIds = offeredProducts.map(

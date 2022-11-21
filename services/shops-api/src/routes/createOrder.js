@@ -19,6 +19,7 @@ const handler = async (event, context) => {
       models.get('Shop')
     ]);
     const data = JSON.parse(event.body);
+    const { shopifyOrderData } = data;
     const order = new Order(data);
     let offerHits = [];
 
@@ -34,18 +35,19 @@ const handler = async (event, context) => {
     }
 
     await order.save();
+    await order.trackPairedPurchases();
     await order.execPopulate('shop');
 
-    // Track conversions for the order.
-    offerHits = await order.trackConversions();
+    // Track conversions if the order is marked as paid.
+    if (shopifyOrderData.financial_status === 'paid') {
+      offerHits = await order.trackConversions();
+    }
 
     // Only track orders resulting in offer conversions.
     if (offerHits.length === 0) {
       await logger.debug(
-        `Skipping order as no conversions were recorded (${order.toString()})`
+        `No conversions were recorded for order (${order.toString()})`
       );
-
-      await order.deleteOne();
     } else {
       await logger.info(`Order created (${order.toString()})`, { data });
     }

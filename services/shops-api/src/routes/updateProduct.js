@@ -53,6 +53,7 @@ const handler = async (event, context) => {
 
     await product.trackShopifyCollections();
     await product.updateDependentOffers();
+    await product.updatePairedPurchases();
     await product.execPopulate('shop');
     await logger.info(`Product updated (${product.toString()})`, { data });
 

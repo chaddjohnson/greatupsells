@@ -15,9 +15,10 @@ const handler = async (event, context) => {
 
   try {
     const { productId } = event.pathParameters;
-    const [Product, Offer] = await Promise.all([
+    const [Product, Offer, PairedPurchase] = await Promise.all([
       models.get('Product'),
-      models.get('Offer')
+      models.get('Offer'),
+      models.get('PairedPurchase')
     ]);
     const product = await Product.findById(productId);
     const { shopifyProductId } = product;
@@ -38,6 +39,11 @@ const handler = async (event, context) => {
       { $pull: { offeredProducts: { shopifyProductId } } },
       { $pull: { triggerProducts: { shopifyProductId } } }
     );
+
+    // Delete paired purchases associated with the product.
+    await PairedPurchase.deleteMany({
+      $or: [{ shopifyProductId }, { pairedShopifyProductId: shopifyProductId }]
+    });
 
     await logger.info(`Product deleted (${product.toString()})`, { product });
 

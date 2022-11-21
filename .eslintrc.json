@@ -39,6 +39,7 @@
       }
     ],
     "no-console": "warn",
+    "no-await-in-loop": "off",
     "import/no-extraneous-dependencies": "off",
     "keyword-spacing": [
       "warn",
@@ -86,11 +87,15 @@
     ],
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/media-has-caption": "off",
-    "spaced-comment": ["warn", "always", {
-      "block": {
-        "balanced": true
+    "spaced-comment": [
+      "warn",
+      "always",
+      {
+        "block": {
+          "balanced": true
+        }
       }
-    }]
+    ]
   },
   "parser": "babel-eslint",
   "parserOptions": {
@@ -108,7 +113,8 @@
       }
     }
   },
-  "overrides": [{
+  "overrides": [
+    {
       "files": ["applications/*/src/pages/**/*.js", "packages/*/src/**/*.js"],
       "rules": {
         "react/prop-types": "off"

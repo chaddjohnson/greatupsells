@@ -4,6 +4,7 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
+const importOrders = require('./importOrders');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
 const getIsPostPurchaseAppInUse = require('./getIsPostPurchaseAppInUse');
@@ -88,10 +89,6 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.virtual('shopName').get(function () {
-  return this.domain.replace(/^([^\.]+).*$/, '$1');
-});
-
 schema.statics.findOneByDomain = function (domain) {
   return Shop.findOne({
     $or: [{ domain }, { alternateDomain: domain }]
@@ -105,6 +102,10 @@ schema.statics.findOneByShopifyShopId = function (shopifyShopId) {
 schema.statics.createOrUpdate = function (shopDomain, accessToken) {
   return createOrUpdate(shopDomain, accessToken);
 };
+
+schema.virtual('shopName').get(function () {
+  return this.domain.replace(/^([^\.]+).*$/, '$1');
+});
 
 schema.methods.searchOffers = async function (params) {
   return searchOffers(this, params);
@@ -151,6 +152,10 @@ schema.methods.getShopifyApiClient = function () {
 
 schema.methods.createWebhooks = function () {
   return createWebhooks(this);
+};
+
+schema.methods.importOrders = function () {
+  return importOrders(this);
 };
 
 schema.methods.importCollections = function () {
@@ -236,7 +241,6 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
-// Create indexes.
 schema.index({ shopifyShopId: 1 }, { unique: true });
 schema.index({ domain: 1 }, { unique: true });
 schema.index({ alternateDomain: 1 });

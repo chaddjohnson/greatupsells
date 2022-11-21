@@ -35,6 +35,7 @@ provider:
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
     SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
+    SHOP_ORDER_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/url, ''}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
@@ -543,6 +544,18 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
+  importShopOrders:
+    memorySize: 512
+    reservedConcurrency: 2
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/importShopOrders.handler
+    events:
+      - sqs:
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-order-import-queue-dev'}
+    timeout: 900
     warmup:
       default:
         enabled: false

@@ -130,13 +130,17 @@ const useFields = (initialOffer, showEndDate) => {
       value: initialOffer.offeredProducts,
       validates: [
         (value) => {
-          if (!value?.length && !offeredCollections.value.length) {
+          if (
+            strategy.value === 'UPSELL' &&
+            !value?.length &&
+            !offeredCollections.value.length
+          ) {
             return 'One or more offered products or collections are required';
           }
         }
       ]
     },
-    [offeredCollections.value]
+    [strategy.value, offeredCollections.value]
   );
   const maximumOfferedProductQuantity = useField({
     value: initialOffer.maximumOfferedProductQuantity?.toString(),

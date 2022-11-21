@@ -23,6 +23,11 @@ resource "aws_sqs_queue" "order_cancelation_dlq" {
   message_retention_seconds = 259200 # 3 days
 }
 
+resource "aws_sqs_queue" "order_create_dlq" {
+  name                      = "order-create-dlq-${terraform.workspace}"
+  message_retention_seconds = 259200 # 3 days
+}
+
 resource "aws_sqs_queue" "order_paid_dlq" {
   name                      = "order-paid-dlq-${terraform.workspace}"
   message_retention_seconds = 259200 # 3 days
@@ -94,6 +99,15 @@ resource "aws_sqs_queue" "order_cancelation" {
   visibility_timeout_seconds = 60
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.order_cancelation_dlq.arn
+    maxReceiveCount     = 10
+  })
+}
+
+resource "aws_sqs_queue" "order_create" {
+  name                       = "order-create-queue-${terraform.workspace}"
+  visibility_timeout_seconds = 60
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.order_create_dlq.arn
     maxReceiveCount     = 10
   })
 }
@@ -207,6 +221,21 @@ resource "aws_sqs_queue_policy" "order_cancelation_policy" {
         "Principal" : "*",
         "Action" : "sqs:SendMessage",
         "Resource" : "${aws_sqs_queue.order_cancelation.arn}"
+      }
+    ]
+  })
+}
+
+resource "aws_sqs_queue_policy" "order_create_policy" {
+  queue_url = aws_sqs_queue.order_create.id
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "sqs:SendMessage",
+        "Resource" : "${aws_sqs_queue.order_create.arn}"
       }
     ]
   })
@@ -334,6 +363,13 @@ resource "aws_ssm_parameter" "order_cancelation_queue_arn" {
   name      = "/greatupsells/${terraform.workspace}/queues/order-cancelation/arn"
   type      = "String"
   value     = aws_sqs_queue.order_cancelation.arn
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "order_create_queue_arn" {
+  name      = "/greatupsells/${terraform.workspace}/queues/order-create/arn"
+  type      = "String"
+  value     = aws_sqs_queue.order_create.arn
   overwrite = true
 }
 

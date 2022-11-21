@@ -100,6 +100,23 @@ resource "aws_cloudwatch_event_rule" "order_cancelation" {
   })
 }
 
+resource "aws_cloudwatch_event_rule" "order_create" {
+  name           = "order-create-webhook"
+  event_bus_name = var.event_bus_name
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "orders/create"
+        ]
+      }
+    }
+  })
+}
+
 resource "aws_cloudwatch_event_rule" "order_paid" {
   name           = "order-paid-webhook"
   event_bus_name = var.event_bus_name
@@ -259,6 +276,13 @@ resource "aws_cloudwatch_event_target" "order_cancelation" {
   event_bus_name = var.event_bus_name
   rule           = aws_cloudwatch_event_rule.order_cancelation.name
   arn            = aws_sqs_queue.order_cancelation.arn
+}
+
+resource "aws_cloudwatch_event_target" "order_create" {
+  target_id      = "order-create"
+  event_bus_name = var.event_bus_name
+  rule           = aws_cloudwatch_event_rule.order_create.name
+  arn            = aws_sqs_queue.order_create.arn
 }
 
 resource "aws_cloudwatch_event_target" "order_paid" {
