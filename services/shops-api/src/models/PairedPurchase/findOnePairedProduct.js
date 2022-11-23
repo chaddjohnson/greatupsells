@@ -34,7 +34,7 @@ const findOnePairedProduct = async (shopifyProductId, options = {}) => {
     },
     { $project: { pairedShopifyProductId: 1, weight: 1 } },
     { $sort: { weight: 1 } },
-    { $sample: { size: 1 } }
+    { $limit: 1 }
   ]);
   const pairedPurchase = pairedPurchases?.[0];
   const pairedPurchaseShopifyProductId = pairedPurchase?.pairedShopifyProductId;
