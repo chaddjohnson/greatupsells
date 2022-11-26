@@ -6,6 +6,7 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const HttpClient = require('@greatupsells/gateway-http-client');
+const logger = require('@greatupsells/logger');
 
 const { SHOPS_API_URL } = process.env;
 
@@ -23,19 +24,11 @@ const handler = middy(async (event, context) => {
 
   try {
     const { shopId } = event.requestContext.authorizer;
-    const shop = await httpClient.get(`/shops/${shopId}`);
-    const data = JSON.parse(event.body);
 
-    if (data.appLastOpenedAt) {
-      // Set the actual time server-side.
-      shop.appLastOpenedAt = Date.now();
-    }
-
-    const updatedShop = await httpClient.put(`/shops/${shopId}`, shop);
+    await httpClient.post(`/shops/${shopId}/data-access-consent`);
 
     return {
-      statusCode: StatusCodes.OK,
-      body: JSON.stringify(updatedShop)
+      statusCode: StatusCodes.NO_CONTENT
     };
   } catch (error) {
     if (error.response && error.response.status) {

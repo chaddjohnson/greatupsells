@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Loading } from '@shopify/app-bridge-react';
 import {
@@ -9,6 +9,7 @@ import {
   Breadcrumbs,
   Banner,
   Stack,
+  Modal,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -119,10 +120,11 @@ const initialOffer = {
 const NewOfferPage = () => {
   const router = useRouter();
   const { showSuccessToast, showErrorToast } = useToast();
-  const { shop, shopLoaded, shopError } = useShop();
+  const { shop, shopLoaded, shopError, consentToDataAccess } = useShop();
   const { saveOffer } = useOffer();
   const { saveTheme } = useTheme();
   const { themes, themesLoaded, themesError } = useThemes();
+  const [consentingToDataAccess, setConsentingToDataAccess] = useState(false);
 
   // Use a copy of the first theme as the default theme. Remove _id to ensure
   // the copy will have its own ID when saved.
@@ -175,6 +177,11 @@ const NewOfferPage = () => {
     router.push('/offers/');
   };
 
+  const handleConsentToDataAccess = async () => {
+    setConsentingToDataAccess(true);
+    await consentToDataAccess();
+  };
+
   initialOffer.maximumOfferedProductQuantity =
     offerTheme.maximumOfferedProductQuantity || 3;
 
@@ -208,6 +215,25 @@ const NewOfferPage = () => {
           />
         )}
       </Page>
+      <Modal
+        open={shop && !shop.consentedToDataAccessAt}
+        title="Data access"
+        primaryAction={{
+          content: 'I understand',
+          onAction: handleConsentToDataAccess,
+          loading: consentingToDataAccess
+        }}
+        onClose={handleConsentToDataAccess}
+      >
+        <Modal.Section>
+          <TextContainer>
+            <p>
+              Please note that this app does not access, processes, or store
+              customer personal data.
+            </p>
+          </TextContainer>
+        </Modal.Section>
+      </Modal>
     </Loader>
   );
 };

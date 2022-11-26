@@ -21,6 +21,11 @@ const ShopProvider = ({ children }) => {
   );
   const shopLoading = !shop && !shopError;
 
+  const consentToDataAccess = async () => {
+    await httpClient.post('/shop/data-access-consent');
+    await fetchShop();
+  };
+
   const changePlan = async (level) => {
     const url = '/plan';
     const data = { level };
@@ -60,6 +65,7 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
+        consentToDataAccess,
         changePlan,
         activatePlan
       }}

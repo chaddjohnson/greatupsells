@@ -84,7 +84,8 @@ const schema = new mongoose.Schema(
     offerConversionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionRate: { type: Number, required: true, default: 0.0, min: 0 },
     revenueIncrease: { type: Number, required: true, default: 0.0 },
-    onlineStore2Theme: { type: Boolean, required: true, default: false }
+    onlineStore2Theme: { type: Boolean, required: true, default: false },
+    consentedToDataAccessAt: { type: Date, required: false }
   },
   schemaOptions
 );
