@@ -21,21 +21,6 @@ const ShopProvider = ({ children }) => {
   );
   const shopLoading = !shop && !shopError;
 
-  const saveShop = async (data) => {
-    const url = '/shop';
-    let updatedData = null;
-
-    try {
-      updatedData = await mutate(url, httpClient.put(url, data));
-      showSuccessToast('Shop updated.');
-
-      return updatedData;
-    } catch (error) {
-      showErrorToast('Error updating shop.');
-      throw error;
-    }
-  };
-
   const changePlan = async (level) => {
     const url = '/plan';
     const data = { level };
@@ -75,7 +60,6 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
-        saveShop,
         changePlan,
         activatePlan
       }}
