@@ -23,13 +23,24 @@ const plans = {
 
 const getTrialDays = async (shop) => {
   const { chargeId, trialStartedAt } = shop.plan;
+  let trialStartedDaysAgo;
+  const maxTrialDays = 7;
 
+  // Allow a trial period to complete if started; otherwise, disallow a trial period.
   if (trialStartedAt) {
-    return Math.round((new Date() - trialStartedAt) / 1000 / 24 / 60 / 60);
+    trialStartedDaysAgo = Math.round(
+      (new Date() - trialStartedAt) / 1000 / 24 / 60 / 60
+    );
+
+    if (trialStartedDaysAgo < maxTrialDays) {
+      return maxTrialDays - trialStartedDaysAgo;
+    }
+
+    return 0;
   }
 
   if (!chargeId) {
-    return 7;
+    return maxTrialDays;
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
@@ -41,7 +52,7 @@ const getTrialDays = async (shop) => {
     (new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60
   );
 
-  if (!remainingDays || remainingDays < 0 || remainingDays > 7) {
+  if (!remainingDays || remainingDays < 0 || remainingDays > maxTrialDays) {
     return 0;
   }
 
