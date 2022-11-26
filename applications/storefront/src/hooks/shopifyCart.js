@@ -44,7 +44,11 @@ const useShopifyCartAddListener = (listener) => {
   const url2 = `${urlPrefix}/cart/add`;
 
   const handler1 = (requestData, responseData) => {
-    const productData = responseData?.items?.[0];
+    const lineItemData =
+      typeof responseData === 'string'
+        ? JSON.parse(responseData)
+        : responseData;
+    const productData = lineItemData?.items?.[0];
 
     if (listener) {
       listener.call(listener, productData);
@@ -52,8 +56,13 @@ const useShopifyCartAddListener = (listener) => {
   };
 
   const handler2 = (requestData, responseData) => {
+    const productData =
+      typeof responseData === 'string'
+        ? JSON.parse(responseData)
+        : responseData;
+
     if (listener) {
-      listener.call(listener, responseData);
+      listener.call(listener, productData);
     }
   };
 
