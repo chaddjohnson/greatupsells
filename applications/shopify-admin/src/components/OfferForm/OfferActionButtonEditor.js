@@ -74,14 +74,16 @@ const OfferActionButtonEditor = ({
           onChange={([value]) => handleActionButtonBehaviorChange(value)}
         />
       </Card.Section>
-      {['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
-        <Card.Section>
-          <Checkbox
-            label="Perform this action immediately after an offered product is accepted"
-            {...asChoiceField(performActionOnAdd)}
-          />
-        </Card.Section>
-      )}
+      {!offer.enableBundling &&
+        ['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
+          <Card.Section>
+            <Checkbox
+              label="Perform this action immediately after a single offered product is accepted"
+              helpText="This will prevent multiple products from being accepted."
+              {...asChoiceField(performActionOnAdd)}
+            />
+          </Card.Section>
+        )}
     </Card>
   );
 };
