@@ -146,7 +146,7 @@ const DashboardPage = () => {
     <Page title="Overview dashboard">
       <PageTitleBar />
       <Banner
-        title="Unable to load dashboad"
+        title="Unable to load dashboard"
         status="critical"
         action={{
           content: 'Try again',
