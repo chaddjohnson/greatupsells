@@ -108,11 +108,11 @@ const initialOffer = {
   minimumRequirement: 'NONE',
   geotargetingCountries: [],
   startAt: new Date().toISOString(),
-  performActionOnAdd: true,
+  performActionOnAdd: false,
   enableVariantSelection: true,
   enableQuantitySelection: true,
-  enableEscClose: false,
-  enableMaskClose: false,
+  enableEscClose: true,
+  enableMaskClose: true,
   animation: 'effect-slide-in-scale',
   enabled: true
 };

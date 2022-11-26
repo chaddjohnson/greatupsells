@@ -170,13 +170,13 @@ const schema = new mongoose.Schema(
         message: 'End date must be on or after start date'
       }
     },
-    performActionOnAdd: { type: Boolean, required: false, default: true },
+    performActionOnAdd: { type: Boolean, required: false, default: false },
     delaySeconds: { type: Number, required: false, min: 0 },
     onPageRequiredSeconds: { type: Number, required: false, min: 0 },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
-    enableEscClose: { type: Boolean, required: false, default: false },
-    enableMaskClose: { type: Boolean, required: false, default: false },
+    enableEscClose: { type: Boolean, required: false, default: true },
+    enableMaskClose: { type: Boolean, required: false, default: true },
     enabled: { type: Boolean, required: true, default: true }
   },
   schemaOptions
