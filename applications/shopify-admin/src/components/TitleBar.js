@@ -19,38 +19,38 @@ const TitleBar = (props) => {
       url: `/offers/${urlParams}`
     }
   ];
-  const actionGroups = [
-    {
-      title: 'Help',
-      actions: [
-        {
-          content: 'Support',
-          onAction: () => {}
-        },
-        {
-          content: 'Help Center',
-          url: 'https://help.domain.com',
-          external: true
-        },
-        {
-          content: 'Tutorials',
-          url: 'https://help.domain.com/tutorials',
-          external: true
-        },
-        {
-          content: 'FAQ',
-          url: 'https://help.domain.com/faq',
-          external: true
-        }
-      ]
-    }
-  ];
+  // const actionGroups = [
+  //   {
+  //     title: 'Help',
+  //     actions: [
+  //       {
+  //         content: 'Support',
+  //         onAction: () => {}
+  //       },
+  //       {
+  //         content: 'Help Center',
+  //         url: 'https://help.domain.com',
+  //         external: true
+  //       },
+  //       {
+  //         content: 'Tutorials',
+  //         url: 'https://help.domain.com/tutorials',
+  //         external: true
+  //       },
+  //       {
+  //         content: 'FAQ',
+  //         url: 'https://help.domain.com/faq',
+  //         external: true
+  //       }
+  //     ]
+  //   }
+  // ];
 
   return (
     <ShopifyTitleBar
       primaryAction={primaryAction}
       secondaryActions={secondaryActions}
-      actionGroups={actionGroups}
+      // actionGroups={actionGroups}
       {...props}
     />
   );
