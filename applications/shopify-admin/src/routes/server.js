@@ -37,7 +37,7 @@ Shopify.Context.initialize({
   API_KEY: SHOPIFY_ADMIN_APP_API_KEY,
   API_SECRET_KEY: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
   SCOPES: [
-    'read_all_orders',
+    // 'read_all_orders',
     'read_checkouts',
     'read_draft_orders',
     'read_orders',
