@@ -31,9 +31,15 @@ const schema = new mongoose.Schema(
 schema.statics.findPairedProducts = function (
   shop,
   shopifyProductIds,
-  quantity
+  quantity,
+  excludedShopifyProductIds
 ) {
-  return findPairedProducts(shop, shopifyProductIds, quantity);
+  return findPairedProducts(
+    shop,
+    shopifyProductIds,
+    quantity,
+    excludedShopifyProductIds
+  );
 };
 
 schema.statics.findOnePairedProduct = function (shopifyProductId, options) {

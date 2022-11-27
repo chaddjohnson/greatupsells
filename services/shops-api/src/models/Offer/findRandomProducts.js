@@ -1,7 +1,11 @@
 const { flatten, uniq } = require('lodash');
 const models = require('..');
 
-const findRandomProducts = async (offer, shopifyCartProductIds = []) => {
+const findRandomProducts = async (
+  offer,
+  shopifyCartProductIds = [],
+  pagePath = ''
+) => {
   const [Product, PairedPurchase] = await Promise.all([
     models.get('Product'),
     models.get('PairedPurchase'),
@@ -16,13 +20,29 @@ const findRandomProducts = async (offer, shopifyCartProductIds = []) => {
     offer.maximumOfferedProductQuantity || 3;
   const hasOfferedProducts = offeredProducts.length > 0;
   const hasOfferedCollections = offeredCollections.length > 0;
+  const pagePathProductHandle = pagePath.match(/^\/products\/([^$]+)/)?.[1];
+  let pageProduct;
+  let excludedShopifyProductIds = [];
+
+  // Find the product, if any, associated with the current page.
+  if (pagePathProductHandle) {
+    pageProduct = await Product.findOne({
+      shop: shop._id,
+      'shopifyProductData.handle': pagePathProductHandle
+    });
+  }
+
+  if (pageProduct) {
+    excludedShopifyProductIds = [pageProduct.shopifyProductId];
+  }
 
   // Intelligently find products if the offer has neither offered products nor offered collections.
   if (!hasOfferedProducts && !hasOfferedCollections) {
     return await PairedPurchase.findPairedProducts(
       shop,
       shopifyCartProductIds,
-      maximumOfferedProductQuantity
+      maximumOfferedProductQuantity,
+      excludedShopifyProductIds
     );
   }
 
@@ -64,10 +84,14 @@ const findRandomProducts = async (offer, shopifyCartProductIds = []) => {
     ]
   });
 
+  excludedShopifyProductIds = excludedShopifyProductIds.concat(
+    shopifyCartProductIds
+  );
+
   const criteria = {
     shop: shop._id,
     $and: andCriteria,
-    shopifyProductId: { $nin: shopifyCartProductIds },
+    shopifyProductId: { $nin: excludedShopifyProductIds },
     'shopifyProductData.published_at': { $ne: null }
   };
 

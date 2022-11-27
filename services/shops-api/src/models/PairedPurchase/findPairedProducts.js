@@ -2,7 +2,12 @@ const Promise = require('bluebird');
 const { shuffle } = require('lodash');
 const models = require('..');
 
-const findPairedProducts = async (shop, shopifyProductIds, quantity) => {
+const findPairedProducts = async (
+  shop,
+  shopifyProductIds,
+  quantity,
+  excludedShopifyProductIds = []
+) => {
   shopifyProductIds = shopifyProductIds || [];
 
   const [PairedPurchase, Product] = await Promise.all([
@@ -19,7 +24,9 @@ const findPairedProducts = async (shop, shopifyProductIds, quantity) => {
 
   // Track products already found to prevent duplicates. Also exclude products
   // already added to the cart.
-  const excludedShopifyProductIds = shopifyProductIds;
+  excludedShopifyProductIds = excludedShopifyProductIds.concat(
+    shopifyProductIds
+  );
 
   // Try to find paired products.
   const pairedProducts = (

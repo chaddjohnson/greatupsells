@@ -190,8 +190,8 @@ schema.statics.findOneRandom = function (shop, params) {
   return findOneRandom(shop, params);
 };
 
-schema.methods.findRandomProducts = function (shopifyCartProductIds) {
-  return findRandomProducts(this, shopifyCartProductIds);
+schema.methods.findRandomProducts = function (shopifyCartProductIds, pagePath) {
+  return findRandomProducts(this, shopifyCartProductIds, pagePath);
 };
 
 schema.statics.search = function (params) {
