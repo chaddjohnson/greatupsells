@@ -1,7 +1,14 @@
+const getenv = require('getenv');
 const logger = require('@greatupsells/logger');
 const { StatusCodes } = require('http-status-codes');
 
+const isSandbox = getenv.bool('SANDBOX', true);
+
 const updateActiveStatus = async (shop) => {
+  if (isSandbox) {
+    return;
+  }
+
   if (!shop.accessToken && !shop.active) {
     return;
   }
