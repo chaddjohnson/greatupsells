@@ -57,6 +57,16 @@ const importProducts = async (shop) => {
 
   // Import orders after importing products as orders depend on products.
   await enqueueOrderImport(shop);
+
+  // Create sample offers after importing products as sample offers depend on products.
+  try {
+    await shop.createSampleOffers();
+  } catch (error) {
+    logger.error(
+      `Failed to create sample offers for shop (${shop.toString()})`,
+      error
+    );
+  }
 };
 
 module.exports = importProducts;

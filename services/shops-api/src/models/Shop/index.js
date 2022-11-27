@@ -24,6 +24,7 @@ const checkThemeCompatibility = require('./checkThemeCompatibility');
 const installAppEmbedBlock = require('./installAppEmbedBlock');
 const getAppEmbedBlockIsInstalledAndEnabled = require('./getAppEmbedBlockIsInstalledAndEnabled');
 const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
+const createSampleOffers = require('./createSampleOffers');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -232,6 +233,10 @@ schema.methods.getAppEmbedBlockIsInstalledAndEnabled = function () {
 
 schema.methods.calculateMonthUpsellRevenue = function () {
   return calculateMonthUpsellRevenue(this);
+};
+
+schema.methods.createSampleOffers = function () {
+  return createSampleOffers(this);
 };
 
 schema.methods.toString = function () {
