@@ -80,7 +80,6 @@ schema.pre('validate', function (next) {
 });
 
 schema.index({ offer: 1 }, { sparse: true });
-schema.index({ 'variables.name': 1 }, { unique: true });
 
 Theme = mongodbClient.connection.model('Theme', schema);
 
