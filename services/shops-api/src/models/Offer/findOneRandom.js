@@ -251,6 +251,9 @@ const findOneRandom = async (
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
   const shopifyProductIdsMissing =
     !shopifyProductIds || shopifyProductIds.length === 0;
+  const monthUpsellRevenueLimitReached =
+    shop.plan.monthUpsellRevenueLimit &&
+    shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit;
 
   if (!triggerEvent) {
     throw new Error('`triggerEvent` must be provided');
@@ -272,10 +275,7 @@ const findOneRandom = async (
   }
 
   // Disallow showing offers if upsell revenue has reached the tier max for the period.
-  if (
-    shop.plan.monthUpsellRevenueLimit &&
-    shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit
-  ) {
+  if (monthUpsellRevenueLimitReached) {
     return;
   }
 
