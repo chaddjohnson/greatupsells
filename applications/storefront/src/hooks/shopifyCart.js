@@ -116,9 +116,12 @@ const CartProvider = ({ children }) => {
   const shopifyCartLoading =
     (!shopifyCart && !shopifyCartError) || isValidating;
 
+  const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
+  const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
+
   const shopifyCartItems = useMemo(() => {
     // Use checkout data if on the Thank You page.
-    if (window.Shopify?.Checkout?.page === 'thank_you') {
+    if (isThankYouPage || isOrderStatusPage) {
       return window.Shopify.checkout.line_items.map((lineItem) => ({
         product_id: lineItem.product_id,
         variant_id: lineItem.variant_id,
@@ -134,17 +137,17 @@ const CartProvider = ({ children }) => {
         quantity: lineItem.quantity
       })) || []
     );
-  }, [shopifyCart]);
+  }, [isOrderStatusPage, isThankYouPage, shopifyCart]);
 
   const shopifyCartTotal = useMemo(() => {
     // Use checkout data if on the Thank You page.
-    if (window.Shopify?.Checkout?.page === 'thank_you') {
+    if (isThankYouPage || isOrderStatusPage) {
       return parseFloat(window.Shopify.checkout.total_price);
     }
 
     // Use Shopify cart data.
     return (shopifyCart?.total_price && shopifyCart?.total_price / 100) || 0;
-  }, [shopifyCart]);
+  }, [isOrderStatusPage, isThankYouPage, shopifyCart]);
 
   const shopifyCartItemCount = useMemo(
     () => shopifyCartItems.reduce((sum, item) => sum + item.quantity, 0),
