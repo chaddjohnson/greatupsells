@@ -10,6 +10,7 @@ const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const shopifyAuth = require('@shopify/koa-shopify-auth').default;
 const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
+const verifySessionToken = require('shopify-jwt-auth-verify').default;
 const HttpClient = require('@greatupsells/gateway-http-client');
 const RedisStore = require('../utilities/RedisStore');
 
@@ -124,11 +125,9 @@ const createServer = () => {
       // Get Shopify session token.
       const { shopifySessionToken } = ctx.query;
 
-      // Verify Shopify session token.
-      // TODO
-
       // Extract the shop domain from the session token.
-      const shopUrl = jwt.decode(shopifySessionToken).dest;
+      const decodeToken = jwt.decode(shopifySessionToken);
+      const shopUrl = decodeToken.dest;
       const shopDomain = shopUrl.replace('https://', '');
 
       // Retrieve shop data based on the shop domain.
@@ -137,8 +136,22 @@ const createServer = () => {
       );
       const shopId = shop._id;
 
+      // Reference: https://shopify.dev/apps/auth/oauth/session-tokens/getting-started#optional-obtain-session-details-and-verify-the-session-token-manually
+      const tokenIsValid = verifySessionToken(
+        shopifySessionToken,
+        SHOPIFY_ADMIN_APP_API_SECRET_KEY,
+        SHOPIFY_ADMIN_APP_API_KEY
+      );
+
       // Create a signed auth token.
       const authToken = jwt.sign({ shopId }, JWT_SECRET);
+
+      if (!tokenIsValid) {
+        ctx.status = StatusCodes.UNAUTHORIZED;
+        ctx.body = ReasonPhrases.UNAUTHORIZED;
+
+        return;
+      }
 
       if (!shop.accessToken) {
         ctx.status = StatusCodes.UNAUTHORIZED;

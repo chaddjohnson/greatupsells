@@ -17955,6 +17955,11 @@ shopify-hmac-validation@^1.1.1:
   dependencies:
     query-string "^6.2.0"
 
+shopify-jwt-auth-verify@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/shopify-jwt-auth-verify/-/shopify-jwt-auth-verify-2.0.1.tgz#1c7fdbf28e3a20b5faa463a871dcd63fba286265"
+  integrity sha512-nKK9aWoyhIUYXOkA/b6c9oDSGhS7NgH3CGLTiF07IYs44Bb4R/2sMN8z85kATSRi2dr03fH13tsoyjKsLYUtiw==
+
 side-channel@^1.0.3, side-channel@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/side-channel/-/side-channel-1.0.4.tgz"
