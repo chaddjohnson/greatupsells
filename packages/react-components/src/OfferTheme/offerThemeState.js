@@ -352,9 +352,11 @@ const useOfferThemeState = ({
     try {
       await onAddProducts(offerId, items);
 
-      [...Array(productCount).keys()].forEach((productIndex) =>
-        handleQuantityAdd(productIndex, items[productIndex].quantity)
-      );
+      [...Array(productCount).keys()].forEach((productIndex) => {
+        if (items[productIndex].quantity > 0) {
+          handleQuantityAdd(productIndex, items[productIndex].quantity);
+        }
+      });
 
       setCheckoutUrl(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
