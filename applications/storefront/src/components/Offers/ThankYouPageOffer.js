@@ -34,7 +34,7 @@ const ThankYouPageOffer = ({
     [theme]
   );
 
-  const isThankYouPage = window.Shopify?.Checkout?.page !== 'thank_you';
+  const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
 
   const headerContainer = document.querySelector(
     '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(1)'
