@@ -171,13 +171,15 @@ const useOfferThemeState = ({
       const addedQuantityBelowMax =
         !hasMaxQuantity || addedQuantity < maximumAcceptedProductQuantity;
       const selectedVariantHasInventory = selectedVariants[index]?.hasInventory;
+      const atOrBelowMaxInventory = selectedQuantity <= maxQuantities[index];
 
       return (
         addedQuantityBelowMax &&
         selectedQuantityAtOrBelowRemaining &&
         selectedQuantityValid &&
         selectedVariantHasInventory &&
-        !addingProduct[index]
+        !addingProduct[index] &&
+        atOrBelowMaxInventory
       );
     });
   }, [
@@ -186,7 +188,8 @@ const useOfferThemeState = ({
     offer,
     translatedOfferedProducts,
     selectedQuantities,
-    selectedVariants
+    selectedVariants,
+    maxQuantities
   ]);
 
   const replacingProductEnabled = useMemo(
