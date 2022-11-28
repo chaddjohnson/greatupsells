@@ -455,8 +455,14 @@ const useOfferThemeState = ({
   });
 
   useEffect(() => {
-    if (productBundleAdded) {
+    if (!productBundleAdded) {
+      return;
+    }
+
+    if (typeof actionButtonUrl === 'string') {
       window.location.href = actionButtonUrl;
+    } else if (typeof actionButtonUrl === 'function') {
+      actionButtonUrl();
     }
   }, [productBundleAdded, actionButtonUrl]);
 
