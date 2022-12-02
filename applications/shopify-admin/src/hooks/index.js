@@ -1,5 +1,6 @@
 export { ShopProvider, useShop } from './shop';
 
+export { default as useCollection } from './collection';
 export { default as useOffer } from './offer';
 export { default as useOfferAcceptances } from './offerAcceptances';
 export { default as useOfferAnalytics } from './offerAnalytics';
@@ -9,6 +10,7 @@ export { default as useOfferImpressions } from './offerImpressions';
 export { default as useOfferRevenueIncreases } from './offerRevenueIncreases';
 export { default as useOfferThemes } from './offerThemes';
 export { default as useOffers } from './offers';
+export { default as useProduct } from './product';
 export { default as useShopAcceptances } from './shopAcceptances';
 export { default as useShopAnalytics } from './shopAnalytics';
 export { default as useShopConversionRates } from './shopConversionRates';

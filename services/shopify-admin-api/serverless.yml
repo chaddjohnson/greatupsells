@@ -265,6 +265,32 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
+  findOneRandomCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomCollection.handler
+    events:
+      - http:
+          path: /collections/random
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  findOneRandomProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomProduct.handler
+    events:
+      - http:
+          path: /products/random
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler

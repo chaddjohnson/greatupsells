@@ -11,6 +11,10 @@ import {
   useThemeComponent
 } from '../../hooks';
 
+const queryString = new URLSearchParams(window.location.search);
+const testToken = queryString.get('testToken');
+const testOfferId = queryString.get('testOfferId');
+
 const triggerEvent = 'ADD';
 const loadedAt = new Date();
 let delayTimeout = 0;
@@ -47,6 +51,8 @@ const ProductOffer = ({
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    testToken,
+    testOfferId,
     shouldQuery:
       productAdded &&
       !!shopifyProductIds?.length &&

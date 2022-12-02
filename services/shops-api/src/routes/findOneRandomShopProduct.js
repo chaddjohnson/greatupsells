@@ -14,38 +14,29 @@ const handler = async (event, context) => {
   }
 
   try {
-    const { offerId } = event.pathParameters;
-    const Offer = await models.get('Offer');
-    const offer = await Offer.findById(offerId);
-    const {
-      triggerShopifyProductId,
-      triggerShopifyVariantId,
-      offeredShopifyProductIds,
-      ipAddress,
-      isTest
-    } = JSON.parse(event.body);
+    const { shopId } = event.pathParameters;
+    const [Shop, Product] = await Promise.all([
+      models.get('Shop'),
+      models.get('Product')
+    ]);
+    const shop = await Shop.findById(shopId);
+    const product = await Product.findOneRandomByShop(shop);
 
-    if (!offer) {
+    if (!product) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
     }
 
-    const offerHit = await offer.trackImpression({
-      triggerShopifyProductId,
-      triggerShopifyVariantId,
-      offeredShopifyProductIds,
-      ipAddress,
-      isTest
-    });
-
     return {
-      statusCode: StatusCodes.CREATED,
-      body: JSON.stringify(offerHit)
+      statusCode: StatusCodes.OK,
+      body: JSON.stringify(product)
     };
   } catch (error) {
-    await logger.error(`Error tracking offer impression`, error, { event });
+    await logger.error(`Error retrieving random product for shop`, error, {
+      event
+    });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

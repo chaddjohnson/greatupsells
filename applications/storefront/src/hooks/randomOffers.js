@@ -13,6 +13,8 @@ const useRandomOffers = ({
   shopifyCartTotal = 0,
   shopifyCartItemCount = 0,
   shopifyOrderId = undefined,
+  testToken = undefined,
+  testOfferId = undefined,
   shouldQuery = true
 }) => {
   // Ensure Shopify product and variant IDs is an array.
@@ -59,7 +61,9 @@ const useRandomOffers = ({
           shopifyOrderId,
           offerImpressions,
           sessionOfferImpressions,
-          pagePath
+          pagePath,
+          testToken,
+          testOfferId
         ])
       : null,
     () =>
@@ -72,7 +76,9 @@ const useRandomOffers = ({
         shopifyOrderId,
         offerImpressions,
         sessionOfferImpressions,
-        pagePath
+        pagePath,
+        testToken,
+        testOfferId
       }),
     {
       revalidateOnFocus: false,

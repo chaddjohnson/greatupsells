@@ -16,7 +16,8 @@ const findImpressionsByOfferId = async (offerId, startAt, endAt) => {
         createdAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
-        }
+        },
+        isTest: false
       }
     },
     {

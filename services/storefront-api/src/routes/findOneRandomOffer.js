@@ -38,7 +38,9 @@ const handler = middy(async (event, context) => {
       shopifyOrderId,
       offerImpressions,
       sessionOfferImpressions,
-      pagePath
+      pagePath,
+      testToken,
+      testOfferId
     } = JSON.parse(event.body);
 
     if (!domain) {
@@ -64,7 +66,9 @@ const handler = middy(async (event, context) => {
         ipAddress,
         offerImpressions,
         sessionOfferImpressions,
-        pagePath
+        pagePath,
+        testToken,
+        testOfferId
       }
     );
 

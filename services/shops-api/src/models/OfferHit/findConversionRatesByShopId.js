@@ -26,7 +26,8 @@ const findConversionRatesByShopId = async (shopId, startAt, endAt) => {
               $lte: new Date(endAt)
             }
           }
-        ]
+        ],
+        isTest: false
       }
     },
     {

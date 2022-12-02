@@ -200,7 +200,7 @@ const OfferOfferedProductsEditor = ({
                       <TextField
                         inputMode="numeric"
                         min={1}
-                        helpText="Applies to offered products."
+                        helpText="Applies to total quantity of offered products."
                         {...maximumAcceptedProductQuantity}
                         error={
                           submitted && maximumAcceptedProductQuantity.error

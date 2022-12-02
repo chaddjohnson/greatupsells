@@ -14,6 +14,7 @@ let Offer = null;
 
 const triggerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true },
   shopifyVariantIds: [{ type: Number, required: true }]
@@ -21,6 +22,7 @@ const triggerProductSchema = new mongoose.Schema({
 
 const offerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true },
   shopifyVariantIds: [{ type: Number, required: true }]
@@ -28,6 +30,7 @@ const offerProductSchema = new mongoose.Schema({
 
 const offerCollectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyCollectionId: { type: Number, required: true }
 });

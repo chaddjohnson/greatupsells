@@ -15,7 +15,7 @@ const trackAcceptance = async (
 
   await offerHit.populate('shop').populate('offer').execPopulate();
 
-  const { shop, offer } = offerHit;
+  const { shop, offer, isTest } = offerHit;
   const transactionOptions = { readPreference: 'primary' };
   const acceptanceTracked = offerHit.acceptedProducts.length > 0;
   const shopifyApiClient = shop.getShopifyApiClient();
@@ -44,7 +44,7 @@ const trackAcceptance = async (
       );
 
       // Track acceptance one time per offer hit (and not once per product per offer hit).
-      if (!acceptanceTracked) {
+      if (!acceptanceTracked && !isTest) {
         // Increment offer acceptance count.
         promises.push(
           Offer.findByIdAndUpdate(

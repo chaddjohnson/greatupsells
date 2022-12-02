@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   useShop,
   useRandomOffers,
@@ -15,22 +15,29 @@ import ProductOffer from './ProductOffer';
 import ThankYouPageOffer from './ThankYouPageOffer';
 import OrderStatusPageOffer from './OrderStatusPageOffer';
 
+const queryString = new URLSearchParams(window.location.search);
+const testToken = queryString.get('testToken');
+const testOfferId = queryString.get('testOfferId');
+
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
-
   const {
     shopifyCartItems,
     shopifyCartTotal,
     shopifyCartItemCount,
-    shopifyCartLoaded
+    shopifyCartLoaded,
+    addVariantsToShopifyCart
   } = useShopifyCart();
-
   const { shop } = useShop();
   const {
     getCustomerLocale,
     getCustomerCountryCode,
     getCustomerCurrency
   } = useShopifyCustomer();
+
+  const testVariantId = new URLSearchParams(window.location.search).get(
+    'testVariantId'
+  );
 
   // Get locale.
   const customerLocale = getCustomerLocale();
@@ -69,6 +76,8 @@ const Offers = () => {
     shopifyCartTotal,
     shopifyCartItemCount,
     shopifyOrderId,
+    testToken,
+    testOfferId,
     shouldQuery: !!shopifyCartItems && shopifyCartLoaded
   });
 
@@ -143,6 +152,24 @@ const Offers = () => {
   const handleOfferClose = () => {
     setViewingOffer(false);
   };
+
+  // If testing, add the test variant, if any, to the cart.
+  useEffect(() => {
+    const testItemInCart =
+      shopifyCartLoaded &&
+      shopifyCartItems.find(
+        (item) => item.variant_id === parseInt(testVariantId)
+      );
+
+    if (testVariantId && shopifyCartLoaded && !testItemInCart) {
+      addVariantsToShopifyCart([
+        {
+          shopifyVariantId: testVariantId,
+          quantity: 1
+        }
+      ]);
+    }
+  }, [shopifyCartLoaded, testVariantId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

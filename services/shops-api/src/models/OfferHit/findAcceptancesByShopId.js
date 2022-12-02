@@ -16,7 +16,8 @@ const findAcceptancesByShopId = async (shopId, startAt, endAt) => {
         acceptedAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
-        }
+        },
+        isTest: false
       }
     },
     {

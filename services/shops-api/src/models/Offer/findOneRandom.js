@@ -245,7 +245,8 @@ const findOneRandom = async (
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = [],
-    pagePath = ''
+    pagePath = '',
+    testOfferId
   }
 ) => {
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
@@ -283,17 +284,24 @@ const findOneRandom = async (
     models.get('Offer'),
     models.get('Collection')
   ]);
-  const criteria = await buildCriteria(shop, {
-    triggerEvent,
-    shopifyProductIds,
-    shopifyVariantIds,
-    shopifyCartTotal,
-    shopifyCartItemCount,
-    shopifyOrderId,
-    ipAddress,
-    offerImpressions,
-    sessionOfferImpressions
-  });
+  const testCriteria = {
+    _id: mongoose.Types.ObjectId(testOfferId),
+    shop: shop._id,
+    triggerEvent
+  };
+  const criteria = !testOfferId
+    ? await buildCriteria(shop, {
+        triggerEvent,
+        shopifyProductIds,
+        shopifyVariantIds,
+        shopifyCartTotal,
+        shopifyCartItemCount,
+        shopifyOrderId,
+        ipAddress,
+        offerImpressions,
+        sessionOfferImpressions
+      })
+    : testCriteria;
   const pagePathSanitized = sanitizePagePath(pagePath);
   const isThankYouPage = !!pagePath.match(/\/checkouts\/[^\/]+\/thank_you/);
   const isOrderStatusPage = !!pagePath.match(/\/orders\/[^\/]+/);
@@ -301,46 +309,48 @@ const findOneRandom = async (
   // Find an offer.
   let offers = await Offer.find(criteria);
 
-  offers = offers.filter((offer) => {
-    // There should be no page path provided for Post-Purchase offers. Exclude
-    // Post-Purchase offers if there is a page path.
-    if (offer.strategy === 'POST_PURCHASE') {
-      return !pagePath;
-    }
+  if (!testOfferId) {
+    offers = offers.filter((offer) => {
+      // There should be no page path provided for Post-Purchase offers. Exclude
+      // Post-Purchase offers if there is a page path.
+      if (offer.strategy === 'POST_PURCHASE') {
+        return !pagePath;
+      }
 
-    // Filter for offers targeting the Order Status page if that is the current page.
-    if (offer.strategy === 'THANK_YOU_PAGE') {
-      return isThankYouPage;
-    }
+      // Filter for offers targeting the Order Status page if that is the current page.
+      if (offer.strategy === 'THANK_YOU_PAGE') {
+        return isThankYouPage;
+      }
 
-    // Filter for offers targeting the Order Status page if that is the current page.
-    if (offer.strategy === 'ORDER_STATUS_PAGE') {
-      return isOrderStatusPage;
-    }
+      // Filter for offers targeting the Order Status page if that is the current page.
+      if (offer.strategy === 'ORDER_STATUS_PAGE') {
+        return isOrderStatusPage;
+      }
 
-    // Include the offer if there is no trigger page to filter for.
-    if (offer.triggerPage !== 'PAGE') {
-      return true;
-    }
+      // Include the offer if there is no trigger page to filter for.
+      if (offer.triggerPage !== 'PAGE') {
+        return true;
+      }
 
-    // Match home page with or without locale prefix.
-    if (offer.triggerPagePath === '/') {
-      return pagePathSanitized.match(/^(?:\/[a-z]{2}-[a-z]{2})?\/?$/);
-    }
+      // Match home page with or without locale prefix.
+      if (offer.triggerPagePath === '/') {
+        return pagePathSanitized.match(/^(?:\/[a-z]{2}-[a-z]{2})?\/?$/);
+      }
 
-    // Filter trigger path based on regex if trigger page is a specific page.
-    return (
-      offer.triggerPagePath &&
-      pagePathSanitized.match(
-        globToRegExp(offer.triggerPagePath, {
-          extended: true,
-          globstar: false
-        })
-      )
-    );
-  });
+      // Filter trigger path based on regex if trigger page is a specific page.
+      return (
+        offer.triggerPagePath &&
+        pagePathSanitized.match(
+          globToRegExp(offer.triggerPagePath, {
+            extended: true,
+            globstar: false
+          })
+        )
+      );
+    });
+  }
 
-  // Return a random offer from the found offers.
+  // Return one random offer from the found offers.
   return offers[Math.floor(Math.random() * offers.length)];
 };
 

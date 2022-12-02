@@ -383,6 +383,22 @@ functions:
           path: /shops/domain/{domain}/offers/random
           method: post
           authorizer: aws_iam
+  findOneRandomShopCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomShopCollection.handler
+    events:
+      - http:
+          path: /shops/{shopId}/collections/random
+          method: get
+          authorizer: aws_iam
+  findOneRandomShopProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomShopProduct.handler
+    events:
+      - http:
+          path: /shops/{shopId}/products/random
+          method: get
+          authorizer: aws_iam
   findOneShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler

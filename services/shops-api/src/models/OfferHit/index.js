@@ -78,7 +78,8 @@ const schema = new mongoose.Schema(
     ipAddress: { type: String, required: false },
     acceptedAt: { type: Date, required: false },
     convertedAt: { type: Date, required: false },
-    revenueIncrease: { type: Number, required: false }
+    revenueIncrease: { type: Number, required: false },
+    isTest: { type: Boolean, required: false }
   },
   schemaOptions
 );

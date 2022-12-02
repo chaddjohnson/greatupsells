@@ -53,7 +53,8 @@ const calculateMonthUpsellRevenue = async (shop) => {
     {
       $match: {
         revenueIncrease: { $gt: 0 },
-        convertedAt: { $gte: periodStartDate }
+        convertedAt: { $gte: periodStartDate },
+        isTest: false
       }
     },
     {

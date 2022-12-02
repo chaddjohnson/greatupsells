@@ -16,7 +16,8 @@ const findConversionsByShopId = async (shopId, startAt, endAt) => {
         convertedAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
-        }
+        },
+        isTest: false
       }
     },
     {

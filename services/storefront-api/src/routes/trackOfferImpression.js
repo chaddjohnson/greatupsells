@@ -36,7 +36,8 @@ const handler = middy(async (event, context) => {
     const {
       triggerShopifyProductId,
       triggerShopifyVariantId,
-      offeredShopifyProductIds
+      offeredShopifyProductIds,
+      isTest
     } = JSON.parse(event.body);
 
     // Only allow tracking for offers belonging to the requestor domain.
@@ -57,7 +58,8 @@ const handler = middy(async (event, context) => {
       triggerShopifyProductId,
       triggerShopifyVariantId,
       offeredShopifyProductIds,
-      ipAddress
+      ipAddress,
+      isTest
     });
 
     return {

@@ -26,7 +26,8 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
               $lte: new Date(endAt)
             }
           }
-        ]
+        ],
+        isTest: false
       }
     },
     {

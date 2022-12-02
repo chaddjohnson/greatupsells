@@ -16,7 +16,8 @@ const findImpressionsByShopId = async (shopId, startAt, endAt) => {
         createdAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
-        }
+        },
+        isTest: false
       }
     },
     {

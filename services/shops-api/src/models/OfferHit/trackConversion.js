@@ -11,7 +11,7 @@ const trackConversion = async (offerHit, order) => {
 
   await offerHit.populate('shop').populate('offer').execPopulate();
 
-  const { shop, offer } = offerHit;
+  const { shop, offer, isTest } = offerHit;
 
   try {
     offerHit.$session(session);
@@ -31,32 +31,34 @@ const trackConversion = async (offerHit, order) => {
 
     await offerHit.save();
 
-    // Update offer stats.
-    await Offer.findByIdAndUpdate(
-      offer.id,
-      {
-        $inc: {
-          revenueIncrease: offerHit.revenueIncrease,
-          conversionCount: 1
+    if (!isTest) {
+      // Update offer stats.
+      await Offer.findByIdAndUpdate(
+        offer.id,
+        {
+          $inc: {
+            revenueIncrease: offerHit.revenueIncrease,
+            conversionCount: 1
+          },
+          conversionRate: (offer.conversionCount + 1) / offer.impressionCount
         },
-        conversionRate: (offer.conversionCount + 1) / offer.impressionCount
-      },
-      { session }
-    );
+        { session }
+      );
 
-    // Update shop stats.
-    await Shop.findByIdAndUpdate(
-      shop.id,
-      {
-        $inc: {
-          revenueIncrease: offerHit.revenueIncrease,
-          offerConversionCount: 1
+      // Update shop stats.
+      await Shop.findByIdAndUpdate(
+        shop.id,
+        {
+          $inc: {
+            revenueIncrease: offerHit.revenueIncrease,
+            offerConversionCount: 1
+          },
+          offerConversionRate:
+            (shop.offerConversionCount + 1) / shop.offerImpressionCount
         },
-        offerConversionRate:
-          (shop.offerConversionCount + 1) / shop.offerImpressionCount
-      },
-      { session }
-    );
+        { session }
+      );
+    }
   } catch (error) {
     await logger.error(
       `Error tracking offer conversion for offer hit (${

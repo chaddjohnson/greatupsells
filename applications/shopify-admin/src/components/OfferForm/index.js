@@ -91,6 +91,7 @@ const OfferForm = ({
   },
   shop,
   themes,
+  onOfferUpdate,
   onSubmit,
   onCancel,
   onDelete
@@ -473,6 +474,10 @@ const OfferForm = ({
     updatePreviewContentHeight();
   }, 0.5);
 
+  useEffect(() => {
+    onOfferUpdate(offer);
+  }, [onOfferUpdate, offer]);
+
   return (
     <Form noValidate onSubmit={submit}>
       <Layout>
@@ -694,6 +699,7 @@ OfferForm.propTypes = {
   }),
   shop: PropTypes.object.isRequired,
   themes: PropTypes.array.isRequired,
+  onOfferUpdate: PropTypes.func,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   onDelete: PropTypes.func

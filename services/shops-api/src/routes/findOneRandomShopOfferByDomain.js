@@ -31,7 +31,8 @@ const findPopupData = async (
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
-    pagePath
+    pagePath,
+    testOfferId
   }
 ) => {
   const [Offer, Theme] = await Promise.all([
@@ -48,7 +49,8 @@ const findPopupData = async (
     ipAddress,
     offerImpressions,
     sessionOfferImpressions,
-    pagePath
+    pagePath,
+    testOfferId
   });
 
   if (!offer) {
@@ -87,6 +89,7 @@ const handler = async (event, context) => {
     const { domain } = event.pathParameters;
     const Shop = await models.get('Shop');
     const shop = await Shop.findOneByDomain(domain);
+    const parsedBody = JSON.parse(event.body);
     const {
       events: triggerEvents,
       shopifyProductIds,
@@ -97,14 +100,21 @@ const handler = async (event, context) => {
       ipAddress,
       offerImpressions,
       sessionOfferImpressions,
-      pagePath
-    } = JSON.parse(event.body);
+      pagePath,
+      testOfferId
+    } = parsedBody;
+    let { testToken } = parsedBody;
 
     if (!shop) {
       return {
         statusCode: StatusCodes.NOT_FOUND,
         body: ReasonPhrases.NOT_FOUND
       };
+    }
+
+    // Ignore the test token if incorrect.
+    if (testToken !== shop.testToken) {
+      testToken = undefined;
     }
 
     // Find popup data for each trigger event. Parallelize to minimize latency.
@@ -120,7 +130,8 @@ const handler = async (event, context) => {
           ipAddress,
           offerImpressions,
           sessionOfferImpressions,
-          pagePath
+          pagePath,
+          testOfferId: testToken ? testOfferId : undefined
         })
       )
     );
