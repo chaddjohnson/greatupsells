@@ -15,7 +15,7 @@ resource "aws_sqs_queue" "shop_product_import_dlq" {
 
 resource "aws_sqs_queue" "shop_order_import" {
   name                       = "shop-order-import-queue-${terraform.workspace}"
-  visibility_timeout_seconds = 60
+  visibility_timeout_seconds = 900
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.shop_order_import_dlq.arn
     maxReceiveCount     = 10
@@ -25,7 +25,7 @@ resource "aws_sqs_queue" "shop_order_import" {
 
 resource "aws_sqs_queue" "shop_collection_import" {
   name                       = "shop-collection-import-queue-${terraform.workspace}"
-  visibility_timeout_seconds = 60
+  visibility_timeout_seconds = 900
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.shop_collection_import_dlq.arn
     maxReceiveCount     = 10
@@ -35,7 +35,7 @@ resource "aws_sqs_queue" "shop_collection_import" {
 
 resource "aws_sqs_queue" "shop_product_import" {
   name                       = "shop-product-import-queue-${terraform.workspace}"
-  visibility_timeout_seconds = 60
+  visibility_timeout_seconds = 900
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.shop_product_import_dlq.arn
     maxReceiveCount     = 10
