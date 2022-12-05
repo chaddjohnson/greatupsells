@@ -5,8 +5,6 @@ dotenvExpand(dotenv.config());
 
 const { MONGODB_URL_LOGS } = process.env;
 
-console.log(`MONGODB_URL_LOGS = ${MONGODB_URL_LOGS.split('').join(' ')}`);
-
 const config = {
   mongodb: {
     url: MONGODB_URL_LOGS,
