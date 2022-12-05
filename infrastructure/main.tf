@@ -42,6 +42,8 @@ module "us_east_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 module "eu_west_1" {
@@ -67,6 +69,8 @@ module "eu_west_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 module "ap_northeast_1" {
@@ -92,6 +96,8 @@ module "ap_northeast_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 output "hosted_zone_id" {

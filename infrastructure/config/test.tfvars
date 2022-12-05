@@ -9,7 +9,7 @@ services_domain_names = {
   "us-east-1" = "services.test.greatupsells.com"
 }
 assets_domain                    = "assets.test.greatupsells.com"
-shopify_admin_app_api_key        = "973752778780866d1cbbbabb75b3401c"
-shopify_admin_app_api_secret_key = "c83f0620743c0e2ba66477f615486c2b"
-shopify_app_embed_block_id       = ""
-event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/3309183/greatupsells-webhooks-test"
+shopify_admin_app_api_key        = "2a3a2f40aab400124390d89a7844b93d"
+shopify_admin_app_api_secret_key = "22560c4fd72703f5530503b7c009664f"
+shopify_app_embed_block_id       = "693cd83e-9cbb-4d13-9db2-d79fc453d7aa"
+event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/18156060673/greatupsells-webhooks-test"

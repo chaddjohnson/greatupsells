@@ -250,6 +250,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
+1. Create the `greatupsells-infrastructure` bucket if it does not exist.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -262,7 +263,7 @@ Code consistency is important. In order to maintain consistency, convention chan
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
 1. Create a `ci` IAM account with administrator access.
-1. Create a `server` account with the following inline policy:
+1. Create a `server` user with the following inline policy:
    ```
    {
       "Version": "2012-10-17",
@@ -286,10 +287,11 @@ Code consistency is important. In order to maintain consistency, convention chan
    }
    ```
 1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
-   1. `hosted_zone_id` (get this from Route 53 for the domain)
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
+   1. `shopify_app_embed_block_id` (you will need to use a dummy value until the app is running, and then update SSM and your Lambdas once activated in the test shop's theme)
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
+1. Update `event_bus_name` in `services/webhooks/infrastructure/config/[environment].tfvars`.
 1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
    1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)

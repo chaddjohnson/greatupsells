@@ -75,6 +75,7 @@
     "build": "next build",
     "format": "find src -type f -iname '*.js' -exec eslint --fix {} +",
     "lint": "eslint 'src/**/*.js'",
+    "infrastructure": "cd infrastructure && ./run.sh",
     "destroy": "cd infrastructure && ./destroy.sh",
     "start": "nodemon -e js --exec \"node src/routes/server\" --watch src/routes",
     "shopify": "shopify",

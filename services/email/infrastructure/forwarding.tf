@@ -7,26 +7,38 @@ data "aws_caller_identity" "current" {}
 # Create S3 bucket for storing emails.
 resource "aws_s3_bucket" "email" {
   bucket        = var.email_bucket
-  acl           = "private"
   force_destroy = false
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "ses.amazonaws.com"
-        },
-        "Action" : "s3:PutObject",
-        "Resource" : "arn:aws:s3:::${var.email_bucket}/*",
-        "Condition" : {
-          "StringEquals" : {
-            "aws:Referer" : data.aws_caller_identity.current.account_id
-          }
-        }
-      }
-    ]
-  })
+}
+
+resource "aws_s3_bucket_acl" "email" {
+  bucket = aws_s3_bucket.email.id
+  acl    = "private"
+}
+
+data "aws_iam_policy_document" "email" {
+  version = "2012-10-17"
+
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.email.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ses.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "email" {
+  bucket = aws_s3_bucket.email.id
+  policy = data.aws_iam_policy_document.email.json
 }
 
 # Create Lambda role.
@@ -136,7 +148,7 @@ resource "aws_ses_receipt_rule_set" "forward_rules" {
 
 # Create forwarding rules.
 resource "aws_ses_receipt_rule" "forward_rule" {
-  name          = "store"
+  name          = "main"
   rule_set_name = "forward-rules-${terraform.workspace}"
   recipients = [
     var.info_email,
