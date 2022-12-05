@@ -28,6 +28,7 @@ module "us_east_1" {
 
   region                           = "us-east-1"
   public_key                       = var.public_key
+  app_name                         = var.app_name
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain
@@ -38,8 +39,11 @@ module "us_east_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
+  shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 module "eu_west_1" {
@@ -51,6 +55,7 @@ module "eu_west_1" {
 
   region                           = "eu-west-1"
   public_key                       = var.public_key
+  app_name                         = var.app_name
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain
@@ -61,8 +66,11 @@ module "eu_west_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
+  shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 module "ap_northeast_1" {
@@ -74,6 +82,7 @@ module "ap_northeast_1" {
 
   region                           = "ap-northeast-1"
   public_key                       = var.public_key
+  app_name                         = var.app_name
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain
@@ -84,8 +93,11 @@ module "ap_northeast_1" {
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
+  shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
+
+  depends_on = [aws_route53_zone.domain]
 }
 
 output "hosted_zone_id" {

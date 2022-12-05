@@ -3,7 +3,7 @@ const models = require('..');
 const updateDependentOffers = async (collection) => {
   const Offer = await models.get('Offer');
   const { shopifyCollectionId, shopifyCollectionData } = collection;
-  const { title, image } = shopifyCollectionData;
+  const { title, handle, image } = shopifyCollectionData;
   const offers = await Offer.find({
     'offeredCollections.shopifyCollectionId': shopifyCollectionId
   });
@@ -15,6 +15,7 @@ const updateDependentOffers = async (collection) => {
       offer.offeredCollections.forEach((offeredCollection) => {
         if (offeredCollection.shopifyCollectionId === shopifyCollectionId) {
           offeredCollection.title = title;
+          offeredCollection.handle = handle;
           offeredCollection.imageUrl = image?.src;
 
           changed = true;
@@ -24,6 +25,7 @@ const updateDependentOffers = async (collection) => {
       offer.triggerCollections.forEach((triggerCollection) => {
         if (triggerCollection.shopifyCollectionId === shopifyCollectionId) {
           triggerCollection.title = title;
+          triggerCollection.handle = handle;
           triggerCollection.imageUrl = image?.src;
 
           changed = true;
@@ -31,10 +33,10 @@ const updateDependentOffers = async (collection) => {
       });
 
       if (changed) {
-        offer.markModified('offeredCollection');
-        offer.markModified('triggerCollections');
-
-        return await offer.save();
+        await Offer.findByIdAndUpdate(offer.id, {
+          offeredCollection: offer.offeredCollection,
+          triggerCollections: offer.triggerCollections
+        });
       }
     })
   );

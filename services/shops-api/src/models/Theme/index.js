@@ -13,6 +13,7 @@ const schemaOptions = {
 const variablesSchema = new mongoose.Schema({
   name: { type: String, required: true },
   label: { type: String, required: true },
+  helpText: { type: String, required: false },
   type: {
     type: String,
     required: true,
@@ -33,6 +34,7 @@ const formFieldsSchema = new mongoose.Schema({
 });
 const schema = new mongoose.Schema(
   {
+    key: { type: String, required: true },
     name: { type: String, required: false },
     offer: {
       type: mongoose.Schema.Types.ObjectId,
@@ -47,23 +49,17 @@ const schema = new mongoose.Schema(
         enum: [
           'UPSELL',
           'CROSS_SELL',
-          'POST_CHECKOUT',
+          'POST_PURCHASE',
           'THANK_YOU_PAGE',
+          'ORDER_STATUS_PAGE',
           'POPUP'
         ]
       }
     ],
-    categories: [{ type: String, required: true, trim: true }],
     thumbnailImageUrl: { type: String, required: true },
-    description: { type: String, required: false },
-    template: {
-      scripts: [{ type: String, required: true, trim: true }],
-      html: { type: String, required: false },
-      css: { type: String, required: false },
-      javascript: { type: String, required: false }
-    },
     variables: [variablesSchema],
     formFields: [formFieldsSchema],
+    maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
     referenceUrl: { type: String, required: false },
     notes: { type: String, required: false },
     enabled: { type: Boolean, required: true, default: false }

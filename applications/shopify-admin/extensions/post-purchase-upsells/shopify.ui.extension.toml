@@ -1,0 +1,2 @@
+name = "post-purchase-upsells"
+type = "checkout_post_purchase"

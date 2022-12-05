@@ -24,6 +24,8 @@ const handler = async (event, context) => {
     try {
       await collection.validate();
     } catch (error) {
+      logger.debug(`ERROR: ${error.message}`);
+
       return {
         statusCode: StatusCodes.BAD_REQUEST,
         body: ReasonPhrases.BAD_REQUEST

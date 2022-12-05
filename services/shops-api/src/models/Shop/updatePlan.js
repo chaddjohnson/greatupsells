@@ -14,35 +14,37 @@ const updatePlan = async (shop) => {
 
   // Is the charge canceled?
   const chargeIsCanceled =
-    recurringChargeData &&
-    (recurringChargeData.cancelled_on ||
-      recurringChargeData.status === 'cancelled');
+    recurringChargeData?.cancelled_on ||
+    recurringChargeData?.status === 'cancelled';
 
-  const billingCycleActive =
-    shop.plan.billingOn && new Date(shop.plan.billingOn) > new Date();
+  const billingOn =
+    recurringChargeData.billing_on &&
+    new Date(`${recurringChargeData.billing_on}T12:00:00Z`);
+  const billingCycleActive = billingOn && new Date(billingOn) > new Date();
 
   // The plan should be removed if the charge canceled, was declined, or has expired (not accepted).
   const planIsInactive =
     !recurringChargeData ||
     chargeIsCanceled ||
     ['declined', 'expired'].includes(recurringChargeData.status);
-  const removePlan = !billingCycleActive && planIsInactive;
+  const resetPlan = !billingCycleActive && planIsInactive;
 
   // The plan should deactivated if the charge is frozen.
   const deactivatePlan =
-    recurringChargeData &&
-    recurringChargeData.status === 'frozen' &&
-    shop.plan.active;
+    recurringChargeData?.status === 'frozen' && shop.plan.active;
 
   // The plan should be reactivated if the charge is active and the plan is inactive.
   const reactivatePlan =
-    recurringChargeData &&
-    recurringChargeData.status === 'active' &&
-    !shop.plan.active;
+    recurringChargeData?.status === 'active' && !shop.plan.active;
 
-  if (removePlan) {
+  // Track the next billing date.
+  if (billingOn) {
+    shop.plan.billingOn = billingOn;
+  }
+
+  if (resetPlan) {
     await logger.warn(
-      `Downgrading plan for shop ${shop.domain} as recurring charge is declined or expired`
+      `Resetting plan for shop as recurring charge is declined or expired (${shop.toString()})`
     );
 
     await shop.resetPlan();
@@ -50,14 +52,16 @@ const updatePlan = async (shop) => {
 
   if (deactivatePlan) {
     await logger.warn(
-      `Deactivating plan for shop ${shop.domain} due to non-payment`
+      `Deactivating plan for shop due to non-payment (${shop.toString()})`
     );
 
     shop.plan.active = false;
   }
 
   if (reactivatePlan) {
-    await logger.warn(`Reactivating plan for shop ${shop.domain}`);
+    await logger.warn(`Reactivating plan for shop (${shop.toString()})`, null, {
+      plan: shop.plan
+    });
 
     shop.plan.active = true;
   }

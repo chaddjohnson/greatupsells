@@ -1,10 +1,9 @@
 service: greatupsells-admin-api
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -72,32 +71,6 @@ functions:
       default:
         enabled: false
   # findLogs:
-  cloneTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/cloneTheme.handler
-    events:
-      - http:
-          path: /themes/{themeId}/clone
-          method: post
-          cors: true
-          # authorizer:
-          #   name: authorizer
-          #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
-  createTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/createTheme.handler
-    events:
-      - http:
-          path: /themes
-          method: post
-          cors: true
-          # authorizer:
-          #   name: authorizer
-          #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
   findLogs:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
@@ -111,47 +84,8 @@ functions:
           #   type: request
           #   identitySource: method.request.header.Authorization
           #   resultTtlInSeconds: 0
-  findOneTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOneTheme.handler
-    events:
-      - http:
-          path: /themes/{themeId}
-          method: get
-          cors: true
-          # authorizer:
-          #   name: authorizer
-          #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
-  findThemes:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findThemes.handler
-    events:
-      - http:
-          path: /themes
-          method: get
-          cors: true
-          # authorizer:
-          #   name: authorizer
-          #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
   # findShops:
   # findStats:
-  updateTheme:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateTheme.handler
-    events:
-      - http:
-          path: /themes/{themeId}
-          method: put
-          cors: true
-          # authorizer:
-          #   name: authorizer
-          #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo

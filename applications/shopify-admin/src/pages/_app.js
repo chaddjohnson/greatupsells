@@ -12,16 +12,12 @@ import {
 import { getSessionToken } from '@shopify/app-bridge-utils';
 import styled from 'styled-components';
 import { ErrorBoundary } from '@greatupsells/react-components';
-import { HttpClientProvider, HttpClient } from '@greatupsells/react-hooks';
+import { HttpClientProvider } from '@greatupsells/react-hooks';
 import { ShopProvider } from '../hooks';
-import { Link, RoutePropagator } from '../components';
+import { Link, RoutePropagator, RouteGuard } from '../components';
 import '@shopify/polaris/build/esm/styles.css';
 
 const apiKey = process.env.SHOPIFY_ADMIN_APP_API_KEY;
-
-const httpClient = new HttpClient({
-  baseUrl: process.env.SHOPIFY_ADMIN_API_URL
-});
 
 const getShop = () => {
   const isClientSide = typeof window !== 'undefined';
@@ -89,7 +85,7 @@ const getAuthToken = async () => {
 };
 
 // Add the token to each request.
-httpClient.addRequestInterceptor(async (config) => {
+const httpRequestInterceptor = async (config) => {
   try {
     let { authToken } = sessionStorage;
 
@@ -102,6 +98,7 @@ httpClient.addRequestInterceptor(async (config) => {
     }
 
     if (authToken) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${authToken}`;
     }
 
@@ -109,7 +106,7 @@ httpClient.addRequestInterceptor(async (config) => {
   } catch (error) {
     return config;
   }
-});
+};
 
 const Main = styled.main`
   padding-bottom: 120px;
@@ -135,12 +132,15 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   return (
     <AppProvider i18n={translations} linkComponent={Link}>
       <AppBridgeProvider config={appBridgeConfig}>
-        <HttpClientProvider httpClient={httpClient}>
+        <HttpClientProvider
+          baseUrl={process.env.SHOPIFY_ADMIN_API_URL}
+          requestInterceptor={httpRequestInterceptor}
+        >
           <ShopProvider>
             {mounted &&
               typeof window !== 'undefined' &&
               window.top !== window.self && (
-                <>
+                <RouteGuard>
                   <ClientRouter history={router} />
                   <RoutePropagator />
                   <ErrorBoundary>
@@ -148,7 +148,7 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
                       <Component {...pageProps} />
                     </Main>
                   </ErrorBoundary>
-                </>
+                </RouteGuard>
               )}
             {mounted &&
               typeof window !== 'undefined' &&

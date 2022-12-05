@@ -4,8 +4,6 @@ const models = require('../models');
 const { DOMAIN, LOGS_NOTIFICATION_EMAIL } = process.env;
 
 const processRecord = async (record) => {
-  console.log(record.body);
-
   const Log = await models.get('Log');
 
   // Parse the message.
@@ -17,7 +15,7 @@ const processRecord = async (record) => {
   // Enqueue an email notification for error logs.
   if (type === 'ERROR') {
     await emailClient.enqueue({
-      to: [LOGS_NOTIFICATION_EMAIL],
+      to: LOGS_NOTIFICATION_EMAIL,
       from: `noreply@${DOMAIN}`,
       subject: `[${type}] - ${message}`,
       body: `

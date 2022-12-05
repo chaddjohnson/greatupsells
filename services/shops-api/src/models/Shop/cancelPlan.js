@@ -1,7 +1,7 @@
 const logger = require('@greatupsells/logger');
 
 const cancelPlan = async (shop) => {
-  if (!shop.plan.chargeId) {
+  if (!shop.plan.chargeId || !shop.active) {
     await shop.resetPlan();
     return;
   }
@@ -17,21 +17,21 @@ const cancelPlan = async (shop) => {
 
   // Cancel the plan if it was activated and not canceled.
   if (planActive) {
-    await logger.info(
-      `Canceling recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
-    );
-
     try {
       await shopifyApiClient.recurringApplicationCharge.delete(
         shop.plan.chargeId
       );
 
       await logger.info(
-        `Canceled recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`
+        `Canceled recurring charge ${
+          shop.plan.chargeId
+        } for shop (${shop.toString()})`
       );
     } catch (error) {
       await logger.error(
-        `Error canceling existing recurring charge ${shop.plan.chargeId} for shop ${shop.domain}`,
+        `Error canceling existing recurring charge ${
+          shop.plan.chargeId
+        } for shop (${shop.toString()})`,
         error
       );
     }

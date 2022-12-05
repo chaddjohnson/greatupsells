@@ -1,10 +1,9 @@
 service: greatupsells-webhooks-service
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   memorySize: 256
   timeout: 10
   endpointType: REGIONAL
@@ -95,6 +94,16 @@ functions:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/order-cancelation/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-cancelation-queue-dev'}
       - http:
           path: /shopify/order-cancelation
+          method: post
+  orderCreate:
+    reservedConcurrency: 1
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/orderCreate.handler
+    events:
+      - sqs:
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/order-create/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:order-create-queue-dev'}
+      - http:
+          path: /shopify/order-create
           method: post
   orderPaid:
     reservedConcurrency: 1

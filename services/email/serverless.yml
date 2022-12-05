@@ -1,10 +1,9 @@
 service: greatupsells-email-service
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   timeout: 10
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}

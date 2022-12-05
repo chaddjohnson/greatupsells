@@ -1,12 +1,20 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect
+} from 'react';
 import PropTypes from 'prop-types';
-import { Form, Layout, Card, PageActions, Sticky } from '@shopify/polaris';
+import { Form, Layout, PageActions, Sticky, Banner } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { ContextualSaveBar } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
+import { useInterval } from '@greatupsells/react-hooks';
+import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
 import ThemeEditor from './ThemeEditor';
@@ -26,6 +34,7 @@ import OfferOptionsEditor from './OfferOptionsEditor';
 import dummyCrossSellData from './dummyCrossSellData.json';
 import dummyUpsellData from './dummyUpsellData.json';
 
+const dev = process.env.NODE_ENV !== 'production';
 let themeCount = 0;
 
 const assignId = (object) => {
@@ -49,20 +58,28 @@ const assignIds = (objects) => {
   return objects.map(assignId);
 };
 
-const OfferPopupContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  min-height: 300px;
-`;
-
 const PreviewOfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
-  display: none;
-  padding: 1rem;
+  height: ${(props) =>
+    props.previewContentHeight ? `${props.previewContentHeight}px` : '300px'};
+  overflow: hidden;
+`;
 
-  @media screen and (min-width: 768px) {
-    display: block;
+const SmallPreviewOfferPopupContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  margin-top: 1rem;
+  height: ${(props) =>
+    props.smallPreviewContentHeight
+      ? `${props.smallPreviewContentHeight}px`
+      : '300px'};
+  max-height: 350px;
+  overflow-y: auto;
+
+  iframe {
+    min-width: 0;
   }
 `;
 
@@ -74,6 +91,7 @@ const OfferForm = ({
   },
   shop,
   themes,
+  onOfferUpdate,
   onSubmit,
   onCancel,
   onDelete
@@ -81,6 +99,8 @@ const OfferForm = ({
   let contextualSaveBar = null;
 
   const app = useAppBridge();
+
+  const offerPopupContext = useRef();
 
   const [submitted, setSubmitted] = useState(false);
   const [showEndDate, setShowEndDate] = useState(false);
@@ -92,7 +112,8 @@ const OfferForm = ({
   const [themeDisplayType, setThemeDisplayType] = useState(
     window.innerWidth >= 768 ? 'desktop' : 'mobile'
   );
-  const [themeIncompatible, setThemeIncompatible] = useState(false);
+  const [previewContentHeight, setPreviewContentHeight] = useState();
+  const [smallPreviewContentHeight, setSmallPreviewContentHeight] = useState();
 
   const {
     name,
@@ -110,6 +131,7 @@ const OfferForm = ({
     offeredProducts,
     offeredCollections,
     maximumOfferedProductQuantity,
+    maximumAcceptedProductQuantity,
     triggerProducts,
     triggerCollections,
     geotargetingCountries,
@@ -126,6 +148,7 @@ const OfferForm = ({
     enableEscClose,
     enableMaskClose,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection
   } = useFields(initialOffer, showEndDate);
@@ -151,6 +174,7 @@ const OfferForm = ({
       offeredProducts,
       offeredCollections,
       maximumOfferedProductQuantity,
+      maximumAcceptedProductQuantity,
       discountType,
       discountValue,
       discountTitle,
@@ -162,6 +186,7 @@ const OfferForm = ({
       enableEscClose,
       enableMaskClose,
       enableBundling,
+      performActionOnAdd,
       enableVariantSelection,
       enableQuantitySelection,
       animation
@@ -174,7 +199,7 @@ const OfferForm = ({
         await onSubmit({
           offer: {
             ...initialOffer,
-            formValues
+            ...formValues
           },
           theme,
           offerThemes
@@ -207,7 +232,7 @@ const OfferForm = ({
     () =>
       ContextualSaveBar.create(app, {
         saveAction: {
-          disabled: (!dirty && !themeDirty) || themeIncompatible,
+          disabled: !dirty && !themeDirty,
           loading: submitting
         },
         discardAction: {
@@ -216,7 +241,7 @@ const OfferForm = ({
           discardConfirmationModal: dirty || themeDirty
         }
       }),
-    [app, dirty, themeDirty, submitting, themeIncompatible]
+    [app, dirty, themeDirty, submitting]
   );
 
   const offer = useMemo(
@@ -227,6 +252,8 @@ const OfferForm = ({
     [initialOffer, fields]
   );
 
+  const ThemeComponent = useThemeComponent(theme?.key);
+
   const copyTheme = (value) => {
     return assignId({
       ...omit(value, ['_id', '__v', 'updatedAt', 'createdAt']),
@@ -236,7 +263,54 @@ const OfferForm = ({
 
   const dummyData =
     offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
-  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE'].includes(offer.strategy);
+  const isInline = [
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+  const zoomByStrategy = {
+    CROSS_SELL: {
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
+    },
+    UPSELL: {
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
+    },
+    THANK_YOU_PAGE: {
+      designModeZoom: 1.0,
+      smallDesignModeZoom: 0.5
+    },
+    ORDER_STATUS_PAGE: {
+      designModeZoom: 1.0,
+      smallDesignModeZoom: 0.5
+    },
+    POST_PURCHASE: {
+      designModeZoom: 0.65,
+      smallDesignModeZoom: 0.33
+    },
+    POPUP: {
+      designModeZoom: 0.69,
+      smallDesignModeZoom: 0.365
+    }
+  };
+  const { designModeZoom } = zoomByStrategy[offer.strategy];
+  const { smallDesignModeZoom } = zoomByStrategy[offer.strategy];
+
+  const updatePreviewContentHeight = useCallback(() => {
+    const context = offerPopupContext?.current;
+    const container = context?.querySelector('.content-container');
+
+    if (!context || !container) {
+      return;
+    }
+
+    // Workaround to ensure preview area fits iframe.
+    setPreviewContentHeight(container.offsetHeight * designModeZoom + 16);
+    setSmallPreviewContentHeight(
+      container.offsetHeight * smallDesignModeZoom + 8
+    );
+  }, [offerPopupContext, designModeZoom, smallDesignModeZoom]);
 
   const handleStrategyChange = (value) => {
     const selectedThemeUsesSelectedStrategy =
@@ -244,6 +318,11 @@ const OfferForm = ({
     const firstStrategyTheme = themes.find(
       (current) => current.strategies.indexOf(value) > -1
     );
+    const valueIsInline = [
+      'POST_PURCHASE',
+      'THANK_YOU_PAGE',
+      'ORDER_STATUS_PAGE'
+    ].includes(value);
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
     let firstStrategyOfferTheme = offerThemes.find(
@@ -253,7 +332,7 @@ const OfferForm = ({
     strategy.onChange(value);
 
     if (value !== 'CROSS_SELL') {
-      maximumOfferedProductQuantity.onChange(undefined);
+      maximumAcceptedProductQuantity.onChange(undefined);
     }
 
     // Bundling is only available with cross-selling.
@@ -275,11 +354,8 @@ const OfferForm = ({
       setTheme(firstStrategyOfferTheme);
     }
 
-    if (!shop.onlineStore2Theme && value === 'POST_PURCHASE') {
-      setThemeIncompatible(true);
-    }
-
-    if (value === 'THANK_YOU_PAGE') {
+    // Use page load as trigger event for some types of offers.
+    if (valueIsInline) {
       triggerEvent.onChange('LOAD');
     }
   };
@@ -292,6 +368,7 @@ const OfferForm = ({
       )
     ]);
     setThemeDirty(true);
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleThemeSelect = (value) => {
@@ -305,25 +382,40 @@ const OfferForm = ({
     setTheme(copiedTheme);
 
     setThemeDirty(true);
+
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
+
+    setTimeout(() => updatePreviewContentHeight());
+
+    const newMaximumOfferedProductQuantity =
+      value.maximumOfferedProductQuantity || 3;
+
+    maximumOfferedProductQuantity.onChange(
+      newMaximumOfferedProductQuantity.toString()
+    );
   };
 
   const handleThemeDisplayTypeChange = (value) => {
     setThemeDisplayType(value);
+
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleClosePreview = () => {
     setPreviewActive(false);
     setTimeout(() => setDesignMode(true));
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handlePreview = () => {
     setDesignMode(false);
     setTimeout(() => setPreviewActive(true));
+    setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleDiscard = () => {
@@ -374,9 +466,47 @@ const OfferForm = ({
     [showEndDate] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  useEffect(() => {
+    updatePreviewContentHeight();
+  }, [updatePreviewContentHeight, offer, theme]);
+
+  useInterval(() => {
+    updatePreviewContentHeight();
+  }, 0.5);
+
+  useEffect(() => {
+    onOfferUpdate(offer);
+  }, [onOfferUpdate, offer]);
+
   return (
     <Form noValidate onSubmit={submit}>
       <Layout>
+        <Layout.Section>
+          {!dev &&
+            offer.strategy === 'POST_PURCHASE' &&
+            !shop.isPostPurchaseAppInUse && (
+              <Banner
+                title="Great Upsells isn't the selected app on the checkout post-purchase page."
+                status="critical"
+                action={{
+                  content: 'Open checkout settings',
+                  url: `https://${sessionStorage.shop}/admin/settings/checkout`,
+                  external: true
+                }}
+                secondaryAction={{
+                  content: 'Learn more',
+                  url:
+                    'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
+                  external: true
+                }}
+              >
+                <p>
+                  To use it on your store&apos;s post-purchase page, select it
+                  in checkout settings.
+                </p>
+              </Banner>
+            )}
+        </Layout.Section>
         <Layout.Section>
           <OfferNameEditor name={name} submitted={submitted} />
           <OfferStrategyEditor
@@ -391,23 +521,30 @@ const OfferForm = ({
             offerThemes={offerThemes}
             displayType={themeDisplayType}
             previewElement={
-              <OfferPopupContainer>
+              <PreviewOfferPopupContainer
+                previewContentHeight={previewContentHeight}
+              >
                 <OfferPopup
+                  contextRef={offerPopupContext}
                   open={designMode || previewActive}
                   designMode={designMode}
-                  designModeZoom={isInline ? 1.0 : 0.8}
+                  designModeZoom={designModeZoom}
                   forceDisplayType={
                     !previewActive ? themeDisplayType : undefined
                   }
                   shop={shop}
                   theme={theme}
+                  ThemeComponent={ThemeComponent}
                   offer={offer}
+                  locale={shop.locale || 'en'}
+                  countryCode={shop.countryCode || 'US'}
+                  currency={shop.currency || 'USD'}
                   triggerProduct={dummyData.triggerProduct}
                   offeredProducts={dummyData.offeredProducts}
                   onClose={handleClosePreview}
                   onClick={!isInline ? handlePreview : undefined}
                 />
-              </OfferPopupContainer>
+              </PreviewOfferPopupContainer>
             }
             onPreview={!isInline ? handlePreview : undefined}
             onChange={handleThemeChange}
@@ -429,6 +566,7 @@ const OfferForm = ({
             submitted={submitted}
           />
           <OfferViewAllowanceEditor
+            offer={offer}
             viewAllowance={viewAllowance}
             viewAllowanceDays={viewAllowanceDays}
             submitted={submitted}
@@ -438,6 +576,7 @@ const OfferForm = ({
             actionButtonBehavior={actionButtonBehavior}
             actionButtonLink={actionButtonLink}
             actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+            performActionOnAdd={performActionOnAdd}
             submitted={submitted}
           />
           <OfferTriggerProductsEditor
@@ -451,9 +590,11 @@ const OfferForm = ({
           />
           <OfferOfferedProductsEditor
             offer={offer}
+            theme={theme}
             offeredProducts={offeredProducts}
             offeredCollections={offeredCollections}
             maximumOfferedProductQuantity={maximumOfferedProductQuantity}
+            maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
             submitted={submitted}
           />
           <OfferDiscountEditor
@@ -464,7 +605,14 @@ const OfferForm = ({
             discountTitle={discountTitle}
             submitted={submitted}
           />
-          <OfferBundlingEditor offer={offer} enableBundling={enableBundling} />
+          {(!theme.maximumOfferedProductQuantity ||
+            theme.maximumOfferedProductQuantity > 1) && (
+            <OfferBundlingEditor
+              offer={offer}
+              theme={theme}
+              enableBundling={enableBundling}
+            />
+          )}
           <OfferDatesEditor
             offer={offer}
             startAt={startAt}
@@ -492,30 +640,34 @@ const OfferForm = ({
         <Layout.Section secondary>
           <Sticky offset={16} disableWhenStacked={true}>
             <OfferSummary offer={offer} />
-            <Card>
-              <PreviewOfferPopupContainer>
-                <OfferPopup
-                  open={true}
-                  designMode={true}
-                  designModeZoom={isInline ? 0.6 : 0.3}
-                  forceDisplayType="desktop"
-                  shop={shop}
-                  theme={theme}
-                  offer={offer}
-                  triggerProduct={dummyData.triggerProduct}
-                  offeredProducts={dummyData.offeredProducts}
-                  onClose={handleClosePreview}
-                  onClick={!isInline ? handlePreview : undefined}
-                />
-              </PreviewOfferPopupContainer>
-            </Card>
+            <SmallPreviewOfferPopupContainer
+              smallPreviewContentHeight={smallPreviewContentHeight}
+            >
+              <OfferPopup
+                open={designMode && !previewActive}
+                designMode={true}
+                designModeZoom={smallDesignModeZoom}
+                forceDisplayType={!previewActive ? themeDisplayType : undefined}
+                shop={shop}
+                theme={theme}
+                ThemeComponent={ThemeComponent}
+                offer={offer}
+                locale={shop.locale || 'en'}
+                countryCode={shop.countryCode || 'US'}
+                currency={shop.currency || 'USD'}
+                triggerProduct={dummyData.triggerProduct}
+                offeredProducts={dummyData.offeredProducts}
+                onClose={handleClosePreview}
+                onClick={!isInline ? handlePreview : undefined}
+              />
+            </SmallPreviewOfferPopupContainer>
           </Sticky>
         </Layout.Section>
         <Layout.Section>
           <PageActions
             primaryAction={{
               content: 'Save offer',
-              disabled: (!dirty && !themeDirty) || themeIncompatible,
+              disabled: !dirty && !themeDirty,
               loading: submitting,
               submit: true,
               onAction: handleSubmit
@@ -547,6 +699,7 @@ OfferForm.propTypes = {
   }),
   shop: PropTypes.object.isRequired,
   themes: PropTypes.array.isRequired,
+  onOfferUpdate: PropTypes.func,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   onDelete: PropTypes.func

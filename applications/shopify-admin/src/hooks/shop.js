@@ -21,17 +21,34 @@ const ShopProvider = ({ children }) => {
   );
   const shopLoading = !shop && !shopError;
 
-  const saveShop = async (data) => {
-    const url = '/shop';
-    let updatedData = null;
+  const consentToDataAccess = async () => {
+    await httpClient.post('/shop/data-access-consent');
+    await fetchShop();
+  };
+
+  const changePlan = async (level) => {
+    const url = '/plan';
+    const data = { level };
 
     try {
-      updatedData = await mutate(url, httpClient.put(url, data));
-      showSuccessToast('Shop updated.');
+      const { redirectUrl } = await mutate(url, httpClient.post(url, data));
 
-      return updatedData;
+      window.top.location.href = redirectUrl;
     } catch (error) {
-      showErrorToast('Error updating shop.');
+      showErrorToast('Error changing plan.');
+      throw error;
+    }
+  };
+
+  const activatePlan = async () => {
+    const url = '/plan/activation';
+
+    try {
+      await mutate(url, httpClient.post(url));
+      await fetchShop();
+      showSuccessToast('Plan activated.');
+    } catch (error) {
+      showErrorToast('Error activating plan.');
       throw error;
     }
   };
@@ -48,7 +65,9 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
-        saveShop
+        consentToDataAccess,
+        changePlan,
+        activatePlan
       }}
     >
       {children}

@@ -3,31 +3,63 @@ import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
-import { createGlobalStyle, StyleSheetManager } from 'styled-components';
+import styled, {
+  createGlobalStyle,
+  StyleSheetManager
+} from 'styled-components';
 import OfferTheme from '../OfferTheme';
 import Overlay from './Overlay';
 import Content from './Content';
 import ContentContainer from './ContentContainer';
 import Mask from './Mask';
 
-const initialIframeHeight = 1000;
-
 const GlobalStyle = createGlobalStyle`
   body {
     overflow: ${(props) =>
-      props.modalOpen && !props.designMode ? 'hidden !important' : 'auto'};
+      props.open && !props.designMode ? 'hidden !important' : 'auto'};
+  }
+`;
+
+const StyledFrame = styled(Frame)`
+  border: 0;
+  position: ${(props) => (props.designMode ? 'static' : 'fixed')};
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: ${(props) => (props.designMode ? '100%' : '100vw')};
+  height: ${(props) => (props.designMode ? '100%' : '100vh')};
+  max-width: ${(props) =>
+    props.forceDisplayType === 'mobile'
+      ? `${375 * props.designModeZoom}px`
+      : 'none'};
+  min-height: ${(props) => (props.designMode ? '1500px' : 0)};
+  z-index: ${(props) => (props.designMode ? 1 : 2147483647)};
+
+  @media screen and (min-width: 768px) {
+    &&& {
+      min-width: ${(props) =>
+        props.designMode && props.forceDisplayType === 'desktop'
+          ? '1200px'
+          : 0};
+    }
   }
 `;
 
 const OfferPopup = ({
   className,
+  contextRef,
   open,
   designMode,
   designModeZoom,
   forceDisplayType,
   theme,
+  ThemeComponent,
   shop,
   offer,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -39,62 +71,18 @@ const OfferPopup = ({
   onClick
 }) => {
   const [frameRef, setFrameRef] = useState(null);
-  const [frameDocument, setFrameDocument] = useState(null);
-  const [iframeHeight, setIframeHeight] = useState(initialIframeHeight);
   const [modalRef, setModalRef] = useState(null);
-  const [modalContentContainerRef, setModalContentContainerRef] = useState(
-    null
-  );
+  const [upsellAccepted, setUpsellAccepted] = useState(false);
 
   // Internal flag for controling whether the actual modal is open. Faacilitates animations.
   // See https://github.com/reactjs/react-modal/blob/master/docs/styles/transitions.md.
-  const [modalOpen, setModalOpen] = useState(designMode);
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
-
-  const fixIframeHeight = () => {
-    if (!frameDocument || !modalRef) {
-      return;
-    }
-
-    // This only applies to design mode.
-    if (!designMode) {
-      return;
-    }
-
-    setTimeout(async () => {
-      // Wait for all images to load so that we can get an accurate measure of
-      // the content height.
-      // Reference: https://stackoverflow.com/a/60949881/83897
-      await Promise.all(
-        Array.from(frameDocument.images).map((image) => {
-          if (image.complete) {
-            return Promise.resolve(image.naturalHeight !== 0);
-          }
-          return new Promise((resolve) => {
-            image.addEventListener('load', () => resolve());
-            image.addEventListener('error', () => resolve());
-          });
-        })
-      );
-
-      // Workaround: Set the iframe height to some large -- taller than the content
-      // will likely actually be. Do so because `offsetHeight` does not reflect the
-      // iframe's content height unless the iframe is actualy tall enough to
-      // accommodate the content.
-      setIframeHeight(initialIframeHeight);
-
-      // Set the iframe height to approximately the modal content height. Do so via
-      // a timeout to allow the iframe height to temporarily increase per above.
-      setTimeout(() => {
-        setIframeHeight((modalRef.offsetHeight - 10) * designModeZoom);
-      });
-    });
-  };
 
   const maskBackgroundColor = useMemo(() => {
     const defaultMaskBackgroundColor = [
-      'POST_CHECKOUT',
-      'THANK_YOU_PAGE'
+      'POST_PURCHASE',
+      'THANK_YOU_PAGE',
+      'ORDER_STATUS_PAGE'
     ].includes(offer.strategy)
       ? '#FFFFFF'
       : 'rgba(0, 0, 0, 0.5)';
@@ -132,7 +120,9 @@ const OfferPopup = ({
       return;
     }
 
-    setModalOpen(false);
+    const isCartUpsell =
+      offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
+
     setModalAfterOpen(false);
 
     // Delay calling the onClose callback (which unmounts this component) until
@@ -140,53 +130,38 @@ const OfferPopup = ({
     // work without this.
     setTimeout(() => {
       onClose();
+
+      // Reload the cart on upsell so that new items show.
+      if (isCartUpsell && upsellAccepted) {
+        window.location.reload();
+      }
     }, 350);
   };
 
   const handleAfterOpen = () => {
     if (!designMode) {
       setModalAfterOpen(true);
+
+      setTimeout(() => {
+        modalRef.focus();
+      });
     }
   };
 
-  // Expose methods globally to enable themes to programmatically interface with popups.
-  if (typeof window !== 'undefined') {
-    window.Offer.submit = handleSubmit;
-    window.Offer.close = handleClose;
-  }
-
-  // Fix the iframe height as dependencies change.
-  useEffect(fixIframeHeight, [
-    frameDocument,
-    modalRef,
-    theme?.template,
-    designMode,
-    designModeZoom
-  ]);
+  const handleReplaceProduct = async (...args) => {
+    setUpsellAccepted(true);
+    await onReplaceProduct(...args);
+  };
 
   useEffect(() => {
-    if (open) {
-      setModalOpen(true);
+    // Reload the iframe if the strategy changes (in design mode) to ensure the correct dummy data displays.
+    // This is a workaround for images not showing correctly.
+    frameRef?.contentWindow.location.reload();
+  }, [frameRef, offer.strategy]);
 
-      if (!designMode) {
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            setModalAfterOpen(true);
-          });
-        }, 20);
-      }
-    }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Fix the iframe height when scrolling occurs.
-  // useEffect(() => {
-  //   window.addEventListener('scroll', fixIframeHeight);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', fixIframeHeight);
-  //   };
-  // });
-
+  if (!offer) {
+    return null;
+  }
   if (!open) {
     return null;
   }
@@ -194,9 +169,9 @@ const OfferPopup = ({
   // Reference: https://codesandbox.io/s/react-iframe-examples-36k1x?file=/src/examples/with-styled-components.js
   return (
     <>
-      <GlobalStyle modalOpen={modalOpen} designMode={designMode} />
-      <Frame
-        className={className}
+      <GlobalStyle open={open} designMode={designMode} />
+      <StyledFrame
+        className={clsx('offer-iframe', className)}
         title="Offer"
         ref={(frame) => frame && setFrameRef(frame?.node || frame?.base)}
         head={
@@ -227,24 +202,17 @@ const OfferPopup = ({
             />
           </>
         }
-        style={{
-          border: 0,
-          position: designMode ? 'static' : 'fixed',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          width: designMode ? '100%' : '100vw',
-          height: designMode ? '100%' : '100vh',
-          maxWidth: forceDisplayType === 'mobile' ? '375px' : 'none',
-          minHeight: designMode ? `${iframeHeight}px` : 0,
-          zIndex: designMode ? 1 : 2147483647
-        }}
+        designMode={designMode}
+        designModeZoom={designModeZoom}
+        forceDisplayType={forceDisplayType}
       >
         <FrameContextConsumer>
           {({ document }) => {
-            setFrameDocument(document);
             ReactModal.setAppElement(document.body);
+
+            if (contextRef) {
+              contextRef.current = document;
+            }
 
             return (
               <StyleSheetManager target={document.head}>
@@ -252,14 +220,14 @@ const OfferPopup = ({
                   contentRef={setModalRef}
                   closeTimeoutMS={333}
                   parentSelector={() => document.body}
-                  isOpen={modalOpen}
+                  isOpen={open}
                   shouldFocusAfterRender={!designMode}
                   shouldCloseOnOverlayClick={offer.enableMaskClose}
                   shouldCloseOnEsc={offer.enableEscClose}
                   contentLabel="Offer Modal"
                   className={clsx(
                     designMode && 'design-mode',
-                    modalOpen && designMode && 'open',
+                    open && designMode && 'open',
                     modalAfterOpen && 'open',
                     !!offer.animation && !designMode && offer.animation
                   )}
@@ -293,25 +261,27 @@ const OfferPopup = ({
                 >
                   <ContentContainer
                     className="content-container"
-                    ref={setModalContentContainerRef}
+                    designMode={designMode}
+                    forceDisplayType={forceDisplayType}
                   >
                     <OfferTheme
+                      context={frameRef?.contentWindow}
                       shop={shop}
                       offer={offer}
+                      theme={theme}
+                      ThemeComponent={ThemeComponent}
+                      locale={locale}
+                      countryCode={countryCode}
+                      currency={currency}
                       triggerProduct={triggerProduct}
                       offeredProducts={offeredProducts}
-                      theme={theme}
                       shopifyCartItems={shopifyCartItems}
                       shopifyCartTotal={shopifyCartTotal}
                       shopifyCartItemCount={shopifyCartItemCount}
-                      handlers={{
-                        closeHandler: 'window.parent.Offer.close()'
-                      }}
                       forceDisplayType={forceDisplayType}
-                      context={frameRef?.contentWindow}
-                      container={modalContentContainerRef}
+                      handlers={{ handleClose, handleSubmit }}
                       onAddProducts={onAddProducts}
-                      onReplaceProduct={onReplaceProduct}
+                      onReplaceProduct={handleReplaceProduct}
                     />
                   </ContentContainer>
                   {designMode && <Mask onClick={onClick} />}
@@ -320,7 +290,7 @@ const OfferPopup = ({
             );
           }}
         </FrameContextConsumer>
-      </Frame>
+      </StyledFrame>
     </>
   );
 };
@@ -332,6 +302,7 @@ OfferPopup.propTypes = {
   designModeZoom: PropTypes.number,
   forceDisplayType: PropTypes.oneOf(['desktop', 'mobile']),
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.func,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.arrayOf(PropTypes.object),
   shopifyCartItems: PropTypes.array,
@@ -339,6 +310,9 @@ OfferPopup.propTypes = {
   shopifyCartItemCount: PropTypes.number,
   shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,

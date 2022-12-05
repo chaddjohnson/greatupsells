@@ -22,9 +22,20 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
               value: 'UPSELL'
             },
             {
-              label: 'Post-purchase cross-sell',
-              helpText:
-                'Encourage customers to purchase a related or complementary product after completing checkout.',
+              label: 'Post-purchase offer',
+              helpText: (
+                <>
+                  Encourage customers to purchase a related or complementary
+                  product after completing checkout. Please review{' '}
+                  <Link
+                    url="https://shopify.dev/apps/checkout/post-purchase#limitations-and-considerations"
+                    external
+                  >
+                    limitations
+                  </Link>
+                  .
+                </>
+              ),
               value: 'POST_PURCHASE',
               renderChildren: (isSelected) =>
                 isSelected &&
@@ -35,10 +46,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                   >
                     Your current theme does not support post-purchase features.
                     A{' '}
-                    <Link
-                      url="https://themes.shopify.com/collections/os2-themes"
-                      external
-                    >
+                    <Link url="https://themes.shopify.com" external>
                       Shopify 2.0 theme
                     </Link>{' '}
                     is required to use this feature.
@@ -46,10 +54,16 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
                 )
             },
             {
-              label: 'Post-checkout Thank You page cross-sell',
+              label: 'Thank You page offer',
               helpText:
                 'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
               value: 'THANK_YOU_PAGE'
+            },
+            {
+              label: 'Order Status page offer',
+              helpText:
+                'Encourage customers to purchase a related or complementary product on the Order Status page.',
+              value: 'ORDER_STATUS_PAGE'
             }
             // {
             //   label: 'Popup',

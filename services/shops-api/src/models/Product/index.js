@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
+const findOneRandomByShop = require('./findOneRandomByShop');
 const trackShopifyCollections = require('./trackShopifyCollections');
 const updateDependentOffers = require('./updateDependentOffers');
+const updatePairedPurchases = require('./updatePairedPurchases');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -28,9 +30,39 @@ schema.statics.findOneByShopifyProductId = function (shopifyProductId) {
 
 schema.statics.findOneByShopifyVariantId = function (shopifyVariantId) {
   return Product.findOne({
-    'shopifyProductData.variants.id': shopifyVariantId
+    'shopifyProductData.variants.id': parseInt(shopifyVariantId)
   });
 };
+
+schema.statics.findOneRandomByShop = function (shop, options) {
+  return findOneRandomByShop(shop, options);
+};
+
+schema.virtual('hasInventory').get(function () {
+  const { shopifyProductData } = this;
+  const { variants } = shopifyProductData;
+  const anyVariantsHaveInventory = variants.some((variant) => {
+    const inventoryManagedByThirdParty =
+      variant.inventory_management !== 'shopify';
+    const hasNonZeroInventory = variant.inventory_quantity > 0;
+    const continueSellingWhenOutOfStock =
+      variant.inventory_policy === 'continue';
+
+    return (
+      inventoryManagedByThirdParty ||
+      hasNonZeroInventory ||
+      continueSellingWhenOutOfStock
+    );
+  });
+
+  return anyVariantsHaveInventory;
+});
+
+schema.virtual('isPublished').get(function () {
+  const { shopifyProductData } = this;
+
+  return shopifyProductData.published_at !== null;
+});
 
 schema.methods.trackShopifyCollections = function () {
   return trackShopifyCollections(this);
@@ -38,6 +70,10 @@ schema.methods.trackShopifyCollections = function () {
 
 schema.methods.updateDependentOffers = function () {
   return updateDependentOffers(this);
+};
+
+schema.methods.updatePairedPurchases = function () {
+  return updatePairedPurchases(this);
 };
 
 schema.methods.toString = function () {
@@ -52,6 +88,7 @@ schema.index({ shop: 1 });
 schema.index({ shopifyShopId: 1 });
 schema.index({ shopifyProductId: 1 }, { unique: true });
 schema.index({ shopifyCollectionIds: 1 });
+schema.index({ 'shopifyProductData.handle': 1 });
 schema.index({ 'shopifyProductData.variants.id': 1 });
 
 Product = mongodbClient.connection.model('Product', schema);

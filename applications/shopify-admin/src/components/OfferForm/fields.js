@@ -125,18 +125,44 @@ const useFields = (initialOffer, showEndDate) => {
     [minimumRequirement.value]
   );
   const offeredCollections = useField(initialOffer.offeredCollections);
-  const offeredProducts = useField({
-    value: initialOffer.offeredProducts,
+  const offeredProducts = useField(
+    {
+      value: initialOffer.offeredProducts,
+      validates: [
+        (value) => {
+          if (
+            strategy.value === 'UPSELL' &&
+            !value?.length &&
+            !offeredCollections.value.length
+          ) {
+            return 'One or more offered products or collections are required';
+          }
+        }
+      ]
+    },
+    [strategy.value, offeredCollections.value]
+  );
+  const maximumOfferedProductQuantity = useField({
+    value: initialOffer.maximumOfferedProductQuantity?.toString(),
     validates: [
+      (value) =>
+        notEmpty("Maximum offered products value can't be blank")(
+          value?.toString()
+        ),
+      (value) =>
+        value &&
+        numericString('Maximum offered products value must be a number')(
+          value?.toString()
+        ),
       (value) => {
-        if (!value?.length && !offeredCollections.value.length) {
-          return 'One or more offered products or collections are required';
+        if (value && Number(value) <= 0) {
+          return 'Maximum offered products value must be greater than zero';
         }
       }
     ]
   });
-  const maximumOfferedProductQuantity = useField(
-    initialOffer.maximumOfferedProductQuantity?.toString()
+  const maximumAcceptedProductQuantity = useField(
+    initialOffer.maximumAcceptedProductQuantity?.toString()
   );
   const discountType = useField(initialOffer.discountType);
   const discountValue = useField(
@@ -247,6 +273,7 @@ const useFields = (initialOffer, showEndDate) => {
   const enableEscClose = useField(initialOffer.enableEscClose);
   const enableMaskClose = useField(initialOffer.enableMaskClose);
   const enableBundling = useField(initialOffer.enableBundling);
+  const performActionOnAdd = useField(initialOffer.performActionOnAdd);
   const enableVariantSelection = useField(initialOffer.enableVariantSelection);
   const enableQuantitySelection = useField(
     initialOffer.enableQuantitySelection
@@ -273,6 +300,7 @@ const useFields = (initialOffer, showEndDate) => {
     offeredProducts,
     offeredCollections,
     maximumOfferedProductQuantity,
+    maximumAcceptedProductQuantity,
     discountType,
     discountValue,
     discountTitle,
@@ -284,6 +312,7 @@ const useFields = (initialOffer, showEndDate) => {
     enableEscClose,
     enableMaskClose,
     enableBundling,
+    performActionOnAdd,
     enableVariantSelection,
     enableQuantitySelection,
     animation

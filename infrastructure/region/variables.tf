@@ -10,6 +10,10 @@ variable "hosted_zone_id" {
   type = string
 }
 
+variable "app_name" {
+  type = string
+}
+
 variable "base_domain" {
   type = string
 }
@@ -41,7 +45,12 @@ variable "assets_domain" {
 variable "shopify_admin_app_api_key" {
   type = string
 }
+
 variable "shopify_admin_app_api_secret_key" {
+  type = string
+}
+
+variable "shopify_app_embed_block_id" {
   type = string
 }
 

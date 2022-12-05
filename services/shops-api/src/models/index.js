@@ -8,6 +8,7 @@ const modelPathsMap = {
   Offer: path.join(__dirname, './Offer'),
   Order: path.join(__dirname, './Order'),
   Theme: path.join(__dirname, './Theme'),
+  PairedPurchase: path.join(__dirname, './PairedPurchase'),
   Product: path.join(__dirname, './Product'),
   Shop: path.join(__dirname, './Shop'),
   Stats: path.join(__dirname, './Stats'),

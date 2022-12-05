@@ -26,8 +26,9 @@ const ResourceListWrapper = styled.div`
 
 const formatSelectionItems = (value) => {
   return flatten(
-    value.selection.map(({ id, title, images, variants }) => ({
+    value.selection.map(({ id, title, handle, images, variants }) => ({
       title,
+      handle,
       imageUrl: images?.[0]?.originalSrc,
       shopifyProductId: parseInt(id.split('/').reverse()[0]),
       shopifyVariantIds: variants.map((variant) =>
@@ -139,6 +140,7 @@ ProductResourceList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
+      handle: PropTypes.string.isRequired,
       imageUrl: PropTypes.string.isRequired,
       shopifyProductId: PropTypes.number.isRequired,
       shopifyVariantIds: PropTypes.array.isRequired

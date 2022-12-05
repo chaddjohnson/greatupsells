@@ -1,4 +1,5 @@
 public_key    = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDI3+ujzmYvNSO/RBMo4ZUp/ytIOM2wlz7OMVQYjyKvfjT7GIvwiFwL6dR8BhV9tqNIDhivYNFwBciN1xMHOqbLDuQ/jaw9ELRFXZwMTt2p01z5Uwi/igwYi3f185bzSy8cijHo7+3vfMSiBjjXY16apQi6uPEQZR4gfVUoR/KIAoLgGecOy+gzxKScJjIwugYFise/OVBBlSSzOrfQ+DWkIpOi4L+sWgV74Gae/e33cu0+Ka+c85U9X4BSOV5mqt3oeEHdGtE9FPoyaYR9hr4dEn8j7Qo3uDqRwMnlT58QjmQd6UZIy/FRtwYHJWuWjtbLhDbS7N1KfQKbqY4UX+eFkp/DmzonyrvjUAS9y3gnPGqmpDhd7Cz9wqMFptk+Hbw4ijloc9RPjuAtHKIzWHRztbFKuVwTNGHS8AtBYMuGl1jpQ83Ocr1ndyHNZnjPzp309cYiAwKynLgabulzdtIQYPDV1YyjPTmt21Cew1OyUvmZJNbCg5A+u5f4RioC2k8= greatupsells"
+app_name      = "Great Upsells"
 base_domain   = "greatupsells.com"
 domain        = "greatupsells.com"
 instance_type = "t3.large"
@@ -12,4 +13,5 @@ services_domain_names = {
 assets_domain                    = "assets.greatupsells.com"
 shopify_admin_app_api_key        = ""
 shopify_admin_app_api_secret_key = ""
+shopify_app_embed_block_id       = ""
 event_bus_arn                    = ""

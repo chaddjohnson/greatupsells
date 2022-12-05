@@ -14,6 +14,7 @@ import {
 } from '@shopify/polaris';
 import {
   useNumberFormatter,
+  useCurrency,
   useDateTime,
   useInterval
 } from '@greatupsells/react-hooks';
@@ -101,11 +102,12 @@ const OfferAnalyticsPage = () => {
 
   const { shop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({ locale, countryCode, currency });
   const { offer } = useOffer(offerId);
   const {
     offerAcceptances,
@@ -213,20 +215,20 @@ const OfferAnalyticsPage = () => {
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
                     <DisplayText size="extraLarge">
+                      {formatPercentage(offer?.conversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
                       {formatCurrency(offer?.revenueIncrease)}
                     </DisplayText>
                     <TextStyle variation="strong">
                       <TextStyle variation="subdued">
                         Revenue increase
                       </TextStyle>
-                    </TextStyle>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
-                      {formatPercentage(offer?.conversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
                     </TextStyle>
                   </Stack>
                 </Stack>

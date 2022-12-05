@@ -14,6 +14,14 @@ resource "aws_ssm_parameter" "domain" {
   provider  = aws.region
 }
 
+resource "aws_ssm_parameter" "app_name" {
+  name      = "/greatupsells/${terraform.workspace}/app-name"
+  type      = "String"
+  value     = var.app_name
+  overwrite = true
+  provider  = aws.region
+}
+
 resource "aws_ssm_parameter" "certificate_name" {
   name      = "/greatupsells/${terraform.workspace}/certificate-name"
   type      = "String"
@@ -66,6 +74,14 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
   name      = "/greatupsells/${terraform.workspace}/shopify/api-secret-key"
   type      = "SecureString"
   value     = var.shopify_admin_app_api_secret_key
+  overwrite = true
+  provider  = aws.region
+}
+
+resource "aws_ssm_parameter" "shopify_app_embed_block_id" {
+  name      = "/greatupsells/${terraform.workspace}/shopify/app-embed-block/id"
+  type      = "SecureString"
+  value     = var.shopify_app_embed_block_id
   overwrite = true
   provider  = aws.region
 }

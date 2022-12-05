@@ -2,18 +2,24 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import { OfferTheme } from '@greatupsells/react-components';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import { useOfferTracking, useOfferAcceptance } from '../../hooks';
 
 const ThankYouPageOffer = ({
+  shop,
   offer,
   theme,
+  ThemeComponent,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts
 }) => {
+  const [lastShop, setLastShop] = useState(shop);
+  const [lastOffer, setLastOffer] = useState(offer);
   const [added, setAdded] = useState(false);
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const offerId = offer?._id;
   const offeredShopifyProductIds = useMemo(
@@ -28,33 +34,48 @@ const ThankYouPageOffer = ({
     [theme]
   );
 
+  const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
+
   const headerContainer = document.querySelector(
-    '.step__sections > .section > .section__content .content-box:nth-of-type(2) .content-box__row:nth-of-type(1)'
+    '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(1)'
   );
   const contentContainer = document.querySelector(
-    '.step__sections > .section > .section__content .content-box:nth-of-type(2) .content-box__row:nth-of-type(2)'
+    '.step__sections > .section > .section__content .content-box:nth-last-child(2) .content-box__row:nth-of-type(2)'
   );
+
+  // Use the last non-empty values.
+  const cachedShop = useMemo(() => shop || lastShop, [shop, lastShop]);
+  const cachedOffer = useMemo(() => offer || lastOffer, [offer, lastOffer]);
+
+  // Track the last non-empty values.
+  useEffect(() => {
+    if (shop) {
+      setLastShop(shop);
+    }
+    if (offer) {
+      setLastOffer(offer);
+    }
+  }, [shop, offer]);
 
   useEffect(() => {
     if (!headerContainer) {
       return;
     }
 
-    if (!headerContainer.classList.contains('content-box__row--no-border')) {
+    if (
+      added &&
+      !headerContainer.classList.contains('content-box__row--no-border')
+    ) {
       headerContainer.classList.add('content-box__row--no-border');
     }
-  }, [headerContainer]);
+  }, [added, headerContainer]);
 
   useEffect(() => {
-    if (!window.Shopify.Checkout) {
+    if (!isThankYouPage) {
       return;
     }
 
-    if (window.Shopify.Checkout.page !== 'thank_you') {
-      return;
-    }
-
-    if (!offerId) {
+    if (!cachedOffer) {
       return;
     }
 
@@ -70,25 +91,36 @@ const ThankYouPageOffer = ({
       offerId,
       offeredShopifyProductIds
     });
-  }, [offerId, added, offeredShopifyProductIds, trackOfferImpression, title]);
+  }, [
+    cachedOffer,
+    offerId,
+    added,
+    offeredShopifyProductIds,
+    trackOfferImpression,
+    title,
+    isThankYouPage
+  ]);
 
   if (!contentContainer) {
     return null;
   }
 
-  if (!offer || !shop || !added) {
+  if (!cachedOffer || !cachedShop || !added) {
     return null;
   }
 
   return createPortal(
     <OfferTheme
-      shop={shop}
-      offer={offer}
+      context={window}
+      shop={cachedShop}
+      offer={cachedOffer}
+      theme={theme}
+      ThemeComponent={ThemeComponent}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
-      theme={theme}
-      context={window}
-      container={contentContainer}
       onAddProducts={addProducts}
       onReplaceProduct={replaceProduct}
     />,
@@ -97,6 +129,7 @@ const ThankYouPageOffer = ({
 };
 
 ThankYouPageOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   triggerProduct: PropTypes.object,

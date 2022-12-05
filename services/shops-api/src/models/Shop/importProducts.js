@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const logger = require('@greatupsells/logger');
 const models = require('..');
+const enqueueOrderImport = require('./enqueueOrderImport');
 
 const importProduct = async (shop, shopifyProductData) => {
   try {
@@ -45,16 +46,27 @@ const importProducts = async (shop) => {
 
   // Handle pagination.
   do {
-    // eslint-disable-next-line no-await-in-loop
     const shopifyProducts = await shopifyApiClient.product.list(params);
 
-    // eslint-disable-next-line no-await-in-loop
     await Promise.mapSeries(shopifyProducts, async (shopifyProductData) => {
       await importProduct(shop, shopifyProductData);
     });
 
     params = shopifyProducts.nextPageParameters;
   } while (params);
+
+  // Import orders after importing products as orders depend on products.
+  await enqueueOrderImport(shop);
+
+  // Create sample offers after importing products as sample offers depend on products.
+  try {
+    await shop.createSampleOffers();
+  } catch (error) {
+    logger.error(
+      `Failed to create sample offers for shop (${shop.toString()})`,
+      error
+    );
+  }
 };
 
 module.exports = importProducts;

@@ -8,7 +8,7 @@ import {
   InlineError
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCurrency } from '@greatupsells/react-hooks';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
 
@@ -38,12 +38,19 @@ const OfferTriggerProductsEditor = ({
   const [appliesTo, setAppliesTo] = useState(initialAppliesTo);
 
   const { locale, countryCode, currency } = shop || {};
-  const { getCurrencySymbol } = useNumberFormatter({
+  const { getCurrencySymbol } = useCurrency({
     locale,
     countryCode,
     currency
   });
   const currencySymbol = getCurrencySymbol();
+
+  const isCrossSellStrategy = [
+    'CROSS_SELL',
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
 
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
@@ -111,30 +118,33 @@ const OfferTriggerProductsEditor = ({
     <>
       <Card
         title={`Cart trigger products${
-          offer.strategy === 'CROSS_SELL' || offer.strategy === 'THANK_YOU_PAGE'
-            ? ' and collections'
-            : ''
+          isCrossSellStrategy ? ' and collections' : ''
         }`}
       >
         <Card.Section>
           <FormLayout>
-            {(offer.strategy === 'CROSS_SELL' ||
-              offer.strategy === 'THANK_YOU_PAGE') && (
+            {isCrossSellStrategy && (
               <ChoiceList
                 title="Applies to"
                 titleHidden
                 choices={[
                   {
-                    label: 'All products (including none)',
-                    value: 'ALL'
+                    label: 'All products',
+                    value: 'ALL',
+                    helpText:
+                      'Offer is shown if any products (including none) are in the cart.'
                   },
                   {
                     label: 'Specific products',
-                    value: 'PRODUCTS'
+                    value: 'PRODUCTS',
+                    helpText:
+                      'Offer is shown if one or more specific products are in the cart.'
                   },
                   {
                     label: 'Specific collections',
-                    value: 'COLLECTIONS'
+                    value: 'COLLECTIONS',
+                    helpText:
+                      'Offer is shown if one or more products from one or more specific collections are in the cart.'
                   }
                 ]}
                 selected={[appliesTo]}
@@ -178,7 +188,7 @@ const OfferTriggerProductsEditor = ({
                   value: 'NONE'
                 },
                 {
-                  label: `Minimum purchase amount (${currencySymbol})`,
+                  label: `Minimum purchase amount (${currency})`,
                   value: 'AMOUNT',
                   renderChildren: (isSelected) =>
                     isSelected && (
@@ -187,7 +197,7 @@ const OfferTriggerProductsEditor = ({
                           inputMode="numeric"
                           prefix={currencySymbol}
                           placeholder="0.00"
-                          helpText="Applies to trigger products."
+                          helpText="Amount before taxes and shipping."
                           {...minimumRequiredAmount}
                           error={submitted && minimumRequiredAmount.error}
                         />
@@ -202,7 +212,6 @@ const OfferTriggerProductsEditor = ({
                       <MinimumRequiredAmountWrapper>
                         <TextField
                           inputMode="numeric"
-                          helpText="Applies to trigger products."
                           {...minimumRequiredAmount}
                           error={submitted && minimumRequiredAmount.error}
                         />

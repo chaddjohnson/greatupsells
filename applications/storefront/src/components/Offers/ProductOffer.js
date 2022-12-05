@@ -6,10 +6,14 @@ import {
   useOfferTracking,
   useRandomOffers,
   useOfferAcceptance,
-  useShop,
   useShopifyCart,
-  useShopifyCartAddListener
+  useShopifyCartAddListener,
+  useThemeComponent
 } from '../../hooks';
+
+const queryString = new URLSearchParams(window.location.search);
+const testToken = queryString.get('testToken');
+const testOfferId = queryString.get('testOfferId');
 
 const triggerEvent = 'ADD';
 const loadedAt = new Date();
@@ -17,6 +21,10 @@ let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
 const ProductOffer = ({
+  shop,
+  locale,
+  countryCode,
+  currency,
   shopifyCartItems,
   shopifyCartTotal,
   shopifyCartItemCount,
@@ -32,7 +40,10 @@ const ProductOffer = ({
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const { shopifyCartLoading } = useShopifyCart();
+  const {
+    shopifyCartLoaded,
+    findTriggerProductShopifyVariantId
+  } = useShopifyCart();
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
@@ -40,14 +51,15 @@ const ProductOffer = ({
     shopifyVariantIds,
     shopifyCartTotal,
     shopifyCartItemCount,
+    testToken,
+    testOfferId,
     shouldQuery:
       productAdded &&
       !!shopifyProductIds?.length &&
       !!shopifyVariantIds?.length &&
-      !shopifyCartLoading
+      shopifyCartLoaded
   });
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
 
   const { offer, theme, triggerProduct, offeredProducts } =
     offerData?.[0] || {};
@@ -55,11 +67,16 @@ const ProductOffer = ({
   const delaySeconds = offer?.delaySeconds || 0;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
 
+  const ThemeComponent = useThemeComponent(theme?.key);
+
   const openPopup = useCallback(() => {
     setOfferViewed(true);
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
+      triggerProduct
+    );
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -69,9 +86,17 @@ const ProductOffer = ({
     trackOfferImpression({
       offerId,
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    onOpen,
+    triggerProduct,
+    offeredProducts,
+    findTriggerProductShopifyVariantId,
+    trackOfferImpression,
+    offerId
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -185,7 +210,11 @@ const ProductOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -199,6 +228,10 @@ const ProductOffer = ({
 };
 
 ProductOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   shopifyCartItems: PropTypes.array,
   shopifyCartTotal: PropTypes.number,
   shopifyCartItemCount: PropTypes.number,

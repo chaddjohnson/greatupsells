@@ -1,10 +1,9 @@
 service: greatupsells-shopify-admin-api
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -71,12 +70,51 @@ functions:
     warmup:
       default:
         enabled: false
+  activatePlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/activatePlan.handler
+    events:
+      - http:
+          path: /plan/activation
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  changePlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/changePlan.handler
+    events:
+      - http:
+          path: /plan
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
     events:
       - http:
           path: /offers/{offerId}/clone
+          method: post
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  consentToDataAccess:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/consentToDataAccess.handler
+    events:
+      - http:
+          path: /shop/data-access-consent
           method: post
           cors: true
           authorizer:
@@ -227,6 +265,32 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
+  findOneRandomCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomCollection.handler
+    events:
+      - http:
+          path: /collections/random
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  findOneRandomProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomProduct.handler
+    events:
+      - http:
+          path: /products/random
+          method: get
+          cors: true
+          authorizer:
+            name: authorizer
+            type: request
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -337,19 +401,6 @@ functions:
     events:
       - http:
           path: /themes/{themeId}
-          method: put
-          cors: true
-          authorizer:
-            name: authorizer
-            type: request
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 0
-  updateShop:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateShop.handler
-    events:
-      - http:
-          path: /shop
           method: put
           cors: true
           authorizer:

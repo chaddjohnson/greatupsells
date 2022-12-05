@@ -5,7 +5,11 @@ import {
   usePushStateListener,
   useEventListener
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import {
+  useOfferTracking,
+  useOfferAcceptance,
+  useShopifyCart
+} from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -14,8 +18,13 @@ let onPageRequiredSecondsTimeout = 0;
 let offerViewed = false;
 
 const PageScrollOffer = ({
+  shop,
   offer,
   theme,
+  ThemeComponent,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -34,7 +43,7 @@ const PageScrollOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
+  const { findTriggerProductShopifyVariantId } = useShopifyCart();
 
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
@@ -46,6 +55,9 @@ const PageScrollOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
+      triggerProduct
+    );
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -55,9 +67,17 @@ const PageScrollOffer = ({
     trackOfferImpression({
       offerId,
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    onOpen,
+    triggerProduct,
+    offeredProducts,
+    findTriggerProductShopifyVariantId,
+    trackOfferImpression,
+    offerId
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -187,7 +207,11 @@ const PageScrollOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -201,8 +225,13 @@ const PageScrollOffer = ({
 };
 
 PageScrollOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.func,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

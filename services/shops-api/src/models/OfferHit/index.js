@@ -34,7 +34,14 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['UPSELL', 'CROSS_SELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE', 'POPUP']
+      enum: [
+        'UPSELL',
+        'CROSS_SELL',
+        'POST_PURCHASE',
+        'THANK_YOU_PAGE',
+        'ORDER_STATUS_PAGE',
+        'POPUP'
+      ]
     },
     triggerEvent: {
       type: String,
@@ -42,7 +49,10 @@ const schema = new mongoose.Schema(
       enum: ['ADD', 'EXIT', 'LOAD', 'FOCUS', 'SCROLL', 'LINK']
     },
     triggerPagePath: { type: String, required: false },
-    triggerShopifyProductId: { type: Number, required: false },
+    triggerProduct: {
+      shopifyProductId: { type: Number, required: false },
+      shopifyVariantId: { type: Number, required: false }
+    },
     offeredProducts: [
       {
         shopifyProductId: { type: Number, required: true }
@@ -68,7 +78,8 @@ const schema = new mongoose.Schema(
     ipAddress: { type: String, required: false },
     acceptedAt: { type: Date, required: false },
     convertedAt: { type: Date, required: false },
-    revenueIncrease: { type: Number, required: false, min: 0 }
+    revenueIncrease: { type: Number, required: false },
+    isTest: { type: Boolean, required: false }
   },
   schemaOptions
 );
@@ -129,29 +140,33 @@ schema.statics.findConversionRatesByShopId = function (shopId, startAt, endAt) {
   return findConversionRatesByShopId(shopId, startAt, endAt);
 };
 
-schema.methods.trackOfferedProducts = function (
-  shopifyProductIds,
-  shopifyVariantIds
+schema.methods.trackOfferedProducts = function (shopifyProductIds) {
+  return trackOfferedProducts(this, shopifyProductIds);
+};
+
+schema.methods.trackAcceptance = function (
+  items,
+  { shopifyDraftOrderId, shopifyCheckoutId }
 ) {
-  return trackOfferedProducts(this, shopifyProductIds, shopifyVariantIds);
+  return trackAcceptance(this, items, {
+    shopifyDraftOrderId,
+    shopifyCheckoutId
+  });
 };
 
-schema.methods.trackAcceptedProducts = function (shopifyDraftOrderId, items) {
-  return trackAcceptedProducts(this, shopifyDraftOrderId, items);
-};
-
-schema.methods.trackAcceptance = function (shopifyDraftOrderId, items) {
-  return trackAcceptance(this, shopifyDraftOrderId, items);
+schema.methods.trackAcceptedProducts = function (
+  items,
+  { shopifyDraftOrderId, shopifyOrderId }
+) {
+  return trackAcceptedProducts(this, items, {
+    shopifyDraftOrderId,
+    shopifyOrderId
+  });
 };
 
 schema.methods.trackConversion = function (order) {
   return trackConversion(this, order);
 };
-
-// TODO: Validate values conditionally based on offer.
-// schema.pre('validate', function (next) {
-//   hooks.preValidate(this, next);
-// });
 
 schema.index({ shop: 1 });
 schema.index({ offer: 1 });

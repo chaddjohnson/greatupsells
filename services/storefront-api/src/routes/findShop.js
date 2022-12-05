@@ -2,21 +2,13 @@ const { URL } = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 
-const { AWS_REGION, SHOPS_API_URL } = process.env;
+const { SHOPS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -27,13 +19,16 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const domain = new URL(event.headers.origin || event.headers.Origin).host;
+    const domain = new URL(
+      event.headers.shop || event.headers.origin || event.headers.Origin
+    ).host;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { countryCode, currency, locale, timezone } = shop;
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
+        domain,
         countryCode,
         currency,
         locale,

@@ -1,1 +1,1 @@
-event_bus_name = "aws.partner/shopify.com/3309183/greatupsells-webhooks-test"
+event_bus_name = "aws.partner/shopify.com/18156060673/greatupsells-webhooks-test"

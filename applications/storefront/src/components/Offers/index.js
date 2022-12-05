@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { usePushStateListener } from '@greatupsells/react-hooks';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
+  useShop,
   useRandomOffers,
   useShopifyCart,
-  useShopifyCartAddListener
+  useShopifyCustomer,
+  useThemeComponent
 } from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
 import LinkClickOffer from './LinkClickOffer';
@@ -12,17 +13,50 @@ import PageLoadOffer from './PageLoadOffer';
 import PageScrollOffer from './PageScrollOffer';
 import ProductOffer from './ProductOffer';
 import ThankYouPageOffer from './ThankYouPageOffer';
+import OrderStatusPageOffer from './OrderStatusPageOffer';
+
+const queryString = new URLSearchParams(window.location.search);
+const testToken = queryString.get('testToken');
+const testOfferId = queryString.get('testOfferId');
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
-  const [productAdded, setProductAdded] = useState(false);
-
   const {
     shopifyCartItems,
     shopifyCartTotal,
     shopifyCartItemCount,
-    shopifyCartLoading
+    shopifyCartLoaded,
+    addVariantsToShopifyCart
   } = useShopifyCart();
+  const { shop } = useShop();
+  const {
+    getCustomerLocale,
+    getCustomerCountryCode,
+    getCustomerCurrency
+  } = useShopifyCustomer();
+
+  const testVariantId = new URLSearchParams(window.location.search).get(
+    'testVariantId'
+  );
+
+  // Get locale.
+  const customerLocale = getCustomerLocale();
+  const shopLocale = shop?.locale;
+  const defaultLocale = 'en';
+  const locale = customerLocale || shopLocale || defaultLocale;
+
+  // Get country code.
+  const customerCountryCode = getCustomerCountryCode();
+  const shopCountryCode = shop?.countryCode;
+  const defaultCountryCode = 'US';
+  const countryCode =
+    customerCountryCode || shopCountryCode || defaultCountryCode;
+
+  // Get currency.
+  const customerCurrency = getCustomerCurrency();
+  const shopCurrency = shop?.currency;
+  const defaultCurrency = 'USD';
+  const currency = customerCurrency || shopCurrency || defaultCurrency;
 
   const shopifyProductIds = useMemo(
     () => shopifyCartItems?.map((item) => item.product_id),
@@ -42,7 +76,9 @@ const Offers = () => {
     shopifyCartTotal,
     shopifyCartItemCount,
     shopifyOrderId,
-    shouldQuery: !!shopifyCartItems && !shopifyCartLoading
+    testToken,
+    testOfferId,
+    shouldQuery: !!shopifyCartItems && shopifyCartLoaded
   });
 
   // Group data by trigger event.
@@ -56,7 +92,12 @@ const Offers = () => {
           return map;
         }
 
-        if (strategy === 'THANK_YOU_PAGE') {
+        if (strategy === 'THANK_YOU_PAGE' || strategy === 'ORDER_STATUS_PAGE') {
+          return map;
+        }
+
+        // Do not render Post-Purchase offers in the storefront.
+        if (strategy === 'POST_PURCHASE') {
           return map;
         }
 
@@ -67,11 +108,42 @@ const Offers = () => {
       }, {}),
     [offersData]
   );
+
   const thankYouPageOfferData = useMemo(() => {
     return offersData?.find(
       ({ offer }) => offer?.strategy === 'THANK_YOU_PAGE'
     );
   }, [offersData]);
+  const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
+
+  const orderStatusPageOfferData = useMemo(() => {
+    return offersData?.find(
+      ({ offer }) => offer?.strategy === 'ORDER_STATUS_PAGE'
+    );
+  }, [offersData]);
+  const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
+
+  const ExitIntentThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.EXIT?.theme.key
+  );
+  const LinkClickThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.LINK?.theme.key
+  );
+  const LostBrowserFocusThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.FOCUS?.theme.key
+  );
+  const PageLoadThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.LOAD?.theme.key
+  );
+  const PageScrollThemeComponent = useThemeComponent(
+    offerDataByTriggerEvent.SCROLL?.theme.key
+  );
+  const ThankYouPageThemeComponent = useThemeComponent(
+    thankYouPageOfferData?.theme.key
+  );
+  const OrderStatusPageThemeComponent = useThemeComponent(
+    orderStatusPageOfferData?.theme.key
+  );
 
   const handleOfferOpen = () => {
     setViewingOffer(true);
@@ -81,23 +153,34 @@ const Offers = () => {
     setViewingOffer(false);
   };
 
-  // Subscribe to product add events.
-  useShopifyCartAddListener((addedProduct) => {
-    if (addedProduct?.product_id) {
-      setProductAdded(true);
-    }
-  });
+  // If testing, add the test variant, if any, to the cart.
+  useEffect(() => {
+    const testItemInCart =
+      shopifyCartLoaded &&
+      shopifyCartItems.find(
+        (item) => item.variant_id === parseInt(testVariantId)
+      );
 
-  // Listen to pushState events.
-  usePushStateListener(() => {
-    setProductAdded(false);
-  });
+    if (testVariantId && shopifyCartLoaded && !testItemInCart) {
+      addVariantsToShopifyCart([
+        {
+          shopifyVariantId: testVariantId,
+          quantity: 1
+        }
+      ]);
+    }
+  }, [shopifyCartLoaded, testVariantId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
       <ExitIntentOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.EXIT?.offer}
         theme={offerDataByTriggerEvent.EXIT?.theme}
+        ThemeComponent={ExitIntentThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.EXIT?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.EXIT?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -108,8 +191,13 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <LinkClickOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.LINK?.offer}
         theme={offerDataByTriggerEvent.LINK?.theme}
+        ThemeComponent={LinkClickThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.LINK?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.LINK?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -120,8 +208,13 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <LostBrowserFocusOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.FOCUS?.offer}
         theme={offerDataByTriggerEvent.FOCUS?.theme}
+        ThemeComponent={LostBrowserFocusThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.FOCUS?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.FOCUS?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -131,23 +224,31 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      {!productAdded && (
-        <PageLoadOffer
-          offer={offerDataByTriggerEvent.LOAD?.offer}
-          theme={offerDataByTriggerEvent.LOAD?.theme}
-          triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
-          offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
-          shopifyCartItems={shopifyCartItems}
-          shopifyCartTotal={shopifyCartTotal}
-          shopifyCartItemCount={shopifyCartItemCount}
-          viewingOffer={viewingOffer}
-          onOpen={handleOfferOpen}
-          onClose={handleOfferClose}
-        />
-      )}
+      <PageLoadOffer
+        shop={shop}
+        offer={offerDataByTriggerEvent.LOAD?.offer}
+        theme={offerDataByTriggerEvent.LOAD?.theme}
+        ThemeComponent={PageLoadThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
+        triggerProduct={offerDataByTriggerEvent.LOAD?.triggerProduct}
+        offeredProducts={offerDataByTriggerEvent.LOAD?.offeredProducts}
+        shopifyCartItems={shopifyCartItems}
+        shopifyCartTotal={shopifyCartTotal}
+        shopifyCartItemCount={shopifyCartItemCount}
+        viewingOffer={viewingOffer}
+        onOpen={handleOfferOpen}
+        onClose={handleOfferClose}
+      />
       <PageScrollOffer
+        shop={shop}
         offer={offerDataByTriggerEvent.SCROLL?.offer}
         theme={offerDataByTriggerEvent.SCROLL?.theme}
+        ThemeComponent={PageScrollThemeComponent}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         triggerProduct={offerDataByTriggerEvent.SCROLL?.triggerProduct}
         offeredProducts={offerDataByTriggerEvent.SCROLL?.offeredProducts}
         shopifyCartItems={shopifyCartItems}
@@ -158,6 +259,10 @@ const Offers = () => {
         onClose={handleOfferClose}
       />
       <ProductOffer
+        shop={shop}
+        locale={locale}
+        countryCode={countryCode}
+        currency={currency}
         shopifyCartItems={shopifyCartItems}
         shopifyCartTotal={shopifyCartTotal}
         shopifyCartItemCount={shopifyCartItemCount}
@@ -165,12 +270,32 @@ const Offers = () => {
         onOpen={handleOfferOpen}
         onClose={handleOfferClose}
       />
-      <ThankYouPageOffer
-        offer={thankYouPageOfferData?.offer}
-        theme={thankYouPageOfferData?.theme}
-        triggerProduct={thankYouPageOfferData?.triggerProduct}
-        offeredProducts={thankYouPageOfferData?.offeredProducts}
-      />
+      {isThankYouPage && (
+        <ThankYouPageOffer
+          shop={shop}
+          offer={thankYouPageOfferData?.offer}
+          theme={thankYouPageOfferData?.theme}
+          ThemeComponent={ThankYouPageThemeComponent}
+          locale={locale}
+          countryCode={countryCode}
+          currency={currency}
+          triggerProduct={thankYouPageOfferData?.triggerProduct}
+          offeredProducts={thankYouPageOfferData?.offeredProducts}
+        />
+      )}
+      {isOrderStatusPage && (
+        <OrderStatusPageOffer
+          shop={shop}
+          offer={orderStatusPageOfferData?.offer}
+          theme={orderStatusPageOfferData?.theme}
+          ThemeComponent={OrderStatusPageThemeComponent}
+          locale={locale}
+          countryCode={countryCode}
+          currency={currency}
+          triggerProduct={orderStatusPageOfferData?.triggerProduct}
+          offeredProducts={orderStatusPageOfferData?.offeredProducts}
+        />
+      )}
     </>
   );
 };

@@ -5,14 +5,23 @@ import {
   usePushStateListener,
   useDocumentVisibility
 } from '@greatupsells/react-hooks';
-import { useOfferTracking, useOfferAcceptance, useShop } from '../../hooks';
+import {
+  useOfferTracking,
+  useOfferAcceptance,
+  useShopifyCart
+} from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
 
 const LostBrowserFocusOffer = ({
+  shop,
   offer,
   theme,
+  ThemeComponent,
+  locale,
+  countryCode,
+  currency,
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
@@ -30,7 +39,7 @@ const LostBrowserFocusOffer = ({
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
-  const { shop } = useShop();
+  const { findTriggerProductShopifyVariantId } = useShopifyCart();
 
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
@@ -41,6 +50,9 @@ const LostBrowserFocusOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
+      triggerProduct
+    );
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );
@@ -50,9 +62,17 @@ const LostBrowserFocusOffer = ({
     trackOfferImpression({
       offerId,
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [offerId, triggerProduct, offeredProducts, trackOfferImpression, onOpen]);
+  }, [
+    onOpen,
+    triggerProduct,
+    offeredProducts,
+    findTriggerProductShopifyVariantId,
+    trackOfferImpression,
+    offerId
+  ]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -158,7 +178,11 @@ const LostBrowserFocusOffer = ({
       open={popupOpen}
       shop={shop}
       theme={theme}
+      ThemeComponent={ThemeComponent}
       offer={offer}
+      locale={locale}
+      countryCode={countryCode}
+      currency={currency}
       triggerProduct={triggerProduct}
       offeredProducts={offeredProducts}
       shopifyCartItems={shopifyCartItems}
@@ -172,8 +196,13 @@ const LostBrowserFocusOffer = ({
 };
 
 LostBrowserFocusOffer.propTypes = {
+  shop: PropTypes.object.isRequired,
   offer: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  ThemeComponent: PropTypes.func,
+  locale: PropTypes.string.isRequired,
+  countryCode: PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   triggerProduct: PropTypes.object,
   offeredProducts: PropTypes.array.isRequired,
   shopifyCartItems: PropTypes.array,

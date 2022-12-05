@@ -2,8 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, FormLayout, ChoiceList } from '@shopify/polaris';
 
-const OfferBundlingEditor = ({ offer, enableBundling }) =>
-  (offer.strategy === 'CROSS_SELL' || offer.strategy === 'THANK_YOU_PAGE') && (
+const OfferBundlingEditor = ({ offer, theme, enableBundling }) => {
+  const isCrossSellStrategy = [
+    'CROSS_SELL',
+    'POST_PURCHASE',
+    'THANK_YOU_PAGE',
+    'ORDER_STATUS_PAGE'
+  ].includes(offer.strategy);
+
+  // Hide bundling options if only one product is offered.
+  if (theme.maximumOfferedProductQuantity === 1) {
+    return null;
+  }
+
+  // Only show for certain strategies.
+  if (!isCrossSellStrategy) {
+    return null;
+  }
+
+  return (
     <Card title="Bundling" sectioned>
       <FormLayout>
         <ChoiceList
@@ -26,9 +43,11 @@ const OfferBundlingEditor = ({ offer, enableBundling }) =>
       </FormLayout>
     </Card>
   );
+};
 
 OfferBundlingEditor.propTypes = {
   offer: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   enableBundling: PropTypes.object.isRequired
 };
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { sortBy } = require('lodash');
 const models = require('..');
+const fillResults = require('./fillResults');
 
 const findAcceptancesByShopId = async (shopId, startAt, endAt) => {
   if (typeof shopId !== 'object') {
@@ -15,14 +16,15 @@ const findAcceptancesByShopId = async (shopId, startAt, endAt) => {
         acceptedAt: {
           $gte: new Date(startAt),
           $lte: new Date(endAt)
-        }
+        },
+        isTest: false
       }
     },
     {
       $project: {
         date: {
           $dateToString: {
-            format: '%Y-%m-%d',
+            format: '%Y-%m-%dT12:00:00Z',
             date: '$acceptedAt'
           }
         }
@@ -47,6 +49,7 @@ const findAcceptancesByShopId = async (shopId, startAt, endAt) => {
   results =
     results.map(({ date, acceptances }) => ({ date, acceptances })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
+  results = fillResults(results, 'acceptances');
 
   return results;
 };

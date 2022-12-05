@@ -14,6 +14,7 @@ let Offer = null;
 
 const triggerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true },
   shopifyVariantIds: [{ type: Number, required: true }]
@@ -21,6 +22,7 @@ const triggerProductSchema = new mongoose.Schema({
 
 const offerProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyProductId: { type: Number, required: true },
   shopifyVariantIds: [{ type: Number, required: true }]
@@ -28,6 +30,7 @@ const offerProductSchema = new mongoose.Schema({
 
 const offerCollectionSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  handle: { type: String, required: true },
   imageUrl: { type: String, required: false },
   shopifyCollectionId: { type: Number, required: true }
 });
@@ -43,17 +46,28 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: ['CROSS_SELL', 'UPSELL', 'POST_CHECKOUT', 'THANK_YOU_PAGE', 'POPUP']
+      enum: [
+        'CROSS_SELL',
+        'UPSELL',
+        'POST_PURCHASE',
+        'THANK_YOU_PAGE',
+        'ORDER_STATUS_PAGE',
+        'POPUP'
+      ]
     },
     impressionCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionCount: { type: Int32, required: true, default: 0, min: 0 },
     conversionRate: { type: Number, required: true, default: 0.0, min: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
     actionButtonBehavior: {
       type: String,
       required() {
-        return this.strategy !== 'THANK_YOU_PAGE';
+        return (
+          this.strategy !== 'POST_PURCHASE' &&
+          this.strategy !== 'THANK_YOU_PAGE' &&
+          this.strategy !== 'ORDER_STATUS_PAGE'
+        );
       },
       enum: ['CHECKOUT', 'CART', 'PAGE', 'LINK']
     },
@@ -79,7 +93,7 @@ const schema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 7,
-      min: 0
+      min: 1
     },
     triggerEvent: {
       type: String,
@@ -119,7 +133,8 @@ const schema = new mongoose.Schema(
     },
     offeredProducts: [offerProductSchema],
     offeredCollections: [offerCollectionSchema],
-    maximumOfferedProductQuantity: { type: Number, required: false, min: 1 },
+    maximumOfferedProductQuantity: { type: Number, required: true, min: 1 },
+    maximumAcceptedProductQuantity: { type: Number, required: false, min: 1 },
     discountType: {
       type: String,
       required: true,
@@ -158,12 +173,13 @@ const schema = new mongoose.Schema(
         message: 'End date must be on or after start date'
       }
     },
+    performActionOnAdd: { type: Boolean, required: false, default: false },
     delaySeconds: { type: Number, required: false, min: 0 },
     onPageRequiredSeconds: { type: Number, required: false, min: 0 },
     enableVariantSelection: { type: Boolean, required: false, default: true },
     enableQuantitySelection: { type: Boolean, required: false, default: true },
-    enableEscClose: { type: Boolean, required: false, default: false },
-    enableMaskClose: { type: Boolean, required: false, default: false },
+    enableEscClose: { type: Boolean, required: false, default: true },
+    enableMaskClose: { type: Boolean, required: false, default: true },
     enabled: { type: Boolean, required: true, default: true }
   },
   schemaOptions
@@ -177,8 +193,8 @@ schema.statics.findOneRandom = function (shop, params) {
   return findOneRandom(shop, params);
 };
 
-schema.methods.findRandomProducts = function () {
-  return findRandomProducts(this);
+schema.methods.findRandomProducts = function (shopifyCartProductIds, pagePath) {
+  return findRandomProducts(this, shopifyCartProductIds, pagePath);
 };
 
 schema.statics.search = function (params) {

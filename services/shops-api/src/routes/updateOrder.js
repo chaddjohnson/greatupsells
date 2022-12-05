@@ -22,6 +22,7 @@ const handler = async (event, context) => {
     let order = await Order.findById(orderId);
     const { revenueIncrease } = order;
     const data = JSON.parse(event.body);
+    const { shopifyOrderData } = data;
 
     if (!order) {
       return {
@@ -49,6 +50,11 @@ const handler = async (event, context) => {
     // Refresh document, and force middleware to run.
     order = await Order.findById(orderId);
     await order.save();
+
+    // Track conversions if the order is marked as paid.
+    if (shopifyOrderData.financial_status === 'paid') {
+      await order.trackConversions();
+    }
 
     await order.execPopulate('shop');
     await logger.info(`Order updated (${order.toString()})`, { order });

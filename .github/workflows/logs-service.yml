@@ -24,14 +24,14 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.17.0
+          node-version: 16.13.0
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: ./run.sh
-        working-directory: services/logs/infrastructure
+        run: yarn infrastructure
+        working-directory: services/logs
         env:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}

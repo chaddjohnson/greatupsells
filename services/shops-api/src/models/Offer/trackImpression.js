@@ -6,8 +6,10 @@ const trackImpression = async (
   offer,
   {
     triggerShopifyProductId = undefined,
+    triggerShopifyVariantId = undefined,
     offeredShopifyProductIds = [],
-    ipAddress = undefined
+    ipAddress = undefined,
+    isTest = false
   }
 ) => {
   const [Offer, Shop, OfferHit] = await Promise.all([
@@ -25,6 +27,11 @@ const trackImpression = async (
     triggerEvent,
     triggerPagePath
   } = offer;
+  const triggerProduct = triggerShopifyProductId &&
+    triggerShopifyVariantId && {
+      shopifyProductId: triggerShopifyProductId,
+      shopifyVariantId: triggerShopifyVariantId
+    };
   const offerHit = new OfferHit({
     offer,
     shopifyShopId,
@@ -32,8 +39,9 @@ const trackImpression = async (
     strategy,
     triggerEvent,
     triggerPagePath,
-    triggerShopifyProductId,
-    ipAddress
+    triggerProduct,
+    ipAddress,
+    isTest
   });
 
   const session = await mongodbClient.connection.startSession();
@@ -50,30 +58,32 @@ const trackImpression = async (
         await offerHit.trackOfferedProducts(offeredShopifyProductIds);
       }
 
-      // Increment offer impression count.
-      await Offer.findByIdAndUpdate(
-        offer.id,
-        {
-          $inc: {
-            impressionCount: 1
+      if (!isTest) {
+        // Increment offer impression count.
+        await Offer.findByIdAndUpdate(
+          offer.id,
+          {
+            $inc: {
+              impressionCount: 1
+            },
+            conversionRate: offer.conversionCount / (offer.impressionCount + 1)
           },
-          conversionRate: offer.conversionCount / (offer.impressionCount + 1)
-        },
-        { session }
-      );
+          { session }
+        );
 
-      // Increment shop offer impression count.
-      await Shop.findByIdAndUpdate(
-        shop.id,
-        {
-          $inc: {
-            offerImpressionCount: 1
+        // Increment shop offer impression count.
+        await Shop.findByIdAndUpdate(
+          shop.id,
+          {
+            $inc: {
+              offerImpressionCount: 1
+            },
+            offerConversionRate:
+              shop.offerConversionCount / (shop.offerImpressionCount + 1)
           },
-          offerConversionRate:
-            shop.offerConversionCount / (shop.offerImpressionCount + 1)
-        },
-        { session }
-      );
+          { session }
+        );
+      }
     }, transactionOptions);
 
     return offerHit;

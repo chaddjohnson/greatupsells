@@ -139,7 +139,11 @@ const buildGeotargetingCriteria = (countryCode) => ({
 
 // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
 const sanitizePagePath = (pagePath) => {
-  return pagePath && `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
+  if (!pagePath) {
+    return '';
+  }
+
+  return `/${pagePath.replace(/(^\/*|\/*$|\/*?\?.*)/g, '')}`;
 };
 
 const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
@@ -241,12 +245,16 @@ const findOneRandom = async (
     ipAddress = undefined,
     offerImpressions = [],
     sessionOfferImpressions = [],
-    pagePath
+    pagePath = '',
+    testOfferId
   }
 ) => {
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
   const shopifyProductIdsMissing =
     !shopifyProductIds || shopifyProductIds.length === 0;
+  const monthUpsellRevenueLimitReached =
+    shop.plan.monthUpsellRevenueLimit &&
+    shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit;
 
   if (!triggerEvent) {
     throw new Error('`triggerEvent` must be provided');
@@ -257,51 +265,92 @@ const findOneRandom = async (
     );
   }
 
+  // Disallow showing offers if the shop is not active.
+  if (!shop.active) {
+    return;
+  }
+
+  // Disallow showing offers if the shop plan is not active.
+  if (!shop.plan.active) {
+    return;
+  }
+
+  // Disallow showing offers if upsell revenue has reached the tier max for the period.
+  if (monthUpsellRevenueLimitReached) {
+    return;
+  }
+
   const [Offer] = await Promise.all([
     models.get('Offer'),
     models.get('Collection')
   ]);
-  const criteria = await buildCriteria(shop, {
-    triggerEvent,
-    shopifyProductIds,
-    shopifyVariantIds,
-    shopifyCartTotal,
-    shopifyCartItemCount,
-    shopifyOrderId,
-    ipAddress,
-    offerImpressions,
-    sessionOfferImpressions
-  });
+  const testCriteria = {
+    _id: mongoose.Types.ObjectId(testOfferId),
+    shop: shop._id,
+    triggerEvent
+  };
+  const criteria = !testOfferId
+    ? await buildCriteria(shop, {
+        triggerEvent,
+        shopifyProductIds,
+        shopifyVariantIds,
+        shopifyCartTotal,
+        shopifyCartItemCount,
+        shopifyOrderId,
+        ipAddress,
+        offerImpressions,
+        sessionOfferImpressions
+      })
+    : testCriteria;
   const pagePathSanitized = sanitizePagePath(pagePath);
   const isThankYouPage = !!pagePath.match(/\/checkouts\/[^\/]+\/thank_you/);
+  const isOrderStatusPage = !!pagePath.match(/\/orders\/[^\/]+/);
 
   // Find an offer.
   let offers = await Offer.find(criteria);
 
-  offers = offers.filter((offer) => {
-    // Filter for offers targeting the Order Status page if that is the current page.
-    if (offer.strategy === 'THANK_YOU_PAGE') {
-      return isThankYouPage;
-    }
+  if (!testOfferId) {
+    offers = offers.filter((offer) => {
+      // There should be no page path provided for Post-Purchase offers. Exclude
+      // Post-Purchase offers if there is a page path.
+      if (offer.strategy === 'POST_PURCHASE') {
+        return !pagePath;
+      }
 
-    // Include the offer if there is no trigger page to filter for.
-    if (offer.triggerPage !== 'PAGE') {
-      return true;
-    }
+      // Filter for offers targeting the Order Status page if that is the current page.
+      if (offer.strategy === 'THANK_YOU_PAGE') {
+        return isThankYouPage;
+      }
 
-    // Filter trigger path based on regex if trigger page is a specific page.
-    return (
-      offer.triggerPagePath &&
-      pagePathSanitized.match(
-        globToRegExp(offer.triggerPagePath, {
-          extended: true,
-          globstar: false
-        })
-      )
-    );
-  });
+      // Filter for offers targeting the Order Status page if that is the current page.
+      if (offer.strategy === 'ORDER_STATUS_PAGE') {
+        return isOrderStatusPage;
+      }
 
-  // Return a random offer from the found offers.
+      // Include the offer if there is no trigger page to filter for.
+      if (offer.triggerPage !== 'PAGE') {
+        return true;
+      }
+
+      // Match home page with or without locale prefix.
+      if (offer.triggerPagePath === '/') {
+        return pagePathSanitized.match(/^(?:\/[a-z]{2}-[a-z]{2})?\/?$/);
+      }
+
+      // Filter trigger path based on regex if trigger page is a specific page.
+      return (
+        offer.triggerPagePath &&
+        pagePathSanitized.match(
+          globToRegExp(offer.triggerPagePath, {
+            extended: true,
+            globstar: false
+          })
+        )
+      );
+    });
+  }
+
+  // Return one random offer from the found offers.
   return offers[Math.floor(Math.random() * offers.length)];
 };
 

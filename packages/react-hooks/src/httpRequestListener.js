@@ -52,13 +52,15 @@ const dataToJson = (data) => {
 if (XMLHttpRequest) {
   XMLHttpRequest.prototype.open = function (method, url, ...params) {
     const request = this;
+    const path = url.match(/^https?:\/\//) ? new URL(url).pathname : url;
 
     // Intercept HTTP request responses, and call listeners.
-    if (listeners[url]) {
+    if (listeners[path]) {
       request.addEventListener('load', () => {
-        listeners[url].forEach((current) => {
+        listeners[path].forEach((current) => {
           const requestData = request.data;
-          const responseData = request.responseText;
+          const isJson = request.responseType.toLowerCase() === 'json';
+          const responseData = isJson ? request.response : request.responseText;
 
           current.call(current, requestData, responseData);
         });
@@ -81,15 +83,24 @@ if (originalFetch) {
   window.fetch = async function (resource, config) {
     const url =
       typeof resource === 'object' ? resource?.url || resource : resource;
+    const path = url.match(/^https?:\/\//) ? new URL(url).pathname : url;
     const requestData = dataToJson(config?.body);
     const request = originalFetch.apply(this, [resource, config]);
     const response = await request;
     const clonedResponse = response.clone();
-    const responseData = await clonedResponse.text();
+    const isJson =
+      config?.headers?.['Content-Type']?.toLowerCase() === 'application/json';
+    let responseData = null;
+
+    if (response.status !== 204) {
+      responseData = isJson
+        ? await clonedResponse.json()
+        : await clonedResponse.text();
+    }
 
     // Call listeners.
-    if (listeners[url]) {
-      listeners[url].forEach((current) => {
+    if (listeners[path]) {
+      listeners[path].forEach((current) => {
         current.call(current, requestData, responseData);
       });
     }
@@ -104,19 +115,23 @@ const useHttpRequestListener = (url, listener) => {
       return;
     }
 
-    listeners[url] = listeners[url] || [];
-    listeners[url].push(listener);
+    const path = url.match(/^https?:\/\//) ? new URL(url).pathname : url;
+
+    listeners[path] = listeners[path] || [];
+    listeners[path].push(listener);
 
     return () => {
-      if (!listeners[url]) {
+      if (!listeners[path]) {
         return;
       }
 
-      const index = listeners[url].findIndex((current) => current === listener);
+      const index = listeners[path].findIndex(
+        (current) => current === listener
+      );
 
-      listeners[url] = [
-        ...listeners[url].slice(0, index),
-        ...listeners[url].slice(index + 1)
+      listeners[path] = [
+        ...listeners[path].slice(0, index),
+        ...listeners[path].slice(index + 1)
       ];
     };
   }, [url, listener]);

@@ -3,21 +3,18 @@ import PropTypes from 'prop-types';
 import {
   OptionList,
   DisplayText,
-  TextField,
   Button,
   Card,
   Tabs,
-  Icon,
   Sheet,
   TextContainer,
-  Heading,
   Banner,
   Scrollable,
   PageActions,
   EmptyState,
   Stack
 } from '@shopify/polaris';
-import { SearchMinor, MobileCancelMajor } from '@shopify/polaris-icons';
+import { MobileCancelMajor } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import styled from 'styled-components';
 
@@ -26,6 +23,10 @@ const InnerWrapper = styled.div`
   flex-direction: column;
   height: 100%;
   background-color: #f4f6f8;
+
+  .Polaris-OptionList-Option {
+    margin-bottom: 2rem;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -47,67 +48,19 @@ const PageActionsWrapper = styled.div`
   padding-bottom: 0;
 `;
 
-const ThemeOptionWrapper = styled.div`
-  border: 1px solid #c9cccf;
-  border-radius: 3px;
-  padding-bottom: 0.5rem;
-  margin: auto;
-  background-color: #ffffff;
-  position: relative;
-
-  &:hover {
-    .preview {
-      visibility: hidden;
-    }
-    .description {
-      visibility: visible;
-    }
-  }
-`;
-
 const ThemeThumbnailImage = styled.img`
   width: 350px;
   max-width: 100%;
   height: auto;
 `;
 
-const ThemeDescription = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-  visibility: hidden;
-`;
-
 const ThemeOption = ({ theme }) => (
-  <ThemeOptionWrapper>
-    <div className="preview">
-      <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
-      <Stack distribution="center">
-        <TextContainer>{theme.name}</TextContainer>
-      </Stack>
-    </div>
-    <ThemeDescription className="description">
-      <TextContainer>
-        <Heading>{theme.name}</Heading>
-        <p>{theme.description}</p>
-      </TextContainer>
-    </ThemeDescription>
-  </ThemeOptionWrapper>
+  <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
 );
 
 ThemeOption.propTypes = {
   theme: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    description: PropTypes.string,
     thumbnailImageUrl: PropTypes.string.isRequired
   })
 };
@@ -143,7 +96,7 @@ const ThemeSelector = ({
   onOfferThemeSelect,
   onClose
 }) => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(theme?._id ? 0 : 1);
   const [selectedTheme, setSelectedTheme] = useState([
     offerThemes.find(
       (current) => current.__id_offerForm === theme?.__id_offerForm
@@ -158,19 +111,9 @@ const ThemeSelector = ({
     strategyThemes = themes.filter(({ enabled }) => enabled);
 
     // Filter by strategy.
-    if (strategy === 'UPSELL') {
-      strategyThemes = strategyThemes.filter((current) => {
-        return current.strategies.indexOf('UPSELL') > -1;
-      });
-    } else if (strategy === 'CROSS_SELL') {
-      strategyThemes = strategyThemes.filter((current) => {
-        return current.strategies.indexOf('CROSS_SELL') > -1;
-      });
-    } else if (strategy === 'POPUP') {
-      strategyThemes = strategyThemes.filter((current) => {
-        return current.strategies.indexOf('POPUP') > -1;
-      });
-    }
+    strategyThemes = strategyThemes.filter((current) => {
+      return current.strategies.indexOf(strategy) > -1;
+    });
 
     return strategyThemes.map((strategyTheme) => ({
       value: strategyTheme._id,
@@ -271,13 +214,15 @@ const ThemeSelector = ({
                       remain available here.
                     </Banner>
                   </TextContainer>
-                  <Card>
-                    <OptionList
-                      options={offerThemeOptions}
-                      selected={selectedTheme}
-                      onChange={handleThemeSelect}
-                    />
-                  </Card>
+                  {offerThemeOptions?.length > 0 && (
+                    <Card>
+                      <OptionList
+                        options={offerThemeOptions}
+                        selected={selectedTheme}
+                        onChange={handleThemeSelect}
+                      />
+                    </Card>
+                  )}
                   {!offerThemeOptions?.length && <EmptyComponent />}
                 </Stack>
               )}
@@ -285,12 +230,6 @@ const ThemeSelector = ({
                 <>
                   {themeOptions?.length > 0 && (
                     <Stack vertical spacing="tight">
-                      <TextField
-                        type="search"
-                        placeholder="Search"
-                        prefix={<Icon source={SearchMinor} />}
-                        onChange={() => {}}
-                      />
                       {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
                         <TextContainer>
                           <Banner>

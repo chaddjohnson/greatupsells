@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const preValidate = (shop, next) => {
   const { shopifyShopData } = shop;
 
@@ -19,6 +21,14 @@ const preValidate = (shop, next) => {
   // Remove extraneous characters from the contact phone number.
   if (shop.contactPhone) {
     shop.contactPhone = shop.contactPhone.toString().replace(/[^\d\+]/g, '');
+  }
+
+  // Generate a testing token.
+  if (!shop.testToken) {
+    shop.testToken = crypto
+      .createHash('md5')
+      .update((Math.random() * 1000000).toString())
+      .digest('hex');
   }
 
   next();

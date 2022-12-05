@@ -1,10 +1,9 @@
 service: greatupsells-shops-api
-variablesResolutionMode: 20210326
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -26,13 +25,17 @@ provider:
         Resource: 'execute-api:/*/GET/health'
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
-    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
+    APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
+    DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
+    EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shops-api'
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
     MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-shops/url}
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
+    SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
+    SHOP_ORDER_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/url, ''}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
@@ -59,6 +62,14 @@ custom:
         - schedule: rate(5 minutes)
 
 functions:
+  activateShopPlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/activateShopPlan.handler
+    events:
+      - http:
+          path: /shops/{shopId}/plan/activation
+          method: post
+          authorizer: aws_iam
   addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
@@ -73,6 +84,14 @@ functions:
     events:
       - http:
           path: /orders/{orderId}/cancelation
+          method: post
+          authorizer: aws_iam
+  changeShopPlan:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/changeShopPlan.handler
+    events:
+      - http:
+          path: /shops/{shopId}/plan
           method: post
           authorizer: aws_iam
   checkShopThemeCompatibility:
@@ -97,6 +116,14 @@ functions:
     events:
       - http:
           path: /themes/{themeId}/clone
+          method: post
+          authorizer: aws_iam
+  consentToDataAccess:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/consentToDataAccess.handler
+    events:
+      - http:
+          path: /shops/{shopId}/data-access-consent
           method: post
           authorizer: aws_iam
   createCollection:
@@ -126,6 +153,7 @@ functions:
   createOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOrder.handler
+    timeout: 15
     events:
       - http:
           path: /orders
@@ -355,6 +383,22 @@ functions:
           path: /shops/domain/{domain}/offers/random
           method: post
           authorizer: aws_iam
+  findOneRandomShopCollection:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomShopCollection.handler
+    events:
+      - http:
+          path: /shops/{shopId}/collections/random
+          method: get
+          authorizer: aws_iam
+  findOneRandomShopProduct:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/findOneRandomShopProduct.handler
+    events:
+      - http:
+          path: /shops/{shopId}/products/random
+          method: get
+          authorizer: aws_iam
   findOneShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
@@ -406,6 +450,14 @@ functions:
           path: /shops/domain/{domain}/initialization
           method: post
           authorizer: aws_iam
+  installAppEmbedBlock:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/installAppEmbedBlock.handler
+    events:
+      - http:
+          path: /shops/{shopId}/themes/{shopifyThemeId}/app-embed-block-install
+          method: post
+          authorizer: aws_iam
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -438,14 +490,6 @@ functions:
           path: /offer-hits/{offerHitId}
           method: put
           authorizer: aws_iam
-  updateShopifyDraftOrder:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/updateShopifyDraftOrder.handler
-    events:
-      - http:
-          path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items/{shopifyVariantId}
-          method: post
-          authorizer: aws_iam
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -460,6 +504,14 @@ functions:
     events:
       - http:
           path: /orders/{orderId}
+          method: put
+          authorizer: aws_iam
+  updateShopifyDraftOrderItems:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateShopifyDraftOrderItems.handler
+    events:
+      - http:
+          path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: put
           authorizer: aws_iam
   updateTheme:
@@ -486,6 +538,17 @@ functions:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam
+  calculateShopMonthUpsellRevenue:
+    memorySize: 512
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/calculateShopMonthUpsellRevenue.handler
+    events:
+      - schedule: cron(1 0,12 * * ? *)
+    timeout: 900
+    enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
   calculateStats:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -505,6 +568,18 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
+    warmup:
+      default:
+        enabled: false
+  importShopOrders:
+    memorySize: 512
+    reservedConcurrency: 2
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/importShopOrders.handler
+    events:
+      - sqs:
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-order-import-queue-dev'}
+    timeout: 900
     warmup:
       default:
         enabled: false

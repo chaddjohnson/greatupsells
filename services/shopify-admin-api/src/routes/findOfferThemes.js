@@ -5,22 +5,14 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 const logger = require('@greatupsells/logger');
 
-const { AWS_REGION, SHOPS_API_URL } = process.env;
+const { SHOPS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -38,6 +30,7 @@ const handler = middy(async (event, context) => {
       httpClient.get(`/offers/${offerId}/themes`)
     ]);
     const offerShopId = offer && offer.shop;
+    const enabledOfferThemes = offerThemes.filter(({ enabled }) => enabled);
 
     if (shopId !== offerShopId) {
       await logger.warn(
@@ -54,7 +47,7 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offerThemes)
+      body: JSON.stringify(enabledOfferThemes)
     };
   } catch (error) {
     if (error.response && error.response.status) {

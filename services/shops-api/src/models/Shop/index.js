@@ -4,25 +4,27 @@ const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
+const importOrders = require('./importOrders');
 const importCollections = require('./importCollections');
 const importProducts = require('./importProducts');
+const getIsPostPurchaseAppInUse = require('./getIsPostPurchaseAppInUse');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
-const initiatePlanUpgrade = require('./initiatePlanUpgrade');
-const activatePlanUpgrade = require('./activatePlanUpgrade');
+const activatePlan = require('./activatePlan');
 const cancelPlan = require('./cancelPlan');
 const resetPlan = require('./resetPlan');
-const downgradePlan = require('./downgradePlan');
+const changePlan = require('./changePlan');
 const updatePlan = require('./updatePlan');
-const updatePlans = require('./updatePlans');
-const fixWebhooks = require('./fixWebhooks');
-const updateActiveStatuses = require('./updateActiveStatuses');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
-const updateShopifyDraftOrderVariantQuantity = require('./updateShopifyDraftOrderVariantQuantity');
+const updateShopifyDraftOrderItems = require('./updateShopifyDraftOrderItems');
 const checkThemeCompatibility = require('./checkThemeCompatibility');
+const installAppEmbedBlock = require('./installAppEmbedBlock');
+const getAppEmbedBlockIsInstalledAndEnabled = require('./getAppEmbedBlockIsInstalledAndEnabled');
+const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
+const createSampleOffers = require('./createSampleOffers');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -61,18 +63,20 @@ const schema = new mongoose.Schema(
     active: { type: Boolean, required: true, default: true },
     shopifyPlan: { type: String, required: true },
     plan: {
+      name: { type: String, required: false },
       level: {
         type: String,
-        required: true,
-        enum: ['FREE', 'BASIC', 'PLUS', 'PRO'],
-        default: 'FREE'
+        enum: ['BASIC', 'PLUS', 'PRO']
       },
-      price: { type: Number, required: false, default: 0.0, min: 0 },
+      price: { type: Number, required: false, min: 0 },
       active: { type: Boolean, required: false, default: false },
       chargeId: { type: String, required: false },
       billingOn: { type: Date, required: false },
-      upgradedAt: { type: Date, required: false },
-      canceledAt: { type: Date, required: false }
+      startedAt: { type: Date, required: false },
+      canceledAt: { type: Date, required: false },
+      trialStartedAt: { type: Date, required: false },
+      monthUpsellRevenue: { type: Number, required: false },
+      monthUpsellRevenueLimit: { type: Number }
     },
     appLastOpenedAt: { type: Date, required: false },
     uninstalledAt: { type: Date, required: false },
@@ -80,15 +84,13 @@ const schema = new mongoose.Schema(
     offerAcceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionCount: { type: Int32, required: true, default: 0, min: 0 },
     offerConversionRate: { type: Number, required: true, default: 0.0, min: 0 },
-    revenueIncrease: { type: Number, required: true, default: 0.0, min: 0 },
-    onlineStore2Theme: { type: Boolean, required: true, default: false }
+    revenueIncrease: { type: Number, required: true, default: 0.0 },
+    onlineStore2Theme: { type: Boolean, required: true, default: false },
+    consentedToDataAccessAt: { type: Date, required: false },
+    testToken: { type: String, required: true }
   },
   schemaOptions
 );
-
-schema.virtual('shopName').get(function () {
-  return this.domain.replace(/^([^\.]+).*$/, '$1');
-});
 
 schema.statics.findOneByDomain = function (domain) {
   return Shop.findOne({
@@ -104,17 +106,9 @@ schema.statics.createOrUpdate = function (shopDomain, accessToken) {
   return createOrUpdate(shopDomain, accessToken);
 };
 
-schema.statics.updatePlans = function () {
-  return updatePlans();
-};
-
-schema.statics.fixWebhooks = function () {
-  return fixWebhooks();
-};
-
-schema.statics.updateActiveStatuses = function () {
-  return updateActiveStatuses();
-};
+schema.virtual('shopName').get(function () {
+  return this.domain.replace(/^([^\.]+).*$/, '$1');
+});
 
 schema.methods.searchOffers = async function (params) {
   return searchOffers(this, params);
@@ -163,12 +157,20 @@ schema.methods.createWebhooks = function () {
   return createWebhooks(this);
 };
 
+schema.methods.importOrders = function () {
+  return importOrders(this);
+};
+
 schema.methods.importCollections = function () {
   return importCollections(this);
 };
 
 schema.methods.importProducts = function () {
   return importProducts(this);
+};
+
+schema.methods.getIsPostPurchaseAppInUse = function () {
+  return getIsPostPurchaseAppInUse(this);
 };
 
 schema.methods.deactivate = function () {
@@ -179,12 +181,8 @@ schema.methods.updateActiveStatus = function () {
   return updateActiveStatus(this);
 };
 
-schema.methods.initiatePlanUpgrade = function () {
-  return initiatePlanUpgrade(this);
-};
-
-schema.methods.activatePlanUpgrade = function () {
-  return activatePlanUpgrade(this);
+schema.methods.activatePlan = function () {
+  return activatePlan(this);
 };
 
 schema.methods.cancelPlan = function () {
@@ -195,8 +193,8 @@ schema.methods.resetPlan = function () {
   return resetPlan(this);
 };
 
-schema.methods.downgradePlan = function () {
-  return downgradePlan(this);
+schema.methods.changePlan = function (level) {
+  return changePlan(this, level);
 };
 
 schema.methods.updatePlan = function () {
@@ -215,21 +213,31 @@ schema.methods.addDraftOrderLineItems = function (draftOrderId, items) {
   return addDraftOrderLineItems(this, draftOrderId, items);
 };
 
-schema.methods.updateShopifyDraftOrderVariantQuantity = function (
+schema.methods.updateShopifyDraftOrderItems = function (
   draftOrderId,
-  shopifyVariantId,
-  quantity
+  shopifyCartItems
 ) {
-  return updateShopifyDraftOrderVariantQuantity(
-    this,
-    draftOrderId,
-    shopifyVariantId,
-    quantity
-  );
+  return updateShopifyDraftOrderItems(this, draftOrderId, shopifyCartItems);
 };
 
 schema.methods.checkThemeCompatibility = function () {
   return checkThemeCompatibility(this);
+};
+
+schema.methods.installAppEmbedBlock = function (shopifyThemeId) {
+  return installAppEmbedBlock(this, shopifyThemeId);
+};
+
+schema.methods.getAppEmbedBlockIsInstalledAndEnabled = function () {
+  return getAppEmbedBlockIsInstalledAndEnabled(this);
+};
+
+schema.methods.calculateMonthUpsellRevenue = function () {
+  return calculateMonthUpsellRevenue(this);
+};
+
+schema.methods.createSampleOffers = function () {
+  return createSampleOffers(this);
 };
 
 schema.methods.toString = function () {
@@ -240,7 +248,6 @@ schema.pre('validate', function (next) {
   hooks.preValidate(this, next);
 });
 
-// Create indexes.
 schema.index({ shopifyShopId: 1 }, { unique: true });
 schema.index({ domain: 1 }, { unique: true });
 schema.index({ alternateDomain: 1 });

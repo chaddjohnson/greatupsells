@@ -19,8 +19,10 @@ const handler = async (event, context) => {
     const offer = await Offer.findById(offerId);
     const {
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds,
-      ipAddress
+      ipAddress,
+      isTest
     } = JSON.parse(event.body);
 
     if (!offer) {
@@ -32,8 +34,10 @@ const handler = async (event, context) => {
 
     const offerHit = await offer.trackImpression({
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds,
-      ipAddress
+      ipAddress,
+      isTest
     });
 
     return {

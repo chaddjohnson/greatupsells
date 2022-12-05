@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
+const findOneRandomByShop = require('./findOneRandomByShop');
 const trackShopifyProducts = require('./trackShopifyProducts');
 const updateDependentOffers = require('./updateDependentOffers');
 const toString = require('./toString');
@@ -31,6 +32,10 @@ schema.statics.findOneByShopifyCollectionId = function (shopifyCollectionId) {
   return Collection.findOne({
     shopifyCollectionId: parseInt(shopifyCollectionId)
   });
+};
+
+schema.statics.findOneRandomByShop = function (shop, options) {
+  return findOneRandomByShop(shop, options);
 };
 
 schema.methods.trackShopifyProducts = function () {

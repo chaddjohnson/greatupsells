@@ -3,26 +3,14 @@ const {
   checkWebhookHmacValidity,
   createRawBody
 } = require('shopify-hmac-validation');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 const logger = require('@greatupsells/logger');
 
-const {
-  AWS_REGION,
-  SHOPS_API_URL,
-  SHOPIFY_ADMIN_APP_API_SECRET_KEY
-} = process.env;
+const { SHOPS_API_URL, SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const processData = async (metadata, data, rawData) => {
   try {
@@ -43,6 +31,7 @@ const processData = async (metadata, data, rawData) => {
     }
 
     const shopifyThemeData = data;
+    const shopifyThemeId = shopifyThemeData.id;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
     await logger.info(
@@ -51,6 +40,9 @@ const processData = async (metadata, data, rawData) => {
     );
 
     await httpClient.post(`/shops/${shop._id}/theme-compatibility`);
+    await httpClient.post(
+      `/shops/${shop._id}/themes/${shopifyThemeId}/app-embed-block-install`
+    );
   } catch (error) {
     await logger.error(`Error processing theme publish webhook data`, error, {
       metadata,

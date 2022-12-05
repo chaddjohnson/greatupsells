@@ -24,10 +24,11 @@ const ResourceListWrapper = styled.div`
 `;
 
 const formatSelectionItems = (value) => {
-  return value.selection.map((collection) => ({
-    title: collection.title,
-    imageUrl: collection.image?.originalSrc,
-    shopifyCollectionId: parseInt(collection.id.split('/').reverse()[0])
+  return value.selection.map(({ id, title, handle, image }) => ({
+    title,
+    handle,
+    imageUrl: image?.originalSrc,
+    shopifyCollectionId: parseInt(id.split('/').reverse()[0])
   }));
 };
 
@@ -99,6 +100,7 @@ CollectionResourceList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
+      handle: PropTypes.string.isRequired,
       imageUrl: PropTypes.string.isRequired,
       shopifyCollectionId: PropTypes.number.isRequired
     })

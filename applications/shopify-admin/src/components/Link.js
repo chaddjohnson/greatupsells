@@ -6,7 +6,14 @@ import qs from 'querystringify';
 const Link = ({ url, external, prefetch, children, ...props }) => {
   if (external || url.match(/^https?:/)) {
     return (
-      <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+      <a
+        data-polaris-unstyled="true"
+        className="Polaris-Link"
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...props}
+      >
         {children}
       </a>
     );
@@ -26,7 +33,9 @@ const Link = ({ url, external, prefetch, children, ...props }) => {
 
   return (
     <NextLink href={updatedUrl} prefetch={prefetch}>
-      <a {...props}>{children}</a>
+      <a data-polaris-unstyled="true" className="Polaris-Link" {...props}>
+        {children}
+      </a>
     </NextLink>
   );
 };

@@ -57,10 +57,10 @@ If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is 
          addr: 4001
          proto: http
          subdomain: yourname-shopify-admin
-      greatupsells-storefront-api:
-         addr: 4006
+      greatupsells-shopify-extension:
+         addr: 4010
          proto: http
-         subdomain: yourname-storefront-api
+         subdomain: yourname-shopify-extension
       greatupsells-webhooks-service:
          addr: 4008
          proto: http
@@ -74,7 +74,20 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 
 1. Clone this repository.
 1. Create a top-level `.env` file by copying `.env.example` and fill in values.
-1. Create hard links (e.g., `ln ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
+1. Create symlinks (e.g., `ln -s ../../.env .`) to the top-level `.env` file within each `applications/` and `services/` subdirectory.
+1. Ask Chad to create an AWS IAM account for you and give you your credentials.
+1. Add AWS credentials to `~/.aws/credentials`:
+   ```
+   [greatupsells]
+   aws_access_key_id = <your key>
+   aws_secret_access_key = <your secret key>
+   ```
+1. Create `~/.aws/config` if it doesn't exist:
+   ```
+   [default]
+   region = us-east-1
+   ```
+1. Run `yarn global add lerna`.
 1. Run `yarn start`. This automatically does the following:
    1. Installs dependencies.
    1. Runs Lerna bootstrapping.
@@ -97,6 +110,53 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 
 Please use the `master` branch for main development.
 
+### Shopify App Extensions
+
+To run and develop Shopify app extensions locally (such as post-purchase upsells):
+
+1. Run the app with `yarn start` from the top-level project directory.
+1. Open another terminal, and change the working directory to `applications/shopify-admin`.
+1. Run `yarn extensions:start` to start extensions.
+1. Follow instructions on screen.
+1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
+
+### Troubleshooting
+
+#### Ports already in use
+
+Sometimes Node processes hang and become "zombie" processes, and then you receive error messages about ports being in use. To remedy this, try running `killall -9 node`.
+
+#### ngrok not starting
+
+Occasionally ngrok tunnels will fail to start because ngrok is running in the background. In this case, try running `killall -9 ngrok`.
+
+## Package Management
+
+### Adding a shared dependency for all projects
+
+To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn add foo`.
+
+Note that `lerna add foo` will add `foo` to package.json in all packages and _not_ to the high-level `package.json`.
+
+### Adding dependencies for packages
+
+To add a dependency for an individual package, use the following command:
+
+    lerna add foo --scope application-name
+
+For example:
+
+    lerna add http-status-codes --scope greatupsells-shopify-admin
+
+Please find more examples [here](https://github.com/lerna/lerna/tree/master/commands/add#examples).
+
+### Removing dependencies for packages
+
+Unfortunately [there is no](https://github.com/lerna/lerna/issues/1886) `lerna remove` command. Here are possible workarounds for removing dependencies from individual package:
+
+1. Run `lerna exec 'yarn remove foo' --scope @org-name/application-name`.
+1. Manually remove dependencies from `application-name/package.json` and then run `lerna bootstrap --scope @org-name/application-name --force-local`.
+
 ### Tooling
 
 The following are used:
@@ -118,7 +178,7 @@ The following are used:
 Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
-2. Create a server configuration for the Shopify Admin app URL; for example:
+1. Create a server configuration for the Shopify Admin app URL; for example:
 
    ```
    server {
@@ -131,16 +191,41 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
 
        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
        ssl_ciphers         HIGH:!aNULL:!MD5;
-       ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
+       ssl_dhparam /usr/local/etc/ssl/certs/dehparam.pem;
 
        location / {
            proxy_pass http://127.0.0.1:3000/;
+           proxy_buffering off;
        }
    }
    ```
 
-3. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx). Change all instances of "test.cpming.top" to "\*.ngrok.io". use "2048" instead of "128" for the `openssl dhparam` command.
-4. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
+1. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx).
+   1. Change all instances of "test.cpming.top" to "\*.ngrok.io".
+   1. Use "2048" instead of "128" for the `openssl dhparam` command.
+1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
+1. Do the same as the previous two steps but for domains admin-api, shopify-admin-api, and storefront-api (but with no `\*.` prefix).
+1. Add nginx configs for admin-api, shopify-admin-api, and storefront-api:
+
+   ```
+   server {
+     listen 80;
+     listen 443 ssl;
+     server_name admin-api;
+
+     ssl_certificate     /usr/local/etc/ssl/certs/admin-api.crt;
+     ssl_certificate_key /usr/local/etc/ssl/private/admin-api.key;
+
+     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+     ssl_ciphers         HIGH:!aNULL:!MD5;
+     ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
+
+     location / {
+        proxy_pass http://127.0.0.1:4005/;
+        proxy_buffering off;
+     }
+   }
+   ```
 
 Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
@@ -157,6 +242,7 @@ The following coding conventions are adhered to except in special cases:
 - Hyphens for image and media file names.
 - Hyphens for directory names.
 - Default exports are used for modules and components (with the exception of index.js files).
+- In general, abide by the Airbnb [JavaScript](https://github.com/airbnb/javascript) and [React](https://airbnb.io/javascript/react/) standards.
 
 Code consistency is important. In order to maintain consistency, convention changes should be openly discussed and decisions made as a team. Please do your best to respect conventions established throughout this code base.
 
@@ -164,6 +250,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
+1. Create the `greatupsells-infrastructure` bucket if it does not exist.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -176,7 +263,7 @@ Code consistency is important. In order to maintain consistency, convention chan
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
 1. Create a `ci` IAM account with administrator access.
-1. Create a `server` account with the following inline policy:
+1. Create a `server` user with the following inline policy:
    ```
    {
       "Version": "2012-10-17",
@@ -200,10 +287,11 @@ Code consistency is important. In order to maintain consistency, convention chan
    }
    ```
 1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
-   1. `hosted_zone_id` (get this from Route 53 for the domain)
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
+   1. `shopify_app_embed_block_id` (you will need to use a dummy value until the app is running, and then update SSM and your Lambdas once activated in the test shop's theme)
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
+1. Update `event_bus_name` in `services/webhooks/infrastructure/config/[environment].tfvars`.
 1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
    1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
@@ -242,6 +330,12 @@ Initial deployments should occur in the following order:
 1. `applications/shopify-admin`
 1. `applications/storefront`
 1. `applications/admin`
+
+## Destruction
+
+Run the following:
+
+    AWS_PROFILE=greatupsells STAGE=test yarn destroy
 
 ## Infrastructure
 

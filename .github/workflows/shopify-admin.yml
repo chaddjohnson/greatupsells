@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/shopify-admin.yml
       - applications/shopify-admin/**
-      - packages/http-client
+      - packages/gateway-http-client
       - packages/react-components
       - packages/react-hooks
 jobs:
@@ -46,14 +46,14 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.17.0
+          node-version: 16.13.0
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
         run: npm install -g yarn serverless
       - name: Run Terraform
-        run: ./run.sh
-        working-directory: applications/shopify-admin/infrastructure
+        run: yarn infrastructure
+        working-directory: applications/shopify-admin
         env:
           STAGE: ${{ env.BRANCH }}
       - name: Install Node Modules
@@ -68,8 +68,8 @@ jobs:
         working-directory: applications/shopify-admin
       - name: Upload Next.js Static Assets to Assets Bucket
         run: aws s3 sync applications/shopify-admin/.next/static s3://$ASSETS_DOMAIN/shopify-admin/_next/static --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
-      - name: Upload Next.js Images to Assets Bucket
-        run: aws s3 sync applications/shopify-admin/public/images s3://$ASSETS_DOMAIN/shopify-admin/images --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
+      - name: Upload Next.js Public Assets to Assets Bucket
+        run: aws s3 sync applications/shopify-admin/public s3://$ASSETS_DOMAIN/shopify-admin --cache-control immutable,max-age=31536000,public --storage-class STANDARD_IA --region us-east-1
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: applications/shopify-admin

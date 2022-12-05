@@ -1,21 +1,13 @@
 const AWS = require('aws-sdk');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 
 // TODO: Use bunyan? Use winston?
 
-const { AWS_REGION, LOG_QUEUE_URL, LOGS_API_URL, LOG_SOURCE } = process.env;
+const { LOG_QUEUE_URL, LOGS_API_URL, LOG_SOURCE } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: LOGS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const extractErrorData = (error) => {
   const data = {};
@@ -83,7 +75,9 @@ const logInfo = async (message, data = {}) => {
 
   data = formatData(data);
 
-  console.info(JSON.stringify(data, null, 2));
+  if (Object.keys(data).length > 0) {
+    console.info(JSON.stringify(data, null, 2));
+  }
 
   await sendMessage('INFO', message, undefined, data);
 };

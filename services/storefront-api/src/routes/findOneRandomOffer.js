@@ -6,21 +6,13 @@ const {
   ReasonPhrases,
   getReasonPhrase
 } = require('http-status-codes');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 
-const { AWS_REGION, SHOPS_API_URL } = process.env;
+const { SHOPS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -34,7 +26,9 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = new URL(event.headers.origin || event.headers.Origin).host;
+    const domain = new URL(
+      event.headers.shop || event.headers.origin || event.headers.Origin
+    ).host;
     const {
       events: triggerEvents,
       shopifyProductIds,
@@ -44,8 +38,17 @@ const handler = middy(async (event, context) => {
       shopifyOrderId,
       offerImpressions,
       sessionOfferImpressions,
-      pagePath
+      pagePath,
+      testToken,
+      testOfferId
     } = JSON.parse(event.body);
+
+    if (!domain) {
+      return {
+        statusCode: StatusCodes.FORBIDDEN,
+        body: ReasonPhrases.FORBIDDEN
+      };
+    }
 
     // Look up offer by domain to minimize this method's latency. Multiple data
     // items are combined into one response to reduce latency.
@@ -63,7 +66,9 @@ const handler = middy(async (event, context) => {
         ipAddress,
         offerImpressions,
         sessionOfferImpressions,
-        pagePath
+        pagePath,
+        testToken,
+        testOfferId
       }
     );
 

@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import useSWR, { mutate } from 'swr';
 import { useHttpClient } from '@greatupsells/react-hooks';
 import useToast from './toast';
 
 const useOffer = (offerId) => {
-  const router = useRouter();
   const { httpClient } = useHttpClient();
   const { showSuccessToast, showErrorToast } = useToast();
 
@@ -26,7 +24,6 @@ const useOffer = (offerId) => {
     let updatedData = null;
 
     if (isNew) {
-      // Use a different key than the URL here to avoid a cache conflict with GET /themes.
       updatedData = await httpClient.post(url, data);
     } else {
       updatedData = await mutate(url, httpClient.put(url, data));
@@ -55,9 +52,17 @@ const useOffer = (offerId) => {
     }
 
     const url = `/offers/${offerId}`;
+    const options = {
+      optimisticData: { ...offer, enabled: true },
+      rollbackOnError: true
+    };
 
     try {
-      await mutate(url, httpClient.put(url, { ...offer, enabled: true }));
+      await mutate(
+        url,
+        httpClient.put(url, { ...offer, enabled: true }),
+        options
+      );
 
       showSuccessToast('Offer enabled.');
     } catch (error) {
@@ -72,9 +77,17 @@ const useOffer = (offerId) => {
     }
 
     const url = `/offers/${offerId}`;
+    const options = {
+      optimisticData: { ...offer, enabled: false },
+      rollbackOnError: true
+    };
 
     try {
-      await mutate(url, httpClient.put(url, { ...offer, enabled: false }));
+      await mutate(
+        url,
+        httpClient.put(url, { ...offer, enabled: false }),
+        options
+      );
 
       showSuccessToast('Offer disabled.');
     } catch (error) {
@@ -93,7 +106,8 @@ const useOffer = (offerId) => {
 
       showSuccessToast('Offer duplicated.');
 
-      router.push(`/offers/${duplicatedOffer._id}/`);
+      // Do not use router.push() because state will be stale.
+      window.location.href = `/offers/${duplicatedOffer._id}/`;
     } catch (error) {
       showErrorToast(`Error duplicating offer.`);
       throw error;

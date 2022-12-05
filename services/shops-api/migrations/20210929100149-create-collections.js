@@ -21,6 +21,16 @@ module.exports = {
     await Shop.createCollection();
     await Stats.createCollection();
     await User.createCollection();
+
+    await Collection.createIndexes();
+    await OfferHit.createIndexes();
+    await Offer.createIndexes();
+    await Order.createIndexes();
+    await Theme.createIndexes();
+    await Product.createIndexes();
+    await Shop.createIndexes();
+    await Stats.createIndexes();
+    await User.createIndexes();
   },
 
   async down() {

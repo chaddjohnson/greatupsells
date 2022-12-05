@@ -1,5 +1,6 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import qs from 'querystringify';
 import { Loading, Modal } from '@shopify/app-bridge-react';
 import {
   Page,
@@ -14,6 +15,7 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import {
+  ExternalMinor,
   DuplicateMinor,
   CircleDisableMinor,
   CircleTickOutlineMinor
@@ -25,6 +27,8 @@ import {
   useTheme,
   useThemes,
   useOfferThemes,
+  useCollection,
+  useProduct,
   useToast
 } from '../../../hooks';
 
@@ -117,11 +121,20 @@ const OfferEditPage = () => {
     enableOffer,
     disableOffer
   } = useOffer(offerId);
+  const [latestOffer, setLatestOffer] = useState(null);
   const { saveTheme } = useTheme();
   const { themes, themesLoaded, themesError } = useThemes();
   const { offerThemes, offerThemesLoaded, offerThemesError } = useOfferThemes(
     offerId
   );
+  const { fetchRandomCollection } = useCollection();
+  const { fetchRandomProduct } = useProduct();
+
+  const isTestable =
+    ['CROSS_SELL', 'UPSELL'].includes(latestOffer?.strategy) &&
+    !['*/orders/*', '*/checkouts/*/thank_you'].includes(
+      latestOffer?.triggerPagePath
+    );
 
   // Get a reference to the offer's theme.
   const offerTheme = useMemo(
@@ -130,8 +143,93 @@ const OfferEditPage = () => {
   );
 
   const loaded = shopLoaded && offerLoaded && themesLoaded && offerThemesLoaded;
-
   const error = !!(shopError || offerError || themesError || offerThemesError);
+
+  const getTestUrl = async () => {
+    let pageUrl = '';
+    const { testToken } = shop;
+    const shopDomain =
+      sessionStorage.shop ||
+      new URLSearchParams(window.location.search).get('shop');
+    const triggerProductIndex = Math.floor(
+      Math.random() * latestOffer.triggerProducts.length
+    );
+    const triggerCollectionIndex = Math.floor(
+      Math.random() * latestOffer.triggerCollections.length
+    );
+    const triggerProduct = latestOffer.triggerProducts[triggerProductIndex];
+    const triggerCollection =
+      latestOffer.triggerCollections[triggerCollectionIndex];
+    const pageParams = {
+      testToken,
+      testOfferId: offerId,
+      testVariantId:
+        latestOffer.triggerEvent !== 'ADD'
+          ? triggerProduct?.shopifyVariantIds[0]
+          : undefined
+    };
+    let randomCollection = null;
+    let randomProduct = null;
+
+    switch (latestOffer.triggerPagePath) {
+      case '/':
+        pageUrl = '';
+        break;
+
+      case '*/collections/all':
+        pageUrl = '/collections/all';
+        break;
+
+      case '*/collections/*':
+        if (triggerCollection) {
+          pageUrl = `/collections/${triggerCollection.handle}`;
+        } else {
+          randomCollection = await fetchRandomCollection();
+          pageUrl = `/collections/${randomCollection.shopifyCollectionData.handle}`;
+        }
+
+        break;
+
+      case '*/products/*':
+        if (triggerProduct) {
+          pageUrl = `/products/${triggerProduct.handle}`;
+        } else {
+          randomProduct = await fetchRandomProduct();
+          pageUrl = `/products/${randomProduct.shopifyProductData.handle}`;
+          pageParams.testVariantId =
+            latestOffer.triggerEvent !== 'ADD'
+              ? randomProduct.shopifyProductData.variants[0].id
+              : undefined;
+        }
+
+        break;
+
+      case '*/blog/*':
+        pageUrl = '/blog';
+        break;
+
+      case '*/cart':
+        pageUrl = '/cart';
+        break;
+
+      default:
+        break;
+    }
+
+    const pageParamsString = qs.stringify(pageParams, true);
+    const testUrl = `https://${shopDomain}${pageUrl}/${pageParamsString}`;
+
+    return testUrl;
+  };
+
+  const handleOfferUpdate = (updatedOffer) => {
+    const changed =
+      JSON.stringify(latestOffer) !== JSON.stringify(updatedOffer);
+
+    if (changed) {
+      setLatestOffer(updatedOffer);
+    }
+  };
 
   const handleSubmit = async (data) => {
     try {
@@ -164,6 +262,7 @@ const OfferEditPage = () => {
       }
 
       showSuccessToast('Offer updated.');
+      window.scrollTo(0, 0);
     } catch (saveError) {
       showErrorToast('Error updating offer.');
     }
@@ -187,9 +286,11 @@ const OfferEditPage = () => {
     router.push('/offers/');
   };
 
-  // const handleTest = () => {
-  //   // TODO
-  // };
+  const handleTest = async () => {
+    const testUrl = await getTestUrl(latestOffer);
+
+    window.open(testUrl, '_blank');
+  };
 
   const handleDuplicate = async () => {
     await duplicateOffer();
@@ -204,12 +305,13 @@ const OfferEditPage = () => {
   };
 
   const secondaryActions = [
-    // {
-    //   content: 'Test',
-    //   accessibilityLabel: 'Test this offer',
-    //   icon: ExternalMinor,
-    //   onAction: handleTest
-    // },
+    {
+      content: 'Test',
+      accessibilityLabel: 'Test this offer',
+      icon: ExternalMinor,
+      disabled: !isTestable,
+      onAction: handleTest
+    },
     {
       content: 'Duplicate',
       accessibilityLabel: 'Duplicate this offer',
@@ -253,6 +355,7 @@ const OfferEditPage = () => {
               }}
               shop={shop}
               themes={themes}
+              onOfferUpdate={handleOfferUpdate}
               onSubmit={handleSubmit}
               onCancel={handleCancel}
               onDelete={handleDelete}

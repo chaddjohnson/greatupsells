@@ -1,20 +1,23 @@
 export { ShopProvider, useShop } from './shop';
 
+export { default as useCollection } from './collection';
 export { default as useOffer } from './offer';
 export { default as useOfferAcceptances } from './offerAcceptances';
 export { default as useOfferAnalytics } from './offerAnalytics';
 export { default as useOfferConversionRates } from './offerConversionRates';
 export { default as useOfferConversions } from './offerConversions';
 export { default as useOfferImpressions } from './offerImpressions';
-export { default as useOfferThemes } from './offerThemes';
 export { default as useOfferRevenueIncreases } from './offerRevenueIncreases';
+export { default as useOfferThemes } from './offerThemes';
 export { default as useOffers } from './offers';
-export { default as useTheme } from './theme';
-export { default as useThemes } from './themes';
+export { default as useProduct } from './product';
 export { default as useShopAcceptances } from './shopAcceptances';
 export { default as useShopAnalytics } from './shopAnalytics';
 export { default as useShopConversionRates } from './shopConversionRates';
 export { default as useShopConversions } from './shopConversions';
 export { default as useShopImpressions } from './shopImpressions';
 export { default as useShopRevenueIncreases } from './shopRevenueIncreases';
+export { default as useTheme } from './theme';
+export { default as useThemeComponent } from './themeComponent';
+export { default as useThemes } from './themes';
 export { default as useToast } from './toast';

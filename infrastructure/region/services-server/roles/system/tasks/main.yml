@@ -163,7 +163,7 @@
     minute: '0'
     hour: '0,12'
     user: root
-    job: 'certbot renew --manual-auth-hook=/root/certbot_hook.py --manual-cleanup-hook=/root/certbot_hook.py --renew-hook "/root/update-certificates.sh && reboot" >> /root/certbot-cron.log 2>&1'
+    job: 'certbot renew --manual-auth-hook=/root/certbot_hook.py --manual-cleanup-hook=/root/certbot_hook.py --deploy-hook "/root/update-certificates.sh && reboot" >> /root/certbot-cron.log 2>&1'
 
 - name: Generate certificate files
   command: /root/update-certificates.sh

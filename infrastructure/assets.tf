@@ -1,7 +1,10 @@
 resource "aws_s3_bucket" "assets" {
   bucket        = var.assets_domain
-  acl           = "private"
   force_destroy = false
+}
+
+resource "aws_s3_bucket_cors_configuration" "assets" {
+  bucket = aws_s3_bucket.assets.id
 
   cors_rule {
     allowed_headers = ["*"]
@@ -9,6 +12,11 @@ resource "aws_s3_bucket" "assets" {
     allowed_origins = ["*"]
     max_age_seconds = 86400
   }
+}
+
+resource "aws_s3_bucket_acl" "assets" {
+  bucket = aws_s3_bucket.assets.id
+  acl    = "private"
 }
 
 resource "aws_cloudfront_origin_access_identity" "assets" {}

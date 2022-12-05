@@ -24,6 +24,8 @@ const handler = async (event, context) => {
     try {
       await product.validate();
     } catch (error) {
+      logger.debug(`ERROR: ${error.message}`);
+
       return {
         statusCode: StatusCodes.BAD_REQUEST,
         body: ReasonPhrases.BAD_REQUEST
@@ -32,6 +34,7 @@ const handler = async (event, context) => {
 
     await product.save();
     await product.trackShopifyCollections();
+    await product.updatePairedPurchases();
     await product.execPopulate('shop');
 
     await logger.info(`Product created (${product.toString()})`, { data });

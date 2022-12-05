@@ -20,7 +20,6 @@ import {
   PieChartOutlined as DashboardIcon,
   BarChart as StatsIcon,
   Store as ShopIcon,
-  Brush as ThemesIcon,
   Notes as LogsIcon
 } from '@material-ui/icons';
 import Link from './Link';
@@ -81,7 +80,13 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar
   },
   link: {
-    color: theme.palette.text.primary
+    color: 'inherit',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    '&:hover': {
+      textDecoration: 'none'
+    }
   },
   content: {
     flexGrow: 1,
@@ -108,53 +113,40 @@ const Layout = ({ title, icon, contentProps, children }) => {
     <>
       <Divider />
       <List>
-        <ListItem className={classes.link} button component={Link} href="/">
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+        <ListItem button component="li">
+          <Link className={classes.link} href="/">
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </Link>
         </ListItem>
-        <ListItem
-          className={classes.link}
-          button
-          component={Link}
-          href="/stats"
-        >
-          <ListItemIcon>
-            <StatsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Stats" />
+        <ListItem button component="li">
+          <Link className={classes.link} href="/stats">
+            <ListItemIcon>
+              <StatsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Stats" />
+          </Link>
         </ListItem>
-        <ListItem
-          className={classes.link}
-          button
-          component={Link}
-          href="/shops"
-        >
-          <ListItemIcon>
-            <ShopIcon />
-          </ListItemIcon>
-          <ListItemText primary="Shops" />
-        </ListItem>
-        <ListItem
-          className={classes.link}
-          button
-          component={Link}
-          href="/themes"
-        >
-          <ListItemIcon>
-            <ThemesIcon />
-          </ListItemIcon>
-          <ListItemText primary="Themes" />
+        <ListItem button component="li">
+          <Link className={classes.link} href="/shops">
+            <ListItemIcon>
+              <ShopIcon />
+            </ListItemIcon>
+            <ListItemText primary="Shops" />
+          </Link>
         </ListItem>
       </List>
       <Divider />
       <List>
-        <ListItem className={classes.link} button component={Link} href="/logs">
-          <ListItemIcon>
-            <LogsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logs" />
+        <ListItem button component="li">
+          <Link className={classes.link} href="/logs">
+            <ListItemIcon>
+              <LogsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logs" />
+          </Link>
         </ListItem>
       </List>
     </>

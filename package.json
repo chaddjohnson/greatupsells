@@ -9,10 +9,12 @@
   "scripts": {
     "lint": "lerna run lint",
     "format": "lerna run format",
+    "clean": "find . -iname node_modules -exec rm -rf {} + ; rm -rf applications/*/.next packages/*/dist",
+    "destroy": "dotenv -- bash -c 'lerna run destroy --stream && (cd infrastructure && ./destroy.sh)'",
     "bootstrap": "dotenv -- lerna bootstrap --force-local",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@greatupsells/*",
-    "prestart": "yarn install && dotenv -- yarn bootstrap",
-    "start": "(ngrok start greatupsells-shopify-admin greatupsells-webhooks-service > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel --scope={@greatupsells/*,greatupsells-shopify-admin,greatupsells-storefront,greatupsells-admin,greatupsells-logs-service,greatupsells-shops-api,greatupsells-shopify-admin-api,greatupsells-storefront-api,greatupsells-admin-api,greatupsells-webhooks-service}"
+    "prestart": "rm -f package-lock.json; yarn install && dotenv -- yarn bootstrap",
+    "start": "(ngrok start greatupsells-shopify-admin greatupsells-shopify-extension greatupsells-webhooks-service > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
   },
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",

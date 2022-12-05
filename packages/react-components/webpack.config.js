@@ -46,6 +46,7 @@ module.exports = {
   stats: 'errors-warnings',
   externals: [
     '@greatupsells/react-hooks',
+    'facepaint',
     'prop-types',
     'react',
     'react-dom',

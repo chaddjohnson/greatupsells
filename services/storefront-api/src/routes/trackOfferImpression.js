@@ -2,22 +2,14 @@ const { URL } = require('url');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { aws4Interceptor } = require('aws4-axios');
-const HttpClient = require('@greatupsells/http-client').default;
+const HttpClient = require('@greatupsells/gateway-http-client');
 const logger = require('@greatupsells/logger');
 
-const { AWS_REGION, SHOPS_API_URL } = process.env;
+const { SHOPS_API_URL } = process.env;
 
 const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-httpClient.addRequestInterceptor(
-  aws4Interceptor({
-    region: AWS_REGION,
-    service: 'execute-api'
-  })
-);
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -31,7 +23,9 @@ const handler = middy(async (event, context) => {
     const ipAddress =
       event.requestContext.identity.sourceIp ||
       event.headers['X-Forwarded-For'];
-    const domain = new URL(event.headers.origin || event.headers.Origin).host;
+    const domain = new URL(
+      event.headers.shop || event.headers.origin || event.headers.Origin
+    ).host;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
@@ -39,9 +33,12 @@ const handler = middy(async (event, context) => {
     ]);
     const shopId = shop._id;
     const offerShopId = offer.shop;
-    const { triggerShopifyProductId, offeredShopifyProductIds } = JSON.parse(
-      event.body
-    );
+    const {
+      triggerShopifyProductId,
+      triggerShopifyVariantId,
+      offeredShopifyProductIds,
+      isTest
+    } = JSON.parse(event.body);
 
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
@@ -59,8 +56,10 @@ const handler = middy(async (event, context) => {
 
     const offerHit = await httpClient.post(`/offers/${offerId}/impressions`, {
       triggerShopifyProductId,
+      triggerShopifyVariantId,
       offeredShopifyProductIds,
-      ipAddress
+      ipAddress,
+      isTest
     });
 
     return {

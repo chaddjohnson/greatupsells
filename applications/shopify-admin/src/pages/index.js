@@ -8,11 +8,14 @@ import {
   MediaCard,
   Stack,
   Heading,
+  List,
   DisplayText,
   TextStyle,
   Button,
   Banner,
+  Modal,
   TextContainer,
+  ProgressBar,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -20,12 +23,38 @@ import {
 import styled from 'styled-components';
 import {
   useNumberFormatter,
+  useCurrency,
   useDateTime,
   useInterval
 } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAcceptances } from '../hooks';
-import { TitleBar, LineChart, SkeletonChart } from '../components';
+import { TitleBar, LineChart, SkeletonChart, Link } from '../components';
+
+const PlanContainer = styled.div`
+  text-align: center;
+`;
+
+const PlanProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+
+  > * {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+`;
+
+const PlanProgressMeterContainer = styled.div`
+  flex: 1 1 0%;
+`;
+
+const PlanProgressAmount = styled.div`
+  white-space: nowrap;
+  font-weight: 500;
+`;
 
 const TutorialsImage = styled.img`
   display: block;
@@ -73,14 +102,27 @@ const DashboardPage = () => {
   );
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
+  const [onboardingModalShown, setOnboardingModalShown] = useState(false);
 
   const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
-  const {
-    formatNumber,
-    formatCurrency,
-    formatPercentage
-  } = useNumberFormatter({ locale, countryCode, currency });
+  const { formatNumber, formatPercentage } = useNumberFormatter({
+    locale,
+    countryCode,
+    currency
+  });
+  const { formatCurrency } = useCurrency({
+    locale,
+    countryCode,
+    currency,
+    options: { decimals: 0 }
+  });
+  const { formatCurrency: formatCurrencyUSD } = useCurrency({
+    locale,
+    countryCode,
+    currency: 'USD',
+    options: { decimals: 0 }
+  });
   const {
     shopAcceptances,
     shopAcceptancesLoaded,
@@ -104,7 +146,7 @@ const DashboardPage = () => {
     <Page title="Overview dashboard">
       <PageTitleBar />
       <Banner
-        title="Unable to load dashboad"
+        title="Unable to load dashboard"
         status="critical"
         action={{
           content: 'Try again',
@@ -115,6 +157,22 @@ const DashboardPage = () => {
       </Banner>
     </Page>
   ));
+
+  const planUsagePercentage = useMemo(() => {
+    if (typeof shop?.plan.monthUpsellRevenueLimit !== 'number') {
+      return 0;
+    }
+
+    return Math.min(
+      shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit,
+      1
+    );
+  }, [shop]);
+
+  const handleOnboardingModalClose = async () => {
+    setOnboardingModalShown(false);
+    await fetchShop();
+  };
 
   // Refresh data at an interval.
   useInterval(() => {
@@ -137,34 +195,143 @@ const DashboardPage = () => {
       <Page title="Overview dashboard">
         <PageTitleBar />
         <Layout>
+          {shop && !shop.isEmbedBlockEnabled && (
+            <Layout.Section>
+              <Banner
+                status="critical"
+                title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
+                action={{
+                  content: 'Activate app embed',
+                  url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
+                }}
+                secondaryAction={{
+                  content: 'View instructions',
+                  onAction: () => setOnboardingModalShown(true)
+                }}
+              >
+                <p>
+                  To use this app, you will need to activate the app embed
+                  entitled &ldquo;Great Upsells Offers&rdquo; and then save your
+                  theme.
+                </p>
+              </Banner>
+              <Modal
+                open={onboardingModalShown}
+                title="Activation"
+                onClose={handleOnboardingModalClose}
+              >
+                <Modal.Section>
+                  <Stack vertical>
+                    <TextContainer>
+                      <Heading>Instructions</Heading>
+                      <List type="number">
+                        <List.Item>
+                          Click the &ldquo;Activate app embed&rdquo; button in
+                          the banner.
+                        </List.Item>
+                        <List.Item>
+                          Make sure the toggle is on for &ldquo;Great Upsells
+                          Offers.&rdquo;
+                        </List.Item>
+                        <List.Item>Click Save.</List.Item>
+                      </List>
+                    </TextContainer>
+                    <video
+                      autoPlay
+                      loop
+                      style={{ width: '100%', height: 'auto' }}
+                    >
+                      <source src="/videos/onboarding.mp4" />
+                    </video>
+                  </Stack>
+                </Modal.Section>
+              </Modal>
+            </Layout.Section>
+          )}
           <Layout.Section>
-            <Card sectioned>
-              <Stack distribution="fillEvenly" wrap>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatNumber(shop?.offerAcceptanceCount)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Accepted offers</TextStyle>
-                  </TextStyle>
+            <Card>
+              <Card.Section>
+                <Stack distribution="fillEvenly" wrap>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatNumber(shop?.offerAcceptanceCount)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Acceptances</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatPercentage(shop?.offerConversionRate, 1)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">Conversion rate</TextStyle>
+                    </TextStyle>
+                  </Stack>
+                  <Stack spacing="tight" alignment="center" vertical>
+                    <DisplayText size="extraLarge">
+                      {formatCurrency(shop?.revenueIncrease)}
+                    </DisplayText>
+                    <TextStyle variation="strong">
+                      <TextStyle variation="subdued">
+                        Revenue increase
+                      </TextStyle>
+                    </TextStyle>
+                  </Stack>
                 </Stack>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatCurrency(shop?.revenueIncrease)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Revenue increase</TextStyle>
-                  </TextStyle>
-                </Stack>
-                <Stack spacing="tight" alignment="center" vertical>
-                  <DisplayText size="extraLarge">
-                    {formatPercentage(shop?.offerConversionRate, 1)}
-                  </DisplayText>
-                  <TextStyle variation="strong">
-                    <TextStyle variation="subdued">Conversion rate</TextStyle>
-                  </TextStyle>
-                </Stack>
-              </Stack>
+              </Card.Section>
+              {shop?.plan.active && (
+                <Card.Section subdued>
+                  <PlanContainer>
+                    <Stack vertical>
+                      <Heading>{shop?.plan.name} plan</Heading>
+                      {typeof shop?.plan.monthUpsellRevenueLimit ===
+                        'number' && (
+                        <PlanProgressContainer>
+                          <PlanProgressAmount>
+                            {formatCurrencyUSD(shop?.plan.monthUpsellRevenue)}{' '}
+                            USD
+                          </PlanProgressAmount>
+                          <PlanProgressMeterContainer>
+                            <ProgressBar
+                              progress={planUsagePercentage * 100 || 0}
+                              size="small"
+                              color={
+                                planUsagePercentage < 0.8
+                                  ? 'highlight'
+                                  : 'critical'
+                              }
+                            />
+                          </PlanProgressMeterContainer>
+                          <PlanProgressAmount>
+                            {formatCurrencyUSD(
+                              shop?.plan.monthUpsellRevenueLimit
+                            )}{' '}
+                            USD
+                          </PlanProgressAmount>
+                        </PlanProgressContainer>
+                      )}
+                      {typeof shop?.plan.monthUpsellRevenueLimit ===
+                        'number' && (
+                        <p>
+                          You have earned{' '}
+                          {formatPercentage(planUsagePercentage, 0)} of your
+                          plan&apos;s monthly upsell revenue.{' '}
+                          <Link url="/plan">Manage your plan</Link>
+                        </p>
+                      )}
+                      {typeof shop?.plan.monthUpsellRevenueLimit !==
+                        'number' && (
+                        <p>
+                          You have an unlimited monthly upsell revenue allowance
+                          with your plan.{' '}
+                          <Link url="/plan">Manage your plan</Link>
+                        </p>
+                      )}
+                    </Stack>
+                  </PlanContainer>
+                </Card.Section>
+              )}
             </Card>
           </Layout.Section>
           <Layout.Section>

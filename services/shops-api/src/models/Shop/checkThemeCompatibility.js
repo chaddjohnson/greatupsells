@@ -10,7 +10,7 @@ const checkThemeCompatibility = async (shop) => {
   try {
     // Check whether metadata defining app blocks for the Cart page exists.
     await shopifyApiClient.asset.get(theme.id, {
-      'asset[key]': 'templates/cart.json'
+      'asset[key]': 'templates/product.json'
     });
 
     // Asset exists, so theme is 2.0 compatible.

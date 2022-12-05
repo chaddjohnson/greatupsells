@@ -2,7 +2,11 @@ const logger = require('@greatupsells/logger');
 const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
-const trackAcceptance = async (offerHit, shopifyDraftOrderId, items) => {
+const trackAcceptance = async (
+  offerHit,
+  items,
+  { shopifyDraftOrderId, shopifyCheckoutId }
+) => {
   const [Offer, Shop, session] = await Promise.all([
     models.get('Offer'),
     models.get('Shop'),
@@ -11,9 +15,18 @@ const trackAcceptance = async (offerHit, shopifyDraftOrderId, items) => {
 
   await offerHit.populate('shop').populate('offer').execPopulate();
 
-  const { shop, offer } = offerHit;
+  const { shop, offer, isTest } = offerHit;
   const transactionOptions = { readPreference: 'primary' };
   const acceptanceTracked = offerHit.acceptedProducts.length > 0;
+  const shopifyApiClient = shop.getShopifyApiClient();
+  let shopifyOrderId;
+  let shopifyCheckout = null;
+
+  // Get the Shopify order ID from the Shopify checkout (if available).
+  if (shopifyCheckoutId) {
+    shopifyCheckout = await shopifyApiClient.checkout.get(shopifyCheckoutId);
+    shopifyOrderId = shopifyCheckout.order_id;
+  }
 
   try {
     // Use a transaction.
@@ -23,10 +36,15 @@ const trackAcceptance = async (offerHit, shopifyDraftOrderId, items) => {
       offerHit.$session(session);
 
       // Track products associated with this acceptance.
-      promises.push(offerHit.trackAcceptedProducts(shopifyDraftOrderId, items));
+      promises.push(
+        offerHit.trackAcceptedProducts(items, {
+          shopifyDraftOrderId,
+          shopifyOrderId
+        })
+      );
 
       // Track acceptance one time per offer hit (and not once per product per offer hit).
-      if (!acceptanceTracked) {
+      if (!acceptanceTracked && !isTest) {
         // Increment offer acceptance count.
         promises.push(
           Offer.findByIdAndUpdate(

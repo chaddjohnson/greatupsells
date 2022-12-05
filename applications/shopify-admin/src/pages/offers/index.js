@@ -34,7 +34,7 @@ const LoadingComponent = () => (
 const EmptyComponent = () => (
   <EmptyState
     heading="Manage your offers"
-    action={{ content: 'Add offer', url: '/offers/new/' }}
+    action={{ content: 'Create an offer', url: '/offers/new/' }}
     image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
   >
     Create new offers to increase your sales.

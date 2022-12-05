@@ -1,19 +1,49 @@
 const { flatten, uniq } = require('lodash');
 const models = require('..');
 
-const findRandomProducts = async (offer) => {
-  const [Product] = await Promise.all([
+const findRandomProducts = async (
+  offer,
+  shopifyCartProductIds = [],
+  pagePath = ''
+) => {
+  const [Product, PairedPurchase] = await Promise.all([
     models.get('Product'),
+    models.get('PairedPurchase'),
     models.get('Shop')
   ]);
 
   await offer.execPopulate('shop');
 
-  const { shop, offeredProducts, offeredCollections } = offer;
+  const { shop, offeredCollections } = offer;
+  const { offeredProducts } = offer;
+  const maximumOfferedProductQuantity =
+    offer.maximumOfferedProductQuantity || 3;
+  const hasOfferedProducts = offeredProducts.length > 0;
+  const hasOfferedCollections = offeredCollections.length > 0;
+  const pagePathProductHandle = pagePath.match(/^\/products\/([^$]+)/)?.[1];
+  let pageProduct;
+  let excludedShopifyProductIds = [];
 
-  // Return no product if the offer has neither products nor collections.
-  if (offeredProducts.length === 0 && offeredCollections.length === 0) {
-    return [];
+  // Find the product, if any, associated with the current page.
+  if (pagePathProductHandle) {
+    pageProduct = await Product.findOne({
+      shop: shop._id,
+      'shopifyProductData.handle': pagePathProductHandle
+    });
+  }
+
+  if (pageProduct) {
+    excludedShopifyProductIds = [pageProduct.shopifyProductId];
+  }
+
+  // Intelligently find products if the offer has neither offered products nor offered collections.
+  if (!hasOfferedProducts && !hasOfferedCollections) {
+    return await PairedPurchase.findPairedProducts(
+      shop,
+      shopifyCartProductIds,
+      maximumOfferedProductQuantity,
+      excludedShopifyProductIds
+    );
   }
 
   const offeredShopifyProductIds = offeredProducts.map(
@@ -54,16 +84,21 @@ const findRandomProducts = async (offer) => {
     ]
   });
 
+  excludedShopifyProductIds = excludedShopifyProductIds.concat(
+    shopifyCartProductIds
+  );
+
   const criteria = {
     shop: shop._id,
     $and: andCriteria,
+    shopifyProductId: { $nin: excludedShopifyProductIds },
     'shopifyProductData.published_at': { $ne: null }
   };
 
   // Randomly select a product for the offer OR a product in a collection for the offer.
   let randomProducts = await Product.aggregate([
     { $match: criteria },
-    { $sample: { size: 3 } },
+    { $sample: { size: maximumOfferedProductQuantity } },
     { $project: { _id: 1 } }
   ]);
 
@@ -77,11 +112,13 @@ const findRandomProducts = async (offer) => {
   );
 
   // Filter variants for only those offered.
-  randomProducts.forEach((randomProduct) => {
-    randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
-      (variant) => offeredShopifyVariantIds.includes(variant.id)
-    );
-  });
+  if (offeredShopifyVariantIds.length > 0 && offeredCollections.length === 0) {
+    randomProducts.forEach((randomProduct) => {
+      randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
+        (variant) => offeredShopifyVariantIds.includes(variant.id)
+      );
+    });
+  }
 
   return randomProducts;
 };

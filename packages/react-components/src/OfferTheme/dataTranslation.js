@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
-import { useNumberFormatter } from '@greatupsells/react-hooks';
+import { useCurrency } from '@greatupsells/react-hooks';
 import calculateDiscountedPrice from './calculateDiscountedPrice';
 
 const getThumbnailImageUrl = (url) => {
   return url && url.replace(/\.(jpg|png)(\?|$)/i, '_400x.$1$2');
 };
 
-const useDataTranslation = (shop, offer) => {
-  const { locale, countryCode, currency } = shop;
-  const { formatCurrency } = useNumberFormatter({
+const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
+  const { currency: shopCurrency } = shop;
+  const { formatCurrency, convertCurrency } = useCurrency({
     locale,
     countryCode,
     currency
@@ -35,46 +35,72 @@ const useDataTranslation = (shop, offer) => {
       const translatedData = {
         id: shopifyProductData.id,
         title: shopifyProductData.title,
+        description: shopifyProductData.body_html,
         url: `/products/${shopifyProductData.handle}`,
         image: {
+          src: shopifyProductData.image?.src,
+          alt: shopifyProductData.image?.alt || shopifyProductData.title
+        },
+        thumbnailImage: {
           src: getThumbnailImageUrl(shopifyProductData.image?.src),
           alt: shopifyProductData.image?.alt || shopifyProductData.title
         },
-        variants: shopifyProductData.variants?.map((variant) => ({
-          id: variant.id,
-          title: variant.title,
-          url: `/products/${shopifyProductData.handle}?variant=${variant.id}`,
-          price: variant.price,
-          salePrice: calculateDiscountedPrice(offer, parseFloat(variant.price)),
-          priceFormatted: formatCurrency(variant.price),
-          salePriceFormatted: formatCurrency(
-            calculateDiscountedPrice(offer, parseFloat(variant.price))
-          ),
-          sku: variant.sku,
-          image: {
-            src: getThumbnailImageUrl(
-              imagesById[variant.image_id]?.src || shopifyProductData.image?.src
-            ),
-            alt:
-              imagesById[variant.image_id]?.alt ||
-              shopifyProductData.image?.alt ||
-              shopifyProductData.title
-          },
-          maxInventory:
-            variant.inventory_policy !== 'continue' &&
-            variant.inventory_management === 'shopify'
-              ? Math.max(variant.inventory_quantity, 0) || 0
-              : undefined,
-          hasInventory:
-            variant.inventory_management !== 'shopify' ||
-            variant.inventory_quantity > 0 ||
-            variant.inventory_policy === 'continue'
-        }))
+        variants: shopifyProductData.variants?.map((variant) => {
+          const price = convertCurrency(
+            parseFloat(variant.price),
+            shopCurrency,
+            currency
+          );
+          const salePrice = convertCurrency(
+            calculateDiscountedPrice(offer, variant.price),
+            shopCurrency,
+            currency
+          );
+
+          return {
+            id: variant.id,
+            title: variant.title,
+            url: `/products/${shopifyProductData.handle}?variant=${variant.id}`,
+            price,
+            salePrice,
+            priceFormatted: formatCurrency(price),
+            salePriceFormatted: formatCurrency(salePrice),
+            sku: variant.sku,
+            image: {
+              src:
+                imagesById[variant.image_id]?.src ||
+                shopifyProductData.image?.src,
+              alt:
+                imagesById[variant.image_id]?.alt ||
+                shopifyProductData.image?.alt ||
+                shopifyProductData.title
+            },
+            thumbnailImage: {
+              src: getThumbnailImageUrl(
+                imagesById[variant.image_id]?.src ||
+                  shopifyProductData.image?.src
+              ),
+              alt:
+                imagesById[variant.image_id]?.alt ||
+                shopifyProductData.image?.alt ||
+                shopifyProductData.title
+            },
+            maxInventory:
+              variant.inventory_policy !== 'continue' &&
+              variant.inventory_management === 'shopify'
+                ? Math.max(variant.inventory_quantity, 0) || 0
+                : undefined,
+            hasInventory:
+              variant.inventory_management !== 'shopify' ||
+              variant.inventory_quantity > 0 ||
+              variant.inventory_policy === 'continue'
+          };
+        })
       };
 
       return translatedData;
     },
-    [formatCurrency, offer]
+    [convertCurrency, currency, formatCurrency, offer, shopCurrency]
   );
 
   const translateTriggerProductData = useCallback(
@@ -87,7 +113,7 @@ const useDataTranslation = (shop, offer) => {
 
       // Find the cart item corresponding to the product.
       const shopifyCartItem = shopifyCartItems.find(
-        (item) => item.product_id === translatedData.id
+        (item) => item.product_id === translatedData?.id
       );
 
       // Find the specific variant.

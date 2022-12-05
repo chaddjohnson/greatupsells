@@ -25,6 +25,11 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/storefront-api/url'
           env_variable_name: 'STOREFRONT_API_URL'
+      - name: Inject "ASSETS_URL" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/url'
+          env_variable_name: 'ASSETS_URL'
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
@@ -35,7 +40,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 14.17.0
+          node-version: 16.13.0
       - name: Install Global Packages
         run: npm install -g yarn
       - name: Install Node Modules
