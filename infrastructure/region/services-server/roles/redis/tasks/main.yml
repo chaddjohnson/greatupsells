@@ -87,6 +87,12 @@
     mode: 0644
   when: not redis.stat.exists
 
+- name: Inject password into Redis config file
+  replace:
+    path: /etc/redis/redis.conf
+    regexp: 'redis_app_password'
+    replace: '{{ redis_app_password }}'
+
 - name: Create Redis service file
   copy:
     src: redis-server.service
@@ -95,12 +101,6 @@
     group: root
     mode: 0644
   when: not redis.stat.exists
-
-- name: Inject password into Redis config file
-  replace:
-    path: /etc/redis/redis.conf
-    regexp: 'redis_app_password'
-    replace: '{{ redis_app_password }}'
 
 - name: Start Redis
   service:

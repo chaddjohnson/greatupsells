@@ -5,7 +5,7 @@ domain        = "test.greatupsells.com"
 instance_type = "t3.large"
 sandbox       = "true"
 jwt_secret    = "85576eb20045603e3fac6800d4f0aff35d5a7477397b3a43e14f2f087205f6bc"
-services_domain_names = {
+services_domains = {
   "us-east-1" = "services.test.greatupsells.com"
 }
 assets_domain                    = "assets.test.greatupsells.com"

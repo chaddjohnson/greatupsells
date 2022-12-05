@@ -1,3 +1,5 @@
+# Reference: https://medium.com/@himanshubhimwal94/a-complete-step-by-step-guide-to-setup-a-3-node-elk-cluster-secured-with-lets-encrypt-b1e988988006
+
 - name: Determine if Elasticsearch is installed
   stat:
     path: /etc/elasticsearch/elasticsearch.yml
@@ -31,29 +33,32 @@
     allow_unauthenticated: yes
   when: not elasticsearch.stat.exists
 
-- name: Set Elasticsearch bootstrap password
-  command: echo {{ elasticsearch_root_password }} | /usr/share/elasticsearch/bin/elasticsearch-keystore add --stdin "bootstrap.password" -f
-  when: not elasticsearch.stat.exists
+- name: Copy certificates for Elasticsearch
+  copy:
+    src: /etc/letsencrypt/live/{{ domain }}/
+    dest: /etc/elasticsearch/certs/
+    remote_src: yes
+    local_follow: yes
+    owner: root
+    group: elasticsearch
+    mode: 0644
 
-- name: Generate Elasticsearch certificate
-  command: '{{ item }}'
-  with_items:
-    - /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /usr/share/elasticsearch/elastic-stack-ca.zip
-    - unzip /usr/share/elasticsearch/elastic-stack-ca.zip -d /usr/share/elasticsearch
-    - /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key --out /usr/share/elasticsearch/elastic-certificates.p12 --pass ''
-    - cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch/
-    - chmod 660 /etc/elasticsearch/elastic-certificates.p12
-  when: not elasticsearch.stat.exists
+- name: Set Elasticsearch certs directory permissions
+  file:
+    path: /etc/elasticsearch/certs
+    state: directory
+    owner: root
+    group: elasticsearch
+    mode: 0655
 
 - name: Create Elasticsearch config file (test)
   copy:
     src: elasticsearch-test.yml
     dest: /etc/elasticsearch/elasticsearch.yml
     owner: root
-    group: root
+    group: elasticsearch
     mode: 0644
   when:
-    - not elasticsearch.stat.exists
     - stage == "test"
 
 - name: Create Elasticsearch config file (production, us-east-1)
@@ -64,7 +69,6 @@
     group: root
     mode: 0644
   when:
-    - not elasticsearch.stat.exists
     - stage == "production"
     - region == "us-east-1"
 
@@ -76,7 +80,6 @@
     group: root
     mode: 0644
   when:
-    - not elasticsearch.stat.exists
     - stage == "production"
     - region == "eu-west-1"
 
@@ -88,7 +91,6 @@
     group: root
     mode: 0644
   when:
-    - not elasticsearch.stat.exists
     - stage == "production"
     - region == "ap-northeast-1"
 
@@ -115,26 +117,30 @@
     state: restarted
   when: not elasticsearch.stat.exists
 
-- name: Configure "app" user role for Elasticsearch
-  command: |
-    curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@services.test.greatupsells.com:9200/_security/role/app' -H "Content-Type: application/json" -d '{
-      "indices" : [
-        {
-          "names" : [ "logs*" ],
-          "privileges" : [ "all" ]
-        }
-      ]
-    }'
-
-- name: Configure "app" user for Elasticsearch
-  command: |
-    curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@localhost:9200/_security/user/app' -H "Content-Type: application/json" -d '{
-      "password" : "{{ elasticsearch_app_password }}",
-      "full_name" : "App",
-      "roles" : [ "app" ]
-    }'
-
 - name: 'TODO: Change Elasticsearch passwords'
   debug:
     msg: 'Run: `/usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive`'
+  when: not elasticsearch.stat.exists
+
+- name: 'TODO: Configure "app" user role for Elasticsearch'
+  debug:
+    msg: |
+      curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@{{ services_domain }}:9200/_security/role/app' -H "Content-Type: application/json" -d '{
+        "indices" : [
+          {
+            "names" : [ "logs*" ],
+            "privileges" : [ "all" ]
+          }
+        ]
+      }'
+  when: not elasticsearch.stat.exists
+
+- name: 'TODO: Configure "app" user for Elasticsearch'
+  debug:
+    msg: |
+      curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@{{ services_domain }}:9200/_security/user/app' -H "Content-Type: application/json" -d '{
+        "password" : "{{ elasticsearch_app_password }}",
+        "full_name" : "App",
+        "roles" : [ "app" ]
+      }'
   when: not elasticsearch.stat.exists

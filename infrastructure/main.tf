@@ -35,7 +35,7 @@ module "us_east_1" {
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
-  services_domain_name             = lookup(var.services_domain_names, "us-east-1")
+  services_domain                  = lookup(var.services_domains, "us-east-1")
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
@@ -62,7 +62,7 @@ module "eu_west_1" {
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
-  services_domain_name             = lookup(var.services_domain_names, "eu-west-1")
+  services_domain                  = lookup(var.services_domains, "eu-west-1")
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
@@ -89,7 +89,7 @@ module "ap_northeast_1" {
   instance_type                    = var.instance_type
   sandbox                          = var.sandbox
   jwt_secret                       = var.jwt_secret
-  services_domain_name             = lookup(var.services_domain_names, "ap-northeast-1")
+  services_domain                  = lookup(var.services_domains, "ap-northeast-1")
   assets_domain                    = var.assets_domain
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
@@ -112,8 +112,8 @@ output "assets_domain" {
   value = var.assets_domain
 }
 
-output "services_domain_names" {
-  value = values(var.services_domain_names)
+output "services_domains" {
+  value = values(var.services_domains)
 }
 
 output "certificate_arn" {
