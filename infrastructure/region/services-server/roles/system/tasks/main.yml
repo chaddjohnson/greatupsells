@@ -5,6 +5,16 @@
 - name: Gather facts
   setup:
 
+- name: Update hostname
+  lineinfile:
+    path: /etc/cloud/cloud.cfg
+    line: 'preserve_hostname: true'
+    create: yes
+
+- name: Set hostname
+  hostname:
+    name: '{{ domain_name }}'
+
 - name: Update all packages
   apt:
     upgrade: dist

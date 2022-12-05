@@ -118,8 +118,6 @@
     replica_set: rs0
     members: services.test.greatupsells.com:27017
     ssl: yes
-    connection_options:
-      - 'tlsAllowInvalidCertificates=true'
     validate: no
   when:
     - stage == "test"
@@ -140,8 +138,6 @@
       - host: services.ap-northeast-1.greatupsells.com:27017
         priority: 0.5
     ssl: yes
-    connection_options:
-      - 'tlsAllowInvalidCertificates=true'
     validate: no
   when:
     - region == "us-east-1"
@@ -162,29 +158,40 @@
       - readWriteAnyDatabase
     ssl: true
     state: present
-    connection_options:
-      - 'tlsAllowInvalidCertificates=true'
   when:
     - region == "us-east-1"
 
-- name: Create MongoDB app user account
+- name: Create MongoDB app user account for greatupsells-shops
   community.mongodb.mongodb_user:
     login_host: '{{ domain_name }}'
     login_database: admin
     login_user: root
     login_password: '{{ mongodb_root_password }}'
-    database: admin
+    database: greatupsells-shops
     name: app
     password: '{{ mongodb_app_password }}'
     roles:
       - { role: 'dbAdmin', db: 'greatupsells-shops' }
-      - { role: 'dbAdmin', db: 'greatupsells-logs' }
       - { role: 'readWrite', db: 'greatupsells-shops' }
+    ssl: true
+    state: present
+  when:
+    - region == "us-east-1"
+
+- name: Create MongoDB app user account for greatupsells-logs
+  community.mongodb.mongodb_user:
+    login_host: '{{ domain_name }}'
+    login_database: admin
+    login_user: root
+    login_password: '{{ mongodb_root_password }}'
+    database: greatupsells-logs
+    name: app
+    password: '{{ mongodb_app_password }}'
+    roles:
+      - { role: 'dbAdmin', db: 'greatupsells-logs' }
       - { role: 'readWrite', db: 'greatupsells-logs' }
     ssl: true
     state: present
-    connection_options:
-      - 'tlsAllowInvalidCertificates=true'
   when:
     - region == "us-east-1"
 
@@ -202,7 +209,5 @@
       - { role: 'read', db: 'greatupsells-logs' }
     ssl: true
     state: present
-    connection_options:
-      - 'tlsAllowInvalidCertificates=true'
   when:
     - region == "us-east-1"
