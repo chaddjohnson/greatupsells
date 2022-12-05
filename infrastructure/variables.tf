@@ -26,7 +26,7 @@ variable "jwt_secret" {
   type = string
 }
 
-variable "services_domain_names" {
+variable "services_domains" {
   type = map(string)
 }
 

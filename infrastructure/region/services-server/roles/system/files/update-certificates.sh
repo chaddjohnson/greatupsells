@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Update mongo.pem.
-cat /etc/letsencrypt/live/domain_name/fullchain.pem /etc/letsencrypt/live/domain_name/privkey.pem > /etc/ssl/mongodb.pem
+cat /etc/letsencrypt/live/domain/fullchain.pem /etc/letsencrypt/live/domain/privkey.pem > /etc/ssl/mongodb.pem
 chmod 644 /etc/ssl/mongodb.pem
 
 # Update ca.pem.
 openssl x509 -in /etc/ssl/ca.crt -out /etc/ssl/ca.pem -outform PEM
-cat /etc/letsencrypt/live/domain_name/chain.pem >> /etc/ssl/ca.pem
+cat /etc/letsencrypt/live/domain/chain.pem >> /etc/ssl/ca.pem
 
 # Generate MongoDB key file if it does not exist.
 if [ ! -f /etc/ssl/mongodb-keyfile.txt ]; then

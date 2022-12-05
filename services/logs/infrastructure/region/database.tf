@@ -1,5 +1,5 @@
 locals {
-  mongodb_hosts = "${join(":27017,", data.terraform_remote_state.greatupsells_infrastructure.outputs.services_domain_names)}:27017"
+  mongodb_hosts = "${join(":27017,", data.terraform_remote_state.greatupsells_infrastructure.outputs.services_domains)}:27017"
 }
 
 resource "aws_ssm_parameter" "elasticsearch_logs_database_url_production" {

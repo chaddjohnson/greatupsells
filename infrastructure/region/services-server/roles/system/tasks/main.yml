@@ -5,7 +5,14 @@
 - name: Gather facts
   setup:
 
-- name: Update hostname
+- name: Add host name to hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ domain }}$'
+    line: '127.0.0.1 {{ domain }}'
+    state: present
+
+- name: Preserve hostname
   lineinfile:
     path: /etc/cloud/cloud.cfg
     line: 'preserve_hostname: true'
@@ -13,7 +20,7 @@
 
 - name: Set hostname
   hostname:
-    name: '{{ domain_name }}'
+    name: '{{ services_domain }}'
 
 - name: Update all packages
   apt:
@@ -128,11 +135,11 @@
 
 - name: Determine if certificates exist
   stat:
-    path: '/etc/letsencrypt/live/{{ domain_name }}'
+    path: '/etc/letsencrypt/live/{{ domain }}'
   register: certificates
 
 - name: Obtain SSL certificate
-  command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m info@greatupsells.com -d {{ domain_name }}'
+  command: 'certbot certonly --non-interactive --agree-tos --preferred-challenges dns --dns-route53 -m info@greatupsells.com -d *.{{ domain }}'
   when: certificates.stat.isdir is not defined
 
 # Active ISRG Root X1 pem file from https://letsencrypt.org/certificates/.
@@ -164,8 +171,8 @@
 - name: Inject domain into certificate update script
   replace:
     path: /root/update-certificates.sh
-    regexp: "\/domain_name\/"
-    replace: "\/{{ domain_name }}\/"
+    regexp: "\/domain\/"
+    replace: "\/{{ domain }}\/"
 
 - name: Set up a job for updating certificate
   cron:

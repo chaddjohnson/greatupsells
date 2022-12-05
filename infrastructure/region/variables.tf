@@ -34,7 +34,7 @@ variable "jwt_secret" {
   type = string
 }
 
-variable "services_domain_name" {
+variable "services_domain" {
   type = string
 }
 
