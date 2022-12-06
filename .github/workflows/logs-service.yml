@@ -24,8 +24,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-          cache: 'yarn'
+          node-version: 16.13.0
+          cache: yarn
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
@@ -48,7 +52,7 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/elasticsearch-logs/url'
           env_variable_name: 'ELASTICSEARCH_URL'
       - name: Install Node Modules
-        run: yarn install --prefer-offline
+        run: yarn install --frozen-lockfile
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Run Data Migrations
