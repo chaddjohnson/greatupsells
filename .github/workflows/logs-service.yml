@@ -76,4 +76,4 @@ jobs:
         working-directory: services/logs
       - name: Uninstall Global Packages
         if: always()
-        run: npm uninstall -g yarn serverless
+        run: npm uninstall -g serverless
