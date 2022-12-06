@@ -9,10 +9,12 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "dependencies": {
-    "@greatupsells/themes": "0.0.0",
     "@shopify/post-purchase-ui-extensions-react": "^0.13.3",
     "@shopify/post-purchase-ui-react": "^0.0.3",
     "compression-webpack-plugin": "^9.0.0"
+  },
+  "devDependencies": {
+    "@greatupsells/themes": "0.0.0"
   },
   "peerDependencies": {
     "@greatupsells/themes": "0.0.0"
