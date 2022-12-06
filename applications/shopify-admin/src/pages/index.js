@@ -198,7 +198,7 @@ const DashboardPage = () => {
           {shop && !shop.isEmbedBlockEnabled && (
             <Layout.Section>
               <Banner
-                status="critical"
+                status="warning"
                 title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
                 action={{
                   content: 'Activate app embed',
