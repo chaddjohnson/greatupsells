@@ -10,8 +10,8 @@
   "author": "Chad Johnson <chad@neatowebsolutions.com>",
   "license": "UNLICENSED",
   "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/email-client",
-  "dependencies": {
-    "aws-sdk": "^2.1032.0"
+  "devDependencies": {
+    "aws-sdk": "^2.1116.0"
   },
   "scripts": {
     "format": "eslint --fix index.js",
