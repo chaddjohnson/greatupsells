@@ -36,7 +36,7 @@ jobs:
           echo -e "\nelasticsearch_app_password: \"${{ secrets.ELASTICSEARCH_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
           echo -e "\nredis_app_password: \"${{ secrets.REDIS_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/redis/vars/main.yml
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
       - name: Install Ansible
         run: sudo apt-get install ansible
       - name: Run Terraform
