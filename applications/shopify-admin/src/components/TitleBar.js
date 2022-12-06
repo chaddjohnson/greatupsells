@@ -14,7 +14,7 @@ const TitleBar = (props) => {
       content: 'Dashboard',
       url: `/${urlParams}`,
       onAction: () => {
-        console.log('action');
+        localStorage.setItem('action', 'value');
       }
     },
     {
