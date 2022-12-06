@@ -36,11 +36,12 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
           env_variable_name: 'ASSETS_DOMAIN'
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
+          cache: yarn
       - name: Install Global Packages
         run: npm install -g yarn
       - name: Install Node Modules

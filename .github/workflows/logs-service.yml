@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: 16.13.0
           cache: yarn
-          cache-dependency-path: 'yarn.lock'
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
