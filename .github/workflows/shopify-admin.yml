@@ -42,11 +42,12 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url'
           env_variable_name: 'SHOPIFY_ADMIN_API_URL'
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.13.0
+          cache: yarn
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Install Global Packages
