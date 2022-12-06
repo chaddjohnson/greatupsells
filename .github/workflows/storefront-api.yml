@@ -25,17 +25,21 @@ jobs:
         with:
           node-version: 16.13.0
           cache: yarn
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
       - name: Install Global Packages
-        run: npm install -g yarn serverless
+        run: npm install -g serverless
       - name: Run Terraform
         run: yarn infrastructure
         working-directory: services/storefront-api
         env:
           STAGE: ${{ env.BRANCH }}
       - name: Install Node Modules
-        run: yarn install
+        run: yarn install --immutable
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
@@ -57,4 +61,4 @@ jobs:
         working-directory: services/storefront-api
       - name: Uninstall Global Packages
         if: always()
-        run: npm uninstall -g yarn serverless
+        run: npm uninstall -g serverless

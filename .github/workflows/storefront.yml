@@ -42,10 +42,12 @@ jobs:
         with:
           node-version: 16.13.0
           cache: yarn
-      - name: Install Global Packages
-        run: npm install -g yarn
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install Node Modules
-        run: yarn install
+        run: yarn install --immutable
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Build Application
@@ -53,6 +55,3 @@ jobs:
         working-directory: applications/storefront
       - name: Upload Application to Assets Bucket
         run: aws s3 sync applications/storefront/dist/ s3://$ASSETS_DOMAIN --cache-control public,must-revalidate,proxy-revalidate,no-cache,max-age=0,s-maxage=0 --storage-class STANDARD_IA --region us-east-1
-      - name: Uninstall Global Packages
-        if: always()
-        run: npm uninstall -g yarn
