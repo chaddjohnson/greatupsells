@@ -12,10 +12,7 @@ const TitleBar = (props) => {
   const secondaryActions = [
     {
       content: 'Dashboard',
-      url: `/${urlParams}`,
-      onAction: () => {
-        localStorage.setItem('action', 'value');
-      }
+      url: `/${urlParams}`
     },
     {
       content: 'Offers',
