@@ -711,6 +711,7 @@ OfferForm.defaultProps = {
     theme: {},
     offerThemes: []
   },
+  onOfferUpdate: () => {},
   onSubmit: () => {},
   onCancel: () => {},
   onDelete: () => {}
