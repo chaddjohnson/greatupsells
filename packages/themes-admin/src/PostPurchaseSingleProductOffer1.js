@@ -57,10 +57,8 @@ export default ({ state, ...props }) => {
   useEffect(() => {
     let removeStyles = () => {};
 
-    setTimeout(() => {
-      removeStyles = injectStyles();
-      setStylesInjected(true);
-    });
+    removeStyles = injectStyles('PostPurchaseSingleProductOffer1');
+    setStylesInjected(true);
 
     return () => {
       removeStyles();
