@@ -41,6 +41,11 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url'
           env_variable_name: 'SHOPIFY_ADMIN_API_URL'
+      - name: Inject "SHOPIFY_EMBED_BLOCK_ID" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
+          env_variable_name: 'SHOPIFY_EMBED_BLOCK_ID'
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Node.js
