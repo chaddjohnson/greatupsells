@@ -80,11 +80,13 @@ const useShopifyCustomer = () => {
       localStorage.getItem('currencyWidget') ||
       getCookie('pb_cur_65271') ||
       getCookie('currency') ||
-      document.querySelector('.currency-switcher .current')?.innerText.trim() ||
-      document.querySelector('.pb_currency_name')?.innerText.trim() ||
+      document
+        .querySelector('.currency-switcher .current')
+        ?.textContent.trim() ||
+      document.querySelector('.pb_currency_name')?.textContent.trim() ||
       (sessionStorage.getItem('bacurr_user_cur') &&
         JSON.parse(sessionStorage.getItem('bacurr_user_cur'))) ||
-      document.querySelector('.ba-chosen')?.innerText.trim() ||
+      document.querySelector('.ba-chosen')?.textContent.trim() ||
       getCookie('cart_currency')
     );
   };
