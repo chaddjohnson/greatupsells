@@ -1,20 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  TextField,
-  Subheading,
-  TextStyle,
-  Stack
-} from '@shopify/polaris';
+import { Card, FormLayout, TextField, Text, Stack } from '@shopify/polaris';
 
 const FontEditor = ({ variables, onChange }) => (
   <Stack vertical>
     <Stack vertical spacing="tight">
-      <Subheading>
-        <TextStyle variation="subdued">Settings</TextStyle>
-      </Subheading>
+      <Text variant="headingXs" as="h3">
+        <Text color="subdued">Settings</Text>
+      </Text>
       <Card sectioned>
         <FormLayout>
           {variables.map((variable, variableIndex) => (

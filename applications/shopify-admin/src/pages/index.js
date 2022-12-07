@@ -7,10 +7,8 @@ import {
   CalloutCard,
   MediaCard,
   Stack,
-  Heading,
   List,
-  DisplayText,
-  TextStyle,
+  Text,
   Button,
   Banner,
   Modal,
@@ -223,7 +221,9 @@ const DashboardPage = () => {
                 <Modal.Section>
                   <Stack vertical>
                     <TextContainer>
-                      <Heading>Instructions</Heading>
+                      <Text variant="headingMd" as="h2">
+                        Instructions
+                      </Text>
                       <List type="number">
                         <List.Item>
                           Click the &ldquo;Activate app embed&rdquo; button in
@@ -253,30 +253,28 @@ const DashboardPage = () => {
               <Card.Section>
                 <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatNumber(shop?.offerAcceptanceCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Acceptances</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Acceptances
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatPercentage(shop?.offerConversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Conversion rate
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatCurrency(shop?.revenueIncrease)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">
-                        Revenue increase
-                      </TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Revenue increase
+                    </Text>
                   </Stack>
                 </Stack>
               </Card.Section>
@@ -284,7 +282,9 @@ const DashboardPage = () => {
                 <Card.Section subdued>
                   <PlanContainer>
                     <Stack vertical>
-                      <Heading>{shop?.plan.name} plan</Heading>
+                      <Text variant="headingMd" as="h2">
+                        {shop?.plan.name} plan
+                      </Text>
                       {typeof shop?.plan.monthUpsellRevenueLimit ===
                         'number' && (
                         <PlanProgressContainer>
@@ -339,7 +339,9 @@ const DashboardPage = () => {
               <LineChart
                 title={
                   <Stack distribution="equalSpacing">
-                    <Heading>Accepted offers growth</Heading>
+                    <Text variant="headingMd" as="h2">
+                      Accepted offers growth
+                    </Text>
                     <Button plain url="/analytics/">
                       View all analytics
                     </Button>

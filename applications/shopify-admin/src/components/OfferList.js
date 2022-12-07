@@ -4,7 +4,7 @@ import {
   Card,
   IndexTable,
   Tabs,
-  TextStyle,
+  Text,
   Stack,
   Filters,
   Pagination,
@@ -60,11 +60,11 @@ const OfferListRow = ({ offer }) => {
     <IndexTable.Row id={offer._id}>
       <IndexTable.Cell>
         <Stack spacing="extraTight" vertical>
-          <TextStyle variation="strong">
+          <Text fontWeight="bold">
             <OfferLink url={`/offers/${offer._id}`} data-primary-link>
               {offer.name}
             </OfferLink>
-          </TextStyle>
+          </Text>
           <span>{description}</span>
         </Stack>
       </IndexTable.Cell>

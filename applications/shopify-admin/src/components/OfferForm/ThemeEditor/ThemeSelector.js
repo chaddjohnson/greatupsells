@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   OptionList,
-  DisplayText,
+  Text,
   Button,
   Card,
   Tabs,
@@ -191,7 +191,7 @@ const ThemeSelector = ({
     >
       <InnerWrapper>
         <HeaderWrapper>
-          <DisplayText size="small">Select theme</DisplayText>
+          <Text variant="headingLg">Select theme</Text>
           <Button
             accessibilityLabel="Cancel"
             icon={MobileCancelMajor}

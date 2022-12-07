@@ -5,7 +5,7 @@ import {
   ResourceItem,
   Button,
   TextContainer,
-  TextStyle,
+  Text,
   Stack
 } from '@shopify/polaris';
 import { CancelSmallMinor } from '@shopify/polaris-icons';
@@ -72,11 +72,11 @@ const ProductResourceListItem = ({
         <Stack.Item fill>
           <Stack.Item>
             <TextContainer>{title}</TextContainer>
-            <TextStyle variation="subdued">
+            <Text color="subdued">
               ({shopifyVariantIds.length}{' '}
               {shopifyVariantIds.length === 1 ? 'variant' : 'variants'}{' '}
               selected)
-            </TextStyle>
+            </Text>
           </Stack.Item>
         </Stack.Item>
         <Stack>

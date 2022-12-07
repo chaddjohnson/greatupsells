@@ -8,7 +8,7 @@ import {
   Popover,
   Button,
   Select,
-  Heading,
+  Text,
   TextContainer
 } from '@shopify/polaris';
 import Link from '../Link';
@@ -191,7 +191,9 @@ const OfferPagesEditor = ({
                           onClose={() => setTriggerPagePathPopoverActive(false)}
                         >
                           <TextContainer spacing="loose">
-                            <Heading>Glob syntax</Heading>
+                            <Text variant="headingMd" as="h2">
+                              Glob syntax
+                            </Text>
                             <p>
                               <code>*/products/*</code>
                             </p>

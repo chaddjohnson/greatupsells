@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import noData from 'highcharts/modules/no-data-to-display';
-import {
-  Stack,
-  Heading,
-  Subheading,
-  DisplayText,
-  TextStyle,
-  Icon
-} from '@shopify/polaris';
+import { Stack, Text, Icon } from '@shopify/polaris';
 import { ArrowUpMinor, ArrowDownMinor } from '@shopify/polaris-icons';
 
 if (typeof window !== 'undefined') {
@@ -165,42 +158,46 @@ const LineChart = ({
     <>
       <Stack vertical>
         <Stack vertical spacing="tight">
-          {typeof title === 'string' ? <Heading>{title}</Heading> : title}
+          {typeof title === 'string' ? (
+            <Text variant="headingMd" as="h2">
+              {title}
+            </Text>
+          ) : (
+            title
+          )}
           {(typeof changeValue !== 'undefined' ||
             typeof changePercentage !== 'undefined') && (
             <Stack alignment="center" spacing="tight">
               {typeof changeValue !== 'undefined' && (
-                <DisplayText size="medium" element="div">
-                  {formatNumber(changeValue)}
-                </DisplayText>
+                <Text variant="headingLg">{formatNumber(changeValue)}</Text>
               )}
               {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
-                <DisplayText size="small" element="div">
+                <Text variant="headingLg">
                   <Stack spacing="none" alignment="center">
                     <Icon source={ArrowUpMinor} color="success" />
-                    <TextStyle variation="positive">
+                    <Text color="success">
                       {formatPercentage(changePercentage, 0)}
-                    </TextStyle>
+                    </Text>
                   </Stack>
-                </DisplayText>
+                </Text>
               )}
               {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
-                <DisplayText size="small" element="div">
+                <Text variant="headingLg">
                   <Stack spacing="none" alignment="center">
                     <Icon source={ArrowDownMinor} color="critical" />
-                    <TextStyle variation="negative">
+                    <Text color="critical">
                       {formatPercentage(changePercentage, 0)}
-                    </TextStyle>
+                    </Text>
                   </Stack>
-                </DisplayText>
+                </Text>
               )}
             </Stack>
           )}
         </Stack>
         {subtitle && (
-          <Subheading>
-            <TextStyle variation="subdued">{subtitle}</TextStyle>
-          </Subheading>
+          <Text variant="headingXs" as="h3">
+            <Text color="subdued">{subtitle}</Text>
+          </Text>
         )}
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>

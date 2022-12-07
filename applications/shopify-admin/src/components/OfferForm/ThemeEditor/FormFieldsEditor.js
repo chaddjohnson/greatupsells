@@ -6,7 +6,7 @@ import {
   Card,
   TextField,
   Button,
-  TextStyle,
+  Text,
   Select,
   TextContainer
 } from '@shopify/polaris';
@@ -119,7 +119,7 @@ const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
             />
           ))}
           <Button onClick={handleAddItem}>
-            <TextStyle variation="strong">Add another field</TextStyle>
+            <Text fontWeight="bold">Add another field</Text>
           </Button>
         </FormLayout>
       </Card.Section>

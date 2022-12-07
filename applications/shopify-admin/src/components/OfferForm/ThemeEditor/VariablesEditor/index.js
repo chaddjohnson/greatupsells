@@ -4,7 +4,7 @@ import {
   Sheet,
   ResourceList,
   ResourceItem,
-  DisplayText,
+  Text,
   Button,
   Icon,
   EmptyState,
@@ -155,9 +155,9 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
               />
             )}
             <Stack.Item fill>
-              <DisplayText size="small">
+              <Text variant="headingLg">
                 {selectedSection ? selectedSection.name : 'Theme settings'}
-              </DisplayText>
+              </Text>
             </Stack.Item>
             <Button
               accessibilityLabel="Cancel"

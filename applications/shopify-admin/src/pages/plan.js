@@ -7,10 +7,8 @@ import {
   Layout,
   Card,
   DataTable,
-  TextStyle,
-  DisplayText,
+  Text,
   Button,
-  Heading,
   TextContainer,
   Icon,
   Stack
@@ -49,89 +47,89 @@ const PlanPage = () => {
 
   const planData = [
     [
-      <TextStyle key="feature1" variation="strong">
+      <Text key="feature1" fontWeight="bold">
         One-click upsells and cross-sells
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature2" variation="strong">
+      <Text key="feature2" fontWeight="bold">
         Post-purchase offers
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature3" variation="strong">
+      <Text key="feature3" fontWeight="bold">
         Thank You page offers
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature3" variation="strong">
+      <Text key="feature3" fontWeight="bold">
         Order Status page offers
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature4" variation="strong">
+      <Text key="feature4" fontWeight="bold">
         Themes
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature5" variation="strong">
+      <Text key="feature5" fontWeight="bold">
         Analytics
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature6" variation="strong">
+      <Text key="feature6" fontWeight="bold">
         Unlimited offers
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature7" variation="strong">
+      <Text key="feature7" fontWeight="bold">
         Unlimited offer views
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature8" variation="strong">
+      <Text key="feature8" fontWeight="bold">
         International currency support
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature9" variation="strong">
+      <Text key="feature9" fontWeight="bold">
         Customer support
-      </TextStyle>,
+      </Text>,
       <Icon key="1" source={TickMinor} color="success" />,
       <Icon key="2" source={TickMinor} color="success" />,
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <TextStyle key="feature10" variation="strong">
+      <Text key="feature10" fontWeight="bold">
         Monthly upsell revenue limit
-      </TextStyle>,
+      </Text>,
       <span key="1">Up to $500 USD</span>,
       <span key="2">Up to $1,500 USD</span>,
       <span key="3">UNLIMITED</span>
@@ -210,12 +208,10 @@ const PlanPage = () => {
           <Layout.Section>
             <TextContainer>
               <Stack alignment="center" vertical>
-                <DisplayText size="extraLarge">Select your plan</DisplayText>
-                <DisplayText size="small">
-                  <TextStyle variation="subdued">
-                    All plans include a 7-day free trial.
-                  </TextStyle>
-                </DisplayText>
+                <Text variant="heading4xl">Select your plan</Text>
+                <Text color="subdued" variant="headingLg">
+                  All plans include a 7-day free trial.
+                </Text>
               </Stack>
             </TextContainer>
           </Layout.Section>
@@ -227,24 +223,30 @@ const PlanPage = () => {
                 columnContentTypes={['text', 'text', 'text', 'text']}
                 headings={[
                   null,
-                  <TextStyle key="basic" variation="strong">
+                  <Text fontWeight="bold" key="basic">
                     <Stack vertical spacing="tight">
-                      <Heading>Basic</Heading>
-                      <DisplayText size="large">$24/month</DisplayText>
+                      <Text variant="headingMd" as="h2">
+                        Basic
+                      </Text>
+                      <Text variant="heading2xl">$24/month</Text>
                     </Stack>
-                  </TextStyle>,
-                  <TextStyle key="plus" variation="strong">
+                  </Text>,
+                  <Text fontWeight="bold" key="plus">
                     <Stack vertical spacing="tight">
-                      <Heading>Plus</Heading>
-                      <DisplayText size="large">$49/month</DisplayText>
+                      <Text variant="headingMd" as="h2">
+                        Plus
+                      </Text>
+                      <Text variant="heading2xl">$49/month</Text>
                     </Stack>
-                  </TextStyle>,
-                  <TextStyle key="pro" variation="strong">
+                  </Text>,
+                  <Text fontWeight="bold" key="pro">
                     <Stack vertical spacing="tight">
-                      <Heading>Pro</Heading>
-                      <DisplayText size="large">$99/month</DisplayText>
+                      <Text variant="headingMd" as="h2">
+                        Pro
+                      </Text>
+                      <Text variant="heading2xl">$99/month</Text>
                     </Stack>
-                  </TextStyle>
+                  </Text>
                 ]}
                 rows={planData}
                 truncate={false}

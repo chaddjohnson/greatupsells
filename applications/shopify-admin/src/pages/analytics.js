@@ -5,8 +5,7 @@ import {
   Layout,
   Card,
   Stack,
-  DisplayText,
-  TextStyle,
+  Text,
   Banner,
   SkeletonPage,
   SkeletonBodyText
@@ -29,11 +28,9 @@ const loadingComponent = () => (
     <SkeletonPage title="Analytics for offer" fullWidth>
       <PageTitleBar />
       <Stack vertical>
-        <DisplayText size="medium">
-          <TextStyle variation="subdued">
-            Here&rsquo;s a summary of how your offers are performing
-          </TextStyle>
-        </DisplayText>
+        <Text as="h3" color="subdued" fontWeight="regular" variant="heading2xl">
+          Here&rsquo;s a summary of how your offers are performing
+        </Text>
         <Layout>
           <Layout.Section fullWidth>
             <Card sectioned>
@@ -175,11 +172,14 @@ const AnalyticsPage = () => {
         <PageTitleBar />
         <Stack vertical>
           <Stack distribution="equalSpacing">
-            <DisplayText size="medium">
-              <TextStyle variation="subdued">
-                Here&rsquo;s a summary of how your offers are performing
-              </TextStyle>
-            </DisplayText>
+            <Text
+              as="h3"
+              color="subdued"
+              fontWeight="regular"
+              variant="heading2xl"
+            >
+              Here&rsquo;s a summary of how your offers are performing
+            </Text>
             {/* <Popover
               active={datePickerActive}
               activator={
@@ -202,38 +202,36 @@ const AnalyticsPage = () => {
               <Card sectioned>
                 <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatNumber(shop?.offerImpressionCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Impressions</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Impressions
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatNumber(shop?.offerAcceptanceCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Acceptances</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Acceptances
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatPercentage(shop?.offerConversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Conversion rate
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatCurrency(shop?.revenueIncrease)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">
-                        Revenue increase
-                      </TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Revenue increase
+                    </Text>
                   </Stack>
                 </Stack>
               </Card>

@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  Checkbox,
-  Subheading,
-  TextStyle,
-  Stack
-} from '@shopify/polaris';
+import { Card, FormLayout, Checkbox, Text, Stack } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 
 const OptionsEditor = ({ variables, onChange }) => {
@@ -20,9 +13,9 @@ const OptionsEditor = ({ variables, onChange }) => {
     <Stack vertical>
       {groupNames.map((groupName, groupIndex) => (
         <Stack key={groupIndex} vertical spacing="tight">
-          <Subheading>
-            <TextStyle variation="subdued">{groupName}</TextStyle>
-          </Subheading>
+          <Text variant="headingXs" as="h3">
+            <Text color="subdued">{groupName}</Text>
+          </Text>
           <Card sectioned>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (

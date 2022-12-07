@@ -6,8 +6,7 @@ import {
   Layout,
   Card,
   Stack,
-  DisplayText,
-  TextStyle,
+  Text,
   Banner,
   SkeletonPage,
   SkeletonBodyText
@@ -41,32 +40,37 @@ const loadingComponent = () => (
     <Loading />
     <SkeletonPage title="Analytics for offer" fullWidth>
       <PageTitleBar />
-      <Layout>
-        <Layout.Section fullWidth>
-          <Card sectioned>
-            <SkeletonBodyText lines={3} />
-          </Card>
-        </Layout.Section>
-        <Layout.Section oneHalf>
-          <Card sectioned>
-            <SkeletonChart />
-          </Card>
-          <Card sectioned>
-            <SkeletonChart />
-          </Card>
-          <Card sectioned>
-            <SkeletonChart />
-          </Card>
-        </Layout.Section>
-        <Layout.Section oneHalf>
-          <Card sectioned>
-            <SkeletonChart />
-          </Card>
-          <Card sectioned>
-            <SkeletonChart />
-          </Card>
-        </Layout.Section>
-      </Layout>
+      <Stack vertical>
+        <Text as="h3" color="subdued" fontWeight="regular" variant="heading2xl">
+          Here&rsquo;s a summary of how your offer is performing
+        </Text>
+        <Layout>
+          <Layout.Section fullWidth>
+            <Card sectioned>
+              <SkeletonBodyText lines={3} />
+            </Card>
+          </Layout.Section>
+          <Layout.Section oneHalf>
+            <Card sectioned>
+              <SkeletonChart />
+            </Card>
+            <Card sectioned>
+              <SkeletonChart />
+            </Card>
+            <Card sectioned>
+              <SkeletonChart />
+            </Card>
+          </Layout.Section>
+          <Layout.Section oneHalf>
+            <Card sectioned>
+              <SkeletonChart />
+            </Card>
+            <Card sectioned>
+              <SkeletonChart />
+            </Card>
+          </Layout.Section>
+        </Layout>
+      </Stack>
     </SkeletonPage>
   </>
 );
@@ -182,11 +186,14 @@ const OfferAnalyticsPage = () => {
         <PageTitleBar offer={offer} />
         <Stack vertical>
           <Stack distribution="equalSpacing">
-            <DisplayText size="medium">
-              <TextStyle variation="subdued">
-                Here&rsquo;s a summary of how your offer is performing
-              </TextStyle>
-            </DisplayText>
+            <Text
+              as="h3"
+              color="subdued"
+              fontWeight="regular"
+              variant="heading2xl"
+            >
+              Here&rsquo;s a summary of how your offer is performing
+            </Text>
             {/* <DateRangePicker
               active={datePickerActive}
               onActivate={() => setDatePickerActive(!datePickerActive)}
@@ -198,38 +205,36 @@ const OfferAnalyticsPage = () => {
               <Card sectioned>
                 <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatNumber(offer?.impressionCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Impressions</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Impressions
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatNumber(offer?.acceptanceCount)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Acceptances</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Acceptances
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatPercentage(offer?.conversionRate, 1)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">Conversion rate</TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Conversion rate
+                    </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <DisplayText size="extraLarge">
+                    <Text variant="heading4xl">
                       {formatCurrency(offer?.revenueIncrease)}
-                    </DisplayText>
-                    <TextStyle variation="strong">
-                      <TextStyle variation="subdued">
-                        Revenue increase
-                      </TextStyle>
-                    </TextStyle>
+                    </Text>
+                    <Text fontWeight="bold" color="subdued">
+                      Revenue increase
+                    </Text>
                   </Stack>
                 </Stack>
               </Card>

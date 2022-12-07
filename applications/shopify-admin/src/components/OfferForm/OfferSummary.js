@@ -1,14 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {
-  Card,
-  Heading,
-  TextStyle,
-  Stack,
-  List,
-  Button
-} from '@shopify/polaris';
+import { Card, Text, Stack, List, Button } from '@shopify/polaris';
 import {
   useNumberFormatter,
   useCurrency,
@@ -88,7 +81,9 @@ const OfferSummary = ({ offer }) => {
           <Stack vertical>
             <HeadingWrapper>
               <Stack distribution="equalSpacing">
-                <Heading element="h3">{offer.name}</Heading>
+                <Text variant="headingMd" as="h2">
+                  {offer.name}
+                </Text>
                 <OfferStatus offer={offer} />
               </Stack>
             </HeadingWrapper>
@@ -101,7 +96,7 @@ const OfferSummary = ({ offer }) => {
             )}
           </Stack>
         ) : (
-          <TextStyle variation="subdued">No information entered yet.</TextStyle>
+          <Text color="subdued">No information entered yet.</Text>
         )}
       </Card.Section>
       {offer._id && (
@@ -122,7 +117,7 @@ const OfferSummary = ({ offer }) => {
               </List.Item>
               {/* <List.Item>44 data submissions</List.Item> */}
             </List>
-            <TextStyle variation="subdued">
+            <Text color="subdued">
               View{' '}
               <Button plain url={`/offers/${offer._id}/analytics/`}>
                 analytics
@@ -132,7 +127,7 @@ const OfferSummary = ({ offer }) => {
                 data submissions
               </Button>{' '} */}
               for this offer
-            </TextStyle>
+            </Text>
           </Stack>
         </Card.Section>
       )}
