@@ -29,8 +29,6 @@ import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, LineChart, SkeletonChart, Link } from '../components';
 
-const SHOPIFY_EMBED_BLOCK_ID = process.env.SHOPIFY_EMBED_BLOCK_ID; // eslint-disable-line prefer-destructuring
-
 const PlanContainer = styled.div`
   text-align: center;
 `;
@@ -202,7 +200,7 @@ const DashboardPage = () => {
                 title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
                 action={{
                   content: 'Activate app embed',
-                  url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${SHOPIFY_EMBED_BLOCK_ID}/app-embed`
+                  url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
                 }}
                 secondaryAction={{
                   content: 'View instructions',
