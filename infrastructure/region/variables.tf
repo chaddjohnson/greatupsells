@@ -14,6 +14,10 @@ variable "app_name" {
   type = string
 }
 
+variable "app_name_slug" {
+  type = string
+}
+
 variable "base_domain" {
   type = string
 }

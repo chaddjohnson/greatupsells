@@ -22,6 +22,14 @@ resource "aws_ssm_parameter" "app_name" {
   provider  = aws.region
 }
 
+resource "aws_ssm_parameter" "app_name_slug" {
+  name      = "/greatupsells/${terraform.workspace}/app-name-slug"
+  type      = "String"
+  value     = var.app_name_slug
+  overwrite = true
+  provider  = aws.region
+}
+
 resource "aws_ssm_parameter" "certificate_name" {
   name      = "/greatupsells/${terraform.workspace}/certificate-name"
   type      = "String"

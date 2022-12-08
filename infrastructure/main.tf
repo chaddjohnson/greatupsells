@@ -29,6 +29,7 @@ module "us_east_1" {
   region                           = "us-east-1"
   public_key                       = var.public_key
   app_name                         = var.app_name
+  app_name_slug                    = var.app_name_slug
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain
@@ -56,6 +57,7 @@ module "eu_west_1" {
   region                           = "eu-west-1"
   public_key                       = var.public_key
   app_name                         = var.app_name
+  app_name_slug                    = var.app_name_slug
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain
@@ -83,6 +85,7 @@ module "ap_northeast_1" {
   region                           = "ap-northeast-1"
   public_key                       = var.public_key
   app_name                         = var.app_name
+  app_name_slug                    = var.app_name_slug
   hosted_zone_id                   = aws_route53_zone.domain.zone_id
   base_domain                      = var.base_domain
   domain                           = var.domain

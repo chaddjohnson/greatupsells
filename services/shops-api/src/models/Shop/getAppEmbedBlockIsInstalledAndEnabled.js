@@ -1,6 +1,8 @@
+const { APP_NAME_SLUG } = process.env;
+
 const getAppEmbedBlock = (settingsData) => {
   const settingsDataBlocks = Object.values(settingsData.current.blocks || {});
-  const appEmbedBlockTypePrefix = `shopify://apps/great-upsells-dev/blocks/app-embed`;
+  const appEmbedBlockTypePrefix = `shopify://apps/${APP_NAME_SLUG}/blocks/app-embed`;
   const appEmbedBlock = settingsDataBlocks.find((block) =>
     block.type.includes(appEmbedBlockTypePrefix)
   );

@@ -1,10 +1,10 @@
 const logger = require('@greatupsells/logger');
 
-const { SHOPIFY_EMBED_BLOCK_ID } = process.env;
+const { APP_NAME_SLUG, SHOPIFY_EMBED_BLOCK_ID } = process.env;
 
 const checkIfInstalled = (settingsData) => {
   const settingsDataBlocks = Object.values(settingsData.current.blocks || {});
-  const appEmbedBlockTypePrefix = `shopify://apps/great-upsells-dev/blocks/app-embed`;
+  const appEmbedBlockTypePrefix = `shopify://apps/${APP_NAME_SLUG}/blocks/app-embed`;
   const appEmbedBlock = settingsDataBlocks.find((block) =>
     block.type.includes(appEmbedBlockTypePrefix)
   );
@@ -23,7 +23,7 @@ const install = async (shop, shopifyThemeId, settingsData) => {
   settingsData.current = settingsData.current || {};
   settingsData.current.blocks = settingsData.current.blocks || {};
   settingsData.current.blocks[blockId] = {
-    type: `shopify:\/\/apps/great-upsells-dev\/blocks\/app-embed\/${SHOPIFY_EMBED_BLOCK_ID}`,
+    type: `shopify:\/\/apps/${APP_NAME_SLUG}\/blocks\/app-embed\/${SHOPIFY_EMBED_BLOCK_ID}`,
     disabled: false,
     settings: {}
   };
