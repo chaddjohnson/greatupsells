@@ -223,7 +223,7 @@ const PlanPage = () => {
                 columnContentTypes={['text', 'text', 'text', 'text']}
                 headings={[
                   null,
-                  <Text fontWeight="bold" key="basic">
+                  <Text fontWeight="bold" key="basic" as="div">
                     <Stack vertical spacing="tight">
                       <Text variant="headingMd" as="h2">
                         Basic
@@ -231,7 +231,7 @@ const PlanPage = () => {
                       <Text variant="heading2xl">$24/month</Text>
                     </Stack>
                   </Text>,
-                  <Text fontWeight="bold" key="plus">
+                  <Text fontWeight="bold" key="plus" as="div">
                     <Stack vertical spacing="tight">
                       <Text variant="headingMd" as="h2">
                         Plus
@@ -239,7 +239,7 @@ const PlanPage = () => {
                       <Text variant="heading2xl">$49/month</Text>
                     </Stack>
                   </Text>,
-                  <Text fontWeight="bold" key="pro">
+                  <Text fontWeight="bold" key="pro" as="div">
                     <Stack vertical spacing="tight">
                       <Text variant="headingMd" as="h2">
                         Pro

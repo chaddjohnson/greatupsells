@@ -172,7 +172,7 @@ const LineChart = ({
                 <Text variant="headingLg">{formatNumber(changeValue)}</Text>
               )}
               {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
-                <Text variant="headingLg">
+                <Text variant="headingLg" as="div">
                   <Stack spacing="none" alignment="center">
                     <Icon source={ArrowUpMinor} color="success" />
                     <Text color="success">
@@ -182,7 +182,7 @@ const LineChart = ({
                 </Text>
               )}
               {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
-                <Text variant="headingLg">
+                <Text variant="headingLg" as="div">
                   <Stack spacing="none" alignment="center">
                     <Icon source={ArrowDownMinor} color="critical" />
                     <Text color="critical">
