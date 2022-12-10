@@ -1,16 +1,11 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
-const redis = require('redis');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-
-const { REDIS_URL_APP } = process.env;
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    redis.createClient({ url: REDIS_URL_APP });
-
     return {
       statusCode: StatusCodes.OK,
       body: ReasonPhrases.OK

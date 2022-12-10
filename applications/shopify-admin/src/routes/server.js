@@ -1,18 +1,17 @@
+require('@shopify/shopify-api/adapters/node');
+
 const getenv = require('getenv');
+const path = require('path');
 const serverless = require('serverless-http');
-const Koa = require('koa');
-const Router = require('koa-router');
-const connect = require('koa-connect');
-const helmet = require('koa-helmet');
+const express = require('express');
+const helmet = require('helmet');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const next = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const shopifyAuth = require('@shopify/koa-shopify-auth').default;
-const { default: Shopify, ApiVersion } = require('@shopify/shopify-api');
+const { shopifyApi, ApiVersion } = require('@shopify/shopify-api');
 const verifySessionToken = require('shopify-jwt-auth-verify').default;
 const HttpClient = require('@greatupsells/gateway-http-client');
-const RedisStore = require('../utilities/RedisStore');
 
 const {
   NODE_ENV,
@@ -21,8 +20,7 @@ const {
   SHOPIFY_ADMIN_APP_URL,
   STOREFRONT_PORT,
   SHOPS_API_URL,
-  JWT_SECRET,
-  REDIS_URL_APP
+  JWT_SECRET
 } = process.env;
 const dev = NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
@@ -31,13 +29,10 @@ const app = next({ dev });
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
-
-const sessionStorage = new RedisStore(REDIS_URL_APP);
-
-Shopify.Context.initialize({
-  API_KEY: SHOPIFY_ADMIN_APP_API_KEY,
-  API_SECRET_KEY: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-  SCOPES: [
+const shopify = shopifyApi({
+  apiKey: SHOPIFY_ADMIN_APP_API_KEY,
+  apiSecretKey: SHOPIFY_ADMIN_APP_API_SECRET_KEY,
+  scopes: [
     'read_all_orders',
     'read_checkouts',
     'read_draft_orders',
@@ -45,85 +40,93 @@ Shopify.Context.initialize({
     'read_products',
     'read_script_tags',
     'read_themes',
+    'write_themes',
     'write_draft_orders',
     'write_script_tags'
   ],
-  HOST_NAME: new URL(SHOPIFY_ADMIN_APP_URL).host,
-  API_VERSION: ApiVersion.January22,
-  IS_EMBEDDED_APP: true,
-  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
-    sessionStorage.storeCallback,
-    sessionStorage.loadCallback,
-    sessionStorage.deleteCallback
-  )
+  hostName: new URL(SHOPIFY_ADMIN_APP_URL).host,
+  apiVersion: ApiVersion.October22,
+  isEmbeddedApp: true
 });
 
 const createServer = () => {
-  const server = new Koa();
-  const router = new Router();
+  const server = express();
   const handle = app.getRequestHandler();
 
-  const handleRequest = async (ctx) => {
-    await handle(ctx.req, ctx.res);
-    ctx.respond = false;
-    ctx.res.statusCode = 200;
+  const handleAppRequest = async (request, response) => {
+    await handle(request, response);
+    response.statusCode = 200;
   };
 
-  // Secure HTTP headers. Disable frameguard so that the app may be embedded within Shopify Admin.
-  server.use(helmet({ frameguard: false }));
+  // Secure HTTP headers. Disable some things so that the app may be embedded within Shopify Admin.
+  server.use(helmet.hidePoweredBy());
+  server.use(helmet.hsts());
+  server.use(helmet.ieNoOpen());
+  server.use(helmet.noSniff());
+  server.use(helmet.permittedCrossDomainPolicies());
+  server.use(helmet.referrerPolicy());
+  server.use(helmet.xssFilter());
 
   // Set up dev proxies.
   if (dev) {
     // Necessary as Shopify script tags must be hosted on a public URL.
     server.use(
-      connect(
-        createProxyMiddleware('/storefront.js', {
-          target: `http://localhost:${STOREFRONT_PORT}`,
-          changeOrigin: true,
-          onProxyRes: (proxyResponse) => {
-            proxyResponse.headers['Accept-Encoding'] = 'gzip';
-          }
-        })
-      )
+      '/storefront.js',
+      createProxyMiddleware({
+        target: `http://localhost:${STOREFRONT_PORT}`,
+        changeOrigin: true,
+        onProxyRes: (proxyResponse) => {
+          proxyResponse.headers['Accept-Encoding'] = 'gzip';
+        }
+      })
     );
 
     // Necessary to enable tunneling for themes in storefront.
     server.use(
-      connect(
-        createProxyMiddleware('/themes', {
-          target: `http://localhost:${STOREFRONT_PORT}`,
-          changeOrigin: true,
-          pathRewrite: { '^/themes': '' },
-          onProxyRes: (proxyResponse) => {
-            proxyResponse.headers['Accept-Encoding'] = 'gzip';
-          }
-        })
-      )
+      '/themes',
+      createProxyMiddleware({
+        target: `http://localhost:${STOREFRONT_PORT}`,
+        changeOrigin: true,
+        pathRewrite: { '^/themes': '' },
+        onProxyRes: (proxyResponse) => {
+          proxyResponse.headers['Accept-Encoding'] = 'gzip';
+        }
+      })
     );
   }
 
-  server.keys = [Shopify.Context.API_SECRET_KEY];
+  server.get('/auth', async (request, response) => {
+    // The library will automatically redirect the user.
+    await shopify.auth.begin({
+      shop: shopify.utils.sanitizeShop(request.query.shop, true),
+      callbackPath: '/auth/callback',
+      isOnline: false,
+      rawRequest: request,
+      rawResponse: response
+    });
+  });
 
-  server.use(
-    shopifyAuth({
-      accessMode: 'offline',
-      afterAuth: async (ctx) => {
-        const { shop: shopDomain, accessToken } = ctx.state.shopify;
+  server.get('/auth/callback', async (request, response) => {
+    // The library will automatically set the appropriate HTTP headers
+    const callbackResponse = await shopify.auth.callback({
+      rawRequest: request,
+      rawResponse: response
+    });
 
-        await shopsServiceHttpClient.post(
-          `/shops/domain/${shopDomain}/initialization`,
-          { accessToken }
-        );
+    const { shop: shopDomain, accessToken } = callbackResponse.session;
 
-        ctx.redirect(`/?shop=${shopDomain}`);
-      }
-    })
-  );
+    await shopsServiceHttpClient.post(
+      `/shops/domain/${shopDomain}/initialization`,
+      { accessToken }
+    );
 
-  router.get('/authToken', async (ctx) => {
+    response.redirect(`/?shop=${shopDomain}`);
+  });
+
+  server.get('/authToken', async (request, response) => {
     try {
       // Get Shopify session token.
-      const { shopifySessionToken } = ctx.query;
+      const { shopifySessionToken } = request.query;
 
       // Extract the shop domain from the session token.
       const decodeToken = jwt.decode(shopifySessionToken);
@@ -147,56 +150,51 @@ const createServer = () => {
       const authToken = jwt.sign({ shopId }, JWT_SECRET);
 
       if (!tokenIsValid) {
-        ctx.status = StatusCodes.UNAUTHORIZED;
-        ctx.body = ReasonPhrases.UNAUTHORIZED;
-
+        response
+          .status(StatusCodes.UNAUTHORIZED)
+          .send(ReasonPhrases.UNAUTHORIZED);
         return;
       }
 
       if (!shop.accessToken) {
-        ctx.status = StatusCodes.UNAUTHORIZED;
-        ctx.body = ReasonPhrases.UNAUTHORIZED;
-
+        response
+          .status(StatusCodes.UNAUTHORIZED)
+          .send(ReasonPhrases.UNAUTHORIZED);
         return;
       }
 
       // Return the auth token.
-      ctx.response.set('Content-Type', 'application/json');
-      ctx.body = JSON.stringify({ authToken });
+      response.set('Content-Type', 'application/json');
+      response.send(JSON.stringify({ authToken }));
     } catch (error) {
-      ctx.status = StatusCodes.INTERNAL_SERVER_ERROR;
-      ctx.body = ReasonPhrases.INTERNAL_SERVER_ERROR;
+      response
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(ReasonPhrases.INTERNAL_SERVER_ERROR);
     }
   });
 
-  router.get('/', async (ctx) => {
-    const { shop: shopDomain } = ctx.query;
+  server.get('/', async (request, response) => {
+    const { shop: shopDomain } = request.query;
     const shop = await shopsServiceHttpClient.get(
       `/shops/domain/${shopDomain}`
     );
 
     if (!shop || !shop.active) {
-      ctx.redirect(`/auth?shop=${shopDomain}`);
+      response.redirect(`/auth?shop=${shopDomain}`);
     } else {
-      ctx.response.set(
+      response.set(
         'Content-Security-Policy',
         `frame-ancestors https://${shopDomain} https://admin.shopify.com`
       );
-      await handleRequest(ctx);
+
+      await handleAppRequest(request, response);
     }
   });
 
-  router.get('(/_next/static/.*)', handleRequest);
-  router.get('/_next/webpack-hmr', handleRequest);
-  router.get('(.*)', handleRequest);
-
-  server.use(router.allowedMethods());
-  server.use(router.routes());
-
-  // Log errors.
-  server.on('error', (error) => {
-    console.error(error); // eslint-disable-line no-console
-  });
+  server.use(express.static(path.join(__dirname, '../../public')));
+  server.use('/_next', express.static(path.join(__dirname, '../../.next')));
+  server.get('/_next/webpack-hmr', handleAppRequest);
+  server.get('*', handleAppRequest);
 
   return server;
 };
@@ -209,13 +207,13 @@ if (dev) {
   });
 }
 
+const serverlessHandler = serverless(createServer());
+
 module.exports.handler = async (event, context) => {
   if (event.source === 'serverless-plugin-warmup') {
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
 
-  const serverlessHandler = serverless(createServer());
-
-  return serverlessHandler(event, context);
+  return await serverlessHandler(event, context);
 };
