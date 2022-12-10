@@ -11,12 +11,12 @@ const TitleBar = (props) => {
   };
   const secondaryActions = [
     {
-      content: 'Dashboard',
-      url: `/${urlParams}`
-    },
-    {
       content: 'Offers',
       url: `/offers/${urlParams}`
+    },
+    {
+      content: 'Dashboard',
+      url: `/${urlParams}`
     }
   ];
   // const actionGroups = [
