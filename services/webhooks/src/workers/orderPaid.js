@@ -76,11 +76,6 @@ const processRecord = async (record) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  if (event.source === 'serverless-plugin-warmup') {
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    return 'Lambda is warm!';
-  }
-
   if (event.Records) {
     // SQS (production).
     Promise.all(event.Records.map(processRecord));

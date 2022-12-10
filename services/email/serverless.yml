@@ -34,6 +34,7 @@ functions:
           path: /health
           method: get
           cors: true
+    provisionedConcurrency: 1
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256

@@ -17620,11 +17620,6 @@ serverless-plugin-monorepo@^0.11.0:
   dependencies:
     fs-extra "^9.0.1"
 
-serverless-plugin-warmup@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/serverless-plugin-warmup/-/serverless-plugin-warmup-7.1.0.tgz"
-  integrity sha512-p2+fIChOnBXkuw3+uyqk7ZNGRj9ymVXTgYYqyxqSJX1tYXBF7QdcKbMUMqU2SDdccFLTRUSejIq7OfRsqe/jdw==
-
 serverless@^3.19.0:
   version "3.19.0"
   resolved "https://registry.npmjs.org/serverless/-/serverless-3.19.0.tgz"

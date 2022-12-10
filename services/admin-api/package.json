@@ -28,7 +28,6 @@
     "serverless": "^3.19.0",
     "serverless-domain-manager": "6.0.3",
     "serverless-offline": "^8.8.0",
-    "serverless-plugin-monorepo": "^0.11.0",
-    "serverless-plugin-warmup": "^7.1.0"
+    "serverless-plugin-monorepo": "^0.11.0"
   }
 }

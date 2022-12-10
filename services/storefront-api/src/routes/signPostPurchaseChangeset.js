@@ -12,11 +12,6 @@ const {
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  if (event.source === 'serverless-plugin-warmup') {
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    return 'Lambda is warm!';
-  }
-
   try {
     const { referenceId, changes, token: inputToken } = JSON.parse(event.body);
     const decodedToken = jwt.verify(

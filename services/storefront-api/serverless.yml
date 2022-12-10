@@ -38,13 +38,11 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
-  warmup:
-    default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
-      events:
-        - schedule: rate(5 minutes)
+  stages:
+    test:
+      provisionedConcurrency: 1
+    production:
+      provisionedConcurrency: 5
 
 functions:
   health:
@@ -55,9 +53,7 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
+    provisionedConcurrency: 1
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -66,9 +62,6 @@ functions:
           path: /region
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
   addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
@@ -77,6 +70,7 @@ functions:
           path: /draft-orders/{draftOrderId}/line-items
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -85,6 +79,7 @@ functions:
           path: /draft-orders
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
@@ -93,6 +88,7 @@ functions:
           path: /offers/random
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -101,6 +97,7 @@ functions:
           path: /shop
           method: get
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   signPostPurchaseChangeset:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/signPostPurchaseChangeset.handler
@@ -109,6 +106,7 @@ functions:
           path: /post-purchase/changeset-signature
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -117,6 +115,7 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -125,6 +124,7 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
@@ -133,12 +133,12 @@ functions:
           path: /draft-orders/{draftOrderId}/line-items
           method: put
           cors: true
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
-  - serverless-plugin-warmup
 
 package:
   patterns:

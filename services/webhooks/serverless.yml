@@ -25,13 +25,6 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 4108
-  warmup:
-    default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
-      events:
-        - schedule: rate(5 minutes)
 
 functions:
   health:
@@ -42,9 +35,7 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
+    provisionedConcurrency: 1
   appUninstall:
     reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -171,7 +162,6 @@ functions:
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
-  - serverless-plugin-warmup
 
 package:
   patterns:

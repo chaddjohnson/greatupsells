@@ -54,13 +54,11 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
-  warmup:
-    default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
-      events:
-        - schedule: rate(5 minutes)
+  stages:
+    test:
+      provisionedConcurrency: 1
+    production:
+      provisionedConcurrency: 5
 
 functions:
   activateShopPlan:
@@ -71,6 +69,7 @@ functions:
           path: /shops/{shopId}/plan/activation
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
@@ -79,6 +78,7 @@ functions:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   cancelOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cancelOrder.handler
@@ -87,6 +87,7 @@ functions:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   changeShopPlan:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/changeShopPlan.handler
@@ -95,6 +96,7 @@ functions:
           path: /shops/{shopId}/plan
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   checkShopThemeCompatibility:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/checkShopThemeCompatibility.handler
@@ -103,6 +105,7 @@ functions:
           path: /shops/{shopId}/theme-compatibility
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -111,6 +114,7 @@ functions:
           path: /offers/{offerId}/clone
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   cloneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneTheme.handler
@@ -119,6 +123,7 @@ functions:
           path: /themes/{themeId}/clone
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   consentToDataAccess:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/consentToDataAccess.handler
@@ -127,6 +132,7 @@ functions:
           path: /shops/{shopId}/data-access-consent
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler
@@ -135,6 +141,7 @@ functions:
           path: /collections
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -143,6 +150,7 @@ functions:
           path: /shops/{shopId}/draft-orders
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
@@ -151,6 +159,7 @@ functions:
           path: /offers
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOrder.handler
@@ -160,6 +169,7 @@ functions:
           path: /orders
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createTheme.handler
@@ -168,6 +178,7 @@ functions:
           path: /themes
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
@@ -176,6 +187,7 @@ functions:
           path: /products
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   deactivateShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deactivateShop.handler
@@ -184,6 +196,7 @@ functions:
           path: /shops/{shopId}/deactivation
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   deleteCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteCollection.handler
@@ -192,6 +205,7 @@ functions:
           path: /collections/{collectionId}
           method: delete
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   deleteOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
@@ -200,6 +214,7 @@ functions:
           path: /offers/{offerId}
           method: delete
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   deleteProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteProduct.handler
@@ -208,6 +223,7 @@ functions:
           path: /products/{productId}
           method: delete
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
@@ -216,6 +232,7 @@ functions:
           path: /offers/{offerId}/acceptances
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
@@ -224,6 +241,7 @@ functions:
           path: /offers/{offerId}/conversion-rates
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
@@ -232,6 +250,7 @@ functions:
           path: /offers/{offerId}/impressions
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
@@ -240,6 +259,7 @@ functions:
           path: /offers/{offerId}/conversions
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferHitsByDraftOrderId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferHitsByDraftOrderId.handler
@@ -248,6 +268,7 @@ functions:
           path: /offer-hits/shopify-draft-order-id/{shopifyDraftOrderId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
@@ -256,6 +277,7 @@ functions:
           path: /offers/{offerId}/revenue-increases
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findThemes.handler
@@ -264,6 +286,7 @@ functions:
           path: /themes
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
@@ -272,6 +295,7 @@ functions:
           path: /shops/{shopId}/acceptances
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
@@ -280,6 +304,7 @@ functions:
           path: /shops/{shopId}/conversion-rates
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
@@ -288,6 +313,7 @@ functions:
           path: /shops/{shopId}/conversions
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
@@ -296,6 +322,7 @@ functions:
           path: /shops/{shopId}/impressions
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
@@ -304,6 +331,7 @@ functions:
           path: /shops/{shopId}/revenue-increases
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferThemes.handler
@@ -312,6 +340,7 @@ functions:
           path: /offers/{offerId}/themes
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
@@ -320,6 +349,7 @@ functions:
           path: /offers
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneCollectionId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneCollectionId.handler
@@ -328,6 +358,7 @@ functions:
           path: /collections/shopify-collection-id/{shopifyCollectionId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
@@ -336,6 +367,7 @@ functions:
           path: /offers/{offerId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneOfferHit:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOfferHit.handler
@@ -344,6 +376,7 @@ functions:
           path: /offer-hits/{offerHitId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrder.handler
@@ -352,6 +385,7 @@ functions:
           path: /orders/{orderId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneOrderByShopifyOrderId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrderByShopifyOrderId.handler
@@ -360,6 +394,7 @@ functions:
           path: /orders/shopify-order-id/{shopifyOrderId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneTheme.handler
@@ -368,6 +403,7 @@ functions:
           path: /themes/{themeId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneProductByShopifyProductId:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneProductByShopifyProductId.handler
@@ -376,6 +412,7 @@ functions:
           path: /products/shopify-product-id/{shopifyProductId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomShopOfferByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopOfferByDomain.handler
@@ -384,6 +421,7 @@ functions:
           path: /shops/domain/{domain}/offers/random
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomShopCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopCollection.handler
@@ -392,6 +430,7 @@ functions:
           path: /shops/{shopId}/collections/random
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomShopProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopProduct.handler
@@ -400,6 +439,7 @@ functions:
           path: /shops/{shopId}/products/random
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
@@ -408,6 +448,7 @@ functions:
           path: /shops/{shopId}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShopByDomain.handler
@@ -416,6 +457,7 @@ functions:
           path: /shops/domain/{domain}
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopOffers.handler
@@ -424,6 +466,7 @@ functions:
           path: /shops/{shopId}/offers
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopThemes.handler
@@ -432,6 +475,7 @@ functions:
           path: /shops/{shopId}/themes
           method: get
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   health:
     memorySize: 128
     handler: src/routes/health.handler
@@ -439,9 +483,7 @@ functions:
       - http:
           path: /health
           method: get
-    warmup:
-      default:
-        enabled: false
+    provisionedConcurrency: 1
   initializeShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/initializeShopByDomain.handler
@@ -451,6 +493,7 @@ functions:
           path: /shops/domain/{domain}/initialization
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   installAppEmbedBlock:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/installAppEmbedBlock.handler
@@ -459,6 +502,7 @@ functions:
           path: /shops/{shopId}/themes/{shopifyThemeId}/app-embed-block-install
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -467,6 +511,7 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -475,6 +520,7 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateCollection.handler
@@ -483,6 +529,7 @@ functions:
           path: /collections/{collectionId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateOfferHit:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOfferHit.handler
@@ -491,6 +538,7 @@ functions:
           path: /offer-hits/{offerHitId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -499,6 +547,7 @@ functions:
           path: /offers/{offerId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOrder.handler
@@ -507,6 +556,7 @@ functions:
           path: /orders/{orderId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
@@ -515,6 +565,7 @@ functions:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateTheme.handler
@@ -523,6 +574,7 @@ functions:
           path: /themes/{themeId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
@@ -531,6 +583,7 @@ functions:
           path: /products/{productId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
@@ -539,6 +592,7 @@ functions:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam
+    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   calculateShopMonthUpsellRevenue:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -547,9 +601,6 @@ functions:
       - schedule: cron(1 0,12 * * ? *)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
   calculateStats:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -558,9 +609,6 @@ functions:
       - schedule: cron(1 5,6 * * ? *)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
   fixShopWebhooks:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -569,9 +617,6 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
   importShopOrders:
     memorySize: 512
     reservedConcurrency: 2
@@ -581,9 +626,6 @@ functions:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-order-import-queue-dev'}
     timeout: 900
-    warmup:
-      default:
-        enabled: false
   importShopCollections:
     memorySize: 512
     reservedConcurrency: 2
@@ -593,9 +635,6 @@ functions:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
     timeout: 900
-    warmup:
-      default:
-        enabled: false
   importShopProducts:
     memorySize: 512
     reservedConcurrency: 2
@@ -605,9 +644,6 @@ functions:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
     timeout: 900
-    warmup:
-      default:
-        enabled: false
   updateShopActiveStatuses:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -616,9 +652,6 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
   updateShopPlans:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -627,15 +660,11 @@ functions:
       - schedule: rate(1 day)
     timeout: 900
     enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
-  - serverless-plugin-warmup
   - serverless-plugin-conditional-functions
 
 package:

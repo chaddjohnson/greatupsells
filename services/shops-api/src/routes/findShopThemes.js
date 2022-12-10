@@ -9,11 +9,6 @@ const handler = async (event, context) => {
 
   await mongodbClient.connect();
 
-  if (event.source === 'serverless-plugin-warmup') {
-    await new Promise((resolve) => setTimeout(resolve, 25));
-    return 'Lambda is warm!';
-  }
-
   try {
     const { shopId } = event.pathParameters;
     const Theme = await models.get('Theme');

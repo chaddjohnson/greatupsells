@@ -37,17 +37,16 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
-  warmup:
-    default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
-      events:
-        - schedule: rate(5 minutes)
+  stages:
+    test:
+      provisionedConcurrency: 1
+    production:
+      provisionedConcurrency: 1
 
 functions:
   # authorizer:
   #   handler: src/authorizer.handler
+  #   provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   health:
     memorySize: 128
     handler: src/routes/health.handler
@@ -56,9 +55,7 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
+    provisionedConcurrency: 1
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -67,9 +64,6 @@ functions:
           path: /region
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
   # findLogs:
   findLogs:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -90,7 +84,6 @@ plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
-  - serverless-plugin-warmup
 
 package:
   patterns:
