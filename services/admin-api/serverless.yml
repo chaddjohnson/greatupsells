@@ -37,16 +37,14 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
-  stages:
-    test:
-      provisionedConcurrency: 1
-    production:
-      provisionedConcurrency: 1
+  provisionedConcurrency:
+    test: 1
+    production: 1
 
 functions:
   # authorizer:
   #   handler: src/authorizer.handler
-  #   provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+  #   provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   health:
     memorySize: 128
     handler: src/routes/health.handler

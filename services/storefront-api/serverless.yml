@@ -38,11 +38,9 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
-  stages:
-    test:
-      provisionedConcurrency: 1
-    production:
-      provisionedConcurrency: 5
+  provisionedConcurrency:
+    test: 1
+    production: 5
 
 functions:
   health:
@@ -70,7 +68,7 @@ functions:
           path: /draft-orders/{draftOrderId}/line-items
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -79,7 +77,7 @@ functions:
           path: /draft-orders
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   findOneRandomOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
@@ -88,7 +86,7 @@ functions:
           path: /offers/random
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -97,7 +95,7 @@ functions:
           path: /shop
           method: get
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   signPostPurchaseChangeset:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/signPostPurchaseChangeset.handler
@@ -106,7 +104,7 @@ functions:
           path: /post-purchase/changeset-signature
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -115,7 +113,7 @@ functions:
           path: /offers/{offerId}/acceptances
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -124,7 +122,7 @@ functions:
           path: /offers/{offerId}/impressions
           method: post
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
@@ -133,7 +131,7 @@ functions:
           path: /draft-orders/{draftOrderId}/line-items
           method: put
           cors: true
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
+    provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
 
 plugins:
   - serverless-offline
