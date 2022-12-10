@@ -77,7 +77,7 @@ const createSampleOffers = async (shop) => {
       offeredProducts: [
         {
           title: offeredProduct1.title,
-          handle: offeredProduct1.handle,
+          handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
           shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
@@ -86,7 +86,7 @@ const createSampleOffers = async (shop) => {
         },
         {
           title: offeredProduct2.title,
-          handle: offeredProduct2.handle,
+          handle: offeredProduct2.shopifyProductData.handle,
           imageUrl: offeredProduct2.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct2.shopifyProductId,
           shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map(
@@ -95,7 +95,7 @@ const createSampleOffers = async (shop) => {
         },
         {
           title: offeredProduct3.title,
-          handle: offeredProduct3.handle,
+          handle: offeredProduct3.shopifyProductData.handle,
           imageUrl: offeredProduct3.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct3.shopifyProductId,
           shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map(
@@ -111,7 +111,7 @@ const createSampleOffers = async (shop) => {
       triggerProducts: [
         {
           title: triggerProduct.title,
-          handle: triggerProduct.handle,
+          handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
           shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
@@ -154,7 +154,7 @@ const createSampleOffers = async (shop) => {
       offeredProducts: [
         {
           title: offeredProduct1.title,
-          handle: offeredProduct1.handle,
+          handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
           shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
@@ -203,7 +203,7 @@ const createSampleOffers = async (shop) => {
       offeredProducts: [
         {
           title: offeredProduct1.title,
-          handle: offeredProduct1.handle,
+          handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
           shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
@@ -219,7 +219,7 @@ const createSampleOffers = async (shop) => {
       triggerProducts: [
         {
           title: triggerProduct.title,
-          handle: triggerProduct.handle,
+          handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
           shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
@@ -262,7 +262,7 @@ const createSampleOffers = async (shop) => {
       offeredProducts: [
         {
           title: offeredProduct1.title,
-          handle: offeredProduct1.handle,
+          handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
           shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
@@ -271,7 +271,7 @@ const createSampleOffers = async (shop) => {
         },
         {
           title: offeredProduct2.title,
-          handle: offeredProduct2.handle,
+          handle: offeredProduct2.shopifyProductData.handle,
           imageUrl: offeredProduct2.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct2.shopifyProductId,
           shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map(
@@ -280,7 +280,7 @@ const createSampleOffers = async (shop) => {
         },
         {
           title: offeredProduct3.title,
-          handle: offeredProduct3.handle,
+          handle: offeredProduct3.shopifyProductData.handle,
           imageUrl: offeredProduct3.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct3.shopifyProductId,
           shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map(
@@ -296,7 +296,7 @@ const createSampleOffers = async (shop) => {
       triggerProducts: [
         {
           title: triggerProduct.title,
-          handle: triggerProduct.handle,
+          handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
           shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
