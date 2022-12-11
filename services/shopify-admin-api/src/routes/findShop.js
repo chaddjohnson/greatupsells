@@ -21,6 +21,7 @@ const handler = middy(async (event, context) => {
     const shop = await httpClient.get(`/shops/${shopId}`);
 
     delete shop.accessToken;
+    delete shop.shopifyShopData;
 
     return {
       statusCode: StatusCodes.OK,
