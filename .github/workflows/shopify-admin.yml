@@ -10,6 +10,8 @@ on:
       - packages/gateway-http-client
       - packages/react-components
       - packages/react-hooks
+      - packages/themes/**
+      - packages/themes-admin/**
 jobs:
   deploy:
     name: Deploy

@@ -8,6 +8,8 @@ on:
       - .github/workflows/storefront-api.yml
       - services/storefront-api/**
       - packages/logger/**
+      - packages/themes/**
+      - packages/themes-storefront/**
 jobs:
   deploy:
     name: Deploy
