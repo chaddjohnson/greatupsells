@@ -100,12 +100,15 @@ const config = addWebpackConfig(
 const cssRule = config.module.rules.find((rule) =>
   rule.test?.toString().includes('.css')
 );
-const loaderRule = cssRule?.use?.find((item) =>
-  item.loader?.includes('style-loader')
+const loaderRule = cssRule?.use?.find(
+  (item) =>
+    item.loader?.includes('style-loader') ||
+    item.loader?.includes('mini-css-extract-plugin')
 );
 
 if (loaderRule) {
-  loaderRule.options = loaderRule.options || {};
+  loaderRule.loader = require.resolve('style-loader');
+  loaderRule.options = {};
   loaderRule.options.injectType = 'singletonStyleTag';
   loaderRule.options.insert = function (element) {
     element.id = 'offer-styles';
