@@ -51,11 +51,12 @@ const importCustomCollections = async (shop) => {
     );
 
     // eslint-disable-next-line no-await-in-loop
-    await Promise.mapSeries(
+    await Promise.map(
       shopifyCollections,
       async (shopifyCollectionData) => {
         await importCollection(shop, shopifyCollectionData);
-      }
+      },
+      { concurrency: 10 }
     );
 
     params = shopifyCollections.nextPageParameters;
@@ -74,11 +75,12 @@ const importSmartCollections = async (shop) => {
     );
 
     // eslint-disable-next-line no-await-in-loop
-    await Promise.mapSeries(
+    await Promise.map(
       shopifyCollections,
       async (shopifyCollectionData) => {
         await importCollection(shop, shopifyCollectionData);
-      }
+      },
+      { concurrency: 10 }
     );
 
     params = shopifyCollections.nextPageParameters;

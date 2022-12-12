@@ -63,15 +63,19 @@ const getShopifyCollectionIds = async (product) => {
 };
 
 const addProductToCollections = async (product, collections) => {
+  const Collection = await models.get('Collection');
   const { shopifyProductId } = product;
 
   await Promise.all(
     collections.map(async (collection) => {
-      if (!collection.shopifyProductIds.includes(shopifyProductId)) {
-        collection.shopifyProductIds.push(shopifyProductId);
-        collection.markModified('shopifyProductIds');
+      const shopifyProductIds = collection.shopifyProductIds || [];
 
-        await collection.save();
+      if (!shopifyProductIds.includes(shopifyProductId)) {
+        shopifyProductIds.push(shopifyProductId);
+
+        await Collection.findByIdAndUpdate(collection.id, {
+          shopifyProductIds
+        });
       }
     })
   );

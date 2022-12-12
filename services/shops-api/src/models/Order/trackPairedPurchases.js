@@ -1,3 +1,5 @@
+const Promise = require('bluebird');
+const { flatten } = require('lodash');
 const models = require('..');
 
 const trackPairedPurchase = async (
@@ -37,7 +39,7 @@ const trackPairedPurchase = async (
   // Create paired purchases if they don't exist.
   [pairedPurchase1, pairedPurchase2] = await Promise.all([
     !pairedPurchase1
-      ? await PairedPurchase.create({
+      ? PairedPurchase.create({
           shop,
           shopifyShopId,
           shopifyProductId,
@@ -48,7 +50,7 @@ const trackPairedPurchase = async (
         })
       : Promise.resolve(pairedPurchase1),
     !pairedPurchase2
-      ? await PairedPurchase.create({
+      ? PairedPurchase.create({
           shop,
           shopifyShopId,
           shopifyProductId: pairedShopifyProductId,
@@ -87,18 +89,26 @@ const trackPairedPurchases = async (order) => {
     return;
   }
 
+  const lineItemPairs = flatten(
+    lineItems.map((lineItem1, index1) =>
+      lineItems
+        .slice(index1)
+        .map((lineItem2) => [lineItem1.product_id, lineItem2.product_id])
+    )
+  );
+
   // Track line item product pairings.
-  await Promise.all(
-    // Go through each line item.
-    lineItems.map(async (lineItem1, index1) => {
-      lineItems.slice(index1).map(async (lineItem2) => {
+  await Promise.mapSeries(
+    lineItemPairs,
+    async ([shopifyProductId, pairedShopifyProductId]) => {
+      if (shopifyProductId && pairedShopifyProductId) {
         await trackPairedPurchase(
           order,
-          lineItem1.product_id,
-          lineItem2.product_id
+          shopifyProductId,
+          pairedShopifyProductId
         );
-      });
-    })
+      }
+    }
   );
 };
 

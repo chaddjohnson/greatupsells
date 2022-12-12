@@ -12,7 +12,7 @@ const importOrder = async (shop, shopifyOrderData) => {
 
     if (order) {
       order.shopifyOrderData = shopifyOrderData;
-      await order.save();
+      return await order.save();
     } else {
       order = await Order.create({
         shop,
@@ -21,10 +21,11 @@ const importOrder = async (shop, shopifyOrderData) => {
         shopifyOrderNumber,
         shopifyOrderData
       });
-      await order.trackPairedPurchases();
       await logger.info(`Imported order from Shopify (${order.toString()})`, {
         shopifyOrderData
       });
+
+      return order;
     }
   } catch (error) {
     await logger.warn(
@@ -37,19 +38,29 @@ const importOrder = async (shop, shopifyOrderData) => {
 };
 
 const importOrders = async (shop) => {
+  const Order = await models.get('Order');
   const shopifyApiClient = shop.getShopifyApiClient();
   let params = { limit: 100 };
+  let orderIds = [];
 
   // Handle pagination.
   do {
     const shopifyOrders = await shopifyApiClient.order.list(params);
+    const orders = await Promise.map(
+      shopifyOrders,
+      async (shopifyOrderData) => importOrder(shop, shopifyOrderData),
+      { concurrency: 10 }
+    );
 
-    await Promise.mapSeries(shopifyOrders, async (shopifyOrderData) => {
-      await importOrder(shop, shopifyOrderData);
-    });
-
+    orderIds = orderIds.concat(orders.map((order) => order.id));
     params = shopifyOrders.nextPageParameters;
   } while (params);
+
+  // Track paired purchases for all orders.
+  await Promise.mapSeries(orderIds, async (orderId) => {
+    const order = await Order.findById(orderId);
+    await order.trackPairedPurchases();
+  });
 };
 
 module.exports = importOrders;

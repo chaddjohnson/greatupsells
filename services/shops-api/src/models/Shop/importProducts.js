@@ -48,9 +48,13 @@ const importProducts = async (shop) => {
   do {
     const shopifyProducts = await shopifyApiClient.product.list(params);
 
-    await Promise.mapSeries(shopifyProducts, async (shopifyProductData) => {
-      await importProduct(shop, shopifyProductData);
-    });
+    await Promise.map(
+      shopifyProducts,
+      async (shopifyProductData) => {
+        await importProduct(shop, shopifyProductData);
+      },
+      { concurrency: 10 }
+    );
 
     params = shopifyProducts.nextPageParameters;
   } while (params);
