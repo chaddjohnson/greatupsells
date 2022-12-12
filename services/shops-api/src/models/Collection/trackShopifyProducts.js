@@ -27,17 +27,15 @@ const getShopifyProductIds = async (collection) => {
 };
 
 const trackCollectionProducts = async (collection) => {
-  const Collection = await models.get('Collection');
-
   // Get a list of products belonging to this collection.
   const shopifyProductIds = await getShopifyProductIds(collection);
-  const productCount = collection.shopifyProductIds.length;
 
   // Track the products for the collection.
-  await Collection.findByIdAndUpdate(collection.id, {
-    shopifyProductIds,
-    productCount
-  });
+  collection.shopifyProductIds = shopifyProductIds;
+  collection.productCount = collection.shopifyProductIds.length;
+  collection.markModified('shopifyProductIds');
+
+  await collection.save();
 };
 
 const trackProductCollections = async (collection) => {
@@ -49,12 +47,11 @@ const trackProductCollections = async (collection) => {
 
   await Promise.all(
     products.map(async (product) => {
-      const shopifyCollectionIds = product.shopifyCollectionIds || [];
+      if (!product.shopifyCollectionIds.includes(shopifyCollectionId)) {
+        product.shopifyCollectionIds.push(shopifyCollectionId);
+        product.markModified('shopifyCollectionIds');
 
-      if (!shopifyCollectionIds.includes(shopifyCollectionId)) {
-        shopifyCollectionIds.push(shopifyCollectionId);
-
-        await Product.findByIdAndUpdate(product.id, { shopifyCollectionIds });
+        await product.save();
       }
     })
   );
