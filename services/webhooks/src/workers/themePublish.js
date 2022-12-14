@@ -14,7 +14,8 @@ const httpClient = new HttpClient({
 
 const processData = async (metadata, data, rawData) => {
   try {
-    const hmac = metadata['X-Shopify-Hmac-Sha256'];
+    const hmac =
+      metadata['X-Shopify-Hmac-Sha256'] || metadata['X-Shopify-Hmac-SHA256'];
     const hmacValid = checkWebhookHmacValidity(
       SHOPIFY_ADMIN_APP_API_SECRET_KEY,
       rawData,
