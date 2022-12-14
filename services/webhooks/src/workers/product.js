@@ -13,6 +13,9 @@ const httpClient = new HttpClient({
 });
 
 const processData = async (metadata, data, rawData) => {
+  console.log('*****');
+  console.log(rawData);
+  console.log('*****');
   try {
     const hmac = metadata['X-Shopify-Hmac-Sha256'];
     const hmacValid = checkWebhookHmacValidity(
