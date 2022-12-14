@@ -7,8 +7,8 @@ on:
     paths:
       - .github/workflows/storefront.yml
       - applications/storefront/**
-      - packages/react-components
-      - packages/react-hooks
+      - packages/react-components/**
+      - packages/react-hooks/**
 jobs:
   deploy:
     name: Deploy

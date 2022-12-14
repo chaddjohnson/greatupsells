@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/logs-service.yml
       - services/logs/**
-      - packages/email-client
+      - packages/email-client/**
 jobs:
   deploy:
     name: Deploy
