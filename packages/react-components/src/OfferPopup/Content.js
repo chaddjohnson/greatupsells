@@ -12,7 +12,7 @@ const Content = styled.div`
   top: 50%;
   padding: 10px;
   margin-right: 0;
-  transform: translateY(-50%);
+  transform: translateY(0%);
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
