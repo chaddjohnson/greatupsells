@@ -89,7 +89,7 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
 resource "aws_ssm_parameter" "shopify_extension_post_purchase_id" {
   name      = "/greatupsells/${terraform.workspace}/shopify/post-purchase/id"
   type      = "SecureString"
-  value     = var.shopify_app_post_purchase_id
+  value     = var.shopify_post_purchase_id
   overwrite = true
   provider  = aws.region
 }
