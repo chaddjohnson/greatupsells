@@ -14,5 +14,6 @@ services_domains = {
 assets_domain                    = "assets.greatupsells.com"
 shopify_admin_app_api_key        = ""
 shopify_admin_app_api_secret_key = ""
+shopify_post_purchase_id         = ""
 shopify_app_embed_block_id       = ""
 event_bus_arn                    = ""

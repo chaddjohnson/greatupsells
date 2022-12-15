@@ -304,6 +304,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `ELASTICSEARCH_ROOT_PASSWORD` (the Elasticsearch "elastic" user password)
    1. `ELASTICSEARCH_APP_PASSWORD` (the Elasticsearch "app" user password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
+   1. `SHOPIFY_CLI_PARTNERS_TOKEN` (a CLI token obtained from the Shopify Partners account)
 1. In the AWS Console under SES, request a sending limit increase to get the SES account out of "sandbox" mode.
 1. Trigger deployments in the order shown below.
 1. Add name servers to domain registrar settings once `infrastructure` setup has run.

@@ -20,6 +20,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: us-east-1
+      SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}
     steps:
       - name: Set Environment Variables
         run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -48,6 +49,24 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
           env_variable_name: 'SHOPIFY_EMBED_BLOCK_ID'
+
+      # Specific to app extensions.
+      - name: Inject "SHOPIFY_API_KEY" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/api-key'
+          env_variable_name: 'SHOPIFY_API_KEY'
+      - name: Inject "SHOPIFY_POST_PURCHASE_UPSELLS_ID" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/post-purchase/id'
+          env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
+      - name: Inject "SHOPIFY_GREAT_UPSELLS_OFFERS_ID" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
+          env_variable_name: 'SHOPIFY_GREAT_UPSELLS_OFFERS_ID'
+
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Node.js
@@ -95,6 +114,9 @@ jobs:
         if: ${{ github.ref == 'refs/heads/production' }}
       - name: Sync .serverless directory
         run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/shopify-admin/.serverless
+        working-directory: applications/shopify-admin
+      - name: Publish Shopify extensions
+        run: yarn extensions:deploy
         working-directory: applications/shopify-admin
       - name: Uninstall Global Packages
         if: always()
