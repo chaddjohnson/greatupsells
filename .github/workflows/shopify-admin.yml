@@ -125,7 +125,7 @@ jobs:
         run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/shopify-admin/.serverless
         working-directory: applications/shopify-admin
       - name: Publish Shopify extensions
-        run: yarn extensions:deploy
+        run: env > .env && yarn extensions:deploy
         working-directory: applications/shopify-admin
       - name: Uninstall Global Packages
         if: always()
