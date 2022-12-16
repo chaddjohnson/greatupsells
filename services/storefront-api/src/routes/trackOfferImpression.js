@@ -69,6 +69,12 @@ const handler = middy(async (event, context) => {
   }
 });
 
-handler.use(cors());
+handler.use(
+  cors({
+    origin: '*',
+    headers:
+      'Content-Type, X-Amz-Date, X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent, shop'
+  })
+);
 
 module.exports.handler = handler;

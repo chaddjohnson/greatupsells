@@ -85,15 +85,7 @@ functions:
       - http:
           path: /offers/random
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - shop
+          cors: true
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -102,15 +94,7 @@ functions:
       - http:
           path: /shop
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - shop
+          cors: true
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   signPostPurchaseChangeset:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -137,15 +121,7 @@ functions:
       - http:
           path: /offers/{offerId}/impressions
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - shop
+          cors: true
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
