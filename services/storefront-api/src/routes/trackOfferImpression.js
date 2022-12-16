@@ -69,10 +69,6 @@ const handler = middy(async (event, context) => {
   }
 });
 
-handler.use(
-  cors({
-    headers: 'shop'
-  })
-);
+handler.use(cors());
 
 module.exports.handler = handler;
