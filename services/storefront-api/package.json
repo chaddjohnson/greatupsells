@@ -25,7 +25,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "aws-sdk": "2.1259.0",
     "nodemon": "^2.0.7",
     "serverless": "^3.19.0",
     "serverless-domain-manager": "6.0.3",
