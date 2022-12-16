@@ -12,11 +12,14 @@ const injectStyles = (themeKey) => {
       stylesCache[themeKey] =
         stylesCache[themeKey] || parentStyleElement?.textContent;
       styleElement.textContent = stylesCache[themeKey];
-      iframe.contentDocument.head.appendChild(styleElement);
-      styleElements.push({
-        parent: iframe.contentDocument.head,
-        element: styleElement
-      });
+
+      if (iframe?.contentDocument?.head) {
+        iframe.contentDocument.head.appendChild(styleElement);
+        styleElements.push({
+          parent: iframe.contentDocument.head,
+          element: styleElement
+        });
+      }
     });
   }
 
