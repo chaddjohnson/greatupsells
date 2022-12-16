@@ -88,11 +88,6 @@ functions:
           cors:
             origin: '*'
             headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   findShop:
@@ -105,11 +100,6 @@ functions:
           cors:
             origin: '*'
             headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   signPostPurchaseChangeset:
@@ -140,11 +130,6 @@ functions:
           cors:
             origin: '*'
             headers:
-              - Content-Type
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   updateShopifyDraftOrderItems:
