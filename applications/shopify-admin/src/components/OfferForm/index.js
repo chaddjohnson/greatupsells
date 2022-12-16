@@ -502,7 +502,8 @@ const OfferForm = ({
               >
                 <p>
                   To use it on your store&apos;s post-purchase page, select it
-                  in checkout settings.
+                  in checkout settings under the &ldquo;Post-purchase page
+                  section&rdquo;.
                 </p>
               </Banner>
             )}
