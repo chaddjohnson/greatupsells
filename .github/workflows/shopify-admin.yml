@@ -49,6 +49,11 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
           env_variable_name: 'SHOPIFY_EMBED_BLOCK_ID'
+      - name: Inject "STOREFRONT_API_URL" SSM Parameter
+        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+        with:
+          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/storefront-api/url'
+          env_variable_name: 'STOREFRONT_API_URL'
 
       # Specific to app extensions.
       - name: Inject "SHOPIFY_API_KEY" SSM Parameter
