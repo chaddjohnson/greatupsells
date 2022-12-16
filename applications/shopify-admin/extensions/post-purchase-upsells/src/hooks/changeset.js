@@ -1,4 +1,4 @@
-const STOREFRONT_API_URL = JSON.parse(process.env.STOREFRONT_API_URL);
+const STOREFRONT_API_URL = process.env.STOREFRONT_API_URL; // eslint-disable-line prefer-destructuring
 
 const buildDiscount = (offer, variant) => {
   const { price } = variant;

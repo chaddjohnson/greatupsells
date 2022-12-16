@@ -1,4 +1,4 @@
-const STOREFRONT_API_URL = JSON.parse(process.env.STOREFRONT_API_URL);
+const STOREFRONT_API_URL = process.env.STOREFRONT_API_URL; // eslint-disable-line prefer-destructuring
 
 // Intentionally track offer hit ID at module level as this hook may be used in
 // multiple places, and we want this state to be shared.
