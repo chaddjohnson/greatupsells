@@ -88,6 +88,7 @@ functions:
           cors:
             origin: '*'
             headers:
+              - Content-Type
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   findShop:
@@ -100,6 +101,7 @@ functions:
           cors:
             origin: '*'
             headers:
+              - Content-Type
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   signPostPurchaseChangeset:
@@ -130,6 +132,7 @@ functions:
           cors:
             origin: '*'
             headers:
+              - Content-Type
               - shop
     provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
   updateShopifyDraftOrderItems:
