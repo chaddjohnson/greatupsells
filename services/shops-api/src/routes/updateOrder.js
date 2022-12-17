@@ -52,7 +52,7 @@ const handler = async (event, context) => {
     }
 
     await order.execPopulate('shop');
-    await logger.info(`Order updated (${order.toString()})`, { order });
+    await logger.debug(`Order updated (${order.toString()})`, { order });
 
     return {
       statusCode: StatusCodes.OK,

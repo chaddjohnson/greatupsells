@@ -32,7 +32,7 @@ const handler = async (event, context) => {
     await product.updatePairedPurchases();
     await product.execPopulate('shop');
 
-    await logger.info(`Product created (${product.toString()})`, { data });
+    await logger.debug(`Product created (${product.toString()})`, { data });
 
     return {
       statusCode: StatusCodes.CREATED,

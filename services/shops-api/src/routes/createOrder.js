@@ -44,7 +44,10 @@ const handler = async (event, context) => {
         `No conversions were recorded for order (${order.toString()})`
       );
     } else {
-      await logger.info(`Order created (${order.toString()})`, { data });
+      await logger.info(
+        `Order with conversions created (${order.toString()})`,
+        { data }
+      );
     }
 
     return {
