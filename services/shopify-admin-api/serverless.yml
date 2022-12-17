@@ -39,10 +39,10 @@ custom:
     autoDomain: true
   warmup:
     default:
-      enabled: false
+      enabled: true
       memorySize: 128
       concurrency: 5
-      prewarm: false
+      prewarm: true
       events:
         - schedule: rate(5 minutes)
 
