@@ -33,11 +33,14 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
+  provisionedConcurrency:
+    test: 1
+    production: 5
   warmup:
     default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
+      enabled: true
+      concurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
+      prewarm: true
       events:
         - schedule: rate(5 minutes)
 
@@ -57,9 +60,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
   log:
     memorySize: 256
     reservedConcurrency: 3
@@ -68,9 +68,6 @@ functions:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 1
-    warmup:
-      default:
-        enabled: false
   findLogs:
     handler: src/routes/findLogs.handler
     events:

@@ -38,11 +38,14 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/storefront-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
+  provisionedConcurrency:
+    test: 1
+    production: 5
   warmup:
     default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
+      enabled: true
+      concurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
+      prewarm: true
       events:
         - schedule: rate(5 minutes)
 
@@ -55,9 +58,6 @@ functions:
           path: /health
           method: get
           cors: true
-    warmup:
-      default:
-        enabled: false
   region:
     memorySize: 128
     handler: src/routes/region.handler

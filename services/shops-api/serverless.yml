@@ -54,11 +54,14 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
+  provisionedConcurrency:
+    test: 1
+    production: 5
   warmup:
     default:
-      enabled: false
-      concurrency: 5
-      prewarm: false
+      enabled: true
+      concurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
+      prewarm: true
       events:
         - schedule: rate(5 minutes)
 
@@ -439,9 +442,6 @@ functions:
       - http:
           path: /health
           method: get
-    warmup:
-      default:
-        enabled: false
   initializeShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/initializeShopByDomain.handler
