@@ -37,16 +37,17 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
-  stages:
-    test:
-      provisionedConcurrency: 1
-    production:
-      provisionedConcurrency: 5
+  warmup:
+    default:
+      enabled: false
+      concurrency: 5
+      prewarm: false
+      events:
+        - schedule: rate(5 minutes)
 
 functions:
   authorizer:
     handler: src/authorizer.handler
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   health:
     memorySize: 128
     handler: src/routes/health.handler
@@ -55,7 +56,9 @@ functions:
           path: /health
           method: get
           cors: true
-    provisionedConcurrency: 1
+    warmup:
+      default:
+        enabled: false
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -64,6 +67,9 @@ functions:
           path: /region
           method: get
           cors: true
+    warmup:
+      default:
+        enabled: false
   activatePlan:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/activatePlan.handler
@@ -77,7 +83,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   changePlan:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/changePlan.handler
@@ -91,7 +96,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   cloneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
@@ -105,7 +109,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   consentToDataAccess:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/consentToDataAccess.handler
@@ -119,7 +122,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
@@ -133,7 +135,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   createTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createTheme.handler
@@ -147,7 +148,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   deleteOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
@@ -161,7 +161,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
@@ -175,7 +174,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
@@ -189,7 +187,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
@@ -203,7 +200,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
@@ -217,7 +213,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferThemes.handler
@@ -231,7 +226,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
@@ -245,7 +239,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOffers:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
@@ -259,7 +252,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOfferImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
@@ -273,7 +265,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomCollection.handler
@@ -287,7 +278,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findOneRandomProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomProduct.handler
@@ -301,7 +291,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -315,7 +304,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findThemes:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findThemes.handler
@@ -329,7 +317,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopAcceptances:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
@@ -343,7 +330,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopConversionRates:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
@@ -357,7 +343,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopConversions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
@@ -371,7 +356,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopImpressions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
@@ -385,7 +369,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   findShopRevenueIncreases:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
@@ -399,7 +382,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
@@ -413,7 +395,6 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
   updateTheme:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateTheme.handler
@@ -427,12 +408,12 @@ functions:
             type: request
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 0
-    provisionedConcurrency: ${self:custom.stages.${self:provider.stage}.provisionedConcurrency, null}
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
+  - serverless-plugin-warmup
 
 package:
   patterns:

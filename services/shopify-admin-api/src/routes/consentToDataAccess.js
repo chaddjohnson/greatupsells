@@ -17,6 +17,11 @@ const httpClient = new HttpClient({
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  if (event.source === 'serverless-plugin-warmup') {
+    await new Promise((resolve) => setTimeout(resolve, 25));
+    return 'Lambda is warm!';
+  }
+
   try {
     const { shopId } = event.requestContext.authorizer;
 

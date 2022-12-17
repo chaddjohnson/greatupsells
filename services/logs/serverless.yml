@@ -33,6 +33,13 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
+  warmup:
+    default:
+      enabled: false
+      concurrency: 5
+      prewarm: false
+      events:
+        - schedule: rate(5 minutes)
 
 functions:
   createLog:
@@ -42,7 +49,6 @@ functions:
           path: /logs
           method: post
           authorizer: aws_iam
-    provisionedConcurrency: 5
   health:
     memorySize: 128
     handler: src/routes/health.handler
@@ -51,7 +57,9 @@ functions:
           path: /health
           method: get
           cors: true
-    provisionedConcurrency: 1
+    warmup:
+      default:
+        enabled: false
   log:
     memorySize: 256
     reservedConcurrency: 3
@@ -60,6 +68,9 @@ functions:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 1
+    warmup:
+      default:
+        enabled: false
   findLogs:
     handler: src/routes/findLogs.handler
     events:
@@ -67,12 +78,12 @@ functions:
           path: /logs
           method: get
           authorizer: aws_iam
-    provisionedConcurrency: 1
 
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
   - serverless-domain-manager
+  - serverless-plugin-warmup
 
 package:
   patterns:
