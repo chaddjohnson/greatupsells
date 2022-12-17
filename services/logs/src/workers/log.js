@@ -32,6 +32,11 @@ const processRecord = async (record) => {
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
+  if (event.source === 'serverless-plugin-warmup') {
+    await new Promise((resolve) => setTimeout(resolve, 25));
+    return 'Lambda is warm!';
+  }
+
   // Using Promise.all() instead of Promise.allSettled() because batchSize is set to 1.
   // batchSize is set to 1 as messages should never be processed successfully more than once.
   await Promise.all(event.Records.map(processRecord));
