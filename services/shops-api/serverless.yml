@@ -54,13 +54,11 @@ custom:
     endpointType: regional
     securityPolicy: tls_1_2
     autoDomain: true
-  provisionedConcurrency:
-    test: 1
-    production: 5
   warmup:
     default:
       enabled: true
-      concurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
+      memorySize: 128
+      concurrency: 5
       prewarm: true
       events:
         - schedule: rate(5 minutes)

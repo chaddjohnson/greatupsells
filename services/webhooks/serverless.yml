@@ -25,13 +25,11 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 4108
-  provisionedConcurrency:
-    test: 1
-    production: 1
   warmup:
     default:
       enabled: true
-      concurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, null}
+      memorySize: 128
+      concurrency: 1
       prewarm: true
       events:
         - schedule: rate(5 minutes)
