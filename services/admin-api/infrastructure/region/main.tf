@@ -42,7 +42,12 @@ resource "aws_route53_health_check" "admin_api" {
   type              = "HTTPS"
   resource_path     = "/health"
   failure_threshold = "5"
-  request_interval  = "30"
+  request_interval  = "60"
+  regions           = ["us-east-1", "eu-west-1"]
+
+  tags = {
+    Name = "admin-api-${terraform.workspace}"
+  }
 }
 
 resource "aws_ssm_parameter" "admin_api_health_check_id" {
