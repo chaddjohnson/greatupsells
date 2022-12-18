@@ -51,7 +51,6 @@ functions:
   health:
     memorySize: 128
     handler: src/routes/health.handler
-    url: true
     events:
       - http:
           path: /health
