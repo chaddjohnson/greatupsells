@@ -337,14 +337,6 @@ functions:
           path: /offers/{offerId}
           method: get
           authorizer: aws_iam
-  findOneOfferHit:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/findOneOfferHit.handler
-    events:
-      - http:
-          path: /offer-hits/{offerHitId}
-          method: get
-          authorizer: aws_iam
   findOneOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrder.handler
