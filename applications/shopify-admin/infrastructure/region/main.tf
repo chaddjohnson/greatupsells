@@ -50,7 +50,7 @@ resource "aws_route53_health_check" "shopify_admin_app" {
   type              = "HTTPS"
   resource_path     = "/health"
   failure_threshold = "5"
-  request_interval  = "60"
+  request_interval  = "30"
   regions           = ["us-east-1", "eu-west-1", "ap-northeast-1"]
 
   tags = {
