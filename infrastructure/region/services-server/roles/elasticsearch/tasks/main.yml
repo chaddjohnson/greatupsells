@@ -106,7 +106,18 @@
     path: /etc/systemd/system/multi-user.target.wants/elasticsearch.service
     regexp: '^Environment=ES_JAVA_OPTS'
     insertbefore: '^EnvironmentFile='
+    line: Environment=ES_JAVA_OPTS="-Xms1g -Xmx1g"
+  when:
+    - stage == "test"
+
+- name: Limit Elasticsearch memory usage
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system/multi-user.target.wants/elasticsearch.service
+    regexp: '^Environment=ES_JAVA_OPTS'
+    insertbefore: '^EnvironmentFile='
     line: Environment=ES_JAVA_OPTS="-Xms2g -Xmx2g"
+  when:
+    - stage == "production"
 
 - name: Reload service files
   command: systemctl daemon-reload
