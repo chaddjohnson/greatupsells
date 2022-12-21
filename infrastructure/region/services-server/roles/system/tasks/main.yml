@@ -36,7 +36,7 @@
   register: swapfile
 
 - name: Create swap file
-  command: fallocate -l 2G /swapfile
+  command: fallocate -l 4G /swapfile
   when: swapfile.stdout.find('swap file') == -1
 
 - name: Set swap file permissions
