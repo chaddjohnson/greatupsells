@@ -68,7 +68,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/activateShopPlan.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/plan/activation
           method: post
           authorizer: aws_iam
@@ -76,7 +76,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: post
           authorizer: aws_iam
@@ -84,7 +84,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cancelOrder.handler
     events:
-      - http:
+      - httpApi:
           path: /orders/{orderId}/cancelation
           method: post
           authorizer: aws_iam
@@ -92,7 +92,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/changeShopPlan.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/plan
           method: post
           authorizer: aws_iam
@@ -100,7 +100,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/checkShopThemeCompatibility.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/theme-compatibility
           method: post
           authorizer: aws_iam
@@ -108,7 +108,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/clone
           method: post
           authorizer: aws_iam
@@ -116,7 +116,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes/{themeId}/clone
           method: post
           authorizer: aws_iam
@@ -124,7 +124,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/consentToDataAccess.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/data-access-consent
           method: post
           authorizer: aws_iam
@@ -132,7 +132,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler
     events:
-      - http:
+      - httpApi:
           path: /collections
           method: post
           authorizer: aws_iam
@@ -140,7 +140,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/draft-orders
           method: post
           authorizer: aws_iam
@@ -148,7 +148,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers
           method: post
           authorizer: aws_iam
@@ -157,7 +157,7 @@ functions:
     handler: src/routes/createOrder.handler
     timeout: 15
     events:
-      - http:
+      - httpApi:
           path: /orders
           method: post
           authorizer: aws_iam
@@ -165,7 +165,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes
           method: post
           authorizer: aws_iam
@@ -173,7 +173,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
     events:
-      - http:
+      - httpApi:
           path: /products
           method: post
           authorizer: aws_iam
@@ -181,7 +181,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deactivateShop.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/deactivation
           method: post
           authorizer: aws_iam
@@ -189,7 +189,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteCollection.handler
     events:
-      - http:
+      - httpApi:
           path: /collections/{collectionId}
           method: delete
           authorizer: aws_iam
@@ -197,7 +197,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: delete
           authorizer: aws_iam
@@ -205,7 +205,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteProduct.handler
     events:
-      - http:
+      - httpApi:
           path: /products/{productId}
           method: delete
           authorizer: aws_iam
@@ -213,7 +213,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/acceptances
           method: get
           authorizer: aws_iam
@@ -221,7 +221,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/conversion-rates
           method: get
           authorizer: aws_iam
@@ -229,7 +229,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/impressions
           method: get
           authorizer: aws_iam
@@ -237,7 +237,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/conversions
           method: get
           authorizer: aws_iam
@@ -245,7 +245,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferHitsByDraftOrderId.handler
     events:
-      - http:
+      - httpApi:
           path: /offer-hits/shopify-draft-order-id/{shopifyDraftOrderId}
           method: get
           authorizer: aws_iam
@@ -253,7 +253,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/revenue-increases
           method: get
           authorizer: aws_iam
@@ -261,7 +261,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findThemes.handler
     events:
-      - http:
+      - httpApi:
           path: /themes
           method: get
           authorizer: aws_iam
@@ -269,7 +269,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/acceptances
           method: get
           authorizer: aws_iam
@@ -277,7 +277,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/conversion-rates
           method: get
           authorizer: aws_iam
@@ -285,7 +285,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/conversions
           method: get
           authorizer: aws_iam
@@ -293,7 +293,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/impressions
           method: get
           authorizer: aws_iam
@@ -301,7 +301,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/revenue-increases
           method: get
           authorizer: aws_iam
@@ -309,7 +309,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferThemes.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/themes
           method: get
           authorizer: aws_iam
@@ -317,7 +317,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
     events:
-      - http:
+      - httpApi:
           path: /offers
           method: get
           authorizer: aws_iam
@@ -325,7 +325,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneCollectionId.handler
     events:
-      - http:
+      - httpApi:
           path: /collections/shopify-collection-id/{shopifyCollectionId}
           method: get
           authorizer: aws_iam
@@ -333,7 +333,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: get
           authorizer: aws_iam
@@ -341,7 +341,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrder.handler
     events:
-      - http:
+      - httpApi:
           path: /orders/{orderId}
           method: get
           authorizer: aws_iam
@@ -349,7 +349,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOrderByShopifyOrderId.handler
     events:
-      - http:
+      - httpApi:
           path: /orders/shopify-order-id/{shopifyOrderId}
           method: get
           authorizer: aws_iam
@@ -357,7 +357,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes/{themeId}
           method: get
           authorizer: aws_iam
@@ -365,7 +365,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneProductByShopifyProductId.handler
     events:
-      - http:
+      - httpApi:
           path: /products/shopify-product-id/{shopifyProductId}
           method: get
           authorizer: aws_iam
@@ -373,7 +373,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopOfferByDomain.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/domain/{domain}/offers/random
           method: post
           authorizer: aws_iam
@@ -381,7 +381,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopCollection.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/collections/random
           method: get
           authorizer: aws_iam
@@ -389,7 +389,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomShopProduct.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/products/random
           method: get
           authorizer: aws_iam
@@ -397,7 +397,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShop.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}
           method: get
           authorizer: aws_iam
@@ -405,7 +405,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneShopByDomain.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/domain/{domain}
           method: get
           authorizer: aws_iam
@@ -413,7 +413,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopOffers.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/offers
           method: get
           authorizer: aws_iam
@@ -421,7 +421,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopThemes.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/themes
           method: get
           authorizer: aws_iam
@@ -429,7 +429,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
   initializeShopByDomain:
@@ -437,7 +437,7 @@ functions:
     handler: src/routes/initializeShopByDomain.handler
     timeout: 20
     events:
-      - http:
+      - httpApi:
           path: /shops/domain/{domain}/initialization
           method: post
           authorizer: aws_iam
@@ -445,7 +445,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/installAppEmbedBlock.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/themes/{shopifyThemeId}/app-embed-block-install
           method: post
           authorizer: aws_iam
@@ -453,7 +453,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/acceptances
           method: post
           authorizer: aws_iam
@@ -461,7 +461,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/impressions
           method: post
           authorizer: aws_iam
@@ -469,7 +469,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateCollection.handler
     events:
-      - http:
+      - httpApi:
           path: /collections/{collectionId}
           method: put
           authorizer: aws_iam
@@ -477,7 +477,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOfferHit.handler
     events:
-      - http:
+      - httpApi:
           path: /offer-hits/{offerHitId}
           method: put
           authorizer: aws_iam
@@ -485,7 +485,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: put
           authorizer: aws_iam
@@ -493,7 +493,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOrder.handler
     events:
-      - http:
+      - httpApi:
           path: /orders/{orderId}
           method: put
           authorizer: aws_iam
@@ -501,7 +501,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}/draft-orders/{draftOrderId}/line-items
           method: put
           authorizer: aws_iam
@@ -509,7 +509,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes/{themeId}
           method: put
           authorizer: aws_iam
@@ -517,7 +517,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
     events:
-      - http:
+      - httpApi:
           path: /products/{productId}
           method: put
           authorizer: aws_iam
@@ -525,7 +525,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShop.handler
     events:
-      - http:
+      - httpApi:
           path: /shops/{shopId}
           method: put
           authorizer: aws_iam

@@ -46,7 +46,7 @@ functions:
   createLog:
     handler: src/routes/createLog.handler
     events:
-      - http:
+      - httpApi:
           path: /logs
           method: post
           authorizer: aws_iam
@@ -54,7 +54,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
           cors: true
@@ -69,7 +69,7 @@ functions:
   findLogs:
     handler: src/routes/findLogs.handler
     events:
-      - http:
+      - httpApi:
           path: /logs
           method: get
           authorizer: aws_iam

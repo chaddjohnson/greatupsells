@@ -53,7 +53,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
           cors: true
@@ -61,7 +61,7 @@ functions:
     memorySize: 128
     handler: src/routes/region.handler
     events:
-      - http:
+      - httpApi:
           path: /region
           method: get
           cors: true
@@ -73,7 +73,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findLogs.handler
     events:
-      - http:
+      - httpApi:
           path: /logs
           method: get
           cors: true

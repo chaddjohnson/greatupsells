@@ -53,7 +53,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
           cors: true
@@ -61,7 +61,7 @@ functions:
     memorySize: 128
     handler: src/routes/region.handler
     events:
-      - http:
+      - httpApi:
           path: /region
           method: get
           cors: true
@@ -72,7 +72,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/activatePlan.handler
     events:
-      - http:
+      - httpApi:
           path: /plan/activation
           method: post
           cors: true
@@ -85,7 +85,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/changePlan.handler
     events:
-      - http:
+      - httpApi:
           path: /plan
           method: post
           cors: true
@@ -98,7 +98,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/cloneOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/clone
           method: post
           cors: true
@@ -111,7 +111,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/consentToDataAccess.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/data-access-consent
           method: post
           cors: true
@@ -124,7 +124,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers
           method: post
           cors: true
@@ -137,7 +137,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes
           method: post
           cors: true
@@ -150,7 +150,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/deleteOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: delete
           cors: true
@@ -163,7 +163,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: get
           cors: true
@@ -176,7 +176,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferAcceptances.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/acceptances
           method: get
           cors: true
@@ -189,7 +189,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversionRates.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/conversion-rates
           method: get
           cors: true
@@ -202,7 +202,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferConversions.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/conversions
           method: get
           cors: true
@@ -215,7 +215,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferThemes.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/themes
           method: get
           cors: true
@@ -228,7 +228,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferRevenueIncreases.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/revenue-increases
           method: get
           cors: true
@@ -241,7 +241,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOffers.handler
     events:
-      - http:
+      - httpApi:
           path: /offers
           method: get
           cors: true
@@ -254,7 +254,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOfferImpressions.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/impressions
           method: get
           cors: true
@@ -267,7 +267,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomCollection.handler
     events:
-      - http:
+      - httpApi:
           path: /collections/random
           method: get
           cors: true
@@ -280,7 +280,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomProduct.handler
     events:
-      - http:
+      - httpApi:
           path: /products/random
           method: get
           cors: true
@@ -293,7 +293,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
     events:
-      - http:
+      - httpApi:
           path: /shop
           method: get
           cors: true
@@ -306,7 +306,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findThemes.handler
     events:
-      - http:
+      - httpApi:
           path: /themes
           method: get
           cors: true
@@ -319,7 +319,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopAcceptances.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/acceptances
           method: get
           cors: true
@@ -332,7 +332,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversionRates.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/conversion-rates
           method: get
           cors: true
@@ -345,7 +345,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopConversions.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/conversions
           method: get
           cors: true
@@ -358,7 +358,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopImpressions.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/impressions
           method: get
           cors: true
@@ -371,7 +371,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShopRevenueIncreases.handler
     events:
-      - http:
+      - httpApi:
           path: /shop/revenue-increases
           method: get
           cors: true
@@ -384,7 +384,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}
           method: put
           cors: true
@@ -397,7 +397,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateTheme.handler
     events:
-      - http:
+      - httpApi:
           path: /themes/{themeId}
           method: put
           cors: true

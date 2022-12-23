@@ -30,7 +30,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
           cors: true

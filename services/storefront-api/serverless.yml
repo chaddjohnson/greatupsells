@@ -52,7 +52,7 @@ functions:
     memorySize: 128
     handler: src/routes/health.handler
     events:
-      - http:
+      - httpApi:
           path: /health
           method: get
           cors: true
@@ -60,7 +60,7 @@ functions:
     memorySize: 128
     handler: src/routes/region.handler
     events:
-      - http:
+      - httpApi:
           path: /region
           method: get
           cors: true
@@ -71,7 +71,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
     events:
-      - http:
+      - httpApi:
           path: /draft-orders/{draftOrderId}/line-items
           method: post
           cors: true
@@ -79,7 +79,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
     events:
-      - http:
+      - httpApi:
           path: /draft-orders
           method: post
           cors: true
@@ -87,7 +87,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/random
           method: post
           cors:
@@ -99,7 +99,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
     events:
-      - http:
+      - httpApi:
           path: /shop
           method: get
           cors:
@@ -111,7 +111,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/signPostPurchaseChangeset.handler
     events:
-      - http:
+      - httpApi:
           path: /post-purchase/changeset-signature
           method: post
           cors: true
@@ -119,7 +119,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/acceptances
           method: post
           cors: true
@@ -127,7 +127,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
     events:
-      - http:
+      - httpApi:
           path: /offers/{offerId}/impressions
           method: post
           cors:
@@ -139,7 +139,7 @@ functions:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
     events:
-      - http:
+      - httpApi:
           path: /draft-orders/{draftOrderId}/line-items
           method: put
           cors: true
