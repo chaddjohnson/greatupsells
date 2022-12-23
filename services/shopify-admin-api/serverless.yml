@@ -56,6 +56,7 @@ custom:
 
 functions:
   authorizer:
+    memorySize: 128
     handler: src/authorizer.handler
   health:
     memorySize: 128
