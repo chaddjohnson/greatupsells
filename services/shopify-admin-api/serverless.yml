@@ -18,6 +18,7 @@ provider:
     authorizers:
       authorizer:
         type: request
+        functionName: authorizer
         identitySource: method.request.header.Authorization
         resultTtlInSeconds: 0
   environment:
