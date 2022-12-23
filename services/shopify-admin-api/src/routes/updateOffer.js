@@ -23,7 +23,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/${shopId}`),

@@ -22,7 +22,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda;
 
     await httpClient.post(`/shops/${shopId}/plan/activation`);
 

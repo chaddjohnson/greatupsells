@@ -20,9 +20,9 @@ const handler = middy(async (event, context) => {
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
-  console.log(JSON.stringify(event, null, 2));
+
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda;
     const shop = await httpClient.get(`/shops/${shopId}`);
 
     delete shop.accessToken;

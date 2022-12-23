@@ -23,7 +23,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda;
     const { startAt, endAt } = event.queryStringParameters || {};
     const params = qs.stringify({ startAt, endAt }, true);
     const shopImpressions = await httpClient.get(

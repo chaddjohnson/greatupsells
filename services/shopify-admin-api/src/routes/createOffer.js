@@ -22,7 +22,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda;
     const shop = await httpClient.get(`/shops/${shopId}`);
     const data = JSON.parse(event.body);
 
