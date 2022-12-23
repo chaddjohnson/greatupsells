@@ -54,6 +54,7 @@ custom:
     certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
+    apiType: http
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:
