@@ -400,7 +400,6 @@ functions:
             type: aws_iam
   findOneRandomShopOfferByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    memorySize: 1024
     handler: src/routes/findOneRandomShopOfferByDomain.handler
     events:
       - httpApi:
@@ -437,7 +436,6 @@ functions:
             type: aws_iam
   findOneShopByDomain:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    memorySize: 1024
     handler: src/routes/findOneShopByDomain.handler
     events:
       - httpApi:
