@@ -20,7 +20,7 @@ const handler = middy(async (event, context) => {
     await new Promise((resolve) => setTimeout(resolve, 25));
     return 'Lambda is warm!';
   }
-
+  console.log(event);
   try {
     const { shopId } = event.requestContext.authorizer;
     const shop = await httpClient.get(`/shops/${shopId}`);
