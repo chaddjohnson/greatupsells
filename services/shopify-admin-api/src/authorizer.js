@@ -6,8 +6,8 @@ const { JWT_SECRET } = process.env;
 
 // Reference: https://github.com/tmaximini/serverless-jwt-authorizer/blob/master/functions/authorize.js
 
-const generatePolicyDocument = (effect, methodArn) => {
-  if (!effect || !methodArn) {
+const generatePolicyDocument = (effect, routeArn) => {
+  if (!effect || !routeArn) {
     return null;
   }
 
@@ -17,7 +17,7 @@ const generatePolicyDocument = (effect, methodArn) => {
       {
         Action: 'execute-api:Invoke',
         Effect: effect,
-        Resource: methodArn
+        Resource: routeArn
       }
     ]
   };
@@ -25,8 +25,8 @@ const generatePolicyDocument = (effect, methodArn) => {
   return policyDocument;
 };
 
-const generateAuthResponse = (principalId, effect, methodArn) => {
-  const policyDocument = generatePolicyDocument(effect, methodArn);
+const generateAuthResponse = (principalId, effect, routeArn) => {
+  const policyDocument = generatePolicyDocument(effect, routeArn);
 
   return {
     principalId,
@@ -44,11 +44,10 @@ const handler = async (event, context) => {
 
   const authorizationHeader =
     event.headers.Authorization || event.headers.authorization;
-  const token =
-    authorizationHeader && authorizationHeader.replace('Bearer ', '');
-  const { methodArn } = event;
+  const token = authorizationHeader?.replace('Bearer ', '');
+  const { routeArn } = event;
 
-  if (!token || !methodArn) {
+  if (!token || !routeArn) {
     await logger.warn('Unauthorized access attempt', null, { event });
 
     return {
@@ -62,7 +61,7 @@ const handler = async (event, context) => {
 
     if (decoded) {
       return {
-        ...generateAuthResponse(decoded.shopId, 'Allow', methodArn),
+        ...generateAuthResponse(decoded.shopId, 'Allow', routeArn),
         context: {
           shopId: decoded.shopId
         }
@@ -73,7 +72,7 @@ const handler = async (event, context) => {
   } catch (error) {
     await logger.warn('Invalid access attempt', null, { event });
 
-    return generateAuthResponse('user', 'Deny', methodArn);
+    return generateAuthResponse('user', 'Deny', routeArn);
   }
 };
 
