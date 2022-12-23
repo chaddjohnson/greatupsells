@@ -64,7 +64,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -72,7 +71,6 @@ functions:
       - httpApi:
           path: /region
           method: get
-          cors: true
     warmup:
       default:
         enabled: false
@@ -83,7 +81,6 @@ functions:
       - httpApi:
           path: /plan/activation
           method: post
-          cors: true
           authorizer:
             name: authorizer
   changePlan:
@@ -93,7 +90,6 @@ functions:
       - httpApi:
           path: /plan
           method: post
-          cors: true
           authorizer:
             name: authorizer
   cloneOffer:
@@ -103,7 +99,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/clone
           method: post
-          cors: true
           authorizer:
             name: authorizer
   consentToDataAccess:
@@ -113,7 +108,6 @@ functions:
       - httpApi:
           path: /shop/data-access-consent
           method: post
-          cors: true
           authorizer:
             name: authorizer
   createOffer:
@@ -123,7 +117,6 @@ functions:
       - httpApi:
           path: /offers
           method: post
-          cors: true
           authorizer:
             name: authorizer
   createTheme:
@@ -133,7 +126,6 @@ functions:
       - httpApi:
           path: /themes
           method: post
-          cors: true
           authorizer:
             name: authorizer
   deleteOffer:
@@ -143,7 +135,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}
           method: delete
-          cors: true
           authorizer:
             name: authorizer
   findOneOffer:
@@ -153,7 +144,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferAcceptances:
@@ -163,7 +153,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/acceptances
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferConversionRates:
@@ -173,7 +162,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/conversion-rates
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferConversions:
@@ -183,7 +171,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/conversions
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferThemes:
@@ -193,7 +180,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/themes
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferRevenueIncreases:
@@ -203,7 +189,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/revenue-increases
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOffers:
@@ -213,7 +198,6 @@ functions:
       - httpApi:
           path: /offers
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOfferImpressions:
@@ -223,7 +207,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/impressions
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOneRandomCollection:
@@ -233,7 +216,6 @@ functions:
       - httpApi:
           path: /collections/random
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findOneRandomProduct:
@@ -243,7 +225,6 @@ functions:
       - httpApi:
           path: /products/random
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShop:
@@ -253,7 +234,6 @@ functions:
       - httpApi:
           path: /shop
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findThemes:
@@ -263,7 +243,6 @@ functions:
       - httpApi:
           path: /themes
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShopAcceptances:
@@ -273,7 +252,6 @@ functions:
       - httpApi:
           path: /shop/acceptances
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShopConversionRates:
@@ -283,7 +261,6 @@ functions:
       - httpApi:
           path: /shop/conversion-rates
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShopConversions:
@@ -293,7 +270,6 @@ functions:
       - httpApi:
           path: /shop/conversions
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShopImpressions:
@@ -303,7 +279,6 @@ functions:
       - httpApi:
           path: /shop/impressions
           method: get
-          cors: true
           authorizer:
             name: authorizer
   findShopRevenueIncreases:
@@ -313,7 +288,6 @@ functions:
       - httpApi:
           path: /shop/revenue-increases
           method: get
-          cors: true
           authorizer:
             name: authorizer
   updateOffer:
@@ -323,7 +297,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}
           method: put
-          cors: true
           authorizer:
             name: authorizer
   updateTheme:
@@ -333,7 +306,6 @@ functions:
       - httpApi:
           path: /themes/{themeId}
           method: put
-          cors: true
           authorizer:
             name: authorizer
 
