@@ -18,7 +18,7 @@ provider:
     #   authorizer:
     #     type: request
     #     functionName: authorizer
-    #     identitySource: $request.header.Authorization
+    #     identitySource: $request.header.authorization
     #     resultTtlInSeconds: 0
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
