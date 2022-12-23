@@ -33,7 +33,8 @@ resource "aws_iam_policy" "services_consumer_role_policy" {
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
           "ses:*",
-          "s3:GetObject"
+          "s3:GetObject",
+          "execute-api:Invoke"
         ],
         "Resource" : "*"
       }

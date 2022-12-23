@@ -13,17 +13,6 @@ provider:
   logRetentionInDays: 14
   httpApi:
     shouldStartNameWithService: true
-  apiGateway:
-    resourcePolicy: # https://www.serverless.com/framework/docs/deprecations/#AWS_API_GATEWAY_SPECIFIC_KEYS
-      - Effect: Allow
-        Principal:
-          AWS: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-        Action: execute-api:Invoke
-        Resource: '*'
-      - Effect: Allow
-        Principal: '*'
-        Action: execute-api:Invoke
-        Resource: 'execute-api:/*/GET/health'
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
