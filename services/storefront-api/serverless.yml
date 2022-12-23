@@ -15,8 +15,8 @@ provider:
     shouldStartNameWithService: true
     disableDefaultEndpoint: true
     cors:
-      origin: '*'
-      headers:
+      allowedOrigins: '*'
+      allowedHeaders:
         - Content-Type
         - shop
   environment:
