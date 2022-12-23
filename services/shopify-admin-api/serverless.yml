@@ -13,7 +13,6 @@ provider:
   logRetentionInDays: 14
   httpApi:
     shouldStartNameWithService: true
-    disableDefaultEndpoint: true
     cors: true
     authorizers:
       authorizer:
