@@ -24,8 +24,7 @@ const handler = middy(async (event, context) => {
 
   try {
     const ipAddress =
-    event.requestContext.http.sourceIp ||
-      event.headers['X-Forwarded-For'];
+      event.requestContext.http.sourceIp || event.headers['X-Forwarded-For'];
     const domain = new URL(
       event.headers.shop || event.headers.origin || event.headers.Origin
     ).host;
