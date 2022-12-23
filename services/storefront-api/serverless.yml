@@ -34,6 +34,7 @@ custom:
     certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
+    apiType: http
     route53Params:
       routingPolicy: latency
       setIdentifier: ${self:provider.region}
