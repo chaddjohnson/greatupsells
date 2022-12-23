@@ -14,7 +14,11 @@ provider:
   httpApi:
     shouldStartNameWithService: true
     disableDefaultEndpoint: true
-    cors: true
+    cors:
+      origin: '*'
+      headers:
+        - Content-Type
+        - shop
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
@@ -89,11 +93,6 @@ functions:
       - httpApi:
           path: /offers/random
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - shop
   findShop:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findShop.handler
@@ -101,11 +100,6 @@ functions:
       - httpApi:
           path: /shop
           method: get
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - shop
   signPostPurchaseChangeset:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/signPostPurchaseChangeset.handler
@@ -127,11 +121,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/impressions
           method: post
-          cors:
-            origin: '*'
-            headers:
-              - Content-Type
-              - shop
   updateShopifyDraftOrderItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateShopifyDraftOrderItems.handler
