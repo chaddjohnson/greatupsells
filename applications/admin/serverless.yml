@@ -13,6 +13,7 @@ provider:
   logRetentionInDays: 14
   httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
     cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
