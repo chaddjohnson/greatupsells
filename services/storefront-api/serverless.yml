@@ -11,8 +11,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+    cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     LOGS_API_URL: ${env:LOGS_API_URL, ssm:/greatupsells/${self:provider.stage}/logs-api/url}
@@ -55,7 +57,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -63,7 +64,6 @@ functions:
       - httpApi:
           path: /region
           method: get
-          cors: true
     warmup:
       default:
         enabled: false
@@ -74,7 +74,6 @@ functions:
       - httpApi:
           path: /draft-orders/{draftOrderId}/line-items
           method: post
-          cors: true
   createDraftOrder:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createDraftOrder.handler
@@ -82,7 +81,6 @@ functions:
       - httpApi:
           path: /draft-orders
           method: post
-          cors: true
   findOneRandomOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/findOneRandomOffer.handler
@@ -114,7 +112,6 @@ functions:
       - httpApi:
           path: /post-purchase/changeset-signature
           method: post
-          cors: true
   trackOfferAcceptance:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferAcceptance.handler
@@ -122,7 +119,6 @@ functions:
       - httpApi:
           path: /offers/{offerId}/acceptances
           method: post
-          cors: true
   trackOfferImpression:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/trackOfferImpression.handler
@@ -142,7 +138,6 @@ functions:
       - httpApi:
           path: /draft-orders/{draftOrderId}/line-items
           method: put
-          cors: true
 
 plugins:
   - serverless-offline

@@ -11,9 +11,9 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
-    shouldStartNameWithService: true
   httpApi:
+    shouldStartNameWithService: true
+    disableDefaultEndpoint: true
     cors: true
     authorizers:
       authorizer:

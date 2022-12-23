@@ -11,8 +11,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+  apiGateway:
     resourcePolicy: # https://www.serverless.com/framework/docs/deprecations/#AWS_API_GATEWAY_SPECIFIC_KEYS
       - Effect: Allow
         Principal:

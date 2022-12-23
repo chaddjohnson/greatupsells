@@ -11,8 +11,16 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+    cors: true
+    # authorizers:
+    #   authorizer:
+    #     type: request
+    #     functionName: authorizer
+    #     identitySource: $request.header.Authorization
+    #     resultTtlInSeconds: 0
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ELASTICSEARCH_URL: ${env:ELASTICSEARCH_URL, ssm:/greatupsells/${self:provider.stage}/database/elasticsearch-logs/url, ''}
@@ -49,7 +57,6 @@ functions:
       - httpApi:
           path: /logs
           method: post
-          authorizer: aws_iam
   health:
     memorySize: 128
     handler: src/routes/health.handler
@@ -57,7 +64,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   log:
     memorySize: 256
     reservedConcurrency: 3
@@ -72,7 +78,6 @@ functions:
       - httpApi:
           path: /logs
           method: get
-          authorizer: aws_iam
 
 plugins:
   - serverless-offline

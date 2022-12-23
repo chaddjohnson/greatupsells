@@ -11,8 +11,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+    cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ADMIN_API_URL: ${env:ADMIN_API_URL, ssm:/greatupsells/${self:provider.stage}/admin-api/url}
@@ -49,7 +51,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -57,7 +58,6 @@ functions:
       - httpApi:
           path: /region
           method: get
-          cors: true
     warmup:
       default:
         enabled: false

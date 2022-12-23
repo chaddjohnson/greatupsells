@@ -11,8 +11,16 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+    cors: true
+    # authorizers:
+    #   authorizer:
+    #     type: request
+    #     functionName: authorizer
+    #     identitySource: $request.header.Authorization
+    #     resultTtlInSeconds: 0
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
@@ -56,7 +64,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   region:
     memorySize: 128
     handler: src/routes/region.handler
@@ -64,7 +71,6 @@ functions:
       - httpApi:
           path: /region
           method: get
-          cors: true
     warmup:
       default:
         enabled: false
@@ -76,7 +82,6 @@ functions:
       - httpApi:
           path: /logs
           method: get
-          cors: true
           # authorizer:
           #   name: authorizer
           #   type: request

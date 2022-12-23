@@ -10,8 +10,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
   versionFunctions: false
   logRetentionInDays: 14
-  apiGateway:
+  httpApi:
     shouldStartNameWithService: true
+    disableDefaultEndpoint: true
+    cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
 
@@ -33,7 +35,6 @@ functions:
       - httpApi:
           path: /health
           method: get
-          cors: true
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256
