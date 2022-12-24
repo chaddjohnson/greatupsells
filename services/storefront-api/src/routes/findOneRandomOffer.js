@@ -1,4 +1,6 @@
 const { URL } = require('url');
+const util = require('util');
+const zlib = require('zlib');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
 const {
@@ -7,6 +9,8 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const HttpClient = require('@greatupsells/gateway-http-client');
+
+const gzip = util.promisify(zlib.gzip);
 
 const { SHOPS_API_URL } = process.env;
 
@@ -88,9 +92,22 @@ const handler = middy(async (event, context) => {
       }
     });
 
+    // Compress data to reduce bandwidth as this is a high-traffic endpoint.
+    const acceptEncoding =
+      event.headers['accept-encoding'] || event.headers['Accept-Encoding'];
+    const gzipAccepted = acceptEncoding.includes('gzip');
+    const buffer = Buffer.from(JSON.stringify(offersData), 'utf-8');
+    const compressedData = await gzip(buffer);
+    const compressedEncodedData = compressedData.toString('base64');
+
     return {
       statusCode: StatusCodes.OK,
-      body: JSON.stringify(offersData)
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Encoding': 'gzip'
+      },
+      isBase64Encoded: true,
+      body: gzipAccepted ? compressedEncodedData : JSON.stringify(offersData)
     };
   } catch (error) {
     if (error.response && error.response.status) {
