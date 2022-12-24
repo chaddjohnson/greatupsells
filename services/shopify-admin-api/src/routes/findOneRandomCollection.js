@@ -22,7 +22,8 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer.lambda;
+    const { shopId } =
+      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const collection = await httpClient.get(
       `/shops/${shopId}/collections/random`
     );

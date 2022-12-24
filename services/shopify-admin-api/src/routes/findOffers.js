@@ -23,7 +23,8 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer.lambda;
+    const { shopId } =
+      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const { query, status } = event.queryStringParameters || {};
     const params = qs.stringify({ query, status }, true);
     const offers = await httpClient.get(`/shops/${shopId}/offers${params}`);

@@ -22,7 +22,8 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } = event.requestContext.authorizer.lambda;
+    const { shopId } =
+      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const shop = await httpClient.get(`/shops/${shopId}`);
 
     delete shop.accessToken;

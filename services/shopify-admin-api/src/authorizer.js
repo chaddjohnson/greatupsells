@@ -6,8 +6,8 @@ const { JWT_SECRET } = process.env;
 
 // Reference: https://github.com/tmaximini/serverless-jwt-authorizer/blob/master/functions/authorize.js
 
-const generatePolicyDocument = (effect, routeArn) => {
-  if (!effect || !routeArn) {
+const generatePolicyDocument = (effect, arn) => {
+  if (!effect || !arn) {
     return null;
   }
 
@@ -17,7 +17,7 @@ const generatePolicyDocument = (effect, routeArn) => {
       {
         Action: 'execute-api:Invoke',
         Effect: effect,
-        Resource: routeArn
+        Resource: arn
       }
     ]
   };
@@ -25,8 +25,8 @@ const generatePolicyDocument = (effect, routeArn) => {
   return policyDocument;
 };
 
-const generateAuthResponse = (principalId, effect, routeArn) => {
-  const policyDocument = generatePolicyDocument(effect, routeArn);
+const generateAuthResponse = (principalId, effect, arn) => {
+  const policyDocument = generatePolicyDocument(effect, arn);
 
   return {
     principalId,
@@ -43,11 +43,13 @@ const handler = async (event, context) => {
   }
 
   const authorizationHeader =
-    event.headers.Authorization || event.headers.authorization;
+    event.authorizationToken ||
+    event.headers.Authorization ||
+    event.headers.authorization;
   const token = authorizationHeader?.replace('Bearer ', '');
-  const { routeArn } = event;
+  const arn = event.routeArn || event.methodArn;
 
-  if (!token || !routeArn) {
+  if (!token || !arn) {
     await logger.warn('Unauthorized access attempt', null, { event });
 
     return {
@@ -61,7 +63,7 @@ const handler = async (event, context) => {
 
     if (decoded) {
       return {
-        ...generateAuthResponse(decoded.shopId, 'Allow', routeArn),
+        ...generateAuthResponse(decoded.shopId, 'Allow', arn),
         context: {
           shopId: decoded.shopId
         }
@@ -72,7 +74,7 @@ const handler = async (event, context) => {
   } catch (error) {
     await logger.warn('Invalid access attempt', null, { event });
 
-    return generateAuthResponse('user', 'Deny', routeArn);
+    return generateAuthResponse('user', 'Deny', arn);
   }
 };
 

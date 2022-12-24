@@ -36,6 +36,7 @@ custom:
   serverless-offline:
     httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 4104
+    noAuth: true
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shops-api/regional-domain, ''}
     basePath: ''
