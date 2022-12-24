@@ -1,5 +1,6 @@
 export { HttpClientProvider, useHttpClient } from './httpClient';
 
+export { default as useCache } from './cache';
 export { default as useCookies } from './cookies';
 export { default as useCurrency } from './currency';
 export { default as useDateTime } from './dateTime';

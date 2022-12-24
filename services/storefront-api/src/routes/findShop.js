@@ -26,10 +26,7 @@ const handler = middy(async (event, context) => {
     const { countryCode, currency, locale, timezone } = shop;
 
     return {
-      statusCode: StatusCodes.NOT_MODIFIED,
-      headers: {
-        'cache-control': 'max-age=300'
-      },
+      statusCode: StatusCodes.OK,
       body: JSON.stringify({
         domain,
         countryCode,
