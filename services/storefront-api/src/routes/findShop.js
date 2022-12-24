@@ -27,6 +27,9 @@ const handler = middy(async (event, context) => {
 
     return {
       statusCode: StatusCodes.OK,
+      headers: {
+        'cache-control': 'max-age=300'
+      },
       body: JSON.stringify({
         domain,
         countryCode,
