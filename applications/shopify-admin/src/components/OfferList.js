@@ -14,6 +14,7 @@ import { useNumberFormatter, useCurrency } from '@greatupsells/react-hooks';
 import styled from 'styled-components';
 import { useShop } from '../hooks';
 import OfferStatus from './OfferStatus';
+import OfferStrategy from './OfferStrategy';
 import Link from './Link';
 
 const FiltersWrapper = styled.div`
@@ -77,6 +78,9 @@ const OfferListRow = ({ offer }) => {
         {formatPercentage(offer.conversionRate, 1)}
       </IndexTable.Cell>
       <IndexTable.Cell>{formatCurrency(offer.revenueIncrease)}</IndexTable.Cell>
+      <IndexTable.Cell>
+        <OfferStrategy offer={offer} />
+      </IndexTable.Cell>
     </IndexTable.Row>
   );
 };
@@ -205,7 +209,8 @@ const OfferList = ({ offers, filters, onFilter }) => {
                 { title: 'Impressions' },
                 { title: 'Acceptances' },
                 { title: 'Conversion rate' },
-                { title: 'Revenue increase' }
+                { title: 'Revenue increase' },
+                { title: 'Strategy' }
               ]}
               selectable={false}
             >
