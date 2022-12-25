@@ -509,12 +509,12 @@ const OfferForm = ({
             )}
         </Layout.Section>
         <Layout.Section>
-          <OfferNameEditor name={name} submitted={submitted} />
           <OfferStrategyEditor
             shop={shop}
             strategy={strategy}
             onStrategyChange={handleStrategyChange}
           />
+          <OfferNameEditor name={name} submitted={submitted} />
           <ThemeEditor
             strategy={offer.strategy}
             theme={theme}
