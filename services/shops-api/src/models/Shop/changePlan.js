@@ -111,7 +111,7 @@ const createPlan = async (shop, level) => {
   shop.plan.billingOn = undefined;
   shop.plan.startedAt = undefined;
   shop.plan.canceledAt = undefined;
-  shop.plan.monthUpsellRevenue = shop.plan.monthUpsellRevenue || 0;
+  shop.plan.monthUpsellRevenue = 0;
   shop.plan.monthUpsellRevenueLimit = plan.monthUpsellRevenueLimit;
   shop.plan.active = false; // Not active until shop owner approves.
 
