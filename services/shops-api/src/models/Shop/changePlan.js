@@ -2,6 +2,7 @@ const getenv = require('getenv');
 const logger = require('@greatupsells/logger');
 
 const { SHOPIFY_ADMIN_APP_API_KEY } = process.env;
+const isSandbox = getenv.bool('SANDBOX', true);
 
 const plans = {
   BASIC: {
@@ -59,49 +60,82 @@ const getTrialDays = async (shop) => {
   return remainingDays;
 };
 
+const createSandboxPlan = async (shop) => {
+  // Set a fake plan under sandbox mode as fucking Shopify disallows recurring application
+  // charge access for custom apps.
+  shop.plan = {
+    name: 'Pro',
+    level: 'PRO',
+    price: 99,
+    active: true,
+    chargeId: 1234567890,
+    billingOn: new Date(),
+    startedAt: new Date(),
+    trialStarteDate: new Date(),
+    monthUpsellRevenue: 0
+  };
+
+  await shop.save();
+
+  const redirectUrl = `/?shop=${shop.domain}`;
+
+  return redirectUrl;
+};
+
+const createPlan = async (shop, level) => {
+  const plan = plans[level];
+
+  if (!plan) {
+    throw new Error(`Unknown plan "${level}" specified`);
+  }
+
+  // Create a new recurring application charge which will replace the existing one.
+  // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
+  const shopifyApiClient = shop.getShopifyApiClient();
+  const trialDays = await getTrialDays(shop);
+  const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create(
+    {
+      name: plan.name,
+      price: plan.price,
+      trial_days: trialDays,
+      return_url: `https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
+      test: false
+    }
+  );
+
+  // Update the shop plan details.
+  shop.plan.name = plan.name;
+  shop.plan.level = level;
+  shop.plan.price = plan.price;
+  shop.plan.chargeId = recurringCharge.id;
+  shop.plan.billingOn = undefined;
+  shop.plan.startedAt = undefined;
+  shop.plan.canceledAt = undefined;
+  shop.plan.monthUpsellRevenue = shop.plan.monthUpsellRevenue || 0;
+  shop.plan.monthUpsellRevenueLimit = plan.monthUpsellRevenueLimit;
+  shop.plan.active = false; // Not active until shop owner approves.
+
+  await shop.save();
+
+  await logger.info(
+    `Successfully changed plan for shop to "${level}" and created new recurring charge ${
+      recurringCharge.id
+    } (${shop.toString()})`,
+    { recurringCharge }
+  );
+
+  const redirectUrl = recurringCharge.confirmation_url;
+
+  return redirectUrl;
+};
+
 const changePlan = async (shop, level) => {
   try {
-    const plan = plans[level];
+    const redirectUrl = isSandbox
+      ? createSandboxPlan(shop)
+      : createPlan(shop, level);
 
-    if (!plan) {
-      throw new Error(`Unknown plan "${level}" specified`);
-    }
-
-    // Create a new recurring application charge which will replace the existing one.
-    // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
-    const shopifyApiClient = shop.getShopifyApiClient();
-    const trialDays = await getTrialDays(shop);
-    const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create(
-      {
-        name: plan.name,
-        price: plan.price,
-        trial_days: trialDays,
-        return_url: `https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan/`,
-        test: getenv.bool('SANDBOX', true) || null
-      }
-    );
-
-    // Update the shop plan details.
-    shop.plan.name = plan.name;
-    shop.plan.level = level;
-    shop.plan.price = plan.price;
-    shop.plan.chargeId = recurringCharge.id;
-    shop.plan.billingOn = undefined;
-    shop.plan.startedAt = undefined;
-    shop.plan.canceledAt = undefined;
-    shop.plan.monthUpsellRevenue = 0;
-    shop.plan.monthUpsellRevenueLimit = plan.monthUpsellRevenueLimit;
-    shop.plan.active = false; // Not active until shop owner approves.
-    await shop.save();
-
-    await logger.info(
-      `Successfully changed plan for shop to "${level}" and created new recurring charge ${
-        recurringCharge.id
-      } (${shop.toString()})`,
-      { recurringCharge }
-    );
-
-    return recurringCharge.confirmation_url;
+    return redirectUrl;
   } catch (error) {
     await logger.error(
       `Error changing plan for shop to "${level}" (${shop.toString()})`,

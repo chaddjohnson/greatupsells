@@ -114,13 +114,21 @@ const createServer = () => {
     });
 
     const { shop: shopDomain, accessToken } = callbackResponse.session;
-
-    await shopsServiceHttpClient.post(
+    const shop = await shopsServiceHttpClient.post(
       `/shops/domain/${shopDomain}/initialization`,
       { accessToken }
     );
+    const shopId = shop._id;
 
-    response.redirect(`/?shop=${shopDomain}`);
+    // Set up a billing plan immediately.
+    const { redirectUrl } = await shopsServiceHttpClient.post(
+      `/shops/${shopId}/plan`,
+      {
+        level: 'BASIC'
+      }
+    );
+
+    response.redirect(redirectUrl);
   });
 
   server.get('/authToken', async (request, response) => {

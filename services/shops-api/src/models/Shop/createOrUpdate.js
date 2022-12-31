@@ -45,22 +45,6 @@ const createOrUpdate = async (shopDomain, accessToken) => {
   // Mark the shop as active.
   shop.active = true;
 
-  // Set a fake plan under sandbox mode as Shopify disallows recurring application
-  // charge access for custom apps.
-  if (isSandbox) {
-    shop.plan = {
-      name: 'Pro',
-      level: 'PRO',
-      price: 99,
-      active: true,
-      chargeId: 1234567890,
-      billingOn: new Date(),
-      startedAt: new Date(),
-      trialStarteDate: new Date(),
-      monthUpsellRevenue: 0
-    };
-  }
-
   await shop.save();
 
   // Run various initializations for the shop.
