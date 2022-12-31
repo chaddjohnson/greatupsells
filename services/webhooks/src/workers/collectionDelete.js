@@ -26,7 +26,7 @@ const processData = async (metadata, data, rawData) => {
     const topic = metadata['X-Shopify-Topic'];
 
     if (!hmacValid) {
-      await logger.warn(`Invalid HMAC for ${topic} webhook`, null, {
+      await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
         metadata,
         data
       });
