@@ -17,6 +17,10 @@ const TitleBar = (props) => {
     {
       content: 'Offers',
       url: `/offers/${urlParams}`
+    },
+    {
+      content: 'Cart drawer',
+      url: `/cart`
     }
   ];
   // const actionGroups = [

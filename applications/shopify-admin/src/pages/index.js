@@ -4,6 +4,7 @@ import {
   Page,
   Layout,
   Card,
+  CalloutCard,
   MediaCard,
   Stack,
   List,
@@ -354,6 +355,22 @@ const DashboardPage = () => {
                 <Button url="/offers/new/">Create offer</Button>
               </Stack>
             </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <CalloutCard
+              title="Cart drawer"
+              primaryAction={{
+                content: 'Install cart drawer',
+                url: '/cart/'
+              }}
+              secondaryAction={{
+                content: 'Learn more',
+                url: 'https://PLACEHOLDER'
+              }}
+            >
+              Create a sliding cart drawer that increases AOV and conversion
+              rates with cross-sell offers.
+            </CalloutCard>
           </Layout.Section>
           <Layout.Section>
             <MediaCard
