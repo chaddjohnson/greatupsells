@@ -5,6 +5,7 @@ const {
 } = require('shopify-hmac-validation');
 const HttpClient = require('@greatupsells/gateway-http-client');
 const logger = require('@greatupsells/logger');
+const { getMetadataValue } = require('../lib');
 
 const { SHOPS_API_URL, SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
 
@@ -14,14 +15,13 @@ const httpClient = new HttpClient({
 
 const processData = async (metadata, data, rawData) => {
   try {
-    const hmac =
-      metadata['X-Shopify-Hmac-Sha256'] || metadata['X-Shopify-Hmac-SHA256'];
+    const hmac = getMetadataValue(metadata, 'X-Shopify-Hmac-SHA256');
     const hmacValid = checkWebhookHmacValidity(
       SHOPIFY_ADMIN_APP_API_SECRET_KEY,
       rawData,
       hmac
     );
-    const topic = metadata['X-Shopify-Topic'];
+    const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
 
     if (!hmacValid) {
       await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
@@ -32,7 +32,7 @@ const processData = async (metadata, data, rawData) => {
 
     const shopifyProductData = data;
     const shopifyProductId = shopifyProductData.id;
-    const domain = metadata['X-Shopify-Shop-Domain'];
+    const domain = getMetadataValue(metadata, 'X-Shopify-Shop-Domain');
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
     let product = null;
@@ -72,7 +72,7 @@ const processRecord = async (record) => {
   const body = JSON.parse(record.body);
   const { detail } = body;
   const { payload, metadata, errors } = detail;
-  const topic = metadata['X-Shopify-Topic'];
+  const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
 
   if (errors) {
     return await logger.error(
