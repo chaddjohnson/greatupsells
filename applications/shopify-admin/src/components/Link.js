@@ -2,8 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 import qs from 'querystringify';
+import clsx from 'clsx';
 
-const Link = ({ url, external, prefetch, children, ...props }) => {
+const Link = ({
+  url,
+  external,
+  monochrome,
+  removeUnderline,
+  prefetch,
+  children,
+  ...props
+}) => {
   if (external || url.match(/^https?:/)) {
     return (
       <a
@@ -31,9 +40,15 @@ const Link = ({ url, external, prefetch, children, ...props }) => {
   // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
   const updatedUrl = `${baseUrl}${qs.stringify(params, true)}`;
 
+  const classNames = clsx(
+    'Polaris-Link',
+    monochrome && 'Polaris-Link--monochrome',
+    removeUnderline && 'Polaris-Link--removeUnderline'
+  );
+
   return (
     <NextLink href={updatedUrl} prefetch={prefetch}>
-      <a data-polaris-unstyled="true" className="Polaris-Link" {...props}>
+      <a data-polaris-unstyled="true" className={classNames} {...props}>
         {children}
       </a>
     </NextLink>
@@ -43,12 +58,17 @@ const Link = ({ url, external, prefetch, children, ...props }) => {
 Link.propTypes = {
   url: PropTypes.string.isRequired,
   external: PropTypes.bool,
+  monochrome: PropTypes.bool,
+  removeUnderline: PropTypes.bool,
   prefetch: PropTypes.bool,
   children: PropTypes.node.isRequired
 };
 
 Link.defaultProps = {
+  url: '',
   external: false,
+  monochrome: false,
+  removeUnderline: false,
   prefetch: false
 };
 
