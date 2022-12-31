@@ -4,7 +4,6 @@ import {
   Page,
   Layout,
   Card,
-  CalloutCard,
   MediaCard,
   Stack,
   List,
@@ -27,7 +26,7 @@ import {
 } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAcceptances } from '../hooks';
-import { TitleBar, LineChart, SkeletonChart, Link } from '../components';
+import { TitleBar, SkeletonChart, Link } from '../components';
 
 const PlanContainer = styled.div`
   text-align: center;
@@ -122,20 +121,10 @@ const DashboardPage = () => {
     options: { decimals: 0 }
   });
   const {
-    shopAcceptances,
     shopAcceptancesLoaded,
     shopAcceptancesError,
     fetchShopAcceptances
   } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
-
-  const shopAcceptancesChartData = useMemo(
-    () =>
-      shopAcceptances?.map(({ date, acceptances }) => [
-        startOfDay(date).getTime(),
-        acceptances
-      ]),
-    [shopAcceptances, startOfDay]
-  );
 
   const loaded = shopLoaded && shopAcceptancesLoaded;
   const error = !!shopError || !!shopAcceptancesError;
@@ -254,26 +243,38 @@ const DashboardPage = () => {
                 <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" alignment="center" vertical>
                     <Text variant="heading4xl">
-                      {formatNumber(shop?.offerAcceptanceCount)}
+                      <Link url="/analytics" removeUnderline monochrome>
+                        {formatNumber(shop?.offerAcceptanceCount)}
+                      </Link>
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Acceptances
+                      <Link url="/analytics" removeUnderline>
+                        Acceptances
+                      </Link>
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
                     <Text variant="heading4xl">
-                      {formatPercentage(shop?.offerConversionRate, 1)}
+                      <Link url="/analytics" removeUnderline monochrome>
+                        {formatPercentage(shop?.offerConversionRate, 1)}
+                      </Link>
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Conversion rate
+                      <Link url="/analytics" removeUnderline>
+                        Conversion rate
+                      </Link>
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
                     <Text variant="heading4xl">
-                      {formatCurrency(shop?.revenueIncrease)}
+                      <Link url="/analytics" removeUnderline monochrome>
+                        {formatCurrency(shop?.revenueIncrease)}
+                      </Link>
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Revenue increase
+                      <Link url="/analytics" removeUnderline>
+                        Revenue increase
+                      </Link>
                     </Text>
                   </Stack>
                 </Stack>
@@ -335,45 +336,26 @@ const DashboardPage = () => {
             </Card>
           </Layout.Section>
           <Layout.Section>
-            <Card sectioned>
-              <LineChart
-                title={
-                  <Stack distribution="equalSpacing">
-                    <Text variant="headingMd" as="h2">
-                      Accepted offers growth
-                    </Text>
-                    <Button plain url="/analytics/">
-                      View all analytics
-                    </Button>
-                  </Stack>
+            <Card
+              title="Add offers to your store"
+              sectioned
+              actions={[
+                {
+                  content: 'Manage your offers',
+                  url: '/offers/'
                 }
-                subtitle="Offers over last 90 days"
-                rangeDescription="January to December"
-                tooltipText="accepted offers"
-                data={shopAcceptancesChartData}
-                emptyMessage="No acceptance data available."
-                formatters={{
-                  number: formatNumber,
-                  percentage: formatPercentage
-                }}
-              />
+              ]}
+            >
+              <Stack spacing="loose" vertical>
+                <p>
+                  Upselling and cross-selling are two of the most effective ways
+                  to increase sales in your store.
+                </p>
+                <Button url="/offers/new/">Create offer</Button>
+              </Stack>
             </Card>
           </Layout.Section>
           <Layout.Section>
-            <CalloutCard
-              title="Add upsell, cross-sell, and popup offers to your store"
-              primaryAction={{
-                content: 'Create offer',
-                url: '/offers/new/'
-              }}
-              secondaryAction={{
-                content: 'Manage your offers',
-                url: '/offers/'
-              }}
-            >
-              Upselling and cross-selling are two of the most effective ways to
-              increase sales in your store.
-            </CalloutCard>
             <MediaCard
               title="Getting Started"
               primaryAction={{
