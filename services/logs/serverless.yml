@@ -39,6 +39,8 @@ custom:
     createRoute53Record: true
     endpointType: regional
     apiType: http
+    route53Params:
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/logs-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
   warmup:

@@ -26,6 +26,17 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 4108
+  customDomain:
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/webhooks-service/regional-domain, ''}
+    basePath: ''
+    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
+    createRoute53Record: true
+    endpointType: regional
+    apiType: http
+    route53Params:
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/webhooks-service/health-check-id, ''}
+    securityPolicy: tls_1_2
+    autoDomain: true
   warmup:
     default:
       enabled: true
@@ -172,6 +183,7 @@ functions:
 plugins:
   - serverless-offline
   - serverless-plugin-monorepo
+  - serverless-domain-manager
   - serverless-plugin-warmup
 
 package:

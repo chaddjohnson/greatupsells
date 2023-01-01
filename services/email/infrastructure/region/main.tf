@@ -20,8 +20,20 @@ data "terraform_remote_state" "greatupsells_infrastructure" {
   }
 }
 
+locals {
+  domain = "email-service.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+}
+
+resource "aws_ssm_parameter" "email_service_regional_domain" {
+  name      = "/greatupsells/${terraform.workspace}/email-service/regional-domain"
+  type      = "String"
+  value     = local.domain
+  overwrite = true
+  provider  = aws.region
+}
+
 resource "aws_route53_health_check" "email_service" {
-  fqdn              = aws_ssm_parameter.email_service_domain.value
+  fqdn              = local.domain
   port              = 443
   type              = "HTTPS"
   resource_path     = "/health"
@@ -32,4 +44,12 @@ resource "aws_route53_health_check" "email_service" {
   tags = {
     Name = "email-service-${terraform.workspace}"
   }
+}
+
+resource "aws_ssm_parameter" "email_service_health_check_id" {
+  name      = "/greatupsells/${terraform.workspace}/email-service/health-check-id"
+  type      = "String"
+  value     = aws_route53_health_check.email_service.id
+  overwrite = true
+  provider  = aws.region
 }

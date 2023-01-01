@@ -18,12 +18,14 @@ provider:
 
 custom:
   customDomain:
-    domainName: ${ssm:/greatupsells/${self:provider.stage}/email-api/regional-domain, ''}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/email-service/regional-domain, ''}
     basePath: ''
     certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
     endpointType: regional
     apiType: http
+    route53Params:
+      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/email-service/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
 
