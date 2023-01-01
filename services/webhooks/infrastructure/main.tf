@@ -10,9 +10,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-data "aws_region" "current" {
-  provider = aws.region
-}
+data "aws_region" "current" {}
 
 data "terraform_remote_state" "greatupsells_infrastructure" {
   backend = "s3"
