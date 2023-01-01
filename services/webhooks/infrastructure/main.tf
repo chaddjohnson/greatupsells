@@ -28,7 +28,6 @@ resource "aws_ssm_parameter" "webhooks_service_regional_domain" {
   type      = "String"
   value     = local.domain
   overwrite = true
-  provider  = aws.region
 }
 
 resource "aws_route53_health_check" "webhooks_service" {
@@ -50,5 +49,4 @@ resource "aws_ssm_parameter" "webhooks_service_health_check_id" {
   type      = "String"
   value     = aws_route53_health_check.webhooks_service.id
   overwrite = true
-  provider  = aws.region
 }
