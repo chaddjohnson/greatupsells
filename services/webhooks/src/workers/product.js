@@ -13,15 +13,16 @@ const httpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
 });
 
-const processData = async (metadata, data, rawData) => {
+const processData = async (metadata, data, rawBody) => {
   try {
     const hmac = getMetadataValue(metadata, 'X-Shopify-Hmac-SHA256');
     const hmacValid = checkWebhookHmacValidity(
       SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-      rawData,
+      rawBody,
       hmac
     );
     const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
+    const domain = getMetadataValue(metadata, 'X-Shopify-Shop-Domain');
 
     if (!hmacValid) {
       await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
@@ -32,7 +33,6 @@ const processData = async (metadata, data, rawData) => {
 
     const shopifyProductData = data;
     const shopifyProductId = shopifyProductData.id;
-    const domain = getMetadataValue(metadata, 'X-Shopify-Shop-Domain');
     const shop = await httpClient.get(`/shops/domain/${domain}`);
     const { shopifyShopId } = shop;
     let product = null;
@@ -73,6 +73,7 @@ const processRecord = async (record) => {
   const { detail } = body;
   const { payload, metadata, errors } = detail;
   const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
+  const rawBody = createRawBody(body);
 
   if (errors) {
     return await logger.error(
@@ -82,7 +83,7 @@ const processRecord = async (record) => {
     );
   }
 
-  await processData(metadata, payload, createRawBody(payload));
+  await processData(metadata, payload, rawBody);
 };
 
 const handler = async (event, context) => {
