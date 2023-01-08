@@ -202,6 +202,14 @@ const createServer = () => {
   server.use('/_next', express.static(path.join(__dirname, '../../.next')));
   server.get('/_next/webpack-hmr', handleAppRequest);
   server.get('*', handleAppRequest);
+  server.use((error, request, response, nextHandler) => {
+    if (!error) {
+      return nextHandler();
+    }
+
+    console.error(error); // eslint-disable-line no-console
+    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error);
+  });
 
   return server;
 };
