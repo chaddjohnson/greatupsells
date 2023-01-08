@@ -24,6 +24,14 @@ const processData = async (metadata, data, rawBody) => {
     const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
     const domain = getMetadataValue(metadata, 'X-Shopify-Shop-Domain');
 
+    console.log({
+      hmacValid,
+      hmac,
+      topic,
+      SHOPIFY_ADMIN_APP_API_SECRET_KEY,
+      rawBody
+    });
+
     if (!hmacValid) {
       await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
         metadata,
