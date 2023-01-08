@@ -137,8 +137,8 @@ const createServer = () => {
       const { shopifySessionToken } = request.query;
 
       // Extract the shop domain from the session token.
-      const decodeToken = jwt.decode(shopifySessionToken);
-      const shopUrl = decodeToken.dest;
+      const decodedToken = jwt.decode(shopifySessionToken);
+      const shopUrl = decodedToken.dest;
       const shopDomain = shopUrl.replace('https://', '');
 
       // Retrieve shop data based on the shop domain.
@@ -194,7 +194,6 @@ const createServer = () => {
         'Content-Security-Policy',
         `frame-ancestors https://${shopDomain} https://admin.shopify.com`
       );
-
       await handleAppRequest(request, response);
     }
   });
