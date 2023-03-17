@@ -17,7 +17,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    await Promise.all(mongodbClient.connect(), esClient.ping());
+    await Promise.all([mongodbClient.connect(), esClient.ping()]);
 
     if (!mongodbClient.connected) {
       throw new Error(`Cannot connect to MongoDB`);
