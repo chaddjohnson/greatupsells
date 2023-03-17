@@ -137,9 +137,10 @@
   debug:
     msg: |
       curl -k -X POST 'https://elastic:{{ elasticsearch_root_password }}@{{ services_domain }}:9200/_security/role/app' -H "Content-Type: application/json" -d '{
+        "cluster": ["monitor"],
         "indices" : [
           {
-            "names" : [ "logs*" ],
+            "names" : [ "logs" ],
             "privileges" : [ "all" ]
           }
         ]
