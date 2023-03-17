@@ -8,6 +8,11 @@ chmod 644 /etc/ssl/mongodb.pem
 openssl x509 -in /etc/ssl/ca.crt -out /etc/ssl/ca.pem -outform PEM
 cat /etc/letsencrypt/live/domain/chain.pem >> /etc/ssl/ca.pem
 
+# Update certificates for Elasticsearch.
+cp -rfL /etc/letsencrypt/live/domain/* /etc/elasticsearch/certs/
+chgrp -R elasticsearch /etc/elasticsearch/certs/
+chmod -R g+r /etc/elasticsearch/certs/
+
 # Generate MongoDB key file if it does not exist.
 if [ ! -f /etc/ssl/mongodb-keyfile.txt ]; then
   openssl rand -base64 768 > /etc/ssl/mongodb-keyfile.txt
