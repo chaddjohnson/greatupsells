@@ -16,9 +16,8 @@ const getMetadataValue = (metadata, searchKey) => {
   ];
 };
 
-const validate = async (metadata, data) => {
+const validate = async (hmac, data) => {
   const rawBody = createRawBody(data);
-  const hmac = getMetadataValue(metadata, 'X-Shopify-Hmac-SHA256');
   const hmacValid = checkWebhookHmacValidity(
     SHOPIFY_ADMIN_APP_API_SECRET_KEY,
     rawBody,
@@ -33,10 +32,10 @@ const processRecord = async (record, processor) => {
   const { detail } = body;
   const { metadata, payload, errors } = detail;
   const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
+  const hmac = getMetadataValue(metadata, 'X-Shopify-Hmac-SHA256');
+  const hmacValid = validate(hmac, record);
 
-  try {
-    validate(metadata, record);
-  } catch (error) {
+  if (!hmacValid) {
     await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
       metadata,
       body
@@ -57,10 +56,10 @@ const processRecord = async (record, processor) => {
 
 const processRequest = async (headers, body, processor) => {
   const topic = getMetadataValue(headers, 'X-Shopify-Topic');
+  const hmac = getMetadataValue(headers, 'X-Shopify-Hmac-SHA256');
+  const hmacValid = validate(hmac, body);
 
-  try {
-    validate(headers, body);
-  } catch (error) {
+  if (!hmacValid) {
     await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
       headers,
       body
