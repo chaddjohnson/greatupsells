@@ -42,7 +42,7 @@ resource "aws_route53_health_check" "shops_api" {
   request_interval                = "30"
   regions                         = ["us-east-1", "eu-west-1", "ap-northeast-1"]
   cloudwatch_alarm_name           = aws_cloudwatch_metric_alarm.shops_api.alarm_name
-  cloudwatch_alarm_region         = aws.region
+  cloudwatch_alarm_region         = data.aws_region.current.name
   insufficient_data_health_status = "Healthy"
 
   tags = {
