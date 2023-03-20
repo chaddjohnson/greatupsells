@@ -44,11 +44,17 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   period              = "60"
   statistic           = "Minimum"
   threshold           = "18"
+  alarm_actions       = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
+  ok_actions          = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
+
   dimensions = {
     HealthCheckId = aws_route53_health_check.shops_api.id
   }
-  # alarm_actions       = [aws_sns_topic.sns.arn]
-  # ok_actions          = [aws_sns_topic.sns.arn]
+}
+
+resource "aws_sns_topic_subscription" "health_check_alarm_topic_subscription" {
+  protocol = "email"
+  endpoint = data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_email
 }
 
 resource "aws_ssm_parameter" "shops_api_health_check_id" {
