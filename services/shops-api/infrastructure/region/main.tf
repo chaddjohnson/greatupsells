@@ -44,6 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   period              = "60"
   statistic           = "Minimum"
   threshold           = "18"
+  unit                = "Count"
   alarm_actions       = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
   ok_actions          = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
 
