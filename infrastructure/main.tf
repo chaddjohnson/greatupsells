@@ -131,10 +131,12 @@ output "health_check_alarm_topic_arn_us-east-1" {
 }
 
 output "health_check_alarm_topic_arn_eu-west-1" {
+  count  = terraform.workspace == "production" ? 1 : 0
   value = module.eu_west_1.health_check_alarm_topic_arn
 }
 
 output "health_check_alarm_topic_arn_ap-northeast-1" {
+  count  = terraform.workspace == "production" ? 1 : 0
   value = module.ap_northeast_1.health_check_alarm_topic_arn
 }
 
