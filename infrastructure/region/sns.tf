@@ -1,5 +1,6 @@
 resource "aws_sns_topic" "health_check_alarm_topic" {
-  name = "health-check-alarm-topic-${terraform.workspace}"
+  name     = "health-check-alarm-topic-${terraform.workspace}"
+  provider = aws.region
 }
 
 output "health_check_alarm_topic_arn" {

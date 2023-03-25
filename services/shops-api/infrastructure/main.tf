@@ -36,7 +36,6 @@ module "us_east_1" {
   }
 
   mongodb_app_password = var.mongodb_app_password
-  health_check_id      = aws_route53_health_check.shops_api.id
 }
 
 module "eu_west_1" {
@@ -47,7 +46,6 @@ module "eu_west_1" {
   }
 
   mongodb_app_password = var.mongodb_app_password
-  health_check_id      = aws_route53_health_check.shops_api.id
 }
 
 module "ap_northeast_1" {
@@ -58,5 +56,4 @@ module "ap_northeast_1" {
   }
 
   mongodb_app_password = var.mongodb_app_password
-  health_check_id      = aws_route53_health_check.shops_api.id
 }
