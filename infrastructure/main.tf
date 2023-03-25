@@ -44,7 +44,6 @@ module "us_east_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
-  health_check_alarm_email         = var.health_check_alarm_email
 
   depends_on = [aws_route53_zone.domain]
 }
@@ -74,7 +73,6 @@ module "eu_west_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
-  health_check_alarm_email         = var.health_check_alarm_email
 
   depends_on = [aws_route53_zone.domain]
 }
@@ -104,7 +102,6 @@ module "ap_northeast_1" {
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
   redis_app_password               = var.redis_app_password
-  health_check_alarm_email         = var.health_check_alarm_email
 
   depends_on = [aws_route53_zone.domain]
 }
@@ -127,4 +124,20 @@ output "services_domains" {
 
 output "certificate_arn" {
   value = module.us_east_1.certificate_arn
+}
+
+output "health_check_alarm_topic_arn_us-east-1" {
+  value = module.us_east_1.health_check_alarm_topic_arn
+}
+
+output "health_check_alarm_topic_arn_eu-west-1" {
+  value = module.eu_west_1.health_check_alarm_topic_arn
+}
+
+output "health_check_alarm_topic_arn_ap-northeast-1" {
+  value = module.ap_northeast_1.health_check_alarm_topic_arn
+}
+
+output "health_check_alarm_topic_email" {
+  value = var.health_check_alarm_email
 }

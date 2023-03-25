@@ -69,7 +69,3 @@ variable "event_bus_arn" {
 variable "redis_app_password" {
   type = string
 }
-
-variable "health_check_alarm_email" {
-  type = string
-}

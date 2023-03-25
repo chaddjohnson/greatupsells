@@ -28,8 +28,8 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   statistic           = "Minimum"
   threshold           = "18"
   unit                = "Count"
-  alarm_actions       = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
-  ok_actions          = [data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn]
+  alarm_actions       = ["data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn_${data.aws_region.current.name}"]
+  ok_actions          = ["data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn_${data.aws_region.current.name}"]
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.shops_api.id
@@ -37,9 +37,9 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
 }
 
 resource "aws_sns_topic_subscription" "health_check_alarm_topic_subscription" {
-  topic_arn = data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn
+  topic_arn = "data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_arn_${data.aws_region.current.name}"
   protocol  = "email"
-  endpoint  = data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_email
+  endpoint  = "data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_email"
 }
 
 resource "aws_ssm_parameter" "shops_api_health_check_id" {
