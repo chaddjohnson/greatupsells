@@ -20,6 +20,11 @@ data "terraform_remote_state" "greatupsells_infrastructure" {
   }
 }
 
+data "aws_sns_topic" "health_check_alarm_topic" {
+  name     = "health-check-alarm-topic-${terraform.workspace}"
+  provider = aws.region
+}
+
 resource "aws_ssm_parameter" "storefront_api_domain" {
   name      = "/greatupsells/${terraform.workspace}/storefront-api/domain"
   type      = "String"
