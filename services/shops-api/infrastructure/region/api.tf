@@ -23,7 +23,7 @@ resource "aws_route53_health_check" "shops_api" {
   }
 }
 
-resource "aws_czloudwatch_metric_alarm" "shops_api" {
+resource "aws_cloudwatch_metric_alarm" "shops_api" {
   alarm_name          = "shops-api-alarm-${terraform.workspace}"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "3"
