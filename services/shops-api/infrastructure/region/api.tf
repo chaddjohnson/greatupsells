@@ -26,12 +26,11 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   alarm_name          = "shops-api-alarm-${terraform.workspace}"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "3"
-  metric_name         = "HealthyHostCount"
+  metric_name         = "HealthCheckPercentageHealthy"
   namespace           = "AWS/Route53"
   period              = "60"
   statistic           = "Minimum"
   threshold           = "18"
-  unit                = "Count"
   alarm_actions       = [data.aws_sns_topic.health_check_alarm_topic.arn]
   ok_actions          = [data.aws_sns_topic.health_check_alarm_topic.arn]
 
