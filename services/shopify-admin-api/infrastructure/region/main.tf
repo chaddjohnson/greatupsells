@@ -55,7 +55,7 @@ resource "aws_route53_health_check" "shopify_admin_api" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "shops_api" {
+resource "aws_cloudwatch_metric_alarm" "shopify_admin_api" {
   alarm_name          = "shopify-admin-api-alarm-${terraform.workspace}"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "3"
@@ -68,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   ok_actions          = [data.aws_sns_topic.health_check_alarm_topic.arn]
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.shops_api.id
+    HealthCheckId = aws_route53_health_check.shopify_admin_api.id
   }
 }
 
