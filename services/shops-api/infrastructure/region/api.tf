@@ -9,13 +9,13 @@ data "aws_sns_topic" "health_check_alarm_topic" {
 }
 
 resource "aws_route53_health_check" "shops_api" {
-  fqdn                            = local.domain
-  port                            = 443
-  type                            = "HTTPS"
-  resource_path                   = "/health"
-  failure_threshold               = "5"
-  request_interval                = "30"
-  regions                         = ["us-east-1", "eu-west-1", "ap-northeast-1"]
+  fqdn              = local.domain
+  port              = 443
+  type              = "HTTPS"
+  resource_path     = "/health"
+  failure_threshold = "5"
+  request_interval  = "30"
+  regions           = ["us-east-1", "eu-west-1", "ap-northeast-1"]
 
   tags = {
     Name = "shops-api-${terraform.workspace}"

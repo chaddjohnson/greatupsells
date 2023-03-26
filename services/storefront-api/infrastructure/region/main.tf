@@ -50,6 +50,29 @@ resource "aws_route53_health_check" "storefront_api" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "shops_api" {
+  alarm_name          = "storefront-api-alarm-${terraform.workspace}"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "HealthCheckPercentageHealthy"
+  namespace           = "AWS/Route53"
+  period              = "60"
+  statistic           = "Minimum"
+  threshold           = "18"
+  alarm_actions       = [data.aws_sns_topic.health_check_alarm_topic.arn]
+  ok_actions          = [data.aws_sns_topic.health_check_alarm_topic.arn]
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.shops_api.id
+  }
+}
+
+resource "aws_sns_topic_subscription" "health_check_alarm_topic_subscription" {
+  topic_arn = data.aws_sns_topic.health_check_alarm_topic.arn
+  protocol  = "email"
+  endpoint  = data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_email
+}
+
 resource "aws_ssm_parameter" "storefront_api_health_check_id" {
   name      = "/greatupsells/${terraform.workspace}/storefront-api/health-check-id"
   type      = "String"
