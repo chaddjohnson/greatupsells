@@ -3,7 +3,7 @@ locals {
   domain        = "shops-api.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
 }
 
-data "aws_sns_topic" "health_check_alarm_topic_arn" {
+data "aws_sns_topic" "health_check_alarm_topic" {
   name     = "health-check-alarm-topic-${terraform.workspace}"
   provider = aws.region
 }
@@ -33,8 +33,8 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
   statistic           = "Minimum"
   threshold           = "18"
   unit                = "Count"
-  alarm_actions       = [data.aws_sns_topic.health_check_alarm_topic_arn]
-  ok_actions          = [data.aws_sns_topic.health_check_alarm_topic_arn]
+  alarm_actions       = [data.aws_sns_topic.health_check_alarm_topic.arn]
+  ok_actions          = [data.aws_sns_topic.health_check_alarm_topic.arn]
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.shops_api.id
@@ -42,7 +42,7 @@ resource "aws_cloudwatch_metric_alarm" "shops_api" {
 }
 
 resource "aws_sns_topic_subscription" "health_check_alarm_topic_subscription" {
-  topic_arn = data.aws_sns_topic.health_check_alarm_topic_arn
+  topic_arn = data.aws_sns_topic.health_check_alarm_topic.arn
   protocol  = "email"
   endpoint  = data.terraform_remote_state.greatupsells_infrastructure.outputs.health_check_alarm_topic_email
 }
