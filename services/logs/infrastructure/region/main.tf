@@ -24,6 +24,11 @@ locals {
   domain = "logs-api.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
 }
 
+data "aws_sns_topic" "health_check_alarm_topic" {
+  name     = "health-check-alarm-topic-${terraform.workspace}"
+  provider = aws.region
+}
+
 resource "aws_ssm_parameter" "logs_api_regional_domain" {
   name      = "/greatupsells/${terraform.workspace}/logs-api/regional-domain"
   type      = "String"
