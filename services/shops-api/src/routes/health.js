@@ -11,13 +11,9 @@ const handler = async (event, context) => {
       throw new Error(`Cannot connect to MongoDB`);
     }
 
-    // return {
-    //   statusCode: StatusCodes.OK,
-    //   body: ReasonPhrases.OK
-    // };
     return {
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      body: ReasonPhrases.INTERNAL_SERVER_ERROR
+      statusCode: StatusCodes.OK,
+      body: ReasonPhrases.OK
     };
   } catch (error) {
     console.error(error.stack); // eslint-disable-line no-console
