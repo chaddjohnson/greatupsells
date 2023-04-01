@@ -219,7 +219,7 @@ const PlanPage = () => {
               <Stack alignment="center" vertical>
                 <Text variant="heading4xl">Select your plan</Text>
                 <Text color="subdued" variant="headingLg">
-                  All plans include a 7-day free trial.
+                  Free 7-day trial. Pay nothing today.
                 </Text>
               </Stack>
             </TextContainer>
