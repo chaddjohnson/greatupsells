@@ -48,11 +48,14 @@ custom:
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shops-api/health-check-id, ''}
     securityPolicy: tls_1_2
     autoDomain: true
+  warmupConcurrency:
+    test: 1
+    production: 5
   warmup:
     default:
       enabled: true
       memorySize: 128
-      concurrency: 5
+      concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}}
       prewarm: true
       events:
         - schedule: rate(5 minutes)
