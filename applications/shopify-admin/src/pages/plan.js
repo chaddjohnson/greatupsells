@@ -11,9 +11,10 @@ import {
   Button,
   TextContainer,
   Icon,
-  Stack
+  Stack,
+  Tooltip
 } from '@shopify/polaris';
-import { TickMinor } from '@shopify/polaris-icons';
+import { TickMinor, InfoMinor } from '@shopify/polaris-icons';
 import { TitleBar } from '../components';
 import { useShop } from '../hooks';
 
@@ -127,9 +128,17 @@ const PlanPage = () => {
       <Icon key="3" source={TickMinor} color="success" />
     ],
     [
-      <Text key="feature10" fontWeight="bold">
-        Monthly upsell revenue limit
-      </Text>,
+      <Stack key="1">
+        <Text fontWeight="bold">Monthly upsell revenue limit</Text>
+        <Text key="feature10" fontWeight="bold">
+          <Tooltip
+            active
+            content="Analytics are not inflated with original items purchased. Only added items are used to calculate monthly upsell revenue."
+          >
+            <Icon key="1" source={InfoMinor} />
+          </Tooltip>
+        </Text>
+      </Stack>,
       <span key="1">Up to $500 USD</span>,
       <span key="2">Up to $1,500 USD</span>,
       <span key="3">UNLIMITED</span>

@@ -206,7 +206,7 @@ const AnalyticsPage = () => {
                       {formatNumber(shop?.offerImpressionCount)}
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Impressions
+                      Offer impressions
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
@@ -214,7 +214,7 @@ const AnalyticsPage = () => {
                       {formatNumber(shop?.offerAcceptanceCount)}
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Acceptances
+                      Offers accepted
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
@@ -239,7 +239,7 @@ const AnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Offer impressions growth"
+                  title="Offer impressions"
                   subtitle="Offer impressions over last 90 days"
                   tooltipText="offer impressions"
                   rangeDescription="January to December"
@@ -252,7 +252,7 @@ const AnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversions growth"
+                  title="Conversions"
                   subtitle="Conversions over last 90 days"
                   tooltipText="conversions"
                   rangeDescription="January to December"
@@ -265,7 +265,7 @@ const AnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversion rate growth"
+                  title="Conversion rate"
                   subtitle="Conversion rate over last 90 days"
                   tooltipText="conversion rate"
                   rangeDescription="January to December"
@@ -280,7 +280,7 @@ const AnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Accepted offers growth"
+                  title="Accepted offers"
                   subtitle="Accepted offers over last 90 days"
                   tooltipText="accepted offers"
                   rangeDescription="January to December"
@@ -293,7 +293,7 @@ const AnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Revenue increase growth"
+                  title="Revenue increase"
                   subtitle="Revenue increase from offers over last 90 days"
                   tooltipText="revenue increase from offers"
                   rangeDescription="January to December"
