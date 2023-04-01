@@ -33,7 +33,7 @@ const sendUsageNotifications = async (
       body: `
         <p>Hi ${shop.contactName},</p>
         <p>Your shop has used 80% of its upsell revenue allowance for the month. Your allowance of $${monthUpsellRevenueLimit} USD will renew on ${planRenewalDateFormatted}.</p>
-        <p>To ensure upselling continues without disruption, please upgrade your plan <a href="https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
+        <p>To ensure upselling continues without disruption, please upgrade your plan <a href="https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
         <br />
         <p>Thank you,</p>
         <p>${APP_NAME}</p>
@@ -50,7 +50,7 @@ const sendUsageNotifications = async (
       body: `
         <p>Hi ${shop.contactName},</p>
         <p>Your shop has used 100% of its upsell revenue allowance for the month. Your allowance of $${monthUpsellRevenueLimit} USD will renew on ${planRenewalDateFormatted}.</p>
-        <p>To continue upselling, please upgrade your plan <a href="https://${shop.domain}/admin/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
+        <p>To continue upselling, please upgrade your plan <a href="https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
         <br />
         <p>Thank you,</p>
         <p>${APP_NAME}</p>

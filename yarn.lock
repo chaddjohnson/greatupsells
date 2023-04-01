@@ -4011,25 +4011,24 @@
     uuid "^8.3.2"
     write-file-atomic "^4.0.1"
 
-"@shopify/app-bridge-react@^3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@shopify/app-bridge-react/-/app-bridge-react-3.4.3.tgz#a264d9b268d2d46ca66500c6a745aa1f1b6722ae"
-  integrity sha512-vkgaevd3AnGuUVqBBbTPYHyLUd/3+XwVmth+RO8FnvXlSGhFdIjImnsXJ4mkIdXFaXVqSs1G3WkIbup2tyaH3w==
-  dependencies:
-    "@shopify/app-bridge" "^3.4.3"
+"@shopify/app-bridge-core@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@shopify/app-bridge-core/-/app-bridge-core-1.0.1.tgz#e8cb810d23a368502016dcddf8b72270343dd31d"
+  integrity sha512-fx0ME5xAbfDEomUMHaH67VddCUOvvxsz9I/7TbwOt7SCAl1llV8jx9ZkYhvmE31RCKqfuMa+posTJa9ePkQJ9w==
 
-"@shopify/app-bridge-utils@^3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@shopify/app-bridge-utils/-/app-bridge-utils-3.4.3.tgz#d8cdbc3e7d7d9c5269c379396625484b651ce00c"
-  integrity sha512-3WJW44y4kJ4hRR9SXGJDm/bcuoKJ4d2LSZqU4IBcP3igMIuiubxdUxZJkW0KXBapABcbj6UujQ5m80OVEflI2w==
+"@shopify/app-bridge-react@^3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@shopify/app-bridge-react/-/app-bridge-react-3.7.4.tgz#79d9bd77893717b2b00fffa7a4d0a644e8486b36"
+  integrity sha512-4/X+GtVcjHGRfnhnonCSva3pQXWjnlkrWMj5Q8Dn4ZI7gxn5hxft6VLTrcoliiEHWkbkL2P3f9KbF8WyhjGZRA==
   dependencies:
-    "@shopify/app-bridge" "^3.4.3"
+    "@shopify/app-bridge" "^3.7.4"
 
-"@shopify/app-bridge@^3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@shopify/app-bridge/-/app-bridge-3.4.3.tgz#b6442ebecfa1e72a4763afffd0b9f1609bf3d51c"
-  integrity sha512-V8RmcBZSAU0nUxM1ybeKZSMzMpLHGJZnsJSNSxlii/HaaIhAN1X9GEsuFqtGDG5VL89hVidgvUVpbBqrwlnt1Q==
+"@shopify/app-bridge@^3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@shopify/app-bridge/-/app-bridge-3.7.4.tgz#df5da0220ca8564ef0344d00ad48bff9de2d5e4e"
+  integrity sha512-FvqD+PZp9D9K4w3+Z7ljRTUGLiELkRb6U7VxGy2HKMHxduO5CE3Gm2/Nm8069tDnn11dOcRZv30Wal/NtuUcAQ==
   dependencies:
+    "@shopify/app-bridge-core" "1.0.1"
     base64url "^3.0.1"
     web-vitals "^3.0.1"
 

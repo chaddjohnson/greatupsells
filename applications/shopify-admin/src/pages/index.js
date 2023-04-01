@@ -190,7 +190,7 @@ const DashboardPage = () => {
                 title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
                 action={{
                   content: 'Activate app embed',
-                  url: `https://${shop.domain}/admin/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
+                  url: `https://admin.shopify.com/store/${shop.name}/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
                 }}
                 secondaryAction={{
                   content: 'View instructions',

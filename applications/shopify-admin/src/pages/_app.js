@@ -9,7 +9,7 @@ import {
   ClientRouter
 } from '@shopify/app-bridge-react';
 
-import { getSessionToken } from '@shopify/app-bridge-utils';
+import { getSessionToken } from '@shopify/app-bridge/utilities';
 import styled from 'styled-components';
 import { ErrorBoundary } from '@greatupsells/react-components';
 import { HttpClientProvider } from '@greatupsells/react-hooks';
