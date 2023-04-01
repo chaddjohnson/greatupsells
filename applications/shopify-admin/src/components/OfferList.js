@@ -206,8 +206,8 @@ const OfferList = ({ offers, filters, onFilter }) => {
               headings={[
                 { title: 'Name' },
                 { title: 'Status' },
-                { title: 'Impressions' },
-                { title: 'Acceptances' },
+                { title: 'Offer impressions' },
+                { title: 'Offers accepted' },
                 { title: 'Conversion rate' },
                 { title: 'Revenue increase' },
                 { title: 'Strategy' }

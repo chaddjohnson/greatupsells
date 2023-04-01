@@ -209,7 +209,7 @@ const OfferAnalyticsPage = () => {
                       {formatNumber(offer?.impressionCount)}
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Impressions
+                      Offer impressions
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
@@ -217,7 +217,7 @@ const OfferAnalyticsPage = () => {
                       {formatNumber(offer?.acceptanceCount)}
                     </Text>
                     <Text fontWeight="bold" color="subdued">
-                      Acceptances
+                      Offers accepted
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
@@ -242,8 +242,8 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Impressions growth"
-                  subtitle="Impressions over last 90 days"
+                  title="Offer impressions"
+                  subtitle="Offer impressions over last 90 days"
                   tooltipText="impressions"
                   rangeDescription="January to December"
                   data={offerImpressionsChartData}
@@ -255,7 +255,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversions growth"
+                  title="Conversions"
                   subtitle="Conversions over last 90 days"
                   tooltipText="conversions"
                   rangeDescription="January to December"
@@ -268,7 +268,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Conversion rate growth"
+                  title="Conversion rate"
                   subtitle="Conversion rate over last 90 days"
                   tooltipText="conversion rate"
                   rangeDescription="January to December"
@@ -283,9 +283,9 @@ const OfferAnalyticsPage = () => {
             <Layout.Section oneHalf>
               <Card sectioned>
                 <LineChart
-                  title="Acceptances growth"
-                  subtitle="Acceptances over last 90 days"
-                  tooltipText="acceptances"
+                  title="Offer acceptances"
+                  subtitle="Offers accepted over last 90 days"
+                  tooltipText="offers accepted"
                   rangeDescription="January to December"
                   data={offerAcceptancesChartData}
                   formatters={{
@@ -296,7 +296,7 @@ const OfferAnalyticsPage = () => {
               </Card>
               <Card sectioned>
                 <LineChart
-                  title="Revenue increase growth"
+                  title="Revenue increase"
                   subtitle="Revenue increase from offers over last 90 days"
                   tooltipText="revenue increase from offers"
                   rangeDescription="January to December"

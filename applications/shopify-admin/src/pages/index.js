@@ -250,7 +250,7 @@ const DashboardPage = () => {
                     </Text>
                     <Text fontWeight="bold" color="subdued">
                       <Link url="/analytics" removeUnderline>
-                        Acceptances
+                        Offers accepted
                       </Link>
                     </Text>
                   </Stack>
