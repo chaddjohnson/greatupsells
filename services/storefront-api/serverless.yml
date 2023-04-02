@@ -51,7 +51,7 @@ custom:
     default:
       enabled: true
       memorySize: 128
-      concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}}
+      concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}, 1}
       prewarm: true
       events:
         - schedule: rate(5 minutes)
