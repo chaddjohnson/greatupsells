@@ -670,8 +670,7 @@ const OfferForm = ({
               content: 'Save offer',
               disabled: !dirty && !themeDirty,
               loading: submitting,
-              submit: true,
-              onAction: handleSubmit
+              submit: true
             }}
             secondaryActions={[
               offer._id
