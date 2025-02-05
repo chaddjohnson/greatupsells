@@ -134,7 +134,7 @@ Occasionally ngrok tunnels will fail to start because ngrok is running in the ba
 
 ### Adding a shared dependency for all projects
 
-To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn add foo`.
+To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn remove foo -W`.
 
 Note that `lerna add foo` will add `foo` to package.json in all packages and _not_ to the high-level `package.json`.
 
