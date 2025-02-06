@@ -12,6 +12,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const { shopifyApi, ApiVersion } = require('@shopify/shopify-api');
 const verifySessionToken = require('shopify-jwt-auth-verify').default;
 const HttpClient = require('@greatupsells/gateway-http-client');
+const { v4: uuidv4 } = require('uuid');
 
 const {
   NODE_ENV,
@@ -155,7 +156,14 @@ const createServer = () => {
       );
 
       // Create a signed auth token.
-      const authToken = jwt.sign({ shopId }, JWT_SECRET);
+      const payload = {
+        iss: SHOPIFY_ADMIN_APP_URL,
+        jti: uuidv4(),
+        iat: Date.now(),
+        aud: 'shopify-admin-api',
+        sub: shopId
+      };
+      const authToken = jwt.sign(payload, JWT_SECRET);
 
       if (!tokenIsValid) {
         response

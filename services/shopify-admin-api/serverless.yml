@@ -19,6 +19,8 @@ provider:
         type: request
         functionName: authorizer
         identitySource: $request.header.authorization
+        issuerUrl: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
+        audience: 'shopify-admin-api'
         resultTtlInSeconds: 0
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
@@ -53,7 +55,7 @@ custom:
     default:
       enabled: true
       memorySize: 128
-      concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}}
+      concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}, 1}
       prewarm: true
       events:
         - schedule: rate(5 minutes)
