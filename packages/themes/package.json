@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/themes",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/themes",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@greatupsells/styled-with-facepaint": "0.0.0",
     "clsx": "^1.1.1",

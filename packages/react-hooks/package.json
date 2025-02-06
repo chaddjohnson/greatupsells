@@ -4,11 +4,11 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/react-hooks",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/react-hooks",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "luxon": "^1.27.0",
     "querystringify": "^2.2.0",

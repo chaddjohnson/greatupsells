@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/storefront-api",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/services/storefront-api",
   "dependencies": {
     "@greatupsells/gateway-http-client": "0.0.0",
     "@greatupsells/logger": "0.0.0",

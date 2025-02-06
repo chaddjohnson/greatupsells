@@ -16,9 +16,9 @@
     "prestart": "rm -f package-lock.json; yarn install && dotenv -- yarn bootstrap",
     "start": "(ngrok start greatupsells-shopify-admin greatupsells-shopify-extension greatupsells-webhooks-service > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells",
+  "homepage": "https://github.com/chaddjohnson/greatupsells",
   "dependencies": {
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

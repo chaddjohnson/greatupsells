@@ -4,11 +4,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/gateway-http-client",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/gateway-http-client",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "axios": "^0.21.0",
     "aws4-axios": "^2.2.0"

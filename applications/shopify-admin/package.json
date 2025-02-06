@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/applications/shopify-admin#readme",
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/applications/shopify-admin#readme",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@greatupsells/gateway-http-client": "0.0.0",
     "@greatupsells/react-components": "0.0.0",

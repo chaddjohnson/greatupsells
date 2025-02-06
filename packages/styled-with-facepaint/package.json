@@ -5,11 +5,11 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/styled-with-facepaint",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/styled-with-facepaint",
   "peerDependencies": {
     "facepaint": "^1.2.0",
     "styled-components": "^5.0.0"

@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/shops-api",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/services/shops-api",
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
     "@greatupsells/email-client": "0.0.0",
