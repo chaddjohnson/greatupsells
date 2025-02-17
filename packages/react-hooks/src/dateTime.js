@@ -1,7 +1,6 @@
-import { useCallback } from 'react';
-
 // Luxon is used because it uses Intl.DateTimeFormat directly and requires no locale data be imported.
 import { DateTime } from 'luxon';
+import { useCallback } from 'react';
 
 const useDateTime = (locale = 'en-us') => {
   // See https://moment.github.io/luxon/docs/manual/formatting#table-of-tokens.

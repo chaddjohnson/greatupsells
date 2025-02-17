@@ -1,4 +1,4 @@
-import { useHttpClient, useCookies } from '@greatupsells/react-hooks';
+import { useCookies, useHttpClient } from '@greatupsells/react-hooks';
 
 const queryString = new URLSearchParams(window.location.search);
 const testToken = queryString.get('testToken');

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Toast } from '@shopify/app-bridge/actions';
 import { useAppBridge } from '@shopify/app-bridge-react';
+import { Toast } from '@shopify/app-bridge/actions';
 
 const useToast = () => {
   const app = useAppBridge();

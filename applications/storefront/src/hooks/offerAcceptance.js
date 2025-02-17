@@ -1,8 +1,8 @@
 import { useCookies } from '@greatupsells/react-hooks';
 import useOfferTracking from './offerTracking';
 import { useShopifyCart } from './shopifyCart';
-import useShopifyDraftOrder from './shopifyDraftOrder';
 import useShopifyCustomer from './shopifyCustomer';
+import useShopifyDraftOrder from './shopifyDraftOrder';
 
 const useOfferAcceptance = () => {
   const { getCookie, setCookie } = useCookies();

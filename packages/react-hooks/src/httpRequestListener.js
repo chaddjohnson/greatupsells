@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import qs from 'querystringify';
+import { useEffect } from 'react';
 
 const XMLHttpRequest = typeof window !== 'undefined' && window.XMLHttpRequest;
 const originalFetch = typeof window !== 'undefined' && window.fetch;

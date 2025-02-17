@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCookies, useCurrency, usePushStateListener } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import { useHttpClient, useCache } from '@greatupsells/react-hooks';
+import { useCache, useHttpClient } from '@greatupsells/react-hooks';
 
 const useShop = () => {
   const { httpClient } = useHttpClient();

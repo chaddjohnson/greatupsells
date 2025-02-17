@@ -2,8 +2,8 @@ import { useState } from 'react';
 import useOfferAcceptances from './offerAcceptances';
 import useOfferConversionRates from './offerConversionRates';
 import useOfferConversions from './offerConversions';
-import useOfferRevenueIncreases from './offerRevenueIncreases';
 import useOfferImpressions from './offerImpressions';
+import useOfferRevenueIncreases from './offerRevenueIncreases';
 
 const useOfferAnalytics = (offerId, startAt, endAt) => {
   const [offerAnalyticsLoaded, setOfferAnalyticsLoaded] = useState(false);

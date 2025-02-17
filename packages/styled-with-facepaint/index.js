@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import facepaint from 'facepaint';
+import styled from 'styled-components';
 
 // Define breakpoints.
 const mq = facepaint(['@media (min-width: 768px)', '@media (min-width: 1024px)', '@media (min-width: 1440px)']);

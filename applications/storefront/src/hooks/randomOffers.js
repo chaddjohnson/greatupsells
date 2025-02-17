@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useSWR from 'swr';
-import { useHttpClient, useCookies, usePushStateListener } from '@greatupsells/react-hooks';
+import { useCookies, useHttpClient, usePushStateListener } from '@greatupsells/react-hooks';
 
 const useRandomOffers = ({
   events,

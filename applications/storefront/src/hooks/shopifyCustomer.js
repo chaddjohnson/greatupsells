@@ -1,5 +1,5 @@
-import React from 'react';
 import { getParamByISO } from 'iso-country-currency';
+import React from 'react';
 import { useCookies } from '@greatupsells/react-hooks';
 
 const useShopifyCustomer = () => {

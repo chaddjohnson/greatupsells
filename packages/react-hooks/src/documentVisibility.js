@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Reference: https://stackoverflow.com/a/38710376/83897
 const useDocumentVisibility = (callback) => {

@@ -1,4 +1,4 @@
-import { useField, notEmpty, numericString, positiveNumericString } from '@shopify/react-form';
+import { notEmpty, numericString, positiveNumericString, useField } from '@shopify/react-form';
 
 const useFields = (initialOffer, showEndDate) => {
   const name = useField({

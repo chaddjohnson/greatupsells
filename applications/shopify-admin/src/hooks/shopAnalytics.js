@@ -2,8 +2,8 @@ import { useState } from 'react';
 import useShopAcceptances from './shopAcceptances';
 import useShopConversionRates from './shopConversionRates';
 import useShopConversions from './shopConversions';
-import useShopRevenueIncreases from './shopRevenueIncreases';
 import useShopImpressions from './shopImpressions';
+import useShopRevenueIncreases from './shopRevenueIncreases';
 
 const useShopAnalytics = (shopId, startAt, endAt) => {
   const [shopAnalyticsLoaded, setShopAnalyticsLoaded] = useState(false);

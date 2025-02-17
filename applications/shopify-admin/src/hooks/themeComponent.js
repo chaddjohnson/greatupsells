@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // Store theme components in a non-state, module-level variable because components
 // cannot be stored in React state.
