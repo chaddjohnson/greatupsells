@@ -1,10 +1,7 @@
 const models = require('..');
 
 const findOneTopProduct = async (shop, options = {}) => {
-  const [PairedPurchase, Product] = await Promise.all([
-    models.get('PairedPurchase'),
-    models.get('Product')
-  ]);
+  const [PairedPurchase, Product] = await Promise.all([models.get('PairedPurchase'), models.get('Product')]);
   const { excludedShopifyProductIds = [] } = options;
   const criteria = {
     shop: shop._id,
@@ -44,9 +41,7 @@ const findOneTopProduct = async (shop, options = {}) => {
   }
 
   if (pairedPurchaseShopifyProductId) {
-    return await Product.findOneByShopifyProductId(
-      pairedPurchaseShopifyProductId
-    );
+    return await Product.findOneByShopifyProductId(pairedPurchaseShopifyProductId);
   }
 };
 

@@ -12,14 +12,9 @@ const getShopifyProductIds = async (collection) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const shopifyProducts = await shopifyApiClient.collection.products(
-      shopifyCollectionId,
-      params
-    );
+    const shopifyProducts = await shopifyApiClient.collection.products(shopifyCollectionId, params);
 
-    shopifyProductIds = shopifyProductIds.concat(
-      shopifyProducts.map(({ id }) => id)
-    );
+    shopifyProductIds = shopifyProductIds.concat(shopifyProducts.map(({ id }) => id));
     params = shopifyProducts.nextPageParameters;
   } while (params);
 

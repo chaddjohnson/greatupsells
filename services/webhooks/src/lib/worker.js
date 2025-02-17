@@ -1,28 +1,17 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const {
-  checkWebhookHmacValidity,
-  createRawBody
-} = require('shopify-hmac-validation');
+const { checkWebhookHmacValidity, createRawBody } = require('shopify-hmac-validation');
 const logger = require('@greatupsells/logger');
 
 const { SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
 
 // This works around Shopify's inconsistent metadata key naming across HTTP webhooks and EventBridge subscriptions.
 const getMetadataValue = (metadata, searchKey) => {
-  return metadata[
-    Object.keys(metadata).find(
-      (key) => key.toLowerCase() === searchKey.toLowerCase()
-    )
-  ];
+  return metadata[Object.keys(metadata).find((key) => key.toLowerCase() === searchKey.toLowerCase())];
 };
 
 const validate = async (hmac, data) => {
   const rawBody = createRawBody(data);
-  const hmacValid = checkWebhookHmacValidity(
-    SHOPIFY_ADMIN_APP_API_SECRET_KEY,
-    rawBody,
-    hmac
-  );
+  const hmacValid = checkWebhookHmacValidity(SHOPIFY_ADMIN_APP_API_SECRET_KEY, rawBody, hmac);
 
   return hmacValid;
 };
@@ -80,9 +69,7 @@ const handle = async (event, context, processor) => {
 
   if (event.Records) {
     // SQS (production).
-    const results = await Promise.allSettled(
-      event.Records.map(async (record) => processRecord(record, processor))
-    );
+    const results = await Promise.allSettled(event.Records.map(async (record) => processRecord(record, processor)));
     const anyFailed = results.some(({ status }) => status === 'rejected');
     const error = results.find(({ status }) => status === 'rejected')?.reason;
 

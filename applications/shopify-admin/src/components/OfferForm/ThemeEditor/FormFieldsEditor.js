@@ -1,15 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  EmptyState,
-  FormLayout,
-  Card,
-  TextField,
-  Button,
-  Text,
-  Select,
-  TextContainer
-} from '@shopify/polaris';
+import { EmptyState, FormLayout, Card, TextField, Button, Text, Select, TextContainer } from '@shopify/polaris';
 import styled from 'styled-components';
 
 const FormFieldContainer = styled.div`
@@ -81,9 +72,7 @@ const EmptyComponent = ({ onAddItem }) => (
       url: 'https://help.domain.com/tutorials/data-integrations'
     }}
   >
-    <TextContainer>
-      Track data from popups, and integrate with third-party services.
-    </TextContainer>
+    <TextContainer>Track data from popups, and integrate with third-party services.</TextContainer>
   </EmptyState>
 );
 
@@ -112,11 +101,7 @@ const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
       <Card.Section title="Form fields">
         <FormLayout>
           {formFields.map((formField, index) => (
-            <FormFieldEditor
-              key={index}
-              formField={formField}
-              onRemoveItem={() => onRemoveItem(index)}
-            />
+            <FormFieldEditor key={index} formField={formField} onRemoveItem={() => onRemoveItem(index)} />
           ))}
           <Button onClick={handleAddItem}>
             <Text fontWeight="bold">Add another field</Text>

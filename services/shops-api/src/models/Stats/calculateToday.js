@@ -18,14 +18,8 @@ const calculateToday = async () => {
     return;
   }
 
-  const startDate = DateTime.fromISO(date, { zone: 'America/New_York' })
-    .minus({ day: 1 })
-    .startOf('day')
-    .toJSDate();
-  const endDate = DateTime.fromISO(date, { zone: 'America/New_York' })
-    .minus({ day: 1 })
-    .endOf('day')
-    .toJSDate();
+  const startDate = DateTime.fromISO(date, { zone: 'America/New_York' }).minus({ day: 1 }).startOf('day').toJSDate();
+  const endDate = DateTime.fromISO(date, { zone: 'America/New_York' }).minus({ day: 1 }).endOf('day').toJSDate();
   const stats = await Stats.calculate(startDate, endDate);
 
   stats.createdAt = startDate;

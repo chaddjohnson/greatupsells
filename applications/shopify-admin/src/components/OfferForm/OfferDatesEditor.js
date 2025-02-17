@@ -4,13 +4,7 @@ import { Card, FormLayout, Checkbox } from '@shopify/polaris';
 import { useDateTime } from '@greatupsells/react-hooks';
 import DateTimePicker from '../DateTimePicker';
 
-const OfferDatesEditor = ({
-  offer,
-  startAt,
-  endAt,
-  showEndDate,
-  onShowEndDateChange
-}) => {
+const OfferDatesEditor = ({ offer, startAt, endAt, showEndDate, onShowEndDateChange }) => {
   const { formatDate } = useDateTime();
 
   const timezoneAbbreviation = formatDate(new Date(), 'ZZZZ');
@@ -18,12 +12,7 @@ const OfferDatesEditor = ({
   const handleStartAtChange = (value) => {
     startAt.onChange(value);
 
-    if (
-      showEndDate &&
-      offer.endAt &&
-      value &&
-      new Date(offer.endAt) < new Date(value)
-    ) {
+    if (showEndDate && offer.endAt && value && new Date(offer.endAt) < new Date(value)) {
       endAt.onChange(value);
     }
   };
@@ -41,11 +30,7 @@ const OfferDatesEditor = ({
           onChange={handleStartAtChange}
         />
         <FormLayout.Group>
-          <Checkbox
-            label="Set end date"
-            checked={showEndDate}
-            onChange={onShowEndDateChange}
-          />
+          <Checkbox label="Set end date" checked={showEndDate} onChange={onShowEndDateChange} />
         </FormLayout.Group>
         {showEndDate && (
           <DateTimePicker

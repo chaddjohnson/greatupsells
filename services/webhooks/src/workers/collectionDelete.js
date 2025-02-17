@@ -17,14 +17,12 @@ const processor = async (metadata, payload) => {
     const shopifyCollectionData = payload;
     const shop = await httpClient.get(`/shops/domain/${domain}`);
 
-    collection = await httpClient.get(
-      `/collections/shopify-collection-id/${shopifyCollectionData.id}`
-    );
+    collection = await httpClient.get(`/collections/shopify-collection-id/${shopifyCollectionData.id}`);
 
-    await logger.info(
-      `Deleting collection "${collection.title}" for shop ${shop.domain} via ${topic} webhook`,
-      { metadata, payload }
-    );
+    await logger.info(`Deleting collection "${collection.title}" for shop ${shop.domain} via ${topic} webhook`, {
+      metadata,
+      payload
+    });
 
     await httpClient.delete(`/collections/${collection._id}`);
   } catch (error) {
@@ -32,11 +30,7 @@ const processor = async (metadata, payload) => {
       return;
     }
 
-    await logger.error(
-      `Error processing collection deletion webhook data`,
-      error,
-      { metadata, payload }
-    );
+    await logger.error(`Error processing collection deletion webhook data`, error, { metadata, payload });
   }
 };
 

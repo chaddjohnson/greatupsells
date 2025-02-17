@@ -6,9 +6,7 @@ const addScripts = async (shop) => {
 
   const shopifyApiClient = shop.getShopifyApiClient();
   const scriptTags = await shopifyApiClient.scriptTag.list();
-  const existingScriptTag = scriptTags.find(
-    (scriptTag) => scriptTag.src === src
-  );
+  const existingScriptTag = scriptTags.find((scriptTag) => scriptTag.src === src);
 
   if (!existingScriptTag) {
     await shopifyApiClient.scriptTag.create({

@@ -7,16 +7,10 @@ const useShopifyCustomer = () => {
 
   const localeAndCountryCode = navigator.languages?.length
     ? navigator.languages[0]
-    : navigator.userLanguage ||
-      navigator.language ||
-      navigator.browserLanguage ||
-      navigator.systemLanguage ||
-      'en-US';
+    : navigator.userLanguage || navigator.language || navigator.browserLanguage || navigator.systemLanguage || 'en-US';
 
   const getCustomerLocale = () => {
-    const urlLocale = window.location.pathname.match(
-      /^\/([a-z]{2})-[a-z]{2}(\/|$)/
-    )?.[1];
+    const urlLocale = window.location.pathname.match(/^\/([a-z]{2})-[a-z]{2}(\/|$)/)?.[1];
 
     // Reference: https://stackoverflow.com/a/52112155/83897
     const language = urlLocale || localeAndCountryCode;
@@ -26,9 +20,7 @@ const useShopifyCustomer = () => {
   };
 
   const getCustomerCountryCode = () => {
-    const urlCountryCode = window.location.pathname
-      .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
-      ?.toUpperCase();
+    const urlCountryCode = window.location.pathname.match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]?.toUpperCase();
 
     // Reference: https://stackoverflow.com/a/52112155/83897
     const language = urlCountryCode || localeAndCountryCode;
@@ -42,9 +34,7 @@ const useShopifyCustomer = () => {
       return window.Shopify.routes.root.replace(/\//g, '') || '';
     }
 
-    return (
-      window.location.pathname.match(/^\/([a-z]{2}-[a-z]{2})(\/|$)/)?.[1] || ''
-    );
+    return window.location.pathname.match(/^\/([a-z]{2}-[a-z]{2})(\/|$)/)?.[1] || '';
   };
 
   const getUrlPrefix = () => {
@@ -54,9 +44,7 @@ const useShopifyCustomer = () => {
   };
 
   const getCustomerCurrency = () => {
-    const urlCountryCode = window.location.pathname
-      .match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]
-      ?.toUpperCase();
+    const urlCountryCode = window.location.pathname.match(/^\/[a-z]{2}-([a-z]{2})(\/|$)/)?.[1]?.toUpperCase();
 
     if (urlCountryCode) {
       // Get the currency code for the country code.
@@ -71,21 +59,16 @@ const useShopifyCustomer = () => {
       getCookie('acscurrency') ||
       localStorage.getItem('__v_cc__s_c__') ||
       (localStorage.getItem('cbb-currency-converter-currency') &&
-        JSON.parse(localStorage.getItem('cbb-currency-converter-currency'))
-          ?.value) ||
+        JSON.parse(localStorage.getItem('cbb-currency-converter-currency'))?.value) ||
       (localStorage.getItem('spurit-global-multitabs.cart') &&
-        JSON.parse(localStorage.getItem('spurit-global-multitabs.cart'))
-          ?.currency) ||
+        JSON.parse(localStorage.getItem('spurit-global-multitabs.cart'))?.currency) ||
       localStorage.getItem('T4Currency') ||
       localStorage.getItem('currencyWidget') ||
       getCookie('pb_cur_65271') ||
       getCookie('currency') ||
-      document
-        .querySelector('.currency-switcher .current')
-        ?.textContent.trim() ||
+      document.querySelector('.currency-switcher .current')?.textContent.trim() ||
       document.querySelector('.pb_currency_name')?.textContent.trim() ||
-      (sessionStorage.getItem('bacurr_user_cur') &&
-        JSON.parse(sessionStorage.getItem('bacurr_user_cur'))) ||
+      (sessionStorage.getItem('bacurr_user_cur') && JSON.parse(sessionStorage.getItem('bacurr_user_cur'))) ||
       document.querySelector('.ba-chosen')?.textContent.trim() ||
       getCookie('cart_currency')
     );

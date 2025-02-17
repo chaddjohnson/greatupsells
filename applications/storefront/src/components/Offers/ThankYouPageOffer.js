@@ -23,16 +23,10 @@ const ThankYouPageOffer = ({
 
   const offerId = offer?._id;
   const offeredShopifyProductIds = useMemo(
-    () =>
-      offeredProducts?.map(({ shopifyProductData }) => shopifyProductData?.id),
+    () => offeredProducts?.map(({ shopifyProductData }) => shopifyProductData?.id),
     [offeredProducts]
   );
-  const title = useMemo(
-    () =>
-      theme?.variables.find(({ name }) => name === 'titleText')?.value ||
-      'Recommended',
-    [theme]
-  );
+  const title = useMemo(() => theme?.variables.find(({ name }) => name === 'titleText')?.value || 'Recommended', [theme]);
 
   const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
 
@@ -62,10 +56,7 @@ const ThankYouPageOffer = ({
       return;
     }
 
-    if (
-      added &&
-      !headerContainer.classList.contains('content-box__row--no-border')
-    ) {
+    if (added && !headerContainer.classList.contains('content-box__row--no-border')) {
       headerContainer.classList.add('content-box__row--no-border');
     }
   }, [added, headerContainer]);
@@ -91,15 +82,7 @@ const ThankYouPageOffer = ({
       offerId,
       offeredShopifyProductIds
     });
-  }, [
-    cachedOffer,
-    offerId,
-    added,
-    offeredShopifyProductIds,
-    trackOfferImpression,
-    title,
-    isThankYouPage
-  ]);
+  }, [cachedOffer, offerId, added, offeredShopifyProductIds, trackOfferImpression, title, isThankYouPage]);
 
   if (!contentContainer) {
     return null;

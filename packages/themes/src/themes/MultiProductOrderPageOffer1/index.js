@@ -17,11 +17,7 @@ const MultiProductOrderPageOffer1 = ({ theme, state }) => {
           <Body>
             <OfferedProducts>
               {offeredProducts.map((offeredProduct, index) => (
-                <OfferedProduct
-                  key={index}
-                  offeredProduct={offeredProduct}
-                  index={index}
-                />
+                <OfferedProduct key={index} offeredProduct={offeredProduct} index={index} />
               ))}
             </OfferedProducts>
           </Body>

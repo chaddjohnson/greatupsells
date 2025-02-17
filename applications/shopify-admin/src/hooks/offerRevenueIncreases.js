@@ -12,14 +12,11 @@ const useOfferRevenueIncreases = (offerId, startAt, endAt) => {
     error: offerRevenueIncreasesError,
     mutate: fetchOfferRevenueIncreases
   } = useSWR(
-    offerId
-      ? `/offers/${offerId}/revenue-increases?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    offerId ? `/offers/${offerId}/revenue-increases?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     { revalidateOnFocus: true }
   );
-  const offerRevenueIncreasesLoading =
-    !offerRevenueIncreases && !offerRevenueIncreasesError;
+  const offerRevenueIncreasesLoading = !offerRevenueIncreases && !offerRevenueIncreasesError;
 
   return {
     offerRevenueIncreases,

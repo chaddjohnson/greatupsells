@@ -3,10 +3,7 @@ const calculateRevenueIncrease = require('./calculateRevenueIncrease');
 const models = require('..');
 
 const trackConversion = async (offerHit, order) => {
-  const [Offer, Shop] = await Promise.all([
-    models.get('Offer'),
-    models.get('Shop')
-  ]);
+  const [Offer, Shop] = await Promise.all([models.get('Offer'), models.get('Shop')]);
   const session = order.$session();
 
   await offerHit.populate('shop').populate('offer').execPopulate();
@@ -22,12 +19,7 @@ const trackConversion = async (offerHit, order) => {
     offerHit.shopifyOrderNumber = order.shopifyOrderNumber;
     offerHit.revenueIncrease = calculateRevenueIncrease(offerHit);
 
-    logger.info(
-      `Tracking conversion for order ${
-        order.orderNumber
-      } for shop (${shop.toString()})`,
-      { offerHit }
-    );
+    logger.info(`Tracking conversion for order ${order.orderNumber} for shop (${shop.toString()})`, { offerHit });
 
     await offerHit.save();
 
@@ -53,8 +45,7 @@ const trackConversion = async (offerHit, order) => {
             revenueIncrease: offerHit.revenueIncrease,
             offerConversionCount: 1
           },
-          offerConversionRate:
-            (shop.offerConversionCount + 1) / shop.offerImpressionCount
+          offerConversionRate: (shop.offerConversionCount + 1) / shop.offerImpressionCount
         },
         { session }
       );

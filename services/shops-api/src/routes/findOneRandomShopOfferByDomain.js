@@ -7,9 +7,7 @@ const models = require('../models');
 const findRandomProduct = async (shopifyProductIds = []) => {
   const Product = await models.get('Product');
   const hasTriggerProducts = shopifyProductIds.length > 0;
-  const randomProductIndex = Math.floor(
-    Math.random() * shopifyProductIds.length
-  );
+  const randomProductIndex = Math.floor(Math.random() * shopifyProductIds.length);
   const triggerShopifyProductId = shopifyProductIds[randomProductIndex];
 
   if (!hasTriggerProducts || !triggerShopifyProductId) {
@@ -35,10 +33,7 @@ const findPopupData = async (
     testOfferId
   }
 ) => {
-  const [Offer, Theme] = await Promise.all([
-    models.get('Offer'),
-    models.get('Theme')
-  ]);
+  const [Offer, Theme] = await Promise.all([models.get('Offer'), models.get('Theme')]);
   const offer = await Offer.findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,

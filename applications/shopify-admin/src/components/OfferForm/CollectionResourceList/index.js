@@ -63,9 +63,7 @@ const CollectionResourceList = ({ label, items, onChange, onRemoveItem }) => {
         labelHidden
         placeholder="Search collections"
         prefix={<Icon source={SearchMinor} />}
-        connectedRight={
-          <Button onClick={handleOpenCollectionPicker}>Browse</Button>
-        }
+        connectedRight={<Button onClick={handleOpenCollectionPicker}>Browse</Button>}
         onChange={handleOpenCollectionPicker}
       />
       <ResourceListWrapper>

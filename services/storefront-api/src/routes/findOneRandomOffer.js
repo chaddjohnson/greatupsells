@@ -3,11 +3,7 @@ const util = require('util');
 const zlib = require('zlib');
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
-const {
-  StatusCodes,
-  ReasonPhrases,
-  getReasonPhrase
-} = require('http-status-codes');
+const { StatusCodes, ReasonPhrases, getReasonPhrase } = require('http-status-codes');
 const HttpClient = require('@greatupsells/gateway-http-client');
 
 const gzip = util.promisify(zlib.gzip);
@@ -27,11 +23,8 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const ipAddress =
-      event.requestContext.http.sourceIp || event.headers['X-Forwarded-For'];
-    const domain = new URL(
-      event.headers.shop || event.headers.origin || event.headers.Origin
-    ).host;
+    const ipAddress = event.requestContext.http.sourceIp || event.headers['X-Forwarded-For'];
+    const domain = new URL(event.headers.shop || event.headers.origin || event.headers.Origin).host;
     const {
       events: triggerEvents,
       shopifyProductIds,
@@ -57,23 +50,20 @@ const handler = middy(async (event, context) => {
     // items are combined into one response to reduce latency.
     // Use POST instead of GET here to side step query string formatting
     // weirdness and query string length issues.
-    const offersData = await httpClient.post(
-      `/shops/domain/${domain}/offers/random`,
-      {
-        events: triggerEvents,
-        shopifyProductIds,
-        shopifyVariantIds,
-        shopifyCartTotal,
-        shopifyCartItemCount,
-        shopifyOrderId,
-        ipAddress,
-        offerImpressions,
-        sessionOfferImpressions,
-        pagePath,
-        testToken,
-        testOfferId
-      }
-    );
+    const offersData = await httpClient.post(`/shops/domain/${domain}/offers/random`, {
+      events: triggerEvents,
+      shopifyProductIds,
+      shopifyVariantIds,
+      shopifyCartTotal,
+      shopifyCartItemCount,
+      shopifyOrderId,
+      ipAddress,
+      offerImpressions,
+      sessionOfferImpressions,
+      pagePath,
+      testToken,
+      testOfferId
+    });
 
     offersData.forEach(({ offer, theme }) => {
       if (offer) {
@@ -93,8 +83,7 @@ const handler = middy(async (event, context) => {
     });
 
     // Compress data to reduce bandwidth as this is a high-traffic endpoint.
-    const acceptEncoding =
-      event.headers['accept-encoding'] || event.headers['Accept-Encoding'];
+    const acceptEncoding = event.headers['accept-encoding'] || event.headers['Accept-Encoding'];
     const gzipAccepted = acceptEncoding.includes('gzip');
     const buffer = Buffer.from(JSON.stringify(offersData), 'utf-8');
     const compressedData = await gzip(buffer);
@@ -113,9 +102,7 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body:
-          JSON.stringify(error.response.data) ||
-          getReasonPhrase(error.response.status)
+        body: JSON.stringify(error.response.data) || getReasonPhrase(error.response.status)
       };
     }
 

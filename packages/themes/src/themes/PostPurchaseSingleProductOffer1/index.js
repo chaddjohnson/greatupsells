@@ -22,13 +22,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
     View
   } = components;
 
-  const {
-    bannerTitle,
-    bannerText,
-    showOriginalPrice,
-    showProductDescription,
-    showVariantThumbnails
-  } = theme;
+  const { bannerTitle, bannerText, showOriginalPrice, showProductDescription, showVariantThumbnails } = theme;
   const {
     offeredProducts,
     selectedVariants,
@@ -52,8 +46,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
   const selectedVariant = selectedVariants[0];
 
   const savings = useMemo(
-    () =>
-      Math.round((1 - selectedVariant.salePrice / selectedVariant.price) * 100),
+    () => Math.round((1 - selectedVariant.salePrice / selectedVariant.price) * 100),
     [selectedVariant.price, selectedVariant.salePrice]
   );
 
@@ -68,9 +61,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
     // Split paragraphs and remove tags.
     const splitDescriptionParagraphs = offeredProduct.description
       ?.match(/<p>([^<]*?)<\/p>/g)
-      ?.map((item) => item.replace(/<[^>]+>/g, '')) || [
-      offeredProduct.description
-    ];
+      ?.map((item) => item.replace(/<[^>]+>/g, '')) || [offeredProduct.description];
 
     return splitDescriptionParagraphs.reduce((paragraphs, paragraph) => {
       if (descriptionLength >= 1000 || paragraphs.length >= 8) {
@@ -108,24 +99,15 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
             >
               <BlockStack alignment="center">
                 <View>
-                  <Image
-                    source={selectedVariant.image.src}
-                    alt={selectedVariant.image.alt}
-                  />
+                  <Image source={selectedVariant.image.src} alt={selectedVariant.image.alt} />
                 </View>
                 <View blockPadding="tight" />
                 {showVariantThumbnails && variants.length > 0 ? (
                   <Tiles maxPerLine={4} spacing="tight">
                     {variants.map((variant, variantIndex) => (
                       <View key={variantIndex}>
-                        <Button
-                          plain
-                          onPress={() => handleVariantChange(0, variant.id)}
-                        >
-                          <Image
-                            source={variant.thumbnailImage.src}
-                            alt={variant.thumbnailImage.alt}
-                          />
+                        <Button plain onPress={() => handleVariantChange(0, variant.id)}>
+                          <Image source={variant.thumbnailImage.src} alt={variant.thumbnailImage.alt} />
                         </Button>
                       </View>
                     ))}
@@ -138,15 +120,11 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
               </BlockStack>
               <View />
               <BlockStack spacing="extraLoose">
-                {pricesError && (
-                  <Banner status="critical">{pricesError}</Banner>
-                )}
+                {pricesError && <Banner status="critical">{pricesError}</Banner>}
                 <BlockStack>
                   <Heading>{offeredProduct.title}</Heading>
                   <PriceHeader
-                    originalPrice={
-                      showOriginalPrice && selectedVariant.priceFormatted
-                    }
+                    originalPrice={showOriginalPrice && selectedVariant.priceFormatted}
                     discountedPrice={selectedVariant.salePriceFormatted}
                     savings={savings}
                     loading={pricesLoading}
@@ -172,40 +150,20 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                   <Select
                     label="Quantity"
                     value={selectedQuantities[0]}
-                    options={[
-                      ...Array(Math.min(maxQuantities[0], 25, 100)).keys()
-                    ].map((index) => ({
+                    options={[...Array(Math.min(maxQuantities[0], 25, 100)).keys()].map((index) => ({
                       label: index + 1,
                       value: index + 1
                     }))}
-                    onChange={(event) =>
-                      handleQuantityChange(0, event.target.value)
-                    }
+                    onChange={(event) => handleQuantityChange(0, event.target.value)}
                   />
                 </BlockStack>
                 <BlockStack spacing="tight">
                   <Separator />
-                  <MoneyLine
-                    label="Subtotal"
-                    amount={subtotalPricesFormatted[0]}
-                    loading={pricesLoading}
-                  />
-                  <MoneyLine
-                    label="Shipping"
-                    amount={shippingPricesFormatted[0]}
-                    loading={pricesLoading}
-                  />
-                  <MoneyLine
-                    label="Taxes"
-                    amount={taxPricesFormatted[0]}
-                    loading={pricesLoading}
-                  />
+                  <MoneyLine label="Subtotal" amount={subtotalPricesFormatted[0]} loading={pricesLoading} />
+                  <MoneyLine label="Shipping" amount={shippingPricesFormatted[0]} loading={pricesLoading} />
+                  <MoneyLine label="Taxes" amount={taxPricesFormatted[0]} loading={pricesLoading} />
                   <Separator />
-                  <MoneySummary
-                    label="Total"
-                    amount={totalPricesFormatted[0]}
-                    loading={pricesLoading}
-                  />
+                  <MoneySummary label="Total" amount={totalPricesFormatted[0]} loading={pricesLoading} />
                 </BlockStack>
                 <Separator />
                 <Button
@@ -214,9 +172,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                   disabled={addingProduct[0]}
                   onPress={() => handleAddProduct(0)}
                 >
-                  {totalPrices[0] > 0 && (
-                    <>Pay now • {totalPricesFormatted[0]}</>
-                  )}
+                  {totalPrices[0] > 0 && <>Pay now • {totalPricesFormatted[0]}</>}
                   {totalPrices[0] === 0 && <>Add now • Free</>}
                 </Button>
                 <Button subdued onPress={handleClose}>

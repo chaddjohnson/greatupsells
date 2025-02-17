@@ -11,26 +11,20 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
           choices={[
             {
               label: 'Cross-sell',
-              helpText:
-                'Encourage customers to purchase a related or complementary product via a popup.',
+              helpText: 'Encourage customers to purchase a related or complementary product via a popup.',
               value: 'CROSS_SELL'
             },
             {
               label: 'Upsell',
-              helpText:
-                'Encourage customers to purchase a comparable, more expensive product via a popup.',
+              helpText: 'Encourage customers to purchase a comparable, more expensive product via a popup.',
               value: 'UPSELL'
             },
             {
               label: 'Post-purchase offer',
               helpText: (
                 <>
-                  Encourage customers to purchase a related or complementary
-                  product after completing checkout. Please review{' '}
-                  <Link
-                    url="https://shopify.dev/apps/checkout/post-purchase#limitations-and-considerations"
-                    external
-                  >
+                  Encourage customers to purchase a related or complementary product after completing checkout. Please review{' '}
+                  <Link url="https://shopify.dev/apps/checkout/post-purchase#limitations-and-considerations" external>
                     limitations
                   </Link>
                   .
@@ -40,12 +34,8 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
               renderChildren: (isSelected) =>
                 isSelected &&
                 !shop.onlineStore2Theme && (
-                  <Banner
-                    title="Incompatible with your theme"
-                    status="critical"
-                  >
-                    Your current theme does not support post-purchase features.
-                    A{' '}
+                  <Banner title="Incompatible with your theme" status="critical">
+                    Your current theme does not support post-purchase features. A{' '}
                     <Link url="https://themes.shopify.com" external>
                       Shopify 2.0 theme
                     </Link>{' '}
@@ -61,8 +51,7 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange }) => (
             },
             {
               label: 'Order Status page offer',
-              helpText:
-                'Encourage customers to purchase a related or complementary product on the Order Status page.',
+              helpText: 'Encourage customers to purchase a related or complementary product on the Order Status page.',
               value: 'ORDER_STATUS_PAGE'
             }
             // {

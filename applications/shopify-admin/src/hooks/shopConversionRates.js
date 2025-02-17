@@ -12,16 +12,13 @@ const useShopConversionRates = (shopId, startAt, endAt) => {
     error: shopConversionRatesError,
     mutate: fetchShopConversionRates
   } = useSWR(
-    shopId
-      ? `/shop/conversion-rates?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    shopId ? `/shop/conversion-rates?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true
     }
   );
-  const shopConversionRatesLoading =
-    !shopConversionRates && !shopConversionRatesError;
+  const shopConversionRatesLoading = !shopConversionRates && !shopConversionRatesError;
 
   return {
     shopConversionRates,

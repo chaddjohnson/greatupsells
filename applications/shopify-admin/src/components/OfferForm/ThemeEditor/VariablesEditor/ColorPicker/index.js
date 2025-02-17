@@ -1,22 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Popover,
-  Button,
-  ColorPicker as ShopifyColorPicker,
-  TextField,
-  Stack,
-  RangeSlider
-} from '@shopify/polaris';
+import { Popover, Button, ColorPicker as ShopifyColorPicker, TextField, Stack, RangeSlider } from '@shopify/polaris';
 import styled from 'styled-components';
-import {
-  valueIsHex,
-  hexToRgb,
-  normalize,
-  hexToHsb,
-  hsbToHex,
-  sanitizeHexValue
-} from './utilities';
+import { valueIsHex, hexToRgb, normalize, hexToHsb, hsbToHex, sanitizeHexValue } from './utilities';
 
 const PreviewButton = styled.button`
   appearance: none;
@@ -77,19 +63,12 @@ const ActivatorWrapper = styled.div`
 `;
 
 const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
-  const [normalizedValue, alphaValue] = useMemo(
-    () => normalize(value),
-    [value]
-  );
+  const [normalizedValue, alphaValue] = useMemo(() => normalize(value), [value]);
   const alphaDisplayValue = useMemo(
-    () =>
-      typeof alphaValue === 'number' && parseInt(Math.round(alphaValue * 100)),
+    () => typeof alphaValue === 'number' && parseInt(Math.round(alphaValue * 100)),
     [alphaValue]
   );
-  const sanitizedValue = useMemo(
-    () => sanitizeHexValue(normalizedValue),
-    [normalizedValue]
-  );
+  const sanitizedValue = useMemo(() => sanitizeHexValue(normalizedValue), [normalizedValue]);
 
   const [active, setActive] = useState(false);
   const [hsbValue, setHsbValue] = useState(hexToHsb(sanitizedValue));

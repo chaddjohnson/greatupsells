@@ -129,34 +129,24 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   return (
     <>
       <Head>
-        <meta
-          name="shopify-api-key"
-          content={process.env.SHOPIFY_ADMIN_APP_API_KEY}
-        />
+        <meta name="shopify-api-key" content={process.env.SHOPIFY_ADMIN_APP_API_KEY} />
         <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
       </Head>
       <AppProvider i18n={translations} linkComponent={Link}>
-        <HttpClientProvider
-          baseUrl={process.env.SHOPIFY_ADMIN_API_URL}
-          requestInterceptor={httpRequestInterceptor}
-        >
+        <HttpClientProvider baseUrl={process.env.SHOPIFY_ADMIN_API_URL} requestInterceptor={httpRequestInterceptor}>
           <ShopProvider>
-            {mounted &&
-              typeof window !== 'undefined' &&
-              window.top !== window.self && (
-                // <RouteGuard>
-                //   <ClientRouter history={router} />
-                //   <RoutePropagator />
-                <ErrorBoundary>
-                  <Main>
-                    <Component {...pageProps} />
-                  </Main>
-                </ErrorBoundary>
-                // </RouteGuard>
-              )}
-            {mounted &&
-              typeof window !== 'undefined' &&
-              window.top === window.self && <h1>Loading...</h1>}
+            {mounted && typeof window !== 'undefined' && window.top !== window.self && (
+              // <RouteGuard>
+              //   <ClientRouter history={router} />
+              //   <RoutePropagator />
+              <ErrorBoundary>
+                <Main>
+                  <Component {...pageProps} />
+                </Main>
+              </ErrorBoundary>
+              // </RouteGuard>
+            )}
+            {mounted && typeof window !== 'undefined' && window.top === window.self && <h1>Loading...</h1>}
           </ShopProvider>
         </HttpClientProvider>
       </AppProvider>

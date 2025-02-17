@@ -7,10 +7,7 @@ const processRecord = async (record) => {
 
   try {
     await emailClient.send({ to, from, subject, body });
-    await logger.info(
-      `Email sent from "${from}" to "${to}" with subject "${subject}"`,
-      { body }
-    );
+    await logger.info(`Email sent from "${from}" to "${to}" with subject "${subject}"`, { body });
   } catch (error) {
     // **DO NOT** log an error here, or an infinite loop may ensue.
     // error log -> email -> error log -> email -> etc.

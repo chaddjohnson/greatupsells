@@ -1,11 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import {
-  useShop,
-  useRandomOffers,
-  useShopifyCart,
-  useShopifyCustomer,
-  useThemeComponent
-} from '../../hooks';
+import { useShop, useRandomOffers, useShopifyCart, useShopifyCustomer, useThemeComponent } from '../../hooks';
 import ExitIntentOffer from './ExitIntentOffer';
 import LinkClickOffer from './LinkClickOffer';
 import LostBrowserFocusOffer from './LostBrowserFocusOffer';
@@ -21,20 +15,12 @@ const testOfferId = queryString.get('testOfferId');
 
 const Offers = () => {
   const [viewingOffer, setViewingOffer] = useState(false);
-  const {
-    shopifyCartItems,
-    shopifyCartTotal,
-    shopifyCartItemCount,
-    shopifyCartLoaded,
-    addVariantsToShopifyCart
-  } = useShopifyCart();
+  const { shopifyCartItems, shopifyCartTotal, shopifyCartItemCount, shopifyCartLoaded, addVariantsToShopifyCart } =
+    useShopifyCart();
   const { shop } = useShop();
-  const { getCustomerLocale, getCustomerCountryCode, getCustomerCurrency } =
-    useShopifyCustomer();
+  const { getCustomerLocale, getCustomerCountryCode, getCustomerCurrency } = useShopifyCustomer();
 
-  const testVariantId = new URLSearchParams(window.location.search).get(
-    'testVariantId'
-  );
+  const testVariantId = new URLSearchParams(window.location.search).get('testVariantId');
 
   // Get locale.
   const customerLocale = getCustomerLocale();
@@ -46,8 +32,7 @@ const Offers = () => {
   const customerCountryCode = getCustomerCountryCode();
   const shopCountryCode = shop?.countryCode;
   const defaultCountryCode = 'US';
-  const countryCode =
-    customerCountryCode || shopCountryCode || defaultCountryCode;
+  const countryCode = customerCountryCode || shopCountryCode || defaultCountryCode;
 
   // Get currency.
   const customerCurrency = getCustomerCurrency();
@@ -55,14 +40,8 @@ const Offers = () => {
   const defaultCurrency = 'USD';
   const currency = customerCurrency || shopCurrency || defaultCurrency;
 
-  const shopifyProductIds = useMemo(
-    () => shopifyCartItems?.map((item) => item.product_id),
-    [shopifyCartItems]
-  );
-  const shopifyVariantIds = useMemo(
-    () => shopifyCartItems?.map((item) => item.variant_id),
-    [shopifyCartItems]
-  );
+  const shopifyProductIds = useMemo(() => shopifyCartItems?.map((item) => item.product_id), [shopifyCartItems]);
+  const shopifyVariantIds = useMemo(() => shopifyCartItems?.map((item) => item.variant_id), [shopifyCartItems]);
   const shopifyOrderId = window.Shopify?.checkout?.order_id;
 
   // Combine requests to reduce cost and minimize chances of exceeding Lambda concurrency limit.
@@ -107,40 +86,22 @@ const Offers = () => {
   );
 
   const thankYouPageOfferData = useMemo(() => {
-    return offersData?.find(
-      ({ offer }) => offer?.strategy === 'THANK_YOU_PAGE'
-    );
+    return offersData?.find(({ offer }) => offer?.strategy === 'THANK_YOU_PAGE');
   }, [offersData]);
   const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
 
   const orderStatusPageOfferData = useMemo(() => {
-    return offersData?.find(
-      ({ offer }) => offer?.strategy === 'ORDER_STATUS_PAGE'
-    );
+    return offersData?.find(({ offer }) => offer?.strategy === 'ORDER_STATUS_PAGE');
   }, [offersData]);
   const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
 
-  const ExitIntentThemeComponent = useThemeComponent(
-    offerDataByTriggerEvent.EXIT?.theme.key
-  );
-  const LinkClickThemeComponent = useThemeComponent(
-    offerDataByTriggerEvent.LINK?.theme.key
-  );
-  const LostBrowserFocusThemeComponent = useThemeComponent(
-    offerDataByTriggerEvent.FOCUS?.theme.key
-  );
-  const PageLoadThemeComponent = useThemeComponent(
-    offerDataByTriggerEvent.LOAD?.theme.key
-  );
-  const PageScrollThemeComponent = useThemeComponent(
-    offerDataByTriggerEvent.SCROLL?.theme.key
-  );
-  const ThankYouPageThemeComponent = useThemeComponent(
-    thankYouPageOfferData?.theme.key
-  );
-  const OrderStatusPageThemeComponent = useThemeComponent(
-    orderStatusPageOfferData?.theme.key
-  );
+  const ExitIntentThemeComponent = useThemeComponent(offerDataByTriggerEvent.EXIT?.theme.key);
+  const LinkClickThemeComponent = useThemeComponent(offerDataByTriggerEvent.LINK?.theme.key);
+  const LostBrowserFocusThemeComponent = useThemeComponent(offerDataByTriggerEvent.FOCUS?.theme.key);
+  const PageLoadThemeComponent = useThemeComponent(offerDataByTriggerEvent.LOAD?.theme.key);
+  const PageScrollThemeComponent = useThemeComponent(offerDataByTriggerEvent.SCROLL?.theme.key);
+  const ThankYouPageThemeComponent = useThemeComponent(thankYouPageOfferData?.theme.key);
+  const OrderStatusPageThemeComponent = useThemeComponent(orderStatusPageOfferData?.theme.key);
 
   const handleOfferOpen = () => {
     setViewingOffer(true);
@@ -152,11 +113,7 @@ const Offers = () => {
 
   // If testing, add the test variant, if any, to the cart.
   useEffect(() => {
-    const testItemInCart =
-      shopifyCartLoaded &&
-      shopifyCartItems.find(
-        (item) => item.variant_id === parseInt(testVariantId)
-      );
+    const testItemInCart = shopifyCartLoaded && shopifyCartItems.find((item) => item.variant_id === parseInt(testVariantId));
 
     if (testVariantId && shopifyCartLoaded && !testItemInCart) {
       addVariantsToShopifyCart([

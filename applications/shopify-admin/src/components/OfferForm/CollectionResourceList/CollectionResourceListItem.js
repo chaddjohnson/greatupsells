@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Thumbnail,
-  ResourceItem,
-  Button,
-  TextContainer,
-  Stack
-} from '@shopify/polaris';
+import { Thumbnail, ResourceItem, Button, TextContainer, Stack } from '@shopify/polaris';
 import { CancelSmallMinor } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 
@@ -22,22 +16,13 @@ const RemoveButtonWrapper = styled.span`
   }
 `;
 
-const CollectionResourceListItem = ({
-  title,
-  imageUrl,
-  shopifyCollectionId,
-  onRemoveItem
-}) => {
+const CollectionResourceListItem = ({ title, imageUrl, shopifyCollectionId, onRemoveItem }) => {
   const handleRemoveItem = () => {
     onRemoveItem(shopifyCollectionId);
   };
 
   return (
-    <ResourceItem
-      name={title}
-      media={<Thumbnail source={imageUrl} alt={title} size="small" />}
-      verticalAlignment="center"
-    >
+    <ResourceItem name={title} media={<Thumbnail source={imageUrl} alt={title} size="small" />} verticalAlignment="center">
       <Stack distribution="equalSpacing" wrap={false}>
         <Stack.Item fill>
           <Stack.Item>

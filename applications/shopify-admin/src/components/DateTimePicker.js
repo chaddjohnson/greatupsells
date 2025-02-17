@@ -15,13 +15,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const DateTimePicker = ({
-  value,
-  disableDatesBefore,
-  datePickerProps,
-  timePickerProps,
-  onChange
-}) => {
+const DateTimePicker = ({ value, disableDatesBefore, datePickerProps, timePickerProps, onChange }) => {
   const { formatDate, formatDateISO } = useDateTime();
 
   const [date, setDate] = useState(value);
@@ -77,10 +71,7 @@ const DateTimePicker = ({
 
 DateTimePicker.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  disableDatesBefore: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Date)
-  ]),
+  disableDatesBefore: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   datePickerProps: PropTypes.shape({
     label: PropTypes.string
   }),

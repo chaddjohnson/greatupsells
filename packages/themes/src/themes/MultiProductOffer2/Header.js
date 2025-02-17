@@ -32,12 +32,7 @@ const Header = styled(({ className }) => {
   textAlign: 'center',
   maxWidth: '550px',
   margin: '0 auto',
-  marginBottom: [
-    ({ theme }) => (theme.enableBundling ? '1.5rem' : '1.25rem'),
-    '1.25rem',
-    '1.25rem',
-    '1.25rem'
-  ],
+  marginBottom: [({ theme }) => (theme.enableBundling ? '1.5rem' : '1.25rem'), '1.25rem', '1.25rem', '1.25rem'],
   paddingLeft: ['1rem', '1rem', 0, 0],
   paddingRight: ['1rem', '1rem', 0, 0]
 });

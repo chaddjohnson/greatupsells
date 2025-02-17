@@ -3,25 +3,11 @@ import clsx from 'clsx';
 import tinycolor from 'tinycolor2';
 import styled from '@greatupsells/styled-with-facepaint';
 
-const Button = styled(
-  ({
-    className,
-    type = 'button',
-    loading = false,
-    disabled = false,
-    children,
-    ...props
-  }) => (
-    <button
-      className={clsx(className, loading && 'loading')}
-      type={type}
-      disabled={loading || disabled}
-      {...props}
-    >
-      <span>{children}</span>
-    </button>
-  )
-)({
+const Button = styled(({ className, type = 'button', loading = false, disabled = false, children, ...props }) => (
+  <button className={clsx(className, loading && 'loading')} type={type} disabled={loading || disabled} {...props}>
+    <span>{children}</span>
+  </button>
+))({
   fontSize: ({ theme }) => `${(theme.bodyFontSize * 0.875) / 16}rem`,
   fontWeight: 600,
   border: 'none',
@@ -37,8 +23,7 @@ const Button = styled(
   transition: 'background-color 0.2s ease-in-out 0s',
 
   '&:hover:not(:disabled)': {
-    backgroundColor: ({ theme }) =>
-      tinycolor(theme.actionButtonBackgroundColor).darken(10)
+    backgroundColor: ({ theme }) => tinycolor(theme.actionButtonBackgroundColor).darken(10)
   },
   '&:disabled': {
     backgroundColor: ({ theme }) =>

@@ -1,21 +1,7 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import {
-  Page,
-  Layout,
-  Card,
-  Stack,
-  Text,
-  Banner,
-  SkeletonPage,
-  SkeletonBodyText
-} from '@shopify/polaris';
-import {
-  useNumberFormatter,
-  useCurrency,
-  useDateTime,
-  useInterval
-} from '@greatupsells/react-hooks';
+import { Page, Layout, Card, Stack, Text, Banner, SkeletonPage, SkeletonBodyText } from '@shopify/polaris';
+import { useNumberFormatter, useCurrency, useDateTime, useInterval } from '@greatupsells/react-hooks';
 
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
@@ -95,9 +81,7 @@ const OfferAnalyticsPage = () => {
 
   const { startOfDay, subtractTime } = useDateTime();
 
-  const [chartStartAt, setChartStartAt] = useState(
-    subtractTime(new Date(), 90, 'days')
-  );
+  const [chartStartAt, setChartStartAt] = useState(subtractTime(new Date(), 90, 'days'));
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
   const [datePickerActive, setDatePickerActive] = useState(false);
@@ -123,43 +107,23 @@ const OfferAnalyticsPage = () => {
   } = useOfferAnalytics(offerId, chartStartAt, chartEndAt);
 
   const offerAcceptancesChartData = useMemo(
-    () =>
-      offerAcceptances?.map(({ date, acceptances }) => [
-        startOfDay(date).getTime(),
-        acceptances
-      ]),
+    () => offerAcceptances?.map(({ date, acceptances }) => [startOfDay(date).getTime(), acceptances]),
     [offerAcceptances, startOfDay]
   );
   const offerConversionsChartData = useMemo(
-    () =>
-      offerConversions?.map(({ date, conversions }) => [
-        startOfDay(date).getTime(),
-        conversions
-      ]),
+    () => offerConversions?.map(({ date, conversions }) => [startOfDay(date).getTime(), conversions]),
     [offerConversions, startOfDay]
   );
   const offerConversionRatesChartData = useMemo(
-    () =>
-      offerConversionRates?.map(({ date, conversionRate }) => [
-        startOfDay(date).getTime(),
-        conversionRate
-      ]),
+    () => offerConversionRates?.map(({ date, conversionRate }) => [startOfDay(date).getTime(), conversionRate]),
     [offerConversionRates, startOfDay]
   );
   const offerRevenueIncreasesChartData = useMemo(
-    () =>
-      offerRevenueIncreases?.map(({ date, revenueIncrease }) => [
-        startOfDay(date).getTime(),
-        revenueIncrease
-      ]),
+    () => offerRevenueIncreases?.map(({ date, revenueIncrease }) => [startOfDay(date).getTime(), revenueIncrease]),
     [offerRevenueIncreases, startOfDay]
   );
   const offerImpressionsChartData = useMemo(
-    () =>
-      offerImpressions?.map(({ date, impressions }) => [
-        startOfDay(date).getTime(),
-        impressions
-      ]),
+    () => offerImpressions?.map(({ date, impressions }) => [startOfDay(date).getTime(), impressions]),
     [offerImpressions, startOfDay]
   );
 
@@ -184,12 +148,7 @@ const OfferAnalyticsPage = () => {
         <PageTitleBar offer={offer} />
         <Stack vertical>
           <Stack distribution="equalSpacing">
-            <Text
-              as="h3"
-              color="subdued"
-              fontWeight="regular"
-              variant="heading2xl"
-            >
+            <Text as="h3" color="subdued" fontWeight="regular" variant="heading2xl">
               Here&rsquo;s a summary of how your offer is performing
             </Text>
             {/* <DateRangePicker
@@ -203,33 +162,25 @@ const OfferAnalyticsPage = () => {
               <Card sectioned>
                 <Stack distribution="fillEvenly" wrap>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">
-                      {formatNumber(offer?.impressionCount)}
-                    </Text>
+                    <Text variant="heading4xl">{formatNumber(offer?.impressionCount)}</Text>
                     <Text fontWeight="bold" color="subdued">
                       Offer impressions
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">
-                      {formatNumber(offer?.acceptanceCount)}
-                    </Text>
+                    <Text variant="heading4xl">{formatNumber(offer?.acceptanceCount)}</Text>
                     <Text fontWeight="bold" color="subdued">
                       Offers accepted
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">
-                      {formatPercentage(offer?.conversionRate, 1)}
-                    </Text>
+                    <Text variant="heading4xl">{formatPercentage(offer?.conversionRate, 1)}</Text>
                     <Text fontWeight="bold" color="subdued">
                       Conversion rate
                     </Text>
                   </Stack>
                   <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">
-                      {formatCurrency(offer?.revenueIncrease)}
-                    </Text>
+                    <Text variant="heading4xl">{formatCurrency(offer?.revenueIncrease)}</Text>
                     <Text fontWeight="bold" color="subdued">
                       Revenue increase
                     </Text>

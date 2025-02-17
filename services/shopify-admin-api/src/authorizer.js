@@ -42,10 +42,7 @@ const handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
-  const authorizationHeader =
-    event.authorizationToken ||
-    event.headers.Authorization ||
-    event.headers.authorization;
+  const authorizationHeader = event.authorizationToken || event.headers.Authorization || event.headers.authorization;
   const token = authorizationHeader?.replace('Bearer ', '');
   const arn = event.routeArn || event.methodArn;
 

@@ -1,13 +1,5 @@
 import { memo, useState } from 'react';
-import {
-  Page,
-  Banner,
-  Layout,
-  Card,
-  SkeletonPage,
-  SkeletonBodyText,
-  EmptyState
-} from '@shopify/polaris';
+import { Page, Banner, Layout, Card, SkeletonPage, SkeletonBodyText, EmptyState } from '@shopify/polaris';
 import { Loader } from '@greatupsells/react-components';
 import { useOffers } from '../../hooks';
 import { TitleBar, OfferList } from '../../components';
@@ -77,11 +69,7 @@ const OffersPage = () => {
         <PageTitleBar />
         <Layout>
           <Layout.Section>
-            <OfferList
-              offers={offers}
-              filters={filters}
-              onFilter={setFilters}
-            />
+            <OfferList offers={offers} filters={filters} onFilter={setFilters} />
           </Layout.Section>
         </Layout>
       </Page>

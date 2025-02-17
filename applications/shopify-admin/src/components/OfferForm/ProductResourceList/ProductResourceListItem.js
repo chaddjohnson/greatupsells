@@ -1,13 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Thumbnail,
-  ResourceItem,
-  Button,
-  TextContainer,
-  Text,
-  Stack
-} from '@shopify/polaris';
+import { Thumbnail, ResourceItem, Button, TextContainer, Text, Stack } from '@shopify/polaris';
 import { CancelSmallMinor } from '@shopify/polaris-icons';
 import { ResourcePicker } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
@@ -24,14 +17,7 @@ const RemoveButtonWrapper = styled.span`
   }
 `;
 
-const ProductResourceListItem = ({
-  title,
-  imageUrl,
-  shopifyProductId,
-  shopifyVariantIds,
-  onChange,
-  onRemoveItem
-}) => {
+const ProductResourceListItem = ({ title, imageUrl, shopifyProductId, shopifyVariantIds, onChange, onRemoveItem }) => {
   const [productPickerOpen, setProductPickerOpen] = useState(false);
 
   const handleShowProductPicker = () => {
@@ -64,18 +50,13 @@ const ProductResourceListItem = ({
   );
 
   return (
-    <ResourceItem
-      name={title}
-      media={<Thumbnail source={imageUrl} alt={title} size="small" />}
-    >
+    <ResourceItem name={title} media={<Thumbnail source={imageUrl} alt={title} size="small" />}>
       <Stack distribution="equalSpacing" wrap={false}>
         <Stack.Item fill>
           <Stack.Item>
             <TextContainer>{title}</TextContainer>
             <Text color="subdued">
-              ({shopifyVariantIds.length}{' '}
-              {shopifyVariantIds.length === 1 ? 'variant' : 'variants'}{' '}
-              selected)
+              ({shopifyVariantIds.length} {shopifyVariantIds.length === 1 ? 'variant' : 'variants'} selected)
             </Text>
           </Stack.Item>
         </Stack.Item>

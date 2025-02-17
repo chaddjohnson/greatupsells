@@ -1,22 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
-import {
-  usePushStateListener,
-  useEventListener
-} from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { usePushStateListener, useEventListener } from '@greatupsells/react-hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 // IE9+ polyfill for `.closest()`.
 // Source: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
 if (!Element.prototype.matches) {
-  Element.prototype.matches =
-    Element.prototype.msMatchesSelector ||
-    Element.prototype.webkitMatchesSelector;
+  Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 }
 if (!Element.prototype.closest) {
   Element.prototype.closest = function (s) {
@@ -67,11 +58,8 @@ const LinkClickOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId =
-      findTriggerProductShopifyVariantId(triggerProduct);
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -81,14 +69,7 @@ const LinkClickOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleLinkClick = useCallback(
     (event) => {
@@ -154,15 +135,7 @@ const LinkClickOffer = ({
       // Finally, open the popup.
       openPopup();
     },
-    [
-      offer,
-      offerId,
-      offerViewed,
-      openPopup,
-      viewingOffer,
-      offeredProducts,
-      isOnPageRequiredSeconds
-    ]
+    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts, isOnPageRequiredSeconds]
   );
 
   const handleClosePopup = () => {
@@ -181,11 +154,7 @@ const LinkClickOffer = ({
       newWindow = window.open(linkUrl);
 
       // Redirect to the link URL if the popup was blocked.
-      if (
-        !newWindow ||
-        newWindow.closed ||
-        typeof newWindow.closed === 'undefined'
-      ) {
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
         window.location.href = linkUrl;
       }
     }

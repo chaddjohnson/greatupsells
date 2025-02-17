@@ -17,13 +17,9 @@ const handler = async (event, context) => {
     const { offerId } = event.pathParameters;
     const Offer = await models.get('Offer');
     const offer = await Offer.findById(offerId);
-    const {
-      triggerShopifyProductId,
-      triggerShopifyVariantId,
-      offeredShopifyProductIds,
-      ipAddress,
-      isTest
-    } = JSON.parse(event.body);
+    const { triggerShopifyProductId, triggerShopifyVariantId, offeredShopifyProductIds, ipAddress, isTest } = JSON.parse(
+      event.body
+    );
 
     if (!offer) {
       return {

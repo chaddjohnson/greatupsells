@@ -1,13 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  ChoiceList,
-  Checkbox,
-  TextField,
-  InlineError
-} from '@shopify/polaris';
+import { Card, FormLayout, ChoiceList, Checkbox, TextField, InlineError } from '@shopify/polaris';
 import styled from 'styled-components';
 import ProductResourceList from './ProductResourceList';
 import CollectionResourceList from './CollectionResourceList';
@@ -34,10 +27,7 @@ const OfferOfferedProductsEditor = ({
   submitted
 }) => {
   const defaultAppliesTo = useMemo(() => {
-    if (
-      offeredCollections.value.length === 0 &&
-      offeredProducts.value.length === 0
-    ) {
+    if (offeredCollections.value.length === 0 && offeredProducts.value.length === 0) {
       return 'INTELLIGENT';
     } else if (offeredCollections.value.length > 0) {
       return 'COLLECTIONS';
@@ -47,17 +37,13 @@ const OfferOfferedProductsEditor = ({
   }, [offeredCollections.value, offeredProducts.value]);
 
   const [appliesTo, setAppliesTo] = useState(defaultAppliesTo);
-  const [
-    maximumAcceptedProductQuantityActive,
-    setmaximumAcceptedProductQuantityActive
-  ] = useState(!!maximumAcceptedProductQuantity.value);
+  const [maximumAcceptedProductQuantityActive, setmaximumAcceptedProductQuantityActive] = useState(
+    !!maximumAcceptedProductQuantity.value
+  );
 
-  const isCrossSellStrategy = [
-    'CROSS_SELL',
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isCrossSellStrategy = ['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(
+    offer.strategy
+  );
 
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
@@ -83,30 +69,19 @@ const OfferOfferedProductsEditor = ({
 
   const removeProduct = (shopifyProductId) => {
     offeredProducts.onChange(
-      offeredProducts.value.filter(
-        (offeredProduct) => offeredProduct.shopifyProductId !== shopifyProductId
-      )
+      offeredProducts.value.filter((offeredProduct) => offeredProduct.shopifyProductId !== shopifyProductId)
     );
   };
 
   const removeCollection = (shopifyCollectionId) => {
     offeredCollections.onChange(
-      offeredCollections.value.filter(
-        (triggerCollection) =>
-          triggerCollection.shopifyCollectionId !== shopifyCollectionId
-      )
+      offeredCollections.value.filter((triggerCollection) => triggerCollection.shopifyCollectionId !== shopifyCollectionId)
     );
   };
 
   useEffect(() => {
-    if (
-      offer.strategy.value === 'UPSELL' &&
-      !offeredProducts.value.length &&
-      !offeredCollections.value.length
-    ) {
-      offeredProducts.setError(
-        'One or more offered products or collections are required'
-      );
+    if (offer.strategy.value === 'UPSELL' && !offeredProducts.value.length && !offeredCollections.value.length) {
+      offeredProducts.setError('One or more offered products or collections are required');
     } else {
       offeredProducts.setError(undefined);
     }
@@ -118,11 +93,7 @@ const OfferOfferedProductsEditor = ({
 
   return (
     <>
-      <Card
-        title={`Offered ${
-          isCrossSellStrategy ? 'products and collections' : 'products'
-        }`}
-      >
+      <Card title={`Offered ${isCrossSellStrategy ? 'products and collections' : 'products'}`}>
         <Card.Section>
           <FormLayout>
             {isCrossSellStrategy && (
@@ -139,14 +110,12 @@ const OfferOfferedProductsEditor = ({
                   {
                     label: 'Specific products',
                     value: 'PRODUCTS',
-                    helpText:
-                      'Only specific products selected below will be offered.'
+                    helpText: 'Only specific products selected below will be offered.'
                   },
                   {
                     label: 'Products from specific collections',
                     value: 'COLLECTIONS',
-                    helpText:
-                      'Only products from specific collections selected below will be offered.'
+                    helpText: 'Only products from specific collections selected below will be offered.'
                   }
                 ].filter(Boolean)}
                 selected={[appliesTo]}
@@ -169,12 +138,7 @@ const OfferOfferedProductsEditor = ({
                 onRemoveItem={removeCollection}
               />
             )}
-            {submitted && offeredProducts.error && (
-              <InlineError
-                message={offeredProducts.error}
-                fieldID="offeredProducts"
-              />
-            )}
+            {submitted && offeredProducts.error && <InlineError message={offeredProducts.error} fieldID="offeredProducts" />}
           </FormLayout>
         </Card.Section>
         {isCrossSellStrategy && (
@@ -202,9 +166,7 @@ const OfferOfferedProductsEditor = ({
                         min={1}
                         helpText="Applies to total quantity of offered products."
                         {...maximumAcceptedProductQuantity}
-                        error={
-                          submitted && maximumAcceptedProductQuantity.error
-                        }
+                        error={submitted && maximumAcceptedProductQuantity.error}
                       />
                     </QuantityInputWrapper>
                   )

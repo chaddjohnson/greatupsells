@@ -11,8 +11,7 @@ const strategyMap = {
   POPUP: 'Popup'
 };
 
-const OfferStrategy = ({ offer }) =>
-  strategyMap[offer.strategy] ? <Tag>{strategyMap[offer.strategy]}</Tag> : null;
+const OfferStrategy = ({ offer }) => (strategyMap[offer.strategy] ? <Tag>{strategyMap[offer.strategy]}</Tag> : null);
 
 OfferStrategy.propTypes = {
   offer: PropTypes.object.isRequired

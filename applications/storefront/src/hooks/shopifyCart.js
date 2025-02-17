@@ -1,18 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-  useEffect
-} from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useSWR from 'swr';
-import {
-  useHttpRequestListener,
-  usePushStateListener,
-  useCookies
-} from '@greatupsells/react-hooks';
+import { useHttpRequestListener, usePushStateListener, useCookies } from '@greatupsells/react-hooks';
 import useShopifyDraftOrder from './shopifyDraftOrder';
 import useShopifyCustomer from './shopifyCustomer';
 
@@ -24,10 +13,7 @@ const useShopifyCartListener = (listener) => {
   const url = `${urlPrefix}/cart.js`;
 
   const handler = (requestData, responseData) => {
-    const cartData =
-      typeof responseData === 'string'
-        ? JSON.parse(responseData)
-        : responseData;
+    const cartData = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
 
     if (listener) {
       listener.call(listener, cartData);
@@ -44,10 +30,7 @@ const useShopifyCartAddListener = (listener) => {
   const url2 = `${urlPrefix}/cart/add`;
 
   const handler1 = (requestData, responseData) => {
-    const lineItemData =
-      typeof responseData === 'string'
-        ? JSON.parse(responseData)
-        : responseData;
+    const lineItemData = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
     const productData = lineItemData?.items?.[0];
 
     if (listener) {
@@ -56,10 +39,7 @@ const useShopifyCartAddListener = (listener) => {
   };
 
   const handler2 = (requestData, responseData) => {
-    const productData =
-      typeof responseData === 'string'
-        ? JSON.parse(responseData)
-        : responseData;
+    const productData = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
 
     if (listener) {
       listener.call(listener, productData);
@@ -113,8 +93,7 @@ const CartProvider = ({ children }) => {
     }
   );
 
-  const shopifyCartLoading =
-    (!shopifyCart && !shopifyCartError) || isValidating;
+  const shopifyCartLoading = (!shopifyCart && !shopifyCartError) || isValidating;
 
   const isThankYouPage = window.Shopify?.Checkout?.page === 'thank_you';
   const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
@@ -169,13 +148,8 @@ const CartProvider = ({ children }) => {
     });
   };
 
-  const removeVariantFromShopifyCart = async (
-    shopifyVariantId,
-    quantity = 1
-  ) => {
-    const variant = shopifyCartItems.find(
-      (item) => item.variant_id === shopifyVariantId
-    );
+  const removeVariantFromShopifyCart = async (shopifyVariantId, quantity = 1) => {
+    const variant = shopifyCartItems.find((item) => item.variant_id === shopifyVariantId);
     const newQuantity = Math.max(variant.quantity - quantity, 0);
 
     await fetch(`${urlPrefix}/cart/update.js`, {
@@ -200,16 +174,11 @@ const CartProvider = ({ children }) => {
     const { variants } = shopifyProductData;
 
     // Find the cart item corresponding to the product.
-    const shopifyCartItem = shopifyCartItems.find(
-      (item) => item.product_id === shopifyProductId
-    );
+    const shopifyCartItem = shopifyCartItems.find((item) => item.product_id === shopifyProductId);
 
     // Find the specific variant.
     const hasVariants = variants.length > 1;
-    const variant =
-      hasVariants &&
-      shopifyCartItem &&
-      variants.find((current) => current.id === shopifyCartItem.variant_id);
+    const variant = hasVariants && shopifyCartItem && variants.find((current) => current.id === shopifyCartItem.variant_id);
 
     return variant?.id;
   };
@@ -232,12 +201,8 @@ const CartProvider = ({ children }) => {
   const overrideCartForm = useCallback(() => {
     const draftOrderId = getCookie('greatupsellsDraftOrderId');
     const draftOrderCheckoutUrl = getCookie('greatupsellsDraftOrderInvoiceUrl');
-    const cartForms = Array.from(document.forms).filter((form) =>
-      form.action.match(/\/cart$/)
-    );
-    const additionalCheckoutButtons = document.querySelector(
-      '.additional-checkout-buttons'
-    );
+    const cartForms = Array.from(document.forms).filter((form) => form.action.match(/\/cart$/));
+    const additionalCheckoutButtons = document.querySelector('.additional-checkout-buttons');
 
     // Abort if already overridden.
     if (cartFormOverridden) {
@@ -264,12 +229,8 @@ const CartProvider = ({ children }) => {
   }, [cartFormOverridden]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const removeCartFormOverrides = useCallback(() => {
-    const cartForms = Array.from(document.forms).filter((form) =>
-      form.action.match(/\/cart$/)
-    );
-    const additionalCheckoutButtons = document.querySelector(
-      '.additional-checkout-buttons'
-    );
+    const cartForms = Array.from(document.forms).filter((form) => form.action.match(/\/cart$/));
+    const additionalCheckoutButtons = document.querySelector('.additional-checkout-buttons');
 
     // Remove event handlers for cart forms.
     cartForms.forEach((cartForm) => {
@@ -295,10 +256,7 @@ const CartProvider = ({ children }) => {
     const latestShopifyCartItems = latestShopifyCart?.items || [];
 
     if (draftOrderId) {
-      draftOrder = await updateShopifyDraftOrderItems(
-        draftOrderId,
-        latestShopifyCartItems
-      );
+      draftOrder = await updateShopifyDraftOrderItems(draftOrderId, latestShopifyCartItems);
 
       if (draftOrder) {
         // Override event handling for cart forms.
@@ -373,9 +331,4 @@ CartProvider.propTypes = {
 
 const useShopifyCart = () => useContext(CartContext);
 
-export {
-  CartProvider,
-  useShopifyCart,
-  useShopifyCartAddListener,
-  useShopifyCartQuantityListener
-};
+export { CartProvider, useShopifyCart, useShopifyCartAddListener, useShopifyCartQuantityListener };

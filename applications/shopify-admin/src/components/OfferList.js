@@ -1,15 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  IndexTable,
-  Tabs,
-  Text,
-  Stack,
-  Filters,
-  Pagination,
-  EmptyState
-} from '@shopify/polaris';
+import { Card, IndexTable, Tabs, Text, Stack, Filters, Pagination, EmptyState } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency } from '@greatupsells/react-hooks';
 import styled from 'styled-components';
 import { useShop } from '../hooks';
@@ -74,9 +65,7 @@ const OfferListRow = ({ offer }) => {
       </IndexTable.Cell>
       <IndexTable.Cell>{formatNumber(offer.impressionCount)}</IndexTable.Cell>
       <IndexTable.Cell>{formatNumber(offer.acceptanceCount)}</IndexTable.Cell>
-      <IndexTable.Cell>
-        {formatPercentage(offer.conversionRate, 1)}
-      </IndexTable.Cell>
+      <IndexTable.Cell>{formatPercentage(offer.conversionRate, 1)}</IndexTable.Cell>
       <IndexTable.Cell>{formatCurrency(offer.revenueIncrease)}</IndexTable.Cell>
       <IndexTable.Cell>
         <OfferStrategy offer={offer} />
@@ -132,8 +121,7 @@ const OfferList = ({ offers, filters, onFilter }) => {
     return statusIndex > -1 ? statusIndex : 0;
   }, [filters]);
 
-  const offerFilterText =
-    selectedTabIndex > 0 ? tabs[selectedTabIndex]?.content.toLowerCase() : '';
+  const offerFilterText = selectedTabIndex > 0 ? tabs[selectedTabIndex]?.content.toLowerCase() : '';
 
   const handleTabChange = (tabIndex) => {
     const status = tabs[tabIndex].id;
@@ -152,10 +140,7 @@ const OfferList = ({ offers, filters, onFilter }) => {
       clearTimeout(debounceChange.current);
     }
 
-    debounceChange.current = setTimeout(
-      () => onFilter(updatedFilters),
-      0.5 * 1000
-    );
+    debounceChange.current = setTimeout(() => onFilter(updatedFilters), 0.5 * 1000);
   };
 
   const handleQueryClear = () => {

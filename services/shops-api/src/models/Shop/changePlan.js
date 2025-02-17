@@ -29,9 +29,7 @@ const getTrialDays = async (shop) => {
 
   // Allow a trial period to complete if started; otherwise, disallow a trial period.
   if (trialStartedAt) {
-    trialStartedDaysAgo = Math.round(
-      (new Date() - trialStartedAt) / 1000 / 24 / 60 / 60
-    );
+    trialStartedDaysAgo = Math.round((new Date() - trialStartedAt) / 1000 / 24 / 60 / 60);
 
     if (trialStartedDaysAgo < maxTrialDays) {
       return maxTrialDays - trialStartedDaysAgo;
@@ -45,12 +43,9 @@ const getTrialDays = async (shop) => {
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
-  const existingRecurringCharge =
-    await shopifyApiClient.recurringApplicationCharge.get(chargeId);
+  const existingRecurringCharge = await shopifyApiClient.recurringApplicationCharge.get(chargeId);
   const trialEndsOn = existingRecurringCharge.trial_ends_on;
-  const remainingDays = Math.round(
-    (new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60
-  );
+  const remainingDays = Math.round((new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60);
 
   if (!remainingDays || remainingDays < 0 || remainingDays > maxTrialDays) {
     return 0;
@@ -92,14 +87,13 @@ const createPlan = async (shop, level) => {
   // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
   const shopifyApiClient = shop.getShopifyApiClient();
   const trialDays = await getTrialDays(shop);
-  const recurringCharge =
-    await shopifyApiClient.recurringApplicationCharge.create({
-      name: plan.name,
-      price: plan.price,
-      trial_days: trialDays,
-      return_url: `https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
-      test: false
-    });
+  const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create({
+    name: plan.name,
+    price: plan.price,
+    trial_days: trialDays,
+    return_url: `https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
+    test: false
+  });
 
   // Update the shop plan details.
   shop.plan.name = plan.name;
@@ -129,16 +123,11 @@ const createPlan = async (shop, level) => {
 
 const changePlan = async (shop, level) => {
   try {
-    const redirectUrl = isSandbox
-      ? createSandboxPlan(shop)
-      : createPlan(shop, level);
+    const redirectUrl = isSandbox ? createSandboxPlan(shop) : createPlan(shop, level);
 
     return redirectUrl;
   } catch (error) {
-    await logger.error(
-      `Error changing plan for shop to "${level}" (${shop.toString()})`,
-      error
-    );
+    await logger.error(`Error changing plan for shop to "${level}" (${shop.toString()})`, error);
     throw error;
   }
 };

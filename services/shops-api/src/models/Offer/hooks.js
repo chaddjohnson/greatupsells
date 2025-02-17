@@ -27,10 +27,7 @@ const preValidate = async (offer, next) => {
 
   if (offer.triggerPagePath && offer.triggerPagePath !== '/') {
     // Sanitize `triggerPagePath`. This removes trailing slash and query strings.
-    offer.triggerPagePath = offer.triggerPagePath.replace(
-      /(\/*$|\/*?\?.*)/g,
-      ''
-    );
+    offer.triggerPagePath = offer.triggerPagePath.replace(/(\/*$|\/*?\?.*)/g, '');
   }
 
   if (offer.strategy === 'POST_PURCHASE') {
@@ -39,11 +36,7 @@ const preValidate = async (offer, next) => {
   }
 
   if (!offer.shop.onlineStore2Theme && offer.strategy === 'POST_PURCHASE') {
-    return next(
-      new Error(
-        'A Shopify 2.0 theme is required to use post-checkout features.'
-      )
-    );
+    return next(new Error('A Shopify 2.0 theme is required to use post-checkout features.'));
   }
 
   next();

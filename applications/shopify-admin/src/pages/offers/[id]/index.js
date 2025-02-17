@@ -14,32 +14,14 @@ import {
   SkeletonDisplayText,
   SkeletonBodyText
 } from '@shopify/polaris';
-import {
-  ExternalMinor,
-  DuplicateMinor,
-  CircleDisableMinor,
-  CircleTickOutlineMinor
-} from '@shopify/polaris-icons';
+import { ExternalMinor, DuplicateMinor, CircleDisableMinor, CircleTickOutlineMinor } from '@shopify/polaris-icons';
 import { Loader } from '@greatupsells/react-components';
-import {
-  useShop,
-  useOffer,
-  useTheme,
-  useThemes,
-  useOfferThemes,
-  useCollection,
-  useProduct,
-  useToast
-} from '../../../hooks';
+import { useShop, useOffer, useTheme, useThemes, useOfferThemes, useCollection, useProduct, useToast } from '../../../hooks';
 
 import { TitleBar, OfferForm } from '../../../components';
 
 const PageTitleBar = memo(() => (
-  <TitleBar
-    title="Edit offer"
-    primaryAction={null}
-    breadcrumbs={[{ content: 'Offers', url: '/offers/' }]}
-  />
+  <TitleBar title="Edit offer" primaryAction={null} breadcrumbs={[{ content: 'Offers', url: '/offers/' }]} />
 ));
 
 const loadingComponent = () => (
@@ -110,35 +92,21 @@ const OfferEditPage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { shop, shopLoaded, shopError } = useShop();
-  const {
-    offer,
-    offerLoaded,
-    offerError,
-    saveOffer,
-    deleteOffer,
-    duplicateOffer,
-    enableOffer,
-    disableOffer
-  } = useOffer(offerId);
+  const { offer, offerLoaded, offerError, saveOffer, deleteOffer, duplicateOffer, enableOffer, disableOffer } =
+    useOffer(offerId);
   const [latestOffer, setLatestOffer] = useState(null);
   const { saveTheme } = useTheme();
   const { themes, themesLoaded, themesError } = useThemes();
-  const { offerThemes, offerThemesLoaded, offerThemesError } =
-    useOfferThemes(offerId);
+  const { offerThemes, offerThemesLoaded, offerThemesError } = useOfferThemes(offerId);
   const { fetchRandomCollection } = useCollection();
   const { fetchRandomProduct } = useProduct();
 
   const isTestable =
     ['CROSS_SELL', 'UPSELL'].includes(latestOffer?.strategy) &&
-    !['*/orders/*', '*/checkouts/*/thank_you'].includes(
-      latestOffer?.triggerPagePath
-    );
+    !['*/orders/*', '*/checkouts/*/thank_you'].includes(latestOffer?.triggerPagePath);
 
   // Get a reference to the offer's theme.
-  const offerTheme = useMemo(
-    () => offerThemes?.find(({ _id }) => _id === offer?.theme),
-    [offerThemes, offer]
-  );
+  const offerTheme = useMemo(() => offerThemes?.find(({ _id }) => _id === offer?.theme), [offerThemes, offer]);
 
   const loaded = shopLoaded && offerLoaded && themesLoaded && offerThemesLoaded;
   const error = !!(shopError || offerError || themesError || offerThemesError);
@@ -146,25 +114,15 @@ const OfferEditPage = () => {
   const getTestUrl = async () => {
     let pageUrl = '';
     const { testToken } = shop;
-    const shopDomain =
-      sessionStorage.shop ||
-      new URLSearchParams(window.location.search).get('shop');
-    const triggerProductIndex = Math.floor(
-      Math.random() * latestOffer.triggerProducts.length
-    );
-    const triggerCollectionIndex = Math.floor(
-      Math.random() * latestOffer.triggerCollections.length
-    );
+    const shopDomain = sessionStorage.shop || new URLSearchParams(window.location.search).get('shop');
+    const triggerProductIndex = Math.floor(Math.random() * latestOffer.triggerProducts.length);
+    const triggerCollectionIndex = Math.floor(Math.random() * latestOffer.triggerCollections.length);
     const triggerProduct = latestOffer.triggerProducts[triggerProductIndex];
-    const triggerCollection =
-      latestOffer.triggerCollections[triggerCollectionIndex];
+    const triggerCollection = latestOffer.triggerCollections[triggerCollectionIndex];
     const pageParams = {
       testToken,
       testOfferId: offerId,
-      testVariantId:
-        latestOffer.triggerEvent !== 'ADD'
-          ? triggerProduct?.shopifyVariantIds[0]
-          : undefined
+      testVariantId: latestOffer.triggerEvent !== 'ADD' ? triggerProduct?.shopifyVariantIds[0] : undefined
     };
     let randomCollection = null;
     let randomProduct = null;
@@ -195,9 +153,7 @@ const OfferEditPage = () => {
           randomProduct = await fetchRandomProduct();
           pageUrl = `/products/${randomProduct.shopifyProductData.handle}`;
           pageParams.testVariantId =
-            latestOffer.triggerEvent !== 'ADD'
-              ? randomProduct.shopifyProductData.variants[0].id
-              : undefined;
+            latestOffer.triggerEvent !== 'ADD' ? randomProduct.shopifyProductData.variants[0].id : undefined;
         }
 
         break;
@@ -221,8 +177,7 @@ const OfferEditPage = () => {
   };
 
   const handleOfferUpdate = (updatedOffer) => {
-    const changed =
-      JSON.stringify(latestOffer) !== JSON.stringify(updatedOffer);
+    const changed = JSON.stringify(latestOffer) !== JSON.stringify(updatedOffer);
 
     if (changed) {
       setLatestOffer(updatedOffer);
@@ -318,9 +273,7 @@ const OfferEditPage = () => {
     },
     {
       content: offer?.enabled ? 'Disable' : 'Enable',
-      accessibilityLabel: offer?.enabled
-        ? 'Disable this offer'
-        : 'Enable this offer',
+      accessibilityLabel: offer?.enabled ? 'Disable this offer' : 'Enable this offer',
       icon: offer?.enabled ? CircleDisableMinor : CircleTickOutlineMinor,
       onAction: handleToggleEnabled
     }
@@ -328,12 +281,7 @@ const OfferEditPage = () => {
 
   return (
     <>
-      <Loader
-        isLoading={!loaded}
-        isError={error}
-        loadingComponent={loadingComponent}
-        errorComponent={errorComponent}
-      >
+      <Loader isLoading={!loaded} isError={error} loadingComponent={loadingComponent} errorComponent={errorComponent}>
         <Page
           title={
             <Stack alignment="center">

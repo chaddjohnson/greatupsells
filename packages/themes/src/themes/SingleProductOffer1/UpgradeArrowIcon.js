@@ -3,9 +3,7 @@ import clsx from 'clsx';
 import styled from '@greatupsells/styled-with-facepaint';
 
 const UpgradeArrowIcon = styled(({ className }) => (
-  <i className={clsx([className, 'material-icons', 'upgrade-arrow'])}>
-    forward
-  </i>
+  <i className={clsx([className, 'material-icons', 'upgrade-arrow'])}>forward</i>
 ))({
   flex: 0,
   color: ({ theme }) => theme.upgradeArrowColor,

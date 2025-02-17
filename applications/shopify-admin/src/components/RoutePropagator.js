@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
-import {
-  useAppBridge,
-  RoutePropagator as AppBridgeRoutePropagator
-} from '@shopify/app-bridge-react';
+import { useAppBridge, RoutePropagator as AppBridgeRoutePropagator } from '@shopify/app-bridge-react';
 
 const RoutePropagator = ({ router }) => {
   const app = useAppBridge();
@@ -15,9 +12,7 @@ const RoutePropagator = ({ router }) => {
     return null;
   }
 
-  return app && !badPath ? (
-    <AppBridgeRoutePropagator location={router.asPath} />
-  ) : null;
+  return app && !badPath ? <AppBridgeRoutePropagator location={router.asPath} /> : null;
 };
 
 RoutePropagator.propTypes = {

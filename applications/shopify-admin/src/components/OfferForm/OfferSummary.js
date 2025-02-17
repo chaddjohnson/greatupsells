@@ -2,11 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Card, Text, Stack, List, Button } from '@shopify/polaris';
-import {
-  useNumberFormatter,
-  useCurrency,
-  useDateTime
-} from '@greatupsells/react-hooks';
+import { useNumberFormatter, useCurrency, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
 import OfferStatus from '../OfferStatus';
 
@@ -38,35 +34,21 @@ const OfferSummary = ({ offer }) => {
       newItems.push(`${offer.discountValue * 100}% off accepted products`);
     }
     if (offer.discountType === 'AMOUNT' && offer.discountValue) {
-      newItems.push(
-        `${formatCurrency(offer.discountValue)} off accepted products`
-      );
+      newItems.push(`${formatCurrency(offer.discountValue)} off accepted products`);
     }
     if (offer.discountType === 'SET_PRICE' && offer.discountValue) {
-      newItems.push(
-        `${formatCurrency(offer.discountValue)} for each accepted product`
-      );
+      newItems.push(`${formatCurrency(offer.discountValue)} for each accepted product`);
     }
 
     if (offer.minimumRequirement === 'AMOUNT' && offer.minimumRequiredAmount) {
-      newItems.push(
-        `Minimum purchase of ${formatCurrency(offer.minimumRequiredAmount)}`
-      );
+      newItems.push(`Minimum purchase of ${formatCurrency(offer.minimumRequiredAmount)}`);
     }
-    if (
-      offer.minimumRequirement === 'QUANTITY' &&
-      offer.minimumRequiredAmount
-    ) {
+    if (offer.minimumRequirement === 'QUANTITY' && offer.minimumRequiredAmount) {
       newItems.push(`Minimum purchase of ${offer.minimumRequiredAmount} items`);
     }
 
     if (offer.startAt && offer.endAt) {
-      newItems.push(
-        `Active from ${formatDate(offer.startAt, 'MMM d, y')} to ${formatDate(
-          offer.endAt,
-          'MMM d, y'
-        )}`
-      );
+      newItems.push(`Active from ${formatDate(offer.startAt, 'MMM d, y')} to ${formatDate(offer.endAt, 'MMM d, y')}`);
     } else if (offer.startAt) {
       newItems.push(`Active from ${formatDate(offer.startAt, 'MMM d, y')}`);
     }
@@ -103,18 +85,10 @@ const OfferSummary = ({ offer }) => {
         <Card.Section title="Performance" subdued>
           <Stack vertical>
             <List>
-              <List.Item>
-                {formatNumber(offer?.impressionCount)} impressions
-              </List.Item>
-              <List.Item>
-                {formatNumber(offer?.acceptanceCount)} acceptances
-              </List.Item>
-              <List.Item>
-                {formatPercentage(offer?.conversionRate, 1)} conversion rate
-              </List.Item>
-              <List.Item>
-                {formatCurrency(offer?.revenueIncrease)} revenue increase
-              </List.Item>
+              <List.Item>{formatNumber(offer?.impressionCount)} impressions</List.Item>
+              <List.Item>{formatNumber(offer?.acceptanceCount)} acceptances</List.Item>
+              <List.Item>{formatPercentage(offer?.conversionRate, 1)} conversion rate</List.Item>
+              <List.Item>{formatCurrency(offer?.revenueIncrease)} revenue increase</List.Item>
               {/* <List.Item>44 data submissions</List.Item> */}
             </List>
             <Text color="subdued">

@@ -1,11 +1,7 @@
 const models = require('..');
 
 const createSampleOffers = async (shop) => {
-  const [Offer, Product, Theme] = await Promise.all([
-    models.get('Offer'),
-    models.get('Product'),
-    models.get('Theme')
-  ]);
+  const [Offer, Product, Theme] = await Promise.all([models.get('Offer'), models.get('Product'), models.get('Theme')]);
 
   const offerCount = await Offer.countDocuments({ shop: shop._id });
 
@@ -19,10 +15,7 @@ const createSampleOffers = async (shop) => {
     excludedShopifyProductIds: [triggerProduct.shopifyProductId]
   });
   const offeredProduct2 = await Product.findOneRandomByShop(shop, {
-    excludedShopifyProductIds: [
-      triggerProduct.shopifyProductId,
-      offeredProduct1.shopifyProductId
-    ]
+    excludedShopifyProductIds: [triggerProduct.shopifyProductId, offeredProduct1.shopifyProductId]
   });
   const offeredProduct3 = await Product.findOneRandomByShop(shop, {
     excludedShopifyProductIds: [
@@ -80,27 +73,21 @@ const createSampleOffers = async (shop) => {
           handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
-          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map((variant) => variant.id)
         },
         {
           title: offeredProduct2.title,
           handle: offeredProduct2.shopifyProductData.handle,
           imageUrl: offeredProduct2.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct2.shopifyProductId,
-          shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map((variant) => variant.id)
         },
         {
           title: offeredProduct3.title,
           handle: offeredProduct3.shopifyProductData.handle,
           imageUrl: offeredProduct3.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct3.shopifyProductId,
-          shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       offeredCollections: [],
@@ -114,9 +101,7 @@ const createSampleOffers = async (shop) => {
           handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
-          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       triggerCollections: [],
@@ -157,9 +142,7 @@ const createSampleOffers = async (shop) => {
           handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
-          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       offeredCollections: [],
@@ -206,9 +189,7 @@ const createSampleOffers = async (shop) => {
           handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
-          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       offeredCollections: [],
@@ -222,9 +203,7 @@ const createSampleOffers = async (shop) => {
           handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
-          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       triggerCollections: [],
@@ -265,27 +244,21 @@ const createSampleOffers = async (shop) => {
           handle: offeredProduct1.shopifyProductData.handle,
           imageUrl: offeredProduct1.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct1.shopifyProductId,
-          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct1.shopifyProductData.variants.map((variant) => variant.id)
         },
         {
           title: offeredProduct2.title,
           handle: offeredProduct2.shopifyProductData.handle,
           imageUrl: offeredProduct2.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct2.shopifyProductId,
-          shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct2.shopifyProductData.variants.map((variant) => variant.id)
         },
         {
           title: offeredProduct3.title,
           handle: offeredProduct3.shopifyProductData.handle,
           imageUrl: offeredProduct3.shopifyProductData.image?.src,
           shopifyProductId: offeredProduct3.shopifyProductId,
-          shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: offeredProduct3.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       offeredCollections: [],
@@ -299,9 +272,7 @@ const createSampleOffers = async (shop) => {
           handle: triggerProduct.shopifyProductData.handle,
           imageUrl: triggerProduct.shopifyProductData.image?.src,
           shopifyProductId: triggerProduct.shopifyProductId,
-          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map(
-            (variant) => variant.id
-          )
+          shopifyVariantIds: triggerProduct.shopifyProductData.variants.map((variant) => variant.id)
         }
       ],
       triggerCollections: [],
@@ -330,12 +301,7 @@ const createSampleOffers = async (shop) => {
   theme4Clone.offer = offer4._id;
 
   // Save themes.
-  await Promise.all([
-    theme1Clone.save(),
-    theme2Clone.save(),
-    theme3Clone.save(),
-    theme4Clone.save()
-  ]);
+  await Promise.all([theme1Clone.save(), theme2Clone.save(), theme3Clone.save(), theme4Clone.save()]);
 };
 
 module.exports = createSampleOffers;

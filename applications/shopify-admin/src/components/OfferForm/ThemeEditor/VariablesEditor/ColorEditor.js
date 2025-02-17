@@ -5,10 +5,7 @@ import { groupBy } from 'lodash';
 import ColorPicker from './ColorPicker';
 
 const ColorEditor = ({ variables, onChange }) => {
-  const groupedVariables = useMemo(
-    () => groupBy(variables, 'group'),
-    [variables]
-  );
+  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [variables]);
   const groupNames = Object.keys(groupedVariables);
 
   return (

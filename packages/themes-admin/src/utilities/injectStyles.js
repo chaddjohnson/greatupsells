@@ -9,8 +9,7 @@ const injectStyles = (themeKey) => {
   if (iframes.length > 0) {
     iframes.forEach((iframe) => {
       styleElement = iframe.contentDocument.createElement('style');
-      stylesCache[themeKey] =
-        stylesCache[themeKey] || parentStyleElement?.textContent;
+      stylesCache[themeKey] = stylesCache[themeKey] || parentStyleElement?.textContent;
       styleElement.textContent = stylesCache[themeKey];
 
       if (iframe?.contentDocument?.head) {

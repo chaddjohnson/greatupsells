@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  TextField,
-  ChoiceList,
-  Popover,
-  Button,
-  Select,
-  Text,
-  TextContainer
-} from '@shopify/polaris';
+import { Card, FormLayout, TextField, ChoiceList, Popover, Button, Select, Text, TextContainer } from '@shopify/polaris';
 import Link from '../Link';
 
 const pageOptions = [
@@ -48,12 +38,7 @@ const pageOptions = [
   }
 ];
 
-const OfferPagesEditor = ({
-  offer,
-  triggerPage,
-  triggerPagePath,
-  submitted
-}) => {
+const OfferPagesEditor = ({ offer, triggerPage, triggerPagePath, submitted }) => {
   let initialTriggerPageType = 'ANY';
 
   if (triggerPage.value !== 'ANY') {
@@ -64,23 +49,16 @@ const OfferPagesEditor = ({
     }
   }
 
-  const [triggerPageType, setTriggerPageType] = useState(
-    initialTriggerPageType
-  );
+  const [triggerPageType, setTriggerPageType] = useState(initialTriggerPageType);
   const [triggerPageSpecificPath, setTriggerPageSpecificPath] = useState(
     initialTriggerPageType === 'PAGE' && triggerPagePath.value
   );
   const [triggerPagePathPattern, setTriggerPagePathPattern] = useState(
     initialTriggerPageType === 'PATTERN' && triggerPagePath.value
   );
-  const [triggerPagePathPopoverActive, setTriggerPagePathPopoverActive] =
-    useState(false);
+  const [triggerPagePathPopoverActive, setTriggerPagePathPopoverActive] = useState(false);
 
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
 
   const handleTriggerPageTypeChange = (value) => {
     setTriggerPageType(value);
@@ -156,8 +134,7 @@ const OfferPagesEditor = ({
             },
             {
               label: 'URL pattern',
-              helpText:
-                'Offer may show only on one or more pages matching a URL pattern.',
+              helpText: 'Offer may show only on one or more pages matching a URL pattern.',
               value: 'PATTERN',
               renderChildren: (isSelected) =>
                 isSelected && (
@@ -175,11 +152,7 @@ const OfferPagesEditor = ({
                               <Button
                                 plain
                                 monochrome
-                                onClick={() =>
-                                  setTriggerPagePathPopoverActive(
-                                    !triggerPagePathPopoverActive
-                                  )
-                                }
+                                onClick={() => setTriggerPagePathPopoverActive(!triggerPagePathPopoverActive)}
                               >
                                 glob syntax
                               </Button>
@@ -201,13 +174,9 @@ const OfferPagesEditor = ({
                               <br />
                               <code>/products/silly-socks</code>
                               <br />
-                              <code>
-                                /collections/shoes/products/fancy-shoes
-                              </code>
+                              <code>/collections/shoes/products/fancy-shoes</code>
                               <br />
-                              <code>
-                                /collections/shoes/products/silly-socks
-                              </code>
+                              <code>/collections/shoes/products/silly-socks</code>
                             </p>
                             <hr />
                             <p>
@@ -216,17 +185,11 @@ const OfferPagesEditor = ({
                             <p>will match the product page for Fancy Shoes.</p>
                             <hr />
                             <p>
-                              <Link
-                                url="https://en.wikipedia.org/wiki/Glob_(programming)"
-                                external
-                              >
+                              <Link url="https://en.wikipedia.org/wiki/Glob_(programming)" external>
                                 More information
                               </Link>
                             </p>
-                            <p>
-                              Please note that extended glob support is enabled,
-                              and globstar support is disabled.
-                            </p>
+                            <p>Please note that extended glob support is enabled, and globstar support is disabled.</p>
                           </TextContainer>
                         </Popover>
                       </>

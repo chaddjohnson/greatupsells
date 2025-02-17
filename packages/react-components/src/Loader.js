@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 const DefaultLoadingComponent = () => <div>Loading...</div>;
 
 const DefaultErrorComponent = () => (
-  <div style={{ color: '#DE3618' }}>
-    An unexpected error occurred. Please try again shortly.
-  </div>
+  <div style={{ color: '#DE3618' }}>An unexpected error occurred. Please try again shortly.</div>
 );
 
 const DefaultEmptyStateComponent = () => <div>No items found.</div>;

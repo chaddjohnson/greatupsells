@@ -23,9 +23,7 @@ const CloseButton = styled(({ className }) => {
   padding: '8.5px 0 0 0.5px',
   lineHeight: 0,
   color: ({ theme }) =>
-    tinycolor(theme.bannerBackgroundColor).isLight()
-      ? 'rgba(0, 0, 0, 0.4)'
-      : 'rgba(255, 255, 255, 0.8)',
+    tinycolor(theme.bannerBackgroundColor).isLight() ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.8)',
   cursor: 'pointer',
   userSelect: 'none',
   border: 'none',

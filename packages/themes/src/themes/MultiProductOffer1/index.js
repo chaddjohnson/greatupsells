@@ -13,17 +13,13 @@ import Footer from './Footer';
 
 const MultiProductOffer1 = ({ context, theme, state }) => {
   const { strategy, triggerProduct, offeredProducts } = state;
-  const showTriggerProduct =
-    (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
+  const showTriggerProduct = (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
 
   return (
     <ThemeProvider theme={theme}>
       <StateContext.Provider value={state}>
         <Head context={context}>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap"
-            rel="stylesheet"
-          />
+          <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
         </Head>
         <Container>
           <CloseButton />
@@ -33,11 +29,7 @@ const MultiProductOffer1 = ({ context, theme, state }) => {
             {showTriggerProduct && <Divider />}
             <OfferedProducts>
               {offeredProducts.map((offeredProduct, index) => (
-                <OfferedProduct
-                  key={index}
-                  offeredProduct={offeredProduct}
-                  index={index}
-                />
+                <OfferedProduct key={index} offeredProduct={offeredProduct} index={index} />
               ))}
             </OfferedProducts>
           </Body>

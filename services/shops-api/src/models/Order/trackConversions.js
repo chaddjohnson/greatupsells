@@ -6,11 +6,7 @@ const models = require('..');
 
 const { DOMAIN, APP_NAME, SHOPIFY_ADMIN_APP_API_KEY } = process.env;
 
-const sendUsageNotifications = async (
-  shop,
-  monthUpsellRevenue,
-  originalMonthUpsellRevenue
-) => {
+const sendUsageNotifications = async (shop, monthUpsellRevenue, originalMonthUpsellRevenue) => {
   const { monthUpsellRevenueLimit, billingOn } = shop.plan;
   const monthUpsellReveueLimitNear =
     monthUpsellRevenueLimit &&
@@ -20,8 +16,7 @@ const sendUsageNotifications = async (
     monthUpsellRevenueLimit &&
     originalMonthUpsellRevenue < monthUpsellRevenueLimit &&
     monthUpsellRevenue >= monthUpsellRevenueLimit;
-  const planRenewalDateFormatted =
-    DateTime.fromJSDate(billingOn).toFormat('MMM d, y');
+  const planRenewalDateFormatted = DateTime.fromJSDate(billingOn).toFormat('MMM d, y');
 
   // Send email when 80% of earnings limit has been reached
   if (monthUpsellReveueLimitNear) {
@@ -66,10 +61,7 @@ const promiseWhile = (conditionFn, fn) => {
 };
 
 const trackConversions = async (order) => {
-  const [OfferHit, Shop] = await Promise.all([
-    models.get('OfferHit'),
-    models.get('Shop')
-  ]);
+  const [OfferHit, Shop] = await Promise.all([models.get('OfferHit'), models.get('Shop')]);
 
   await order.execPopulate('shop');
 
@@ -94,9 +86,7 @@ const trackConversions = async (order) => {
   }
 
   // Filter out offer hits marked as converted.
-  const unConvertedOfferHits = offerHits.filter(
-    (offerHit) => !offerHit.convertedAt
-  );
+  const unConvertedOfferHits = offerHits.filter((offerHit) => !offerHit.convertedAt);
 
   const session = await mongodbClient.connection.startSession();
   const transactionOptions = { readPreference: 'primary' };
@@ -127,11 +117,7 @@ const trackConversions = async (order) => {
   });
 
   // Send any usage notications to the shop.
-  await sendUsageNotifications(
-    shop,
-    monthUpsellRevenue,
-    originalMonthUpsellRevenue
-  );
+  await sendUsageNotifications(shop, monthUpsellRevenue, originalMonthUpsellRevenue);
 
   return offerHits;
 };

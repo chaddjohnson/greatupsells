@@ -56,16 +56,9 @@ const ProductOptions = styled(({ className }) => {
   return (
     <div className={className}>
       {enableVariantSelection && variants.length > 1 && (
-        <VariantSelect
-          value={selectedVariant.id}
-          onChange={(event) => handleVariantChange(0, event.target.value)}
-        >
+        <VariantSelect value={selectedVariant.id} onChange={(event) => handleVariantChange(0, event.target.value)}>
           {variants.map((variant, index) => (
-            <option
-              key={index}
-              value={variant.id}
-              disabled={!variant.hasInventory}
-            >
+            <option key={index} value={variant.id} disabled={!variant.hasInventory}>
               {variant.title}
             </option>
           ))}

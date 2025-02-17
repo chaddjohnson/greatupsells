@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  TextField,
-  ChoiceList,
-  Banner
-} from '@shopify/polaris';
+import { Card, FormLayout, TextField, ChoiceList, Banner } from '@shopify/polaris';
 import styled from 'styled-components';
 import { useCurrency } from '@greatupsells/react-hooks';
 
@@ -16,18 +10,9 @@ const DiscountValueInputWrapper = styled.div`
   }
 `;
 
-const OfferDiscountEditor = ({
-  shop,
-  offer,
-  discountType,
-  discountValue,
-  discountTitle,
-  submitted
-}) => {
+const OfferDiscountEditor = ({ shop, offer, discountType, discountValue, discountTitle, submitted }) => {
   const [discountValueInternal, setDiscountValueInternal] = useState(
-    discountType.value === 'PERCENTAGE' && discountValue.value
-      ? discountValue.value * 100
-      : discountValue.value
+    discountType.value === 'PERCENTAGE' && discountValue.value ? discountValue.value * 100 : discountValue.value
   );
   const { locale, countryCode, currency } = shop || {};
   const { getCurrencySymbol } = useCurrency({
@@ -52,16 +37,11 @@ const OfferDiscountEditor = ({
   const handleDiscountValueChange = (value) => {
     setDiscountValueInternal(value);
 
-    discountValue.onChange(
-      discountType.value === 'PERCENTAGE' && value ? value / 100 : value
-    );
+    discountValue.onChange(discountType.value === 'PERCENTAGE' && value ? value / 100 : value);
   };
 
   const handleDiscountValueBlur = () => {
-    if (
-      discountType.value === 'PERCENTAGE' ||
-      discountType.value === 'NO_DISCOUNT'
-    ) {
+    if (discountType.value === 'PERCENTAGE' || discountType.value === 'NO_DISCOUNT') {
       return discountValue.onBlur();
     }
 
@@ -106,14 +86,11 @@ const OfferDiscountEditor = ({
             <TextField
               label="Discount value"
               prefix={
-                (discountType.value === 'AMOUNT' && currencySymbol) ||
-                (discountType.value === 'SET_PRICE' && currencySymbol)
+                (discountType.value === 'AMOUNT' && currencySymbol) || (discountType.value === 'SET_PRICE' && currencySymbol)
               }
               suffix={discountType.value === 'PERCENTAGE' && '%'}
               placeholder={
-                (discountType.value === 'AMOUNT' && '0.00') ||
-                (discountType.value === 'SET_PRICE' && '0.00') ||
-                undefined
+                (discountType.value === 'AMOUNT' && '0.00') || (discountType.value === 'SET_PRICE' && '0.00') || undefined
               }
               helpText={
                 discountType.value !== 'SET_PRICE'
@@ -145,8 +122,7 @@ const OfferDiscountEditor = ({
         )}
         {discountType.value !== 'NO_DISCOUNT' && (
           <Banner title="Can't combine with discounts" status="info">
-            Customers won&apos;t be able to enter a discount code or use an
-            automatic discount if this offer is accepted.
+            Customers won&apos;t be able to enter a discount code or use an automatic discount if this offer is accepted.
           </Banner>
         )}
       </FormLayout>

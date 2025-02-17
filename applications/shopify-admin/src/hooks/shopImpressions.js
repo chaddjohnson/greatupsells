@@ -15,9 +15,7 @@ const useShopImpressions = (shopId, startAt, endAt) => {
     error: shopImpressionsError,
     mutate: fetchShopImpressions
   } = useSWR(
-    shopId
-      ? `/shop/impressions?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    shopId ? `/shop/impressions?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true

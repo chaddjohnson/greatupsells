@@ -26,11 +26,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
         return;
       }
 
-      const imagesById =
-        shopifyProductData.images?.reduce(
-          (map, image) => ({ ...map, [image.id]: image }),
-          {}
-        ) || {};
+      const imagesById = shopifyProductData.images?.reduce((map, image) => ({ ...map, [image.id]: image }), {}) || {};
 
       const translatedData = {
         id: shopifyProductData.id,
@@ -46,16 +42,8 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
           alt: shopifyProductData.image?.alt || shopifyProductData.title
         },
         variants: shopifyProductData.variants?.map((variant) => {
-          const price = convertCurrency(
-            parseFloat(variant.price),
-            shopCurrency,
-            currency
-          );
-          const salePrice = convertCurrency(
-            calculateDiscountedPrice(offer, variant.price),
-            shopCurrency,
-            currency
-          );
+          const price = convertCurrency(parseFloat(variant.price), shopCurrency, currency);
+          const salePrice = convertCurrency(calculateDiscountedPrice(offer, variant.price), shopCurrency, currency);
 
           return {
             id: variant.id,
@@ -67,27 +55,15 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
             salePriceFormatted: formatCurrency(salePrice),
             sku: variant.sku,
             image: {
-              src:
-                imagesById[variant.image_id]?.src ||
-                shopifyProductData.image?.src,
-              alt:
-                imagesById[variant.image_id]?.alt ||
-                shopifyProductData.image?.alt ||
-                shopifyProductData.title
+              src: imagesById[variant.image_id]?.src || shopifyProductData.image?.src,
+              alt: imagesById[variant.image_id]?.alt || shopifyProductData.image?.alt || shopifyProductData.title
             },
             thumbnailImage: {
-              src: getThumbnailImageUrl(
-                imagesById[variant.image_id]?.src ||
-                  shopifyProductData.image?.src
-              ),
-              alt:
-                imagesById[variant.image_id]?.alt ||
-                shopifyProductData.image?.alt ||
-                shopifyProductData.title
+              src: getThumbnailImageUrl(imagesById[variant.image_id]?.src || shopifyProductData.image?.src),
+              alt: imagesById[variant.image_id]?.alt || shopifyProductData.image?.alt || shopifyProductData.title
             },
             maxInventory:
-              variant.inventory_policy !== 'continue' &&
-              variant.inventory_management === 'shopify'
+              variant.inventory_policy !== 'continue' && variant.inventory_management === 'shopify'
                 ? Math.max(variant.inventory_quantity, 0) || 0
                 : undefined,
             hasInventory:
@@ -112,29 +88,20 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
       const translatedData = translateProductData(product);
 
       // Find the cart item corresponding to the product.
-      const shopifyCartItem = shopifyCartItems.find(
-        (item) => item.product_id === translatedData?.id
-      );
+      const shopifyCartItem = shopifyCartItems.find((item) => item.product_id === translatedData?.id);
 
       // Find the specific variant.
       const hasVariants = translatedData?.variants.length > 1;
       const variant =
         hasVariants &&
         shopifyCartItem &&
-        translatedData?.variants.find(
-          (current) => current.id === shopifyCartItem.variant_id
-        );
+        translatedData?.variants.find((current) => current.id === shopifyCartItem.variant_id);
 
       // Use specific variant data for display for a better customer experience.
       if (variant) {
-        translatedData.title =
-          shopifyCartItem.title ||
-          `${product.title} - ${variant.title}` ||
-          translatedData.title;
-        translatedData.image.src =
-          variant.image.src || translatedData.image.src;
-        translatedData.image.alt =
-          variant.image.alt || translatedData.image.alt;
+        translatedData.title = shopifyCartItem.title || `${product.title} - ${variant.title}` || translatedData.title;
+        translatedData.image.src = variant.image.src || translatedData.image.src;
+        translatedData.image.alt = variant.image.alt || translatedData.image.alt;
       }
 
       return translatedData;

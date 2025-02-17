@@ -30,11 +30,7 @@ const ThemeEditor = ({
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
 
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(strategy);
 
   const handleChange = (value) => {
     onChange({
@@ -52,9 +48,7 @@ const ThemeEditor = ({
       <Card>
         <Card.Header title="Theme">
           <ButtonGroup>
-            <Button onClick={() => setThemeSelectorOpen(true)}>
-              Select theme
-            </Button>
+            <Button onClick={() => setThemeSelectorOpen(true)}>Select theme</Button>
             <Button primary onClick={() => setVariablesEditorOpen(true)}>
               Customize
             </Button>

@@ -1,7 +1,6 @@
 const toString = (collection) => {
   const { shop } = collection;
-  const title =
-    collection.shopifyCollectionData && collection.shopifyCollectionData.title;
+  const title = collection.shopifyCollectionData && collection.shopifyCollectionData.title;
   const data = [];
 
   data.push(`Collection ID = ${collection.id}`);

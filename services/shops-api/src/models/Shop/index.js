@@ -218,10 +218,7 @@ schema.methods.addDraftOrderLineItems = function (draftOrderId, items) {
   return addDraftOrderLineItems(this, draftOrderId, items);
 };
 
-schema.methods.updateShopifyDraftOrderItems = function (
-  draftOrderId,
-  shopifyCartItems
-) {
+schema.methods.updateShopifyDraftOrderItems = function (draftOrderId, shopifyCartItems) {
   return updateShopifyDraftOrderItems(this, draftOrderId, shopifyCartItems);
 };
 

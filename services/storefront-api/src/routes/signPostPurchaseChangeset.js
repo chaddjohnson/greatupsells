@@ -4,8 +4,7 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
-const { SHOPIFY_ADMIN_APP_API_KEY, SHOPIFY_ADMIN_APP_API_SECRET_KEY } =
-  process.env;
+const { SHOPIFY_ADMIN_APP_API_KEY, SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -17,12 +16,8 @@ const handler = middy(async (event, context) => {
 
   try {
     const { referenceId, changes, token: inputToken } = JSON.parse(event.body);
-    const decodedToken = jwt.verify(
-      inputToken,
-      SHOPIFY_ADMIN_APP_API_SECRET_KEY
-    );
-    const decodedReferenceId =
-      decodedToken.input_data.initialPurchase.referenceId;
+    const decodedToken = jwt.verify(inputToken, SHOPIFY_ADMIN_APP_API_SECRET_KEY);
+    const decodedReferenceId = decodedToken.input_data.initialPurchase.referenceId;
 
     if (decodedReferenceId !== referenceId) {
       return {

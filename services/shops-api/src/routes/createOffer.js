@@ -14,10 +14,7 @@ const handler = async (event, context) => {
   }
 
   try {
-    const [Offer] = await Promise.all([
-      models.get('Offer'),
-      models.get('Shop')
-    ]);
+    const [Offer] = await Promise.all([models.get('Offer'), models.get('Shop')]);
     const data = JSON.parse(event.body);
 
     delete data.impressionCount;

@@ -42,17 +42,11 @@ schema.virtual('hasInventory').get(function () {
   const { shopifyProductData } = this;
   const { variants } = shopifyProductData;
   const anyVariantsHaveInventory = variants.some((variant) => {
-    const inventoryManagedByThirdParty =
-      variant.inventory_management !== 'shopify';
+    const inventoryManagedByThirdParty = variant.inventory_management !== 'shopify';
     const hasNonZeroInventory = variant.inventory_quantity > 0;
-    const continueSellingWhenOutOfStock =
-      variant.inventory_policy === 'continue';
+    const continueSellingWhenOutOfStock = variant.inventory_policy === 'continue';
 
-    return (
-      inventoryManagedByThirdParty ||
-      hasNonZeroInventory ||
-      continueSellingWhenOutOfStock
-    );
+    return inventoryManagedByThirdParty || hasNonZeroInventory || continueSellingWhenOutOfStock;
   });
 
   return anyVariantsHaveInventory;

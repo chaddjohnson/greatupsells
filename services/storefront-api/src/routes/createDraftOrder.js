@@ -28,17 +28,11 @@ const handler = middy(async (event, context) => {
 
     // Verify offers associated with line items belong to the shop.
     const offerIds = lineItems.map(({ offerId }) => offerId).filter(Boolean);
-    const offers = await Promise.all(
-      offerIds.map(async (offerId) => httpClient.get(`/offers/${offerId}`))
-    );
+    const offers = await Promise.all(offerIds.map(async (offerId) => httpClient.get(`/offers/${offerId}`)));
     const offersBelongToShop = offers.every((offer) => offer.shop === shopId);
 
     if (!offersBelongToShop) {
-      await logger.warn(
-        `Unauthorized usage attempt for offer from domain ${domain}`,
-        null,
-        { event }
-      );
+      await logger.warn(`Unauthorized usage attempt for offer from domain ${domain}`, null, { event });
 
       return {
         statusCode: StatusCodes.FORBIDDEN,
@@ -46,10 +40,7 @@ const handler = middy(async (event, context) => {
       };
     }
 
-    const draftOrder = await httpClient.post(
-      `/shops/${shopId}/draft-orders`,
-      data
-    );
+    const draftOrder = await httpClient.post(`/shops/${shopId}/draft-orders`, data);
 
     return {
       statusCode: StatusCodes.CREATED,

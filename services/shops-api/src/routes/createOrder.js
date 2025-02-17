@@ -14,10 +14,7 @@ const handler = async (event, context) => {
   }
 
   try {
-    const [Order] = await Promise.all([
-      models.get('Order'),
-      models.get('Shop')
-    ]);
+    const [Order] = await Promise.all([models.get('Order'), models.get('Shop')]);
     const data = JSON.parse(event.body);
     const { shopifyOrderData } = data;
     const order = new Order(data);
@@ -45,14 +42,9 @@ const handler = async (event, context) => {
 
     // Only track orders resulting in offer conversions.
     if (offerHits.length === 0) {
-      await logger.debug(
-        `No conversions were recorded for order (${order.toString()})`
-      );
+      await logger.debug(`No conversions were recorded for order (${order.toString()})`);
     } else {
-      await logger.info(
-        `Order with conversions created (${order.toString()})`,
-        { data }
-      );
+      await logger.info(`Order with conversions created (${order.toString()})`, { data });
     }
 
     return {

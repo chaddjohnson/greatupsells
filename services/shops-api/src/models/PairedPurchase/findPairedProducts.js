@@ -2,48 +2,30 @@ const Promise = require('bluebird');
 const { shuffle } = require('lodash');
 const models = require('..');
 
-const findPairedProducts = async (
-  shop,
-  shopifyProductIds,
-  quantity,
-  excludedShopifyProductIds = []
-) => {
+const findPairedProducts = async (shop, shopifyProductIds, quantity, excludedShopifyProductIds = []) => {
   shopifyProductIds = shopifyProductIds || [];
 
-  const [PairedPurchase, Product] = await Promise.all([
-    models.get('PairedPurchase'),
-    models.get('Product')
-  ]);
+  const [PairedPurchase, Product] = await Promise.all([models.get('PairedPurchase'), models.get('Product')]);
 
   // Randomize items in the cart in case there are more items in the cart than
   // the number of products that should be presented in the offered.
-  const shuffledShopifyProductIds = shuffle(shopifyProductIds).slice(
-    0,
-    quantity
-  );
+  const shuffledShopifyProductIds = shuffle(shopifyProductIds).slice(0, quantity);
 
   // Track products already found to prevent duplicates. Also exclude products
   // already added to the cart.
-  excludedShopifyProductIds =
-    excludedShopifyProductIds.concat(shopifyProductIds);
+  excludedShopifyProductIds = excludedShopifyProductIds.concat(shopifyProductIds);
 
   // Try to find paired products.
   const pairedProducts = (
-    await Promise.mapSeries(
-      shuffledShopifyProductIds,
-      async (shopifyProductId) => {
-        const product = await PairedPurchase.findOnePairedProduct(
-          shopifyProductId,
-          { excludedShopifyProductIds }
-        );
+    await Promise.mapSeries(shuffledShopifyProductIds, async (shopifyProductId) => {
+      const product = await PairedPurchase.findOnePairedProduct(shopifyProductId, { excludedShopifyProductIds });
 
-        if (product) {
-          excludedShopifyProductIds.push(product.shopifyProductId);
-        }
-
-        return product;
+      if (product) {
+        excludedShopifyProductIds.push(product.shopifyProductId);
       }
-    )
+
+      return product;
+    })
   ).filter(Boolean);
 
   // Determine how many more products are needed.

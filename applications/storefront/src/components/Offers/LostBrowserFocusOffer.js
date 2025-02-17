@@ -1,15 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
-import {
-  usePushStateListener,
-  useDocumentVisibility
-} from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { usePushStateListener, useDocumentVisibility } from '@greatupsells/react-hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -50,11 +43,8 @@ const LostBrowserFocusOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId =
-      findTriggerProductShopifyVariantId(triggerProduct);
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -64,14 +54,7 @@ const LostBrowserFocusOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -114,16 +97,7 @@ const LostBrowserFocusOffer = ({
     }
 
     openPopup();
-  }, [
-    offerId,
-    offerViewed,
-    offeredProducts,
-    isVisible,
-    openPopup,
-    viewingOffer,
-    isOnPageRequiredSeconds,
-    delayFinished
-  ]);
+  }, [offerId, offerViewed, offeredProducts, isVisible, openPopup, viewingOffer, isOnPageRequiredSeconds, delayFinished]);
 
   useDocumentVisibility((visible) => {
     if (isVisible !== visible) {

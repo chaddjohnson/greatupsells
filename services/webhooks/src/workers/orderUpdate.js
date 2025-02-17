@@ -18,9 +18,7 @@ const processor = async (metadata, payload) => {
 
     order = await httpClient.get(`/orders/shopify-order-id/${shopifyOrderId}`);
     dataIsNewer =
-      !order.shopifyOrderData ||
-      new Date(shopifyOrderData.updated_at) >
-        new Date(order.shopifyOrderData.updated_at);
+      !order.shopifyOrderData || new Date(shopifyOrderData.updated_at) > new Date(order.shopifyOrderData.updated_at);
 
     if (dataIsNewer) {
       order.shopifyOrderData = shopifyOrderData;

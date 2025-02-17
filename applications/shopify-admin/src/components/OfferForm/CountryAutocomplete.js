@@ -21,13 +21,7 @@ const getCountryName = (countryCode) => {
   }
 };
 
-const CountryAutocomplete = ({
-  label,
-  placeholder,
-  selected = [],
-  error,
-  onChange
-}) => {
+const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChange }) => {
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
 
@@ -42,9 +36,7 @@ const CountryAutocomplete = ({
     }
 
     const filterRegex = new RegExp(value, 'i');
-    const resultOptions = countriesList.filter((option) =>
-      option.label.match(filterRegex)
-    );
+    const resultOptions = countriesList.filter((option) => option.label.match(filterRegex));
 
     setOptions(resultOptions);
   };
@@ -109,11 +101,7 @@ CountryAutocomplete.propTypes = {
   label: PropTypes.node,
   placeholder: PropTypes.string,
   selected: PropTypes.array,
-  error: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-    PropTypes.element
-  ]),
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.element]),
   onChange: PropTypes.func
 };
 

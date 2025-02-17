@@ -3,9 +3,7 @@ const { APP_NAME_SLUG } = process.env;
 const getAppEmbedBlock = (settingsData) => {
   const settingsDataBlocks = Object.values(settingsData.current.blocks || {});
   const appEmbedBlockTypePrefix = `shopify://apps/${APP_NAME_SLUG}/blocks/app-embed`;
-  const appEmbedBlock = settingsDataBlocks.find((block) =>
-    block.type.includes(appEmbedBlockTypePrefix)
-  );
+  const appEmbedBlock = settingsDataBlocks.find((block) => block.type.includes(appEmbedBlockTypePrefix));
 
   return appEmbedBlock;
 };

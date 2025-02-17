@@ -3,8 +3,7 @@ import { ComponentContext, StateContext, ThemeContext } from '../../components';
 import PriceHeader from './PriceHeader';
 
 const OfferedProduct = ({ offeredProduct, index }) => {
-  const { BlockStack, Button, Image, Text, Select, Tiles, View } =
-    useContext(ComponentContext);
+  const { BlockStack, Button, Image, Text, Select, Tiles, View } = useContext(ComponentContext);
   const {
     selectedVariants,
     selectedQuantities,
@@ -26,8 +25,7 @@ const OfferedProduct = ({ offeredProduct, index }) => {
   const addedAnyProduct = addedQuantities.some((quantity) => quantity > 0);
 
   const savings = useMemo(
-    () =>
-      Math.round((1 - selectedVariant.salePrice / selectedVariant.price) * 100),
+    () => Math.round((1 - selectedVariant.salePrice / selectedVariant.price) * 100),
     [selectedVariant.price, selectedVariant.salePrice]
   );
 
@@ -65,14 +63,10 @@ const OfferedProduct = ({ offeredProduct, index }) => {
           <BlockStack>
             <BlockStack spacing="xtight">
               <Text size="xlarge" emphasized>
-                {offeredProduct.title.length > 50
-                  ? `${offeredProduct.title.substring(0, 50)}…`
-                  : offeredProduct.title}
+                {offeredProduct.title.length > 50 ? `${offeredProduct.title.substring(0, 50)}…` : offeredProduct.title}
               </Text>
               <PriceHeader
-                originalPrice={
-                  showOriginalPrice && selectedVariant.priceFormatted
-                }
+                originalPrice={showOriginalPrice && selectedVariant.priceFormatted}
                 discountedPrice={selectedVariant.salePriceFormatted}
                 savings={savings}
                 loading={pricesLoading}
@@ -93,15 +87,11 @@ const OfferedProduct = ({ offeredProduct, index }) => {
                 <Select
                   label="Quantity"
                   value={selectedQuantities[index]}
-                  options={[
-                    ...Array(Math.min(maxQuantities[index], 25, 100)).keys()
-                  ].map((quantityIndex) => ({
+                  options={[...Array(Math.min(maxQuantities[index], 25, 100)).keys()].map((quantityIndex) => ({
                     label: quantityIndex + 1,
                     value: quantityIndex + 1
                   }))}
-                  onChange={(event) =>
-                    handleQuantityChange(index, event.target.value)
-                  }
+                  onChange={(event) => handleQuantityChange(index, event.target.value)}
                 />
               </BlockStack>
             </View>

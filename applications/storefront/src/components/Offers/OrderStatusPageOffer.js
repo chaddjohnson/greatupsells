@@ -23,16 +23,10 @@ const OrderStatusPageOffer = ({
 
   const offerId = offer?._id;
   const offeredShopifyProductIds = useMemo(
-    () =>
-      offeredProducts?.map(({ shopifyProductData }) => shopifyProductData?.id),
+    () => offeredProducts?.map(({ shopifyProductData }) => shopifyProductData?.id),
     [offeredProducts]
   );
-  const title = useMemo(
-    () =>
-      theme?.variables.find(({ name }) => name === 'titleText')?.value ||
-      'Recommended',
-    [theme]
-  );
+  const title = useMemo(() => theme?.variables.find(({ name }) => name === 'titleText')?.value || 'Recommended', [theme]);
 
   const isOrderStatusPage = window.Shopify?.Checkout?.isOrderStatusPage;
 
@@ -62,10 +56,7 @@ const OrderStatusPageOffer = ({
       return;
     }
 
-    if (
-      added &&
-      !headerContainer.classList.contains('content-box__row--no-border')
-    ) {
+    if (added && !headerContainer.classList.contains('content-box__row--no-border')) {
       headerContainer.classList.add('content-box__row--no-border');
     }
   }, [added, headerContainer]);
@@ -91,15 +82,7 @@ const OrderStatusPageOffer = ({
       offerId,
       offeredShopifyProductIds
     });
-  }, [
-    cachedOffer,
-    offerId,
-    added,
-    offeredShopifyProductIds,
-    trackOfferImpression,
-    title,
-    isOrderStatusPage
-  ]);
+  }, [cachedOffer, offerId, added, offeredShopifyProductIds, trackOfferImpression, title, isOrderStatusPage]);
 
   if (!contentContainer) {
     return null;

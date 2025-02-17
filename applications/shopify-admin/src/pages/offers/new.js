@@ -19,11 +19,7 @@ import { useShop, useOffer, useTheme, useThemes, useToast } from '../../hooks';
 import { TitleBar, OfferForm } from '../../components';
 
 const PageTitleBar = memo(() => (
-  <TitleBar
-    title="Create offer"
-    primaryAction={null}
-    breadcrumbs={[{ content: 'Offers', url: '/offers/' }]}
-  />
+  <TitleBar title="Create offer" primaryAction={null} breadcrumbs={[{ content: 'Offers', url: '/offers/' }]} />
 ));
 
 const loadingComponent = () => (
@@ -128,9 +124,7 @@ const NewOfferPage = () => {
   // the copy will have its own ID when saved.
   // const offerTheme = omit(themes?.[0], '_id');
   const offerTheme = omit(
-    themes?.find(
-      ({ strategies }) => strategies.indexOf(initialOffer.strategy) > -1
-    ),
+    themes?.find(({ strategies }) => strategies.indexOf(initialOffer.strategy) > -1),
     ['_id', '__v', 'updatedAt', 'createdAt']
   );
 
@@ -180,16 +174,10 @@ const NewOfferPage = () => {
     await consentToDataAccess();
   };
 
-  initialOffer.maximumOfferedProductQuantity =
-    offerTheme.maximumOfferedProductQuantity || 3;
+  initialOffer.maximumOfferedProductQuantity = offerTheme.maximumOfferedProductQuantity || 3;
 
   return (
-    <Loader
-      isLoading={!loaded}
-      isError={error}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-    >
+    <Loader isLoading={!loaded} isError={error} loadingComponent={loadingComponent} errorComponent={errorComponent}>
       <Page
         title={
           <Stack alignment="center">
@@ -225,10 +213,7 @@ const NewOfferPage = () => {
       >
         <Modal.Section>
           <TextContainer>
-            <p>
-              Please note that this app does not access, processes, or store
-              customer personal data.
-            </p>
+            <p>Please note that this app does not access, processes, or store customer personal data.</p>
           </TextContainer>
         </Modal.Section>
       </Modal>

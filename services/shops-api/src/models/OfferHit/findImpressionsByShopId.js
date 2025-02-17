@@ -46,8 +46,7 @@ const findImpressionsByShopId = async (shopId, startAt, endAt) => {
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results =
-    results.map(({ date, impressions }) => ({ date, impressions })) || [];
+  results = results.map(({ date, impressions }) => ({ date, impressions })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
   results = fillResults(results, 'impressions');
 

@@ -5,9 +5,7 @@ const { APP_NAME_SLUG, SHOPIFY_EMBED_BLOCK_ID } = process.env;
 const checkIfInstalled = (settingsData) => {
   const settingsDataBlocks = Object.values(settingsData.current.blocks || {});
   const appEmbedBlockTypePrefix = `shopify://apps/${APP_NAME_SLUG}/blocks/app-embed`;
-  const appEmbedBlock = settingsDataBlocks.find((block) =>
-    block.type.includes(appEmbedBlockTypePrefix)
-  );
+  const appEmbedBlock = settingsDataBlocks.find((block) => block.type.includes(appEmbedBlockTypePrefix));
   const appEmbedBlockIsInstalled = !!appEmbedBlock;
 
   return appEmbedBlockIsInstalled;
@@ -49,10 +47,7 @@ const installAppEmbedBlock = async (shop, shopifyThemeId) => {
   // Install app block if not installed.
   if (!appEmbedBlockIsInstalled) {
     await install(shop, shopifyThemeId, settingsDataJson);
-    await logger.info(
-      `Installed app embed block for shop (${shop.toString()})`,
-      { settingsData }
-    );
+    await logger.info(`Installed app embed block for shop (${shop.toString()})`, { settingsData });
   }
 };
 

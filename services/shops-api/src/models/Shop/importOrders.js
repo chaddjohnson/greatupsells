@@ -28,12 +28,7 @@ const importOrder = async (shop, shopifyOrderData) => {
       return order;
     }
   } catch (error) {
-    await logger.warn(
-      `Error importing Shopify order ${
-        shopifyOrderData.id
-      } for shop (${shop.toString()})`,
-      error
-    );
+    await logger.warn(`Error importing Shopify order ${shopifyOrderData.id} for shop (${shop.toString()})`, error);
   }
 };
 
@@ -46,11 +41,9 @@ const importOrders = async (shop) => {
   // Handle pagination.
   do {
     const shopifyOrders = await shopifyApiClient.order.list(params);
-    const orders = await Promise.map(
-      shopifyOrders,
-      async (shopifyOrderData) => importOrder(shop, shopifyOrderData),
-      { concurrency: 10 }
-    );
+    const orders = await Promise.map(shopifyOrders, async (shopifyOrderData) => importOrder(shop, shopifyOrderData), {
+      concurrency: 10
+    });
 
     orderIds = orderIds.concat(orders.map((order) => order.id));
     params = shopifyOrders.nextPageParameters;

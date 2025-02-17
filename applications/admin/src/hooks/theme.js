@@ -9,13 +9,9 @@ const useTheme = (id) => {
 
   const [themeLoaded, setThemeLoaded] = useState(false);
 
-  const { data: theme, error: themeError } = useSWR(
-    id ? `/themes/${id}` : null,
-    httpClient.get.bind(httpClient),
-    {
-      revalidateOnFocus: false
-    }
-  );
+  const { data: theme, error: themeError } = useSWR(id ? `/themes/${id}` : null, httpClient.get.bind(httpClient), {
+    revalidateOnFocus: false
+  });
   const themeLoading = !theme && !themeError;
 
   const saveTheme = async (data) => {
@@ -41,9 +37,7 @@ const useTheme = (id) => {
 
   const cloneTheme = async (sourceTheme) => {
     try {
-      const clonedTheme = await httpClient.post(
-        `/themes/${sourceTheme._id}/clone`
-      );
+      const clonedTheme = await httpClient.post(`/themes/${sourceTheme._id}/clone`);
 
       showSuccessToast(`Theme cloned successfully.`);
 

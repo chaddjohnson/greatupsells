@@ -42,15 +42,11 @@ export default ({ state, ...props }) => {
 
   // Inject dummy values.
   state = {
-    subtotalPricesFormatted: selectedVariants.map(
-      ({ salePriceFormatted }) => salePriceFormatted
-    ),
+    subtotalPricesFormatted: selectedVariants.map(({ salePriceFormatted }) => salePriceFormatted),
     shippingPricesFormatted: selectedVariants.map(() => 'Free'),
     taxPricesFormatted: selectedVariants.map(() => 'Free'),
     totalPrices: selectedVariants.map(({ salePrice }) => salePrice),
-    totalPricesFormatted: selectedVariants.map(
-      ({ salePriceFormatted }) => salePriceFormatted
-    ),
+    totalPricesFormatted: selectedVariants.map(({ salePriceFormatted }) => salePriceFormatted),
     ...state
   };
 
@@ -71,11 +67,7 @@ export default ({ state, ...props }) => {
 
   return (
     <Context>
-      <PostPurchaseSingleProductOffer1
-        components={components}
-        state={state}
-        {...props}
-      />
+      <PostPurchaseSingleProductOffer1 components={components} state={state} {...props} />
     </Context>
   );
 };

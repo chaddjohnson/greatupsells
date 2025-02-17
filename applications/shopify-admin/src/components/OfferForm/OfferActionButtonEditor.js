@@ -11,11 +11,7 @@ const OfferActionButtonEditor = ({
   performActionOnAdd,
   submitted
 }) => {
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
 
   const handleActionButtonBehaviorChange = (value) => {
     actionButtonBehavior.onChange(value);
@@ -37,10 +33,8 @@ const OfferActionButtonEditor = ({
         <ChoiceList
           choices={[
             {
-              label:
-                'Skip the cart and redirect customers to the Checkout page',
-              helpText:
-                'Immediately initiating checkout can increase conversions.',
+              label: 'Skip the cart and redirect customers to the Checkout page',
+              helpText: 'Immediately initiating checkout can increase conversions.',
               value: 'CHECKOUT'
             },
             {
@@ -56,15 +50,8 @@ const OfferActionButtonEditor = ({
               renderChildren: (isSelected) =>
                 isSelected && (
                   <Stack vertical spacing="tight">
-                    <TextField
-                      placeholder="https://"
-                      {...actionButtonLink}
-                      error={submitted && actionButtonLink.error}
-                    />
-                    <Checkbox
-                      label="Open in new browser tab"
-                      {...asChoiceField(actionButtonLinkOpenInNewTab)}
-                    />
+                    <TextField placeholder="https://" {...actionButtonLink} error={submitted && actionButtonLink.error} />
+                    <Checkbox label="Open in new browser tab" {...asChoiceField(actionButtonLinkOpenInNewTab)} />
                   </Stack>
                 ),
               value: 'LINK'
@@ -74,16 +61,15 @@ const OfferActionButtonEditor = ({
           onChange={([value]) => handleActionButtonBehaviorChange(value)}
         />
       </Card.Section>
-      {!offer.enableBundling &&
-        ['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
-          <Card.Section>
-            <Checkbox
-              label="Perform this action immediately after a single offered product is accepted"
-              helpText="This will prevent multiple products from being accepted."
-              {...asChoiceField(performActionOnAdd)}
-            />
-          </Card.Section>
-        )}
+      {!offer.enableBundling && ['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
+        <Card.Section>
+          <Checkbox
+            label="Perform this action immediately after a single offered product is accepted"
+            helpText="This will prevent multiple products from being accepted."
+            {...asChoiceField(performActionOnAdd)}
+          />
+        </Card.Section>
+      )}
     </Card>
   );
 };

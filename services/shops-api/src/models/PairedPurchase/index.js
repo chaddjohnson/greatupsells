@@ -28,18 +28,8 @@ const schema = new mongoose.Schema(
   schemaOptions
 );
 
-schema.statics.findPairedProducts = function (
-  shop,
-  shopifyProductIds,
-  quantity,
-  excludedShopifyProductIds
-) {
-  return findPairedProducts(
-    shop,
-    shopifyProductIds,
-    quantity,
-    excludedShopifyProductIds
-  );
+schema.statics.findPairedProducts = function (shop, shopifyProductIds, quantity, excludedShopifyProductIds) {
+  return findPairedProducts(shop, shopifyProductIds, quantity, excludedShopifyProductIds);
 };
 
 schema.statics.findOnePairedProduct = function (shopifyProductId, options) {
@@ -51,10 +41,7 @@ schema.statics.findOneTopProduct = function (shop, options) {
 };
 
 schema.index({ shop: 1 });
-schema.index(
-  { shopifyProductId: 1, pairedShopifyProductId: 1 },
-  { unique: true }
-);
+schema.index({ shopifyProductId: 1, pairedShopifyProductId: 1 }, { unique: true });
 
 PairedPurchase = mongodbClient.connection.model('PairedPurchase', schema);
 

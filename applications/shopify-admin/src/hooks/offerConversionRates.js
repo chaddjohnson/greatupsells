@@ -12,14 +12,11 @@ const useOfferConversionRates = (offerId, startAt, endAt) => {
     error: offerConversionRatesError,
     mutate: fetchOfferConversionRates
   } = useSWR(
-    offerId
-      ? `/offers/${offerId}/conversion-rates?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    offerId ? `/offers/${offerId}/conversion-rates?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     { revalidateOnFocus: true }
   );
-  const offerConversionRatesLoading =
-    !offerConversionRates && !offerConversionRatesError;
+  const offerConversionRatesLoading = !offerConversionRates && !offerConversionRatesError;
 
   return {
     offerConversionRates,

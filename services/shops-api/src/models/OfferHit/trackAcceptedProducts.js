@@ -1,14 +1,7 @@
 const models = require('..');
 
-const trackAcceptedProducts = async (
-  offerHit,
-  items,
-  { shopifyDraftOrderId, shopifyOrderId }
-) => {
-  const [Product] = await Promise.all([
-    models.get('Product'),
-    models.get('Offer')
-  ]);
+const trackAcceptedProducts = async (offerHit, items, { shopifyDraftOrderId, shopifyOrderId }) => {
+  const [Product] = await Promise.all([models.get('Product'), models.get('Offer')]);
 
   await offerHit.execPopulate('offer');
 
@@ -19,35 +12,21 @@ const trackAcceptedProducts = async (
       }
 
       const { offer, triggerProduct } = offerHit;
-      const {
-        shopifyProductId: triggerShopifyProductId,
-        shopifyVariantId: triggerShopifyVariantId
-      } = triggerProduct;
+      const { shopifyProductId: triggerShopifyProductId, shopifyVariantId: triggerShopifyVariantId } = triggerProduct;
       const { strategy } = offer;
-      const originalShopifyProductId =
-        strategy === 'UPSELL' ? triggerShopifyProductId : shopifyProductId;
-      const originalShopifyVariantId =
-        strategy === 'UPSELL' ? triggerShopifyVariantId : shopifyVariantId;
-      const originalProduct = await Product.findOneByShopifyProductId(
-        originalShopifyProductId
-      );
-      const acceptedProduct =
-        await Product.findOneByShopifyProductId(shopifyProductId);
+      const originalShopifyProductId = strategy === 'UPSELL' ? triggerShopifyProductId : shopifyProductId;
+      const originalShopifyVariantId = strategy === 'UPSELL' ? triggerShopifyVariantId : shopifyVariantId;
+      const originalProduct = await Product.findOneByShopifyProductId(originalShopifyProductId);
+      const acceptedProduct = await Product.findOneByShopifyProductId(shopifyProductId);
 
       // Get a reference to the variant in the Shopify data.
-      const originalVariant =
-        originalProduct?.shopifyProductData?.variants.find(
-          ({ id }) => id === originalShopifyVariantId
-        );
-      const acceptedVariant =
-        acceptedProduct?.shopifyProductData?.variants.find(
-          ({ id }) => id === shopifyVariantId
-        );
+      const originalVariant = originalProduct?.shopifyProductData?.variants.find(
+        ({ id }) => id === originalShopifyVariantId
+      );
+      const acceptedVariant = acceptedProduct?.shopifyProductData?.variants.find(({ id }) => id === shopifyVariantId);
 
       if (!originalProduct) {
-        throw new Error(
-          `Unable to find Shopify product ${originalShopifyProductId}`
-        );
+        throw new Error(`Unable to find Shopify product ${originalShopifyProductId}`);
       }
       if (!acceptedProduct) {
         throw new Error(`Unable to find Shopify product ${shopifyProductId}`);
@@ -65,8 +44,7 @@ const trackAcceptedProducts = async (
 
       const originalPrice = parseFloat(originalVariant.price);
       const acceptedProductPrice = parseFloat(acceptedVariant.price);
-      const acceptedPrice =
-        offer.calculateDiscountedPrice(acceptedProductPrice);
+      const acceptedPrice = offer.calculateDiscountedPrice(acceptedProductPrice);
 
       return {
         shopifyProductId,
@@ -86,9 +64,7 @@ const trackAcceptedProducts = async (
 
   // Track the accepted product data for the offer hit.
   offerHit.acceptedProducts = offerHit.acceptedProducts || [];
-  offerHit.acceptedProducts = offerHit.acceptedProducts.concat(
-    acceptedProducts.filter(Boolean)
-  );
+  offerHit.acceptedProducts = offerHit.acceptedProducts.concat(acceptedProducts.filter(Boolean));
 
   offerHit.acceptedAt = offerHit.acceptedAt || Date.now();
 

@@ -20,15 +20,11 @@ const buildTimeOptions = () =>
     [...Array(24)].map((_, index) => [
       {
         value: `${index.toString().padStart(2, '0')}:00`,
-        label: `${(index % 12 > 0 ? index % 12 : 12)
-          .toString()
-          .padStart(2, '0')}:00 ${index < 12 ? 'AM' : 'PM'}`
+        label: `${(index % 12 > 0 ? index % 12 : 12).toString().padStart(2, '0')}:00 ${index < 12 ? 'AM' : 'PM'}`
       },
       {
         value: `${index.toString().padStart(2, '0')}:30`,
-        label: `${(index % 12 > 0 ? index % 12 : 12)
-          .toString()
-          .padStart(2, '0')}:30 ${index < 12 ? 'AM' : 'PM'}`
+        label: `${(index % 12 > 0 ? index % 12 : 12).toString().padStart(2, '0')}:30 ${index < 12 ? 'AM' : 'PM'}`
       }
     ])
   );
@@ -72,9 +68,7 @@ const TimePicker = ({ label, placeholder, onChange, ...props }) => {
 
       // Filter options to show only options matching text that has been typed.
       const filterRegex = new RegExp(newValue, 'i');
-      const filteredOptions = timeOptions.filter((option) =>
-        option.label.match(filterRegex)
-      );
+      const filteredOptions = timeOptions.filter((option) => option.label.match(filterRegex));
 
       setOptions(filteredOptions);
     },

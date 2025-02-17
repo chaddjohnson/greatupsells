@@ -22,17 +22,12 @@ const useShopifyDraftOrder = () => {
     return draftOrder;
   };
 
-  const updateShopifyDraftOrderItems = async (
-    draftOrderId,
-    shopifyCartItems
-  ) => {
+  const updateShopifyDraftOrderItems = async (draftOrderId, shopifyCartItems) => {
     const url = `/draft-orders/${draftOrderId}/line-items`;
-    const data = shopifyCartItems.map(
-      ({ variant_id: shopifyVariantId, quantity }) => ({
-        shopifyVariantId,
-        quantity
-      })
-    );
+    const data = shopifyCartItems.map(({ variant_id: shopifyVariantId, quantity }) => ({
+      shopifyVariantId,
+      quantity
+    }));
     const draftOrder = await httpClient.put(url, data);
 
     return draftOrder;

@@ -31,9 +31,7 @@ const formatSelectionItems = (value) => {
       handle,
       imageUrl: images?.[0]?.originalSrc,
       shopifyProductId: parseInt(id.split('/').reverse()[0]),
-      shopifyVariantIds: variants.map((variant) =>
-        parseInt(variant.id.split('/').reverse()[0])
-      )
+      shopifyVariantIds: variants.map((variant) => parseInt(variant.id.split('/').reverse()[0]))
     }))
   );
 };
@@ -58,19 +56,11 @@ const ProductResourceList = ({ label, items, onChange, onRemoveItem }) => {
 
   const handleItemChange = (shopifyProductId, value) => {
     const formattedValue = formatSelectionItems(value);
-    const productIndex = items.findIndex(
-      (item) => item.shopifyProductId === shopifyProductId
-    );
-    const filteredItems = items.filter(
-      (item) => item.shopifyProductId !== shopifyProductId
-    );
+    const productIndex = items.findIndex((item) => item.shopifyProductId === shopifyProductId);
+    const filteredItems = items.filter((item) => item.shopifyProductId !== shopifyProductId);
 
     if (productIndex > -1) {
-      onChange([
-        ...filteredItems.slice(0, productIndex),
-        ...formattedValue,
-        ...filteredItems.slice(productIndex)
-      ]);
+      onChange([...filteredItems.slice(0, productIndex), ...formattedValue, ...filteredItems.slice(productIndex)]);
     } else {
       onChange(filteredItems.concat(formattedValue));
     }
@@ -94,19 +84,13 @@ const ProductResourceList = ({ label, items, onChange, onRemoveItem }) => {
         labelHidden
         placeholder="Search products"
         prefix={<Icon source={SearchMinor} />}
-        connectedRight={
-          <Button onClick={handleOpenProductPicker}>Browse</Button>
-        }
+        connectedRight={<Button onClick={handleOpenProductPicker}>Browse</Button>}
         onChange={handleOpenProductPicker}
       />
       <ResourceListWrapper>
         <ResourceList
           items={items}
-          renderItem={(
-            { title, imageUrl, shopifyProductId, shopifyVariantIds },
-            id,
-            index
-          ) => (
+          renderItem={({ title, imageUrl, shopifyProductId, shopifyVariantIds }, id, index) => (
             <ProductResourceListItem
               key={index}
               title={title}

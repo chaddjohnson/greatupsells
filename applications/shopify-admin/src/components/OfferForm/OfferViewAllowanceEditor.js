@@ -9,12 +9,7 @@ const ViewAllowanceDaysInputWrapper = styled.div`
   }
 `;
 
-const OfferViewAllowanceEditor = ({
-  offer,
-  viewAllowance,
-  viewAllowanceDays,
-  submitted
-}) => {
+const OfferViewAllowanceEditor = ({ offer, viewAllowance, viewAllowanceDays, submitted }) => {
   const handleViewAllowanceChange = (value) => {
     if (value === 'DAYS') {
       viewAllowanceDays.onChange('7');
@@ -36,8 +31,7 @@ const OfferViewAllowanceEditor = ({
         choices={[
           {
             label: 'Once within a period of days',
-            helpText:
-              'Customers may only see this offer once within a period of days.',
+            helpText: 'Customers may only see this offer once within a period of days.',
             renderChildren: (isSelected) =>
               isSelected && (
                 <ViewAllowanceDaysInputWrapper>
@@ -54,8 +48,7 @@ const OfferViewAllowanceEditor = ({
           },
           {
             label: 'Once per browser tab session',
-            helpText:
-              'Customers may see this offer only once per browser tab session.',
+            helpText: 'Customers may see this offer only once per browser tab session.',
             value: 'SESSION'
           },
           {
@@ -65,8 +58,7 @@ const OfferViewAllowanceEditor = ({
           },
           {
             label: 'Once every page load',
-            helpText:
-              'Customers may see this offer with every new page visited.',
+            helpText: 'Customers may see this offer with every new page visited.',
             value: 'PAGE'
           }
         ]}

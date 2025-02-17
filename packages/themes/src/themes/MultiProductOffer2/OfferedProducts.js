@@ -76,8 +76,7 @@ const OfferedProducts = styled(({ className, children }) => {
               style={{
                 width: index === currentSlide ? '0.75rem' : '0.5rem',
                 height: index === currentSlide ? '0.75rem' : '0.5rem',
-                backgroundColor:
-                  index === currentSlide ? '#000000' : 'transparent'
+                backgroundColor: index === currentSlide ? '#000000' : 'transparent'
               }}
             />
           </DotContainer>

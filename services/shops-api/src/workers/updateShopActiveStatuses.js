@@ -15,10 +15,7 @@ const handler = async (event, context) => {
         try {
           await shop.updateActiveStatus();
         } catch (error) {
-          await logger.warn(
-            `Error updating shop active status (${shop.toString()})`,
-            error
-          );
+          await logger.warn(`Error updating shop active status (${shop.toString()})`, error);
         }
       },
       { parallel: 50 }

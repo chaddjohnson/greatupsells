@@ -54,10 +54,7 @@ export const normalize = (value) => {
     .map((color) => parseFloat(color));
 
   if (isRgb) {
-    return [
-      rgbToHex(r, g, b),
-      typeof a === 'number' ? parseFloat(a) : undefined
-    ];
+    return [rgbToHex(r, g, b), typeof a === 'number' ? parseFloat(a) : undefined];
   }
 
   return [value || '#000000'];

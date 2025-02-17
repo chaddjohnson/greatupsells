@@ -83,8 +83,7 @@ const ActionButton = styled(Button)({
   marginRight: ['2rem', 0, 0, 0],
 
   '&&:hover': {
-    backgroundColor: ({ theme }) =>
-      tinycolor(theme.actionButtonBackgroundColor).darken(10)
+    backgroundColor: ({ theme }) => tinycolor(theme.actionButtonBackgroundColor).darken(10)
   }
 });
 
@@ -112,16 +111,10 @@ const AddedIconContainer = styled.div({
 
 const TriggerProduct = styled(({ className }) => {
   const theme = useTheme();
-  const {
-    strategy,
-    triggerProduct,
-    actionButtonUrl,
-    actionButtonTarget,
-    shopifyCartTotalFormatted
-  } = useContext(StateContext);
+  const { strategy, triggerProduct, actionButtonUrl, actionButtonTarget, shopifyCartTotalFormatted } =
+    useContext(StateContext);
   const { addedText, actionButtonText } = theme;
-  const showTriggerProduct =
-    (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
+  const showTriggerProduct = (strategy === 'UPSELL' || theme.showTriggerProduct) && triggerProduct;
 
   if (!showTriggerProduct) {
     return null;
@@ -132,10 +125,7 @@ const TriggerProduct = styled(({ className }) => {
       <TriggerProductImageContainer>
         <AddedIconContainer />
         <TriggerProductImageContainerInner>
-          <TriggerProductImage
-            src={triggerProduct.thumbnailImage.src}
-            alt={triggerProduct.thumbnailImage.alt}
-          />
+          <TriggerProductImage src={triggerProduct.thumbnailImage.src} alt={triggerProduct.thumbnailImage.alt} />
         </TriggerProductImageContainerInner>
       </TriggerProductImageContainer>
       <TriggerProductDetails>
@@ -148,12 +138,8 @@ const TriggerProduct = styled(({ className }) => {
         <CartSubtotal>Cart subtotal: {shopifyCartTotalFormatted}</CartSubtotal>
         <ActionButton
           as="a"
-          href={
-            typeof actionButtonUrl === 'string' ? actionButtonUrl : undefined
-          }
-          onClick={
-            typeof actionButtonUrl === 'function' ? actionButtonUrl : undefined
-          }
+          href={typeof actionButtonUrl === 'string' ? actionButtonUrl : undefined}
+          onClick={typeof actionButtonUrl === 'function' ? actionButtonUrl : undefined}
           target={actionButtonTarget}
         >
           {actionButtonText}
@@ -162,12 +148,7 @@ const TriggerProduct = styled(({ className }) => {
     </div>
   );
 })({
-  display: [
-    ({ theme }) => (theme.enableBundling ? 'none' : 'flex'),
-    'flex',
-    'flex',
-    'flex'
-  ],
+  display: [({ theme }) => (theme.enableBundling ? 'none' : 'flex'), 'flex', 'flex', 'flex'],
   flexWrap: ['wrap', 'nowrap', 'nowrap', 'nowrap'],
   alignItems: 'center',
   padding: '1rem',

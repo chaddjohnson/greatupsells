@@ -71,8 +71,7 @@ const LineChart = ({
       ],
       chart: {
         style: {
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
+          fontFamily: '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
         }
       },
       tooltip: {
@@ -85,8 +84,7 @@ const LineChart = ({
         padding: 12,
         style: {
           color: 'white',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif',
+          fontFamily: '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif',
           fontSize: '13px',
           textAlign: 'center'
         },
@@ -97,11 +95,7 @@ const LineChart = ({
 
           return `<div style="font-weight: 500">${month} ${date.getDate()}</div><div style="margin-top: 5px">${formatNumber(
             this.y
-          )} ${(
-            tooltipText ||
-            (typeof title === 'string' && title) ||
-            ''
-          ).toLowerCase()}</div>`;
+          )} ${(tooltipText || (typeof title === 'string' && title) || '').toLowerCase()}</div>`;
         }
       },
       lang: {
@@ -165,34 +159,25 @@ const LineChart = ({
           ) : (
             title
           )}
-          {(typeof changeValue !== 'undefined' ||
-            typeof changePercentage !== 'undefined') && (
+          {(typeof changeValue !== 'undefined' || typeof changePercentage !== 'undefined') && (
             <Stack alignment="center" spacing="tight">
-              {typeof changeValue !== 'undefined' && (
-                <Text variant="headingLg">{formatNumber(changeValue)}</Text>
+              {typeof changeValue !== 'undefined' && <Text variant="headingLg">{formatNumber(changeValue)}</Text>}
+              {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
+                <Text variant="headingLg" as="div">
+                  <Stack spacing="none" alignment="center">
+                    <Icon source={ArrowUpMinor} color="success" />
+                    <Text color="success">{formatPercentage(changePercentage, 0)}</Text>
+                  </Stack>
+                </Text>
               )}
-              {typeof changePercentage !== 'undefined' &&
-                changePercentage > 0 && (
-                  <Text variant="headingLg" as="div">
-                    <Stack spacing="none" alignment="center">
-                      <Icon source={ArrowUpMinor} color="success" />
-                      <Text color="success">
-                        {formatPercentage(changePercentage, 0)}
-                      </Text>
-                    </Stack>
-                  </Text>
-                )}
-              {typeof changePercentage !== 'undefined' &&
-                changePercentage < 0 && (
-                  <Text variant="headingLg" as="div">
-                    <Stack spacing="none" alignment="center">
-                      <Icon source={ArrowDownMinor} color="critical" />
-                      <Text color="critical">
-                        {formatPercentage(changePercentage, 0)}
-                      </Text>
-                    </Stack>
-                  </Text>
-                )}
+              {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
+                <Text variant="headingLg" as="div">
+                  <Stack spacing="none" alignment="center">
+                    <Icon source={ArrowDownMinor} color="critical" />
+                    <Text color="critical">{formatPercentage(changePercentage, 0)}</Text>
+                  </Stack>
+                </Text>
+              )}
             </Stack>
           )}
         </Stack>

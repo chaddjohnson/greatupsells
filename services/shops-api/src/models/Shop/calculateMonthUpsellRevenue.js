@@ -6,31 +6,26 @@ const models = require('..');
 
 const convertToUSD = (amount, fromCurrency) => {
   return new Promise((resolve, reject) => {
-    const request = https.get(
-      'https://cdn.shopify.com/s/javascripts/currencies.js',
-      (response) => {
-        let code = '';
+    const request = https.get('https://cdn.shopify.com/s/javascripts/currencies.js', (response) => {
+      let code = '';
 
-        response.on('data', (data) => {
-          code += data.toString();
-        });
+      response.on('data', (data) => {
+        code += data.toString();
+      });
 
-        response.on('end', () => {
-          const context = {};
+      response.on('end', () => {
+        const context = {};
 
-          vm.createContext(context);
-          vm.runInContext(code, context);
+        vm.createContext(context);
+        vm.runInContext(code, context);
 
-          if (!context.Currency?.convert) {
-            throw new Error(
-              'Shopify currency converter is unavailable, or implementation has changed'
-            );
-          }
+        if (!context.Currency?.convert) {
+          throw new Error('Shopify currency converter is unavailable, or implementation has changed');
+        }
 
-          resolve(context.Currency.convert(amount, fromCurrency, 'USD'));
-        });
-      }
-    );
+        resolve(context.Currency.convert(amount, fromCurrency, 'USD'));
+      });
+    });
 
     request.on('error', (error) => {
       reject(error);
@@ -43,11 +38,7 @@ const calculateMonthUpsellRevenue = async (shop) => {
 
   // Calculate month upsell revenue for the shop starting one month prior
   // to the next billing date.
-  const periodStartDate = DateTime.fromISO(
-    new Date(shop.plan.billingOn).toISOString()
-  )
-    .minus({ month: 1 })
-    .toJSDate();
+  const periodStartDate = DateTime.fromISO(new Date(shop.plan.billingOn).toISOString()).minus({ month: 1 }).toJSDate();
 
   const pipelines = [
     {

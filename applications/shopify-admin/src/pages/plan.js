@@ -149,40 +149,28 @@ const PlanPage = () => {
         key="action1"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'BASIC' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'BASIC' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('BASIC')}
       >
-        {shop?.plan.level === 'BASIC' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'BASIC' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
       <Button
         key="action2"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'PLUS' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'PLUS' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('PLUS')}
       >
-        {shop?.plan.level === 'PLUS' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'PLUS' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
       <Button
         key="action3"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'PRO' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'PRO' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('PRO')}
       >
-        {shop?.plan.level === 'PRO' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'PRO' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>
     ]
   ];

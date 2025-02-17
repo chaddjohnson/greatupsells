@@ -9,11 +9,7 @@ const trackOfferedProducts = async (offerHit, shopifyProductIds = []) => {
     shopifyProductId
   }));
 
-  await OfferHit.findByIdAndUpdate(
-    offerHit.id,
-    { offeredProducts },
-    { session }
-  );
+  await OfferHit.findByIdAndUpdate(offerHit.id, { offeredProducts }, { session });
 };
 
 module.exports = trackOfferedProducts;

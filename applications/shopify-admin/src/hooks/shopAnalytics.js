@@ -8,36 +8,25 @@ import useShopImpressions from './shopImpressions';
 const useShopAnalytics = (shopId, startAt, endAt) => {
   const [shopAnalyticsLoaded, setShopAnalyticsLoaded] = useState(false);
 
-  const {
-    shopAcceptances,
-    shopAcceptancesLoading,
-    shopAcceptancesError,
-    fetchShopAcceptances
-  } = useShopAcceptances(shopId, startAt, endAt);
-  const {
-    shopConversions,
-    shopConversionsLoading,
-    shopConversionsError,
-    fetchShopConversions
-  } = useShopConversions(shopId, startAt, endAt);
-  const {
-    shopConversionRates,
-    shopConversionRatesLoading,
-    shopConversionRatesError,
-    fetchShopConversionRates
-  } = useShopConversionRates(shopId, startAt, endAt);
-  const {
-    shopRevenueIncreases,
-    shopRevenueIncreasesLoading,
-    shopRevenueIncreasesError,
-    fetchShopRevenueIncreases
-  } = useShopRevenueIncreases(shopId, startAt, endAt);
-  const {
-    shopImpressions,
-    shopImpressionsLoading,
-    shopImpressionsError,
-    fetchShopImpressions
-  } = useShopImpressions(shopId, startAt, endAt);
+  const { shopAcceptances, shopAcceptancesLoading, shopAcceptancesError, fetchShopAcceptances } = useShopAcceptances(
+    shopId,
+    startAt,
+    endAt
+  );
+  const { shopConversions, shopConversionsLoading, shopConversionsError, fetchShopConversions } = useShopConversions(
+    shopId,
+    startAt,
+    endAt
+  );
+  const { shopConversionRates, shopConversionRatesLoading, shopConversionRatesError, fetchShopConversionRates } =
+    useShopConversionRates(shopId, startAt, endAt);
+  const { shopRevenueIncreases, shopRevenueIncreasesLoading, shopRevenueIncreasesError, fetchShopRevenueIncreases } =
+    useShopRevenueIncreases(shopId, startAt, endAt);
+  const { shopImpressions, shopImpressionsLoading, shopImpressionsError, fetchShopImpressions } = useShopImpressions(
+    shopId,
+    startAt,
+    endAt
+  );
 
   const shopAnalyticsLoading =
     shopAcceptancesLoading ||

@@ -8,9 +8,7 @@ const importProduct = async (shop, shopifyProductData) => {
     const Product = await models.get('Product');
     const { shopifyShopId } = shop;
     const shopifyProductId = shopifyProductData.id;
-    let product = await Product.findOneByShopifyProductId(
-      shopifyProductData.id
-    );
+    let product = await Product.findOneByShopifyProductId(shopifyProductData.id);
 
     if (product) {
       product.shopifyProductData = shopifyProductData;
@@ -22,21 +20,13 @@ const importProduct = async (shop, shopifyProductData) => {
         shopifyProductData
       });
 
-      await logger.info(
-        `Imported product from Shopify (${product.toString()})`,
-        { shopifyProductData }
-      );
+      await logger.info(`Imported product from Shopify (${product.toString()})`, { shopifyProductData });
     }
 
     await product.save();
     await product.trackShopifyCollections();
   } catch (error) {
-    await logger.warn(
-      `Error importing Shopify product ${
-        shopifyProductData.id
-      } for shop (${shop.toString()})`,
-      error
-    );
+    await logger.warn(`Error importing Shopify product ${shopifyProductData.id} for shop (${shop.toString()})`, error);
   }
 };
 
@@ -66,10 +56,7 @@ const importProducts = async (shop) => {
   try {
     await shop.createSampleOffers();
   } catch (error) {
-    logger.error(
-      `Failed to create sample offers for shop (${shop.toString()})`,
-      error
-    );
+    logger.error(`Failed to create sample offers for shop (${shop.toString()})`, error);
   }
 };
 

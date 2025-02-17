@@ -20,18 +20,9 @@ const PostPurchaseMultiProductOffer1 = ({ theme, state, components }) => {
               { viewportSize: 'large', sizes: [850] }
             ]}
           >
-            <Tiles
-              maxPerLine={2}
-              breakAt={600}
-              spacing="xloose"
-              alignment="trailing"
-            >
+            <Tiles maxPerLine={2} breakAt={600} spacing="xloose" alignment="trailing">
               {offeredProducts.map((offeredProduct, index) => (
-                <OfferedProduct
-                  key={index}
-                  offeredProduct={offeredProduct}
-                  index={index}
-                />
+                <OfferedProduct key={index} offeredProduct={offeredProduct} index={index} />
               ))}
             </Tiles>
           </Layout>

@@ -40,10 +40,7 @@ const updateActiveStatus = async (shop) => {
     }
 
     const { statusCode } = error.response;
-    const cancelPlanErrorCodeWhitelist = [
-      StatusCodes.NOT_FOUND,
-      StatusCodes.FORBIDDEN
-    ];
+    const cancelPlanErrorCodeWhitelist = [StatusCodes.NOT_FOUND, StatusCodes.FORBIDDEN];
     const deactivationErrorCodeWhitelist = [
       StatusCodes.PAYMENT_REQUIRED,
       StatusCodes.NOT_FOUND,
@@ -51,10 +48,8 @@ const updateActiveStatus = async (shop) => {
       StatusCodes.METHOD_FAILURE, // shop unavailable
       StatusCodes.LOCKED
     ];
-    const cancelShopPlan =
-      error.response && cancelPlanErrorCodeWhitelist.includes(statusCode);
-    const deactivateShop =
-      error.response && deactivationErrorCodeWhitelist.includes(statusCode);
+    const cancelShopPlan = error.response && cancelPlanErrorCodeWhitelist.includes(statusCode);
+    const deactivateShop = error.response && deactivationErrorCodeWhitelist.includes(statusCode);
 
     if (cancelShopPlan) {
       await shop.cancelPlan();

@@ -5,10 +5,7 @@ const updateDependentOffers = async (product) => {
   const { shopifyProductId, shopifyProductData } = product;
   const { title, handle, image } = shopifyProductData;
   const offers = await Offer.find({
-    $or: [
-      { 'triggerProducts.shopifyProductId': shopifyProductId },
-      { 'offeredProducts.shopifyProductId': shopifyProductId }
-    ]
+    $or: [{ 'triggerProducts.shopifyProductId': shopifyProductId }, { 'offeredProducts.shopifyProductId': shopifyProductId }]
   });
 
   return await Promise.all(

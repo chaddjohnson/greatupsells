@@ -15,9 +15,7 @@ const useOfferConversions = (offerId, startAt, endAt) => {
     error: offerConversionsError,
     mutate: fetchOfferConversions
   } = useSWR(
-    offerId
-      ? `/offers/${offerId}/conversions?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    offerId ? `/offers/${offerId}/conversions?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true

@@ -10,12 +10,7 @@ const MetadataEditor = ({ theme, onChange }) => {
   return (
     <Card sectioned>
       <FormLayout>
-        <TextField
-          type="text"
-          label="Name"
-          value={theme.name}
-          onChange={(value) => handleChange('name', value)}
-        />
+        <TextField type="text" label="Name" value={theme.name} onChange={(value) => handleChange('name', value)} />
         <TextField
           type="text"
           label="Description"

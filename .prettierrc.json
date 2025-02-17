@@ -1,6 +1,16 @@
 {
   "singleQuote": true,
   "tabWidth": 2,
-  "printWidth": 80,
-  "trailingComma": "none"
+  "printWidth": 125,
+  "trailingComma": "none",
+  "importOrder": [
+    "^@greatupsells/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": [
+    "typescript",
+    "decorators-legacy"
+  ]
 }

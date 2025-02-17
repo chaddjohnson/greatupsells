@@ -20,9 +20,7 @@ const fillResults = (results, valueKey) => {
     });
 
     resultDate = resultDate || {
-      date: DateTime.fromISO(`${targetDateString}T12:00:00Z`)
-        .toJSDate()
-        .toISOString(),
+      date: DateTime.fromISO(`${targetDateString}T12:00:00Z`).toJSDate().toISOString(),
       [valueKey]: 0
     };
 

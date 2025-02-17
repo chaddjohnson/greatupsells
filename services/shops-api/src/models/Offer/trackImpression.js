@@ -12,16 +12,11 @@ const trackImpression = async (
     isTest = false
   }
 ) => {
-  const [Offer, Shop, OfferHit] = await Promise.all([
-    models.get('Offer'),
-    models.get('Shop'),
-    models.get('OfferHit')
-  ]);
+  const [Offer, Shop, OfferHit] = await Promise.all([models.get('Offer'), models.get('Shop'), models.get('OfferHit')]);
 
   await offer.execPopulate('shop');
 
-  const { shop, shopifyShopId, strategy, triggerEvent, triggerPagePath } =
-    offer;
+  const { shop, shopifyShopId, strategy, triggerEvent, triggerPagePath } = offer;
   const triggerProduct = triggerShopifyProductId &&
     triggerShopifyVariantId && {
       shopifyProductId: triggerShopifyProductId,
@@ -73,8 +68,7 @@ const trackImpression = async (
             $inc: {
               offerImpressionCount: 1
             },
-            offerConversionRate:
-              shop.offerConversionCount / (shop.offerImpressionCount + 1)
+            offerConversionRate: shop.offerConversionCount / (shop.offerImpressionCount + 1)
           },
           { session }
         );
@@ -84,9 +78,7 @@ const trackImpression = async (
     return offerHit;
   } catch (error) {
     await logger.error(
-      `Error tracking offer impression for offer (${
-        offer && offer.toString()
-      }) in shop (${shop && shop.toString()})`,
+      `Error tracking offer impression for offer (${offer && offer.toString()}) in shop (${shop && shop.toString()})`,
       error,
       { offerHit, ipAddress }
     );

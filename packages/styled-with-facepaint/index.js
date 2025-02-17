@@ -2,11 +2,7 @@ import styled from 'styled-components';
 import facepaint from 'facepaint';
 
 // Define breakpoints.
-const mq = facepaint([
-  '@media (min-width: 768px)',
-  '@media (min-width: 1024px)',
-  '@media (min-width: 1440px)'
-]);
+const mq = facepaint(['@media (min-width: 768px)', '@media (min-width: 1024px)', '@media (min-width: 1440px)']);
 
 // Get list of helper functions.
 const keys = Object.keys(styled);

@@ -20,16 +20,11 @@ const useOfferTracking = () => {
   }) => {
     // Retrieve local event and offer tracking data.
     const offerImpressions = getCookie('greatupsellsOfferImpressions') || [];
-    const sessionOfferImpressions =
-      sessionStorage.greatupsellsSessionOfferImpressions
-        ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
-        : [];
-    const offerImpression = offerImpressions.find(
-      (current) => current.offerId === offerId
-    );
-    const sessionOfferImpression = sessionOfferImpressions.find(
-      (current) => current.offerId === offerId
-    );
+    const sessionOfferImpressions = sessionStorage.greatupsellsSessionOfferImpressions
+      ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
+      : [];
+    const offerImpression = offerImpressions.find((current) => current.offerId === offerId);
+    const sessionOfferImpression = sessionOfferImpressions.find((current) => current.offerId === offerId);
     const viewedAt = new Date().toISOString();
 
     // Do not track views on the client side when testing offers.
@@ -55,9 +50,7 @@ const useOfferTracking = () => {
       });
 
       // Track the offer impression via sessionStorage.
-      sessionStorage.greatupsellsSessionOfferImpressions = JSON.stringify(
-        sessionOfferImpressions
-      );
+      sessionStorage.greatupsellsSessionOfferImpressions = JSON.stringify(sessionOfferImpressions);
     }
 
     // Record an offer hit.

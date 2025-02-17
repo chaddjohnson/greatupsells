@@ -46,14 +46,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: [
-        'CROSS_SELL',
-        'UPSELL',
-        'POST_PURCHASE',
-        'THANK_YOU_PAGE',
-        'ORDER_STATUS_PAGE',
-        'POPUP'
-      ]
+      enum: ['CROSS_SELL', 'UPSELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE', 'POPUP']
     },
     impressionCount: { type: Int32, required: true, default: 0, min: 0 },
     acceptanceCount: { type: Int32, required: true, default: 0, min: 0 },
@@ -64,9 +57,7 @@ const schema = new mongoose.Schema(
       type: String,
       required() {
         return (
-          this.strategy !== 'POST_PURCHASE' &&
-          this.strategy !== 'THANK_YOU_PAGE' &&
-          this.strategy !== 'ORDER_STATUS_PAGE'
+          this.strategy !== 'POST_PURCHASE' && this.strategy !== 'THANK_YOU_PAGE' && this.strategy !== 'ORDER_STATUS_PAGE'
         );
       },
       enum: ['CHECKOUT', 'CART', 'PAGE', 'LINK']

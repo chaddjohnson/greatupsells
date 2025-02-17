@@ -19,13 +19,10 @@ const processor = async (metadata, payload) => {
     let dataIsNewer = false;
 
     try {
-      collection = await httpClient.get(
-        `/collections/shopify-collection-id/${shopifyCollectionId}`
-      );
+      collection = await httpClient.get(`/collections/shopify-collection-id/${shopifyCollectionId}`);
       dataIsNewer =
         !collection.shopifyCollectionData ||
-        new Date(shopifyCollectionData.updated_at) >
-          new Date(collection.shopifyCollectionData.updated_at);
+        new Date(shopifyCollectionData.updated_at) > new Date(collection.shopifyCollectionData.updated_at);
 
       if (dataIsNewer) {
         collection.shopifyCollectionData = shopifyCollectionData;

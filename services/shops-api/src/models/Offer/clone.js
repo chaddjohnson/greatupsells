@@ -1,10 +1,7 @@
 const models = require('..');
 
 const clone = async (offer) => {
-  const [Offer, Theme] = await Promise.all([
-    models.get('Offer'),
-    models.get('Theme')
-  ]);
+  const [Offer, Theme] = await Promise.all([models.get('Offer'), models.get('Theme')]);
   const data = offer.toObject();
 
   delete data.__v;
@@ -17,10 +14,7 @@ const clone = async (offer) => {
 
   data.name = `${data.name} (copy)`;
 
-  const [clonedOffer, theme] = await Promise.all([
-    Offer.create(data),
-    Theme.findById(offer.theme)
-  ]);
+  const [clonedOffer, theme] = await Promise.all([Offer.create(data), Theme.findById(offer.theme)]);
   const clonedTheme = await theme.clone();
 
   // Link the cloned offer and the cloned popup.

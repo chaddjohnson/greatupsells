@@ -54,9 +54,7 @@ const ThemeThumbnailImage = styled.img`
   height: auto;
 `;
 
-const ThemeOption = ({ theme }) => (
-  <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
-);
+const ThemeOption = ({ theme }) => <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />;
 
 ThemeOption.propTypes = {
   theme: PropTypes.shape({
@@ -86,21 +84,10 @@ const tabs = [
   }
 ];
 
-const ThemeSelector = ({
-  open,
-  strategy,
-  theme,
-  themes,
-  offerThemes,
-  onThemeSelect,
-  onOfferThemeSelect,
-  onClose
-}) => {
+const ThemeSelector = ({ open, strategy, theme, themes, offerThemes, onThemeSelect, onOfferThemeSelect, onClose }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(theme?._id ? 0 : 1);
   const [selectedTheme, setSelectedTheme] = useState([
-    offerThemes.find(
-      (current) => current.__id_offerForm === theme?.__id_offerForm
-    )?.__id_offerForm
+    offerThemes.find((current) => current.__id_offerForm === theme?.__id_offerForm)?.__id_offerForm
   ]);
   const [offerThemeSelected, setOfferThemeSelected] = useState(true);
 
@@ -132,9 +119,7 @@ const ThemeSelector = ({
     });
 
     // Filter by strategy.
-    sortedOfferThemes = sortedOfferThemes.filter(
-      (current) => current.strategies.indexOf(strategy) > -1
-    );
+    sortedOfferThemes = sortedOfferThemes.filter((current) => current.strategies.indexOf(strategy) > -1);
 
     return sortedOfferThemes.map((offerTheme) => ({
       value: offerTheme.__id_offerForm,
@@ -153,11 +138,7 @@ const ThemeSelector = ({
 
   const handleSave = () => {
     if (offerThemeSelected) {
-      onOfferThemeSelect(
-        offerThemes.find(
-          (current) => current.__id_offerForm === selectedTheme[0]
-        )
-      );
+      onOfferThemeSelect(offerThemes.find((current) => current.__id_offerForm === selectedTheme[0]));
     } else {
       onThemeSelect(themes.find((current) => current._id === selectedTheme[0]));
     }
@@ -166,9 +147,7 @@ const ThemeSelector = ({
   };
 
   const handleEntered = () => {
-    const currentThemeId = offerThemes.find(
-      (current) => current.__id_offerForm === theme?.__id_offerForm
-    )?.__id_offerForm;
+    const currentThemeId = offerThemes.find((current) => current.__id_offerForm === theme?.__id_offerForm)?.__id_offerForm;
 
     if (typeof currentThemeId === 'undefined') {
       return;
@@ -182,45 +161,23 @@ const ThemeSelector = ({
   };
 
   return (
-    <Sheet
-      open={open}
-      onEntered={handleEntered}
-      onExit={handleExit}
-      onClose={onClose}
-      accessibilityLabel="Select theme"
-    >
+    <Sheet open={open} onEntered={handleEntered} onExit={handleExit} onClose={onClose} accessibilityLabel="Select theme">
       <InnerWrapper>
         <HeaderWrapper>
           <Text variant="headingLg">Select theme</Text>
-          <Button
-            accessibilityLabel="Cancel"
-            icon={MobileCancelMajor}
-            onClick={onClose}
-            plain
-          />
+          <Button accessibilityLabel="Cancel" icon={MobileCancelMajor} onClick={onClose} plain />
         </HeaderWrapper>
         <Scrollable>
-          <Tabs
-            tabs={tabs}
-            selected={selectedTabIndex}
-            onSelect={handleTabChange}
-          >
+          <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
             <SearchWrapper>
               {tabs[selectedTabIndex].id === 'history' && (
                 <Stack vertical>
                   <TextContainer>
-                    <Banner>
-                      Your customizations for previously selected themes will
-                      remain available here.
-                    </Banner>
+                    <Banner>Your customizations for previously selected themes will remain available here.</Banner>
                   </TextContainer>
                   {offerThemeOptions?.length > 0 && (
                     <Card>
-                      <OptionList
-                        options={offerThemeOptions}
-                        selected={selectedTheme}
-                        onChange={handleThemeSelect}
-                      />
+                      <OptionList options={offerThemeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                     </Card>
                   )}
                   {!offerThemeOptions?.length && <EmptyComponent />}
@@ -232,18 +189,11 @@ const ThemeSelector = ({
                     <Stack vertical spacing="tight">
                       {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
                         <TextContainer>
-                          <Banner>
-                            Themes will adapt to work for both cross-selling and
-                            upselling strategies.
-                          </Banner>
+                          <Banner>Themes will adapt to work for both cross-selling and upselling strategies.</Banner>
                         </TextContainer>
                       )}
                       <Card>
-                        <OptionList
-                          options={themeOptions}
-                          selected={selectedTheme}
-                          onChange={handleThemeSelect}
-                        />
+                        <OptionList options={themeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                       </Card>
                     </Stack>
                   )}

@@ -4,15 +4,7 @@ import NextLink from 'next/link';
 import qs from 'querystringify';
 import clsx from 'clsx';
 
-const Link = ({
-  url,
-  external,
-  monochrome,
-  removeUnderline,
-  prefetch,
-  children,
-  ...props
-}) => {
+const Link = ({ url, external, monochrome, removeUnderline, prefetch, children, ...props }) => {
   if (external || url.match(/^https?:/)) {
     return (
       <a

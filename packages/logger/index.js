@@ -32,11 +32,7 @@ const formatData = (data = {}) =>
       ...map,
       [key]:
         typeof data[key] === 'object'
-          ? JSON.stringify(
-              data[key].toObject ? data[key].toObject() : data[key],
-              null,
-              2
-            )
+          ? JSON.stringify(data[key].toObject ? data[key].toObject() : data[key], null, 2)
           : data[key]
     }),
     {}
@@ -60,9 +56,7 @@ const sendMessage = async (type, message, stackTrace, data) => {
       await httpClient.post('/logs', body);
     }
   } catch (error) {
-    console.error(
-      `Unable to log ${source} message "${message}": ${error.message}`
-    );
+    console.error(`Unable to log ${source} message "${message}": ${error.message}`);
   }
 };
 

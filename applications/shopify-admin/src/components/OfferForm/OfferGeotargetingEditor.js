@@ -4,9 +4,7 @@ import { Card, Stack, Checkbox } from '@shopify/polaris';
 import CountryAutocomplete from './CountryAutocomplete';
 
 const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
-  const [enableGeotargeting, setEnableGeotargeting] = useState(
-    geotargetingCountries.value.length > 0
-  );
+  const [enableGeotargeting, setEnableGeotargeting] = useState(geotargetingCountries.value.length > 0);
 
   const handleEnableGeotargeting = (checked) => {
     setEnableGeotargeting(checked);

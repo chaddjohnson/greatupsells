@@ -45,13 +45,7 @@ const OfferTheme = ({
     return null;
   }
 
-  return (
-    <ThemeComponent
-      context={context}
-      theme={themeVariables}
-      state={{ ...state, forceDisplayType }}
-    />
-  );
+  return <ThemeComponent context={context} theme={themeVariables} state={{ ...state, forceDisplayType }} />;
 };
 
 OfferTheme.propTypes = {

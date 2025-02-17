@@ -34,10 +34,7 @@ const App = ({ Component, ...pageProps }) => {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <HttpClientProvider
-        baseUrl={process.env.ADMIN_API_URL}
-        requestInterceptor={httpRequestInterceptor}
-      >
+      <HttpClientProvider baseUrl={process.env.ADMIN_API_URL} requestInterceptor={httpRequestInterceptor}>
         <ThemeProvider theme={theme}>
           <ToastProvider>
             <CssBaseline />

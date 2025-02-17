@@ -115,30 +115,20 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
     let filteredVariables = variables;
 
     // Filter by variable types handled by the section.
-    filteredVariables = filteredVariables.filter(
-      ({ type }) => selectedSection.variableTypes.indexOf(type) > -1
-    );
+    filteredVariables = filteredVariables.filter(({ type }) => selectedSection.variableTypes.indexOf(type) > -1);
 
     // Optionally filter by strategy.
-    filteredVariables = filteredVariables.filter(
-      ({ options = {} }) => !options.strategy || options.strategy === strategy
-    );
+    filteredVariables = filteredVariables.filter(({ options = {} }) => !options.strategy || options.strategy === strategy);
 
     return filteredVariables;
   }, [selectedSection, variables, strategy]);
 
   const handleVariableChange = (variableId, value) => {
-    const index = variables.findIndex(
-      (variable) => variable._id === variableId
-    );
+    const index = variables.findIndex((variable) => variable._id === variableId);
 
     onChange({
       ...theme,
-      variables: [
-        ...variables.slice(0, index),
-        { ...variables[index], value },
-        ...variables.slice(index + 1)
-      ]
+      variables: [...variables.slice(0, index), { ...variables[index], value }, ...variables.slice(index + 1)]
     });
   };
 
@@ -147,24 +137,11 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
       <InnerWrapper>
         <HeaderWrapper>
           <Stack alignment="center">
-            {selectedSection && (
-              <Button
-                outline
-                icon={ArrowLeftMinor}
-                onClick={() => setSelectedSection(null)}
-              />
-            )}
+            {selectedSection && <Button outline icon={ArrowLeftMinor} onClick={() => setSelectedSection(null)} />}
             <Stack.Item fill>
-              <Text variant="headingLg">
-                {selectedSection ? selectedSection.name : 'Theme settings'}
-              </Text>
+              <Text variant="headingLg">{selectedSection ? selectedSection.name : 'Theme settings'}</Text>
             </Stack.Item>
-            <Button
-              accessibilityLabel="Cancel"
-              icon={MobileCancelMajor}
-              onClick={onClose}
-              plain
-            />
+            <Button accessibilityLabel="Cancel" icon={MobileCancelMajor} onClick={onClose} plain />
           </Stack>
         </HeaderWrapper>
         {!selectedSection && (
@@ -182,11 +159,7 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
                 >
                   <Stack alignment="center">
                     <Stack.Item fill>{section.name}</Stack.Item>
-                    <Button
-                      icon={ChevronRightMinor}
-                      plain
-                      onClick={() => setSelectedSection(section)}
-                    />
+                    <Button icon={ChevronRightMinor} plain onClick={() => setSelectedSection(section)} />
                   </Stack>
                 </ResourceItem>
               )}
@@ -196,20 +169,12 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
         {selectedSection && (
           <Scrollable>
             <ContentWrapper>
-              {sectionVariables?.length > 0 &&
-                selectedSection.id === 'content' && (
-                  <ContentEditor
-                    variables={sectionVariables}
-                    onChange={handleVariableChange}
-                  />
-                )}
-              {sectionVariables?.length > 0 &&
-                selectedSection.id === 'colors' && (
-                  <ColorEditor
-                    variables={sectionVariables}
-                    onChange={handleVariableChange}
-                  />
-                )}
+              {sectionVariables?.length > 0 && selectedSection.id === 'content' && (
+                <ContentEditor variables={sectionVariables} onChange={handleVariableChange} />
+              )}
+              {sectionVariables?.length > 0 && selectedSection.id === 'colors' && (
+                <ColorEditor variables={sectionVariables} onChange={handleVariableChange} />
+              )}
               {/* {sectionVariables?.length > 0 &&
                 selectedSection.id === 'typography' && (
                   <FontEditor
@@ -217,18 +182,11 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
                     onChange={handleVariableChange}
                   />
                 )} */}
-              {sectionVariables?.length > 0 &&
-                selectedSection.id === 'options' && (
-                  <OptionsEditor
-                    variables={sectionVariables}
-                    onChange={handleVariableChange}
-                  />
-                )}
-              {selectedSection.id === 'metadata' && (
-                <MetadataEditor theme={theme} onChange={onChange} />
+              {sectionVariables?.length > 0 && selectedSection.id === 'options' && (
+                <OptionsEditor variables={sectionVariables} onChange={handleVariableChange} />
               )}
-              {!sectionVariables?.length &&
-                !!selectedSection.variableTypes?.length && <EmptyComponent />}
+              {selectedSection.id === 'metadata' && <MetadataEditor theme={theme} onChange={onChange} />}
+              {!sectionVariables?.length && !!selectedSection.variableTypes?.length && <EmptyComponent />}
             </ContentWrapper>
           </Scrollable>
         )}

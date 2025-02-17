@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import {
-  Stack,
-  SkeletonDisplayText,
-  SkeletonBodyText,
-  SkeletonThumbnail
-} from '@shopify/polaris';
+import { Stack, SkeletonDisplayText, SkeletonBodyText, SkeletonThumbnail } from '@shopify/polaris';
 
 const SkeletonThumbnailWrapper = styled.div`
   .Polaris-SkeletonThumbnail {

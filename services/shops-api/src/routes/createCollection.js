@@ -14,10 +14,7 @@ const handler = async (event, context) => {
   }
 
   try {
-    const [Collection] = await Promise.all([
-      models.get('Collection'),
-      models.get('Shop')
-    ]);
+    const [Collection] = await Promise.all([models.get('Collection'), models.get('Shop')]);
     const data = JSON.parse(event.body);
     const collection = new Collection(data);
 

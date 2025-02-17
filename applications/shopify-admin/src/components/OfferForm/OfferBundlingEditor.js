@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import { Card, FormLayout, ChoiceList } from '@shopify/polaris';
 
 const OfferBundlingEditor = ({ offer, theme, enableBundling }) => {
-  const isCrossSellStrategy = [
-    'CROSS_SELL',
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isCrossSellStrategy = ['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(
+    offer.strategy
+  );
 
   // Hide bundling options if only one product is offered.
   if (theme.maximumOfferedProductQuantity === 1) {

@@ -1,10 +1,6 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
-const {
-  StatusCodes,
-  ReasonPhrases,
-  getReasonPhrase
-} = require('http-status-codes');
+const { StatusCodes, ReasonPhrases, getReasonPhrase } = require('http-status-codes');
 const HttpClient = require('@greatupsells/gateway-http-client');
 
 const { SHOPS_API_URL } = process.env;
@@ -22,8 +18,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { jwt } =
-      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const { jwt } = event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const shopId = jwt.claims.sub;
     const { level } = JSON.parse(event.body);
     const { redirectUrl } = await httpClient.post(`/shops/${shopId}/plan`, {
@@ -38,9 +33,7 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body:
-          JSON.stringify(error.response.data) ||
-          getReasonPhrase(error.response.status)
+        body: JSON.stringify(error.response.data) || getReasonPhrase(error.response.status)
       };
     }
 

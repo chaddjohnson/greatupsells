@@ -115,19 +115,13 @@ const createServer = () => {
     });
 
     const { shop: shopDomain, accessToken } = callbackResponse.session;
-    const shop = await shopsServiceHttpClient.post(
-      `/shops/domain/${shopDomain}/initialization`,
-      { accessToken }
-    );
+    const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
     const shopId = shop._id;
 
     // Set up a billing plan immediately.
-    const { redirectUrl } = await shopsServiceHttpClient.post(
-      `/shops/${shopId}/plan`,
-      {
-        level: 'BASIC'
-      }
-    );
+    const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
+      level: 'BASIC'
+    });
 
     response.redirect(redirectUrl);
   });
@@ -143,9 +137,7 @@ const createServer = () => {
       const shopDomain = shopUrl.replace('https://', '');
 
       // Retrieve shop data based on the shop domain.
-      const shop = await shopsServiceHttpClient.get(
-        `/shops/domain/${shopDomain}`
-      );
+      const shop = await shopsServiceHttpClient.get(`/shops/domain/${shopDomain}`);
       const shopId = shop._id;
 
       // Reference: https://shopify.dev/apps/auth/oauth/session-tokens/getting-started#optional-obtain-session-details-and-verify-the-session-token-manually
@@ -166,16 +158,12 @@ const createServer = () => {
       const authToken = jwt.sign(payload, JWT_SECRET);
 
       if (!tokenIsValid) {
-        response
-          .status(StatusCodes.UNAUTHORIZED)
-          .send(ReasonPhrases.UNAUTHORIZED);
+        response.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
         return;
       }
 
       if (!shop.accessToken) {
-        response
-          .status(StatusCodes.UNAUTHORIZED)
-          .send(ReasonPhrases.UNAUTHORIZED);
+        response.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
         return;
       }
 
@@ -183,9 +171,7 @@ const createServer = () => {
       response.set('Content-Type', 'application/json');
       response.send(JSON.stringify({ authToken }));
     } catch (error) {
-      response
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(ReasonPhrases.INTERNAL_SERVER_ERROR);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReasonPhrases.INTERNAL_SERVER_ERROR);
     }
   });
 
@@ -193,17 +179,12 @@ const createServer = () => {
     const { shop: shopDomain } = request.query;
 
     try {
-      const shop = await shopsServiceHttpClient.get(
-        `/shops/domain/${shopDomain}`
-      );
+      const shop = await shopsServiceHttpClient.get(`/shops/domain/${shopDomain}`);
 
       if (!shop.active) {
         response.redirect(`/auth?shop=${shopDomain}`);
       } else {
-        response.set(
-          'Content-Security-Policy',
-          `frame-ancestors https://${shopDomain} https://admin.shopify.com`
-        );
+        response.set('Content-Security-Policy', `frame-ancestors https://${shopDomain} https://admin.shopify.com`);
         await handleAppRequest(request, response);
       }
     } catch (error) {

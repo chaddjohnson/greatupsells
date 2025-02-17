@@ -2,11 +2,7 @@ const logger = require('@greatupsells/logger');
 const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
-const trackAcceptance = async (
-  offerHit,
-  items,
-  { shopifyDraftOrderId, shopifyCheckoutId }
-) => {
+const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCheckoutId }) => {
   const [Offer, Shop, session] = await Promise.all([
     models.get('Offer'),
     models.get('Shop'),

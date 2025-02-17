@@ -3,11 +3,7 @@ const calculateUpsellRevenueIncrease = (offerHit) => {
 
   // Sum all accepted variant prices accounting for quantities.
   return acceptedProducts.reduce((sum, acceptedProduct) => {
-    const {
-      originalPrice = 0,
-      acceptedPrice = 0,
-      quantity = 0
-    } = acceptedProduct;
+    const { originalPrice = 0, acceptedPrice = 0, quantity = 0 } = acceptedProduct;
 
     return sum + (acceptedPrice - originalPrice) * quantity;
   }, 0);

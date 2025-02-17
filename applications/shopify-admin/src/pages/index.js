@@ -18,12 +18,7 @@ import {
   SkeletonBodyText
 } from '@shopify/polaris';
 import styled from 'styled-components';
-import {
-  useNumberFormatter,
-  useCurrency,
-  useDateTime,
-  useInterval
-} from '@greatupsells/react-hooks';
+import { useNumberFormatter, useCurrency, useDateTime, useInterval } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAcceptances } from '../hooks';
 import { TitleBar, SkeletonChart, Link } from '../components';
@@ -93,9 +88,7 @@ const loadingComponent = () => (
 
 const DashboardPage = () => {
   const { subtractTime, startOfDay } = useDateTime();
-  const [chartStartAt, setChartStartAt] = useState(
-    subtractTime(new Date(), 90, 'days')
-  );
+  const [chartStartAt, setChartStartAt] = useState(subtractTime(new Date(), 90, 'days'));
   const [chartEndAt, setChartEndAt] = useState(new Date());
   const [chartDateChanged, setChartDateChanged] = useState(false);
   const [onboardingModalShown, setOnboardingModalShown] = useState(false);
@@ -119,8 +112,11 @@ const DashboardPage = () => {
     currency: 'USD',
     options: { decimals: 0 }
   });
-  const { shopAcceptancesLoaded, shopAcceptancesError, fetchShopAcceptances } =
-    useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
+  const { shopAcceptancesLoaded, shopAcceptancesError, fetchShopAcceptances } = useShopAcceptances(
+    shop?._id,
+    chartStartAt,
+    chartEndAt
+  );
 
   const loaded = shopLoaded && shopAcceptancesLoaded;
   const error = !!shopError || !!shopAcceptancesError;
@@ -146,10 +142,7 @@ const DashboardPage = () => {
       return 0;
     }
 
-    return Math.min(
-      shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit,
-      1
-    );
+    return Math.min(shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit, 1);
   }, [shop]);
 
   const handleOnboardingModalClose = async () => {
@@ -169,12 +162,7 @@ const DashboardPage = () => {
   }, 60);
 
   return (
-    <Loader
-      isLoading={!loaded}
-      isError={error}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
-    >
+    <Loader isLoading={!loaded} isError={error} loadingComponent={loadingComponent} errorComponent={errorComponent}>
       <Page title="Overview dashboard">
         <PageTitleBar />
         <Layout>
@@ -193,16 +181,11 @@ const DashboardPage = () => {
                 }}
               >
                 <p>
-                  To use this app, you will need to activate the app embed
-                  entitled &ldquo;Great Upsells Offers&rdquo; and then save your
-                  theme.
+                  To use this app, you will need to activate the app embed entitled &ldquo;Great Upsells Offers&rdquo; and
+                  then save your theme.
                 </p>
               </Banner>
-              <Modal
-                open={onboardingModalShown}
-                title="Activation"
-                onClose={handleOnboardingModalClose}
-              >
+              <Modal open={onboardingModalShown} title="Activation" onClose={handleOnboardingModalClose}>
                 <Modal.Section>
                   <Stack vertical>
                     <TextContainer>
@@ -210,22 +193,12 @@ const DashboardPage = () => {
                         Instructions
                       </Text>
                       <List type="number">
-                        <List.Item>
-                          Click the &ldquo;Activate app embed&rdquo; button in
-                          the banner.
-                        </List.Item>
-                        <List.Item>
-                          Make sure the toggle is on for &ldquo;Great Upsells
-                          Offers.&rdquo;
-                        </List.Item>
+                        <List.Item>Click the &ldquo;Activate app embed&rdquo; button in the banner.</List.Item>
+                        <List.Item>Make sure the toggle is on for &ldquo;Great Upsells Offers.&rdquo;</List.Item>
                         <List.Item>Click Save.</List.Item>
                       </List>
                     </TextContainer>
-                    <video
-                      autoPlay
-                      loop
-                      style={{ width: '100%', height: 'auto' }}
-                    >
+                    <video autoPlay loop style={{ width: '100%', height: 'auto' }}>
                       <source src="/videos/onboarding.mp4" />
                     </video>
                   </Stack>
@@ -282,46 +255,30 @@ const DashboardPage = () => {
                       <Text variant="headingMd" as="h2">
                         {shop?.plan.name} plan
                       </Text>
-                      {typeof shop?.plan.monthUpsellRevenueLimit ===
-                        'number' && (
+                      {typeof shop?.plan.monthUpsellRevenueLimit === 'number' && (
                         <PlanProgressContainer>
-                          <PlanProgressAmount>
-                            {formatCurrencyUSD(shop?.plan.monthUpsellRevenue)}{' '}
-                            USD
-                          </PlanProgressAmount>
+                          <PlanProgressAmount>{formatCurrencyUSD(shop?.plan.monthUpsellRevenue)} USD</PlanProgressAmount>
                           <PlanProgressMeterContainer>
                             <ProgressBar
                               progress={planUsagePercentage * 100 || 0}
                               size="small"
-                              color={
-                                planUsagePercentage < 0.8
-                                  ? 'highlight'
-                                  : 'critical'
-                              }
+                              color={planUsagePercentage < 0.8 ? 'highlight' : 'critical'}
                             />
                           </PlanProgressMeterContainer>
                           <PlanProgressAmount>
-                            {formatCurrencyUSD(
-                              shop?.plan.monthUpsellRevenueLimit
-                            )}{' '}
-                            USD
+                            {formatCurrencyUSD(shop?.plan.monthUpsellRevenueLimit)} USD
                           </PlanProgressAmount>
                         </PlanProgressContainer>
                       )}
-                      {typeof shop?.plan.monthUpsellRevenueLimit ===
-                        'number' && (
+                      {typeof shop?.plan.monthUpsellRevenueLimit === 'number' && (
                         <p>
-                          You have earned{' '}
-                          {formatPercentage(planUsagePercentage, 0)} of your
-                          plan&apos;s monthly upsell revenue.{' '}
-                          <Link url="/plan">Manage your plan</Link>
+                          You have earned {formatPercentage(planUsagePercentage, 0)} of your plan&apos;s monthly upsell
+                          revenue. <Link url="/plan">Manage your plan</Link>
                         </p>
                       )}
-                      {typeof shop?.plan.monthUpsellRevenueLimit !==
-                        'number' && (
+                      {typeof shop?.plan.monthUpsellRevenueLimit !== 'number' && (
                         <p>
-                          You have an unlimited monthly upsell revenue allowance
-                          with your plan.{' '}
+                          You have an unlimited monthly upsell revenue allowance with your plan.{' '}
                           <Link url="/plan">Manage your plan</Link>
                         </p>
                       )}
@@ -343,10 +300,7 @@ const DashboardPage = () => {
               ]}
             >
               <Stack spacing="loose" vertical>
-                <p>
-                  Upselling and cross-selling are two of the most effective ways
-                  to increase sales in your store.
-                </p>
+                <p>Upselling and cross-selling are two of the most effective ways to increase sales in your store.</p>
                 <Button url="/offers/new/">Create offer</Button>
               </Stack>
             </Card>
@@ -363,8 +317,7 @@ const DashboardPage = () => {
                 url: 'https://PLACEHOLDER'
               }}
             >
-              Create a sliding cart drawer that increases AOV and conversion
-              rates with cross-sell offers.
+              Create a sliding cart drawer that increases AOV and conversion rates with cross-sell offers.
             </CalloutCard>
           </Layout.Section>
           <Layout.Section>

@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  TextField,
-  Checkbox,
-  Select,
-  Button,
-  KeyboardKey
-} from '@shopify/polaris';
+import { Card, FormLayout, TextField, Checkbox, Select, Button, KeyboardKey } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
@@ -43,18 +35,11 @@ const OfferOptionsEditor = ({
   submitted,
   onPreview
 }) => {
-  const [delaySecondsActive, setDelaySecondsActive] = useState(
-    offer?.delaySeconds > 0
-  );
-  const [onPageRequiredSecondsActive, setOnPageRequiredSecondsActive] =
-    useState(offer?.onPageRequiredSeconds > 0);
+  const [delaySecondsActive, setDelaySecondsActive] = useState(offer?.delaySeconds > 0);
+  const [onPageRequiredSecondsActive, setOnPageRequiredSecondsActive] = useState(offer?.onPageRequiredSeconds > 0);
   const [animationActive, setAnimationActive] = useState(!!animation.value);
 
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
 
   const handleDelaySecondsActiveChange = (checked) => {
     setDelaySecondsActive(checked);
@@ -101,27 +86,26 @@ const OfferOptionsEditor = ({
           helpText="Customers may change quantities for products."
           {...asChoiceField(enableQuantitySelection)}
         />
-        {!isInline &&
-          ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
-            <Checkbox
-              label="Delay showing offer after trigger event"
-              helpText={
-                delaySecondsActive && (
-                  <SecondsInputWrapper>
-                    <TextField
-                      inputMode="numeric"
-                      min={0}
-                      suffix="seconds"
-                      {...delaySeconds}
-                      error={submitted && delaySeconds.error}
-                    />
-                  </SecondsInputWrapper>
-                )
-              }
-              checked={delaySecondsActive}
-              onChange={handleDelaySecondsActiveChange}
-            />
-          )}
+        {!isInline && ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
+          <Checkbox
+            label="Delay showing offer after trigger event"
+            helpText={
+              delaySecondsActive && (
+                <SecondsInputWrapper>
+                  <TextField
+                    inputMode="numeric"
+                    min={0}
+                    suffix="seconds"
+                    {...delaySeconds}
+                    error={submitted && delaySeconds.error}
+                  />
+                </SecondsInputWrapper>
+              )
+            }
+            checked={delaySecondsActive}
+            onChange={handleDelaySecondsActiveChange}
+          />
+        )}
         {!isInline && (
           <Checkbox
             label="Require customer be on page for a specified amount of time before allowing offer to show"
@@ -151,12 +135,7 @@ const OfferOptionsEditor = ({
             {...asChoiceField(enableEscClose)}
           />
         )}
-        {!isInline && (
-          <Checkbox
-            label="Allow clicking outside to close the offer"
-            {...asChoiceField(enableMaskClose)}
-          />
-        )}
+        {!isInline && <Checkbox label="Allow clicking outside to close the offer" {...asChoiceField(enableMaskClose)} />}
         {!isInline && (
           <Checkbox
             label="Use an animation when showing and hiding the offer"

@@ -1,15 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
-import {
-  usePushStateListener,
-  useEventListener
-} from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { usePushStateListener, useEventListener } from '@greatupsells/react-hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -37,9 +30,7 @@ const PageScrollOffer = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [delayFinished, setDelayFinished] = useState(false);
   const [isOnPageRequiredSeconds, setIsOnPageRequiredSeconds] = useState(false);
-  const [lastScrollTop, setLastScrollTop] = useState(
-    window.pageYOffset || document.documentElement.scrollTop
-  );
+  const [lastScrollTop, setLastScrollTop] = useState(window.pageYOffset || document.documentElement.scrollTop);
 
   const { trackOfferImpression } = useOfferTracking();
   const { addProducts, replaceProduct } = useOfferAcceptance();
@@ -55,11 +46,8 @@ const PageScrollOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId =
-      findTriggerProductShopifyVariantId(triggerProduct);
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -69,14 +57,7 @@ const PageScrollOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -86,13 +67,11 @@ const PageScrollOffer = ({
   const handleScroll = useCallback(
     () => {
       const defaultTriggerScrollThreshold = 75;
-      const { triggerScrollThreshold = defaultTriggerScrollThreshold } =
-        offer || {};
+      const { triggerScrollThreshold = defaultTriggerScrollThreshold } = offer || {};
 
       // Reference: https://stackoverflow.com/a/31223774
       // Reference: https://javascript.info/size-and-scroll-window#width-height-of-the-document
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       const scrollHeight = Math.max(
         document.body.scrollHeight,
         document.documentElement.scrollHeight,
@@ -146,16 +125,7 @@ const PageScrollOffer = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      offer,
-      offerId,
-      offerViewed,
-      openPopup,
-      viewingOffer,
-      offeredProducts,
-      isOnPageRequiredSeconds,
-      delayFinished
-    ]
+    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts, isOnPageRequiredSeconds, delayFinished]
   );
 
   // Listen to scroll events.

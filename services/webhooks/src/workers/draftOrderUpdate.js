@@ -19,9 +19,7 @@ const processor = async (metadata, payload) => {
     }
 
     // Find all offer hits associated with the draft order.
-    const offerHits = await httpClient.get(
-      `/offer-hits/shopify-draft-order-id/${shopifyDraftOrderId}`
-    );
+    const offerHits = await httpClient.get(`/offer-hits/shopify-draft-order-id/${shopifyDraftOrderId}`);
 
     // Update each offer hit to reference the order associated with the draft order.
     await Promise.all(
@@ -37,11 +35,7 @@ const processor = async (metadata, payload) => {
       `Associated offer hits for Shopify draft order ${shopifyDraftOrderId} to reference Shopify order ${shopifyOrderId}`
     );
   } catch (error) {
-    await logger.error(
-      `Error processing draft order update webhook data`,
-      error,
-      { metadata, payload }
-    );
+    await logger.error(`Error processing draft order update webhook data`, error, { metadata, payload });
   }
 };
 

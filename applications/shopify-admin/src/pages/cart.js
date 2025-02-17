@@ -20,10 +20,7 @@ const CartPage = () => {
             <Card.Section>
               <Checkbox
                 label="Enable Cart Drawer"
-                helpText={
-                  enabled &&
-                  'This will show as a cart replacement whenever Cart links and buttons are clicked.'
-                }
+                helpText={enabled && 'This will show as a cart replacement whenever Cart links and buttons are clicked.'}
                 checked={enabled}
                 onChange={handleEnable}
               />
