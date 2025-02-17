@@ -48,14 +48,18 @@ Used to track sessions.
 
 A paid ngrok account is necessary (please bill us, and include your receipt). Alternatively, if you can quickly figure out how to use another local tunneling mechanism, go for it, and please add to this README if you have success.
 
-If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is an example of how your `~/.ngrok2/ngrok.yml` file should look:
+If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Find your config file's location via `ngrok config check`. Here is an example of how your config file should look:
 
-    authtoken: tokenhere
-    tunnels:
-      greatupsells:
-         addr: 80
-         proto: http
-         subdomain: yoursubdomainname
+```
+version: "3"
+agent:
+   authtoken: 3CNHdUUcGwXeZwQ93k78A_36jBEyt7ueo58s8f14189
+tunnels:
+greatupsells:
+   addr: 80
+   proto: http
+   subdomain: mysubdomain
+```
 
 Please follow instructions [here](https://ngrok.com/download) to install the `ngrok` binary and authorize your machine. Once done, ngrok will start automatically with `yarn start`.
 
@@ -91,13 +95,13 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
       ```
-      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/
+      https://mysubdomain.us.ngrok.io/
       ```
    1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
       ```
-      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth/callback
+      https://mysubdomain.us.ngrok.io/auth/callback
       ```
-1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-admin.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
+1. Install the app by visiting the following URL: https://mysubdomain.us.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://mysubdomain.us.ngrok.io/auth?shop=my-test-store.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
 
 Please use the `develop` branch for main development.
 
@@ -166,59 +170,110 @@ The following are used:
 
 ### Speed Improvement
 
-Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
+Loading the Shopify Admin app over ngrok can be extremely slow (even on a fast connection) and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
 1. Create a server configuration for the Shopify Admin app URL; for example:
 
-   ```
-   server {
-       listen 80;
-       listen 443 ssl;
-       server_name yourname-shopify-admin.ngrok.io;
+```
+server {
+   listen 80;
+   listen 443 ssl;
+   server_name localhost mysubdomain.eu.ngrok.io;
 
-       ssl_certificate     /usr/local/etc/ssl/certs/self-signed.crt;
-       ssl_certificate_key /usr/local/etc/ssl/private/self-signed.key;
+   ssl_certificate     /opt/homebrew/etc/ssl/certs/mysubdomain.eu.ngrok.io.crt;
+   ssl_certificate_key /opt/homebrew/etc/ssl/private/mysubdomain.eu.ngrok.io.key;
 
-       ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-       ssl_ciphers         HIGH:!aNULL:!MD5;
-       ssl_dhparam /usr/local/etc/ssl/certs/dehparam.pem;
+   ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+   ssl_ciphers         HIGH:!aNULL:!MD5;
+   ssl_dhparam /opt/homebrew/etc/ssl/certs/dhparam.pem;
 
-       location / {
-           proxy_pass http://127.0.0.1:3000/;
-           proxy_buffering off;
-       }
+   location / {
+      proxy_pass http://localhost:4001/;
+      proxy_buffering off;
    }
-   ```
 
-1. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx).
-   1. Change all instances of "test.cpming.top" to "\*.ngrok.io".
-   1. Use "2048" instead of "128" for the `openssl dhparam` command.
-1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
-1. Do the same as the previous two steps but for domains `admin-api`, `shopify-admin-api`, and `storefront-api` (but with no `\*.` prefix).
-1. Add nginx configs for `admin-api`, `shopify-admin-api`, and `storefront-api`:
-
-   ```
-   server {
-     listen 80;
-     listen 443 ssl;
-     server_name admin-api;
-
-     ssl_certificate     /usr/local/etc/ssl/certs/admin-api.crt;
-     ssl_certificate_key /usr/local/etc/ssl/private/admin-api.key;
-
-     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-     ssl_ciphers         HIGH:!aNULL:!MD5;
-     ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
-
-     location / {
-        proxy_pass http://127.0.0.1:4005/;
-        proxy_buffering off;
-     }
+   location /admin-api {
+      proxy_pass http://localhost:4005;
+      proxy_buffering off;
    }
-   ```
 
-Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
+   location /admin {
+      proxy_pass http://localhost:4003;
+      proxy_buffering off;
+   }
+
+   location /admin/ {
+      proxy_pass http://localhost:4003/;
+      proxy_buffering off;
+   }
+
+   location /logs-api {
+      proxy_pass http://localhost:4009;
+      proxy_buffering off;
+   }
+
+   location /shopify-admin-api {
+      proxy_pass http://localhost:4000;
+      proxy_buffering off;
+   }
+
+   location /shops-api {
+      proxy_pass http://localhost:4004;
+      proxy_buffering off;
+   }
+
+   location /storefront-api {
+      proxy_pass http://localhost:4006;
+      proxy_buffering off;
+   }
+
+   location /webhooks-api {
+      proxy_pass http://localhost:4008;
+      proxy_buffering off;
+   }
+}
+```
+
+1. Create a self-signed certificate locally (replace `mysubdomain` with your ngrok subdomain name):
+
+   1. Generate a Private Key: `openssl genrsa -out mysubdomain.us.ngrok.io.key 2048`.
+   1. Create a Certificate Signing Request (CSR): `openssl req -new -key mysubdomain.us.ngrok.io.key -out mysubdomain.us.ngrok.io.csr -subj "/CN=mysubdomain.us.ngrok.io"`.
+   1. Create a configuration file called `mysubdomain.us.ngrok.io.ext` with the following contents:
+
+      ```
+      authorityKeyIdentifier=keyid,issuer
+      basicConstraints=CA:FALSE
+      keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+      subjectAltName = @alt_names
+
+      [alt_names]
+      DNS.1 = mysubdomain.us.ngrok.io
+      ```
+
+   1. Generate the Self-Signed Certificate: `openssl x509 -req -in mysubdomain.us.ngrok.io.csr -signkey mysubdomain.us.ngrok.io.key -out mysubdomain.us.ngrok.io.crt -days 365 -extfile mysubdomain.us.ngrok.io.ext`.
+   1. Install the Self-Signed Certificate in Chrome's Trusted Root CA Store.
+      1. MacOS:
+         1. Open Keychain Access (cmd + space, type Keychain Access).
+         1. Drag and drop mysubdomain.us.ngrok.io.crt into the System keychain (not the login keychain).
+         1. Double-click the certificate and expand Trust.
+         1. Set "When using this certificate" to "Always Trust".
+         1. Restart Chrome.
+      1. Windows:
+         1. Open Certificate Manager (Win + R, then type certmgr.msc).
+         1. Navigate to Trusted Root Certification Authorities → Certificates.
+         1. Right-click Certificates, choose Import, and select mysubdomain.us.ngrok.io.crt.
+         1. Restart Chrome.
+      1. Linux:
+         1. Move the certificate to `/usr/local/share/ca-certificates/`: `sudo cp mysubdomain.us.ngrok.io.crt /usr/local/share/ca-certificates/`.
+         1. Update the certificate store: `sudo update-ca-certificates`.
+         1. Restart Chrome.
+   1. Use the certificate and key files in ngnix for `ssl_certificate` and `ssl_certificate_key`, respectively.
+   1. Restart nginx.
+
+1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 mysubdomain.us.ngrok.io`.
+
+Please note you might need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
 ### Coding Conventions
 
@@ -283,7 +338,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `shopify_app_embed_block_id` (you will need to use a dummy value until the app is running, and then update SSM and your Lambdas once activated in the test shop's theme)
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
 1. Update `event_bus_name` in `services/webhooks/infrastructure/config/[environment].tfvars`.
-1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
+1. Configure the following secrets [here](https://github.com/chaddjohnson/upselling/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
    1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
    1. `AWS_SECRET_ACCESS_KEY` (key for a server IAM account used by CI)
