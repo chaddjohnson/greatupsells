@@ -31,17 +31,18 @@ const trackAcceptedProducts = async (
       const originalProduct = await Product.findOneByShopifyProductId(
         originalShopifyProductId
       );
-      const acceptedProduct = await Product.findOneByShopifyProductId(
-        shopifyProductId
-      );
+      const acceptedProduct =
+        await Product.findOneByShopifyProductId(shopifyProductId);
 
       // Get a reference to the variant in the Shopify data.
-      const originalVariant = originalProduct?.shopifyProductData?.variants.find(
-        ({ id }) => id === originalShopifyVariantId
-      );
-      const acceptedVariant = acceptedProduct?.shopifyProductData?.variants.find(
-        ({ id }) => id === shopifyVariantId
-      );
+      const originalVariant =
+        originalProduct?.shopifyProductData?.variants.find(
+          ({ id }) => id === originalShopifyVariantId
+        );
+      const acceptedVariant =
+        acceptedProduct?.shopifyProductData?.variants.find(
+          ({ id }) => id === shopifyVariantId
+        );
 
       if (!originalProduct) {
         throw new Error(
@@ -64,9 +65,8 @@ const trackAcceptedProducts = async (
 
       const originalPrice = parseFloat(originalVariant.price);
       const acceptedProductPrice = parseFloat(acceptedVariant.price);
-      const acceptedPrice = offer.calculateDiscountedPrice(
-        acceptedProductPrice
-      );
+      const acceptedPrice =
+        offer.calculateDiscountedPrice(acceptedProductPrice);
 
       return {
         shopifyProductId,

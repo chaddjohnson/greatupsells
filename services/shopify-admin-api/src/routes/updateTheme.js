@@ -23,8 +23,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
     const { themeId } = event.pathParameters;
     const theme = await httpClient.get(`/themes/${themeId}`);
     const offer = await httpClient.get(`/offers/${theme.offer}`);

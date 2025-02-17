@@ -12,11 +12,13 @@ const mq = facepaint([
 const keys = Object.keys(styled);
 
 // Provide an overridden version of `styled` as a function.
-const styledWithFacepaint = (key) => (...styles) => {
-  return styled(key)`
-    ${mq(styles)}
-  `;
-};
+const styledWithFacepaint =
+  (key) =>
+  (...styles) => {
+    return styled(key)`
+      ${mq(styles)}
+    `;
+  };
 
 // Provide an overridden version of each helper function.
 keys.forEach((key) => {

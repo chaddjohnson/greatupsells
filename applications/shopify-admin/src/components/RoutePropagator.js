@@ -8,7 +8,6 @@ import {
 
 const RoutePropagator = ({ router }) => {
   const app = useAppBridge();
-
   const badPath = !!router.asPath.match(/\[[^\]]+\]/);
 
   // Work around Next.js bug where URL swaps to use placeholders.

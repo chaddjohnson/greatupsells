@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
 const mongodbClient = require('../models/mongodbClient');

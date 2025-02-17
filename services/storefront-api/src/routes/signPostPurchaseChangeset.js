@@ -4,10 +4,8 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
-const {
-  SHOPIFY_ADMIN_APP_API_KEY,
-  SHOPIFY_ADMIN_APP_API_SECRET_KEY
-} = process.env;
+const { SHOPIFY_ADMIN_APP_API_KEY, SHOPIFY_ADMIN_APP_API_SECRET_KEY } =
+  process.env;
 
 const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;

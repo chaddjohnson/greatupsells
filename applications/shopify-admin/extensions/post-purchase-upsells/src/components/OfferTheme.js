@@ -1,6 +1,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useExtensionInput } from '@shopify/post-purchase-ui-extensions-react';
+
+// TODO Import from package if possible.
+import useOfferThemeState from '@greatupsells/react-components/src/OfferTheme/offerThemeState';
+import useOfferThemeVariables from '@greatupsells/react-components/src/OfferTheme/offerThemeVariables';
 import {
   useThemeComponent,
   useOfferTracking,
@@ -9,10 +13,6 @@ import {
   useShopifyCart,
   useChangeset
 } from '../hooks';
-
-// TODO Import from package if possible.
-import useOfferThemeState from '../../../../../../packages/react-components/src/OfferTheme/offerThemeState';
-import useOfferThemeVariables from '../../../../../../packages/react-components/src/OfferTheme/offerThemeVariables';
 
 const OfferTheme = ({
   shop,
@@ -48,9 +48,8 @@ const OfferTheme = ({
   const currency =
     calculatedPurchases[0]?.totalOutstandingSet.presentmentMoney.currencyCode;
   const { formatCurrency } = useCurrency({ locale, countryCode, currency });
-  const { findTriggerProductShopifyVariantId } = useShopifyCart(
-    shopifyCartItems
-  );
+  const { findTriggerProductShopifyVariantId } =
+    useShopifyCart(shopifyCartItems);
 
   const handleAddProduct = async (offerId, items) => {
     try {
@@ -94,9 +93,8 @@ const OfferTheme = ({
 
   const subtotalPricesFormatted = useMemo(() => {
     return calculatedPurchases.map((calculatedPurchase) => {
-      const [presentmentAmount, presentmentCurrency] = calculateSubtotalPrice(
-        calculatedPurchase
-      );
+      const [presentmentAmount, presentmentCurrency] =
+        calculateSubtotalPrice(calculatedPurchase);
       const formattedPresentmentAmount = formatCurrency(
         presentmentAmount,
         presentmentCurrency
@@ -109,9 +107,8 @@ const OfferTheme = ({
   const shippingPricesFormatted = useMemo(
     () =>
       calculatedPurchases.map((calculatedPurchase) => {
-        const [presentmentAmount, presentmentCurrency] = calculateShippingPrice(
-          calculatedPurchase
-        );
+        const [presentmentAmount, presentmentCurrency] =
+          calculateShippingPrice(calculatedPurchase);
         const formattedPresentmentAmount = formatCurrency(
           presentmentAmount,
           presentmentCurrency
@@ -125,9 +122,8 @@ const OfferTheme = ({
   const taxPricesFormatted = useMemo(
     () =>
       calculatedPurchases.map((calculatedPurchase) => {
-        const [presentmentAmount, presentmentCurrency] = calculateTaxPrice(
-          calculatedPurchase
-        );
+        const [presentmentAmount, presentmentCurrency] =
+          calculateTaxPrice(calculatedPurchase);
         const formattedPresentmentAmount = formatCurrency(
           presentmentAmount,
           presentmentCurrency
@@ -149,9 +145,8 @@ const OfferTheme = ({
   const totalPricesFormatted = useMemo(
     () =>
       calculatedPurchases.map((calculatedPurchase) => {
-        const [presentmentAmount, presentmentCurrency] = calculateTotalPrice(
-          calculatedPurchase
-        );
+        const [presentmentAmount, presentmentCurrency] =
+          calculateTotalPrice(calculatedPurchase);
         const formattedPresentmentAmount = formatCurrency(
           presentmentAmount,
           presentmentCurrency
@@ -203,9 +198,8 @@ const OfferTheme = ({
     const { domain } = shop;
     const offerId = offer._id;
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
+    const triggerShopifyVariantId =
+      findTriggerProductShopifyVariantId(triggerProduct);
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );

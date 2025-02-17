@@ -14,7 +14,7 @@ const addScripts = async (shop) => {
     await shopifyApiClient.scriptTag.create({
       event: 'onload',
       src,
-      display_scope: 'order_status', // only load on Order Status and Thank You pages
+      display_scope: 'online_store',
       cache: false
     });
 

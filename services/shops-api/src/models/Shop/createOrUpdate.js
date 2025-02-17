@@ -1,8 +1,5 @@
-const getenv = require('getenv');
 const logger = require('@greatupsells/logger');
 const models = require('..');
-
-const isSandbox = getenv.bool('SANDBOX', true);
 
 const createShop = async (shopDomain, accessToken) => {
   const Shop = await models.get('Shop');

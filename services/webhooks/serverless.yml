@@ -26,6 +26,7 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 4108
+    prefix: 'webhooks-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/webhooks-service/regional-domain, ''}
     basePath: ''

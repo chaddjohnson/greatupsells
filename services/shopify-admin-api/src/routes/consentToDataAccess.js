@@ -6,7 +6,6 @@ const {
   getReasonPhrase
 } = require('http-status-codes');
 const HttpClient = require('@greatupsells/gateway-http-client');
-const logger = require('@greatupsells/logger');
 
 const { SHOPS_API_URL } = process.env;
 
@@ -23,8 +22,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
 
     await httpClient.post(`/shops/${shopId}/data-access-consent`);
 

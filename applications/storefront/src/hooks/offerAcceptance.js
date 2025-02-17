@@ -12,10 +12,8 @@ const useOfferAcceptance = () => {
     addVariantsToShopifyCart,
     removeVariantFromShopifyCart
   } = useShopifyCart();
-  const {
-    createShopifyDraftOrder,
-    addVariantsToShopifyDraftOrder
-  } = useShopifyDraftOrder();
+  const { createShopifyDraftOrder, addVariantsToShopifyDraftOrder } =
+    useShopifyDraftOrder();
   const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
   const locale = getUrlLocaleAndCountryCode();
 

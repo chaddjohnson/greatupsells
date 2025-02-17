@@ -12,7 +12,7 @@ If you are struggling and need help setting anything up, please ask for help.
 
 ### Node.js
 
-The Node version is specified in the top-level `.node-version` file; please install and use this version on your system. We are currently using Node 12.x, so we cannot use features from higher versions. For example, optional chaining cannot be used in our Node code.
+The Node version is specified in the top-level `.node-version` file; please install and use this version on your system.
 
 [nvm](https://github.com/nvm-sh/nvm) and [avn](https://github.com/wbyoung/avn) are recommended for easily managing and using Node versions.
 
@@ -51,20 +51,11 @@ A paid ngrok account is necessary (please bill us, and include your receipt). Al
 If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is an example of how your `~/.ngrok2/ngrok.yml` file should look:
 
     authtoken: tokenhere
-    region: us
     tunnels:
-      greatupsells-shopify-admin:
-         addr: 4001
+      greatupsells:
+         addr: 80
          proto: http
-         subdomain: yourname-shopify-admin
-      greatupsells-shopify-extension:
-         addr: 4010
-         proto: http
-         subdomain: yourname-shopify-extension
-      greatupsells-webhooks-service:
-         addr: 4008
-         proto: http
-         subdomain: yourname-webhooks
+         subdomain: yoursubdomainname
 
 Please follow instructions [here](https://ngrok.com/download) to install the `ngrok` binary and authorize your machine. Once done, ngrok will start automatically with `yarn start`.
 
@@ -88,7 +79,7 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
    region = us-east-1
    ```
 1. Run `yarn global add lerna`.
-1. Run `yarn start`. This automatically does the following:
+1. Run `yarn start` (please note you might need to set `AWS_PROFILE`; e.g., `AWS_PROFILE=greatupsells yarn start`). This automatically does the following:
    1. Installs dependencies.
    1. Runs Lerna bootstrapping.
    1. Builds packages.
@@ -108,7 +99,7 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
       ```
 1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-admin.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
 
-Please use the `master` branch for main development.
+Please use the `develop` branch for main development.
 
 ### Shopify App Extensions
 
@@ -204,8 +195,8 @@ Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwi
    1. Change all instances of "test.cpming.top" to "\*.ngrok.io".
    1. Use "2048" instead of "128" for the `openssl dhparam` command.
 1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
-1. Do the same as the previous two steps but for domains admin-api, shopify-admin-api, and storefront-api (but with no `\*.` prefix).
-1. Add nginx configs for admin-api, shopify-admin-api, and storefront-api:
+1. Do the same as the previous two steps but for domains `admin-api`, `shopify-admin-api`, and `storefront-api` (but with no `\*.` prefix).
+1. Add nginx configs for `admin-api`, `shopify-admin-api`, and `storefront-api`:
 
    ```
    server {

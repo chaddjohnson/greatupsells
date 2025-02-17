@@ -46,9 +46,8 @@ const importCustomCollections = async (shop) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const shopifyCollections = await shopifyApiClient.customCollection.list(
-      params
-    );
+    const shopifyCollections =
+      await shopifyApiClient.customCollection.list(params);
 
     // eslint-disable-next-line no-await-in-loop
     await Promise.map(
@@ -70,9 +69,8 @@ const importSmartCollections = async (shop) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const shopifyCollections = await shopifyApiClient.smartCollection.list(
-      params
-    );
+    const shopifyCollections =
+      await shopifyApiClient.smartCollection.list(params);
 
     // eslint-disable-next-line no-await-in-loop
     await Promise.map(

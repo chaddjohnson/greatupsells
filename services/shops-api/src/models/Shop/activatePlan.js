@@ -10,9 +10,8 @@ const activatePlan = async (shop) => {
       );
     }
 
-    const recurringCharge = await shopifyApiClient.recurringApplicationCharge.get(
-      shop.plan.chargeId
-    );
+    const recurringCharge =
+      await shopifyApiClient.recurringApplicationCharge.get(shop.plan.chargeId);
 
     if (recurringCharge.status === 'declined') {
       await logger.info(

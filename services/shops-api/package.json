@@ -7,7 +7,7 @@
     "migrate": "migrate-mongo up",
     "infrastructure": "cd infrastructure && ./run.sh",
     "destroy": "cd infrastructure && ./destroy.sh",
-    "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
+    "start": "nodemon -e js --exec \"NODE_TLS_REJECT_UNAUTHORIZED='0' serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
     "@greatupsells/email-client": "0.0.0",
     "@greatupsells/logger": "0.0.0",
+    "@shopify/admin-api-client": "^1.0.5",
     "bluebird": "^3.7.2",
     "geoip-country": "^4.0.56",
     "getenv": "^1.0.0",

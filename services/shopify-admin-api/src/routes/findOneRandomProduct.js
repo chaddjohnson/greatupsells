@@ -22,8 +22,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
     const product = await httpClient.get(`/shops/${shopId}/products/random`);
 
     return {

@@ -21,7 +21,7 @@
     "compression-webpack-plugin": "^9.0.0",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "eslint-webpack-plugin": "^2.5.3",
+    "eslint-webpack-plugin": "^4.2.0",
     "getenv": "^1.0.0",
     "http-status-codes": "^2.1.4",
     "koa": "^2.13.1",

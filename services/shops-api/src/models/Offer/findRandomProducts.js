@@ -114,9 +114,10 @@ const findRandomProducts = async (
   // Filter variants for only those offered.
   if (offeredShopifyVariantIds.length > 0 && offeredCollections.length === 0) {
     randomProducts.forEach((randomProduct) => {
-      randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
-        (variant) => offeredShopifyVariantIds.includes(variant.id)
-      );
+      randomProduct.shopifyProductData.variants =
+        randomProduct.shopifyProductData.variants.filter((variant) =>
+          offeredShopifyVariantIds.includes(variant.id)
+        );
     });
   }
 

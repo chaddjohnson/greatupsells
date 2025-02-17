@@ -22,8 +22,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
     const collection = await httpClient.get(
       `/shops/${shopId}/collections/random`
     );

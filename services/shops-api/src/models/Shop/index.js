@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
+const getGraphqlShopifyApiClient = require('./getGraphqlShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
 const importOrders = require('./importOrders');
@@ -151,6 +152,10 @@ schema.methods.findConversionRates = async function (startAt, endAt) {
 
 schema.methods.getShopifyApiClient = function () {
   return getShopifyApiClient(this);
+};
+
+schema.methods.getGraphqlShopifyApiClient = function () {
+  return getGraphqlShopifyApiClient(this);
 };
 
 schema.methods.createWebhooks = function () {

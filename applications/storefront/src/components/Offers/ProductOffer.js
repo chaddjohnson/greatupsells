@@ -40,10 +40,8 @@ const ProductOffer = ({
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const {
-    shopifyCartLoaded,
-    findTriggerProductShopifyVariantId
-  } = useShopifyCart();
+  const { shopifyCartLoaded, findTriggerProductShopifyVariantId } =
+    useShopifyCart();
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
@@ -74,9 +72,8 @@ const ProductOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
+    const triggerShopifyVariantId =
+      findTriggerProductShopifyVariantId(triggerProduct);
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );

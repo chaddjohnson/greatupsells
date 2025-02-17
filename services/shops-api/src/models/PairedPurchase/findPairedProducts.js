@@ -24,9 +24,8 @@ const findPairedProducts = async (
 
   // Track products already found to prevent duplicates. Also exclude products
   // already added to the cart.
-  excludedShopifyProductIds = excludedShopifyProductIds.concat(
-    shopifyProductIds
-  );
+  excludedShopifyProductIds =
+    excludedShopifyProductIds.concat(shopifyProductIds);
 
   // Try to find paired products.
   const pairedProducts = (

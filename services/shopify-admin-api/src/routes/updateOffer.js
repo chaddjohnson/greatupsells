@@ -23,8 +23,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/${shopId}`),

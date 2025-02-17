@@ -6,7 +6,7 @@
     "lint": "eslint src/**/*.js",
     "infrastructure": "cd infrastructure && ./run.sh",
     "destroy": "cd infrastructure && ./destroy.sh",
-    "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
+    "start": "nodemon -e js --exec \"NODE_TLS_REJECT_UNAUTHORIZED='0' serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
   },
   "repository": {
     "type": "git",

@@ -150,10 +150,8 @@ const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
   // Query Shopify for order data because the order may have just been created.
   const shopifyApiClient = shop.getShopifyApiClient();
   const shopifyOrderData = await shopifyApiClient.order.get(shopifyOrderId);
-  const {
-    line_items: lineItems = [],
-    subtotal_price: subtotalPrice = 0
-  } = shopifyOrderData;
+  const { line_items: lineItems = [], subtotal_price: subtotalPrice = 0 } =
+    shopifyOrderData;
   const shopifyProductIds = lineItems.map((item) => item.product_id);
   const shopifyVariantIds = lineItems.map((item) => item.variant_id);
   const shopifyCartTotal = parseFloat(subtotalPrice) || 0;

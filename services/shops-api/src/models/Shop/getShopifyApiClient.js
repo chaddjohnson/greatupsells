@@ -11,12 +11,13 @@ module.exports = (shop) => {
   }
 
   const shopName = domain.replace(/^([^\.]+).*$/, '$1');
-
-  return new ShopifyApiNode({
+  const client = new ShopifyApiNode({
     shopName,
     accessToken,
     autoLimit,
     timeout,
     apiVersion
   });
+
+  return client;
 };

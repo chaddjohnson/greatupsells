@@ -8,9 +8,8 @@ const updatePlan = async (shop) => {
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
-  const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
-    shop.plan.chargeId
-  );
+  const recurringChargeData =
+    await shopifyApiClient.recurringApplicationCharge.get(shop.plan.chargeId);
 
   // Is the charge canceled?
   const chargeIsCanceled =

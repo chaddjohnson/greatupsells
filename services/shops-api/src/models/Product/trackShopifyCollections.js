@@ -36,9 +36,8 @@ const getSmartCollectionIds = async (product) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const smartCollections = await shopifyApiClient.smartCollection.list(
-      params
-    );
+    const smartCollections =
+      await shopifyApiClient.smartCollection.list(params);
 
     smartCollectionIds = smartCollectionIds.concat(
       smartCollections.map(({ id }) => id)

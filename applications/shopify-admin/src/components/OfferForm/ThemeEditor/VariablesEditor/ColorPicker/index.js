@@ -28,7 +28,8 @@ const PreviewButton = styled.button`
   width: 38px;
   height: 2rem;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 7%),
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 7%),
     inset 0 1px 3px 0 rgb(0 0 0 / 15%);
 `;
 
@@ -50,7 +51,8 @@ const TextFieldColorPreview = styled.div.attrs((props) => ({
   }
 }))`
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 7%),
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 7%),
     inset 0 1px 3px 0 rgb(0 0 0 / 15%);
   width: 2rem;
   height: 2rem;
@@ -75,17 +77,19 @@ const ActivatorWrapper = styled.div`
 `;
 
 const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
-  const [normalizedValue, alphaValue] = useMemo(() => normalize(value), [
-    value
-  ]);
+  const [normalizedValue, alphaValue] = useMemo(
+    () => normalize(value),
+    [value]
+  );
   const alphaDisplayValue = useMemo(
     () =>
       typeof alphaValue === 'number' && parseInt(Math.round(alphaValue * 100)),
     [alphaValue]
   );
-  const sanitizedValue = useMemo(() => sanitizeHexValue(normalizedValue), [
-    normalizedValue
-  ]);
+  const sanitizedValue = useMemo(
+    () => sanitizeHexValue(normalizedValue),
+    [normalizedValue]
+  );
 
   const [active, setActive] = useState(false);
   const [hsbValue, setHsbValue] = useState(hexToHsb(sanitizedValue));

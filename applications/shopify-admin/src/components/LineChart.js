@@ -171,26 +171,28 @@ const LineChart = ({
               {typeof changeValue !== 'undefined' && (
                 <Text variant="headingLg">{formatNumber(changeValue)}</Text>
               )}
-              {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
-                <Text variant="headingLg" as="div">
-                  <Stack spacing="none" alignment="center">
-                    <Icon source={ArrowUpMinor} color="success" />
-                    <Text color="success">
-                      {formatPercentage(changePercentage, 0)}
-                    </Text>
-                  </Stack>
-                </Text>
-              )}
-              {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
-                <Text variant="headingLg" as="div">
-                  <Stack spacing="none" alignment="center">
-                    <Icon source={ArrowDownMinor} color="critical" />
-                    <Text color="critical">
-                      {formatPercentage(changePercentage, 0)}
-                    </Text>
-                  </Stack>
-                </Text>
-              )}
+              {typeof changePercentage !== 'undefined' &&
+                changePercentage > 0 && (
+                  <Text variant="headingLg" as="div">
+                    <Stack spacing="none" alignment="center">
+                      <Icon source={ArrowUpMinor} color="success" />
+                      <Text color="success">
+                        {formatPercentage(changePercentage, 0)}
+                      </Text>
+                    </Stack>
+                  </Text>
+                )}
+              {typeof changePercentage !== 'undefined' &&
+                changePercentage < 0 && (
+                  <Text variant="headingLg" as="div">
+                    <Stack spacing="none" alignment="center">
+                      <Icon source={ArrowDownMinor} color="critical" />
+                      <Text color="critical">
+                        {formatPercentage(changePercentage, 0)}
+                      </Text>
+                    </Stack>
+                  </Text>
+                )}
             </Stack>
           )}
         </Stack>

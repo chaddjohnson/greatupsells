@@ -12,13 +12,13 @@ const ShopProvider = ({ children }) => {
 
   const [shopLoaded, setShopLoaded] = useState(false);
 
-  const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
-    '/shop',
-    httpClient.get.bind(httpClient),
-    {
-      revalidateOnFocus: true
-    }
-  );
+  const {
+    data: shop,
+    error: shopError,
+    mutate: fetchShop
+  } = useSWR('/shop', httpClient.get.bind(httpClient), {
+    revalidateOnFocus: true
+  });
   const shopLoading = !shop && !shopError;
 
   const consentToDataAccess = async () => {

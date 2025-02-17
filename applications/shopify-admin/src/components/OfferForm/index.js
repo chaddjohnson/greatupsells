@@ -495,8 +495,7 @@ const OfferForm = ({
                 }}
                 secondaryAction={{
                   content: 'Learn more',
-                  url:
-                    'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
+                  url: 'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
                   external: true
                 }}
               >

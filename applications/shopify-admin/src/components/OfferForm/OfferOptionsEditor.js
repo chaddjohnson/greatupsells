@@ -46,10 +46,8 @@ const OfferOptionsEditor = ({
   const [delaySecondsActive, setDelaySecondsActive] = useState(
     offer?.delaySeconds > 0
   );
-  const [
-    onPageRequiredSecondsActive,
-    setOnPageRequiredSecondsActive
-  ] = useState(offer?.onPageRequiredSeconds > 0);
+  const [onPageRequiredSecondsActive, setOnPageRequiredSecondsActive] =
+    useState(offer?.onPageRequiredSeconds > 0);
   const [animationActive, setAnimationActive] = useState(!!animation.value);
 
   const isInline = [

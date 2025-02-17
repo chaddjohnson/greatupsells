@@ -5,11 +5,14 @@ import { DateTime } from 'luxon';
 
 const useDateTime = (locale = 'en-us') => {
   // See https://moment.github.io/luxon/docs/manual/formatting#table-of-tokens.
-  const formatDate = useCallback((date = Date.now(), format) => {
-    return (
-      date && DateTime.fromISO(new Date(date).toISOString()).toFormat(format)
-    );
-  }, []);
+  const formatDate = useCallback(
+    (date = Date.now(), format = DateTime.DATETIME_SHORT) => {
+      return (
+        date && DateTime.fromISO(new Date(date).toISOString()).toFormat(format)
+      );
+    },
+    []
+  );
 
   const formatDateISO = useCallback((date = Date.now()) => {
     return date && DateTime.fromISO(new Date(date).toISOString()).toISODate();

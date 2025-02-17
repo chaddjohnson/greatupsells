@@ -20,13 +20,8 @@ const trackImpression = async (
 
   await offer.execPopulate('shop');
 
-  const {
-    shop,
-    shopifyShopId,
-    strategy,
-    triggerEvent,
-    triggerPagePath
-  } = offer;
+  const { shop, shopifyShopId, strategy, triggerEvent, triggerPagePath } =
+    offer;
   const triggerProduct = triggerShopifyProductId &&
     triggerShopifyVariantId && {
       shopifyProductId: triggerShopifyProductId,

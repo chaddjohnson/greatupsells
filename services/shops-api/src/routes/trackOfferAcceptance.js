@@ -15,12 +15,8 @@ const handler = async (event, context) => {
 
   try {
     const OfferHit = await models.get('OfferHit');
-    const {
-      offerHitId,
-      shopifyDraftOrderId,
-      shopifyCheckoutId,
-      items
-    } = JSON.parse(event.body);
+    const { offerHitId, shopifyDraftOrderId, shopifyCheckoutId, items } =
+      JSON.parse(event.body);
     const offerHit = await OfferHit.findById(offerHitId);
 
     if (!offerHitId) {

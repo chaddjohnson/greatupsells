@@ -46,9 +46,8 @@ const PageLoadOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
+    const triggerShopifyVariantId =
+      findTriggerProductShopifyVariantId(triggerProduct);
     const offeredShopifyProductIds = offeredProducts.map(
       ({ shopifyProductData }) => shopifyProductData?.id
     );

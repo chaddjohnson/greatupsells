@@ -1,6 +1,5 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -37,7 +36,6 @@ const PageTitleBar = memo(({ offer }) => (
 
 const loadingComponent = () => (
   <>
-    <Loading />
     <SkeletonPage title="Analytics for offer" fullWidth>
       <PageTitleBar />
       <Stack vertical>

@@ -29,11 +29,8 @@ const Offers = () => {
     addVariantsToShopifyCart
   } = useShopifyCart();
   const { shop } = useShop();
-  const {
-    getCustomerLocale,
-    getCustomerCountryCode,
-    getCustomerCurrency
-  } = useShopifyCustomer();
+  const { getCustomerLocale, getCustomerCountryCode, getCustomerCurrency } =
+    useShopifyCustomer();
 
   const testVariantId = new URLSearchParams(window.location.search).get(
     'testVariantId'

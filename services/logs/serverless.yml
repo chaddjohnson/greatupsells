@@ -32,6 +32,7 @@ custom:
   serverless-offline:
     httpPort: ${env:LOGS_API_PORT, 4009}
     lambdaPort: 4109
+    prefix: 'logs-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/logs-api/regional-domain, ''}
     basePath: ''

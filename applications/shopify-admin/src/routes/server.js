@@ -108,7 +108,7 @@ const createServer = () => {
   });
 
   server.get('/auth/callback', async (request, response) => {
-    // The library will automatically set the appropriate HTTP headers
+    // The library will automatically set the appropriate HTTP headers.
     const callbackResponse = await shopify.auth.callback({
       rawRequest: request,
       rawResponse: response
@@ -191,23 +191,28 @@ const createServer = () => {
 
   server.get('/', async (request, response) => {
     const { shop: shopDomain } = request.query;
-    const shop = await shopsServiceHttpClient.get(
-      `/shops/domain/${shopDomain}`
-    );
 
-    if (!shop || !shop.active) {
-      response.redirect(`/auth?shop=${shopDomain}`);
-    } else {
-      response.set(
-        'Content-Security-Policy',
-        `frame-ancestors https://${shopDomain} https://admin.shopify.com`
+    try {
+      const shop = await shopsServiceHttpClient.get(
+        `/shops/domain/${shopDomain}`
       );
-      await handleAppRequest(request, response);
+
+      if (!shop.active) {
+        response.redirect(`/auth?shop=${shopDomain}`);
+      } else {
+        response.set(
+          'Content-Security-Policy',
+          `frame-ancestors https://${shopDomain} https://admin.shopify.com`
+        );
+        await handleAppRequest(request, response);
+      }
+    } catch (error) {
+      response.redirect(`/auth?shop=${shopDomain}`);
     }
   });
 
   server.use(express.static(path.join(__dirname, '../../public')));
-  server.use('/_next', express.static(path.join(__dirname, '../../.next')));
+  server.use('/_next/', express.static(path.join(__dirname, '../../.next')));
   server.get('/_next/webpack-hmr', handleAppRequest);
   server.get('*', handleAppRequest);
   server.use((error, request, response, nextHandler) => {

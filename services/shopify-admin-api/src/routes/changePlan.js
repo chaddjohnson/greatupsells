@@ -22,8 +22,9 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
+    const { jwt } =
       event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const shopId = jwt.claims.sub;
     const { level } = JSON.parse(event.body);
     const { redirectUrl } = await httpClient.post(`/shops/${shopId}/plan`, {
       level

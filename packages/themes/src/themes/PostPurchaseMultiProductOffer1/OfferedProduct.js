@@ -3,9 +3,8 @@ import { ComponentContext, StateContext, ThemeContext } from '../../components';
 import PriceHeader from './PriceHeader';
 
 const OfferedProduct = ({ offeredProduct, index }) => {
-  const { BlockStack, Button, Image, Text, Select, Tiles, View } = useContext(
-    ComponentContext
-  );
+  const { BlockStack, Button, Image, Text, Select, Tiles, View } =
+    useContext(ComponentContext);
   const {
     selectedVariants,
     selectedQuantities,

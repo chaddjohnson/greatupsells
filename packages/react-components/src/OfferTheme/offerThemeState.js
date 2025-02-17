@@ -52,10 +52,8 @@ const useOfferThemeState = ({
     [...Array(offeredProducts.length).keys()].map(() => 0)
   );
 
-  const {
-    translateProductData,
-    translateTriggerProductData
-  } = useDataTranslation({ shop, offer, locale, countryCode, currency });
+  const { translateProductData, translateTriggerProductData } =
+    useDataTranslation({ shop, offer, locale, countryCode, currency });
 
   const translatedTriggerProduct = useMemo(() => {
     if (triggerProduct) {

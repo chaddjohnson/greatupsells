@@ -73,10 +73,8 @@ const OfferPagesEditor = ({
   const [triggerPagePathPattern, setTriggerPagePathPattern] = useState(
     initialTriggerPageType === 'PATTERN' && triggerPagePath.value
   );
-  const [
-    triggerPagePathPopoverActive,
-    setTriggerPagePathPopoverActive
-  ] = useState(false);
+  const [triggerPagePathPopoverActive, setTriggerPagePathPopoverActive] =
+    useState(false);
 
   const isInline = [
     'POST_PURCHASE',

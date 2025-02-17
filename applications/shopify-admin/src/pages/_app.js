@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import translations from '@shopify/polaris/locales/en.json';
 import { AppProvider } from '@shopify/polaris';
 import createApp from '@shopify/app-bridge';
 import { Redirect } from '@shopify/app-bridge/actions';
-import {
-  Provider as AppBridgeProvider,
-  ClientRouter
-} from '@shopify/app-bridge-react';
-
+import { ClientRouter } from '@shopify/app-bridge-react';
 import { getSessionToken } from '@shopify/app-bridge/utilities';
 import styled from 'styled-components';
 import { ErrorBoundary } from '@greatupsells/react-components';
@@ -46,9 +43,9 @@ const getHost = () => {
     return sessionStorage.host;
   }
 
-  const shop = getShop();
-  const host =
-    shop && shop.includes('.') ? window.btoa(`${shop}/admin`) : undefined;
+  // const shop = getShop();
+  // const host = shop?.includes('.') ? window.btoa(`${shop}/admin`) : undefined;
+  const host = new URLSearchParams(window.location.search).get('host');
 
   return host;
 };
@@ -56,29 +53,29 @@ const getHost = () => {
 const initiateOauth = () => {
   const host = getHost();
   const shop = getShop();
-  const app = createApp({ apiKey, host });
+  const forceRedirect = true;
+  const app = createApp({ apiKey, host, forceRedirect });
   const redirect = Redirect.create(app);
+  const url = `https://${window.location.host}/auth?shop=${shop}`;
 
-  redirect.dispatch(
-    Redirect.Action.REMOTE,
-    `https://${window.location.host}/auth?shop=${shop}`
-  );
+  redirect.dispatch(Redirect.Action.REMOTE, url);
 };
 
 const getAuthToken = async () => {
   // Get a JWT via Shopify.
   const host = getHost();
-  const app = createApp({ apiKey, host });
+  const forceRedirect = true;
+  const app = createApp({ apiKey, host, forceRedirect });
   const shopifySessionToken = await getSessionToken(app);
 
   try {
     // Retrieve a custom access token tailored to this application using Shopify's
     // session token.
-    const response = await (
-      await fetch(`/authToken?shopifySessionToken=${shopifySessionToken}`)
-    ).json();
+    const url = `/authToken?shopifySessionToken=${shopifySessionToken}`;
+    const response = await fetch(url);
+    const json = await response.json();
 
-    return response.authToken;
+    return json.authToken;
   } catch (error) {
     initiateOauth();
   }
@@ -114,15 +111,15 @@ const Main = styled.main`
 
 const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   const [mounted, setMounted] = useState(false);
-
   const router = useRouter();
-
-  const forceRedirect = true;
-  const appBridgeConfig = { apiKey, host, forceRedirect };
 
   if (typeof window !== 'undefined') {
     sessionStorage.shop = shop;
     sessionStorage.host = host;
+
+    if (!sessionStorage.authToken) {
+      getAuthToken();
+    }
   }
 
   useEffect(() => {
@@ -130,8 +127,15 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   }, []);
 
   return (
-    <AppProvider i18n={translations} linkComponent={Link}>
-      <AppBridgeProvider config={appBridgeConfig}>
+    <>
+      <Head>
+        <meta
+          name="shopify-api-key"
+          content={process.env.SHOPIFY_ADMIN_APP_API_KEY}
+        />
+        <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+      </Head>
+      <AppProvider i18n={translations} linkComponent={Link}>
         <HttpClientProvider
           baseUrl={process.env.SHOPIFY_ADMIN_API_URL}
           requestInterceptor={httpRequestInterceptor}
@@ -140,23 +144,23 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
             {mounted &&
               typeof window !== 'undefined' &&
               window.top !== window.self && (
-                <RouteGuard>
-                  <ClientRouter history={router} />
-                  <RoutePropagator />
-                  <ErrorBoundary>
-                    <Main>
-                      <Component {...pageProps} />
-                    </Main>
-                  </ErrorBoundary>
-                </RouteGuard>
+                // <RouteGuard>
+                //   <ClientRouter history={router} />
+                //   <RoutePropagator />
+                <ErrorBoundary>
+                  <Main>
+                    <Component {...pageProps} />
+                  </Main>
+                </ErrorBoundary>
+                // </RouteGuard>
               )}
             {mounted &&
               typeof window !== 'undefined' &&
               window.top === window.self && <h1>Loading...</h1>}
           </ShopProvider>
         </HttpClientProvider>
-      </AppBridgeProvider>
-    </AppProvider>
+      </AppProvider>
+    </>
   );
 };
 

@@ -37,6 +37,7 @@ custom:
     httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 4104
     noAuth: true
+    prefix: 'shops-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shops-api/regional-domain, ''}
     basePath: ''

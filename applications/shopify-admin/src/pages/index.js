@@ -1,5 +1,4 @@
 import { memo, useState, useMemo } from 'react';
-import { Loading } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -66,7 +65,6 @@ const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
 
 const loadingComponent = () => (
   <>
-    <Loading />
     <SkeletonPage title="Overview dashboard">
       <PageTitleBar />
       <Layout>
@@ -121,11 +119,8 @@ const DashboardPage = () => {
     currency: 'USD',
     options: { decimals: 0 }
   });
-  const {
-    shopAcceptancesLoaded,
-    shopAcceptancesError,
-    fetchShopAcceptances
-  } = useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
+  const { shopAcceptancesLoaded, shopAcceptancesError, fetchShopAcceptances } =
+    useShopAcceptances(shop?._id, chartStartAt, chartEndAt);
 
   const loaded = shopLoaded && shopAcceptancesLoaded;
   const error = !!shopError || !!shopAcceptancesError;

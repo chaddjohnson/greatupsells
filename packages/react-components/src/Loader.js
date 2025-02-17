@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const DefaultLoadingComponent = () => <div>Loading...</div>;
@@ -20,6 +20,20 @@ const Loader = ({
   emptyStateComponent: EmptyStateComponent,
   children
 }) => {
+  useEffect(() => {
+    if (isLoading) {
+      window.shopify.loading(true);
+      return;
+    }
+
+    if (isError) {
+      window.shopify.loading(false);
+      return;
+    }
+
+    window.shopify.loading(false);
+  }, [isLoading, isError]);
+
   if (isError) {
     return <ErrorComponent />;
   }

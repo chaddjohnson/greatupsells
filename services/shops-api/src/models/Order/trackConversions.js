@@ -20,9 +20,8 @@ const sendUsageNotifications = async (
     monthUpsellRevenueLimit &&
     originalMonthUpsellRevenue < monthUpsellRevenueLimit &&
     monthUpsellRevenue >= monthUpsellRevenueLimit;
-  const planRenewalDateFormatted = DateTime.fromJSDate(billingOn).toFormat(
-    'MMM d, y'
-  );
+  const planRenewalDateFormatted =
+    DateTime.fromJSDate(billingOn).toFormat('MMM d, y');
 
   // Send email when 80% of earnings limit has been reached
   if (monthUpsellReveueLimitNear) {

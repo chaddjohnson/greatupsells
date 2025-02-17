@@ -4,9 +4,10 @@ import { Card, FormLayout, Checkbox, Text, Stack } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 
 const OptionsEditor = ({ variables, onChange }) => {
-  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
-    variables
-  ]);
+  const groupedVariables = useMemo(
+    () => groupBy(variables, 'group'),
+    [variables]
+  );
   const groupNames = Object.keys(groupedVariables);
 
   return (

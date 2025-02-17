@@ -45,9 +45,8 @@ const getTrialDays = async (shop) => {
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
-  const existingRecurringCharge = await shopifyApiClient.recurringApplicationCharge.get(
-    chargeId
-  );
+  const existingRecurringCharge =
+    await shopifyApiClient.recurringApplicationCharge.get(chargeId);
   const trialEndsOn = existingRecurringCharge.trial_ends_on;
   const remainingDays = Math.round(
     (new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60
@@ -93,15 +92,14 @@ const createPlan = async (shop, level) => {
   // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
   const shopifyApiClient = shop.getShopifyApiClient();
   const trialDays = await getTrialDays(shop);
-  const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create(
-    {
+  const recurringCharge =
+    await shopifyApiClient.recurringApplicationCharge.create({
       name: plan.name,
       price: plan.price,
       trial_days: trialDays,
       return_url: `https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
       test: false
-    }
-  );
+    });
 
   // Update the shop plan details.
   shop.plan.name = plan.name;

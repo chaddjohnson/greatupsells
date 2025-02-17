@@ -7,13 +7,13 @@ const useThemes = () => {
 
   const [themesLoaded, setThemesLoaded] = useState(false);
 
-  const { data: themes, error: themesError, mutate: fetchThemes } = useSWR(
-    `/themes`,
-    httpClient.get.bind(httpClient),
-    {
-      revalidateOnFocus: false
-    }
-  );
+  const {
+    data: themes,
+    error: themesError,
+    mutate: fetchThemes
+  } = useSWR(`/themes`, httpClient.get.bind(httpClient), {
+    revalidateOnFocus: false
+  });
   const themesLoading = !themes && !themesError;
 
   if (!themesLoaded && !themesLoading) {

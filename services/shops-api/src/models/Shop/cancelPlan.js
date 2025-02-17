@@ -7,9 +7,8 @@ const cancelPlan = async (shop) => {
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
-  const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
-    shop.plan.chargeId
-  );
+  const recurringChargeData =
+    await shopifyApiClient.recurringApplicationCharge.get(shop.plan.chargeId);
   const planActive =
     recurringChargeData &&
     recurringChargeData.activated_on &&

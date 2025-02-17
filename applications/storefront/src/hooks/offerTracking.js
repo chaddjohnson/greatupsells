@@ -20,9 +20,10 @@ const useOfferTracking = () => {
   }) => {
     // Retrieve local event and offer tracking data.
     const offerImpressions = getCookie('greatupsellsOfferImpressions') || [];
-    const sessionOfferImpressions = sessionStorage.greatupsellsSessionOfferImpressions
-      ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
-      : [];
+    const sessionOfferImpressions =
+      sessionStorage.greatupsellsSessionOfferImpressions
+        ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
+        : [];
     const offerImpression = offerImpressions.find(
       (current) => current.offerId === offerId
     );

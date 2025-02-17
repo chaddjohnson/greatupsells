@@ -1,7 +1,7 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import qs from 'querystringify';
-import { Loading, Modal } from '@shopify/app-bridge-react';
+import { Modal } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -44,7 +44,6 @@ const PageTitleBar = memo(() => (
 
 const loadingComponent = () => (
   <>
-    <Loading />
     <SkeletonPage secondaryActions={3}>
       <PageTitleBar />
       <Layout>
@@ -124,9 +123,8 @@ const OfferEditPage = () => {
   const [latestOffer, setLatestOffer] = useState(null);
   const { saveTheme } = useTheme();
   const { themes, themesLoaded, themesError } = useThemes();
-  const { offerThemes, offerThemesLoaded, offerThemesError } = useOfferThemes(
-    offerId
-  );
+  const { offerThemes, offerThemesLoaded, offerThemesError } =
+    useOfferThemes(offerId);
   const { fetchRandomCollection } = useCollection();
   const { fetchRandomProduct } = useProduct();
 
