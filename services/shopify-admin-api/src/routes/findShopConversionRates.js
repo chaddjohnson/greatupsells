@@ -19,8 +19,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { jwt } = event.requestContext.authorizer.lambda || event.requestContext.authorizer;
-    const shopId = jwt.claims.sub;
+    const { shopId } = event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const { startAt, endAt } = event.queryStringParameters || {};
     const params = qs.stringify({ startAt, endAt }, true);
     const shopConversionRates = await httpClient.get(`/shops/${shopId}/conversion-rates${params}`);
