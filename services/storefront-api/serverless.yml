@@ -1,10 +1,11 @@
 service: greatupsells-storefront-api
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
-  memorySize: 2048
+  architecture: arm64
+  runtime: nodejs20.x
   timeout: 10
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}
@@ -51,7 +52,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}, 1}
       prewarm: true
       events:
@@ -59,14 +59,12 @@ custom:
 
 functions:
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
           path: /health
           method: get
   region:
-    memorySize: 128
     handler: src/routes/region.handler
     events:
       - httpApi:

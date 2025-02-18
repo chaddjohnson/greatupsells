@@ -1,9 +1,11 @@
 service: greatupsells-webhooks-service
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 256
   timeout: 10
   endpointType: REGIONAL
@@ -41,7 +43,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: 1
       prewarm: true
       events:
@@ -49,7 +50,6 @@ custom:
 
 functions:
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
