@@ -1,7 +1,7 @@
 const { createWorker } = require('../lib/worker');
 
 const handler = createWorker(async (event) => {
-  const { shop_id, shop_domain, customer, orders } = JSON.parse(event.body);
+  const { shop_id, shop_domain, customer, orders_to_redact } = JSON.parse(event.body);
   
   // TODO: Implement your data deletion logic here
   // You should delete or anonymize all data associated with this customer
@@ -11,7 +11,7 @@ const handler = createWorker(async (event) => {
     shop_domain,
     customer_id: customer.id,
     customer_email: customer.email,
-    orders: orders.map(order => order.id)
+    orders: orders_to_redact.map(order => order.id)
   });
 
   return {

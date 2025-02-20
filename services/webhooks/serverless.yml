@@ -183,24 +183,21 @@ functions:
   customerDataRequest:
     handler: src/workers/customerDataRequest.handler
     events:
-      - http:
-          path: webhooks/customers/data-request
+      - httpApi:
+          path: shopify/customers/data-request
           method: post
-          cors: true
   customerRedact:
     handler: src/workers/customerRedact.handler
     events:
-      - http:
-          path: webhooks/customers/redact
+      - httpApi:
+          path: shopify/customers/redact
           method: post
-          cors: true
   shopRedact:
     handler: src/workers/shopRedact.handler
     events:
-      - http:
-          path: webhooks/shop/redact
+      - httpApi:
+          path: shopify/shop/redact
           method: post
-          cors: true
 
 plugins:
   - serverless-offline

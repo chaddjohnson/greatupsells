@@ -1,7 +1,7 @@
 const { createWorker } = require('../lib/worker');
 
 const handler = createWorker(async (event) => {
-  const { shop_id, shop_domain, customer, orders } = JSON.parse(event.body);
+  const { shop_id, shop_domain, customer, orders_requested } = JSON.parse(event.body);
   
   // TODO: Implement your data gathering logic here
   // You should collect all data associated with this customer
@@ -12,7 +12,7 @@ const handler = createWorker(async (event) => {
     shop_domain,
     customer_id: customer.id,
     customer_email: customer.email,
-    orders: orders.map(order => order.id)
+    orders: orders_requested.map(order => order.id)
   });
 
   return {
