@@ -1,12 +1,9 @@
-const { createWorker } = require('../lib/worker');
+const { handle } = require('../lib/worker');
 
-const handler = createWorker(async (event) => {
-  const { shop_id, shop_domain, customer, orders_requested } = JSON.parse(event.body);
-  
+const processor = async ({ shop_id, shop_domain, customer, orders_requested }) => {
   // TODO: Implement your data gathering logic here
   // You should collect all data associated with this customer
   // and provide it to the merchant through your preferred method
-  
   console.log('Processing customer data request', {
     shop_id,
     shop_domain,
@@ -14,11 +11,10 @@ const handler = createWorker(async (event) => {
     customer_email: customer.email,
     orders: orders_requested.map(order => order.id)
   });
+};
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Data request received and being processed' })
-  };
-});
+const handler = async (event, context) => {
+  return await handle(event, context, processor);
+};
 
-module.exports = { handler }; 
+module.exports.handler = handler;

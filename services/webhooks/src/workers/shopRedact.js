@@ -1,20 +1,16 @@
-const { createWorker } = require('../lib/worker');
+const { handle } = require('../lib/worker');
 
-const handler = createWorker(async (event) => {
-  const { shop_id, shop_domain } = JSON.parse(event.body);
-  
+const processor = async ({ shop_id, shop_domain }) => {
   // TODO: Implement your shop data deletion logic here
   // You should delete or anonymize all data associated with this shop
-  
   console.log('Processing shop redaction request', {
     shop_id,
     shop_domain
   });
+};
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Shop redaction request received and being processed' })
-  };
-});
+const handler = async (event, context) => {
+  return await handle(event, context, processor);
+};
 
-module.exports = { handler }; 
+module.exports.handler = handler;

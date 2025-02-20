@@ -1,8 +1,6 @@
-const { createWorker } = require('../lib/worker');
+const { handle } = require('../lib/worker');
 
-const handler = createWorker(async (event) => {
-  const { shop_id, shop_domain, customer, orders_to_redact } = JSON.parse(event.body);
-  
+const processor = async ({ shop_id, shop_domain, customer, orders_to_redact }) => {
   // TODO: Implement your data deletion logic here
   // You should delete or anonymize all data associated with this customer
   
@@ -13,11 +11,10 @@ const handler = createWorker(async (event) => {
     customer_email: customer.email,
     orders: orders_to_redact.map(order => order.id)
   });
+};
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Redaction request received and being processed' })
-  };
-});
+const handler = async (event, context) => {
+  return await handle(event, context, processor);
+};
 
-module.exports = { handler }; 
+module.exports.handler = handler;
