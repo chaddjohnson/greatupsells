@@ -180,6 +180,24 @@ functions:
       - httpApi:
           path: /shopify/theme-publish
           method: post
+  customerDataRequest:
+    handler: src/workers/customerDataRequest.handler
+    events:
+      - httpApi:
+          path: /shopify/customers/data-request
+          method: post
+  customerRedact:
+    handler: src/workers/customerRedact.handler
+    events:
+      - httpApi:
+          path: /shopify/customers/redact
+          method: post
+  shopRedact:
+    handler: src/workers/shopRedact.handler
+    events:
+      - httpApi:
+          path: /shopify/shop/redact
+          method: post
 
 plugins:
   - serverless-offline
