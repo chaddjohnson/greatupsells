@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, Checkbox, Select, Button, KeyboardKey } from '@shopify/polaris';
+import { Card, FormLayout, TextField, Checkbox, Select, Button, BlockStack, Text, KeyboardKey } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
 import styled from 'styled-components';
 
@@ -32,8 +32,8 @@ const OfferOptionsEditor = ({
   enableEscClose,
   enableMaskClose,
   animation,
-  submitted,
-  onPreview
+  submitted = false,
+  onPreview = () => {}
 }) => {
   const [delaySecondsActive, setDelaySecondsActive] = useState(offer?.delaySeconds > 0);
   const [onPageRequiredSecondsActive, setOnPageRequiredSecondsActive] = useState(offer?.onPageRequiredSeconds > 0);
@@ -74,141 +74,108 @@ const OfferOptionsEditor = ({
   }, [offer.triggerEvent]);
 
   return (
-    <Card title="Options" sectioned>
-      <FormLayout>
-        <Checkbox
-          label="Allow customers to select variants"
-          helpText="Customers may select variants if available."
-          {...asChoiceField(enableVariantSelection)}
-        />
-        <Checkbox
-          label="Allow customers to change quantities"
-          helpText="Customers may change quantities for products."
-          {...asChoiceField(enableQuantitySelection)}
-        />
-        {!isInline && ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Options</Text>
+        <FormLayout>
           <Checkbox
-            label="Delay showing offer after trigger event"
-            helpText={
-              delaySecondsActive && (
-                <SecondsInputWrapper>
-                  <TextField
-                    inputMode="numeric"
-                    min={0}
-                    suffix="seconds"
-                    {...delaySeconds}
-                    error={submitted && delaySeconds.error}
-                  />
-                </SecondsInputWrapper>
-              )
-            }
-            checked={delaySecondsActive}
-            onChange={handleDelaySecondsActiveChange}
+            label="Allow customers to select variants"
+            helpText="Customers may select variants if available."
+            {...asChoiceField(enableVariantSelection)}
           />
-        )}
-        {!isInline && (
           <Checkbox
-            label="Require customer be on page for a specified amount of time before allowing offer to show"
-            helpText={
-              onPageRequiredSecondsActive && (
-                <SecondsInputWrapper>
-                  <TextField
-                    inputMode="numeric"
-                    suffix="seconds"
-                    {...onPageRequiredSeconds}
-                    error={submitted && onPageRequiredSeconds.error}
-                  />
-                </SecondsInputWrapper>
-              )
-            }
-            checked={onPageRequiredSecondsActive}
-            onChange={handleOnPageRequiredSecondsActiveChange}
+            label="Allow customers to change quantities"
+            helpText="Customers may change quantities for products."
+            {...asChoiceField(enableQuantitySelection)}
           />
-        )}
-        {!isInline && (
-          <Checkbox
-            label={
-              <>
-                Allow <KeyboardKey>esc</KeyboardKey> key to close the offer
-              </>
-            }
-            {...asChoiceField(enableEscClose)}
-          />
-        )}
-        {!isInline && <Checkbox label="Allow clicking outside to close the offer" {...asChoiceField(enableMaskClose)} />}
-        {!isInline && (
-          <Checkbox
-            label="Use an animation when showing and hiding the offer"
-            helpText={
-              animationActive && (
-                <Flex>
-                  <AnimationSelectWrapper>
-                    <Select
-                      label="Animation"
-                      labelHidden
-                      options={[
-                        {
-                          value: 'effect-slide-in-scale',
-                          label: 'Fade in & scale'
-                        },
-                        {
-                          value: 'effect-slide-in-right',
-                          label: 'Slide in (right)'
-                        },
-                        {
-                          value: 'effect-slide-in-bottom',
-                          label: 'Slide in (bottom)'
-                        },
-                        {
-                          value: 'effect-fall',
-                          label: 'Fall'
-                        },
-                        {
-                          value: 'effect-sticky-up',
-                          label: 'Sticky up'
-                        },
-                        {
-                          value: 'effect-3d-flip-horizontal',
-                          label: '3D flip (horizontal)'
-                        },
-                        {
-                          value: 'effect-3d-flip-vertical',
-                          label: '3D flip (vertical)'
-                        },
-                        {
-                          value: 'effect-3d-sign',
-                          label: '3D sign'
-                        },
-                        {
-                          value: 'effect-super-scaled',
-                          label: 'Super scaled'
-                        },
-                        {
-                          value: 'effect-3d-slit',
-                          label: '3D slit'
-                        },
-                        {
-                          value: 'effect-3d-rotate-bottom',
-                          label: '3D rotate bottom'
-                        },
-                        {
-                          value: 'effect-3d-rotate-in-left',
-                          label: '3D rotate in left'
-                        }
-                      ]}
-                      {...animation}
-                      error={submitted && animation.error}
+          {!isInline && ['ADD', 'LOAD', 'FOCUS', 'SCROLL'].includes(offer.triggerEvent) && (
+            <Checkbox
+              label="Delay showing offer after trigger event"
+              helpText={
+                delaySecondsActive && (
+                  <SecondsInputWrapper>
+                    <TextField
+                      inputMode="numeric"
+                      min={0}
+                      suffix="seconds"
+                      {...delaySeconds}
+                      error={submitted && delaySeconds.error}
                     />
-                  </AnimationSelectWrapper>
-                  <Button onClick={onPreview}>Preview</Button>
-                </Flex>
-              )
-            }
-            checked={animationActive}
-            onChange={handleAnimationActiveChange}
-          />
-        )}
-      </FormLayout>
+                  </SecondsInputWrapper>
+                )
+              }
+              checked={delaySecondsActive}
+              onChange={handleDelaySecondsActiveChange}
+            />
+          )}
+          {!isInline && (
+            <Checkbox
+              label="Require customer be on page for a specified amount of time before allowing offer to show"
+              helpText={
+                onPageRequiredSecondsActive && (
+                  <SecondsInputWrapper>
+                    <TextField
+                      inputMode="numeric"
+                      suffix="seconds"
+                      {...onPageRequiredSeconds}
+                      error={submitted && onPageRequiredSeconds.error}
+                    />
+                  </SecondsInputWrapper>
+                )
+              }
+              checked={onPageRequiredSecondsActive}
+              onChange={handleOnPageRequiredSecondsActiveChange}
+            />
+          )}
+          {!isInline && (
+            <Checkbox
+              label={
+                <>
+                  Allow <KeyboardKey>esc</KeyboardKey> key to close the offer
+                </>
+              }
+              {...asChoiceField(enableEscClose)}
+            />
+          )}
+          {!isInline && <Checkbox label="Allow clicking outside to close the offer" {...asChoiceField(enableMaskClose)} />}
+          {!isInline && (
+            <Checkbox
+              label="Use an animation when showing and hiding the offer"
+              helpText={
+                animationActive && (
+                  <Flex>
+                    <AnimationSelectWrapper>
+                      <Select
+                        label="Animation"
+                        labelHidden
+                        options={[
+                          { value: 'effect-slide-in-scale', label: 'Fade in & scale' },
+                          { value: 'effect-slide-in-right', label: 'Slide in (right)' },
+                          { value: 'effect-slide-in-bottom', label: 'Slide in (bottom)' },
+                          { value: 'effect-fall', label: 'Fall' },
+                          { value: 'effect-sticky-up', label: 'Sticky up' },
+                          { value: 'effect-3d-flip-horizontal', label: '3D flip (horizontal)' },
+                          { value: 'effect-3d-flip-vertical', label: '3D flip (vertical)' },
+                          { value: 'effect-3d-sign', label: '3D sign' },
+                          { value: 'effect-super-scaled', label: 'Super scaled' },
+                          { value: 'effect-3d-slit', label: '3D slit' },
+                          { value: 'effect-3d-rotate-bottom', label: '3D rotate bottom' },
+                          { value: 'effect-3d-rotate-in-left', label: '3D rotate in left' }
+                        ]}
+                        {...animation}
+                        error={submitted && animation.error}
+                      />
+                    </AnimationSelectWrapper>
+                    <Button onClick={onPreview}>Preview</Button>
+                  </Flex>
+                )
+              }
+              checked={animationActive}
+              onChange={handleAnimationActiveChange}
+            />
+          )}
+        </FormLayout>
+      </BlockStack>
     </Card>
   );
 };
@@ -224,11 +191,6 @@ OfferOptionsEditor.propTypes = {
   animation: PropTypes.object.isRequired,
   submitted: PropTypes.bool,
   onPreview: PropTypes.func
-};
-
-OfferOptionsEditor.defaultProps = {
-  submitted: false,
-  onPreview: () => {}
 };
 
 export default OfferOptionsEditor;

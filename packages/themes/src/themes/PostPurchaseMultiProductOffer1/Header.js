@@ -21,7 +21,7 @@ const Header = () => {
           </Text>
         </BlockStack>
         <View blockPadding="tight" />
-        <Banner status="critical" iconHidden>
+        <Banner tone="critical" hideIcon>
           <BlockStack alignment="center">
             <Text size="large">{bannerText}</Text>
           </BlockStack>

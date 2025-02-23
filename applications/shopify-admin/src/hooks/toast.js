@@ -1,26 +1,21 @@
 import React from 'react';
 import { useAppBridge } from '@shopify/app-bridge-react';
-import { Toast } from '@shopify/app-bridge/actions';
 
 const useToast = () => {
-  const app = useAppBridge();
+  const shopify = useAppBridge();
 
-  const showSuccessToast = (message, options = {}) => {
-    Toast.create(app, {
-      message,
+  const showSuccessToast = (message) => {
+    shopify.toast.show(message, {
       duration: 5 * 1000,
-      isError: false,
-      ...options
-    }).dispatch(Toast.Action.SHOW);
+      isError: false
+    });
   };
 
-  const showErrorToast = (message, options = {}) => {
-    Toast.create(app, {
-      message,
+  const showErrorToast = (message) => {
+    shopify.toast.show(message, {
       duration: 5 * 1000,
-      isError: true,
-      ...options
-    }).dispatch(Toast.Action.SHOW);
+      isError: true
+    });
   };
 
   return { showSuccessToast, showErrorToast };

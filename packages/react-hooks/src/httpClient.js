@@ -112,7 +112,7 @@ class HttpClient {
 
 const HttpClientContext = createContext(null);
 
-const HttpClientProvider = ({ baseUrl, requestInterceptor, children }) => {
+const HttpClientProvider = ({ baseUrl = '', requestInterceptor, children }) => {
   const httpClient = new HttpClient({ baseUrl, requestInterceptor });
 
   return <HttpClientContext.Provider value={{ httpClient }}>{children}</HttpClientContext.Provider>;
@@ -122,10 +122,6 @@ HttpClientProvider.propTypes = {
   baseUrl: PropTypes.string,
   requestInterceptor: PropTypes.func,
   children: PropTypes.node.isRequired
-};
-
-HttpClientProvider.defaultProps = {
-  baseUrl: ''
 };
 
 const useHttpClient = () => useContext(HttpClientContext);

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, Checkbox } from '@shopify/polaris';
+import { Card, FormLayout, Checkbox, BlockStack, Text } from '@shopify/polaris';
 import { useDateTime } from '@greatupsells/react-hooks';
 import DateTimePicker from '../DateTimePicker';
 
-const OfferDatesEditor = ({ offer, startAt, endAt, showEndDate, onShowEndDateChange }) => {
+const OfferDatesEditor = ({ offer, startAt, endAt, showEndDate, onShowEndDateChange = () => {} }) => {
   const { formatDate } = useDateTime();
 
   const timezoneAbbreviation = formatDate(new Date(), 'ZZZZ');
@@ -18,33 +18,36 @@ const OfferDatesEditor = ({ offer, startAt, endAt, showEndDate, onShowEndDateCha
   };
 
   return (
-    <Card title="Active dates" sectioned>
-      <FormLayout>
-        <DateTimePicker
-          value={offer.startAt}
-          datePickerProps={{ label: 'Start date' }}
-          timePickerProps={{
-            label: `Start time (${timezoneAbbreviation})`,
-            placeholder: 'Enter time'
-          }}
-          onChange={handleStartAtChange}
-        />
-        <FormLayout.Group>
-          <Checkbox label="Set end date" checked={showEndDate} onChange={onShowEndDateChange} />
-        </FormLayout.Group>
-        {showEndDate && (
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Active dates</Text>
+        <FormLayout>
           <DateTimePicker
-            disableDatesBefore={new Date(offer.startAt)}
-            value={offer.endAt}
-            datePickerProps={{ label: 'End date' }}
+            value={offer.startAt}
+            datePickerProps={{ label: 'Start date' }}
             timePickerProps={{
-              label: `End time (${timezoneAbbreviation})`,
+              label: `Start time (${timezoneAbbreviation})`,
               placeholder: 'Enter time'
             }}
-            onChange={endAt.onChange}
+            onChange={handleStartAtChange}
           />
-        )}
-      </FormLayout>
+          <FormLayout.Group>
+            <Checkbox label="Set end date" checked={showEndDate} onChange={onShowEndDateChange} />
+          </FormLayout.Group>
+          {showEndDate && (
+            <DateTimePicker
+              disableDatesBefore={new Date(offer.startAt)}
+              value={offer.endAt}
+              datePickerProps={{ label: 'End date' }}
+              timePickerProps={{
+                label: `End time (${timezoneAbbreviation})`,
+                placeholder: 'Enter time'
+              }}
+              onChange={endAt.onChange}
+            />
+          )}
+        </FormLayout>
+      </BlockStack>
     </Card>
   );
 };
@@ -55,10 +58,6 @@ OfferDatesEditor.propTypes = {
   endAt: PropTypes.object.isRequired,
   showEndDate: PropTypes.bool,
   onShowEndDateChange: PropTypes.func
-};
-
-OfferDatesEditor.defaultProps = {
-  onShowEndDateChange: () => {}
 };
 
 export default OfferDatesEditor;

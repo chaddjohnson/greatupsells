@@ -7,14 +7,13 @@ import {
   Card,
   Tabs,
   Sheet,
-  TextContainer,
   Banner,
   Scrollable,
   PageActions,
   EmptyState,
-  Stack
+  BlockStack
 } from '@shopify/polaris';
-import { MobileCancelMajor } from '@shopify/polaris-icons';
+import { XIcon } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import styled from 'styled-components';
 
@@ -65,7 +64,7 @@ ThemeOption.propTypes = {
 
 const EmptyComponent = () => (
   <EmptyState heading="No themes">
-    <TextContainer>No themes are available.</TextContainer>
+    <Text as="p">No themes are available.</Text>
   </EmptyState>
 );
 
@@ -84,7 +83,16 @@ const tabs = [
   }
 ];
 
-const ThemeSelector = ({ open, strategy, theme, themes, offerThemes, onThemeSelect, onOfferThemeSelect, onClose }) => {
+const ThemeSelector = ({
+  open = false,
+  strategy,
+  theme,
+  themes,
+  offerThemes,
+  onThemeSelect = () => {},
+  onOfferThemeSelect = () => {},
+  onClose = () => {}
+}) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(theme?._id ? 0 : 1);
   const [selectedTheme, setSelectedTheme] = useState([
     offerThemes.find((current) => current.__id_offerForm === theme?.__id_offerForm)?.__id_offerForm
@@ -165,37 +173,33 @@ const ThemeSelector = ({ open, strategy, theme, themes, offerThemes, onThemeSele
       <InnerWrapper>
         <HeaderWrapper>
           <Text variant="headingLg">Select theme</Text>
-          <Button accessibilityLabel="Cancel" icon={MobileCancelMajor} onClick={onClose} plain />
+          <Button variant="plain" accessibilityLabel="Cancel" icon={XIcon} onClick={onClose} />
         </HeaderWrapper>
         <Scrollable>
           <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
             <SearchWrapper>
               {tabs[selectedTabIndex].id === 'history' && (
-                <Stack vertical>
-                  <TextContainer>
-                    <Banner>Your customizations for previously selected themes will remain available here.</Banner>
-                  </TextContainer>
+                <BlockStack gap="200">
+                  <Banner>Your customizations for previously selected themes will remain available here.</Banner>
                   {offerThemeOptions?.length > 0 && (
                     <Card>
                       <OptionList options={offerThemeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                     </Card>
                   )}
                   {!offerThemeOptions?.length && <EmptyComponent />}
-                </Stack>
+                </BlockStack>
               )}
               {tabs[selectedTabIndex].id === 'explore' && (
                 <>
                   {themeOptions?.length > 0 && (
-                    <Stack vertical spacing="tight">
+                    <BlockStack gap="200">
                       {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
-                        <TextContainer>
-                          <Banner>Themes will adapt to work for both cross-selling and upselling strategies.</Banner>
-                        </TextContainer>
+                        <Banner>Themes will adapt to work for both cross-selling and upselling strategies.</Banner>
                       )}
                       <Card>
                         <OptionList options={themeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                       </Card>
-                    </Stack>
+                    </BlockStack>
                   )}
                   {!themeOptions?.length && <EmptyComponent />}
                 </>
@@ -232,13 +236,6 @@ ThemeSelector.propTypes = {
   onThemeSelect: PropTypes.func,
   onOfferThemeSelect: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ThemeSelector.defaultProps = {
-  open: false,
-  onThemeSelect: () => {},
-  onOfferThemeSelect: () => {},
-  onClose: () => {}
 };
 
 export default ThemeSelector;

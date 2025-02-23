@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete, Icon } from '@shopify/polaris';
-import { ClockMajor } from '@shopify/polaris-icons';
+import { ClockIcon } from '@shopify/polaris-icons';
 import { flatten } from 'lodash';
 import { useDateTime } from '@greatupsells/react-hooks';
 
@@ -29,7 +29,7 @@ const buildTimeOptions = () =>
     ])
   );
 
-const TimePicker = ({ label, placeholder, onChange, ...props }) => {
+const TimePicker = ({ label, placeholder, onChange = () => {}, ...props }) => {
   const { formatDate } = useDateTime();
 
   const timeOptions = buildTimeOptions();
@@ -51,7 +51,7 @@ const TimePicker = ({ label, placeholder, onChange, ...props }) => {
     [formatDate]
   );
 
-  const [value, setValue] = useState(toFormattedTime(props.value));
+  const [value, setValue] = useState(toFormattedTime(props.value || new Date()));
   const [lastValidValue, setLastValidValue] = useState(value);
   const [options, setOptions] = useState(timeOptions);
   const [selectedOptions, setSelectedOptions] = useState('');
@@ -108,7 +108,7 @@ const TimePicker = ({ label, placeholder, onChange, ...props }) => {
 
   // Update state value when props value changes.
   useEffect(() => {
-    const formattedTime = toFormattedTime(props.value);
+    const formattedTime = toFormattedTime(props.value || new Date());
 
     setValue(formattedTime);
     setLastValidValue(formattedTime);
@@ -124,7 +124,7 @@ const TimePicker = ({ label, placeholder, onChange, ...props }) => {
         <Autocomplete.TextField
           label={label}
           placeholder={placeholder}
-          prefix={<Icon source={ClockMajor} />}
+          prefix={<Icon source={ClockIcon} />}
           value={value}
           maxLength={8}
           onChange={handleTextChange}
@@ -140,11 +140,6 @@ TimePicker.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func
-};
-
-TimePicker.defaultProps = {
-  value: new Date(), // default to current local time
-  onChange: () => {}
 };
 
 export default TimePicker;

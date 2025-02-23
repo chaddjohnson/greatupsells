@@ -15,7 +15,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const DateTimePicker = ({ value, disableDatesBefore, datePickerProps, timePickerProps, onChange }) => {
+const DateTimePicker = ({
+  value = new Date(),
+  disableDatesBefore = new Date(),
+  datePickerProps,
+  timePickerProps,
+  onChange = () => {}
+}) => {
   const { formatDate, formatDateISO } = useDateTime();
 
   const [date, setDate] = useState(value);
@@ -80,12 +86,6 @@ DateTimePicker.propTypes = {
     placeholder: PropTypes.string
   }),
   onChange: PropTypes.func
-};
-
-DateTimePicker.defaultProps = {
-  value: new Date(), // default to current date and time
-  disableDatesBefore: new Date(),
-  onChange: () => {}
 };
 
 export default DateTimePicker;

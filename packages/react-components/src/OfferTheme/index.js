@@ -9,16 +9,16 @@ const OfferTheme = ({
   offer,
   theme,
   ThemeComponent,
-  locale,
-  countryCode,
-  currency,
+  locale = 'en',
+  countryCode = 'US',
+  currency = 'USD',
   triggerProduct,
   offeredProducts,
   shopifyCartItems,
   shopifyCartTotal,
   shopifyCartItemCount,
   forceDisplayType,
-  handlers,
+  handlers = {},
   onAddProducts,
   onReplaceProduct
 }) => {
@@ -66,13 +66,6 @@ OfferTheme.propTypes = {
   handlers: PropTypes.object,
   onAddProducts: PropTypes.func,
   onReplaceProduct: PropTypes.func
-};
-
-OfferTheme.defaultProps = {
-  locale: 'en',
-  countryCode: 'US',
-  currency: 'USD',
-  handlers: {}
 };
 
 export default OfferTheme;

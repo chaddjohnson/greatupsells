@@ -25,12 +25,12 @@ const ProductOffer = ({
   locale,
   countryCode,
   currency,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -207,13 +207,6 @@ ProductOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ProductOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default ProductOffer;

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Card, Text, Stack, List, Button } from '@shopify/polaris';
+import { Card, Text, List, BlockStack, InlineStack } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
+import { Link } from '..';
 import OfferStatus from '../OfferStatus';
 
 const HeadingWrapper = styled.div`
@@ -57,17 +58,18 @@ const OfferSummary = ({ offer }) => {
   }, [offer, formatCurrency, formatDate]);
 
   return (
-    <Card title="Summary" subdued>
-      <Card.Section>
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Summary</Text>
         {offer.name ? (
-          <Stack vertical>
+          <BlockStack gap="200">
             <HeadingWrapper>
-              <Stack distribution="equalSpacing">
+              <InlineStack align="space-between">
                 <Text variant="headingMd" as="h2">
                   {offer.name}
                 </Text>
                 <OfferStatus offer={offer} />
-              </Stack>
+              </InlineStack>
             </HeadingWrapper>
             {items.length > 0 && (
               <List>
@@ -76,14 +78,13 @@ const OfferSummary = ({ offer }) => {
                 ))}
               </List>
             )}
-          </Stack>
+          </BlockStack>
         ) : (
-          <Text color="subdued">No information entered yet.</Text>
+          <Text tone="subdued">No information entered yet.</Text>
         )}
-      </Card.Section>
-      {offer._id && (
-        <Card.Section title="Performance" subdued>
-          <Stack vertical>
+        {offer._id && (
+          <>
+            <Text variant="headingMd">Performance</Text>
             <List>
               <List.Item>{formatNumber(offer?.impressionCount)} impressions</List.Item>
               <List.Item>{formatNumber(offer?.acceptanceCount)} acceptances</List.Item>
@@ -91,20 +92,17 @@ const OfferSummary = ({ offer }) => {
               <List.Item>{formatCurrency(offer?.revenueIncrease)} revenue increase</List.Item>
               {/* <List.Item>44 data submissions</List.Item> */}
             </List>
-            <Text color="subdued">
-              View{' '}
-              <Button plain url={`/offers/${offer._id}/analytics/`}>
-                analytics
-              </Button>{' '}
+            <Text tone="subdued">
+              View <Link url={`/offers/${offer._id}/analytics/`}>analytics</Link>{' '}
               {/* and{' '}
-              <Button plain url={`/offers/${offer._id}/data/`}>
-                data submissions
-              </Button>{' '} */}
+                <Button variant="plain" url={`/offers/${offer._id}/data/`}>
+                  data submissions
+                </Button>{' '} */}
               for this offer
             </Text>
-          </Stack>
-        </Card.Section>
-      )}
+          </>
+        )}
+      </BlockStack>
     </Card>
   );
 };

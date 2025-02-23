@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AddButton = ({ className, color, ...props }) => {
+const AddButton = ({ className, color = 'primary', ...props }) => {
   const classes = useStyles();
 
   return (
@@ -26,10 +26,6 @@ const AddButton = ({ className, color, ...props }) => {
 AddButton.propTypes = {
   className: PropTypes.string,
   color: PropTypes.string
-};
-
-AddButton.defaultProps = {
-  color: 'primary'
 };
 
 export default AddButton;

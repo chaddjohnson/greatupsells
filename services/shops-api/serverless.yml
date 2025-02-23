@@ -125,15 +125,6 @@ functions:
           method: post
           authorizer:
             type: aws_iam
-  consentToDataAccess:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/consentToDataAccess.handler
-    events:
-      - httpApi:
-          path: /shops/{shopId}/data-access-consent
-          method: post
-          authorizer:
-            type: aws_iam
   createCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler

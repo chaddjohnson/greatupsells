@@ -13,7 +13,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const { message, children } = this.props;
+    const { message = 'An unexpected error occurred. Please try again later.', children } = this.props;
     const { hasError } = this.state;
 
     if (hasError) {
@@ -27,10 +27,6 @@ class ErrorBoundary extends React.Component {
 ErrorBoundary.propTypes = {
   message: PropTypes.node,
   children: PropTypes.node.isRequired
-};
-
-ErrorBoundary.defaultProps = {
-  message: 'An unexpected error occurred. Please try again later.'
 };
 
 export default ErrorBoundary;

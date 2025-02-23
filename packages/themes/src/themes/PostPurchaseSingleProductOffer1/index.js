@@ -106,7 +106,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
                   <Tiles maxPerLine={4} spacing="tight">
                     {variants.map((variant, variantIndex) => (
                       <View key={variantIndex}>
-                        <Button plain onPress={() => handleVariantChange(0, variant.id)}>
+                        <Button variant="plain" onPress={() => handleVariantChange(0, variant.id)}>
                           <Image source={variant.thumbnailImage.src} alt={variant.thumbnailImage.alt} />
                         </Button>
                       </View>
@@ -120,7 +120,7 @@ const PostPurchaseSingleProductOffer1 = ({ theme, state, components }) => {
               </BlockStack>
               <View />
               <BlockStack spacing="extraLoose">
-                {pricesError && <Banner status="critical">{pricesError}</Banner>}
+                {pricesError && <Banner tone="critical">{pricesError}</Banner>}
                 <BlockStack>
                   <Heading>{offeredProduct.title}</Heading>
                   <PriceHeader

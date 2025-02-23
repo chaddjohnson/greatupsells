@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, Text, Stack } from '@shopify/polaris';
+import { Card, FormLayout, TextField, Text, BlockStack } from '@shopify/polaris';
 
-const FontEditor = ({ variables, onChange }) => (
-  <Stack vertical>
-    <Stack vertical spacing="tight">
-      <Text variant="headingXs" as="h3">
-        <Text color="subdued">Settings</Text>
+const FontEditor = ({ variables = [], onChange = () => {} }) => (
+  <BlockStack gap="400">
+    <BlockStack gap="200">
+      <Text variant="headingXs" as="h3" tone="subdued">
+        Settings
       </Text>
-      <Card sectioned>
+      <Card>
         <FormLayout>
           {variables.map((variable, variableIndex) => (
             <TextField
@@ -21,18 +21,13 @@ const FontEditor = ({ variables, onChange }) => (
           ))}
         </FormLayout>
       </Card>
-    </Stack>
-  </Stack>
+    </BlockStack>
+  </BlockStack>
 );
 
 FontEditor.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
-};
-
-FontEditor.defaultProps = {
-  variables: [],
-  onChange: () => {}
 };
 
 export default FontEditor;

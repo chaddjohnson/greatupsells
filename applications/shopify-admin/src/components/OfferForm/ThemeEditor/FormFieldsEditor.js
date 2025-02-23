@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EmptyState, FormLayout, Card, TextField, Button, Text, Select, TextContainer } from '@shopify/polaris';
+import { EmptyState, FormLayout, BlockStack, TextField, Button, Text, Select, Text } from '@shopify/polaris';
 import styled from 'styled-components';
 
 const FormFieldContainer = styled.div`
@@ -8,7 +8,7 @@ const FormFieldContainer = styled.div`
   padding-bottom: 2rem;
 `;
 
-const FormFieldEditor = ({ formField, onRemoveItem, ...props }) => {
+const FormFieldEditor = ({ formField, onRemoveItem = () => {}, ...props }) => {
   const filterKeyPresses = (event) => {
     const isNameCharacter = !event.key.match(/[a-zA-Z0-9\-_]/);
     const isDelete = event.key === 'Delete';
@@ -20,7 +20,7 @@ const FormFieldEditor = ({ formField, onRemoveItem, ...props }) => {
   };
 
   return (
-    <FormFieldContainer onKeyPress={filterKeyPresses} {...props}>
+    <FormFieldContainer onKeyDown={filterKeyPresses} {...props}>
       <TextField
         type="text"
         label="Field name"
@@ -59,11 +59,7 @@ FormFieldEditor.propTypes = {
   onRemoveItem: PropTypes.func
 };
 
-FormFieldEditor.defaltProps = {
-  onRemoveItem: () => {}
-};
-
-const EmptyComponent = ({ onAddItem }) => (
+const EmptyComponent = ({ onAddItem = () => {} }) => (
   <EmptyState
     heading="Manage form fields"
     action={{ content: 'Add form field', onAction: onAddItem }}
@@ -72,7 +68,7 @@ const EmptyComponent = ({ onAddItem }) => (
       url: 'https://help.domain.com/tutorials/data-integrations'
     }}
   >
-    <TextContainer>Track data from popups, and integrate with third-party services.</TextContainer>
+    <Text as="p">Track data from popups, and integrate with third-party services.</Text>
   </EmptyState>
 );
 
@@ -80,11 +76,7 @@ EmptyComponent.propTypes = {
   onAddItem: PropTypes.func
 };
 
-EmptyComponent.defaultProps = {
-  onAddItem: () => {}
-};
-
-const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
+const FormFieldsEditor = ({ formFields, onAddItem = () => {}, onRemoveItem = () => {} }) => {
   const handleAddItem = () => {
     onAddItem({
       name: '',
@@ -97,18 +89,16 @@ const FormFieldsEditor = ({ formFields, onAddItem, onRemoveItem }) => {
   }
 
   return (
-    <>
-      <Card.Section title="Form fields">
-        <FormLayout>
-          {formFields.map((formField, index) => (
-            <FormFieldEditor key={index} formField={formField} onRemoveItem={() => onRemoveItem(index)} />
-          ))}
-          <Button onClick={handleAddItem}>
-            <Text fontWeight="bold">Add another field</Text>
-          </Button>
-        </FormLayout>
-      </Card.Section>
-    </>
+    <BlockStack gap="400" padding="400">
+      <FormLayout>
+        {formFields.map((formField, index) => (
+          <FormFieldEditor key={index} formField={formField} onRemoveItem={() => onRemoveItem(index)} />
+        ))}
+        <Button onClick={handleAddItem}>
+          <Text fontWeight="bold">Add another field</Text>
+        </Button>
+      </FormLayout>
+    </BlockStack>
   );
 };
 
@@ -116,11 +106,6 @@ FormFieldsEditor.propTypes = {
   formFields: PropTypes.array.isRequired,
   onAddItem: PropTypes.func,
   onRemoveItem: PropTypes.func
-};
-
-FormFieldsEditor.defaultProps = {
-  onAddItem: () => {},
-  onRemoveItem: () => {}
 };
 
 export default FormFieldsEditor;

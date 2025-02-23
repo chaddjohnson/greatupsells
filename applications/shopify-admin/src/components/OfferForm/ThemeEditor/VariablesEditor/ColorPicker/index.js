@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Popover, Button, ColorPicker as ShopifyColorPicker, TextField, Stack, RangeSlider } from '@shopify/polaris';
+import {
+  Popover,
+  Button,
+  ColorPicker as ShopifyColorPicker,
+  TextField,
+  BlockStack,
+  InlineStack,
+  RangeSlider
+} from '@shopify/polaris';
 import styled from 'styled-components';
 import { valueIsHex, hexToRgb, normalize, hexToHsb, hsbToHex, sanitizeHexValue } from './utilities';
 
@@ -62,7 +70,7 @@ const ActivatorWrapper = styled.div`
   }
 `;
 
-const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
+const ColorPicker = ({ label, value, allowAlpha = false, onChange = () => {} }) => {
   const [normalizedValue, alphaValue] = useMemo(() => normalize(value), [value]);
   const alphaDisplayValue = useMemo(
     () => typeof alphaValue === 'number' && parseInt(Math.round(alphaValue * 100)),
@@ -143,26 +151,26 @@ const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
   }, [sanitizedValue, alphaValue]);
 
   return (
-    <Stack spacing="tight" vertical>
+    <BlockStack gap="200">
       <Popover
         active={active}
         activator={
           <ActivatorWrapper>
-            <Stack>
+            <InlineStack gap="100">
               <PreviewButton type="button" onClick={togglePopover}>
                 <ColorPreview value={hexValue} />
               </PreviewButton>
               <Button onClick={togglePopover} plain>
                 {label}
               </Button>
-            </Stack>
+            </InlineStack>
           </ActivatorWrapper>
         }
         preferredAlignment="left"
         sectioned
         onClose={togglePopover}
       >
-        <Stack spacing="tight" alignment="center" vertical>
+        <BlockStack gap="200" align="center">
           <ShopifyColorPicker color={hsbValue} onChange={handleHsbChange} />
           <HexColorTextWrapper onKeyDown={handleHexKeyPress}>
             <TextField
@@ -174,7 +182,7 @@ const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
               onBlur={handleHexBlur}
             />
           </HexColorTextWrapper>
-        </Stack>
+        </BlockStack>
       </Popover>
       {allowAlpha && (
         <RangeSlider
@@ -187,7 +195,7 @@ const ColorPicker = ({ label, value, allowAlpha, onChange }) => {
           suffix={`${alphaDisplayValue}%`}
         />
       )}
-    </Stack>
+    </BlockStack>
   );
 };
 
@@ -196,11 +204,6 @@ ColorPicker.propTypes = {
   value: PropTypes.string,
   allowAlpha: PropTypes.bool,
   onChange: PropTypes.func
-};
-
-ColorPicker.defaultProps = {
-  allowAlpha: false,
-  onChange: () => {}
 };
 
 export default ColorPicker;

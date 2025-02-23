@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Autocomplete, Tag, Stack } from '@shopify/polaris';
-import { SearchMinor } from '@shopify/polaris-icons';
+import { Icon, Autocomplete, Tag, BlockStack, InlineStack } from '@shopify/polaris';
+import { SearchIcon } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import countries from './countries.json';
 
@@ -21,7 +21,7 @@ const getCountryName = (countryCode) => {
   }
 };
 
-const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChange }) => {
+const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChange = () => {} }) => {
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
 
@@ -68,7 +68,7 @@ const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChang
     <Autocomplete.TextField
       label={label}
       placeholder={placeholder}
-      prefix={<Icon source={SearchMinor} color="base" />}
+      prefix={<Icon source={SearchIcon} tone="base" />}
       value={inputValue}
       error={error}
       onChange={handleChange}
@@ -76,15 +76,15 @@ const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChang
   );
 
   return (
-    <Stack vertical>
-      {selected?.length && (
-        <Stack>
+    <BlockStack gap="400">
+      {selected?.length > 0 && (
+        <InlineStack gap="200">
           {selected.map((value, index) => (
             <Tag key={index} onRemove={() => handleRemove(value)}>
               {getCountryName(value)}
             </Tag>
           ))}
-        </Stack>
+        </InlineStack>
       )}
       <Autocomplete
         allowMultiple
@@ -93,7 +93,7 @@ const CountryAutocomplete = ({ label, placeholder, selected = [], error, onChang
         onSelect={handleSelect}
         textField={textField}
       />
-    </Stack>
+    </BlockStack>
   );
 };
 
@@ -103,11 +103,6 @@ CountryAutocomplete.propTypes = {
   selected: PropTypes.array,
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.element]),
   onChange: PropTypes.func
-};
-
-CountryAutocomplete.defaultProps = {
-  selected: [],
-  onChange: () => {}
 };
 
 export default CountryAutocomplete;

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useAppBridge } from '@shopify/app-bridge-react';
 
 const DefaultLoadingComponent = () => <div>Loading...</div>;
 
@@ -13,24 +14,26 @@ const Loader = ({
   isLoading,
   isError,
   isEmpty,
-  loadingComponent: LoadingComponent,
-  errorComponent: ErrorComponent,
-  emptyStateComponent: EmptyStateComponent,
+  loadingComponent: LoadingComponent = DefaultLoadingComponent,
+  errorComponent: ErrorComponent = DefaultErrorComponent,
+  emptyStateComponent: EmptyStateComponent = DefaultEmptyStateComponent,
   children
 }) => {
+  const shopify = useAppBridge();
+
   useEffect(() => {
     if (isLoading) {
-      window.shopify.loading(true);
+      shopify.loading(true);
       return;
     }
 
     if (isError) {
-      window.shopify.loading(false);
+      shopify.loading(false);
       return;
     }
 
-    window.shopify.loading(false);
-  }, [isLoading, isError]);
+    shopify.loading(false);
+  }, [shopify, isLoading, isError]);
 
   if (isError) {
     return <ErrorComponent />;
@@ -56,12 +59,6 @@ Loader.propTypes = {
   errorComponent: PropTypes.elementType,
   emptyStateComponent: PropTypes.elementType,
   children: PropTypes.node
-};
-
-Loader.defaultProps = {
-  loadingComponent: DefaultLoadingComponent,
-  errorComponent: DefaultErrorComponent,
-  emptyStateComponent: DefaultEmptyStateComponent
 };
 
 export default Loader;

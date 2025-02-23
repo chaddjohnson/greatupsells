@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Stack, Checkbox } from '@shopify/polaris';
+import { Card, BlockStack, Text, Checkbox } from '@shopify/polaris';
 import CountryAutocomplete from './CountryAutocomplete';
 
-const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
+const OfferGeotargetingEditor = ({ geotargetingCountries, submitted = false }) => {
   const [enableGeotargeting, setEnableGeotargeting] = useState(geotargetingCountries.value.length > 0);
 
   const handleEnableGeotargeting = (checked) => {
@@ -15,8 +15,9 @@ const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
   };
 
   return (
-    <Card title="Geotargeting" sectioned>
-      <Stack vertical>
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Geotargeting</Text>
         <Checkbox
           label="Restrict offer to specific countries"
           checked={enableGeotargeting}
@@ -31,7 +32,7 @@ const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
             error={submitted && geotargetingCountries.error}
           />
         )}
-      </Stack>
+      </BlockStack>
     </Card>
   );
 };
@@ -39,10 +40,6 @@ const OfferGeotargetingEditor = ({ geotargetingCountries, submitted }) => {
 OfferGeotargetingEditor.propTypes = {
   geotargetingCountries: PropTypes.object.isRequired,
   submitted: PropTypes.bool
-};
-
-OfferGeotargetingEditor.defaultProps = {
-  submitted: false
 };
 
 export default OfferGeotargetingEditor;

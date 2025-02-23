@@ -20,12 +20,12 @@ const PageScrollOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [delayFinished, setDelayFinished] = useState(false);
@@ -209,13 +209,6 @@ PageScrollOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-PageScrollOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default PageScrollOffer;

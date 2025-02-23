@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ResourceList, TextField, Icon, Button } from '@shopify/polaris';
-import { ResourcePicker } from '@shopify/app-bridge-react';
-import { SearchMinor } from '@shopify/polaris-icons';
+import { useAppBridge } from '@shopify/app-bridge-react';
+import { SearchIcon } from '@shopify/polaris-icons';
 import styled from 'styled-components';
-import { flatten } from 'lodash';
 import ProductResourceListItem from './ProductResourceListItem';
 
 const ResourceListWrapper = styled.div`
@@ -24,34 +23,46 @@ const ResourceListWrapper = styled.div`
   }
 `;
 
-const formatSelectionItems = (value) => {
-  return flatten(
-    value.selection.map(({ id, title, handle, images, variants }) => ({
-      title,
-      handle,
-      imageUrl: images?.[0]?.originalSrc,
-      shopifyProductId: parseInt(id.split('/').reverse()[0]),
-      shopifyVariantIds: variants.map((variant) => parseInt(variant.id.split('/').reverse()[0]))
-    }))
-  );
+const formatSelectionItems = (selections) => {
+  return selections.map(({ id, title, handle, images, variants }) => ({
+    title,
+    handle,
+    imageUrl: images?.[0]?.originalSrc,
+    shopifyProductId: parseInt(id.split('/').reverse()[0]),
+    shopifyVariantIds: variants.map((variant) => parseInt(variant.id.split('/').reverse()[0]))
+  }));
 };
 
-const ProductResourceList = ({ label, items, onChange, onRemoveItem }) => {
-  const [productPickerOpen, setProductPickerOpen] = useState(false);
+const ProductResourceList = ({ label, items, onChange = () => {}, onRemoveItem = () => {} }) => {
+  const shopify = useAppBridge();
 
-  const handleOpenProductPicker = () => {
-    setProductPickerOpen(true);
-  };
+  const initialSelectionIds = useMemo(
+    () =>
+      items.map(({ shopifyProductId, shopifyVariantIds }) => ({
+        id: `gid://shopify/Product/${shopifyProductId}`,
+        variants: shopifyVariantIds.map((shopifyVariantId) => ({
+          id: `gid://shopify/ProductVariant/${shopifyVariantId}`
+        }))
+      })),
+    [items]
+  );
 
-  const handleCloseProductPicker = () => {
-    setProductPickerOpen(false);
-  };
+  const handleOpenProductPicker = async () => {
+    const selections = await shopify.resourcePicker({
+      type: 'product',
+      action: 'select',
+      multiple: true,
+      selectionIds: initialSelectionIds,
+      filter: {
+        draft: false,
+        archived: false,
+        variants: true
+      }
+    });
 
-  const handleChange = (value) => {
-    const formattedValue = formatSelectionItems(value);
-
-    onChange(formattedValue);
-    setProductPickerOpen(false);
+    if (selections) {
+      onChange(formatSelectionItems(selections));
+    }
   };
 
   const handleItemChange = (shopifyProductId, value) => {
@@ -66,24 +77,13 @@ const ProductResourceList = ({ label, items, onChange, onRemoveItem }) => {
     }
   };
 
-  const initialSelectionIds = useMemo(
-    () =>
-      items.map(({ shopifyProductId, shopifyVariantIds }) => ({
-        id: `gid://shopify/Product/${shopifyProductId}`,
-        variants: shopifyVariantIds.map((shopifyVariantId) => ({
-          id: `gid://shopify/ProductVariant/${shopifyVariantId}`
-        }))
-      })),
-    [items]
-  );
-
   return (
     <>
       <TextField
         label={label}
         labelHidden
         placeholder="Search products"
-        prefix={<Icon source={SearchMinor} />}
+        prefix={<Icon source={SearchIcon} />}
         connectedRight={<Button onClick={handleOpenProductPicker}>Browse</Button>}
         onChange={handleOpenProductPicker}
       />
@@ -103,18 +103,6 @@ const ProductResourceList = ({ label, items, onChange, onRemoveItem }) => {
           )}
         />
       </ResourceListWrapper>
-      <ResourcePicker
-        resourceType="Product"
-        actionVerb="select"
-        showVariants={true}
-        showArchived={false}
-        showDraft={false}
-        allowMultiple={true}
-        open={productPickerOpen}
-        initialSelectionIds={initialSelectionIds}
-        onSelection={handleChange}
-        onCancel={handleCloseProductPicker}
-      />
     </>
   );
 };
@@ -132,11 +120,6 @@ ProductResourceList.propTypes = {
   ).isRequired,
   onChange: PropTypes.func,
   onRemoveItem: PropTypes.func
-};
-
-ProductResourceList.defaultProps = {
-  onChange: () => {},
-  onRemoveItem: () => {}
 };
 
 export default ProductResourceList;

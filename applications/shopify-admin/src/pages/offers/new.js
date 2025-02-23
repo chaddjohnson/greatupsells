@@ -1,14 +1,11 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useRouter } from 'next/router';
 import {
   Page,
   Layout,
   Card,
-  TextContainer,
-  Breadcrumbs,
+  BlockStack,
   Banner,
-  Stack,
-  Modal,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -18,59 +15,65 @@ import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useTheme, useThemes, useToast } from '../../hooks';
 import { TitleBar, OfferForm } from '../../components';
 
-const PageTitleBar = memo(() => (
-  <TitleBar title="Create offer" primaryAction={null} breadcrumbs={[{ content: 'Offers', url: '/offers/' }]} />
-));
+const PageTitleBar = memo(() => {
+  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
+  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
 
-const loadingComponent = () => (
-  <>
-    <SkeletonPage secondaryActions={3}>
-      <PageTitleBar />
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <TextContainer>
+  return (
+    <TitleBar title="Create offer">
+      <a variant="breadcrumb" href={`/offers/${urlParams}`}>
+        Offers
+      </a>
+    </TitleBar>
+  );
+});
+
+const LoadingComponent = () => (
+  <SkeletonPage>
+    <Layout>
+      <Layout.Section>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={2} />
+          </BlockStack>
+        </Card>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={3} />
+          </BlockStack>
+        </Card>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={4} />
+          </BlockStack>
+        </Card>
+      </Layout.Section>
+      <Layout.Section>
+        <Card>
+          <BlockStack>
+            <BlockStack gap="200" padding="400">
               <SkeletonDisplayText size="small" />
               <SkeletonBodyText lines={2} />
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <TextContainer>
-              <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={3} />
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <TextContainer>
-              <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={4} />
-            </TextContainer>
-          </Card>
-        </Layout.Section>
-        <Layout.Section secondary>
-          <Card subdued>
-            <Card.Section>
-              <TextContainer>
-                <SkeletonDisplayText size="small" />
-                <SkeletonBodyText lines={2} />
-              </TextContainer>
-            </Card.Section>
-            <Card.Section>
-              <SkeletonBodyText lines={2} />
-            </Card.Section>
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
-  </>
+            </BlockStack>
+          </BlockStack>
+          <BlockStack>
+            <SkeletonBodyText lines={2} />
+          </BlockStack>
+        </Card>
+      </Layout.Section>
+    </Layout>
+  </SkeletonPage>
 );
 
-const errorComponent = () => (
+const ErrorComponent = () => (
   <Page fullWidth>
     <PageTitleBar />
     <Banner
       title="Unable to load new offer page"
-      status="critical"
+      tone="critical"
       action={{
         content: 'Try again',
         onAction: () => window.location.reload()
@@ -114,11 +117,10 @@ const initialOffer = {
 const NewOfferPage = () => {
   const router = useRouter();
   const { showSuccessToast, showErrorToast } = useToast();
-  const { shop, shopLoaded, shopError, consentToDataAccess } = useShop();
+  const { shop, shopLoaded, shopError } = useShop();
   const { saveOffer } = useOffer();
   const { saveTheme } = useTheme();
   const { themes, themesLoaded, themesError } = useThemes();
-  const [consentingToDataAccess, setConsentingToDataAccess] = useState(false);
 
   // Use a copy of the first theme as the default theme. Remove _id to ensure
   // the copy will have its own ID when saved.
@@ -169,23 +171,11 @@ const NewOfferPage = () => {
     router.push('/offers/');
   };
 
-  const handleConsentToDataAccess = async () => {
-    setConsentingToDataAccess(true);
-    await consentToDataAccess();
-  };
-
   initialOffer.maximumOfferedProductQuantity = offerTheme.maximumOfferedProductQuantity || 3;
 
   return (
-    <Loader isLoading={!loaded} isError={error} loadingComponent={loadingComponent} errorComponent={errorComponent}>
-      <Page
-        title={
-          <Stack alignment="center">
-            <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
-            <span>Create offer</span>
-          </Stack>
-        }
-      >
+    <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
+      <Page title="New Offer">
         <PageTitleBar />
         {loaded && !error && (
           <OfferForm
@@ -201,22 +191,6 @@ const NewOfferPage = () => {
           />
         )}
       </Page>
-      <Modal
-        open={shop && !shop.consentedToDataAccessAt}
-        title="Data access"
-        primaryAction={{
-          content: 'I understand',
-          onAction: handleConsentToDataAccess,
-          loading: consentingToDataAccess
-        }}
-        onClose={handleConsentToDataAccess}
-      >
-        <Modal.Section>
-          <TextContainer>
-            <p>Please note that this app does not access, processes, or store customer personal data.</p>
-          </TextContainer>
-        </Modal.Section>
-      </Modal>
     </Loader>
   );
 };

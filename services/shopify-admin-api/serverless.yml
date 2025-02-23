@@ -106,15 +106,6 @@ functions:
           method: post
           authorizer:
             name: authorizer
-  consentToDataAccess:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/consentToDataAccess.handler
-    events:
-      - httpApi:
-          path: /shop/data-access-consent
-          method: post
-          authorizer:
-            name: authorizer
   createOffer:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createOffer.handler

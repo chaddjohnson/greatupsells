@@ -16,12 +16,12 @@ const ExitIntentOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -241,13 +241,6 @@ ExitIntentOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ExitIntentOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default ExitIntentOffer;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, ButtonGroup, Button, Stack } from '@shopify/polaris';
-import { DesktopMajor, MobileMajor } from '@shopify/polaris-icons';
+import { Card, ButtonGroup, Button, BlockStack, InlineGrid, Text } from '@shopify/polaris';
+import { DesktopIcon, MobileIcon } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 import ThemeSelector from './ThemeSelector';
 import VariablesEditor from './VariablesEditor';
@@ -16,16 +16,16 @@ const DeviceToggle = styled.div`
 
 const ThemeEditor = ({
   strategy,
-  theme,
-  themes,
-  offerThemes,
-  displayType,
+  theme = {},
+  themes = [],
+  offerThemes = [],
+  displayType = 'desktop',
   previewElement,
-  onPreview,
-  onChange,
-  onThemeSelect,
-  onOfferThemeSelect,
-  onDisplayTypeChange
+  onPreview = () => {},
+  onChange = () => {},
+  onThemeSelect = () => {},
+  onOfferThemeSelect = () => {},
+  onDisplayTypeChange = () => {}
 }) => {
   const [themeSelectorOpen, setThemeSelectorOpen] = useState(false);
   const [variablesEditorOpen, setVariablesEditorOpen] = useState(false);
@@ -46,44 +46,37 @@ const ThemeEditor = ({
   return (
     <>
       <Card>
-        <Card.Header title="Theme">
-          <ButtonGroup>
-            <Button onClick={() => setThemeSelectorOpen(true)}>Select theme</Button>
-            <Button primary onClick={() => setVariablesEditorOpen(true)}>
-              Customize
-            </Button>
-          </ButtonGroup>
-        </Card.Header>
-        <Card.Section>
-          <Stack vertical spacing="tight">
-            <DeviceToggle>
-              <ButtonGroup segmented>
-                <Button
-                  icon={DesktopMajor}
-                  outline
-                  pressed={displayType === 'desktop'}
-                  onClick={() => handleDisplayTypeChange('desktop')}
-                >
-                  Desktop
-                </Button>
-                <Button
-                  icon={MobileMajor}
-                  outline
-                  pressed={displayType === 'mobile'}
-                  onClick={() => handleDisplayTypeChange('mobile')}
-                >
-                  Mobile
-                </Button>
-              </ButtonGroup>
-            </DeviceToggle>
-            {previewElement}
-            {!isInline && (
-              <Button fullWidth onClick={onPreview}>
-                Preview full size
+        <BlockStack gap="200" padding="400">
+          <InlineGrid columns="1fr auto">
+            <Text variant="headingMd">Theme</Text>
+            <ButtonGroup>
+              <Button onClick={() => setThemeSelectorOpen(true)}>Select theme</Button>
+              <Button variant="primary" onClick={() => setVariablesEditorOpen(true)}>
+                Customize
               </Button>
-            )}
-          </Stack>
-        </Card.Section>
+            </ButtonGroup>
+          </InlineGrid>
+          <DeviceToggle>
+            <ButtonGroup variant="segmented">
+              <Button
+                icon={DesktopIcon}
+                pressed={displayType === 'desktop'}
+                onClick={() => handleDisplayTypeChange('desktop')}
+              >
+                Desktop
+              </Button>
+              <Button icon={MobileIcon} pressed={displayType === 'mobile'} onClick={() => handleDisplayTypeChange('mobile')}>
+                Mobile
+              </Button>
+            </ButtonGroup>
+          </DeviceToggle>
+          {previewElement}
+          {!isInline && (
+            <Button fullWidth onClick={onPreview}>
+              Preview full size
+            </Button>
+          )}
+        </BlockStack>
       </Card>
       <ThemeSelector
         open={themeSelectorOpen}
@@ -118,18 +111,6 @@ ThemeEditor.propTypes = {
   onThemeSelect: PropTypes.func,
   onOfferThemeSelect: PropTypes.func,
   onDisplayTypeChange: PropTypes.func
-};
-
-ThemeEditor.defaultProps = {
-  theme: {},
-  themes: [],
-  offerThemes: [],
-  displayType: 'desktop',
-  onPreview: () => {},
-  onChange: () => {},
-  onThemeSelect: () => {},
-  onOfferThemeSelect: () => {},
-  onDisplayTypeChange: () => {}
 };
 
 export default ThemeEditor;

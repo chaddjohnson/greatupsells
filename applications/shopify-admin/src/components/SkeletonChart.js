@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Stack, SkeletonDisplayText, SkeletonBodyText, SkeletonThumbnail } from '@shopify/polaris';
+import { BlockStack, SkeletonDisplayText, SkeletonBodyText, SkeletonThumbnail } from '@shopify/polaris';
 
 const SkeletonThumbnailWrapper = styled.div`
   .Polaris-SkeletonThumbnail {
@@ -9,15 +9,13 @@ const SkeletonThumbnailWrapper = styled.div`
 `;
 
 const SkeletonChart = () => (
-  <>
-    <Stack vertical>
-      <SkeletonDisplayText size="small" />
-      <SkeletonBodyText lines={2} />
-      <SkeletonThumbnailWrapper>
-        <SkeletonThumbnail />
-      </SkeletonThumbnailWrapper>
-    </Stack>
-  </>
+  <BlockStack>
+    <SkeletonDisplayText size="small" />
+    <SkeletonBodyText lines={2} />
+    <SkeletonThumbnailWrapper>
+      <SkeletonThumbnail />
+    </SkeletonThumbnailWrapper>
+  </BlockStack>
 );
 
 export default SkeletonChart;

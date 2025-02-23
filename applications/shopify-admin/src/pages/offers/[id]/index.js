@@ -6,73 +6,83 @@ import {
   Page,
   Layout,
   Card,
-  TextContainer,
-  Breadcrumbs,
+  BlockStack,
   Banner,
-  Stack,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
 } from '@shopify/polaris';
-import { ExternalMinor, DuplicateMinor, CircleDisableMinor, CircleTickOutlineMinor } from '@shopify/polaris-icons';
+import {
+  ChartVerticalFilledIcon,
+  ExternalSmallIcon,
+  DuplicateIcon,
+  DisabledIcon,
+  StatusActiveIcon
+} from '@shopify/polaris-icons';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useTheme, useThemes, useOfferThemes, useCollection, useProduct, useToast } from '../../../hooks';
 
 import { TitleBar, OfferForm } from '../../../components';
 
-const PageTitleBar = memo(() => (
-  <TitleBar title="Edit offer" primaryAction={null} breadcrumbs={[{ content: 'Offers', url: '/offers/' }]} />
-));
+const PageTitleBar = memo(() => {
+  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
+  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
 
-const loadingComponent = () => (
-  <>
-    <SkeletonPage secondaryActions={3}>
-      <PageTitleBar />
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <TextContainer>
+  return (
+    <TitleBar title="Edit offer">
+      <a variant="breadcrumb" href={`/offers/${urlParams}`}>
+        Offers
+      </a>
+    </TitleBar>
+  );
+});
+
+const LoadingComponent = () => (
+  <SkeletonPage>
+    <Layout>
+      <Layout.Section>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={2} />
+          </BlockStack>
+        </Card>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={3} />
+          </BlockStack>
+        </Card>
+        <Card>
+          <BlockStack gap="200" padding="400">
+            <SkeletonDisplayText size="small" />
+            <SkeletonBodyText lines={4} />
+          </BlockStack>
+        </Card>
+      </Layout.Section>
+      <Layout.Section>
+        <Card>
+          <BlockStack>
+            <BlockStack gap="200" padding="400">
               <SkeletonDisplayText size="small" />
               <SkeletonBodyText lines={2} />
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <TextContainer>
-              <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={3} />
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <TextContainer>
-              <SkeletonDisplayText size="small" />
-              <SkeletonBodyText lines={4} />
-            </TextContainer>
-          </Card>
-        </Layout.Section>
-        <Layout.Section secondary>
-          <Card subdued>
-            <Card.Section>
-              <TextContainer>
-                <SkeletonDisplayText size="small" />
-                <SkeletonBodyText lines={2} />
-              </TextContainer>
-            </Card.Section>
-            <Card.Section>
-              <SkeletonBodyText lines={2} />
-            </Card.Section>
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
-  </>
+            </BlockStack>
+          </BlockStack>
+          <BlockStack>
+            <SkeletonBodyText lines={2} />
+          </BlockStack>
+        </Card>
+      </Layout.Section>
+    </Layout>
+  </SkeletonPage>
 );
 
-const errorComponent = () => (
+const ErrorComponent = () => (
   <Page fullWidth>
     <PageTitleBar />
     <Banner
       title="Unable to load offer"
-      status="critical"
+      tone="critical"
       action={{
         content: 'Try again',
         onAction: () => window.location.reload()
@@ -259,38 +269,36 @@ const OfferEditPage = () => {
 
   const secondaryActions = [
     {
+      content: 'Analytics',
+      accessibilityLabel: 'Analytics',
+      icon: ChartVerticalFilledIcon,
+      url: `/offers/${offer?._id}/analytics/`
+    },
+    {
       content: 'Test',
       accessibilityLabel: 'Test this offer',
-      icon: ExternalMinor,
+      icon: ExternalSmallIcon,
       disabled: !isTestable,
       onAction: handleTest
     },
     {
       content: 'Duplicate',
       accessibilityLabel: 'Duplicate this offer',
-      icon: DuplicateMinor,
+      icon: DuplicateIcon,
       onAction: handleDuplicate
     },
     {
       content: offer?.enabled ? 'Disable' : 'Enable',
       accessibilityLabel: offer?.enabled ? 'Disable this offer' : 'Enable this offer',
-      icon: offer?.enabled ? CircleDisableMinor : CircleTickOutlineMinor,
+      icon: offer?.enabled ? DisabledIcon : StatusActiveIcon,
       onAction: handleToggleEnabled
     }
   ];
 
   return (
     <>
-      <Loader isLoading={!loaded} isError={error} loadingComponent={loadingComponent} errorComponent={errorComponent}>
-        <Page
-          title={
-            <Stack alignment="center">
-              <Breadcrumbs breadcrumbs={[{ url: '/offers' }]} />
-              <span>{offer?.name}</span>
-            </Stack>
-          }
-          secondaryActions={secondaryActions}
-        >
+      <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
+        <Page title={offer?.name} secondaryActions={secondaryActions}>
           <PageTitleBar />
           {loaded && !error && (
             <OfferForm

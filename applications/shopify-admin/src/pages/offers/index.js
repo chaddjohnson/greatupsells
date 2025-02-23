@@ -1,24 +1,30 @@
 import { memo, useState } from 'react';
-import { Page, Banner, Layout, Card, SkeletonPage, SkeletonBodyText, EmptyState } from '@shopify/polaris';
+import { Page, Banner, Layout, Card, BlockStack, SkeletonPage, SkeletonBodyText, EmptyState } from '@shopify/polaris';
 import { Loader } from '@greatupsells/react-components';
 import { useOffers } from '../../hooks';
 import { TitleBar, OfferList } from '../../components';
 
-const PageTitleBar = memo(() => <TitleBar title="Offers" />);
+const PageTitleBar = memo(() => {
+  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
+  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
+
+  return (
+    <TitleBar title="Offers">
+      <a variant="breadcrumb" href={`/${urlParams}`}>
+        Dashboard
+      </a>
+    </TitleBar>
+  );
+});
 
 const LoadingComponent = () => (
-  <>
-    <SkeletonPage title="Offers" fullWidth>
-      <PageTitleBar />
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <SkeletonBodyText lines={3} />
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
-  </>
+  <SkeletonPage>
+    <BlockStack gap="400" padding="400">
+      <Card>
+        <SkeletonBodyText lines={3} />
+      </Card>
+    </BlockStack>
+  </SkeletonPage>
 );
 
 const EmptyComponent = () => (
@@ -36,16 +42,16 @@ const EmptyComponent = () => (
 
 const OffersPage = () => {
   const [filters, setFilters] = useState({});
-  const { offers, offersLoaded, offersError } = useOffers(filters);
+  const { offers, offersLoading, offersLoaded, offersError } = useOffers(filters);
 
   const hasFilters = Object.keys(filters).length > 0;
 
   const ErrorComponent = memo(() => (
-    <Page title="Offers" fullWidth>
+    <Page fullWidth>
       <PageTitleBar />
       <Banner
         title="Unable to load offers"
-        status="critical"
+        tone="critical"
         action={{
           content: 'Try again',
           onAction: () => window.location.reload()
@@ -65,11 +71,11 @@ const OffersPage = () => {
       errorComponent={ErrorComponent}
       emptyStateComponent={EmptyComponent}
     >
-      <Page title="Offers" fullWidth>
+      <Page fullWidth>
         <PageTitleBar />
         <Layout>
           <Layout.Section>
-            <OfferList offers={offers} filters={filters} onFilter={setFilters} />
+            <OfferList offers={offers} loading={offersLoading} filters={filters} onFilter={setFilters} />
           </Layout.Section>
         </Layout>
       </Page>

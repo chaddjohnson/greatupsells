@@ -1,62 +1,22 @@
 import React from 'react';
 import { TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
+import { useRouter } from 'next/router';
 
-const TitleBar = (props) => {
+const TitleBar = ({ children, ...props }) => {
+  const router = useRouter();
+
   // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
   const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
 
-  const primaryAction = {
-    content: 'Create offer',
-    url: `/offers/new/${urlParams}`
-  };
-  const secondaryActions = [
-    {
-      content: 'Dashboard',
-      url: `/${urlParams}`
-    },
-    {
-      content: 'Offers',
-      url: `/offers/${urlParams}`
-    },
-    {
-      content: 'Cart drawer',
-      url: `/cart`
-    }
-  ];
-  // const actionGroups = [
-  //   {
-  //     title: 'Help',
-  //     actions: [
-  //       {
-  //         content: 'Support',
-  //         onAction: () => {}
-  //       },
-  //       {
-  //         content: 'Help Center',
-  //         url: 'https://help.domain.com',
-  //         external: true
-  //       },
-  //       {
-  //         content: 'Tutorials',
-  //         url: 'https://help.domain.com/tutorials',
-  //         external: true
-  //       },
-  //       {
-  //         content: 'FAQ',
-  //         url: 'https://help.domain.com/faq',
-  //         external: true
-  //       }
-  //     ]
-  //   }
-  // ];
-
   return (
-    <ShopifyTitleBar
-      primaryAction={primaryAction}
-      secondaryActions={secondaryActions}
-      // actionGroups={actionGroups}
-      {...props}
-    />
+    <ShopifyTitleBar {...props}>
+      {children}
+      <button variant="primary" onClick={() => router.push(`/offers/new/${urlParams}`)}>
+        Create offer
+      </button>
+      <button onClick={() => router.push(`/${urlParams}`)}>Dashboard</button>
+      <button onClick={() => router.push(`/offers/${urlParams}`)}>Offers</button>
+    </ShopifyTitleBar>
   );
 };
 

@@ -8,20 +8,19 @@ import {
   Button,
   Icon,
   EmptyState,
-  TextContainer,
   Scrollable,
-  Stack
+  InlineStack
 } from '@shopify/polaris';
 import {
-  MobileCancelMajor,
-  ChevronRightMinor,
-  ProductsMajor,
-  TextBlockMajor,
-  ColorsMajor,
-  // TypeMajor,
-  SettingsMajor,
-  // CodeMajor,
-  ArrowLeftMinor
+  MobileIcon,
+  ChevronRightIcon,
+  ProductIcon,
+  TextTitleIcon,
+  ColorIcon,
+  // TextFontIcon,
+  SettingsFilledIcon,
+  // CodeIcon,
+  ArrowLeftIcon
 } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 import ContentEditor from './ContentEditor';
@@ -35,33 +34,33 @@ const sections = [
     id: 'content',
     name: 'Content',
     variableTypes: ['TEXT'],
-    icon: TextBlockMajor
+    icon: TextTitleIcon
   },
   {
     id: 'colors',
     name: 'Colors',
     variableTypes: ['COLOR'],
-    icon: ColorsMajor
+    icon: ColorIcon
   },
   // {
   //   id: 'typography',
   //   name: 'Typography',
   //   variableTypes: ['FONT', 'FONTSIZE'],
-  //   icon: TypeMajor
+  //   icon: TextFontIcon
   // },
   {
     id: 'options',
     name: 'Options',
     variableTypes: ['OPTION'],
-    icon: SettingsMajor
+    icon: SettingsFilledIcon
   },
   {
     id: 'metadata',
     name: 'Metadata',
     variableTypes: [],
-    icon: ProductsMajor
+    icon: ProductIcon
   }
-  // { id: 'code', name: 'Code', icon: CodeMajor }
+  // { id: 'code', name: 'Code', icon: CodeIcon }
 ];
 
 const InnerWrapper = styled.div`
@@ -98,11 +97,11 @@ const ResourceListWrapper = styled.span`
 
 const EmptyComponent = () => (
   <EmptyState heading="No customization options">
-    <TextContainer>No customization options are available.</TextContainer>
+    <Text as="p">No customization options are available.</Text>
   </EmptyState>
 );
 
-const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
+const VariablesEditor = ({ open = false, theme = { variables: [] }, strategy, onChange = () => {}, onClose = () => {} }) => {
   const { variables } = theme;
 
   const [selectedSection, setSelectedSection] = useState(null);
@@ -136,13 +135,11 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
     <Sheet open={open} onClose={onClose} accessibilityLabel="Edit theme">
       <InnerWrapper>
         <HeaderWrapper>
-          <Stack alignment="center">
-            {selectedSection && <Button outline icon={ArrowLeftMinor} onClick={() => setSelectedSection(null)} />}
-            <Stack.Item fill>
-              <Text variant="headingLg">{selectedSection ? selectedSection.name : 'Theme settings'}</Text>
-            </Stack.Item>
-            <Button accessibilityLabel="Cancel" icon={MobileCancelMajor} onClick={onClose} plain />
-          </Stack>
+          <InlineStack align="center" gap="200">
+            {selectedSection && <Button icon={ArrowLeftIcon} onClick={() => setSelectedSection(null)} />}
+            <Text variant="headingLg">{selectedSection ? selectedSection.name : 'Theme settings'}</Text>
+            <Button variant="plain" accessibilityLabel="Cancel" icon={MobileIcon} onClick={onClose} />
+          </InlineStack>
         </HeaderWrapper>
         {!selectedSection && (
           <ResourceListWrapper>
@@ -157,10 +154,10 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
                   verticalAlignment="center"
                   onClick={() => setSelectedSection(section)}
                 >
-                  <Stack alignment="center">
-                    <Stack.Item fill>{section.name}</Stack.Item>
-                    <Button icon={ChevronRightMinor} plain onClick={() => setSelectedSection(section)} />
-                  </Stack>
+                  <InlineStack align="center" gap="200">
+                    <Text>{section.name}</Text>
+                    <Button variant="plain" icon={ChevronRightIcon} onClick={() => setSelectedSection(section)} />
+                  </InlineStack>
                 </ResourceItem>
               )}
             />
@@ -175,13 +172,16 @@ const VariablesEditor = ({ open, theme, strategy, onChange, onClose }) => {
               {sectionVariables?.length > 0 && selectedSection.id === 'colors' && (
                 <ColorEditor variables={sectionVariables} onChange={handleVariableChange} />
               )}
-              {/* {sectionVariables?.length > 0 &&
+              {/*
+              {sectionVariables?.length > 0 &&
                 selectedSection.id === 'typography' && (
                   <FontEditor
                     variables={sectionVariables}
                     onChange={handleVariableChange}
                   />
-                )} */}
+                )
+              }
+              */}
               {sectionVariables?.length > 0 && selectedSection.id === 'options' && (
                 <OptionsEditor variables={sectionVariables} onChange={handleVariableChange} />
               )}
@@ -201,15 +201,6 @@ VariablesEditor.propTypes = {
   strategy: PropTypes.string,
   onChange: PropTypes.func,
   onClose: PropTypes.func
-};
-
-VariablesEditor.defaultProps = {
-  open: false,
-  theme: {
-    variables: []
-  },
-  onChange: () => {},
-  onClose: () => {}
 };
 
 export default VariablesEditor;

@@ -17,12 +17,12 @@ const LostBrowserFocusOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -184,13 +184,6 @@ LostBrowserFocusOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-LostBrowserFocusOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default LostBrowserFocusOffer;

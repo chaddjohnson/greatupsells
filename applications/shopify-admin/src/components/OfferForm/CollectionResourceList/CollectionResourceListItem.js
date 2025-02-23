@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Thumbnail, ResourceItem, Button, TextContainer, Stack } from '@shopify/polaris';
-import { CancelSmallMinor } from '@shopify/polaris-icons';
+import { Thumbnail, ResourceItem, Button, Text, InlineStack, BlockStack } from '@shopify/polaris';
+import { XCircleIcon } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 
 const RemoveButtonWrapper = styled.span`
@@ -16,23 +16,21 @@ const RemoveButtonWrapper = styled.span`
   }
 `;
 
-const CollectionResourceListItem = ({ title, imageUrl, shopifyCollectionId, onRemoveItem }) => {
+const CollectionResourceListItem = ({ title, imageUrl, shopifyCollectionId, onRemoveItem = () => {} }) => {
   const handleRemoveItem = () => {
     onRemoveItem(shopifyCollectionId);
   };
 
   return (
     <ResourceItem name={title} media={<Thumbnail source={imageUrl} alt={title} size="small" />} verticalAlignment="center">
-      <Stack distribution="equalSpacing" wrap={false}>
-        <Stack.Item fill>
-          <Stack.Item>
-            <TextContainer>{title}</TextContainer>
-          </Stack.Item>
-        </Stack.Item>
+      <InlineStack align="space-between" wrap={false}>
+        <BlockStack>
+          <Text>{title}</Text>
+        </BlockStack>
         <RemoveButtonWrapper>
-          <Button icon={CancelSmallMinor} plain onClick={handleRemoveItem} />
+          <Button variant="plain" icon={XCircleIcon} onClick={handleRemoveItem} />
         </RemoveButtonWrapper>
-      </Stack>
+      </InlineStack>
     </ResourceItem>
   );
 };
@@ -42,10 +40,6 @@ CollectionResourceListItem.propTypes = {
   imageUrl: PropTypes.string.isRequired,
   shopifyCollectionId: PropTypes.number.isRequired,
   onRemoveItem: PropTypes.func
-};
-
-CollectionResourceListItem.defaultProps = {
-  onRemoveItem: () => {}
 };
 
 export default CollectionResourceListItem;

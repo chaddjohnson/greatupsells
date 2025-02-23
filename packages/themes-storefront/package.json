@@ -9,7 +9,7 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@shopify/post-purchase-ui-extensions-react": "^0.13.3",
+    "@shopify/post-purchase-ui-extensions-react": "^0.13.5",
     "@shopify/post-purchase-ui-react": "^0.0.3",
     "compression-webpack-plugin": "^9.0.0"
   },

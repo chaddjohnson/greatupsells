@@ -39,9 +39,9 @@ const StyledFrame = styled(Frame)`
 const OfferPopup = ({
   className,
   contextRef,
-  open,
-  designMode,
-  designModeZoom,
+  open = false,
+  designMode = false,
+  designModeZoom = 1,
   forceDisplayType,
   theme,
   ThemeComponent,
@@ -50,15 +50,15 @@ const OfferPopup = ({
   locale,
   countryCode,
   currency,
-  triggerProduct,
-  offeredProducts,
-  shopifyCartItems,
+  triggerProduct = {},
+  offeredProducts = [],
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  onAddProducts,
-  onReplaceProduct,
-  onClose,
-  onClick
+  onAddProducts = () => {},
+  onReplaceProduct = () => {},
+  onClose = () => {},
+  onClick = () => {}
 }) => {
   const [frameRef, setFrameRef] = useState(null);
   const [modalRef, setModalRef] = useState(null);
@@ -292,18 +292,6 @@ OfferPopup.propTypes = {
   onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,
   onClick: PropTypes.func
-};
-
-OfferPopup.defaultProps = {
-  open: false,
-  designMode: false,
-  designModeZoom: 1,
-  triggerProduct: {},
-  offeredProducts: [],
-  shopifyCartItems: [],
-  onAddProducts: () => {},
-  onReplaceProduct: () => {},
-  onClose: () => {}
 };
 
 export default OfferPopup;

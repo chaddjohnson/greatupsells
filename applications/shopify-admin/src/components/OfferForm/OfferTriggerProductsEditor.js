@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, ChoiceList, InlineError } from '@shopify/polaris';
+import {
+  Card,
+  FormLayout,
+  TextField,
+  ChoiceList,
+  BlockStack,
+  Text,
+  Divider,
+  Bleed,
+  Box,
+  InlineError
+} from '@shopify/polaris';
 import styled from 'styled-components';
 import { useCurrency } from '@greatupsells/react-hooks';
 import ProductResourceList from './ProductResourceList';
@@ -102,8 +113,9 @@ const OfferTriggerProductsEditor = ({
 
   return (
     <>
-      <Card title={`Cart trigger products${isCrossSellStrategy ? ' and collections' : ''}`}>
-        <Card.Section>
+      <Card>
+        <BlockStack gap="400" padding="400">
+          <Text variant="headingMd">Cart trigger products{isCrossSellStrategy ? ' and collections' : ''}</Text>
           <FormLayout>
             {isCrossSellStrategy && (
               <ChoiceList
@@ -131,73 +143,74 @@ const OfferTriggerProductsEditor = ({
               />
             )}
             {appliesTo === 'PRODUCTS' && (
-              <>
-                <ProductResourceList
-                  label="Trigger products"
-                  items={triggerProducts.value}
-                  onChange={handleProductSelection}
-                  onRemoveItem={removeProduct}
-                />
-              </>
+              <ProductResourceList
+                label="Trigger products"
+                items={triggerProducts.value}
+                onChange={handleProductSelection}
+                onRemoveItem={removeProduct}
+              />
             )}
             {appliesTo === 'COLLECTIONS' && (
-              <>
-                <CollectionResourceList
-                  label="Trigger collections"
-                  items={triggerCollections.value}
-                  onChange={handleCollectionSelection}
-                  onRemoveItem={removeCollection}
-                />
-              </>
+              <CollectionResourceList
+                label="Trigger collections"
+                items={triggerCollections.value}
+                onChange={handleCollectionSelection}
+                onRemoveItem={removeCollection}
+              />
             )}
             {submitted && triggerProducts.error && <InlineError message={triggerProducts.error} fieldID="triggerProducts" />}
+            <Bleed marginBlockEnd="400" marginInline="400">
+              <Divider />
+              <Box padding="400" paddingBlockEnd="500">
+                <BlockStack gap="400" padding="400">
+                  <Text variant="headingMd">Minimum cart requirements</Text>
+                  <FormLayout>
+                    <ChoiceList
+                      choices={[
+                        { label: 'None', value: 'NONE' },
+                        {
+                          label: `Minimum purchase amount (${currency})`,
+                          value: 'AMOUNT',
+                          renderChildren: (isSelected) =>
+                            isSelected && (
+                              <MinimumRequiredAmountWrapper>
+                                <TextField
+                                  inputMode="numeric"
+                                  prefix={currencySymbol}
+                                  placeholder="0.00"
+                                  helpText="Amount before taxes and shipping."
+                                  {...minimumRequiredAmount}
+                                  error={submitted && minimumRequiredAmount.error}
+                                />
+                              </MinimumRequiredAmountWrapper>
+                            )
+                        },
+                        {
+                          label: 'Minimum quantity of items',
+                          value: 'QUANTITY',
+                          renderChildren: (isSelected) =>
+                            isSelected && (
+                              <MinimumRequiredAmountWrapper>
+                                <TextField
+                                  type="number"
+                                  inputMode="numeric"
+                                  min={1}
+                                  {...minimumRequiredAmount}
+                                  error={submitted && minimumRequiredAmount.error}
+                                />
+                              </MinimumRequiredAmountWrapper>
+                            )
+                        }
+                      ]}
+                      selected={[minimumRequirement.value]}
+                      onChange={([value]) => handleMinimumRequirementChange(value)}
+                    />
+                  </FormLayout>
+                </BlockStack>
+              </Box>
+            </Bleed>
           </FormLayout>
-        </Card.Section>
-        <Card.Section title="Minimum cart requirements">
-          <FormLayout>
-            <ChoiceList
-              choices={[
-                {
-                  label: 'None',
-                  value: 'NONE'
-                },
-                {
-                  label: `Minimum purchase amount (${currency})`,
-                  value: 'AMOUNT',
-                  renderChildren: (isSelected) =>
-                    isSelected && (
-                      <MinimumRequiredAmountWrapper>
-                        <TextField
-                          inputMode="numeric"
-                          prefix={currencySymbol}
-                          placeholder="0.00"
-                          helpText="Amount before taxes and shipping."
-                          {...minimumRequiredAmount}
-                          error={submitted && minimumRequiredAmount.error}
-                        />
-                      </MinimumRequiredAmountWrapper>
-                    )
-                },
-                {
-                  label: 'Minimum quantity of items',
-                  value: 'QUANTITY',
-                  renderChildren: (isSelected) =>
-                    isSelected && (
-                      <MinimumRequiredAmountWrapper>
-                        <TextField
-                          inputMode="numeric"
-                          {...minimumRequiredAmount}
-                          error={submitted && minimumRequiredAmount.error}
-                        />
-                      </MinimumRequiredAmountWrapper>
-                    )
-                }
-              ]}
-              selected={[minimumRequirement.value]}
-              onChange={([value]) => handleMinimumRequirementChange(value)}
-            />
-          </FormLayout>
-        </Card.Section>
+        </BlockStack>
       </Card>
     </>
   );

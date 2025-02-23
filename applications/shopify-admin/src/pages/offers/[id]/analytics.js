@@ -1,70 +1,67 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { Page, Layout, Card, Stack, Text, Banner, SkeletonPage, SkeletonBodyText } from '@shopify/polaris';
+import { Page, Card, BlockStack, InlineStack, Grid, Text, Banner, SkeletonPage, SkeletonBodyText } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency, useDateTime, useInterval } from '@greatupsells/react-hooks';
-
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
 import { TitleBar, LineChart, SkeletonChart } from '../../../components';
 
-const PageTitleBar = memo(({ offer }) => (
-  <TitleBar
-    title="Analytics"
-    breadcrumbs={[
-      { content: 'Offers', url: '/offers/' },
-      offer && {
-        content: offer?.name,
-        url: `/offers/${offer?._id}/`
-      }
-    ].filter(Boolean)}
-  />
-));
+const PageTitleBar = memo(({ offer }) => {
+  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
+  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
 
-const loadingComponent = () => (
-  <>
-    <SkeletonPage title="Analytics for offer" fullWidth>
-      <PageTitleBar />
-      <Stack vertical>
-        <Text as="h3" color="subdued" fontWeight="regular" variant="heading2xl">
-          Here&rsquo;s a summary of how your offer is performing
-        </Text>
-        <Layout>
-          <Layout.Section fullWidth>
-            <Card sectioned>
-              <SkeletonBodyText lines={3} />
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card sectioned>
-              <SkeletonChart />
-            </Card>
-            <Card sectioned>
-              <SkeletonChart />
-            </Card>
-            <Card sectioned>
-              <SkeletonChart />
-            </Card>
-          </Layout.Section>
-          <Layout.Section oneHalf>
-            <Card sectioned>
-              <SkeletonChart />
-            </Card>
-            <Card sectioned>
-              <SkeletonChart />
-            </Card>
-          </Layout.Section>
-        </Layout>
-      </Stack>
-    </SkeletonPage>
-  </>
+  return (
+    <TitleBar title="Offer analytics">
+      <a variant="breadcrumb" href={`/offers/${offer._id}/${urlParams}`}>
+        {offer.name}
+      </a>
+    </TitleBar>
+  );
+});
+
+const LoadingComponent = () => (
+  <SkeletonPage fullWidth>
+    <BlockStack gap="400">
+      <Card>
+        <SkeletonBodyText lines={3} />
+      </Card>
+      <Grid>
+        <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+          <Card>
+            <SkeletonChart />
+          </Card>
+        </Grid.Cell>
+        <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+          <Card>
+            <SkeletonChart />
+          </Card>
+        </Grid.Cell>
+        <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+          <Card>
+            <SkeletonChart />
+          </Card>
+        </Grid.Cell>
+        <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+          <Card>
+            <SkeletonChart />
+          </Card>
+        </Grid.Cell>
+        <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+          <Card>
+            <SkeletonChart />
+          </Card>
+        </Grid.Cell>
+      </Grid>
+    </BlockStack>
+  </SkeletonPage>
 );
 
-const errorComponent = memo(() => (
+const ErrorComponent = memo(() => (
   <Page fullWidth>
     <PageTitleBar />
     <Banner
       title="Unable to load analytics"
-      status="critical"
+      tone="critical"
       action={{
         content: 'Try again',
         onAction: () => window.location.reload()
@@ -141,124 +138,103 @@ const OfferAnalyticsPage = () => {
     <Loader
       isLoading={!offerAnalyticsLoaded}
       isError={!!offerAnalyticsError}
-      loadingComponent={loadingComponent}
-      errorComponent={errorComponent}
+      loadingComponent={LoadingComponent}
+      errorComponent={ErrorComponent}
     >
-      <Page title="Analytics for offer" fullWidth>
+      <Page fullWidth>
         <PageTitleBar offer={offer} />
-        <Stack vertical>
-          <Stack distribution="equalSpacing">
-            <Text as="h3" color="subdued" fontWeight="regular" variant="heading2xl">
-              Here&rsquo;s a summary of how your offer is performing
-            </Text>
-            {/* <DateRangePicker
-              active={datePickerActive}
-              onActivate={() => setDatePickerActive(!datePickerActive)}
-              onClose={() => setDatePickerActive(false)}
-            /> */}
-          </Stack>
-          <Layout>
-            <Layout.Section fullWidth>
-              <Card sectioned>
-                <Stack distribution="fillEvenly" wrap>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">{formatNumber(offer?.impressionCount)}</Text>
-                    <Text fontWeight="bold" color="subdued">
-                      Offer impressions
-                    </Text>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">{formatNumber(offer?.acceptanceCount)}</Text>
-                    <Text fontWeight="bold" color="subdued">
-                      Offers accepted
-                    </Text>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">{formatPercentage(offer?.conversionRate, 1)}</Text>
-                    <Text fontWeight="bold" color="subdued">
-                      Conversion rate
-                    </Text>
-                  </Stack>
-                  <Stack spacing="tight" alignment="center" vertical>
-                    <Text variant="heading4xl">{formatCurrency(offer?.revenueIncrease)}</Text>
-                    <Text fontWeight="bold" color="subdued">
-                      Revenue increase
-                    </Text>
-                  </Stack>
-                </Stack>
-              </Card>
-            </Layout.Section>
-            <Layout.Section oneHalf>
-              <Card sectioned>
+        <BlockStack gap="400">
+          <Card>
+            <InlineStack align="space-evenly" gap="400">
+              <BlockStack inlineAlign="center" gap="150">
+                <Text variant="heading3xl">{formatNumber(shop?.offerImpressionCount)}</Text>
+                <Text fontWeight="bold" tone="subdued">
+                  Offer impressions
+                </Text>
+              </BlockStack>
+              <BlockStack inlineAlign="center" gap="150">
+                <Text variant="heading3xl">{formatNumber(shop?.offerAcceptanceCount)}</Text>
+                <Text fontWeight="bold" tone="subdued">
+                  Offers accepted
+                </Text>
+              </BlockStack>
+              <BlockStack inlineAlign="center" gap="150">
+                <Text variant="heading3xl">{formatPercentage(shop?.offerConversionRate, 1)}</Text>
+                <Text fontWeight="bold" tone="subdued">
+                  Conversion rate
+                </Text>
+              </BlockStack>
+              <BlockStack inlineAlign="center" gap="150">
+                <Text variant="heading3xl">{formatCurrency(shop?.revenueIncrease)}</Text>
+                <Text fontWeight="bold" tone="subdued">
+                  Revenue increase
+                </Text>
+              </BlockStack>
+            </InlineStack>
+          </Card>
+          <Grid>
+            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+              <Card>
                 <LineChart
                   title="Offer impressions"
                   subtitle="Offer impressions over last 90 days"
                   tooltipText="impressions"
                   rangeDescription="January to December"
                   data={offerImpressionsChartData}
-                  formatters={{
-                    number: formatNumber,
-                    percentage: formatPercentage
-                  }}
+                  formatters={{ number: formatNumber, percentage: formatPercentage }}
                 />
               </Card>
-              <Card sectioned>
+            </Grid.Cell>
+            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+              <Card>
                 <LineChart
                   title="Conversions"
                   subtitle="Conversions over last 90 days"
                   tooltipText="conversions"
                   rangeDescription="January to December"
                   data={offerConversionsChartData}
-                  formatters={{
-                    number: formatNumber,
-                    percentage: formatPercentage
-                  }}
+                  formatters={{ number: formatNumber, percentage: formatPercentage }}
                 />
               </Card>
-              <Card sectioned>
+            </Grid.Cell>
+            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+              <Card>
                 <LineChart
                   title="Conversion rate"
                   subtitle="Conversion rate over last 90 days"
                   tooltipText="conversion rate"
                   rangeDescription="January to December"
                   data={offerConversionRatesChartData}
-                  formatters={{
-                    number: formatPercentage,
-                    percentage: formatPercentage
-                  }}
+                  formatters={{ number: formatPercentage, percentage: formatPercentage }}
                 />
               </Card>
-            </Layout.Section>
-            <Layout.Section oneHalf>
-              <Card sectioned>
+            </Grid.Cell>
+            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+              <Card>
                 <LineChart
                   title="Offer acceptances"
                   subtitle="Offers accepted over last 90 days"
                   tooltipText="offers accepted"
                   rangeDescription="January to December"
                   data={offerAcceptancesChartData}
-                  formatters={{
-                    number: formatNumber,
-                    percentage: formatPercentage
-                  }}
+                  formatters={{ number: formatNumber, percentage: formatPercentage }}
                 />
               </Card>
-              <Card sectioned>
+            </Grid.Cell>
+            <Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 3, lg: 6, xl: 4 }}>
+              <Card>
                 <LineChart
                   title="Revenue increase"
                   subtitle="Revenue increase from offers over last 90 days"
                   tooltipText="revenue increase from offers"
                   rangeDescription="January to December"
                   data={offerRevenueIncreasesChartData}
-                  formatters={{
-                    number: formatCurrency,
-                    percentage: formatPercentage
-                  }}
+                  formatters={{ number: formatCurrency, percentage: formatPercentage }}
                 />
               </Card>
-            </Layout.Section>
-          </Layout>
-        </Stack>
+            </Grid.Cell>
+          </Grid>
+        </BlockStack>
       </Page>
     </Loader>
   );
