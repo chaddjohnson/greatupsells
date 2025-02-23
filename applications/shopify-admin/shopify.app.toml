@@ -17,9 +17,12 @@ redirect_urls = [
 ]
 
 [app_proxy]
-url = "https://chaddjohnson.eu.ngrok.io/shopify-admin"
+url = "https://chaddjohnson.eu.ngrok.io"
 subpath = "great-upsells-assets"
 prefix = "tools"
 
 [pos]
 embedded = false
+
+[build]
+include_config_on_deploy = true
