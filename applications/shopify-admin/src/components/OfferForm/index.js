@@ -393,7 +393,12 @@ const OfferForm = ({
   return (
     <Form noValidate onSubmit={submit}>
       <SaveBar id="save-bar" discardConfirmation={dirty || themeDirty}>
-        <button variant="primary" disabled={!dirty && !themeDirty} loading={submitting} onClick={handleSubmit}>
+        <button
+          variant="primary"
+          disabled={(!dirty && !themeDirty) || submitting}
+          loading={submitting}
+          onClick={handleSubmit}
+        >
           Save
         </button>
         <button onClick={handleDiscard}>Discard</button>
