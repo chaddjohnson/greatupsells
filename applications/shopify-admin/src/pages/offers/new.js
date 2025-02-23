@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { useRouter } from 'next/router';
 import {
   Page,
@@ -13,20 +12,7 @@ import {
 import { omit } from 'lodash';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useTheme, useThemes, useToast } from '../../hooks';
-import { TitleBar, OfferForm } from '../../components';
-
-const PageTitleBar = memo(() => {
-  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
-  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
-
-  return (
-    <TitleBar title="Create offer">
-      <a variant="breadcrumb" href={`/offers/${urlParams}`}>
-        Offers
-      </a>
-    </TitleBar>
-  );
-});
+import { OfferForm } from '../../components';
 
 const LoadingComponent = () => (
   <SkeletonPage>
@@ -70,7 +56,6 @@ const LoadingComponent = () => (
 
 const ErrorComponent = () => (
   <Page fullWidth>
-    <PageTitleBar />
     <Banner
       title="Unable to load new offer page"
       tone="critical"
@@ -79,7 +64,7 @@ const ErrorComponent = () => (
         onAction: () => window.location.reload()
       }}
     >
-      Unable to load offer. Please try again shortly.
+      Unable to load page. Please try again shortly.
     </Banner>
   </Page>
 );
@@ -175,8 +160,7 @@ const NewOfferPage = () => {
 
   return (
     <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
-      <Page title="New Offer">
-        <PageTitleBar />
+      <Page title="Add offer" backAction={{ content: 'Offers', url: `/offers` }}>
         {loaded && !error && (
           <OfferForm
             initialValues={{

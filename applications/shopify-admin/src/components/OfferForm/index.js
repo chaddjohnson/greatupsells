@@ -176,7 +176,6 @@ const OfferForm = ({
     makeCleanAfterSubmit: true,
     onSubmit: async (formValues) => {
       try {
-        console.log('CALLING onSubmit()');
         await onSubmit({
           offer: {
             ...initialOffer,

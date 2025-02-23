@@ -3,20 +3,7 @@ import { Page, Card, BlockStack, InlineStack, Grid, Text, Banner, SkeletonPage, 
 import { useNumberFormatter, useCurrency, useDateTime, useInterval } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useShopAnalytics } from '../hooks';
-import { TitleBar, LineChart, SkeletonChart } from '../components';
-
-const PageTitleBar = memo(() => {
-  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
-  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
-
-  return (
-    <TitleBar title="Analytics">
-      <a variant="breadcrumb" href={`/${urlParams}`}>
-        Dashboard
-      </a>
-    </TitleBar>
-  );
-});
+import { LineChart, SkeletonChart } from '../components';
 
 const LoadingComponent = () => (
   <SkeletonPage fullWidth>
@@ -57,7 +44,6 @@ const LoadingComponent = () => (
 
 const ErrorComponent = memo(() => (
   <Page fullWidth>
-    <PageTitleBar />
     <Banner
       title="Unable to load analytics"
       tone="critical"
@@ -134,8 +120,7 @@ const AnalyticsPage = () => {
 
   return (
     <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
-      <Page fullWidth>
-        <PageTitleBar />
+      <Page title="Analytics" fullWidth>
         <BlockStack gap="400">
           <Card>
             <InlineStack align="space-evenly" gap="400">

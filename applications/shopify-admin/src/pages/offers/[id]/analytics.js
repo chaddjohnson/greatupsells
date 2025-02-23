@@ -4,20 +4,7 @@ import { Page, Card, BlockStack, InlineStack, Grid, Text, Banner, SkeletonPage, 
 import { useNumberFormatter, useCurrency, useDateTime, useInterval } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useOfferAnalytics } from '../../../hooks';
-import { TitleBar, LineChart, SkeletonChart } from '../../../components';
-
-const PageTitleBar = memo(({ offer }) => {
-  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
-  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
-
-  return (
-    <TitleBar title="Offer analytics">
-      <a variant="breadcrumb" href={`/offers/${offer._id}/${urlParams}`}>
-        {offer.name}
-      </a>
-    </TitleBar>
-  );
-});
+import { LineChart, SkeletonChart } from '../../../components';
 
 const LoadingComponent = () => (
   <SkeletonPage fullWidth>
@@ -58,7 +45,6 @@ const LoadingComponent = () => (
 
 const ErrorComponent = memo(() => (
   <Page fullWidth>
-    <PageTitleBar />
     <Banner
       title="Unable to load analytics"
       tone="critical"
@@ -67,7 +53,7 @@ const ErrorComponent = memo(() => (
         onAction: () => window.location.reload()
       }}
     >
-      Unable to load offer. Please try again shortly.
+      Unable to load analytics. Please try again shortly.
     </Banner>
   </Page>
 ));
@@ -141,8 +127,7 @@ const OfferAnalyticsPage = () => {
       loadingComponent={LoadingComponent}
       errorComponent={ErrorComponent}
     >
-      <Page fullWidth>
-        <PageTitleBar offer={offer} />
+      <Page title="Offer analytics" fullWidth backAction={{ content: 'Offers', url: `/offers/${offer._id}` }}>
         <BlockStack gap="400">
           <Card>
             <InlineStack align="space-evenly" gap="400">

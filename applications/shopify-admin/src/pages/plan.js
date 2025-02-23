@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
@@ -16,7 +16,6 @@ import {
   Tooltip
 } from '@shopify/polaris';
 import { CheckIcon, InfoIcon } from '@shopify/polaris-icons';
-import { TitleBar } from '../components';
 import { useShop } from '../hooks';
 
 const PlanTableContainer = styled.div`
@@ -31,8 +30,6 @@ const PlanTableContainer = styled.div`
     text-align: center;
   }
 `;
-
-const PageTitleBar = memo(() => <TitleBar title="Plan" />);
 
 const PlanPage = () => {
   const router = useRouter();
@@ -168,8 +165,7 @@ const PlanPage = () => {
   }, [chargeId, activatingPlan, activatePlan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Page backAction={{ content: 'Dashboard', url: '/' }} title="Choose your plan">
-      {shop?.plan.active && <PageTitleBar />}
+    <Page title="Plan">
       <Layout>
         {!shop?.plan.active && (
           <Layout.Section>

@@ -1,21 +1,8 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Page, Banner, Layout, Card, BlockStack, SkeletonPage, SkeletonBodyText, EmptyState } from '@shopify/polaris';
 import { Loader } from '@greatupsells/react-components';
 import { useOffers } from '../../hooks';
-import { TitleBar, OfferList } from '../../components';
-
-const PageTitleBar = memo(() => {
-  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
-  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
-
-  return (
-    <TitleBar title="Offers">
-      <a variant="breadcrumb" href={`/${urlParams}`}>
-        Dashboard
-      </a>
-    </TitleBar>
-  );
-});
+import { OfferList } from '../../components';
 
 const LoadingComponent = () => (
   <SkeletonPage>
@@ -29,7 +16,6 @@ const LoadingComponent = () => (
 
 const EmptyComponent = () => (
   <>
-    <PageTitleBar />
     <EmptyState
       heading="Manage your offers"
       action={{ content: 'Create an offer', url: '/offers/new/' }}
@@ -43,12 +29,18 @@ const EmptyComponent = () => (
 const OffersPage = () => {
   const [filters, setFilters] = useState({});
   const { offers, offersLoading, offersLoaded, offersError } = useOffers(filters);
+  const [loadedOffers, setLoadedOffers] = useState([]);
 
   const hasFilters = Object.keys(filters).length > 0;
 
+  useEffect(() => {
+    if (offers) {
+      setLoadedOffers(offers);
+    }
+  }, [offers]);
+
   const ErrorComponent = memo(() => (
     <Page fullWidth>
-      <PageTitleBar />
       <Banner
         title="Unable to load offers"
         tone="critical"
@@ -71,11 +63,10 @@ const OffersPage = () => {
       errorComponent={ErrorComponent}
       emptyStateComponent={EmptyComponent}
     >
-      <Page fullWidth>
-        <PageTitleBar />
+      <Page title="Offers" fullWidth primaryAction={{ content: 'Add offer', url: '/offers/new' }}>
         <Layout>
           <Layout.Section>
-            <OfferList offers={offers} loading={offersLoading} filters={filters} onFilter={setFilters} />
+            <OfferList offers={loadedOffers} loading={offersLoading} filters={filters} onFilter={setFilters} />
           </Layout.Section>
         </Layout>
       </Page>

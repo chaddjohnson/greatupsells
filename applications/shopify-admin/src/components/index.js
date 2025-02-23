@@ -8,4 +8,3 @@ export { default as OfferList } from './OfferList';
 export { default as OfferStatus } from './OfferStatus';
 export { default as RouteGuard } from './RouteGuard';
 export { default as SkeletonChart } from './SkeletonChart';
-export { default as TitleBar } from './TitleBar';

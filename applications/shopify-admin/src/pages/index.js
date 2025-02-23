@@ -23,7 +23,7 @@ import styled from 'styled-components';
 import { useNumberFormatter, useCurrency, useInterval } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
 import { useShop } from '../hooks';
-import { TitleBar, Link } from '../components';
+import { Link } from '../components';
 
 const PlanContainer = styled.div`
   text-align: center;
@@ -49,8 +49,6 @@ const PlanProgressAmount = styled.div`
   white-space: nowrap;
   font-weight: 500;
 `;
-
-const PageTitleBar = memo(() => <TitleBar title="Overview dashboard" />);
 
 const LoadingComponent = () => (
   <SkeletonPage>
@@ -94,17 +92,16 @@ const DashboardPage = () => {
   const error = !!shopError;
 
   const ErrorComponent = memo(() => (
-    <Page>
-      <PageTitleBar />
+    <Page title="Overview dashboard">
       <Banner
-        title="Unable to load dashboard"
+        title="Unable to load overview dashboard"
         tone="critical"
         action={{
           content: 'Try again',
           onAction: () => window.location.reload()
         }}
       >
-        Unable to load offers. Please try again shortly.
+        Unable to load overview dashboard. Please try again shortly.
       </Banner>
     </Page>
   ));
@@ -130,7 +127,6 @@ const DashboardPage = () => {
   return (
     <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
       <Page>
-        <PageTitleBar />
         <Layout>
           {shop && !shop.isEmbedBlockEnabled && (
             <Layout.Section>

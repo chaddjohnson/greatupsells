@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import qs from 'querystringify';
 import { Modal, TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
@@ -24,20 +24,7 @@ import {
 import { Loader } from '@greatupsells/react-components';
 import { useShop, useOffer, useTheme, useThemes, useOfferThemes, useCollection, useProduct, useToast } from '../../../hooks';
 
-import { TitleBar, OfferForm } from '../../../components';
-
-const PageTitleBar = memo(() => {
-  // Include `shop` as a URL parameter to internal links to allow links to be opened in new tabs.
-  const urlParams = sessionStorage.shop ? `?shop=${sessionStorage.shop}` : '';
-
-  return (
-    <TitleBar title="Edit offer">
-      <a variant="breadcrumb" href={`/offers/${urlParams}`}>
-        Offers
-      </a>
-    </TitleBar>
-  );
-});
+import { OfferForm } from '../../../components';
 
 const LoadingComponent = () => (
   <SkeletonPage>
@@ -81,7 +68,6 @@ const LoadingComponent = () => (
 
 const ErrorComponent = () => (
   <Page fullWidth>
-    <PageTitleBar />
     <Banner
       title="Unable to load offer"
       tone="critical"
@@ -300,8 +286,7 @@ const OfferEditPage = () => {
   return (
     <>
       <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
-        <Page title={offer?.name} secondaryActions={secondaryActions}>
-          <PageTitleBar />
+        <Page title={offer?.name} backAction={{ content: 'Offers', url: `/offers` }} secondaryActions={secondaryActions}>
           {loaded && !error && (
             <OfferForm
               initialValues={{

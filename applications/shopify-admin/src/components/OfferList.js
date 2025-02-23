@@ -1,15 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  IndexFilters,
-  IndexTable,
-  Text,
-  BlockStack,
-  InlineStack,
-  Box,
-  useSetIndexFiltersMode,
-  IndexFiltersMode
-} from '@shopify/polaris';
+import { IndexFilters, IndexTable, Text, BlockStack, useSetIndexFiltersMode, IndexFiltersMode } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency } from '@greatupsells/react-hooks';
 import styled from 'styled-components';
 import { useShop } from '../hooks';
@@ -197,7 +188,6 @@ const OfferList = ({ offers, loading = false, filters = {}, onFilter = () => {} 
           onNext: handlePaginateNext
         }}
         selectable={false}
-        loading={loading}
       >
         {offers?.map((offer, index) => (
           <OfferListRow key={index} offer={offer} />
