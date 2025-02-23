@@ -107,6 +107,15 @@ Please use the `develop` branch for main development.
 
 ### Shopify App Extensions
 
+To initially register all available extensions for the Shopify at once:
+
+1. Open a terminal, and change the working directory to `applications/shopify-admin`.
+1. Run `yarn shopify app deploy`.
+1. Follow the prompts.
+1. Verify the extensions are now listed under `Extensions` for the app on Shopify Parters.
+
+You will need to run the "deploy" command each time you want to publish a new version of one or more extensions. Further, to publish to different environments (e.g., dev, test, prod), delete the contents of `applications/shopify-admin/shopify.app.toml` locally before running the command.
+
 To run and develop Shopify app extensions locally (such as post-purchase upsells):
 
 1. Run the app with `yarn start` from the top-level project directory.
