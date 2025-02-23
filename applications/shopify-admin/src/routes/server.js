@@ -7,7 +7,7 @@ const express = require('express');
 const helmet = require('helmet');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
-const next = require('next');
+const nextjs = require('next');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { shopifyApi, ApiVersion } = require('@shopify/shopify-api');
 const verifySessionToken = require('shopify-jwt-auth-verify').default;
@@ -25,7 +25,7 @@ const {
 } = process.env;
 const dev = NODE_ENV !== 'production';
 const port = getenv.int('SHOPIFY_ADMIN_APP_PORT', 4001);
-const app = next({ dev });
+const app = nextjs({ dev });
 
 const shopsServiceHttpClient = new HttpClient({
   baseUrl: SHOPS_API_URL
@@ -76,6 +76,7 @@ const createServer = () => {
       createProxyMiddleware({
         target: `http://localhost:${STOREFRONT_PORT}`,
         changeOrigin: true,
+        pathRewrite: { '^/tools/great-upsells-assets': '' },
         onProxyRes: (proxyResponse) => {
           proxyResponse.headers['Accept-Encoding'] = 'gzip';
         }
