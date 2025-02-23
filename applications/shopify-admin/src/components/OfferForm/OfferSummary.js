@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Card, Text, List, BlockStack, InlineStack } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
-import { Link } from '..';
+import Link from '../Link';
 import OfferStatus from '../OfferStatus';
 
 const HeadingWrapper = styled.div`
