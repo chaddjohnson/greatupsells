@@ -1,0 +1,25 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "b6cea2b8e7a978804299007a1243f324"
+application_url = "https://chaddjohnson.eu.ngrok.io/"
+embedded = true
+name = "Great Upsells Dev"
+handle = "great-upsells-dev-1"
+
+[webhooks]
+api_version = "2025-01"
+
+[auth]
+redirect_urls = [
+  "https://chaddjohnson.eu.ngrok.io/auth/callback",
+  "https://chaddjohnson.eu.ngrok.io/auth",
+  "https://chaddjohnson.eu.ngrok.io/"
+]
+
+[app_proxy]
+url = "https://chaddjohnson.eu.ngrok.io/shopify-admin"
+subpath = "great-upsells-assets"
+prefix = "tools"
+
+[pos]
+embedded = false
