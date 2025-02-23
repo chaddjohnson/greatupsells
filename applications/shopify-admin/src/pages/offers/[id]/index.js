@@ -1,13 +1,15 @@
 import { memo, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import qs from 'querystringify';
-import { Modal } from '@shopify/app-bridge-react';
+import { Modal, TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
   Card,
   BlockStack,
   Banner,
+  Box,
+  Text,
   SkeletonPage,
   SkeletonDisplayText,
   SkeletonBodyText
@@ -317,22 +319,17 @@ const OfferEditPage = () => {
           )}
         </Page>
       </Loader>
-      <Modal
-        title={`Delete ${offer?.name}`}
-        message={`Are you sure you want to delete the offer ${offer?.name}? This can’t be undone.`}
-        open={deleteModalOpen}
-        primaryAction={{
-          content: 'Delete offer',
-          destructive: true,
-          onAction: handleConfirmDelete
-        }}
-        secondaryActions={[
-          {
-            content: 'Cancel',
-            onAction: handleCancelDelete
-          }
-        ]}
-      />
+      <Modal open={deleteModalOpen} onHide={handleCancelDelete}>
+        <Box padding="400">
+          <Text as="p">Are you sure you want to delete the offer {offer?.name}? This can&apos;t be undone.</Text>
+        </Box>
+        <ShopifyTitleBar title={`Delete offer`}>
+          <button variant="primary" tone="critical" onClick={handleConfirmDelete}>
+            Delete offer
+          </button>
+          <button onClick={handleCancelDelete}>Cancel</button>
+        </ShopifyTitleBar>
+      </Modal>
     </>
   );
 };
