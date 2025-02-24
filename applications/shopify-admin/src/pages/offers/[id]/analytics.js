@@ -127,7 +127,7 @@ const OfferAnalyticsPage = () => {
       loadingComponent={LoadingComponent}
       errorComponent={ErrorComponent}
     >
-      <Page title="Offer analytics" fullWidth backAction={{ content: 'Offers', url: `/offers/${offer._id}` }}>
+      <Page title="Offer analytics" fullWidth backAction={{ content: 'Offers', url: `/offers/${offer?._id}` }}>
         <BlockStack gap="400">
           <Card>
             <InlineStack align="space-evenly" gap="400">

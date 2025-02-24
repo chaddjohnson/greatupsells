@@ -1,21 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Card, Text, List, BlockStack, InlineStack } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency, useDateTime } from '@greatupsells/react-hooks';
 import { useShop } from '../../hooks';
 import Link from '../Link';
 import OfferStatus from '../OfferStatus';
-
-const HeadingWrapper = styled.div`
-  .Polaris-Stack {
-    flex-wrap: nowrap;
-  }
-
-  .Polaris-Stack__Item:first-child {
-    flex: 1 1 auto;
-  }
-`;
 
 const OfferSummary = ({ offer }) => {
   const { shop } = useShop();
@@ -63,14 +52,12 @@ const OfferSummary = ({ offer }) => {
         <Text variant="headingMd">Summary</Text>
         {offer.name ? (
           <BlockStack gap="200">
-            <HeadingWrapper>
-              <InlineStack align="space-between">
-                <Text variant="headingMd" as="h2">
-                  {offer.name}
-                </Text>
-                <OfferStatus offer={offer} />
-              </InlineStack>
-            </HeadingWrapper>
+            <InlineStack align="space-between">
+              <Text variant="headingMd" as="h2">
+                {offer.name}
+              </Text>
+              <OfferStatus offer={offer} />
+            </InlineStack>
             {items.length > 0 && (
               <List>
                 {items.map((item, index) => (

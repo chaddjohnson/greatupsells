@@ -1,19 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { FormLayout } from '@shopify/polaris';
 import { useDateTime } from '@greatupsells/react-hooks';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
-
-const Wrapper = styled.div`
-  .Polaris-FormLayout__Item:first-child {
-    margin-left: 0;
-  }
-  .Polaris-FormLayout__Item {
-    margin-top: 0;
-  }
-`;
 
 const DateTimePicker = ({
   value = new Date(),
@@ -56,7 +46,7 @@ const DateTimePicker = ({
   );
 
   return (
-    <Wrapper>
+    <>
       <FormLayout.Group condensed>
         <DatePicker
           label={datePickerProps.label}
@@ -71,7 +61,7 @@ const DateTimePicker = ({
           onChange={handleTimeChange}
         />
       </FormLayout.Group>
-    </Wrapper>
+    </>
   );
 };
 

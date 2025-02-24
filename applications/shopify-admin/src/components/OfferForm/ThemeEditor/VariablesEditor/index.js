@@ -12,7 +12,7 @@ import {
   InlineStack
 } from '@shopify/polaris';
 import {
-  MobileIcon,
+  XIcon,
   ChevronRightIcon,
   ProductIcon,
   TextTitleIcon,
@@ -72,15 +72,11 @@ const InnerWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   border-bottom: 1px solid #dfe3e8;
-  padding: 1.6rem;
+  padding: 1.25rem 1rem 1rem 1rem;
 `;
 
 const ContentWrapper = styled.div`
-  margin: 1.6rem;
-
-  .Polaris-Card {
-    border: 1px solid #dfe3e8;
-  }
+  margin: 1rem;
 `;
 
 const ResourceListWrapper = styled.span`
@@ -135,10 +131,12 @@ const VariablesEditor = ({ open = false, theme = { variables: [] }, strategy, on
     <Sheet open={open} onClose={onClose} accessibilityLabel="Edit theme">
       <InnerWrapper>
         <HeaderWrapper>
-          <InlineStack align="center" gap="200">
-            {selectedSection && <Button icon={ArrowLeftIcon} onClick={() => setSelectedSection(null)} />}
-            <Text variant="headingLg">{selectedSection ? selectedSection.name : 'Theme settings'}</Text>
-            <Button variant="plain" accessibilityLabel="Cancel" icon={MobileIcon} onClick={onClose} />
+          <InlineStack align="space-between" gap="200">
+            <InlineStack gap="200" blockAlign="center">
+              {selectedSection && <Button icon={ArrowLeftIcon} size="slim" onClick={() => setSelectedSection(null)} />}
+              <Text variant="headingLg">{selectedSection ? selectedSection.name : 'Theme settings'}</Text>
+            </InlineStack>
+            <Button variant="plain" accessibilityLabel="Cancel" icon={XIcon} onClick={onClose} />
           </InlineStack>
         </HeaderWrapper>
         {!selectedSection && (
@@ -154,7 +152,7 @@ const VariablesEditor = ({ open = false, theme = { variables: [] }, strategy, on
                   verticalAlignment="center"
                   onClick={() => setSelectedSection(section)}
                 >
-                  <InlineStack align="center" gap="200">
+                  <InlineStack align="space-between" gap="200">
                     <Text>{section.name}</Text>
                     <Button variant="plain" icon={ChevronRightIcon} onClick={() => setSelectedSection(section)} />
                   </InlineStack>

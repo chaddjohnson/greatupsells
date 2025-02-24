@@ -14,7 +14,7 @@ import { valueIsHex, hexToRgb, normalize, hexToHsb, hsbToHex, sanitizeHexValue }
 
 const PreviewButton = styled.button`
   appearance: none;
-  margin: 0;
+  margin: 0 0.5rem 0 0;
   padding: 0;
   background: none;
   border: none;
@@ -44,12 +44,11 @@ const TextFieldColorPreview = styled.div.attrs((props) => ({
     backgroundColor: props.value
   }
 }))`
-  border-radius: 50%;
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 7%),
     inset 0 1px 3px 0 rgb(0 0 0 / 15%);
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   margin-left: -0.4rem;
 `;
 
@@ -63,6 +62,10 @@ const ActivatorWrapper = styled.div`
   .Polaris-Button {
     color: black;
     text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   svg.Polaris-Icon__Svg {
@@ -160,7 +163,7 @@ const ColorPicker = ({ label, value, allowAlpha = false, onChange = () => {} }) 
               <PreviewButton type="button" onClick={togglePopover}>
                 <ColorPreview value={hexValue} />
               </PreviewButton>
-              <Button onClick={togglePopover} plain>
+              <Button variant="plain" onClick={togglePopover}>
                 {label}
               </Button>
             </InlineStack>

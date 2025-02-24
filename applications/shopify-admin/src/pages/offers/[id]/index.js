@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import qs from 'querystringify';
-import { Modal, TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
+import { Modal, TitleBar } from '@shopify/app-bridge-react';
 import {
   Page,
   Layout,
@@ -308,12 +308,12 @@ const OfferEditPage = () => {
         <Box padding="400">
           <Text as="p">Are you sure you want to delete the offer {offer?.name}? This can&apos;t be undone.</Text>
         </Box>
-        <ShopifyTitleBar title={`Delete offer`}>
+        <TitleBar title={`Delete offer`}>
           <button variant="primary" tone="critical" onClick={handleConfirmDelete}>
             Delete offer
           </button>
           <button onClick={handleCancelDelete}>Cancel</button>
-        </ShopifyTitleBar>
+        </TitleBar>
       </Modal>
     </>
   );

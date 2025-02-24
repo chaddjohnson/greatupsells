@@ -11,7 +11,8 @@ import {
   Scrollable,
   PageActions,
   EmptyState,
-  BlockStack
+  BlockStack,
+  InlineStack
 } from '@shopify/polaris';
 import { XIcon } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
@@ -29,21 +30,17 @@ const InnerWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  align-items: center;
   border-bottom: 1px solid #dfe3e8;
-  display: flex;
-  justify-content: space-between;
-  padding: 1.6rem;
-  width: 100%;
+  padding: 1.25rem 1rem 1rem 1rem;
 `;
 
 const SearchWrapper = styled.div`
-  padding: 1.6rem;
+  padding: 1rem;
 `;
 
 const PageActionsWrapper = styled.div`
   width: 100%;
-  padding: 1.6rem;
+  padding: 1rem;
   padding-bottom: 0;
 `;
 
@@ -172,8 +169,10 @@ const ThemeSelector = ({
     <Sheet open={open} onEntered={handleEntered} onExit={handleExit} onClose={onClose} accessibilityLabel="Select theme">
       <InnerWrapper>
         <HeaderWrapper>
-          <Text variant="headingLg">Select theme</Text>
-          <Button variant="plain" accessibilityLabel="Cancel" icon={XIcon} onClick={onClose} />
+          <InlineStack align="space-between" gap="200">
+            <Text variant="headingLg">Select theme</Text>
+            <Button variant="plain" accessibilityLabel="Cancel" icon={XIcon} onClick={onClose} />
+          </InlineStack>
         </HeaderWrapper>
         <Scrollable>
           <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
