@@ -5,7 +5,6 @@ import {
   Card,
   InlineGrid,
   Divider,
-  List,
   Bleed,
   Box,
   Text,
@@ -18,7 +17,6 @@ import {
   SkeletonDisplayText,
   SkeletonBodyText
 } from '@shopify/polaris';
-import { Modal, TitleBar as ShopifyTitleBar } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { useNumberFormatter, useCurrency, useInterval } from '@greatupsells/react-hooks';
 import { Loader } from '@greatupsells/react-components';
@@ -67,7 +65,6 @@ const LoadingComponent = () => (
 );
 
 const DashboardPage = () => {
-  const [onboardingModalShown, setOnboardingModalShown] = useState(false);
   const { shop, shopLoaded, shopError, fetchShop } = useShop();
   const { locale, countryCode, currency } = shop || {};
   const { formatNumber, formatPercentage } = useNumberFormatter({
@@ -114,15 +111,6 @@ const DashboardPage = () => {
     return Math.min(shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit, 1);
   }, [shop]);
 
-  const shopName = useMemo(() => {
-    return shop?.domain.replace(/.myshopify.com/, '');
-  }, [shop]);
-
-  const handleOnboardingModalHide = async () => {
-    setOnboardingModalShown(false);
-    await fetchShop();
-  };
-
   // Refresh data at an interval.
   useInterval(() => {
     fetchShop();
@@ -132,48 +120,6 @@ const DashboardPage = () => {
     <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
       <Page>
         <Layout>
-          {shop && !shop.isEmbedBlockEnabled && (
-            <Layout.Section>
-              <Banner
-                tone="warning"
-                title="Please enable the &ldquo;Great Upsells Offers&rdquo; app embed"
-                action={{
-                  content: 'Activate app embed',
-                  variant: 'primary',
-                  tone: 'critical',
-                  url: `https://admin.shopify.com/store/${shopName}/themes/current/editor?context=apps&appEmbed=${process.env.SHOPIFY_EMBED_BLOCK_ID}%2Fapp-embed`,
-                  target: '_blank'
-                }}
-                secondaryAction={{
-                  content: 'View instructions',
-                  onAction: () => setOnboardingModalShown(true)
-                }}
-              >
-                <Text as="p">
-                  To use this app, you will need to activate the app embed entitled &ldquo;Great Upsells Offers&rdquo; and
-                  then save your theme.
-                </Text>
-              </Banner>
-              <Modal open={onboardingModalShown} onHide={handleOnboardingModalHide}>
-                <ShopifyTitleBar title="Activation" />
-                <Box padding="400">
-                  <BlockStack gap="200">
-                    <Text variant="headingMd" as="h2">
-                      Instructions
-                    </Text>
-                    <List type="number">
-                      <List.Item>Click the &ldquo;Activate app embed&rdquo; button in the banner.</List.Item>
-                      <List.Item>Make sure the toggle is on for &ldquo;Great Upsells Offers.&rdquo;</List.Item>
-                      <List.Item>Click Save.</List.Item>
-                    </List>
-                    <video autoPlay loop style={{ width: '100%', height: 'auto' }}>
-                      <source src="/videos/onboarding.mp4" />
-                    </video>
-                  </BlockStack>
-                </Box>
-              </Modal>
-            </Layout.Section>
-          )}
           <Layout.Section>
             <Card>
               <Bleed marginBlockStart="100">

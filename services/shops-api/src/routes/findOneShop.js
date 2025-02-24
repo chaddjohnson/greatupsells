@@ -27,17 +27,13 @@ const handler = async (event, context) => {
 
     // Determine whether this app is currently selected as the post-purchase app for the shop.
     // Determine whether the app embed block is enabled for the current theme.
-    const [isPostPurchaseAppInUse, isEmbedBlockEnabled] = await Promise.all([
-      shop.getIsPostPurchaseAppInUse(),
-      shop.getAppEmbedBlockIsInstalledAndEnabled()
-    ]);
+    const isPostPurchaseAppInUse = await shop.getIsPostPurchaseAppInUse();
 
     return {
       statusCode: StatusCodes.OK,
       body: JSON.stringify({
         ...shop.toObject(),
-        isPostPurchaseAppInUse,
-        isEmbedBlockEnabled
+        isPostPurchaseAppInUse
       })
     };
   } catch (error) {

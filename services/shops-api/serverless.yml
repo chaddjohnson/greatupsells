@@ -26,7 +26,6 @@ provider:
     MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-shops/url}
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
-    SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
     SHOP_ORDER_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/url, ''}
     SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
     SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
