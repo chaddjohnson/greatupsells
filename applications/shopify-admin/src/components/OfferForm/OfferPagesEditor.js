@@ -75,7 +75,7 @@ const OfferPagesEditor = ({ offer, triggerPage, triggerPagePath, submitted = fal
     }
 
     if (value === 'PATTERN') {
-      triggerPage.onChange('PAGE');
+      triggerPage.onChange('PATTERN');
       triggerPagePath.onChange(undefined);
       setTriggerPagePathPattern(undefined);
     }
