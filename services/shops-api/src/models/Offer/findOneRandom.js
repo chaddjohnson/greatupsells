@@ -159,7 +159,7 @@ const buildCriteria = async (
     sessionOfferImpressions = []
   }
 ) => {
-  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
+  const isLocalIpAddress = !!ipAddress && (ipAddress === '127.0.0.1' || ipAddress === '::1');
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   let shopifyOrderCartData = null;
 
