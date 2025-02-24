@@ -114,6 +114,10 @@ const DashboardPage = () => {
     return Math.min(shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit, 1);
   }, [shop]);
 
+  const shopName = useMemo(() => {
+    return shop?.domain.replace(/.myshopify.com/, '');
+  }, [shop]);
+
   const handleOnboardingModalHide = async () => {
     setOnboardingModalShown(false);
     await fetchShop();
@@ -137,7 +141,8 @@ const DashboardPage = () => {
                   content: 'Activate app embed',
                   variant: 'primary',
                   tone: 'critical',
-                  url: `https://admin.shopify.com/store/${shop.name}/themes/current/editor?context=apps&activateAppId=${process.env.SHOPIFY_EMBED_BLOCK_ID}/app-embed`
+                  url: `https://admin.shopify.com/store/${shopName}/themes/current/editor?context=apps&appEmbed=${process.env.SHOPIFY_EMBED_BLOCK_ID}%2Fapp-embed`,
+                  target: '_blank'
                 }}
                 secondaryAction={{
                   content: 'View instructions',
