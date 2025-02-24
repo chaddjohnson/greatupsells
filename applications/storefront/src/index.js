@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
 let initialized = false;
@@ -11,13 +12,13 @@ const init = () => {
 
   initialized = true;
 
-  const root = document.createElement('div');
-  const rootId = 'greatupsells-popup-root';
+  const container = document.createElement('div');
+  const containerId = 'greatupsells-popup-container';
 
-  root.setAttribute('id', rootId);
-  document.body.appendChild(root);
+  container.setAttribute('id', containerId);
+  document.body.appendChild(container);
 
-  ReactDOM.render(<App />, document.getElementById(rootId));
+  createRoot(container).render(<App />);
 };
 
 // Initialize when document becomes ready.
