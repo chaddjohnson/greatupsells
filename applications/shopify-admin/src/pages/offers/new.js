@@ -18,37 +18,39 @@ const LoadingComponent = () => (
   <SkeletonPage>
     <Layout>
       <Layout.Section>
-        <Card>
-          <BlockStack gap="200" padding="400">
-            <SkeletonDisplayText size="small" />
-            <SkeletonBodyText lines={2} />
-          </BlockStack>
-        </Card>
-        <Card>
-          <BlockStack gap="200" padding="400">
-            <SkeletonDisplayText size="small" />
-            <SkeletonBodyText lines={3} />
-          </BlockStack>
-        </Card>
-        <Card>
-          <BlockStack gap="200" padding="400">
-            <SkeletonDisplayText size="small" />
-            <SkeletonBodyText lines={4} />
-          </BlockStack>
-        </Card>
-      </Layout.Section>
-      <Layout.Section>
-        <Card>
-          <BlockStack>
+        <BlockStack gap="400">
+          <Card>
             <BlockStack gap="200" padding="400">
               <SkeletonDisplayText size="small" />
               <SkeletonBodyText lines={2} />
             </BlockStack>
-          </BlockStack>
-          <BlockStack>
-            <SkeletonBodyText lines={2} />
-          </BlockStack>
-        </Card>
+          </Card>
+          <Card>
+            <BlockStack gap="200" padding="400">
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={15} />
+            </BlockStack>
+          </Card>
+          <Card>
+            <BlockStack gap="200" padding="400">
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={15} />
+            </BlockStack>
+          </Card>
+        </BlockStack>
+      </Layout.Section>
+      <Layout.Section variant="oneThird">
+        <BlockStack gap="400">
+          <Card>
+            <BlockStack gap="200" padding="400">
+              <SkeletonDisplayText size="small" />
+              <SkeletonBodyText lines={16} />
+            </BlockStack>
+          </Card>
+          <Card>
+            <SkeletonBodyText lines={10} />
+          </Card>
+        </BlockStack>
       </Layout.Section>
     </Layout>
   </SkeletonPage>
