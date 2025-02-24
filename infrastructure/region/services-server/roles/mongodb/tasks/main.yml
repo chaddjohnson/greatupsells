@@ -133,10 +133,10 @@
     members:
       - host: services.us-east-1.greatupsells.com:27017
         priority: 1
-      - host: services.eu-west-1.greatupsells.com:27017
-        priority: 0.5
-      - host: services.ap-northeast-1.greatupsells.com:27017
-        priority: 0.5
+      # - host: services.eu-west-1.greatupsells.com:27017
+      #   priority: 0.5
+      # - host: services.ap-northeast-1.greatupsells.com:27017
+      #   priority: 0.5
     ssl: yes
     validate: no
   when:

@@ -7,10 +7,10 @@ aws s3 sync s3://greatupsells-infrastructure/serverless/shops-api . --region us-
 
 (cd .. && serverless remove --stage $STAGE --region us-east-1) || true
 
-if [ "$STAGE" = "production" ]; then
-  (cd .. serverless remove --stage $STAGE --region eu-west-1) || true
-  (cd .. serverless remove --stage $STAGE --region ap-northeast-1) || true
-fi
+# if [ "$STAGE" = "production" ]; then
+#   (cd .. serverless remove --stage $STAGE --region eu-west-1) || true
+#   (cd .. serverless remove --stage $STAGE --region ap-northeast-1) || true
+# fi
 
 terraform init
 terraform workspace select $STAGE
