@@ -24,7 +24,20 @@ jobs:
           chmod 600 ~/.ssh/greatupsells/id_rsa
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Add Terraform variables
+      - name: Add Terraform variables (test)
+        if: success() && github.ref == 'refs/heads/test'
+        run: |
+          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER_TEST }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER_TEST }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_admin_password: \"${{ secrets.MONGODB_ADMIN_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_app_password: \"${{ secrets.MONGODB_APP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_backup_password: \"${{ secrets.MONGODB_BACKUP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nelasticsearch_root_password: \"${{ secrets.ELASTICSEARCH_ROOT_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
+          echo -e "\nelasticsearch_app_password: \"${{ secrets.ELASTICSEARCH_APP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
+          echo -e "\nredis_app_password: \"${{ secrets.REDIS_APP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/redis/vars/main.yml
+      - name: Add Terraform variables (production)
+        if: success() && github.ref == 'refs/heads/master'
         run: |
           echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
           echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
