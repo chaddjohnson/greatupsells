@@ -383,6 +383,8 @@ Initial deployments should occur in the following order:
 1. `applications/storefront`
 1. `applications/admin`
 
+The easiest way to accomplish this is to initially run Terraform for each service from your local machine.
+
 ## Destruction
 
 Run the following:
