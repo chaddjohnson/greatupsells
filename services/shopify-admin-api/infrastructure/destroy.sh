@@ -2,7 +2,7 @@
 
 [ -z "$STAGE" ] && echo "STAGE not set" && exit 1;
 
-aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin-api . --region us-east-1
+aws s3 sync s3://greatupsells-infrastructure2/serverless/shopify-admin-api . --region us-east-1
 
 (cd .. && serverless remove --stage $STAGE --region us-east-1) || true
 

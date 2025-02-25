@@ -3,7 +3,7 @@
 [ -z "$STAGE" ] && echo "STAGE not set" && exit 1;
 [ -z "$MONGODB_APP_PASSWORD" ] && echo "MONGODB_APP_PASSWORD not set" && exit 1;
 
-aws s3 sync s3://greatupsells-infrastructure/serverless/shops-api . --region us-east-1
+aws s3 sync s3://greatupsells-infrastructure2/serverless/shops-api . --region us-east-1
 
 (cd .. && serverless remove --stage $STAGE --region us-east-1) || true
 

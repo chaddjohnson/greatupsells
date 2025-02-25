@@ -4,7 +4,7 @@
 [ -z "$MONGODB_APP_PASSWORD" ] && echo "MONGODB_APP_PASSWORD not set" && exit 1;
 [ -z "$ELASTICSEARCH_APP_PASSWORD" ] && echo "ELASTICSEARCH_APP_PASSWORD not set" && exit 1;
 
-aws s3 sync s3://greatupsells-infrastructure/serverless/logs-service . --region us-east-1
+aws s3 sync s3://greatupsells-infrastructure2/serverless/logs-service . --region us-east-1
 
 (cd .. && serverless remove --stage $STAGE --region us-east-1) || true
 

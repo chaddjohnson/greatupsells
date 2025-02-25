@@ -91,7 +91,7 @@ jobs:
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin . --region us-east-1
+        run: aws s3 sync s3://greatupsells-infrastructure2/serverless/shopify-admin . --region us-east-1
         working-directory: applications/shopify-admin
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
@@ -112,7 +112,7 @@ jobs:
       #   working-directory: applications/shopify-admin
       #   if: ${{ github.ref == 'refs/heads/production' }}
       - name: Sync .serverless directory
-        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/shopify-admin/.serverless
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure2/serverless/shopify-admin/.serverless
         working-directory: applications/shopify-admin
       - name: Publish Shopify extensions
         run: env > .env && yarn extensions:deploy

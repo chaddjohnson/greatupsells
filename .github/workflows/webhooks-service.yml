@@ -43,13 +43,13 @@ jobs:
       - name: Build Packages
         run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/webhooks-service . --region us-east-1
+        run: aws s3 sync s3://greatupsells-infrastructure2/serverless/webhooks-service . --region us-east-1
         working-directory: services/webhooks
       - name: Deploy Serverless Application (us-east-1)
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: services/webhooks
       - name: Sync .serverless directory
-        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/webhooks-service/.serverless --region us-east-1
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure2/serverless/webhooks-service/.serverless --region us-east-1
         working-directory: services/webhooks
       - name: Uninstall Global Packages
         if: always()
