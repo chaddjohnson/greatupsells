@@ -10,9 +10,7 @@ services_domains = {
   "us-east-1" = "services.test.greatupsells.com"
 }
 assets_domain                    = "assets.test.greatupsells.com"
-shopify_admin_app_api_key        = "2a3a2f40aab400124390d89a7844b93d"
-shopify_admin_app_api_secret_key = "22560c4fd72703f5530503b7c009664f"
-shopify_post_purchase_id         = "8aa3eb0a-f23d-4e3a-b336-f99d87fec220"
-shopify_app_embed_block_id       = "986ff121-e7bc-43eb-a8d8-a99c474cbea0"
-event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/18156060673/greatupsells-webhooks-test"
+shopify_admin_app_api_key        = "e2f85781266415a7439d8022e56fb01f"
+shopify_post_purchase_id         = ""
+event_bus_arn                    = "arn:aws:events:us-east-1:108782060660:event-bus/aws.partner/shopify.com/223146770433/greatupsells-webhooks-test"
 health_check_alarm_email         = "greatupsells@proxima.ai"
