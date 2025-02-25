@@ -43,7 +43,6 @@ module "us_east_1" {
   shopify_post_purchase_id         = var.shopify_post_purchase_id
   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
-  redis_app_password               = var.redis_app_password
 
   depends_on = [aws_route53_zone.domain]
 }
@@ -72,7 +71,6 @@ module "us_east_1" {
 #   shopify_post_purchase_id         = var.shopify_post_purchase_id
 #   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
 #   event_bus_arn                    = var.event_bus_arn
-#   redis_app_password               = var.redis_app_password
 
 #   depends_on = [aws_route53_zone.domain]
 # }
@@ -101,7 +99,6 @@ module "us_east_1" {
 #   shopify_post_purchase_id         = var.shopify_post_purchase_id
 #   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
 #   event_bus_arn                    = var.event_bus_arn
-#   redis_app_password               = var.redis_app_password
 
 #   depends_on = [aws_route53_zone.domain]
 # }

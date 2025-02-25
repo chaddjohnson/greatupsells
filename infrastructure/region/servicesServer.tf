@@ -38,14 +38,6 @@ resource "aws_security_group" "services_server" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Redis
-  ingress {
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   # Elasticsearch
   ingress {
     from_port   = 9200

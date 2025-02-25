@@ -65,7 +65,3 @@ variable "shopify_app_embed_block_id" {
 variable "event_bus_arn" {
   type = string
 }
-
-variable "redis_app_password" {
-  type = string
-}
