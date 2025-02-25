@@ -305,7 +305,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
-1. Create the `greatupsells-infrastructure` bucket if it does not exist.
+1. Create the `greatupsells-infrastructure2` bucket if it does not exist.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -344,14 +344,13 @@ Code consistency is important. In order to maintain consistency, convention chan
 1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
-   1. `shopify_app_embed_block_id` (you will need to use a dummy value until the app is running, and then update SSM and your Lambdas once activated in the test shop's theme)
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
 1. Update `event_bus_name` in `services/webhooks/infrastructure/config/[environment].tfvars`.
-1. Configure the following secrets [here](https://github.com/chaddjohnson/upselling/settings/secrets/actions) in GitHub:
+1. Configure the following secrets [here](https://github.com/chaddjohnson/greatupsells/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
-   1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
+   1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account)
    1. `AWS_SECRET_ACCESS_KEY` (key for a server IAM account used by CI)
-   1. `AWS_SECRET_ACCESS_KEY_SERVER` (key for a server IAM account used by CI)
+   1. `AWS_SECRET_ACCESS_KEY_SERVER` (key for a server IAM account)
    1. `MONGODB_ROOT_PASSWORD` (the root MongoDB password)
    1. `MONGODB_ADMIN_PASSWORD` (the main admin account MongoDB password)
    1. `MONGODB_APP_PASSWORD` (the app account MongoDB password)
@@ -360,6 +359,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `ELASTICSEARCH_APP_PASSWORD` (the Elasticsearch "app" user password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
    1. `SHOPIFY_CLI_PARTNERS_TOKEN` (a CLI token obtained from the Shopify Partners account)
+      1. This should be regenerated every 12 months.
 1. In the AWS Console under SES, request a sending limit increase to get the SES account out of "sandbox" mode.
 1. Trigger deployments in the order shown below.
 1. Add name servers to domain registrar settings once `infrastructure` setup has run.
