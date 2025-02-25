@@ -8,7 +8,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "image-id"
-    values = ["ami-083654bd07b5da81d"]
+    values = ["ami-0070839387a174250"]
   }
 }
 
