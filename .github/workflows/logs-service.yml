@@ -38,6 +38,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Node Modules
+        run: yarn install --immutable
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
@@ -68,8 +70,6 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/elasticsearch-logs/url'
           env_variable_name: 'ELASTICSEARCH_URL'
-      - name: Install Node Modules
-        run: yarn install --immutable
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Run Data Migrations

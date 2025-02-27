@@ -52,6 +52,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Node Modules
+        run: yarn install --immutable
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
@@ -61,8 +63,6 @@ jobs:
         working-directory: applications/admin
         env:
           STAGE: ${{ env.BRANCH }}
-      - name: Install Node Modules
-        run: yarn install --immutable
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
