@@ -39,6 +39,8 @@ jobs:
         run: yarn infrastructure
         working-directory: services/logs
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD_TEST }}
           ELASTICSEARCH_APP_PASSWORD: ${{ secrets.ELASTICSEARCH_APP_PASSWORD_TEST }}
@@ -47,6 +49,8 @@ jobs:
         run: yarn infrastructure
         working-directory: services/logs
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
           ELASTICSEARCH_APP_PASSWORD: ${{ secrets.ELASTICSEARCH_APP_PASSWORD }}
