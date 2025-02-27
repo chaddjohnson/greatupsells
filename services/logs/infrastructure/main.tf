@@ -15,6 +15,7 @@ provider "aws" {
   alias  = "region"
   region = "us-east-1"
 }
+
 # provider "aws" {
 #   alias  = "eu-west-1"
 #   region = "eu-west-1"
@@ -28,7 +29,8 @@ provider "aws" {
 module "us_east_1" {
   source = "./region"
   providers = {
-    aws.region = aws
+    aws = aws
+    aws.region = aws.region
   }
 
   elasticsearch_app_password = var.elasticsearch_app_password
