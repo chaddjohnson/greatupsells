@@ -36,7 +36,9 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
           env_variable_name: 'ASSETS_DOMAIN'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:

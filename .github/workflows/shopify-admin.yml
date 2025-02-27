@@ -67,7 +67,9 @@ jobs:
       #     env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:

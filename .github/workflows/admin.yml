@@ -40,7 +40,9 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/admin-api/url'
           env_variable_name: 'ADMIN_API_URL'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
