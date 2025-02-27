@@ -59,8 +59,6 @@ jobs:
         run: ./run.sh
         working-directory: infrastructure
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           STAGE: ${{ env.BRANCH }}
           TF_VAR_public_key: ${{ env.PUBLIC_KEY_TEST }}
           TF_VAR_shopify_admin_app_api_secret_key_test: ${{ env.SHOPIFY_ADMIN_APP_API_SECRET_KEY_TEST }}
@@ -70,8 +68,6 @@ jobs:
         run: ./run.sh
         working-directory: infrastructure
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           STAGE: ${{ env.BRANCH }}
           TF_VAR_public_key: ${{ env.PUBLIC_KEY }}
           TF_VAR_shopify_admin_app_api_secret_key: ${{ env.SHOPIFY_ADMIN_APP_API_SECRET_KEY }}
