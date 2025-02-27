@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "infrastructure.tfstate"
     region = "us-east-1"
   }
@@ -41,7 +41,6 @@ module "us_east_1" {
   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
   shopify_post_purchase_id         = var.shopify_post_purchase_id
-  shopify_app_embed_block_id       = var.shopify_app_embed_block_id
   event_bus_arn                    = var.event_bus_arn
 
   depends_on = [aws_route53_zone.domain]
@@ -69,7 +68,6 @@ module "us_east_1" {
 #   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
 #   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
 #   shopify_post_purchase_id         = var.shopify_post_purchase_id
-#   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
 #   event_bus_arn                    = var.event_bus_arn
 
 #   depends_on = [aws_route53_zone.domain]
@@ -97,7 +95,6 @@ module "us_east_1" {
 #   shopify_admin_app_api_key        = var.shopify_admin_app_api_key
 #   shopify_admin_app_api_secret_key = var.shopify_admin_app_api_secret_key
 #   shopify_post_purchase_id         = var.shopify_post_purchase_id
-#   shopify_app_embed_block_id       = var.shopify_app_embed_block_id
 #   event_bus_arn                    = var.event_bus_arn
 
 #   depends_on = [aws_route53_zone.domain]

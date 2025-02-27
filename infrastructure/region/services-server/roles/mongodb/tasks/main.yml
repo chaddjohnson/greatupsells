@@ -7,15 +7,13 @@
   register: mongodb
 
 - name: Add Mongo PPA key
-  apt_key:
-    url: https://www.mongodb.org/static/pgp/server-4.4.asc
-    state: present
+  raw: curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
   when: not mongodb.stat.exists
 
 - name: Add Mongo sources list
   lineinfile:
-    line: 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse'
-    dest: /etc/apt/sources.list.d/mongodb-org-4.4.list
+    line: 'deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse'
+    dest: /etc/apt/sources.list.d/mongodb-org-8.0.list
     state: present
     create: yes
   when: not mongodb.stat.exists
@@ -43,6 +41,7 @@
     - mongodb-org-server
     - mongodb-org-shell
     - mongodb-org-mongos
+    - mongodb-mongosh
     - mongodb-org-tools
   when: not mongodb.stat.exists
 
@@ -59,8 +58,11 @@
     name: root
     password: '{{ mongodb_root_password }}'
     update_password: on_create
-    roles: root
-  ignore_errors: yes
+    roles:
+      - role: root
+    ssl: true
+    ssl_cert_reqs: CERT_NONE
+  ignore_errors: false
   when: not mongodb.stat.exists
 
 - name: Regenerate certificate files
@@ -97,7 +99,7 @@
     minute: '0'
     hour: '0,6,12,18'
     user: root
-    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-shops?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups/database/{{ stage }}/greatupsells-shops/$(date +\\%s).gz --storage-class STANDARD_IA"
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-shops?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-shops/$(date +\\%s).gz --storage-class STANDARD_IA"
   when: region == "us-east-1"
 
 - name: Set up a job for Logs database backup
@@ -106,7 +108,7 @@
     minute: '1'
     hour: '0,6,12,18'
     user: root
-    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-logs?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups/database/{{ stage }}/greatupsells-logs/$(date +\\%s).gz --storage-class STANDARD_IA"
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-logs?replicaSet=rs0&readPreference=secondaryPreferred&ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-logs/$(date +\\%s).gz --storage-class STANDARD_IA"
   when: region == "us-east-1"
 
 - name: Initiate MongoDB replica set (test)
@@ -150,7 +152,7 @@
     login_user: root
     login_password: '{{ mongodb_root_password }}'
     database: admin
-    name: 'chad'
+    name: chad
     password: '{{ mongodb_admin_password }}'
     roles:
       - { role: 'userAdminAnyDatabase', db: 'admin' }

@@ -45,7 +45,7 @@ custom:
     endpointType: regional
     apiType: http
     route53Params:
-      routingPolicy: latency
+      routingPolicy: simple
       setIdentifier: ${self:provider.region}
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
     securityPolicy: tls_1_2

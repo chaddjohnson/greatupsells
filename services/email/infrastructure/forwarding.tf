@@ -6,13 +6,16 @@ data "aws_caller_identity" "current" {}
 
 # Create S3 bucket for storing emails.
 resource "aws_s3_bucket" "email" {
-  bucket        = var.email_bucket
-  force_destroy = false
+  bucket           = var.email_bucket
+  force_destroy    = false
 }
 
-resource "aws_s3_bucket_acl" "email" {
+resource "aws_s3_bucket_ownership_controls" "email" {
   bucket = aws_s3_bucket.email.id
-  acl    = "private"
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 data "aws_iam_policy_document" "email" {

@@ -1,4 +1,4 @@
-email_bucket             = "greatupsells-email-test"
+email_bucket             = "greatupsells-email-test2"
 info_email               = "info@test.greatupsells.com"
 support_email            = "support@test.greatupsells.com"
 abuse_forwarding_email   = "greatupsells@proxima.ai"

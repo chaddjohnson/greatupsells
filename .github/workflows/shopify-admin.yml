@@ -56,11 +56,11 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/api-key'
           env_variable_name: 'SHOPIFY_API_KEY'
-      - name: Inject "SHOPIFY_POST_PURCHASE_UPSELLS_ID" SSM Parameter
-        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
-        with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/post-purchase/id'
-          env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
+      # - name: Inject "SHOPIFY_POST_PURCHASE_UPSELLS_ID" SSM Parameter
+      #   uses: 'marvinpinto/action-inject-ssm-secrets@latest'
+      #   with:
+      #     ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/post-purchase/id'
+      #     env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -78,7 +78,7 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
         run: npm install -g serverless
       - name: Run Terraform

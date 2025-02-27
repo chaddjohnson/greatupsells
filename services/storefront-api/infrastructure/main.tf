@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "storefront-api.tfstate"
     region = "us-east-1"
   }

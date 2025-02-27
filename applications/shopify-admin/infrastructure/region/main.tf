@@ -14,7 +14,7 @@ data "aws_region" "current" {
 data "terraform_remote_state" "greatupsells_infrastructure" {
   backend = "s3"
   config = {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "env:/${terraform.workspace}/infrastructure.tfstate"
     region = "us-east-1"
   }
@@ -29,14 +29,6 @@ resource "aws_ssm_parameter" "shopify_admin_app_domain" {
   name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/domain"
   type      = "String"
   value     = var.shopify_admin_app_domain
-  overwrite = true
-  provider  = aws.region
-}
-
-resource "aws_ssm_parameter" "shopify_admin_app_latency_domain" {
-  name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/latency-domain"
-  type      = "String"
-  value     = "shopify-admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
   overwrite = true
   provider  = aws.region
 }
@@ -56,7 +48,6 @@ resource "aws_route53_health_check" "shopify_admin_app" {
   resource_path     = "/health"
   failure_threshold = "5"
   request_interval  = "30"
-  regions           = ["us-east-1"] # ["us-east-1", "eu-west-1", "ap-northeast-1"]
 
   tags = {
     Name = "shopify-admin-app-${terraform.workspace}"

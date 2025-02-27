@@ -1,6 +1,14 @@
 resource "aws_s3_bucket" "assets" {
-  bucket        = var.assets_domain
-  force_destroy = false
+  bucket           = var.assets_domain
+  force_destroy    = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "assets" {
+  bucket = aws_s3_bucket.assets.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 resource "aws_s3_bucket_cors_configuration" "assets" {
@@ -12,11 +20,6 @@ resource "aws_s3_bucket_cors_configuration" "assets" {
     allowed_origins = ["*"]
     max_age_seconds = 86400
   }
-}
-
-resource "aws_s3_bucket_acl" "assets" {
-  bucket = aws_s3_bucket.assets.id
-  acl    = "private"
 }
 
 resource "aws_cloudfront_origin_access_identity" "assets" {}

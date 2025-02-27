@@ -4,10 +4,8 @@ resource "aws_acm_certificate" "domain" {
   subject_alternative_names = [
     "*.${var.base_domain}",
     "*.${data.aws_region.current.name}.${var.base_domain}",
-    "*.latency.${var.base_domain}",
     "*.test.${var.base_domain}",
     "*.${data.aws_region.current.name}.test.${var.base_domain}",
-    "*.latency.test.${var.base_domain}",
   ]
 }
 
@@ -31,11 +29,15 @@ resource "aws_route53_record" "domain" {
   ttl             = 60
   type            = each.value.type
   zone_id         = data.aws_route53_zone.domain.zone_id
+
+  depends_on = [aws_acm_certificate.domain]
 }
 
 resource "aws_acm_certificate_validation" "domain" {
   certificate_arn         = aws_acm_certificate.domain.arn
   validation_record_fqdns = [for record in aws_route53_record.domain : record.fqdn]
+
+  depends_on = [aws_acm_certificate.domain]
 }
 
 output "certificate_arn" {

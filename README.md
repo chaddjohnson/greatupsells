@@ -383,11 +383,74 @@ Initial deployments should occur in the following order:
 1. `applications/storefront`
 1. `applications/admin`
 
-The easiest way to accomplish this is to initially run Terraform for each service from your local machine.
+The easiest way to accomplish this is to initially run Terraform for each service from your local machine. For each service, from its directory, run the following:
+
+    AWS_PROFILE=greatupsells STAGE=test ./run.sh
+
+Be sure to pass in whatever environment variables are needed by the script.
+
+To run for `infrastructure` locally, you'll need to temporarily plug variables into files in `./infrastructure/region/services-server/roles` similarly to how `workflows/infrastructure.yml` does (note that these files are ignored by Git). You will also need to install the server private and public keys at `~/.ssh/greatupsells/[test|production]/id_rsa` and `~/.ssh/greatupsells/[test|production]/id_rsa.pub`.
+
+Unfortunately you will likely have to fight with the top-level `infrastructure` piece to get Terraform to successfully run.
+
+- One thing you will need to do is disable security before the MongoDB "Create MongoDB root user" task runs by manually editing `/etc/mongod.conf` on the server, then re-run Ansible, then remove this:
+
+  ```
+  security:
+    authorization: "disabled"
+  ```
+
+  Then stop MongoDB and restart without authentication:
+
+  ```
+  sudo systemctl stop mongod
+  sudo mongod --dbpath /var/lib/mongodb --port 27017 --bind_ip 127.0.0.1 --replSet rs0 --noauth
+  ```
+
+  Finally, log in:
+
+  ```
+  mongosh --port 27017
+  ```
+
+  Initiate the replicaset:
+
+  ```
+  rs.initiate()
+  ```
+
+  and create the user:
+
+  ```
+  use admin
+  db.createUser({
+    user: "root",
+    pwd: "your_secure_password",
+    roles: [{ role: "root", db: "admin" }]
+  })
+  ```
+
+  Once done, re-enable authorization and restart `mongod`:
+
+  ```
+  sudo systemctl restart mongod
+  ```
+
+  You might also need to fix file ownership:
+
+  ```
+  sudo chown -R mongodb:mongodb /var/lib/mongodb
+  sudo chown -R mongodb:mongodb /var/log/mongodb
+  sudo chmod -R 700 /var/lib/mongodb
+  sudo chmod -R 755 /var/log/mongodb
+  sudo systemctl restart mongod
+  ```
+
+  Then re-run Ansible.
 
 ## Destruction
 
-Run the following:
+Run the following from the project root:
 
     AWS_PROFILE=greatupsells STAGE=test yarn destroy
 

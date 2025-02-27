@@ -14,7 +14,7 @@ resource "aws_cloudfront_distribution" "admin" {
   }
 
   origin {
-    domain_name = "admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+    domain_name = "admin.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
     origin_id   = "app"
 
     custom_origin_config {

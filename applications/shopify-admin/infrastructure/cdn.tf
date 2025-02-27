@@ -14,7 +14,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   }
 
   origin {
-    domain_name = "shopify-admin.latency.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
+    domain_name = "shopify-admin.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}"
     origin_id   = "app"
 
     custom_origin_config {

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "logs-service.tfstate"
     region = "us-east-1"
   }
