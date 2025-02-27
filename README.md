@@ -18,7 +18,7 @@ The Node version is specified in the top-level `.node-version` file; please inst
 
 ### Yarn
 
-Yarn is used as the package manager. Please install this globally.
+Yarn v4 is used as the package manager. Please install this globally.
 
 ### Lerna
 

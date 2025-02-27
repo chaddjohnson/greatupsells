@@ -10,8 +10,8 @@
   "license": "UNLICENSED",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "axios": "^0.21.0",
-    "aws4-axios": "^2.2.0"
+    "aws4-axios": "^2.2.0",
+    "axios": "^0.21.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.1116.0"

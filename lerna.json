@@ -1,5 +1,11 @@
 {
   "version": "0.0.0",
-  "useWorkspaces": true,
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "packages": [
+    "applications/*",
+    "packages/*",
+    "services/*"
+  ],
+  "stream": true,
+  "loglevel": "info"
 }

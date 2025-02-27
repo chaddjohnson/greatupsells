@@ -69,7 +69,7 @@ jobs:
       - name: Install Node Modules
         run: yarn install --immutable
       - name: Build Packages
-        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Run Data Migrations
         run: yarn migrate
         working-directory: services/logs

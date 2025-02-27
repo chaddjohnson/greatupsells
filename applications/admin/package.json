@@ -9,13 +9,13 @@
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@greatupsells/react-components": "0.0.0",
+    "@greatupsells/react-hooks": "0.0.0",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
-    "@greatupsells/react-components": "0.0.0",
-    "@greatupsells/react-hooks": "0.0.0",
     "clsx": "^1.1.1",
     "codemirror": "^5.60.0",
     "compression-webpack-plugin": "^9.0.0",
@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "babel-plugin-transform-imports": "^2.0.0",
-    "nodemon": "^2.0.7",
     "serverless": "^3.38.0",
     "serverless-domain-manager": "6.0.3",
     "serverless-plugin-monorepo": "^0.11.0",

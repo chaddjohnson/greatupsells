@@ -45,7 +45,7 @@ jobs:
       - name: Install Node Modules
         run: yarn install --immutable
       - name: Build Packages
-        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
         run: aws s3 sync s3://greatupsells-infrastructure2/serverless/shopify-admin-api . --region us-east-1
         working-directory: services/shopify-admin-api

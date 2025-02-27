@@ -16,10 +16,10 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/services/admin-api",
   "dependencies": {
-    "@middy/core": "^1.0.0",
-    "@middy/http-cors": "^1.0.0",
     "@greatupsells/gateway-http-client": "0.0.0",
     "@greatupsells/logger": "0.0.0",
+    "@middy/core": "^1.0.0",
+    "@middy/http-cors": "^1.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
     "qs": "^6.10.1"

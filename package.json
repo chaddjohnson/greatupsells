@@ -11,9 +11,9 @@
     "format": "lerna run format",
     "clean": "find . -iname node_modules -exec rm -rf {} + ; rm -rf applications/*/.next packages/*/dist",
     "destroy": "dotenv -- bash -c 'lerna run destroy --stream && (cd infrastructure && ./destroy.sh)'",
-    "bootstrap": "dotenv -- lerna bootstrap --force-local",
+    "bootstrap": "dotenv -- yarn workspaces focus --all",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@greatupsells/*",
-    "prestart": "rm -f package-lock.json; yarn install && dotenv -- yarn bootstrap",
+    "prestart": "rm -f package-lock.json; yarn install --immutable && dotenv -- yarn bootstrap",
     "start": "(ngrok start greatupsells > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
   },
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
@@ -51,9 +51,11 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-webpack-plugin": "^4.2.0",
-    "lerna": "^3.22.1",
+    "lerna": "^8.2.0",
+    "nodemon": "^3.1.9",
     "prettier": "^3.5.1",
     "webpack": "^5.97.1",
     "webpack-cli": "^4.5.0"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }
