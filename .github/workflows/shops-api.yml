@@ -34,7 +34,15 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
         run: npm install -g serverless
-      - name: Run Terraform
+      - name: Run Terraform (test)
+        if: success() && github.ref == 'refs/heads/test'
+        run: yarn infrastructure
+        working-directory: services/shops-api
+        env:
+          STAGE: ${{ env.BRANCH }}
+          MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD_TEST }}
+      - name: Run Terraform (production)
+        if: success() && github.ref == 'refs/heads/master'
         run: yarn infrastructure
         working-directory: services/shops-api
         env:
