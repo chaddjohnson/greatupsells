@@ -27,6 +27,9 @@ provider "aws" {
 
 module "us_east_1" {
   source = "./region"
+  providers = {
+    aws.region = aws
+  }
 
   elasticsearch_app_password = var.elasticsearch_app_password
   mongodb_app_password       = var.mongodb_app_password
