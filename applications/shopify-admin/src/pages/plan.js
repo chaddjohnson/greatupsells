@@ -184,7 +184,33 @@ const PlanPage = () => {
                 <PlanTableContainer>
                   <DataTable
                     columnContentTypes={['text', 'text', 'text', 'text']}
-                    headings={['Feature', 'Basic', 'Plus', 'Pro']}
+                    headings={[
+                      'Feature',
+                      <Text fontWeight="bold" key="basic" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Basic
+                          </Text>
+                          <Text variant="headingXl">$24/month</Text>
+                        </BlockStack>
+                      </Text>,
+                      <Text fontWeight="bold" key="plus" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Plus
+                          </Text>
+                          <Text variant="headingXl">$49/month</Text>
+                        </BlockStack>
+                      </Text>,
+                      <Text fontWeight="bold" key="pro" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Pro
+                          </Text>
+                          <Text variant="headingXl">$99/month</Text>
+                        </BlockStack>
+                      </Text>
+                    ]}
                     rows={planData}
                     truncate={false}
                     hoverable={false}
