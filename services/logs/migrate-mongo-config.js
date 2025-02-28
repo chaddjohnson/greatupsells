@@ -1,3 +1,5 @@
+console.log(JSON.stringify(process.env));
+
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
