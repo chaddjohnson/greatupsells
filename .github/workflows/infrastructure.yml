@@ -60,8 +60,8 @@ jobs:
         working-directory: infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
-          TF_VAR_public_key: ${{ env.PUBLIC_KEY_TEST }}
-          TF_VAR_shopify_admin_app_api_secret_key_test: ${{ env.SHOPIFY_ADMIN_APP_API_SECRET_KEY_TEST }}
+          TF_VAR_public_key: ${{ secrets.PUBLIC_KEY_TEST }}
+          TF_VAR_shopify_admin_app_api_secret_key_test: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY_TEST }}
         timeout-minutes: 45
       - name: Run Terraform (production)
         if: success() && github.ref == 'refs/heads/master'
@@ -69,6 +69,6 @@ jobs:
         working-directory: infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
-          TF_VAR_public_key: ${{ env.PUBLIC_KEY }}
-          TF_VAR_shopify_admin_app_api_secret_key: ${{ env.SHOPIFY_ADMIN_APP_API_SECRET_KEY }}
+          TF_VAR_public_key: ${{ secrets.PUBLIC_KEY }}
+          TF_VAR_shopify_admin_app_api_secret_key: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY }}
         timeout-minutes: 45
