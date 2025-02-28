@@ -608,7 +608,6 @@ functions:
         enabled: false
   importShopOrders:
     memorySize: 512
-    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopOrders.handler
     events:
@@ -620,7 +619,6 @@ functions:
         enabled: false
   importShopCollections:
     memorySize: 512
-    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopCollections.handler
     events:
@@ -632,7 +630,6 @@ functions:
         enabled: false
   importShopProducts:
     memorySize: 512
-    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopProducts.handler
     events:

@@ -68,7 +68,7 @@ functions:
           method: get
   log:
     memorySize: 256
-    reservedConcurrency: 3
+    maxConcurrency: 3
     handler: src/workers/log.handler
     events:
       - sqs:
