@@ -5,8 +5,6 @@ dotenvExpand(dotenv.config());
 
 const { MONGODB_URL_LOGS } = process.env;
 
-console.log(`MONGODB_URL_LOGS = ${MONGODB_URL_LOGS?.split('').join(' ')}`);
-
 const config = {
   mongodb: {
     url: MONGODB_URL_LOGS,
@@ -27,6 +25,8 @@ const config = {
   // The file extension to create migrations and search for in migration dir
   migrationFileExtension: '.js'
 };
+
+console.log(JSON.stringify(config, null, 2));
 
 // Return the config as a promise
 module.exports = config;
