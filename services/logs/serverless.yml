@@ -68,12 +68,12 @@ functions:
           method: get
   log:
     memorySize: 256
-    maxConcurrency: 3
     handler: src/workers/log.handler
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 1
+          maximumConcurrency: 3
   findLogs:
     handler: src/routes/findLogs.handler
     events:
