@@ -1,5 +1,5 @@
-console.log(`MONGODB_URL_LOGS = ${process.env.MONGODB_URL_LOGS}`);
-console.log(`ELASTICSEARCH_URL = ${process.env.ELASTICSEARCH_URL}`);
+console.log(`MONGODB_URL_LOGS = ${process.env.MONGODB_URL_LOGS?.split('').join(' ')}`);
+console.log(`ELASTICSEARCH_URL = ${process.env.ELASTICSEARCH_URL?.split('').join(' ')}`);
 
 const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
