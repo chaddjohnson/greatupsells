@@ -60,6 +60,8 @@ jobs:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
           ELASTICSEARCH_APP_PASSWORD: ${{ secrets.ELASTICSEARCH_APP_PASSWORD }}
+      - name: Debug MONGODB_URL_LOGS
+        run: echo "MONGODB_URL_LOGS=$MONGODB_URL_LOGS"
       - name: Inject "MONGODB_URL_LOGS" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
@@ -73,11 +75,8 @@ jobs:
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Run Data Migrations
-        run: yarn migrate
+        run: MONGODB_URL_LOGS="${MONGODB_URL_LOGS}" ELASTICSEARCH_URL="${ELASTICSEARCH_URL}" yarn migrate
         working-directory: services/logs
-        env:
-          MONGODB_URL_LOGS: ${{ env.MONGODB_URL_LOGS }}
-          ELASTICSEARCH_URL: ${{ env.ELASTICSEARCH_URL }}
       - name: Download .serverless directory
         run: aws s3 sync s3://greatupsells-infrastructure2/serverless/logs-service . --region us-east-1
         working-directory: services/logs
