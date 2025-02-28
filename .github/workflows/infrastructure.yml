@@ -22,11 +22,13 @@ jobs:
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Install Private Key (test)
+        if: success() && github.ref == 'refs/heads/test'
         run: |
           mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
           echo "${{ secrets.PRIVATE_KEY_TEST }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
           chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
       - name: Install Private Key (production)
+        if: success() && github.ref == 'refs/heads/master'
         run: |
           mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
