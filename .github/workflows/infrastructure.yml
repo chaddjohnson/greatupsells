@@ -23,7 +23,7 @@ jobs:
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Install Private Key
         run: |
-          mkdir -p ~/.ssh/greatupsells
+          mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
           chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
       - name: Checkout
