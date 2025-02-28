@@ -88,7 +88,6 @@ functions:
   draftOrderUpdate:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/draftOrderUpdate.handler
-    reservedConcurrency: 1
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/draft-order-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:draft-order-update-queue-dev'}
