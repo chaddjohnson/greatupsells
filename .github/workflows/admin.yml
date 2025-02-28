@@ -57,7 +57,7 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
-        run: npm install -g serverless
+        run: npm install -g serverless@3.38.0
       - name: Run Terraform
         run: yarn infrastructure
         working-directory: applications/admin
