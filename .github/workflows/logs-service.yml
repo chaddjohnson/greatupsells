@@ -60,20 +60,16 @@ jobs:
           STAGE: ${{ env.BRANCH }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
           ELASTICSEARCH_APP_PASSWORD: ${{ secrets.ELASTICSEARCH_APP_PASSWORD }}
-      - name: Inject "MONGODB_URL_LOGS" SSM Parameter
-        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
-        with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/mongodb-logs/url'
-          env_variable_name: 'MONGODB_URL_LOGS'
-      - name: Debug Injected MONGODB_URL_LOGS
-        run: echo "MONGODB_URL_LOGS=${MONGODB_URL_LOGS}"
-      - name: Debug Branch Value
-        run: echo "BRANCH=${{ env.BRANCH }}"
-      - name: Inject "ELASTICSEARCH_URL" SSM Parameter
-        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
-        with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/elasticsearch-logs/url'
-          env_variable_name: 'ELASTICSEARCH_URL'
+      - name: Fetch and Persist "MONGODB_URL_LOGS"
+        run: |
+          VALUE=$(aws ssm get-parameter --name "/greatupsells/${{ env.BRANCH }}/database/mongodb-logs/url" --with-decryption --query "Parameter.Value" --output text)
+          echo "MONGODB_URL_LOGS=$VALUE" >> $GITHUB_ENV
+          echo "Successfully retrieved MONGODB_URL_LOGS"
+      - name: Fetch and Persist "ELASTICSEARCH_URL"
+        run: |
+          VALUE=$(aws ssm get-parameter --name "/greatupsells/${{ env.BRANCH }}/database/elasticsearch-logs/url" --with-decryption --query "Parameter.Value" --output text)
+          echo "ELASTICSEARCH_URL=$VALUE" >> $GITHUB_ENV
+          echo "Successfully retrieved ELASTICSEARCH_URL"
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Run Data Migrations
