@@ -104,7 +104,7 @@ Please use the `develop` branch for main development.
 To initially register all the extension for the Shopify at once:
 
 1. Open a terminal, and change the working directory to `applications/shopify-admin`.
-1. Run `yarn shopify app deploy`.
+1. Run `yarn shopify app deploy -c dev`.
 1. Follow the prompts.
 1. Verify the extension is now listed under `Extensions` for the app on Shopify Partners.
 

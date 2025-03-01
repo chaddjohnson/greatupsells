@@ -86,13 +86,13 @@ resource "aws_ssm_parameter" "shopify_admin_app_api_secret_key" {
   provider  = aws.region
 }
 
-# resource "aws_ssm_parameter" "shopify_extension_post_purchase_id" {
-#   name      = "/greatupsells/${terraform.workspace}/shopify/post-purchase/id"
-#   type      = "SecureString"
-#   value     = var.shopify_post_purchase_id
-#   overwrite = true
-#   provider  = aws.region
-# }
+resource "aws_ssm_parameter" "shopify_extension_post_purchase_id" {
+  name      = "/greatupsells/${terraform.workspace}/shopify/post-purchase/id"
+  type      = "SecureString"
+  value     = var.shopify_post_purchase_id
+  overwrite = true
+  provider  = aws.region
+}
 
 resource "aws_ssm_parameter" "event_bus_arn" {
   name      = "/greatupsells/${terraform.workspace}/webhooks/arn"

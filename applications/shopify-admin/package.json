@@ -74,6 +74,6 @@
     "extensions:start": "dotenv -- bash -c 'shopify app dev --tunnel-url=$POST_PURCHASE_APP_URL'",
     "extensions:info": "shopify app info",
     "extensions:scaffold": "shopify app scaffold",
-    "extensions:deploy": "shopify app deploy"
+    "extensions:deploy": "shopify app deploy --force"
   }
 }

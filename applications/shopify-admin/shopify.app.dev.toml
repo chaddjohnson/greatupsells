@@ -6,9 +6,6 @@ embedded = true
 name = "Great Upsells Dev"
 handle = "great-upsells-dev-1"
 
-[build]
-include_config_on_deploy = true
-
 [webhooks]
 api_version = "2025-01"
 
@@ -26,3 +23,6 @@ prefix = "tools"
 
 [pos]
 embedded = false
+
+[build]
+include_config_on_deploy = true
