@@ -120,9 +120,16 @@ jobs:
       - name: Sync .serverless directory
         run: aws s3 sync .serverless s3://greatupsells-infrastructure2/serverless/shopify-admin/.serverless
         working-directory: applications/shopify-admin
-      - name: Publish Shopify extensions
-        run: env > .env && yarn extensions:deploy -c ${{ env.BRANCH }}
+      - name: Publish Shopify extensions (test)
+        run: env > .env && yarn extensions:deploy -c test
         working-directory: applications/shopify-admin
+        env:
+          SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN_TEST }}
+      - name: Publish Shopify extensions (production)
+        run: env > .env && yarn extensions:deploy -c production
+        working-directory: applications/shopify-admin
+        env:
+          SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g serverless
