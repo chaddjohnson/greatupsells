@@ -7461,7 +7461,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:^2.1113.0, aws-sdk@npm:^2.1116.0, aws-sdk@npm:^2.1404.0":
+"aws-sdk@npm:^2.1113.0, aws-sdk@npm:^2.1116.0, aws-sdk@npm:^2.1404.0, aws-sdk@npm:^2.1692.0":
   version: 2.1692.0
   resolution: "aws-sdk@npm:2.1692.0"
   dependencies:
@@ -13557,6 +13557,7 @@ __metadata:
     "@greatupsells/logger": "npm:0.0.0"
     "@middy/core": "npm:^1.0.0"
     "@middy/http-cors": "npm:^1.0.0"
+    aws-sdk: "npm:^2.1692.0"
     http-status-codes: "npm:^2.1.4"
     serverless: "npm:^3.38.0"
     serverless-domain-manager: "npm:6.0.3"
@@ -13672,7 +13673,7 @@ __metadata:
     "@greatupsells/email-client": "npm:0.0.0"
     "@greatupsells/logger": "npm:0.0.0"
     "@shopify/admin-api-client": "npm:^1.0.5"
-    aws-sdk: "npm:^2.1116.0"
+    aws-sdk: "npm:^2.1692.0"
     bluebird: "npm:^3.7.2"
     geoip-country: "npm:^4.0.56"
     getenv: "npm:^1.0.0"

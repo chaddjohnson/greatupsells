@@ -36,7 +36,7 @@
     "shopify-api-node": "^3.6.5"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1116.0",
+    "aws-sdk": "^2.1692.0",
     "serverless": "^3.38.0",
     "serverless-domain-manager": "6.0.3",
     "serverless-offline": "^13.5.0",

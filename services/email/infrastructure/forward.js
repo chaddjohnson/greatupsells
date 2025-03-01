@@ -4,14 +4,7 @@
 
 const AWS = require('aws-sdk');
 
-const {
-  DOMAIN,
-  EMAIL_BUCKET,
-  INFO_EMAIL,
-  SUPPORT_EMAIL,
-  INFO_FORWARDING_EMAIL,
-  SUPPORT_FORWARDING_EMAIL
-} = process.env;
+const { DOMAIN, EMAIL_BUCKET, INFO_EMAIL, SUPPORT_EMAIL, INFO_FORWARDING_EMAIL, SUPPORT_FORWARDING_EMAIL } = process.env;
 
 // Configure the S3 bucket and key prefix for stored raw emails, and the
 // mapping of email addresses to forward from and to.
@@ -103,9 +96,7 @@ exports.transformRecipients = function (data) {
       origEmailKey = origEmailKey.replace(/\+.*?@/, '@');
     }
     if (data.config.forwardMapping.hasOwnProperty(origEmailKey)) {
-      newRecipients = newRecipients.concat(
-        data.config.forwardMapping[origEmailKey]
-      );
+      newRecipients = newRecipients.concat(data.config.forwardMapping[origEmailKey]);
       data.originalRecipient = origEmail;
     } else {
       let origEmailDomain;
@@ -117,21 +108,11 @@ exports.transformRecipients = function (data) {
         origEmailDomain = origEmailKey.slice(pos);
         origEmailUser = origEmailKey.slice(0, pos);
       }
-      if (
-        origEmailDomain &&
-        data.config.forwardMapping.hasOwnProperty(origEmailDomain)
-      ) {
-        newRecipients = newRecipients.concat(
-          data.config.forwardMapping[origEmailDomain]
-        );
+      if (origEmailDomain && data.config.forwardMapping.hasOwnProperty(origEmailDomain)) {
+        newRecipients = newRecipients.concat(data.config.forwardMapping[origEmailDomain]);
         data.originalRecipient = origEmail;
-      } else if (
-        origEmailUser &&
-        data.config.forwardMapping.hasOwnProperty(origEmailUser)
-      ) {
-        newRecipients = newRecipients.concat(
-          data.config.forwardMapping[origEmailUser]
-        );
+      } else if (origEmailUser && data.config.forwardMapping.hasOwnProperty(origEmailUser)) {
+        newRecipients = newRecipients.concat(data.config.forwardMapping[origEmailUser]);
         data.originalRecipient = origEmail;
       } else if (data.config.forwardMapping.hasOwnProperty('@')) {
         newRecipients = newRecipients.concat(data.config.forwardMapping['@']);
@@ -143,8 +124,7 @@ exports.transformRecipients = function (data) {
   if (!newRecipients.length) {
     data.log({
       message: `${
-        'Finishing process. No new recipients found for ' +
-        'original destinations: '
+        'Finishing process. No new recipients found for ' + 'original destinations: '
       }${data.originalRecipients.join(', ')}`,
       level: 'info'
     });
@@ -240,9 +220,7 @@ exports.processMessage = function (data) {
     } else {
       data.log({
         level: 'info',
-        message:
-          'Reply-To address not added because From address was not ' +
-          'properly extracted.'
+        message: 'Reply-To address not added because From address was not ' + 'properly extracted.'
       });
     }
   }
@@ -250,39 +228,26 @@ exports.processMessage = function (data) {
   // SES does not allow sending messages from an unverified address,
   // so replace the message's "From:" header with the original
   // recipient (which is a verified domain)
-  header = header.replace(
-    /^from:[\t ]?(.*(?:\r?\n\s+.*)*)/gim,
-    function (match, from) {
-      let fromText;
-      if (data.config.fromEmail) {
-        fromText = `From: ${from.replace(/<(.*)>/, '').trim()} <${
-          data.config.fromEmail
-        }>`;
-      } else {
-        fromText = `From: ${from.replace('<', 'at ').replace('>', '')} <${
-          data.originalRecipient
-        }>`;
-      }
-      return fromText;
+  header = header.replace(/^from:[\t ]?(.*(?:\r?\n\s+.*)*)/gim, function (match, from) {
+    let fromText;
+    if (data.config.fromEmail) {
+      fromText = `From: ${from.replace(/<(.*)>/, '').trim()} <${data.config.fromEmail}>`;
+    } else {
+      fromText = `From: ${from.replace('<', 'at ').replace('>', '')} <${data.originalRecipient}>`;
     }
-  );
+    return fromText;
+  });
 
   // Add a prefix to the Subject
   if (data.config.subjectPrefix) {
-    header = header.replace(
-      /^subject:[\t ]?(.*)/gim,
-      function (match, subject) {
-        return `Subject: ${data.config.subjectPrefix}${subject}`;
-      }
-    );
+    header = header.replace(/^subject:[\t ]?(.*)/gim, function (match, subject) {
+      return `Subject: ${data.config.subjectPrefix}${subject}`;
+    });
   }
 
   // Replace original 'To' header with a manually defined one
   if (data.config.toEmail) {
-    header = header.replace(
-      /^to:[\t ]?(.*)/gim,
-      () => `To: ${data.config.toEmail}`
-    );
+    header = header.replace(/^to:[\t ]?(.*)/gim, () => `To: ${data.config.toEmail}`);
   }
 
   // Remove the Return-Path header.
@@ -360,13 +325,7 @@ exports.handler = function (event, context, callback, overrides) {
   const steps =
     overrides && overrides.steps
       ? overrides.steps
-      : [
-          exports.parseEvent,
-          exports.transformRecipients,
-          exports.fetchMessage,
-          exports.processMessage,
-          exports.sendMessage
-        ];
+      : [exports.parseEvent, exports.transformRecipients, exports.fetchMessage, exports.processMessage, exports.sendMessage];
   const data = {
     event,
     callback,
@@ -374,10 +333,7 @@ exports.handler = function (event, context, callback, overrides) {
     config: overrides && overrides.config ? overrides.config : defaultConfig,
     log: overrides && overrides.log ? overrides.log : console.log,
     ses: overrides && overrides.ses ? overrides.ses : new AWS.SES(),
-    s3:
-      overrides && overrides.s3
-        ? overrides.s3
-        : new AWS.S3({ signatureVersion: 'v4' })
+    s3: overrides && overrides.s3 ? overrides.s3 : new AWS.S3({ signatureVersion: 'v4' })
   };
   Promise.series(steps, data)
     .then(function (data) {
