@@ -73,7 +73,7 @@ jobs:
         working-directory: services/shops-api
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
-      #   working-directory: services/shops-api
+        working-directory: services/shops-api
       # - name: Deploy Serverless Application to eu-west-1
       #   run: serverless deploy --stage $BRANCH --region eu-west-1
       #   working-directory: services/shops-api
