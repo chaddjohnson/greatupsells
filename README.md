@@ -26,7 +26,7 @@ Yarn v4 is used as the package manager. Please install this globally.
 
 ### MongoDB
 
-Version 4.2 or higher is required as multi-document transactions on replica sets are used. Please only used features supported by 4.6 and lower.
+Version 4.2 or higher is required as multi-document transactions are used. Please only used features supported by 4.6 and lower.
 
 If upgrading from 3.x to 4.x, it might be easiest to dump your databases one by one, remove your MongoDB data directory, upgrade MongoDB, and then restore your databases.
 
@@ -37,8 +37,6 @@ To dump a database:
 And to restore a database:
 
     mongorestore --gzip --archive=database-name.gz
-
-During development, a local replica set is required as transactions are used. Please follow [this gist](https://gist.github.com/davisford/bb37079900888c44d2bbcb2c52a5d6e8) for setup instructions. Alternatively, you can use [run-rs](https://www.npmjs.com/package/run-rs).
 
 ### ngrok
 
@@ -411,12 +409,6 @@ Unfortunately you will likely have to fight with the top-level `infrastructure` 
 
   ```
   mongosh --port 27017
-  ```
-
-  Initiate the replicaset:
-
-  ```
-  rs.initiate()
   ```
 
   and create the user:
