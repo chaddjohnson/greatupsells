@@ -26,7 +26,5 @@ const config = {
   migrationFileExtension: '.js'
 };
 
-console.log(JSON.stringify(config, null, 2));
-
 // Return the config as a promise
 module.exports = config;
