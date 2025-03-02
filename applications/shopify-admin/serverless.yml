@@ -90,6 +90,5 @@ package:
     - '!infrastructure/**'
     - '!.next/cache/webpack/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
     - '!node_modules/aws-sdk'
     - '!node_modules/eslint'
