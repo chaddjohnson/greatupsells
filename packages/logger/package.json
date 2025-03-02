@@ -11,9 +11,7 @@
   "license": "UNLICENSED",
   "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/logger",
   "dependencies": {
-    "@greatupsells/gateway-http-client": "0.0.0"
-  },
-  "devDependencies": {
+    "@greatupsells/gateway-http-client": "0.0.0",
     "aws-sdk": "^2.1116.0"
   },
   "scripts": {
