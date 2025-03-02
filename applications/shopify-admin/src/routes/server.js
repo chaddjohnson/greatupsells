@@ -172,6 +172,7 @@ const createServer = () => {
       response.set('Content-Type', 'application/json');
       response.send(JSON.stringify({ authToken }));
     } catch (error) {
+      console.error(error); // eslint-disable-line no-console
       response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReasonPhrases.INTERNAL_SERVER_ERROR);
     }
   });
@@ -203,7 +204,7 @@ const createServer = () => {
     }
 
     console.error(error); // eslint-disable-line no-console
-    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error);
+    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReasonPhrases.INTERNAL_SERVER_ERROR);
   });
 
   return server;
