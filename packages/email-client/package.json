@@ -10,7 +10,7 @@
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
   "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/email-client",
-  "devDependencies": {
+  "dependencies": {
     "aws-sdk": "^2.1116.0"
   },
   "scripts": {
