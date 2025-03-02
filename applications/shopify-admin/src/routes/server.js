@@ -54,8 +54,8 @@ const createServer = () => {
   const server = express();
   const handle = app.getRequestHandler();
 
-  const handleAppRequest = async (request, response) => {
-    await handle(request, response);
+  const handleAppRequest = (request, response) => {
+    handle(request, response);
     response.statusCode = 200;
   };
 
@@ -187,7 +187,7 @@ const createServer = () => {
         response.redirect(`/auth?shop=${shopDomain}`);
       } else {
         response.set('Content-Security-Policy', `frame-ancestors https://${shopDomain} https://admin.shopify.com`);
-        await handleAppRequest(request, response);
+        handleAppRequest(request, response);
       }
     } catch (error) {
       response.redirect(`/auth?shop=${shopDomain}`);
