@@ -408,14 +408,15 @@ const OfferForm = ({
               tone="critical"
               action={{
                 content: 'Open checkout settings',
-                url: `https://admin.shopify.com/store/${shopName}/settings/checkout`,
+                url: `https://admin.shopify.com/store/${shopName}/settings/checkout#post-purchase-page`,
                 external: true,
                 target: '_blank'
               }}
               secondaryAction={{
                 content: 'Learn more',
                 url: 'https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-apps#set-post-purchase-app',
-                external: true
+                external: true,
+                target: '_blank'
               }}
             >
               <Text as="p">
