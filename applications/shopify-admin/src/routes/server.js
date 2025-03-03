@@ -58,7 +58,11 @@ const createServer = () => {
   const cacheTtl = 5 * 60 * 1000; // 5 minute cache duration
 
   const handleAppRequest = async (request, response) => {
+    console.log(`handleAppRequest()`);
+
     const { url } = request;
+
+    console.log(`URL = ${url}`);
 
     // Check if the response is already cached and still valid
     if (cache.has(url)) {
