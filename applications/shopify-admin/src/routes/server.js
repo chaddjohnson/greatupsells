@@ -54,45 +54,9 @@ const createServer = () => {
   const server = express();
   const handle = app.getRequestHandler();
 
-  const cache = new Map();
-  const cacheTtl = 5 * 60 * 1000; // 5 minute cache duration
-
-  const handleAppRequest = async (request, response) => {
-    console.log(`handleAppRequest()`);
-
-    const { url } = request;
-
-    console.log(`URL = ${url}`);
-
-    // Check if the response is already cached and still valid
-    if (cache.has(url)) {
-      console.log(`CACHE KEY "${url}" found`);
-      const { data, expiry } = cache.get(url);
-
-      if (expiry > Date.now()) {
-        console.log('CACHE IS VALID');
-        response.setHeader('X-Cache', 'HIT');
-        response.setHeader('Content-Type', 'text/html');
-        response.status(200).send(data);
-        return;
-      }
-
-      console.log('EXPIRING CACHE');
-
-      // If expired, remove cache entry
-      cache.delete(url);
-    }
-
-    // Capture original response behavior to store the response in cache
-    const originalSend = response.send;
-    response.send = (body) => {
-      console.log('SETTING CACHE');
-      cache.set(url, { data: body, expiry: Date.now() + cacheTtl });
-      response.setHeader('X-Cache', 'MISS');
-      originalSend.call(response, body);
-    };
-
-    await handle(request, response);
+  const handleAppRequest = (request, response) => {
+    handle(request, response);
+    response.statusCode = 200;
   };
 
   // Secure HTTP headers. Disable some things so that the app may be embedded within Shopify Admin.
