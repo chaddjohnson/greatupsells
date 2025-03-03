@@ -32,6 +32,7 @@ const handler = async (event, context) => {
 
     // Check the cache.
     if (isPostPurchaseAppInUseCache[shopId] && isPostPurchaseAppInUseCache[shopId].timestamp + ttl > now) {
+      console.log('USING isPostPurchaseAppInUseCache CACHE');
       return {
         statusCode: StatusCodes.OK,
         body: JSON.stringify({
@@ -41,12 +42,16 @@ const handler = async (event, context) => {
       };
     }
 
+    console.log('NOT USING isPostPurchaseAppInUseCache CACHE');
+
     // Determine whether this app is currently selected as the post-purchase app for the shop.
     // Determine whether the app embed block is enabled for the current theme.
     const isPostPurchaseAppInUse = await shop.getIsPostPurchaseAppInUse();
 
     // Store in cache only if the value is true
     if (isPostPurchaseAppInUse) {
+      console.log('CACHING isPostPurchaseAppInUseCache');
+
       isPostPurchaseAppInUseCache[shopId] = {
         value: isPostPurchaseAppInUse,
         timestamp: now
