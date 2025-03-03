@@ -254,6 +254,8 @@ const OfferForm = ({
   const { designModeZoom } = zoomByStrategy[offer.strategy];
   const { smallDesignModeZoom } = zoomByStrategy[offer.strategy];
 
+  const shopName = sessionStorage.shop?.replace('.myshopify.com', '');
+
   const updatePreviewContentHeight = useCallback(() => {
     const context = offerPopupContext?.current;
     const container = context?.querySelector('.content-container');
@@ -406,12 +408,13 @@ const OfferForm = ({
               tone="critical"
               action={{
                 content: 'Open checkout settings',
-                url: `https://${sessionStorage.shop}/admin/settings/checkout`,
-                external: true
+                url: `https://admin.shopify.com/store/${shopName}/settings/checkout`,
+                external: true,
+                target: '_blank'
               }}
               secondaryAction={{
                 content: 'Learn more',
-                url: 'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
+                url: 'https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-apps#set-post-purchase-app',
                 external: true
               }}
             >
