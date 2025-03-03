@@ -3,6 +3,9 @@ const logger = require('@greatupsells/logger');
 const mongodbClient = require('../models/mongodbClient');
 const models = require('../models');
 
+const isPostPurchaseAppInUseCache = {};
+const ttl = 5 * 60 * 1000; // 5 minutes
+
 const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
@@ -25,9 +28,30 @@ const handler = async (event, context) => {
       };
     }
 
+    const now = Date.now();
+
+    // Check the cache.
+    if (isPostPurchaseAppInUseCache[shopId] && isPostPurchaseAppInUseCache[shopId].timestamp + ttl > now) {
+      return {
+        statusCode: StatusCodes.OK,
+        body: JSON.stringify({
+          ...shop.toObject(),
+          isPostPurchaseAppInUse: isPostPurchaseAppInUseCache[shopId].value
+        })
+      };
+    }
+
     // Determine whether this app is currently selected as the post-purchase app for the shop.
     // Determine whether the app embed block is enabled for the current theme.
     const isPostPurchaseAppInUse = await shop.getIsPostPurchaseAppInUse();
+
+    // Store in cache only if the value is true
+    if (isPostPurchaseAppInUse) {
+      isPostPurchaseAppInUseCache[shopId] = {
+        value: isPostPurchaseAppInUse,
+        timestamp: now
+      };
+    }
 
     return {
       statusCode: StatusCodes.OK,
