@@ -62,14 +62,18 @@ const createServer = () => {
 
     // Check if the response is already cached and still valid
     if (cache.has(url)) {
+      console.log(`CACHE KEY "${url}" found`);
       const { data, expiry } = cache.get(url);
 
       if (expiry > Date.now()) {
+        console.log('CACHE IS VALID');
         response.setHeader('X-Cache', 'HIT');
         response.setHeader('Content-Type', 'text/html');
         response.status(200).send(data);
         return;
       }
+
+      console.log('EXPIRING CACHE');
 
       // If expired, remove cache entry
       cache.delete(url);
@@ -78,6 +82,7 @@ const createServer = () => {
     // Capture original response behavior to store the response in cache
     const originalSend = response.send;
     response.send = (body) => {
+      console.log('SETTING CACHE');
       cache.set(url, { data: body, expiry: Date.now() + cacheTtl });
       response.setHeader('X-Cache', 'MISS');
       originalSend.call(response, body);
