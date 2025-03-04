@@ -122,7 +122,7 @@
 - name: Reload service files
   command: systemctl daemon-reload
 
-- name: Retart Elasticsearch
+- name: Restart Elasticsearch
   service:
     name: elasticsearch
     state: restarted
