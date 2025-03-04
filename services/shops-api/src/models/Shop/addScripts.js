@@ -1,8 +1,9 @@
 const logger = require('@greatupsells/logger');
 
+const { ASSETS_URL } = process.env;
+
 const addScripts = async (shop) => {
-  // Use proxy URL defined in app settings within Shopify Partners account.
-  const src = `https://${shop.domain}/tools/great-upsells-assets/storefront.js`;
+  const src = `${ASSETS_URL}/storefront.js`;
 
   const shopifyApiClient = shop.getShopifyApiClient();
   const scriptTags = await shopifyApiClient.scriptTag.list();

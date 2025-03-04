@@ -20,6 +20,7 @@ provider:
     APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
     APP_NAME_SLUG: ${env:APP_NAME_SLUG, ssm:/greatupsells/${self:provider.stage}/app-name-slug}
     DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
+    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
     EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shops-api'

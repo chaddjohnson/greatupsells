@@ -76,7 +76,6 @@ const createServer = () => {
       createProxyMiddleware({
         target: `http://localhost:${STOREFRONT_PORT}`,
         changeOrigin: true,
-        pathRewrite: { '^/tools/great-upsells-assets': '' },
         onProxyRes: (proxyResponse) => {
           proxyResponse.headers['Accept-Encoding'] = 'gzip';
         }
