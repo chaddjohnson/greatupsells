@@ -436,6 +436,8 @@ Unfortunately you will likely have to fight with the top-level `infrastructure` 
 
   Then re-run Ansible.
 
+Further, please also note there are some manual "TODO" items for Elasticsearch. See `elasticsearch/tasks/main.yml` in the `infrastructure` project.
+
 ## Destruction
 
 Run the following from the project root:
