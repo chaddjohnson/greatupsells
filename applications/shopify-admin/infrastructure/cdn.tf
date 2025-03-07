@@ -3,15 +3,12 @@ variable "default_api_gateway_url" {
 }
 
 data "aws_ssm_parameter" "api_gateway_url" {
-  name = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-url"
+  name     = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-url"
+  count    = length(try(aws_ssm_parameter.api_gateway_url, [])) > 0 ? 1 : 0
 }
 
 locals {
-  api_gateway_url = (
-    length(data.aws_ssm_parameter.api_gateway_url.value) > 0 ?
-    data.aws_ssm_parameter.api_gateway_url.value :
-    var.default_api_gateway_url
-  )
+  api_gateway_url = try(data.aws_ssm_parameter.api_gateway_url[0].value, var.default_api_gateway_url)
 }
 
 resource "aws_cloudfront_distribution" "shopify_admin" {
