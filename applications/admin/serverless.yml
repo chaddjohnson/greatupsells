@@ -66,6 +66,7 @@ resources:
         Name: /greatupsells/${self:provider.stage}/admin-app/gateway-domain
         Type: String
         Value: !Sub ${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+        Overwrite: true
 
 plugins:
   - serverless-plugin-monorepo
