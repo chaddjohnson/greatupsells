@@ -7,6 +7,8 @@ resource "aws_ssm_parameter" "admin_api_gateway_url" {
 
 data "aws_ssm_parameter" "admin_api_gateway_url" {
   name = "/greatupsells/${terraform.workspace}/admin-app/gateway-url"
+
+  depends_on = [aws_ssm_parameter.admin_api_gateway_url]
 }
 
 resource "aws_cloudfront_distribution" "admin" {

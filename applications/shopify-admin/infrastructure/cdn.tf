@@ -7,6 +7,8 @@ resource "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
 
 data "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
   name = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-url"
+
+  depends_on = [aws_ssm_parameter.shopify_admin_api_gateway_url]
 }
 
 resource "aws_cloudfront_distribution" "shopify_admin" {
