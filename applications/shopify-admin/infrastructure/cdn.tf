@@ -3,7 +3,6 @@ resource "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
   type      = "String"
   value     = "https://placeholder.execute-api.us-east-1.amazonaws.com"
   overwrite = false
-  provider  = aws.region
 }
 
 data "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
