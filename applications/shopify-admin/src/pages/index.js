@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   Page,
   Layout,
@@ -124,42 +124,24 @@ const DashboardPage = () => {
             <Card>
               <Bleed marginBlockStart="100">
                 <Box paddingBlockEnd="300">
+                  <InlineStack align="end">
+                    <Button variant="plain" url={'/analytics'}>
+                      View analytics
+                    </Button>
+                  </InlineStack>
+
                   <InlineStack align="space-evenly">
                     <BlockStack inlineAlign="center" gap="150">
-                      <Text variant="heading3xl">
-                        <Link url="/analytics" removeUnderline monochrome>
-                          {formatNumber(shop?.offerAcceptanceCount)}
-                        </Link>
-                      </Text>
-                      <Text fontWeight="bold" tone="subdued">
-                        <Link url="/analytics" removeUnderline>
-                          Offers accepted
-                        </Link>
-                      </Text>
+                      <Text variant="heading3xl">{formatNumber(shop?.offerAcceptanceCount)}</Text>
+                      <Text fontWeight="bold">Offers accepted</Text>
                     </BlockStack>
                     <BlockStack inlineAlign="center" gap="150">
-                      <Text variant="heading3xl">
-                        <Link url="/analytics" removeUnderline monochrome>
-                          {formatPercentage(shop?.offerConversionRate, 1)}
-                        </Link>
-                      </Text>
-                      <Text fontWeight="bold" tone="subdued">
-                        <Link url="/analytics" removeUnderline>
-                          Conversion rate
-                        </Link>
-                      </Text>
+                      <Text variant="heading3xl">{formatPercentage(shop?.offerConversionRate, 1)}</Text>
+                      <Text fontWeight="bold">Conversion rate</Text>
                     </BlockStack>
                     <BlockStack inlineAlign="center" gap="150">
-                      <Text variant="heading3xl">
-                        <Link url="/analytics" removeUnderline monochrome>
-                          {formatCurrency(shop?.revenueIncrease)}
-                        </Link>
-                      </Text>
-                      <Text fontWeight="bold" tone="subdued">
-                        <Link url="/analytics" removeUnderline>
-                          Revenue increase
-                        </Link>
-                      </Text>
+                      <Text variant="heading3xl">{formatCurrency(shop?.revenueIncrease)}</Text>
+                      <Text fontWeight="bold">Revenue increase</Text>
                     </BlockStack>
                   </InlineStack>
                 </Box>
@@ -214,7 +196,7 @@ const DashboardPage = () => {
                   <Text as="h2" variant="headingSm">
                     Add offers to your store
                   </Text>
-                  <Button variant="plain" url={'/offers/'}>
+                  <Button variant="plain" url={'/offers'}>
                     Manage your offers
                   </Button>
                 </InlineGrid>
