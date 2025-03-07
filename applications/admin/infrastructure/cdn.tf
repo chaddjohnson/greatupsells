@@ -1,14 +1,13 @@
-variable "default_api_gateway_url" {
-  default = "https://placeholder.execute-api.us-east-1.amazonaws.com"
+resource "aws_ssm_parameter" "admin_api_gateway_url" {
+  name      = "/greatupsells/${terraform.workspace}/admin-app/gateway-url"
+  type      = "String"
+  value     = "https://placeholder.execute-api.us-east-1.amazonaws.com"
+  overwrite = false
+  provider  = aws.region
 }
 
-data "aws_ssm_parameter" "api_gateway_url" {
+data "aws_ssm_parameter" "admin_api_gateway_url" {
   name = "/greatupsells/${terraform.workspace}/admin-app/gateway-url"
-  optional = true  # ✅ This prevents Terraform from failing if the parameter doesn’t exist (Terraform 1.6+)
-}
-
-locals {
-  api_gateway_url = try(data.aws_ssm_parameter.api_gateway_url.value, var.default_api_gateway_url)
 }
 
 resource "aws_cloudfront_distribution" "admin" {
@@ -27,7 +26,7 @@ resource "aws_cloudfront_distribution" "admin" {
   }
 
   origin {
-    domain_name = local.api_gateway_url
+    domain_name = data.aws_ssm_parameter.admin_api_gateway_url.value
     origin_id   = "app"
 
     custom_origin_config {
