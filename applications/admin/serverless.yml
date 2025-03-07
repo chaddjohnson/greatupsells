@@ -23,19 +23,6 @@ provider:
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
 
 custom:
-  customDomain:
-    domainName: ${ssm:/greatupsells/${self:provider.stage}/admin-app/domain}
-    basePath: ''
-    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
-    createRoute53Record: true
-    endpointType: regional
-    apiType: http
-    route53Params:
-      routingPolicy: simple
-      setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/admin-app/health-check-id, ''}
-    securityPolicy: tls_1_2
-    autoDomain: true
   warmup:
     default:
       enabled: true
@@ -73,10 +60,13 @@ functions:
 
 plugins:
   - serverless-plugin-monorepo
-  - serverless-domain-manager
   - serverless-plugin-warmup
 
 package:
   patterns:
     - '!infrastructure/**'
     - '!.next/cache/webpack/**'
+    - '!.next/static/**'
+    - '!node_modules/**/*.map'
+    - '!node_modules/aws-sdk'
+    - '!node_modules/eslint'
