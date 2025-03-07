@@ -1,12 +1,12 @@
 resource "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
-  name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-url"
+  name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-domain"
   type      = "String"
-  value     = "https://placeholder.execute-api.us-east-1.amazonaws.com"
+  value     = "placeholder.execute-api.us-east-1.amazonaws.com"
   overwrite = false
 }
 
 data "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
-  name = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-url"
+  name = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-domain"
 
   depends_on = [aws_ssm_parameter.shopify_admin_api_gateway_url]
 }

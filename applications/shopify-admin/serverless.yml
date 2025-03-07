@@ -73,9 +73,9 @@ resources:
     ApiGatewayUrlParameter:
       Type: AWS::SSM::Parameter
       Properties:
-        Name: /greatupsells/${self:provider.stage}/shopify-admin-app/gateway-url
+        Name: /greatupsells/${self:provider.stage}/shopify-admin-app/gateway-domain
         Type: String
-        Value: !Sub https://${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com
+        Value: !Sub ${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com
 
 plugins:
   - serverless-plugin-monorepo
