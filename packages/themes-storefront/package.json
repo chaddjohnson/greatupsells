@@ -11,7 +11,7 @@
   "dependencies": {
     "@shopify/post-purchase-ui-extensions-react": "^0.13.5",
     "@shopify/post-purchase-ui-react": "^0.0.3",
-    "compression-webpack-plugin": "^9.0.0"
+    "compression-webpack-plugin": "^11.1.0"
   },
   "devDependencies": {
     "@greatupsells/themes": "0.0.0"

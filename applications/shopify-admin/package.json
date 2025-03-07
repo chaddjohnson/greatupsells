@@ -24,7 +24,7 @@
     "@shopify/shopify-api": "^6.0.1",
     "clsx": "^1.1.1",
     "colr": "^1.2.2",
-    "compression-webpack-plugin": "^9.0.0",
+    "compression-webpack-plugin": "^11.1.0",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
     "eslint-webpack-plugin": "^4.2.0",

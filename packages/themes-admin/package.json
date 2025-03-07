@@ -10,7 +10,7 @@
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@shopify/checkout-ui-react": "0.2.0",
-    "compression-webpack-plugin": "^9.0.0"
+    "compression-webpack-plugin": "^11.1.0"
   },
   "devDependencies": {
     "@greatupsells/themes": "0.0.0",

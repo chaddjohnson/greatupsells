@@ -3098,7 +3098,7 @@ __metadata:
   dependencies:
     "@greatupsells/themes": "npm:0.0.0"
     "@shopify/checkout-ui-react": "npm:0.2.0"
-    compression-webpack-plugin: "npm:^9.0.0"
+    compression-webpack-plugin: "npm:^11.1.0"
     preact: "npm:^10.5.13"
     style-loader: "npm:^1.2.1"
     tslib: "npm:^2.4.0"
@@ -3114,7 +3114,7 @@ __metadata:
     "@greatupsells/themes": "npm:0.0.0"
     "@shopify/post-purchase-ui-extensions-react": "npm:^0.13.5"
     "@shopify/post-purchase-ui-react": "npm:^0.0.3"
-    compression-webpack-plugin: "npm:^9.0.0"
+    compression-webpack-plugin: "npm:^11.1.0"
   peerDependencies:
     "@greatupsells/themes": 0.0.0
   languageName: unknown
@@ -9388,15 +9388,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression-webpack-plugin@npm:^9.0.0":
-  version: 9.2.0
-  resolution: "compression-webpack-plugin@npm:9.2.0"
+"compression-webpack-plugin@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "compression-webpack-plugin@npm:11.1.0"
   dependencies:
-    schema-utils: "npm:^4.0.0"
-    serialize-javascript: "npm:^6.0.0"
+    schema-utils: "npm:^4.2.0"
+    serialize-javascript: "npm:^6.0.2"
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 10c0/6c2cf07844fe2e0a4789d2fd478dbcd947de4fc405d86b209b27d84a5fc48524eb0cd25a4e9bf2fb55cd70535edc15d32d273337a90abe0a3ec4fc810f48bd09
+  checksum: 10c0/387043d1e7dd776768bbc92071953ae0459891337f1ca908c0b4c9fe98322caf19847fae3713876e3976d894599712f784ccf13baa6d1c64ecb915786a54f2ec
   languageName: node
   linkType: hard
 
@@ -13525,7 +13525,7 @@ __metadata:
     babel-plugin-transform-imports: "npm:^2.0.0"
     clsx: "npm:^1.1.1"
     codemirror: "npm:^5.60.0"
-    compression-webpack-plugin: "npm:^9.0.0"
+    compression-webpack-plugin: "npm:^11.1.0"
     dotenv: "npm:^8.2.0"
     dotenv-expand: "npm:^5.1.0"
     eslint-webpack-plugin: "npm:^4.2.0"
@@ -13629,7 +13629,7 @@ __metadata:
     babel-plugin-transform-imports: "npm:^2.0.0"
     clsx: "npm:^1.1.1"
     colr: "npm:^1.2.2"
-    compression-webpack-plugin: "npm:^9.0.0"
+    compression-webpack-plugin: "npm:^11.1.0"
     dotenv: "npm:^8.2.0"
     dotenv-expand: "npm:^5.1.0"
     eslint-webpack-plugin: "npm:^4.2.0"
@@ -21834,7 +21834,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-javascript@npm:^6.0.0, serialize-javascript@npm:^6.0.2":
+"serialize-javascript@npm:^6.0.2":
   version: 6.0.2
   resolution: "serialize-javascript@npm:6.0.2"
   dependencies:
