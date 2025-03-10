@@ -100,8 +100,12 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
       // Use specific variant data for display for a better customer experience.
       if (variant) {
         translatedData.title = shopifyCartItem.title || `${product.title} - ${variant.title}` || translatedData.title;
+
         translatedData.image.src = variant.image.src || translatedData.image.src;
         translatedData.image.alt = variant.image.alt || translatedData.image.alt;
+
+        translatedData.thumbnailImage.src = variant.thumbnailImage.src || translatedData.thumbnailImage.src;
+        translatedData.thumbnailImage.alt = variant.thumbnailImage.alt || translatedData.thumbnailImage.alt;
       }
 
       return translatedData;
