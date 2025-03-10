@@ -374,8 +374,10 @@ Initial deployments should occur in the following order:
 1. `services/admin-api`
 1. `services/storefront-api`
 1. `applications/shopify-admin`
+   1. You will need to run this twice. After the first run, update the `shopify_admin_app_gateway_domain` Terraform config variable for the environment. Find this URL by clicking on the API in API Gateway in the AWS Console, then look for the "API: greatupsells-..." section in the left nav. Click that, and use the value under "Invoke URL."
 1. `applications/storefront`
 1. `applications/admin`
+   1. You will need to run this twice. After the first run, update the `admin_app_gateway_domain` Terraform config variable for the environment. Find this URL by clicking on the API in API Gateway in the AWS Console, then look for the "API: greatupsells-..." section in the left nav. Click that, and use the value under "Invoke URL."
 
 The easiest way to accomplish this is to initially run Terraform for each service from your local machine. For each service, from its directory, run the following:
 
