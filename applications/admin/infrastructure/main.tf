@@ -35,7 +35,8 @@ module "us_east_1" {
     aws.region = aws
   }
 
-  admin_app_domain = var.admin_app_domain
+  admin_app_domain  = var.admin_app_domain
+  admin_app_gateway = var.admin_app_gateway
 }
 
 # module "eu_west_1" {
@@ -45,7 +46,8 @@ module "us_east_1" {
 #     aws.region = aws.eu-west-1
 #   }
 
-#   admin_app_domain = var.admin_app_domain
+#   admin_app_domain  = var.admin_app_domain
+#   admin_app_gateway = var.admin_app_gateway
 # }
 
 # module "ap_northeast_1" {
@@ -55,5 +57,6 @@ module "us_east_1" {
 #     aws.region = aws.ap-northeast-1
 #   }
 
-#   admin_app_domain = var.admin_app_domain
+#   admin_app_domain  = var.admin_app_domain
+#   admin_app_gateway = var.admin_app_gateway
 # }

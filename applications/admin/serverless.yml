@@ -58,16 +58,6 @@ functions:
           path: /{any+}
           method: ANY
 
-resources:
-  Resources:
-    ApiGatewayUrlParameter:
-      Type: AWS::SSM::Parameter
-      Properties:
-        Name: /greatupsells/${self:provider.stage}/admin-app/gateway-domain
-        Type: String
-        Value: !Sub ${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
-        Overwrite: true
-
 plugins:
   - serverless-plugin-monorepo
   - serverless-plugin-warmup

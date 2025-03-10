@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "admin" {
   }
 
   origin {
-    domain_name = data.aws_ssm_parameter.admin_api_gateway_url.value
+    domain_name = var.admin_app_gateway
     origin_id   = "app"
 
     custom_origin_config {

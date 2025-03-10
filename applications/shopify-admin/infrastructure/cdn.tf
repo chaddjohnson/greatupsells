@@ -27,7 +27,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   }
 
   origin {
-    domain_name = data.aws_ssm_parameter.shopify_admin_api_gateway_url.value
+    domain_name = var.shopify_admin_app_gateway
     origin_id   = "app"
 
     custom_origin_config {
