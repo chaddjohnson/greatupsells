@@ -61,7 +61,7 @@ const findPairedProducts = async (shop, shopifyProductIds, quantity, excludedSho
   // Select random products if no top products are found.
   const randomProducts = (
     await Promise.mapSeries([...Array(remainingQuantity).keys()], async () => {
-      const product = await Product.findOneRandomByShop(shop);
+      const product = await Product.findOneRandomByShop(shop, { excludedShopifyProductIds });
 
       if (product) {
         excludedShopifyProductIds.push(product.shopifyProductId);
