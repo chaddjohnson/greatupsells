@@ -36,7 +36,7 @@ module "us_east_1" {
   }
 
   shopify_admin_app_domain  = var.shopify_admin_app_domain
-  shopify_admin_app_gateway = var.shopify_admin_app_gateway
+  shopify_admin_app_gateway_domain = var.shopify_admin_app_gateway_domain
 }
 
 # module "eu_west_1" {
@@ -47,7 +47,7 @@ module "us_east_1" {
 #   }
 
 #   shopify_admin_app_domain  = var.shopify_admin_app_domain
-#   shopify_admin_app_gateway = var.shopify_admin_app_gateway
+#   shopify_admin_app_gateway_domain = var.shopify_admin_app_gateway_domain
 # }
 
 # module "ap_northeast_1" {
@@ -58,5 +58,5 @@ module "us_east_1" {
 #   }
 
 #   shopify_admin_app_domain  = var.shopify_admin_app_domain
-#   shopify_admin_app_gateway = var.shopify_admin_app_gateway
+#   shopify_admin_app_gateway_domain = var.shopify_admin_app_gateway_domain
 # }

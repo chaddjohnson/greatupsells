@@ -1,16 +1,3 @@
-resource "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
-  name      = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-domain"
-  type      = "String"
-  value     = "placeholder.execute-api.us-east-1.amazonaws.com"
-  overwrite = false
-}
-
-data "aws_ssm_parameter" "shopify_admin_api_gateway_url" {
-  name = "/greatupsells/${terraform.workspace}/shopify-admin-app/gateway-domain"
-
-  depends_on = [aws_ssm_parameter.shopify_admin_api_gateway_url]
-}
-
 resource "aws_cloudfront_distribution" "shopify_admin" {
   enabled     = true
   aliases     = [var.shopify_admin_app_domain]
@@ -27,7 +14,7 @@ resource "aws_cloudfront_distribution" "shopify_admin" {
   }
 
   origin {
-    domain_name = var.shopify_admin_app_gateway
+    domain_name = var.shopify_admin_app_gateway_domain
     origin_id   = "app"
 
     custom_origin_config {
