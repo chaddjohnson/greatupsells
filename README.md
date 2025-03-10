@@ -361,8 +361,6 @@ GitHub Actions is used for deployment. Deployment is automatic when Git pushes o
 - `test`
 - `production`
 
-Please note that when deploying changes to the `storefront` application, you might need to force an invalidation on CloudFront for `storefront.js` since this path remains static and does not use cache busting.
-
 Initial deployments should occur in the following order:
 
 1. `infrastructure`
