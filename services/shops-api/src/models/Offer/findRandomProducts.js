@@ -1,7 +1,7 @@
 const { flatten, uniq } = require('lodash');
 const models = require('..');
 
-const findRandomProducts = async (offer, shopifyCartProductIds = [], pagePath = '') => {
+const findRandomProducts = async (offer, triggerShopifyProductId = undefined, shopifyCartProductIds = [], pagePath = '') => {
   const [Product, PairedPurchase] = await Promise.all([
     models.get('Product'),
     models.get('PairedPurchase'),
@@ -17,7 +17,7 @@ const findRandomProducts = async (offer, shopifyCartProductIds = [], pagePath = 
   const hasOfferedCollections = offeredCollections.length > 0;
   const pagePathProductHandle = pagePath.match(/^\/products\/([^$]+)/)?.[1];
   let pageProduct;
-  let excludedShopifyProductIds = [];
+  let excludedShopifyProductIds = [triggerShopifyProductId].filter(Boolean);
 
   // Find the product, if any, associated with the current page.
   if (pagePathProductHandle) {

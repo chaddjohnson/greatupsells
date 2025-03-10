@@ -52,11 +52,13 @@ const findPopupData = async (
     return;
   }
 
+  const triggerProduct = await findRandomProduct(shopifyProductIds);
+  const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+
   // Parallelize to minimize latency.
-  const [theme, triggerProduct, offeredProducts] = await Promise.all([
+  const [theme, offeredProducts] = await Promise.all([
     Theme.findById(offer.theme).lean(),
-    findRandomProduct(shopifyProductIds),
-    offer.findRandomProducts(shopifyProductIds, pagePath)
+    offer.findRandomProducts(triggerShopifyProductId, shopifyProductIds, pagePath)
   ]);
 
   // Reduce payload size.
