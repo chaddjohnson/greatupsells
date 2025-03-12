@@ -18,6 +18,8 @@ const processor = async (metadata, payload) => {
     let product = null;
     let dataIsNewer = false;
 
+    console.log({ metadata, payload });
+
     try {
       product = await httpClient.get(`/products/shopify-product-id/${shopifyProductId}`);
       dataIsNewer =

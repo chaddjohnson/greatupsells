@@ -1,6 +1,8 @@
 const Promise = require('bluebird');
 
 const buildVariants = async (product) => {
+  console.log({ shop: product.shop });
+
   await product.execPopulate('shop');
 
   const { shop, shopifyProductData } = product;
