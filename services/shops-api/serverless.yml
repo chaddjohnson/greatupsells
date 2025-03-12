@@ -175,6 +175,7 @@ functions:
   createProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
+    timeout: 60
     events:
       - httpApi:
           path: /products
@@ -560,6 +561,7 @@ functions:
   updateProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
+    timeout: 60
     events:
       - httpApi:
           path: /products/{productId}

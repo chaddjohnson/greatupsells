@@ -46,6 +46,8 @@ const handler = async (event, context) => {
 
     // Refresh document, and force middleware to run.
     product = await Product.findById(productId);
+    product.variants = await product.buildVariants(product);
+    product.markModified('variants');
     await product.save();
 
     await product.trackShopifyCollections();

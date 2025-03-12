@@ -23,6 +23,9 @@ const importProduct = async (shop, shopifyProductData) => {
       await logger.info(`Imported product from Shopify (${product.toString()})`, { shopifyProductData });
     }
 
+    product.variants = await product.buildVariants(product);
+    product.markModified('variants');
+
     await product.save();
     await product.trackShopifyCollections();
   } catch (error) {

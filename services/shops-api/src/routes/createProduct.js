@@ -29,6 +29,8 @@ const handler = async (event, context) => {
       };
     }
 
+    product.variants = await product.buildVariants(product);
+
     await product.save();
     await product.trackShopifyCollections();
     await product.updatePairedPurchases();

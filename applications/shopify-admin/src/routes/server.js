@@ -37,13 +37,14 @@ const shopify = shopifyApi({
     'read_all_orders',
     'read_checkouts',
     'read_draft_orders',
+    'read_inventory',
     'read_orders',
     'read_products',
     'read_script_tags',
     'read_themes',
-    'write_themes',
     'write_draft_orders',
-    'write_script_tags'
+    'write_script_tags',
+    'write_themes'
   ],
   hostName: new URL(SHOPIFY_ADMIN_APP_URL).host,
   apiVersion: ApiVersion.October22,
