@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { shuffle } from 'lodash';
 import { useCurrency } from '@greatupsells/react-hooks';
 import calculateDiscountedPrice from './calculateDiscountedPrice';
 
@@ -87,7 +88,7 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
       const translatedData = translateProductData(product);
 
       // Find the cart item corresponding to the product.
-      const shopifyCartItem = shopifyCartItems.find((item) => item.product_id === translatedData?.id);
+      const shopifyCartItem = shuffle(shopifyCartItems).find((item) => item.product_id === translatedData?.id);
 
       // Find the specific variant.
       const hasVariants = translatedData?.variants.length > 1;

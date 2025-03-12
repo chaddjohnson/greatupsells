@@ -3055,6 +3055,7 @@ __metadata:
     "@greatupsells/themes": "npm:0.0.0"
     clsx: "npm:^1.1.1"
     css-loader: "npm:^3.5.3"
+    lodash: "npm:^4.17.15"
     react-frame-component: "npm:^5.2.3"
     react-modal: "npm:3.14.3"
     style-loader: "npm:^1.2.1"

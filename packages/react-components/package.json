@@ -12,6 +12,7 @@
   "dependencies": {
     "clsx": "^1.1.1",
     "css-loader": "^3.5.3",
+    "lodash": "^4.17.15",
     "react-frame-component": "^5.2.3",
     "react-modal": "3.14.3",
     "style-loader": "^1.2.1"
