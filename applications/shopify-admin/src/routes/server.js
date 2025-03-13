@@ -12,7 +12,6 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const { shopifyApi, ApiVersion } = require('@shopify/shopify-api');
 const verifySessionToken = require('shopify-jwt-auth-verify').default;
 const HttpClient = require('@greatupsells/gateway-http-client');
-const logger = require('@greatupsells/logger');
 const { v4: uuidv4 } = require('uuid');
 
 const {
@@ -134,7 +133,7 @@ const createServer = () => {
 
       response.redirect(redirectUrl);
     } catch (error) {
-      await logger.error('OAuth callback error', error);
+      console.error('OAuth callback error', error); // eslint-disable-line no-console
       response.status(500).send('Authorization failed. Please try again.');
     }
   });
