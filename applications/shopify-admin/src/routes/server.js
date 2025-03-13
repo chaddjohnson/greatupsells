@@ -109,20 +109,31 @@ const createServer = () => {
   });
 
   server.get('/auth/callback', async (request, response) => {
+    console.log('AUTH CALLBACK 1');
+
     // The library will automatically set the appropriate HTTP headers.
     const callbackResponse = await shopify.auth.callback({
       rawRequest: request,
       rawResponse: response
     });
 
+    console.log('AUTH CALLBACK 2');
+    console.log({ callbackResponse });
+
     const { shop: shopDomain, accessToken } = callbackResponse.session;
+    console.log('AUTH CALLBACK 3');
+    console.log({ shop, accessToken });
     const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
+    console.log('AUTH CALLBACK 4');
+    console.log({ shop });
     const shopId = shop._id;
 
     // Set up a billing plan immediately.
     const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
       level: 'BASIC'
     });
+    console.log('AUTH CALLBACK 5');
+    console.log(redirectUrl);
 
     response.redirect(redirectUrl);
   });
