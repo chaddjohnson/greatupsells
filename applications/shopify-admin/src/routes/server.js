@@ -12,6 +12,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const { shopifyApi, ApiVersion } = require('@shopify/shopify-api');
 const verifySessionToken = require('shopify-jwt-auth-verify').default;
 const HttpClient = require('@greatupsells/gateway-http-client');
+const logger = require('@greatupsells/logger');
 const { v4: uuidv4 } = require('uuid');
 
 const {
@@ -109,33 +110,33 @@ const createServer = () => {
   });
 
   server.get('/auth/callback', async (request, response) => {
-    console.log('AUTH CALLBACK 1');
+    try {
+      // The library will automatically set the appropriate HTTP headers.
+      const callbackResponse = await shopify.auth.callback({
+        rawRequest: request,
+        rawResponse: response
+      });
 
-    // The library will automatically set the appropriate HTTP headers.
-    const callbackResponse = await shopify.auth.callback({
-      rawRequest: request,
-      rawResponse: response
-    });
+      const { session } = callbackResponse;
 
-    console.log('AUTH CALLBACK 2');
-    console.log({ callbackResponse });
+      if (!session) {
+        throw new Error('No valid session returned from Shopify OAuth.');
+      }
 
-    const { shop: shopDomain, accessToken } = callbackResponse.session;
-    console.log('AUTH CALLBACK 3');
-    console.log({ shop, accessToken });
-    const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
-    console.log('AUTH CALLBACK 4');
-    console.log({ shop });
-    const shopId = shop._id;
+      const { shop: shopDomain, accessToken } = session;
+      const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
+      const shopId = shop._id;
 
-    // Set up a billing plan immediately.
-    const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
-      level: 'BASIC'
-    });
-    console.log('AUTH CALLBACK 5');
-    console.log(redirectUrl);
+      // Set up a billing plan immediately.
+      const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
+        level: 'BASIC'
+      });
 
-    response.redirect(redirectUrl);
+      response.redirect(redirectUrl);
+    } catch (error) {
+      await logger.error('OAuth callback error', error);
+      response.status(500).send('Authorization failed. Please try again.');
+    }
   });
 
   server.get('/authToken', async (request, response) => {
