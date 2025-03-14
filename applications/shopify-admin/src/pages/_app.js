@@ -63,8 +63,11 @@ const getAuthToken = async () => {
     const url = `/authToken?shopifySessionToken=${shopifySessionToken}`;
     const response = await fetch(url);
     const json = await response.json();
+    const { authToken } = json;
 
-    return json.authToken;
+    sessionStorage.authToken = authToken;
+
+    return authToken;
   } catch (error) {
     initiateOauth();
   }
@@ -77,10 +80,6 @@ const httpRequestInterceptor = async (config) => {
 
     if (!authToken) {
       authToken = await getAuthToken();
-
-      if (authToken) {
-        sessionStorage.authToken = authToken;
-      }
     }
 
     if (authToken) {
@@ -104,13 +103,10 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   if (typeof window !== 'undefined') {
     sessionStorage.shop = shop;
     sessionStorage.host = host;
-
-    if (!sessionStorage.authToken) {
-      getAuthToken();
-    }
   }
 
   useEffect(() => {
+    getAuthToken();
     setMounted(true);
   }, []);
 
