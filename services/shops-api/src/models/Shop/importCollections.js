@@ -23,7 +23,6 @@ const importCollection = async (shop, shopifyCollectionData) => {
     }
 
     await collection.save();
-    await collection.trackShopifyProducts();
   } catch (error) {
     await logger.warn(`Error importing Shopify collection ${shopifyCollectionData.id} for shop (${shop.toString()})`, error);
   }
@@ -39,7 +38,7 @@ const importCustomCollections = async (shop) => {
     const shopifyCollections = await shopifyApiClient.customCollection.list(params);
 
     // eslint-disable-next-line no-await-in-loop
-    await Promise.map(
+    await Promise.mapSeries(
       shopifyCollections,
       async (shopifyCollectionData) => {
         await importCollection(shop, shopifyCollectionData);

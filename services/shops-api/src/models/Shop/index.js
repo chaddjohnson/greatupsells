@@ -18,6 +18,8 @@ const changePlan = require('./changePlan');
 const updatePlan = require('./updatePlan');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
+const trackCollectionProducts = require('./trackCollectionProducts');
+const trackProductCollections = require('./trackProductCollections');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
 const updateShopifyDraftOrderItems = require('./updateShopifyDraftOrderItems');
@@ -207,6 +209,14 @@ schema.methods.updatePlan = function () {
 
 schema.methods.initialize = function () {
   return initialize(this);
+};
+
+schema.methods.trackCollectionProducts = function () {
+  return trackCollectionProducts(this);
+};
+
+schema.methods.trackProductCollections = function () {
+  return trackProductCollections(this);
 };
 
 schema.methods.createDraftOrder = function (data) {

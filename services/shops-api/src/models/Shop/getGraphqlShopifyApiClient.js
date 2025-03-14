@@ -1,7 +1,14 @@
 const { createAdminApiClient } = require('@shopify/admin-api-client');
 
+const clientCache = {};
+
 module.exports = (shop) => {
   const { domain, accessToken } = shop;
+  const apiVersion = '2025-01';
+
+  if (clientCache[domain]) {
+    return clientCache[domain];
+  }
 
   if (!accessToken) {
     throw new Error(`No access token available for shop ${domain}`);
@@ -10,10 +17,12 @@ module.exports = (shop) => {
   // See https://github.com/Shopify/shopify-app-js/tree/159ffbaac410c2be56913770520e9acaf145f190/packages/api-clients/admin-api-client#graphql-client
   const client = createAdminApiClient({
     storeDomain: domain,
-    apiVersion: '2025-01',
+    apiVersion,
     accessToken,
     retries: 3
   });
+
+  clientCache[domain] = client;
 
   return client;
 };

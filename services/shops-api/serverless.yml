@@ -29,8 +29,7 @@ provider:
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
     SHOP_ORDER_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/url, ''}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
+    SHOP_PRODUCT_AND_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-and-collection-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
     WEBHOOK_ARN: ${ssm:/greatupsells/${self:provider.stage}/webhooks/arn, ''}
 
@@ -621,24 +620,13 @@ functions:
     warmup:
       default:
         enabled: false
-  importShopCollections:
+  importShopProductsAndCollections:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopCollections.handler
+    handler: src/workers/importShopProductsAndCollections.handler
     events:
       - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
-    timeout: 900
-    warmup:
-      default:
-        enabled: false
-  importShopProducts:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopProducts.handler
-    events:
-      - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-and-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-and-collection-import-queue-dev'}
     timeout: 900
     warmup:
       default:

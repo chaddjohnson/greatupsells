@@ -8,15 +8,19 @@ const buildVariants = async (product) => {
   const shopifyApiClient = shop.getShopifyApiClient();
 
   // Fetch inventory items for each variant to determine if inventory is tracked for each.
-  const variants = await Promise.mapSeries(shopifyVariants, async (shopifyVariant) => {
-    const inventoryItem = await shopifyApiClient.inventoryItem.get(shopifyVariant.inventory_item_id);
-    const { tracked } = inventoryItem;
+  const variants = await Promise.map(
+    shopifyVariants,
+    async (shopifyVariant) => {
+      const inventoryItem = await shopifyApiClient.inventoryItem.get(shopifyVariant.inventory_item_id);
+      const { tracked } = inventoryItem;
 
-    return {
-      id: shopifyVariant.id,
-      inventoryTracked: tracked
-    };
-  });
+      return {
+        id: shopifyVariant.id,
+        inventoryTracked: tracked
+      };
+    },
+    { concurrency: 10 }
+  );
 
   return variants;
 };
