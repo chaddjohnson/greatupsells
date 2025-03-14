@@ -1,6 +1,6 @@
 const logger = require('@greatupsells/logger');
 const models = require('../models');
-const enqueueOrderImport = require('../models/shop/enqueueOrderImport');
+const enqueueOrderImport = require('../models/Shop/enqueueOrderImport');
 
 const processRecord = async (record) => {
   const body = JSON.parse(record.body);
