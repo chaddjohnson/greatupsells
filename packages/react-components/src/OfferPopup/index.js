@@ -73,8 +73,6 @@ const OfferPopup = ({
       ? '#FFFFFF'
       : 'rgba(0, 0, 0, 0.5)';
 
-    console.log({ theme });
-
     return (
       theme?.variables.find(({ name }) => {
         return name === 'maskBackgroundColor';
