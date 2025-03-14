@@ -22,11 +22,7 @@ const getShop = () => {
     return undefined;
   }
 
-  if (sessionStorage.shop) {
-    return sessionStorage.shop;
-  }
-
-  const shop = new URLSearchParams(window.location.search).get('shop');
+  const shop = new URLSearchParams(window.location.search).get('shop') || sessionStorage.shop;
 
   return shop;
 };
@@ -38,13 +34,7 @@ const getHost = () => {
     return undefined;
   }
 
-  if (sessionStorage.host) {
-    return sessionStorage.host;
-  }
-
-  // const shop = getShop();
-  // const host = shop?.includes('.') ? window.btoa(`${shop}/admin`) : undefined;
-  const host = new URLSearchParams(window.location.search).get('host');
+  const host = new URLSearchParams(window.location.search).get('host') || sessionStorage.host;
 
   return host;
 };
