@@ -7,10 +7,7 @@ const enqueueProductAndCollectionImport = require('./enqueueProductAndCollection
 const initialize = async (shop) => {
   await logger.info(`(Re)initializing shop (${shop.toString()})`);
 
-  // Execute these sequentially to avoid rate limiting with Shopify's API.
-  await createWebhooks(shop);
-  await addScripts(shop);
-  await checkThemeCompatibility(shop);
+  await Promise.all([createWebhooks(shop), addScripts(shop), checkThemeCompatibility(shop)]);
   await enqueueProductAndCollectionImport(shop);
 };
 
