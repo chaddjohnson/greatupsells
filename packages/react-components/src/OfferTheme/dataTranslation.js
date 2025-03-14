@@ -45,7 +45,6 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
         variants: shopifyProductData.variants?.map((variant) => {
           const price = convertCurrency(parseFloat(variant.price), shopCurrency, currency);
           const salePrice = convertCurrency(calculateDiscountedPrice(offer, variant.price), shopCurrency, currency);
-          const variantInventoryTracked = !!product.variants?.find((current) => current.id === variant.id)?.inventoryTracked;
 
           return {
             id: variant.id,
@@ -65,11 +64,13 @@ const useDataTranslation = ({ shop, offer, locale, countryCode, currency }) => {
               alt: imagesById[variant.image_id]?.alt || shopifyProductData.image?.alt || shopifyProductData.title
             },
             maxInventory:
-              variant.inventory_policy !== 'continue' && variantInventoryTracked
+              variant.inventory_policy !== 'continue' && variant.inventory_management === 'shopify'
                 ? Math.max(variant.inventory_quantity, 0) || 0
                 : undefined,
             hasInventory:
-              !variantInventoryTracked || variant.inventory_quantity > 0 || variant.inventory_policy === 'continue'
+              variant.inventory_management !== 'shopify' ||
+              variant.inventory_quantity > 0 ||
+              variant.inventory_policy === 'continue'
           };
         })
       };

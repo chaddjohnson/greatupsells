@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const mongodbClient = require('../mongodbClient');
-const buildVariants = require('./buildVariants');
 const findOneRandomByShop = require('./findOneRandomByShop');
 const trackShopifyCollections = require('./trackShopifyCollections');
 const updateDependentOffers = require('./updateDependentOffers');
@@ -13,10 +12,6 @@ let Product = null;
 const schemaOptions = {
   timestamps: true
 };
-const variantSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
-  inventoryTracked: { type: Boolean, required: true }
-});
 const schema = new mongoose.Schema(
   {
     shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true },
@@ -24,8 +19,7 @@ const schema = new mongoose.Schema(
     shopifyProductId: { type: Number, required: true },
     shopifyProductData: { type: mongoose.Schema.Types.Mixed, required: true },
     shopifyCollectionIds: [{ type: Number, required: true }],
-    title: { type: String, required: true },
-    variants: [variantSchema]
+    title: { type: String, required: true }
   },
   schemaOptions
 );
@@ -45,10 +39,10 @@ schema.statics.findOneRandomByShop = function (shop, options) {
 };
 
 schema.virtual('hasInventory').get(function () {
-  const { shopifyProductData, variants } = this;
-  const { variants: shopifyVariants } = shopifyProductData;
-  const anyVariantsHaveInventory = shopifyVariants.some((variant) => {
-    const inventoryManagedByThirdParty = !variants.find((current) => current.id === variant.id)?.inventoryTracked;
+  const { shopifyProductData } = this;
+  const { variants } = shopifyProductData;
+  const anyVariantsHaveInventory = variants.some((variant) => {
+    const inventoryManagedByThirdParty = variant.inventory_management !== 'shopify';
     const hasNonZeroInventory = variant.inventory_quantity > 0;
     const continueSellingWhenOutOfStock = variant.inventory_policy === 'continue';
 
@@ -63,10 +57,6 @@ schema.virtual('isPublished').get(function () {
 
   return shopifyProductData.published_at !== null;
 });
-
-schema.methods.buildVariants = function () {
-  return buildVariants(this);
-};
 
 schema.methods.trackShopifyCollections = function () {
   return trackShopifyCollections(this);
