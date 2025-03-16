@@ -108,8 +108,6 @@ const OfferEditPage = () => {
   // Get a reference to the offer's theme.
   const offerTheme = useMemo(() => offerThemes?.find(({ _id }) => _id === offer?.theme), [offerThemes, offer]);
 
-  console.log({ offerTheme, offerThemes });
-
   const loaded = shopLoaded && offerLoaded && themesLoaded && offerThemesLoaded;
   const error = !!(shopError || offerError || themesError || offerThemesError);
 
