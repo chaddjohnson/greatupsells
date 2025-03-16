@@ -199,11 +199,13 @@ const OfferForm = ({
     setSubmitted(true);
     submit();
 
-    const firstErrorElement = document.querySelector('.Polaris-InlineError');
+    setTimeout(() => {
+      const firstErrorElement = document.querySelector('.Polaris-InlineError');
 
-    if (firstErrorElement) {
-      firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const offer = useMemo(
@@ -395,7 +397,13 @@ const OfferForm = ({
   return (
     <Form noValidate onSubmit={submit}>
       <SaveBar id="save-bar" discardConfirmation={dirty || themeDirty || false}>
-        <button type="submit" variant="primary" disabled={(!dirty && !themeDirty) || submitting} loading={submitting}>
+        <button
+          type="submit"
+          variant="primary"
+          disabled={(!dirty && !themeDirty) || submitting}
+          loading={submitting}
+          onClick={handleSubmit}
+        >
           Save
         </button>
         <button onClick={handleDiscard}>Discard</button>
@@ -596,7 +604,7 @@ const OfferForm = ({
               content: 'Save offer',
               disabled: !dirty && !themeDirty,
               loading: submitting,
-              submit: true
+              onAction: handleSubmit
             }}
             secondaryActions={[
               offer._id
