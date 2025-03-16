@@ -165,7 +165,7 @@ const PlanPage = () => {
   }, [chargeId, activatingPlan, activatePlan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Page title="Plan">
+    <Page>
       <Layout>
         {!shop?.plan.active && (
           <Layout.Section>
