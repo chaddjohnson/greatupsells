@@ -35,7 +35,10 @@ const trackImpression = async (
   });
 
   const session = await mongodbClient.connection.startSession();
-  const transactionOptions = { readPreference: 'primary' };
+
+  // TODO: Add this back if we add more database servers.
+  // const transactionOptions = { readPreference: 'primary' };
+  const transactionOptions = {};
 
   try {
     // Use a transaction.

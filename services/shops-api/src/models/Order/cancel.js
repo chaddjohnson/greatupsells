@@ -19,9 +19,11 @@ const cancel = async (order) => {
 
   const { shop } = order;
   const offerHits = await OfferHit.findByOrderId(order._id);
-
   const session = await mongodbClient.connection.startSession();
-  const transactionOptions = { readPreference: 'primary' };
+
+  // TODO: Add this back if we add more database servers.
+  // const transactionOptions = { readPreference: 'primary' };
+  const transactionOptions = {};
 
   // Use a transaction.
   await session.withTransaction(async () => {

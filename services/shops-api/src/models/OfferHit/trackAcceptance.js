@@ -12,11 +12,14 @@ const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCh
   await offerHit.populate('shop').populate('offer').execPopulate();
 
   const { shop, offer, isTest } = offerHit;
-  const transactionOptions = { readPreference: 'primary' };
   const acceptanceTracked = offerHit.acceptedProducts.length > 0;
   const shopifyApiClient = shop.getShopifyApiClient();
   let shopifyOrderId;
   let shopifyCheckout = null;
+
+  // TODO: Add this back if we add more database servers.
+  // const transactionOptions = { readPreference: 'primary' };
+  const transactionOptions = {};
 
   // Get the Shopify order ID from the Shopify checkout (if available).
   if (shopifyCheckoutId) {

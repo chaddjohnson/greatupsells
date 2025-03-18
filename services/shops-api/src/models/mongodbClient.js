@@ -22,10 +22,7 @@ const connectionOptions = {
   useFindAndModify: false,
 
   // Use IPv4, and skip trying IPv6.
-  family: 4,
-
-  // Do not retry writes as we (currently) only have one server in our replica set.
-  retryWrites: false
+  family: 4
 };
 
 const mongodbClient = new MongodbClientLambda(connectionUri, connectionOptions);
