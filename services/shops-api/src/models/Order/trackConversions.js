@@ -88,28 +88,17 @@ const trackConversions = async (order) => {
   // Filter out offer hits marked as converted.
   const unConvertedOfferHits = offerHits.filter((offerHit) => !offerHit.convertedAt);
 
-  const session = await mongodbClient.connection.startSession();
+  // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
+  await Promise.mapSeries(unConvertedOfferHits, async (offerHit) => {
+    await offerHit.trackConversion(order);
+  });
 
-  // TODO: Add this back if we add more database servers.
-  // const transactionOptions = { readPreference: 'primary' };
-  const transactionOptions = {};
+  // Track the total revenue increase for the order.
+  order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
+    return sum + (offerHit.revenueIncrease || 0);
+  }, 0);
 
-  // Use a transaction.
-  await session.withTransaction(async () => {
-    order.$session(session);
-
-    // Track conversions for offer hits. Do so sequentially to avoid data conflicts.
-    await Promise.mapSeries(unConvertedOfferHits, async (offerHit) => {
-      await offerHit.trackConversion(order);
-    });
-
-    // Track the total revenue increase for the order.
-    order.revenueIncrease = offerHits.reduce((sum, offerHit) => {
-      return sum + (offerHit.revenueIncrease || 0);
-    }, 0);
-
-    await order.save();
-  }, transactionOptions);
+  await order.save();
 
   const originalMonthUpsellRevenue = shop.plan.monthUpsellRevenue;
   const monthUpsellRevenue = await shop.calculateMonthUpsellRevenue();

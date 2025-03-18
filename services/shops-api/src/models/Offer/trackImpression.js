@@ -34,49 +34,30 @@ const trackImpression = async (
     isTest
   });
 
-  const session = await mongodbClient.connection.startSession();
-
-  // TODO: Add this back if we add more database servers.
-  // const transactionOptions = { readPreference: 'primary' };
-  const transactionOptions = {};
-
   try {
-    // Use a transaction.
-    await session.withTransaction(async () => {
-      offerHit.$session(session);
+    await offerHit.save();
 
-      await offerHit.save();
+    if (offeredShopifyProductIds.length) {
+      await offerHit.trackOfferedProducts(offeredShopifyProductIds);
+    }
 
-      if (offeredShopifyProductIds.length) {
-        await offerHit.trackOfferedProducts(offeredShopifyProductIds);
-      }
+    if (!isTest) {
+      // Increment offer impression count.
+      await Offer.findByIdAndUpdate(offer.id, {
+        $inc: {
+          impressionCount: 1
+        },
+        conversionRate: offer.conversionCount / (offer.impressionCount + 1)
+      });
 
-      if (!isTest) {
-        // Increment offer impression count.
-        await Offer.findByIdAndUpdate(
-          offer.id,
-          {
-            $inc: {
-              impressionCount: 1
-            },
-            conversionRate: offer.conversionCount / (offer.impressionCount + 1)
-          },
-          { session }
-        );
-
-        // Increment shop offer impression count.
-        await Shop.findByIdAndUpdate(
-          shop.id,
-          {
-            $inc: {
-              offerImpressionCount: 1
-            },
-            offerConversionRate: shop.offerConversionCount / (shop.offerImpressionCount + 1)
-          },
-          { session }
-        );
-      }
-    }, transactionOptions);
+      // Increment shop offer impression count.
+      await Shop.findByIdAndUpdate(shop.id, {
+        $inc: {
+          offerImpressionCount: 1
+        },
+        offerConversionRate: shop.offerConversionCount / (shop.offerImpressionCount + 1)
+      });
+    }
 
     return offerHit;
   } catch (error) {

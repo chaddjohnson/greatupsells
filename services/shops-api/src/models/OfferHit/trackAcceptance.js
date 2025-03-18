@@ -1,13 +1,8 @@
 const logger = require('@greatupsells/logger');
-const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
 const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCheckoutId }) => {
-  const [Offer, Shop, session] = await Promise.all([
-    models.get('Offer'),
-    models.get('Shop'),
-    mongodbClient.connection.startSession()
-  ]);
+  const [Offer, Shop] = await Promise.all([models.get('Offer'), models.get('Shop')]);
 
   await offerHit.populate('shop').populate('offer').execPopulate();
 
@@ -17,10 +12,6 @@ const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCh
   let shopifyOrderId;
   let shopifyCheckout = null;
 
-  // TODO: Add this back if we add more database servers.
-  // const transactionOptions = { readPreference: 'primary' };
-  const transactionOptions = {};
-
   // Get the Shopify order ID from the Shopify checkout (if available).
   if (shopifyCheckoutId) {
     shopifyCheckout = await shopifyApiClient.checkout.get(shopifyCheckoutId);
@@ -28,52 +19,39 @@ const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCh
   }
 
   try {
-    // Use a transaction.
-    await session.withTransaction(async () => {
-      const promises = [];
+    const promises = [];
 
-      offerHit.$session(session);
+    // Track products associated with this acceptance.
+    promises.push(
+      offerHit.trackAcceptedProducts(items, {
+        shopifyDraftOrderId,
+        shopifyOrderId
+      })
+    );
 
-      // Track products associated with this acceptance.
+    // Track acceptance one time per offer hit (and not once per product per offer hit).
+    if (!acceptanceTracked && !isTest) {
+      // Increment offer acceptance count.
       promises.push(
-        offerHit.trackAcceptedProducts(items, {
-          shopifyDraftOrderId,
-          shopifyOrderId
+        Offer.findByIdAndUpdate(offer.id, {
+          $inc: {
+            acceptanceCount: 1
+          }
         })
       );
 
-      // Track acceptance one time per offer hit (and not once per product per offer hit).
-      if (!acceptanceTracked && !isTest) {
-        // Increment offer acceptance count.
-        promises.push(
-          Offer.findByIdAndUpdate(
-            offer.id,
-            {
-              $inc: {
-                acceptanceCount: 1
-              }
-            },
-            { session }
-          )
-        );
+      // Increment shop offer acceptance count.
+      promises.push(
+        Shop.findByIdAndUpdate(shop.id, {
+          $inc: {
+            offerAcceptanceCount: 1
+          }
+        })
+      );
+    }
 
-        // Increment shop offer acceptance count.
-        promises.push(
-          Shop.findByIdAndUpdate(
-            shop.id,
-            {
-              $inc: {
-                offerAcceptanceCount: 1
-              }
-            },
-            { session }
-          )
-        );
-      }
-
-      // Run queries in parallel.
-      await Promise.all(promises);
-    }, transactionOptions);
+    // Run queries in parallel.
+    await Promise.all(promises);
   } catch (error) {
     await logger.error(
       `Error tracking offer acceptance for offer hit (${
