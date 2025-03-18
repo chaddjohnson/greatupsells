@@ -21,7 +21,7 @@ resource "aws_ssm_parameter" "elasticsearch_logs_database_url_test" {
 resource "aws_ssm_parameter" "mongodb_logs_database_url" {
   name      = "/greatupsells/${terraform.workspace}/database/mongodb-logs/url"
   type      = "SecureString"
-  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/greatupsells-logs?ssl=true&retryWrites=false"
+  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/greatupsells-logs?ssl=true"
   overwrite = true
   provider  = aws.region
 }
