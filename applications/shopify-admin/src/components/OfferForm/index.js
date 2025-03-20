@@ -195,18 +195,23 @@ const OfferForm = ({
     }
   });
 
-  const handleSubmit = useCallback(() => {
-    setSubmitted(true);
-    submit();
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
 
-    setTimeout(() => {
-      const firstErrorElement = document.querySelector('.Polaris-InlineError');
+      setSubmitted(true);
+      submit();
 
-      if (firstErrorElement) {
-        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-  }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
+      setTimeout(() => {
+        const firstErrorElement = document.querySelector('.Polaris-InlineError');
+
+        if (firstErrorElement) {
+          firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    },
+    [submit]
+  ); // eslint-disable-line react-hooks/exhaustive-deps
 
   const offer = useMemo(
     () => ({
@@ -604,7 +609,8 @@ const OfferForm = ({
               content: 'Save offer',
               disabled: !dirty && !themeDirty,
               loading: submitting,
-              onAction: handleSubmit
+              onAction: handleSubmit,
+              submit: true
             }}
             secondaryActions={[
               offer._id
