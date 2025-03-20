@@ -10,9 +10,7 @@ const findOneRandomByShop = async (shop, options = {}) => {
         shopifyProductId: { $nin: excludedShopifyProductIds },
         $or: [
           {
-            'shopifyProductData.variants.inventory_management': {
-              $ne: 'shopify'
-            }
+            'variants.inventoryTracked': false
           },
           {
             'shopifyProductData.variants.inventory_quantity': {

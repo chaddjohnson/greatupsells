@@ -22,6 +22,9 @@ const importProduct = async (shop, shopifyProductData) => {
       await logger.info(`Imported product from Shopify (${product.toString()})`, { shopifyProductData });
     }
 
+    product.variants = await product.buildVariants(product);
+    product.markModified('variants');
+
     await product.save();
   } catch (error) {
     await logger.warn(`Error importing Shopify product ${shopifyProductData.id} for shop (${shop.toString()})`, error);

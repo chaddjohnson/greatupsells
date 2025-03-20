@@ -58,9 +58,7 @@ const findRandomProducts = async (offer, triggerShopifyProductId = undefined, sh
   andCriteria.push({
     $or: [
       {
-        'shopifyProductData.variants.inventory_management': {
-          $ne: 'shopify'
-        }
+        'variants.inventoryTracked': false
       },
       {
         'shopifyProductData.variants.inventory_quantity': {
