@@ -105,7 +105,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
       default: 'ANY',
-      enum: ['ANY', 'PAGE']
+      enum: ['ANY', 'PAGE', 'PATTERN']
     },
     triggerPagePath: { type: String, required: false },
     triggerProducts: [triggerProductSchema],

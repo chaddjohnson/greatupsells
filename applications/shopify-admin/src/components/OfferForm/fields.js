@@ -43,23 +43,50 @@ const useFields = (initialOffer, showEndDate) => {
     [triggerEvent.value]
   );
   const triggerPage = useField(initialOffer.triggerPage);
-  const triggerPagePath = useField({
-    value: initialOffer.triggerPagePath,
-    validates: [
-      (value) => {
-        if (value && value.match(/^https?:\/\//)) {
-          return "Trigger page path can't contain a protocol or a domain";
+  const triggerPagePath = useField(
+    {
+      value: initialOffer.triggerPagePath,
+      validates: [
+        (value) => {
+          if (triggerPage.value === 'PATTERN' && !value) {
+            return "Trigger page path can't be blank";
+          }
+        },
+        (value) => {
+          if (value && value.match(/^https?:\/\//)) {
+            return "Trigger page path can't contain a protocol or a domain";
+          }
+        },
+        (value) => {
+          if (value && value.match(/\?/)) {
+            return "Trigger page path can't contain a query string";
+          }
         }
-      },
-      (value) => {
-        if (value && value.match(/\?/)) {
-          return "Trigger page path can't contain a query string";
-        }
-      }
-    ]
-  });
+      ]
+    },
+    [triggerPage.value]
+  );
   const viewAllowance = useField(initialOffer.viewAllowance);
-  const viewAllowanceDays = useField(initialOffer.viewAllowanceDays?.toString());
+  const viewAllowanceDays = useField(
+    {
+      value: initialOffer.viewAllowanceDays?.toString(),
+      validates: [
+        (value) => {
+          if (viewAllowance.value === 'DAYS' && !value) {
+            return "Period of days can't be blank";
+          }
+        },
+        (value) =>
+          viewAllowance.value === 'DAYS' && value && numericString('Period of days must be a number')(value?.toString()),
+        (value) => {
+          if (viewAllowance.value === 'DAYS' && value && Number(value) < 1) {
+            return 'Period of days must be greater than 1';
+          }
+        }
+      ]
+    },
+    [viewAllowance.value]
+  );
   const triggerProducts = useField(
     {
       value: initialOffer.triggerProducts,
