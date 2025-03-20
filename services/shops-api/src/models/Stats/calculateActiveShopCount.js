@@ -6,7 +6,7 @@ const calculateActiveShopCount = async () => {
     active: true
   };
 
-  return await Shop.find(criteria).count();
+  return await Shop.find(criteria).countDocuments();
 };
 
 module.exports = calculateActiveShopCount;
