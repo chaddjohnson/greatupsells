@@ -7,7 +7,7 @@ import { SaveBar, useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
-import { useInterval } from '@greatupsells/react-hooks';
+import { useInterval, useDateTime } from '@greatupsells/react-hooks';
 import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
@@ -83,11 +83,12 @@ const OfferForm = ({
   onDelete = () => {}
 }) => {
   const shopify = useAppBridge();
+  const { addTime } = useDateTime();
 
   const offerPopupContext = useRef();
 
   const [submitted, setSubmitted] = useState(false);
-  const [showEndDate, setShowEndDate] = useState(false);
+  const [showEndDate, setShowEndDate] = useState(!!initialOffer.endAt);
   const [designMode, setDesignMode] = useState(true);
   const [previewActive, setPreviewActive] = useState(false);
   const [theme, setTheme] = useState(assignId(initialTheme));
@@ -382,7 +383,15 @@ const OfferForm = ({
   // Set end date to start date when showing end date.
   useEffect(
     () => {
-      endAt.onChange(showEndDate ? startAt.value : undefined);
+      // If showing the date but it has no value, then set an initial end date that is based on the start date.
+      if (showEndDate && !endAt.value) {
+        endAt.onChange(showEndDate ? addTime(startAt.value, 1, 'day') : undefined);
+      }
+
+      // Unset the end date if not showing the end date.
+      if (!showEndDate) {
+        endAt.onChange(undefined);
+      }
     },
     [showEndDate] // eslint-disable-line react-hooks/exhaustive-deps
   );
