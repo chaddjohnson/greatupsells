@@ -164,6 +164,7 @@ const Body = styled(({ className }) => {
     selectedQuantities,
     maxQuantities,
     handleVariantChange,
+    handleQuantityChange,
     handleAddProduct,
     handleReplaceProduct,
     handleClose
@@ -222,7 +223,11 @@ const Body = styled(({ className }) => {
             {enableQuantitySelection && strategy === 'CROSS_SELL' && (
               <>
                 <Label for="quantity">Quantity</Label>
-                <Select id="quantity" value={selectedQuantity}>
+                <Select
+                  id="quantity"
+                  value={selectedQuantity}
+                  onChange={(event) => handleQuantityChange(0, event.target.value)}
+                >
                   {[...Array(Math.min(maxQuantity || 25, 100)).keys()].map((index) => (
                     <option key={index} value={index + 1}>
                       {index + 1}
