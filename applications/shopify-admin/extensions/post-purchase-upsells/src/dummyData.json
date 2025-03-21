@@ -301,7 +301,7 @@
         "_id": "6112fabf59bfae08b0d22620",
         "name": "bannerText",
         "label": "Banner text",
-        "value": "Get this item for a 20% discount",
+        "value": "Get this item for a discount",
         "group": "Text",
         "type": "TEXT"
       },
