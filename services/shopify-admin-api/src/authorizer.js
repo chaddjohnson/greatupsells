@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
 
 const { JWT_SECRET } = process.env;
@@ -48,11 +47,7 @@ const handler = async (event, context) => {
 
   if (!token || !arn) {
     await logger.warn('Unauthorized access attempt', null, { event });
-
-    return {
-      statusCode: StatusCodes.UNAUTHORIZED,
-      body: ReasonPhrases.UNAUTHORIZED
-    };
+    return generateAuthResponse('anonymous', 'Deny', arn);
   }
 
   try {
