@@ -20,10 +20,10 @@ provider:
       authorizer:
         type: request
         functionName: authorizer
-        identitySource: $request.header.authorization
+        identitySource: $request.header.Authorization
         issuerUrl: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
         audience: 'shopify-admin-api'
-        resultTtlInSeconds: 0
+        resultTtlInSeconds: 300 # This enables caching for 5 minutes
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
@@ -65,9 +65,7 @@ custom:
 functions:
   authorizer:
     handler: src/authorizer.handler
-    warmup:
-      default:
-        concurrency: 15
+    provisionedConcurrency: 5
   health:
     handler: src/routes/health.handler
     events:
