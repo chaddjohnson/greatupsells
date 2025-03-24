@@ -88,7 +88,7 @@ functions:
           # authorizer:
           #   name: authorizer
           #   type: request
-          #   identitySource: method.request.header.Authorization
+          #   identitySource: method.request.header.authorization
           #   resultTtlInSeconds: 300 # This enables caching for 5 minutes
   # findShops:
   # findStats:

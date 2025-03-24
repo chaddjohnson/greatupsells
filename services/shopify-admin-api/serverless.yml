@@ -20,7 +20,7 @@ provider:
       authorizer:
         type: request
         functionName: authorizer
-        identitySource: $request.header.Authorization
+        identitySource: $request.header.authorization
         issuerUrl: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
         audience: 'shopify-admin-api'
         resultTtlInSeconds: 300 # This enables caching for 5 minutes
