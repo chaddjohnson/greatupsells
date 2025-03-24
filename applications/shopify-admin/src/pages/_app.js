@@ -106,8 +106,10 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
   }
 
   useEffect(() => {
-    getAuthToken();
-    setMounted(true);
+    (async () => {
+      await getAuthToken();
+      setMounted(true);
+    })();
   }, []);
 
   return (
@@ -126,8 +128,8 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
           <a href="/offers/new">Create offer</a>
         </NavMenu>
         <HttpClientProvider baseUrl={process.env.SHOPIFY_ADMIN_API_URL} requestInterceptor={httpRequestInterceptor}>
-          <ShopProvider>
-            {mounted && typeof window !== 'undefined' && window.top !== window.self && (
+          {mounted && typeof window !== 'undefined' && window.top !== window.self && (
+            <ShopProvider>
               <RouteGuard>
                 <ErrorBoundary>
                   <Main>
@@ -135,9 +137,9 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
                   </Main>
                 </ErrorBoundary>
               </RouteGuard>
-            )}
-            {mounted && typeof window !== 'undefined' && window.top === window.self && <h1>Loading...</h1>}
-          </ShopProvider>
+            </ShopProvider>
+          )}
+          {mounted && typeof window !== 'undefined' && window.top === window.self && <h1>Loading...</h1>}
         </HttpClientProvider>
       </AppProvider>
     </>

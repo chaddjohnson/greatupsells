@@ -52,6 +52,10 @@ const ShopProvider = ({ children }) => {
     setShopLoaded(true);
   }
 
+  if (!shopLoaded) {
+    return null;
+  }
+
   return (
     <ShopContext.Provider
       value={{
