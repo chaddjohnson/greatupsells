@@ -13,7 +13,7 @@ const generatePolicyDocument = (effect, arn) => {
   // Enable caching cross different Lambdas, even though they use different ARNs.
   const wildcardArn = arn.replace(/(\/(GET|POST|PUT|DELETE|PATCH)\/shopify-admin-api)\/.*/, '$1/*');
 
-  const policyDocument = {
+  return {
     Version: '2012-10-17',
     Statement: [
       {
@@ -22,17 +22,6 @@ const generatePolicyDocument = (effect, arn) => {
         Resource: wildcardArn
       }
     ]
-  };
-
-  return policyDocument;
-};
-
-const generateAuthResponse = (principalId, effect, arn) => {
-  const policyDocument = generatePolicyDocument(effect, arn);
-
-  return {
-    principalId,
-    policyDocument
   };
 };
 
@@ -44,32 +33,38 @@ const handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
-  const authorizationHeader = event.authorizationToken || event.headers.Authorization || event.headers.authorization;
+  const authorizationHeader = event.authorizationToken || event.headers?.Authorization || event.headers?.authorization;
   const token = authorizationHeader?.replace('Bearer ', '');
   const arn = event.routeArn || event.methodArn;
 
   if (!token || !arn) {
     await logger.warn('Unauthorized access attempt', null, { event });
-    return generateAuthResponse('anonymous', 'Deny', arn);
+
+    return {
+      principalId: 'anonymous',
+      policyDocument: generatePolicyDocument('Deny', arn),
+      context: {}
+    };
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    if (decoded) {
-      return {
-        ...generateAuthResponse(decoded.sub, 'Allow', arn),
-        context: {
-          shopId: decoded.sub
-        }
-      };
-    } else {
-      throw new Error('Cannot decode JWT');
-    }
+    return {
+      principalId: decoded.sub,
+      policyDocument: generatePolicyDocument('Allow', arn),
+      context: {
+        shopId: decoded.sub
+      }
+    };
   } catch (error) {
-    await logger.warn('Invalid access attempt', null, { event });
+    await logger.warn('Invalid access attempt', error, { event });
 
-    return generateAuthResponse('user', 'Deny', arn);
+    return {
+      principalId: 'unauthorized',
+      policyDocument: generatePolicyDocument('Deny', arn),
+      context: {}
+    };
   }
 };
 
