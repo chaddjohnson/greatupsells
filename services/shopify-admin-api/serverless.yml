@@ -65,7 +65,6 @@ custom:
 functions:
   authorizer:
     handler: src/authorizer.handler
-    provisionedConcurrency: 5
   health:
     handler: src/routes/health.handler
     events:
