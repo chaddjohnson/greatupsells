@@ -10,13 +10,16 @@ const generatePolicyDocument = (effect, arn) => {
     return null;
   }
 
+  // Enable caching cross different Lambdas, even though they use different ARNs.
+  const wildcardArn = arn.replace(/\/[^/]+\/[^/]+$/, '/*');
+
   const policyDocument = {
     Version: '2012-10-17',
     Statement: [
       {
         Action: 'execute-api:Invoke',
         Effect: effect,
-        Resource: arn
+        Resource: wildcardArn
       }
     ]
   };
