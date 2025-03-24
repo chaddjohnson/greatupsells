@@ -11,7 +11,7 @@ const generatePolicyDocument = (effect, arn) => {
   }
 
   // Enable caching cross different Lambdas, even though they use different ARNs.
-  const wildcardArn = arn.replace(/\/[^/]+\/[^/]+$/, '/*');
+  const wildcardArn = arn.replace(/(\/(GET|POST|PUT|DELETE|PATCH)\/shopify-admin-api)\/.*/, '$1/*');
 
   const policyDocument = {
     Version: '2012-10-17',
