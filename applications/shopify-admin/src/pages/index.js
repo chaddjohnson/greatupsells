@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState, useCallback } from 'react';
 import {
   Page,
   Layout,
@@ -11,6 +11,9 @@ import {
   InlineStack,
   Button,
   Banner,
+  MediaCard,
+  Tabs,
+  DescriptionList,
   BlockStack,
   ProgressBar,
   SkeletonPage,
@@ -46,6 +49,14 @@ const PlanProgressMeterContainer = styled.div`
 const PlanProgressAmount = styled.div`
   white-space: nowrap;
   font-weight: 500;
+`;
+
+const TutorialsImage = styled.img`
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 200px;
+  margin: 1rem auto;
 `;
 
 const LoadingComponent = () => (
@@ -85,8 +96,23 @@ const DashboardPage = () => {
     options: { decimals: 0 }
   });
 
+  const [selectedGettingStartedTabIndex, setSelectedGettingStartedTabIndex] = useState(0);
+
   const loaded = shopLoaded;
   const error = !!shopError;
+
+  const gettingStartedTabs = [
+    {
+      id: 'strategies',
+      content: 'Strategies',
+      panelID: 'strategies-content'
+    },
+    {
+      id: 'trigger-events',
+      content: 'Trigger events',
+      panelID: 'trigger-events-content'
+    }
+  ];
 
   const ErrorComponent = memo(() => (
     <Page title="Overview dashboard">
@@ -110,6 +136,10 @@ const DashboardPage = () => {
 
     return Math.min(shop?.plan.monthUpsellRevenue / shop?.plan.monthUpsellRevenueLimit, 1);
   }, [shop]);
+
+  const handleTabChange = useCallback((index) => {
+    setSelectedGettingStartedTabIndex(index);
+  }, []);
 
   // Refresh data at an interval.
   useInterval(() => {
@@ -212,6 +242,104 @@ const DashboardPage = () => {
                 </BlockStack>
               </BlockStack>
             </Card>
+          </Layout.Section>
+          <Layout.Section>
+            <MediaCard
+              portrait
+              title="Getting started"
+              description={
+                <BlockStack gap="200">
+                  <Text as="p">
+                    Great Upsells lets you create offers using strategies and trigger events. Read more about these below.
+                  </Text>
+                  <Box paddingBlockStart="400">
+                    <Divider />
+                  </Box>
+                  <Bleed marginInline="300">
+                    <Box paddingBlockStart="200">
+                      <Tabs
+                        tabs={gettingStartedTabs}
+                        selected={selectedGettingStartedTabIndex}
+                        fitted
+                        onSelect={handleTabChange}
+                      >
+                        <Box paddingBlock={300} paddingInline={300}>
+                          {gettingStartedTabs[selectedGettingStartedTabIndex].id === 'strategies' && (
+                            <DescriptionList
+                              gap="tight"
+                              items={[
+                                {
+                                  term: 'Cross-sell',
+                                  description:
+                                    'Encourage customers to purchase a related or complementary product via a popup.'
+                                },
+                                {
+                                  term: 'Upsell',
+                                  description:
+                                    'Encourage customers to purchase a comparable, more expensive product via a popup.'
+                                },
+                                {
+                                  term: 'Post-purchase offer',
+                                  description:
+                                    'Encourage customers to purchase a related or complementary product after completing checkout, before the Thank You page. Please review limitations.'
+                                },
+                                {
+                                  term: 'Thank You page offer',
+                                  description:
+                                    'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.'
+                                },
+                                {
+                                  term: 'Order Status page offer',
+                                  description:
+                                    'Encourage customers to purchase a related or complementary product on the Order Status page.'
+                                }
+                              ]}
+                            />
+                          )}
+                          {gettingStartedTabs[selectedGettingStartedTabIndex].id === 'trigger-events' && (
+                            <DescriptionList
+                              gap="tight"
+                              items={[
+                                {
+                                  term: 'Add to cart',
+                                  description: 'Offer is shown when a product is added to the cart.'
+                                },
+                                {
+                                  term: 'Page load',
+                                  description: 'Offer is shown when the page loads.'
+                                },
+                                {
+                                  term: 'Exit intent',
+                                  description:
+                                    'Offer is shown on desktop when the mouse is moved above the browser window and on mobile with fast scroll up.'
+                                },
+                                {
+                                  term: 'Lost browser focus',
+                                  description:
+                                    'Offer is shown when the browser tab fully loses visibility or another browser tab is selected.'
+                                },
+                                {
+                                  term: 'Page scroll',
+                                  description:
+                                    'Offer is shown when the page is actively scrolled downward beyond a specified threshold.'
+                                },
+                                {
+                                  term: 'Link click',
+                                  description:
+                                    'Offer is shown when any link is clicked. Links are followed when the popup is closed.                              '
+                                }
+                              ]}
+                            />
+                          )}
+                        </Box>
+                      </Tabs>
+                    </Box>
+                  </Bleed>
+                </BlockStack>
+              }
+            >
+              <TutorialsImage alt="Tutorials" src={`/images/tutorials.svg`} />
+            </MediaCard>
           </Layout.Section>
         </Layout>
       </Page>
