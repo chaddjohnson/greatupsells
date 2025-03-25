@@ -10,12 +10,12 @@ const trackAcceptance = async (offerHit, items, { shopifyDraftOrderId, shopifyCh
   const acceptanceTracked = offerHit.acceptedProducts.length > 0;
   const shopifyApiClient = shop.getShopifyApiClient();
   let shopifyOrderId;
-  let shopifyCheckout = null;
+  let shopifyCheckoutOrders = [];
 
   // Get the Shopify order ID from the Shopify checkout (if available).
   if (shopifyCheckoutId) {
-    shopifyCheckout = await shopifyApiClient.checkout.get(shopifyCheckoutId);
-    shopifyOrderId = shopifyCheckout.order_id;
+    shopifyCheckoutOrders = await shopifyApiClient.order.list({ checkout_id: shopifyCheckoutId });
+    shopifyOrderId = shopifyCheckoutOrders?.[0]?.id;
   }
 
   try {
