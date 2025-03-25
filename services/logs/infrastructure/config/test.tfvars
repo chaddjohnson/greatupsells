@@ -1,1 +1,1 @@
-logs_notification_email = "greatupsells@proxima.ai"
+logs_notification_email = "chad@proxima.ai"
