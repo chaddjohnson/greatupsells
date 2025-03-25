@@ -99,7 +99,7 @@
     minute: '0'
     hour: '0,6,12,18'
     user: root
-    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-shops?ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-shops/$(date +\\%s).gz --storage-class STANDARD_IA"
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-shops?ssl=true&authSource=admin' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-shops/$(date +\\%s).gz --storage-class STANDARD_IA"
   when: region == "us-east-1"
 
 - name: Set up a job for Logs database backup
@@ -108,7 +108,7 @@
     minute: '1'
     hour: '0,6,12,18'
     user: root
-    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-logs?ssl=true' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-logs/$(date +\\%s).gz --storage-class STANDARD_IA"
+    job: "/usr/bin/mongodump --archive --uri 'mongodb://backup:{{ mongodb_backup_password }}@{{ services_domain }}/greatupsells-logs?ssl=true&authSource=admin' | /usr/bin/gzip -9 -c | /usr/local/bin/aws s3 cp - s3://greatupsells-backups2/database/{{ stage }}/greatupsells-logs/$(date +\\%s).gz --storage-class STANDARD_IA"
   when: region == "us-east-1"
 
 - name: Create MongoDB admin user account
