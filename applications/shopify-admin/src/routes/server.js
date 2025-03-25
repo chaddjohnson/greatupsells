@@ -191,18 +191,20 @@ const createServer = () => {
   server.get('/', async (request, response) => {
     const { shop: shopDomain } = request.query;
 
-    try {
-      const shop = await shopsServiceHttpClient.get(`/shops/domain/${shopDomain}`);
+    throw new Error('This is a test error');
 
-      if (!shop.active) {
-        response.redirect(`/auth?shop=${shopDomain}`);
-      } else {
-        response.set('Content-Security-Policy', `frame-ancestors https://${shopDomain} https://admin.shopify.com`);
-        handleAppRequest(request, response);
-      }
-    } catch (error) {
-      response.redirect(`/auth?shop=${shopDomain}`);
-    }
+    // try {
+    //   const shop = await shopsServiceHttpClient.get(`/shops/domain/${shopDomain}`);
+
+    //   if (!shop.active) {
+    //     response.redirect(`/auth?shop=${shopDomain}`);
+    //   } else {
+    //     response.set('Content-Security-Policy', `frame-ancestors https://${shopDomain} https://admin.shopify.com`);
+    //     handleAppRequest(request, response);
+    //   }
+    // } catch (error) {
+    //   response.redirect(`/auth?shop=${shopDomain}`);
+    // }
   });
 
   server.use(express.static(path.join(__dirname, '../../public')));
