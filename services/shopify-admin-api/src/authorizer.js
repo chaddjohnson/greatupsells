@@ -5,13 +5,26 @@ const { JWT_SECRET } = process.env;
 
 // Reference: https://github.com/tmaximini/serverless-jwt-authorizer/blob/master/functions/authorize.js
 
+// 🔥 Create a wildcard ARN like: arn:aws:execute-api:region:account:apiId/stage/*/*/*
+const generateWildcardArn = (methodArn) => {
+  const arnParts = methodArn.split(':');
+  const resourceParts = arnParts[5].split('/');
+  const base = resourceParts[0]; // api-id
+  const stage = resourceParts[1]; // dev, prod, etc.
+
+  // Construct ARN with wildcards for any method + any route
+  arnParts[5] = `${base}/${stage}/*/*`;
+
+  return arnParts.join(':');
+};
+
 const generatePolicyDocument = (effect, arn) => {
   if (!effect || !arn) {
     return null;
   }
 
   // Enable caching cross different Lambdas, even though they use different ARNs.
-  const wildcardArn = arn.replace(/(\/(GET|POST|PUT|DELETE|PATCH)\/shopify-admin-api)\/.*/, '$1/*');
+  const wildcardArn = generateWildcardArn(arn);
 
   return {
     Version: '2012-10-17',
