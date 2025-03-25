@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { Form, Layout, PageActions, Sticky, Banner, BlockStack, Text } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
 import { SaveBar, useAppBridge } from '@shopify/app-bridge-react';
@@ -84,6 +85,7 @@ const OfferForm = ({
 }) => {
   const shopify = useAppBridge();
   const { addTime } = useDateTime();
+  const router = useRouter();
 
   const offerPopupContext = useRef();
 
@@ -367,7 +369,9 @@ const OfferForm = ({
     setTimeout(() => updatePreviewContentHeight());
   };
 
-  const handleDiscard = () => {
+  const handleDiscard = (event) => {
+    event.preventDefault();
+
     shopify.saveBar.hide('save-bar');
     onCancel();
   };
@@ -408,6 +412,19 @@ const OfferForm = ({
     onOfferUpdate(offer);
   }, [onOfferUpdate, offer]);
 
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Hide Save Bar on route change.
+      shopify.saveBar.hide('save-bar');
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Form noValidate onSubmit={submit}>
       <SaveBar id="save-bar" discardConfirmation={dirty || themeDirty || false}>
@@ -420,7 +437,7 @@ const OfferForm = ({
         >
           Save
         </button>
-        <button onClick={handleDiscard}>Discard</button>
+        <button onClick={handleDiscard}>Blah</button>
       </SaveBar>
       <Layout>
         <Layout.Section>

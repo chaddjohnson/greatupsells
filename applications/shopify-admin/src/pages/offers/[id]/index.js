@@ -288,7 +288,7 @@ const OfferEditPage = () => {
   return (
     <>
       <Loader isLoading={!loaded} isError={error} loadingComponent={LoadingComponent} errorComponent={ErrorComponent}>
-        <Page title={offer?.name} backAction={{ content: 'Offers', url: `/offers` }} secondaryActions={secondaryActions}>
+        <Page title={offer?.name} backAction={{ content: 'Offers', url: '/offers' }} secondaryActions={secondaryActions}>
           {loaded && !error && (
             <OfferForm
               initialValues={{
