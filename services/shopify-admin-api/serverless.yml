@@ -65,9 +65,7 @@ custom:
 functions:
   authorizer:
     handler: src/authorizer.handler
-    warmup:
-      default:
-        concurrency: 15
+    provisionedConcurrency: 10
   health:
     handler: src/routes/health.handler
     events:
