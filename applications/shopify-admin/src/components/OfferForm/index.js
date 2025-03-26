@@ -327,6 +327,7 @@ const OfferForm = ({
 
   const handleThemeSelect = (value) => {
     const copiedTheme = copyTheme(value);
+    const offeredProductQuantity = value.maximumOfferedProductQuantity || 3;
 
     // Make a copy of the theme and add it as history for the offer, and then
     // copy over changes to the current theme to history.
@@ -336,19 +337,18 @@ const OfferForm = ({
     setTheme(copiedTheme);
 
     setThemeDirty(true);
-
     setTimeout(() => updatePreviewContentHeight());
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
-
     setTimeout(() => updatePreviewContentHeight());
 
-    const newMaximumOfferedProductQuantity = value.maximumOfferedProductQuantity || 3;
+    const offeredProductQuantity = value.maximumOfferedProductQuantity || 3;
 
-    maximumOfferedProductQuantity.onChange(newMaximumOfferedProductQuantity.toString());
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleThemeDisplayTypeChange = (value) => {
