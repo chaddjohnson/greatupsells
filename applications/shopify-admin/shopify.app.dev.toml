@@ -16,11 +16,6 @@ redirect_urls = [
   "https://chaddjohnson.eu.ngrok.io/"
 ]
 
-[app_proxy]
-url = "https://chaddjohnson.eu.ngrok.io/"
-subpath = "great-upsells-assets"
-prefix = "tools"
-
 [pos]
 embedded = false
 
