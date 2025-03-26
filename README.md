@@ -118,6 +118,8 @@ To run and develop Shopify app extensions locally (such as post-purchase upsells
 1. Follow instructions on screen.
 1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
 
+Please note that this might require some effort to make it work.
+
 ### Troubleshooting
 
 #### Ports already in use
