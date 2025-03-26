@@ -286,6 +286,8 @@ const OfferForm = ({
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
     let firstStrategyOfferTheme = offerThemes.find((current) => current.strategies.indexOf(value) > -1);
+    const offeredProductQuantity =
+      firstStrategyOfferTheme?.maximumOfferedProductQuantity || firstStrategyTheme?.maximumOfferedProductQuantity || 3;
 
     strategy.onChange(value);
 
@@ -316,6 +318,8 @@ const OfferForm = ({
     if (valueIsInline) {
       triggerEvent.onChange('LOAD');
     }
+
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleThemeChange = (value) => {
