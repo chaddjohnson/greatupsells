@@ -14,7 +14,7 @@
     "bootstrap": "dotenv -- yarn workspaces focus --all",
     "postbootstrap": "dotenv -- lerna run build --stream --scope=@greatupsells/*",
     "prestart": "rm -f package-lock.json; yarn install --immutable && dotenv -- yarn bootstrap",
-    "start": "(ngrok start greatupsells > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
+    "start": "((ngrok start greatupsells > /dev/null) & ngrok start extension > /dev/null) & COLUMNS=120 dotenv -- lerna run start --parallel"
   },
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",

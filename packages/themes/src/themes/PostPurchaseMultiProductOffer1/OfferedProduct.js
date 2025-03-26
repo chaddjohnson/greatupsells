@@ -91,7 +91,7 @@ const OfferedProduct = ({ offeredProduct, index }) => {
                     label: quantityIndex + 1,
                     value: quantityIndex + 1
                   }))}
-                  onChange={(event) => handleQuantityChange(index, event.target.value)}
+                  onChange={(value) => handleQuantityChange(index, value)}
                 />
               </BlockStack>
             </View>
