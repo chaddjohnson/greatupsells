@@ -42,7 +42,12 @@ const getShopifyCart = (initialPurchase) => {
 const loadOffer = async (domain, shopifyCart) => {
   const events = ['LOAD'];
   const url = `${STOREFRONT_API_URL}/offers/random`;
-  const { shopifyCartTotal, shopifyCartItemCount, shopifyProductIds, shopifyVariantIds } = shopifyCart;
+  const {
+    shopifyCartTotal,
+    shopifyCartItemCount,
+    shopifyProductIds,
+    shopifyVariantIds
+  } = shopifyCart;
   const data = {
     events,
     shopifyProductIds,
@@ -65,7 +70,10 @@ const loadOffer = async (domain, shopifyCart) => {
 
 const loadData = async (domain, initialPurchase) => {
   const shopifyCart = getShopifyCart(initialPurchase);
-  const [shop, offerData] = await Promise.all([loadShop(domain), loadOffer(domain, shopifyCart)]);
+  const [shop, offerData] = await Promise.all([
+    loadShop(domain),
+    loadOffer(domain, shopifyCart)
+  ]);
 
   return {
     shop,

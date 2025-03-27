@@ -56,23 +56,26 @@ const App = ({ storage }) => {
  * optionally allows data to be stored on the client for use in the `Render`
  * extension point.
  */
-extend('Checkout::PostPurchase::ShouldRender', async ({ inputData, storage }) => {
-  const { shop, initialPurchase, token } = inputData;
-  const { referenceId } = initialPurchase;
-  const { domain } = shop;
-  const data = await loadData(domain, initialPurchase);
-  const { offer, offeredProducts } = data;
-  const shouldRender = !!offer && offeredProducts.length > 0;
+extend(
+  'Checkout::PostPurchase::ShouldRender',
+  async ({ inputData, storage }) => {
+    const { shop, initialPurchase, token } = inputData;
+    const { referenceId } = initialPurchase;
+    const { domain } = shop;
+    const data = await loadData(domain, initialPurchase);
+    const { offer, offeredProducts } = data;
+    const shouldRender = !!offer && offeredProducts.length > 0;
 
-  if (shouldRender) {
-    // Saves initial state, provided to `Render` via `storage.initialData`.
-    await storage.update({ ...data, referenceId, token });
+    if (shouldRender) {
+      // Saves initial state, provided to `Render` via `storage.initialData`.
+      await storage.update({ ...data, referenceId, token });
+    }
+
+    return {
+      render: shouldRender
+    };
   }
-
-  return {
-    render: shouldRender
-  };
-});
+);
 
 /**
  * Entry point for the `Render` Extension Point
