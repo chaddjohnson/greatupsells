@@ -21,3 +21,9 @@ embedded = false
 
 [build]
 include_config_on_deploy = true
+
+[[extensions]]
+type = "post_purchase"
+handle = "post-purchase-upsells"
+name = "Post Purchase Upsells"
+source_files_path = "extensions/post-purchase"

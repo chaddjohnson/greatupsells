@@ -21,3 +21,9 @@ redirect_urls = [
 
 [pos]
 embedded = false
+
+[[extensions]]
+type = "post_purchase"
+handle = "post-purchase-upsells"
+name = "Post Purchase Upsells"
+source_files_path = "extensions/post-purchase"
