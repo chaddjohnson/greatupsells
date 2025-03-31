@@ -16,7 +16,6 @@ import { OfferTheme } from './components';
 import loadData from './utilities/loadData';
 
 const App = ({ storage }) => {
-  console.log('App 1');
   const {
     shop,
     shopifyCartItems,
@@ -29,13 +28,10 @@ const App = ({ storage }) => {
     referenceId,
     token
   } = storage.initialData || {};
-  console.log('App 2');
 
   if (!storage.initialData) {
-    console.log('App 3');
     return null;
   }
-  console.log('App 4');
 
   return (
     <OfferTheme
@@ -61,23 +57,17 @@ const App = ({ storage }) => {
  * extension point.
  */
 extend('Checkout::PostPurchase::ShouldRender', async ({ inputData, storage }) => {
-  console.log('Checkout::PostPurchase::ShouldRender 1');
   const { shop, initialPurchase, token } = inputData;
   const { referenceId } = initialPurchase;
   const { domain } = shop;
-  console.log('Checkout::PostPurchase::ShouldRender 2');
   const data = await loadData(domain, initialPurchase);
-  console.log('Checkout::PostPurchase::ShouldRender 3');
   const { offer, offeredProducts } = data;
   const shouldRender = !!offer && offeredProducts.length > 0;
-  console.log('Checkout::PostPurchase::ShouldRender 4');
 
   if (shouldRender) {
-    console.log('Checkout::PostPurchase::ShouldRender 5');
     // Saves initial state, provided to `Render` via `storage.initialData`.
     await storage.update({ ...data, referenceId, token });
   }
-  console.log('Checkout::PostPurchase::ShouldRender 6');
 
   return {
     render: shouldRender
