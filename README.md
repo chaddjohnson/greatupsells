@@ -118,7 +118,7 @@ To run and develop Shopify app extensions locally (such as post-purchase upsells
 1. Run the app with `yarn start` from the top-level project directory.
 1. Open another terminal, and change the working directory to `applications/shopify-admin`.
 1. Go to your ngrok account, look under Agents, and determine the URL to the randomized tunnel URL. Update `POST_PURCHASE_APP_URL` in `.env` with this URL.
-1. Run `yarn extensions:start` to start extensions.
+1. Run `yarn extensions:start --tunnel-url=$POST_PURCHASE_APP_URL` to start extensions.
 1. Follow instructions on screen.
    1. You'll need to install the suggested Shopify extension. It is blocked by Google, and ChatGPT can help you download, unpack, and install it.
 1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
