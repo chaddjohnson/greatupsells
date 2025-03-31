@@ -122,13 +122,13 @@ jobs:
         working-directory: applications/shopify-admin
       - name: Publish Shopify extensions (test)
         if: ${{ success() && github.ref == 'refs/heads/test' }}
-        run: env > .env && yarn extensions:build -- -config=test && yarn extensions:deploy -- -config=test
+        run: env > .env && CONFIG=test yarn extensions:build && CONFIG=test yarn extensions:deploy
         working-directory: applications/shopify-admin
         env:
           SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN_TEST }}
       - name: Publish Shopify extensions (production)
         if: ${{ success() && github.ref == 'refs/heads/master' }}
-        run: env > .env && yarn extensions:build -- -config=production && yarn extensions:deploy -- -config=production
+        run: env > .env && CONFIG=production yarn extensions:build && CONFIG=production yarn extensions:deploy
         working-directory: applications/shopify-admin
         env:
           SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}
