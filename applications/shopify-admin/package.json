@@ -73,6 +73,7 @@
     "extensions:start": "dotenv -- bash -c 'shopify app dev'",
     "extensions:info": "shopify app info",
     "extensions:scaffold": "shopify app scaffold",
-    "extensions:deploy": "shopify app deploy --force"
+    "extensions:deploy": "shopify app deploy --force",
+    "extensions:release": "shopify app release --force"
   }
 }
