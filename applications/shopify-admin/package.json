@@ -69,8 +69,8 @@
     "destroy": "cd infrastructure && ./destroy.sh",
     "start": "nodemon -e js --exec \"NODE_OPTIONS=--openssl-legacy-provider NODE_TLS_REJECT_UNAUTHORIZED='0' node src/routes/server\" --watch src/routes",
     "shopify": "shopify",
-    "extensions:build": "dotenv -- bash -c 'shopify app build \"$@\"' _",
-    "extensions:start": "dotenv -- bash -c 'shopify app dev \"$@\"' _",
+    "extensions:build": "dotenv -- bash -c 'shopify app build \"$@\"' bash",
+    "extensions:start": "dotenv -- bash -c 'shopify app dev \"$@\"' bash",
     "extensions:info": "shopify app info",
     "extensions:scaffold": "shopify app scaffold",
     "extensions:deploy": "shopify app deploy --force"
