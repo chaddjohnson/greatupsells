@@ -1,14 +1,8 @@
 const { createAdminApiClient } = require('@shopify/admin-api-client');
 
-const clientCache = {};
-
 module.exports = (shop) => {
   const { domain, accessToken } = shop;
   const apiVersion = '2025-01';
-
-  if (clientCache[domain]) {
-    return clientCache[domain];
-  }
 
   if (!accessToken) {
     throw new Error(`No access token available for shop ${domain}`);
@@ -21,8 +15,6 @@ module.exports = (shop) => {
     accessToken,
     retries: 3
   });
-
-  clientCache[domain] = client;
 
   return client;
 };
