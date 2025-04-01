@@ -52,7 +52,12 @@ const handler = async (event, context) => {
       body: JSON.stringify(order)
     };
   } catch (error) {
-    await logger.error(`Error creating order`, error, { event });
+    const blacklist = [/E11000/];
+    const errorBlacklisted = blacklist.some((regex) => regex.test(error.message));
+
+    if (!errorBlacklisted) {
+      await logger.error(`Error creating order`, error, { event });
+    }
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
