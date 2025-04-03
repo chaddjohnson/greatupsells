@@ -44,18 +44,18 @@ const OfferStrategyEditor = ({ shop, strategy, onStrategyChange = () => {} }) =>
                     is required to use this feature.
                   </Banner>
                 )
-            },
-            {
-              label: 'Thank You page offer',
-              helpText:
-                'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
-              value: 'THANK_YOU_PAGE'
-            },
-            {
-              label: 'Order Status page offer',
-              helpText: 'Encourage customers to purchase a related or complementary product on the Order Status page.',
-              value: 'ORDER_STATUS_PAGE'
             }
+            // {
+            //   label: 'Thank You page offer',
+            //   helpText:
+            //     'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.',
+            //   value: 'THANK_YOU_PAGE'
+            // },
+            // {
+            //   label: 'Order Status page offer',
+            //   helpText: 'Encourage customers to purchase a related or complementary product on the Order Status page.',
+            //   value: 'ORDER_STATUS_PAGE'
+            // }
             // {
             //   label: 'Popup',
             //   helpText:

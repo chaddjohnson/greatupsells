@@ -224,6 +224,7 @@ const OfferPopup = ({
                   contentElement={(contentProps, children) => (
                     <Content
                       {...contentProps}
+                      className={clsx(offer.strategy.toLowerCase(), contentProps.className)}
                       style={{
                         zoom: designMode ? designModeZoom : 1
                       }}

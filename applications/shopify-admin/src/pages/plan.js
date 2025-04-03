@@ -58,18 +58,18 @@ const PlanPage = () => {
       <Icon key="2" source={CheckIcon} tone="success" />,
       <Icon key="3" source={CheckIcon} tone="success" />
     ],
-    [
-      <Text key="feature3">Thank You page offers</Text>,
-      <Icon key="1" source={CheckIcon} tone="success" />,
-      <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
-    ],
-    [
-      <Text key="feature3">Order Status page offers</Text>,
-      <Icon key="1" source={CheckIcon} tone="success" />,
-      <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
-    ],
+    // [
+    //   <Text key="feature3">Thank You page offers</Text>,
+    //   <Icon key="1" source={CheckIcon} tone="success" />,
+    //   <Icon key="2" source={CheckIcon} tone="success" />,
+    //   <Icon key="3" source={CheckIcon} tone="success" />
+    // ],
+    // [
+    //   <Text key="feature3">Order Status page offers</Text>,
+    //   <Icon key="1" source={CheckIcon} tone="success" />,
+    //   <Icon key="2" source={CheckIcon} tone="success" />,
+    //   <Icon key="3" source={CheckIcon} tone="success" />
+    // ],
     [
       <Text key="feature4">Themes</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,

@@ -282,17 +282,17 @@ const DashboardPage = () => {
                                   term: 'Post-purchase offer',
                                   description:
                                     'Encourage customers to purchase a related or complementary product after completing checkout, before the Thank You page. Please review limitations.'
-                                },
-                                {
-                                  term: 'Thank You page offer',
-                                  description:
-                                    'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.'
-                                },
-                                {
-                                  term: 'Order Status page offer',
-                                  description:
-                                    'Encourage customers to purchase a related or complementary product on the Order Status page.'
                                 }
+                                // {
+                                //   term: 'Thank You page offer',
+                                //   description:
+                                //     'Encourage customers to purchase a related or complementary product on the Thank You page after completing checkout.'
+                                // },
+                                // {
+                                //   term: 'Order Status page offer',
+                                //   description:
+                                //     'Encourage customers to purchase a related or complementary product on the Order Status page.'
+                                // }
                               ]}
                             />
                           )}

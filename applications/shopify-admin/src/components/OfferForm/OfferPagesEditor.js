@@ -27,15 +27,15 @@ const pageOptions = [
   {
     value: '*/cart',
     label: 'Cart page'
-  },
-  {
-    value: '*/orders/*',
-    label: 'Order Status page'
-  },
-  {
-    value: '*/checkouts/*/thank_you',
-    label: 'Checkout Thank You page'
   }
+  // {
+  //   value: '*/orders/*',
+  //   label: 'Order Status page'
+  // },
+  // {
+  //   value: '*/checkouts/*/thank_you',
+  //   label: 'Checkout Thank You page'
+  // }
 ];
 
 const OfferPagesEditor = ({ offer, triggerPage, triggerPagePath, submitted = false }) => {
