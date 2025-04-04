@@ -40,6 +40,8 @@ And to restore a database:
 
 ### ngrok
 
+You could use `nginx` with `hosts` file entries, but this won't work for webhooks. Hence, we use a tool like `ngrok`.
+
 A paid ngrok account is necessary (please bill us, and include your receipt). Alternatively, if you can quickly figure out how to use another local tunneling mechanism, go for it, and please add to this README if you have success.
 
 If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Find your config file's location via `ngrok config check`. Here is an example of how your config file should look:
