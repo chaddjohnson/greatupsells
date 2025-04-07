@@ -10,7 +10,7 @@ module.exports = (shop) => {
     throw new Error(`No access token available for shop ${domain}`);
   }
 
-  const shopName = domain.replace(/^([^\.]+).*$/, '$1');
+  const { shopName } = shop;
   const client = new ShopifyApiNode({
     shopName,
     accessToken,
