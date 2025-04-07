@@ -1,7 +1,6 @@
 const Promise = require('bluebird');
 const { DateTime } = require('luxon');
 const emailClient = require('@greatupsells/email-client');
-const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
 const { DOMAIN, APP_NAME, SHOPIFY_ADMIN_APP_API_KEY } = process.env;
@@ -17,17 +16,18 @@ const sendUsageNotifications = async (shop, monthUpsellRevenue, originalMonthUps
     originalMonthUpsellRevenue < monthUpsellRevenueLimit &&
     monthUpsellRevenue >= monthUpsellRevenueLimit;
   const planRenewalDateFormatted = DateTime.fromJSDate(billingOn).toFormat('MMM d, y');
+  const { shopName, contactEmail } = shop;
 
   // Send email when 80% of earnings limit has been reached
   if (monthUpsellReveueLimitNear) {
     await emailClient.enqueue({
-      to: shop.contactEmail,
+      to: contactEmail,
       from: `support@${DOMAIN}`,
       subject: '80% of month upsell revenue allowance used',
       body: `
         <p>Hi ${shop.contactName},</p>
         <p>Your shop has used 80% of its upsell revenue allowance for the month. Your allowance of $${monthUpsellRevenueLimit} USD will renew on ${planRenewalDateFormatted}.</p>
-        <p>To ensure upselling continues without disruption, please upgrade your plan <a href="https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
+        <p>To ensure upselling continues without disruption, please upgrade your plan <a href="https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
         <br />
         <p>Thank you,</p>
         <p>${APP_NAME}</p>
@@ -38,13 +38,13 @@ const sendUsageNotifications = async (shop, monthUpsellRevenue, originalMonthUps
   // Send email when earnings limit has been reached.
   if (monthUpsellRevenueLimitReached) {
     await emailClient.enqueue({
-      to: shop.contactEmail,
+      to: contactEmail,
       from: `support@${DOMAIN}`,
       subject: '100% of month upsell revenue allowance used',
       body: `
         <p>Hi ${shop.contactName},</p>
         <p>Your shop has used 100% of its upsell revenue allowance for the month. Your allowance of $${monthUpsellRevenueLimit} USD will renew on ${planRenewalDateFormatted}.</p>
-        <p>To continue upselling, please upgrade your plan <a href="https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
+        <p>To continue upselling, please upgrade your plan <a href="https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/plan">here</a>.</p>
         <br />
         <p>Thank you,</p>
         <p>${APP_NAME}</p>
