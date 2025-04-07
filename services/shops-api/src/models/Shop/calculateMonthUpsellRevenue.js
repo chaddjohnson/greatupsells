@@ -59,7 +59,7 @@ const calculateMonthUpsellRevenue = async (shop) => {
   ];
 
   const results = await OfferHit.aggregate(pipelines);
-  let total = results[0]?.total;
+  let total = results[0]?.total || 0;
 
   // Convert the total to USD if the shop currency is not USD.
   if (shop.currency !== 'USD') {
