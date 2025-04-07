@@ -129,13 +129,39 @@ const sanitizePagePath = (pagePath) => {
 
 const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
   // Query Shopify for order data because the order may have just been created.
-  const shopifyApiClient = shop.getShopifyApiClient();
-  const shopifyOrderData = await shopifyApiClient.order.get(shopifyOrderId);
-  const { line_items: lineItems = [], subtotal_price: subtotalPrice = 0 } = shopifyOrderData;
-  const shopifyProductIds = lineItems.map((item) => item.product_id);
-  const shopifyVariantIds = lineItems.map((item) => item.variant_id);
+  const shopifyApiClient = shop.getGraphqlShopifyApiClient();
+  const query = `
+    query getOrder($id: ID!) {
+      order(id: $id) {
+        lineItems(first: 10) {
+          edges {
+            node {
+              product {
+                id
+              }
+              variant {
+                id
+              }
+              quantity
+            }
+          }
+        }
+        subtotalPriceSet {
+          shopMoney {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  `;
+  const result = await shopifyApiClient.request(query, { variables: { id: shopifyOrderId } });
+  const { lineItems } = result.data.order;
+  const subtotalPrice = parseFloat(result.data.order.subtotalPriceSet.shopMoney.amount) || 0;
+  const shopifyProductIds = lineItems.edges.map((item) => parseInt(item.node.product.id.split('/').pop()));
+  const shopifyVariantIds = lineItems.edges.map((item) => parseInt(item.node.variant.id.split('/').pop()));
   const shopifyCartTotal = parseFloat(subtotalPrice) || 0;
-  const shopifyCartItemCount = lineItems.reduce((sum, item) => sum + item.quantity, 0);
+  const shopifyCartItemCount = lineItems.edges.reduce((sum, item) => sum + item.node.quantity, 0);
 
   return {
     shopifyProductIds,
