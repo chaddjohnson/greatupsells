@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - test
-      - production
+      - master
     paths:
       - .github/workflows/email-service.yml
       - services/email/**

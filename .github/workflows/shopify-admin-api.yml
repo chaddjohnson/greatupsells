@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - test
-      - production
+      - master
     paths:
       - .github/workflows/shopify-admin-api.yml
       - services/shopify-admin-api/**
