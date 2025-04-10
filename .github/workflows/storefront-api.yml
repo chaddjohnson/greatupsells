@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - test
-      - production
+      - master
     paths:
       - .github/workflows/storefront-api.yml
       - services/storefront-api/**
