@@ -79,13 +79,7 @@ module.exports = addWebpackConfig({
       })
   ].filter(Boolean),
   stats: 'errors-warnings',
-  externals: [
-    'facepaint',
-    'prop-types',
-    'react',
-    'react-dom',
-    'styled-components'
-  ],
+  externals: ['facepaint', 'prop-types', 'react', 'react-dom', 'styled-components'],
   resolve: {
     // Setting this to `true` allows dependency packages to be watched.
     symlinks: true

@@ -10,11 +10,11 @@
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@shopify/checkout-ui-react": "0.2.0",
-    "compression-webpack-plugin": "^11.1.0"
+    "compression-webpack-plugin": "^11.1.0",
+    "preact": "^10.5.13"
   },
   "devDependencies": {
     "@greatupsells/themes": "0.0.0",
-    "preact": "^10.5.13",
     "style-loader": "^1.2.1",
     "tslib": "^2.4.0"
   },

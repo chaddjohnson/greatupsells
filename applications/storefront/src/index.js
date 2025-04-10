@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { createRoot } from 'react-dom/client';
+import { render } from 'preact';
 import App from './App';
 
 let initialized = false;
@@ -18,7 +17,7 @@ const init = () => {
   container.setAttribute('id', containerId);
   document.body.appendChild(container);
 
-  createRoot(container).render(<App />);
+  render(<App />, container);
 };
 
 // Initialize when document becomes ready.

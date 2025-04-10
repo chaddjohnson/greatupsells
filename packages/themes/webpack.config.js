@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const zlib = require('zlib');
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -13,10 +12,8 @@ module.exports = {
     MultiProductOffer1: './src/themes/MultiProductOffer1',
     MultiProductOffer2: './src/themes/MultiProductOffer2',
     MultiProductOrderPageOffer1: './src/themes/MultiProductOrderPageOffer1',
-    PostPurchaseMultiProductOffer1:
-      './src/themes/PostPurchaseMultiProductOffer1',
-    PostPurchaseSingleProductOffer1:
-      './src/themes/PostPurchaseSingleProductOffer1',
+    PostPurchaseMultiProductOffer1: './src/themes/PostPurchaseMultiProductOffer1',
+    PostPurchaseSingleProductOffer1: './src/themes/PostPurchaseSingleProductOffer1',
     SingleProductOffer1: './src/themes/SingleProductOffer1',
     SingleProductOffer2: './src/themes/SingleProductOffer2'
   },
@@ -48,19 +45,11 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    dev && new ESLintPlugin({ cache: true })
-  ].filter(Boolean),
+  plugins: [new CleanWebpackPlugin(), new webpack.NoEmitOnErrorsPlugin(), dev && new ESLintPlugin({ cache: true })].filter(
+    Boolean
+  ),
   stats: 'errors-warnings',
-  externals: [
-    'facepaint',
-    'prop-types',
-    'react',
-    'react-dom',
-    'styled-components'
-  ],
+  externals: ['facepaint', 'prop-types', 'react', 'react-dom', 'styled-components'],
   resolve: {
     // Setting this to `true` allows dependency packages to be watched.
     symlinks: true
