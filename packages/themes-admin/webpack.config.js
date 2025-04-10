@@ -80,13 +80,7 @@ const config = addWebpackConfig(
         })
     ].filter(Boolean),
     stats: 'errors-warnings',
-    externals: [
-      'facepaint',
-      'prop-types',
-      'react',
-      'react-dom',
-      'styled-components'
-    ],
+    externals: ['facepaint', 'prop-types', 'react', 'react-dom', 'styled-components'],
     resolve: {
       // Setting this to `true` allows dependency packages to be watched.
       symlinks: true
@@ -97,13 +91,9 @@ const config = addWebpackConfig(
   }
 );
 
-const cssRule = config.module.rules.find((rule) =>
-  rule.test?.toString().includes('.css')
-);
+const cssRule = config.module.rules.find((rule) => rule.test?.toString().includes('.css'));
 const loaderRule = cssRule?.use?.find(
-  (item) =>
-    item.loader?.includes('style-loader') ||
-    item.loader?.includes('mini-css-extract-plugin')
+  (item) => item.loader?.includes('style-loader') || item.loader?.includes('mini-css-extract-plugin')
 );
 
 if (loaderRule) {

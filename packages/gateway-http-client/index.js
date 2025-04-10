@@ -19,7 +19,7 @@ class HttpClient {
     client.defaults.baseURL = baseUrl;
     client.defaults.timeout = 20 * 1000;
     client.defaults.responseType = 'json';
-    client.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
+    client.defaults.headers.common['Content-Type'] = 'application/json';
 
     // Enable this if needing to serialize arrays in query strings.
     // Note that there are difficulties with importing `qs` with webpack 5.

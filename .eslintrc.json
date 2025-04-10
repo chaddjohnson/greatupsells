@@ -4,7 +4,6 @@
     "node": true
   },
   "extends": [
-    "react-app",
     "airbnb-base",
     "eslint:recommended",
     "plugin:prettier/recommended",
@@ -12,7 +11,7 @@
     "plugin:jsx-a11y/recommended",
     "prettier"
   ],
-  "plugins": ["prettier", "jsx-a11y"],
+  "plugins": ["prettier", "jsx-a11y", "react-hooks"],
   "rules": {
     "prettier/prettier": ["warn"],
     "func-names": ["off"],
@@ -112,6 +111,9 @@
     "requireConfigFile": false
   },
   "settings": {
+    "react": {
+      "version": "detect"
+    },
     "import/resolver": {
       "node": {
         "paths": ["src"]
