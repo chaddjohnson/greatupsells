@@ -72,11 +72,15 @@
     value: '10'
     state: present
 
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  changed_when: false
+
 - name: Install packages
   apt:
     pkg:
       - software-properties-common
-      - ntp
       - python3-pip
       - jq
       - unzip
