@@ -24,46 +24,53 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            STAGE="production"
+          else
+            STAGE="$BRANCH_NAME"
+          fi
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/domain'
           env_variable_name: 'ASSETS_DOMAIN'
       - name: Inject "ASSETS_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/url'
           env_variable_name: 'ASSETS_URL'
       - name: Inject "SHOPIFY_ADMIN_APP_API_KEY" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/api-key'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/shopify/api-key'
           env_variable_name: 'SHOPIFY_ADMIN_APP_API_KEY'
       - name: Inject "SHOPIFY_ADMIN_API_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/shopify-admin-api/url'
           env_variable_name: 'SHOPIFY_ADMIN_API_URL'
       - name: Inject "STOREFRONT_API_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/storefront-api/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/storefront-api/url'
           env_variable_name: 'STOREFRONT_API_URL'
 
       # Specific to app extensions.
       - name: Inject "SHOPIFY_API_KEY" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/api-key'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/shopify/api-key'
           env_variable_name: 'SHOPIFY_API_KEY'
       - name: Inject "SHOPIFY_POST_PURCHASE_UPSELLS_ID" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/post-purchase/id'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/shopify/post-purchase/id'
           env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
 
       - name: Checkout
@@ -93,7 +100,7 @@ jobs:
         run: yarn infrastructure
         working-directory: applications/shopify-admin
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory

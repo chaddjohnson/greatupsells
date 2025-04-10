@@ -19,7 +19,14 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            STAGE="production"
+          else
+            STAGE="$BRANCH_NAME"
+          fi
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
@@ -47,19 +54,19 @@ jobs:
         run: yarn infrastructure
         working-directory: services/shops-api
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD_TEST }}
       - name: Run Terraform (production)
         if: ${{ success() && github.ref == 'refs/heads/master' }}
         run: yarn infrastructure
         working-directory: services/shops-api
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
           MONGODB_APP_PASSWORD: ${{ secrets.MONGODB_APP_PASSWORD }}
       - name: Inject "MONGODB_URL_SHOPS" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/database/mongodb-shops/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/database/mongodb-shops/url'
           env_variable_name: 'MONGODB_URL_SHOPS'
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
