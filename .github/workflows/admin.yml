@@ -20,24 +20,31 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            STAGE="production"
+          else
+            STAGE="$BRANCH_NAME"
+          fi
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/domain'
           env_variable_name: 'ASSETS_DOMAIN'
       - name: Inject "ASSETS_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/url'
           env_variable_name: 'ASSETS_URL'
       - name: Inject "ADMIN_API_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/admin-api/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/admin-api/url'
           env_variable_name: 'ADMIN_API_URL'
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,7 +69,7 @@ jobs:
         run: yarn infrastructure
         working-directory: applications/admin
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
       - name: Build Packages
         run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory

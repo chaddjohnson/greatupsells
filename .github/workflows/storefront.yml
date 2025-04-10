@@ -19,21 +19,29 @@ jobs:
       AWS_REGION: us-east-1
     steps:
       - name: Set Environment Variables
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: |
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            STAGE="production"
+          else
+            STAGE="$BRANCH_NAME"
+          fi
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
       - name: Inject "STOREFRONT_API_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/storefront-api/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/storefront-api/url'
           env_variable_name: 'STOREFRONT_API_URL'
       - name: Inject "ASSETS_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/url'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/url'
           env_variable_name: 'ASSETS_URL'
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/assets/domain'
+          ssm_parameter: '/greatupsells/${{ env.STAGE }}/assets/domain'
           env_variable_name: 'ASSETS_DOMAIN'
       - name: Checkout
         uses: actions/checkout@v4

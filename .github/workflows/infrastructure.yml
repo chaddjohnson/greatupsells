@@ -17,22 +17,29 @@ jobs:
     steps:
       - name: Set Environment Variables
         run: |
-          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            STAGE="production"
+          else
+            STAGE="$BRANCH_NAME"
+          fi
+          echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "STAGE=$STAGE" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Install Private Key (test)
         if: ${{ success() && github.ref == 'refs/heads/test' }}
         run: |
-          mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
-          echo "${{ secrets.PRIVATE_KEY_TEST }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
-          chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
+          mkdir -p ~/.ssh/greatupsells/${{ env.STAGE }}
+          echo "${{ secrets.PRIVATE_KEY_TEST }}" > ~/.ssh/greatupsells/${{ env.STAGE }}/id_rsa
+          chmod 600 ~/.ssh/greatupsells/${{ env.STAGE }}/id_rsa
       - name: Install Private Key (production)
         if: ${{ success() && github.ref == 'refs/heads/master' }}
         run: |
-          mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
-          chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
+          mkdir -p ~/.ssh/greatupsells/${{ env.STAGE }}
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/${{ env.STAGE }}/id_rsa
+          chmod 600 ~/.ssh/greatupsells/${{ env.STAGE }}/id_rsa
       - name: Checkout
         uses: actions/checkout@v4
       - name: Add Terraform variables (test)
@@ -66,7 +73,7 @@ jobs:
         run: ./run.sh
         working-directory: infrastructure
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
           TF_VAR_public_key: ${{ secrets.PUBLIC_KEY_TEST }}
           TF_VAR_shopify_admin_app_api_secret_key: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY_TEST }}
         timeout-minutes: 45
@@ -75,7 +82,7 @@ jobs:
         run: ./run.sh
         working-directory: infrastructure
         env:
-          STAGE: ${{ env.BRANCH }}
+          STAGE: ${{ env.STAGE }}
           TF_VAR_public_key: ${{ secrets.PUBLIC_KEY }}
           TF_VAR_shopify_admin_app_api_secret_key: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY }}
         timeout-minutes: 45
