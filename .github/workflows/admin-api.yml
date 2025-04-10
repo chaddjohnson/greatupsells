@@ -54,7 +54,7 @@ jobs:
         env:
           STAGE: ${{ env.STAGE }}
       - name: Build Packages
-        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=\"@greatupsells/*\"
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope="@greatupsells/*"
       - name: Download .serverless directory
         run: aws s3 sync s3://greatupsells-infrastructure2/serverless/admin-api . --region us-east-1
         working-directory: services/admin-api

@@ -69,7 +69,7 @@ jobs:
           ssm_parameter: '/greatupsells/${{ env.STAGE }}/database/mongodb-shops/url'
           env_variable_name: 'MONGODB_URL_SHOPS'
       - name: Build Packages
-        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=\"@greatupsells/*\"
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope="@greatupsells/*"
       - name: Run Data Migrations
         run: yarn migrate
         working-directory: services/shops-api
