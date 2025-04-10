@@ -77,6 +77,7 @@ const createSandboxPlan = async (shop) => {
 };
 
 const createPlan = async (shop, level) => {
+  const { shopName } = shop;
   const plan = plans[level];
 
   if (!plan) {
@@ -91,7 +92,7 @@ const createPlan = async (shop, level) => {
     name: plan.name,
     price: plan.price,
     trial_days: trialDays,
-    return_url: `https://admin.shopify.com/store/${shop.name}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
+    return_url: `https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
     test: false
   });
 
