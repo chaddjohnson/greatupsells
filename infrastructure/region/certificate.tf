@@ -7,6 +7,13 @@ resource "aws_acm_certificate" "domain" {
     "*.test.${var.base_domain}",
     "*.${data.aws_region.current.name}.test.${var.base_domain}",
   ]
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [
+      subject_alternative_names
+    ]
+  }
 }
 
 data "aws_route53_zone" "domain" {
