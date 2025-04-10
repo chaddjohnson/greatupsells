@@ -6,7 +6,7 @@ resource "aws_ssm_parameter" "elasticsearch_logs_database_url_production" {
   count     = terraform.workspace == "production" ? 1 : 0
   name      = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
   type      = "SecureString"
-  value     = "https://app:${var.elasticsearch_app_password}@services.${data.aws_region.current.name}.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}:9200"
+  value     = "https://app:${var.elasticsearch_app_password}@services.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}:9200"
   overwrite = true
 }
 
