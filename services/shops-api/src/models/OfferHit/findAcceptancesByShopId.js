@@ -46,8 +46,7 @@ const findAcceptancesByShopId = async (shopId, startAt, endAt) => {
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results =
-    results.map(({ date, acceptances }) => ({ date, acceptances })) || [];
+  results = results.map(({ date, acceptances }) => ({ date, acceptances })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
   results = fillResults(results, 'acceptances');
 

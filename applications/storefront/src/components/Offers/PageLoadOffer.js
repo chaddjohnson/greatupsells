@@ -2,11 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
 import { usePushStateListener } from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -21,12 +17,12 @@ const PageLoadOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -46,12 +42,8 @@ const PageLoadOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -61,14 +53,7 @@ const PageLoadOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -119,16 +104,7 @@ const PageLoadOffer = ({
     // The page path (`pagePath`) is sent to the API via the useRandomOffer hook.
 
     openPopup();
-  }, [
-    offer,
-    offerId,
-    offerViewed,
-    openPopup,
-    viewingOffer,
-    offeredProducts,
-    isOnPageRequiredSeconds,
-    delayFinished
-  ]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts, isOnPageRequiredSeconds, delayFinished]);
 
   useEffect(() => {
     if (!offerId) {
@@ -197,13 +173,6 @@ PageLoadOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-PageLoadOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default PageLoadOffer;

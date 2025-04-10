@@ -10,9 +10,9 @@
   "detail": {
     "payload": {
       "id": 27708653613,
-      "name": "neatowebsolutions-chad",
-      "email": "chad@neatowebsolutions.com",
-      "domain": "neatowebsolutions-chad.myshopify.com",
+      "name": "greatupsells-proxima",
+      "email": "greatupsells@proxima.ai",
+      "domain": "greatupsells-proxima.myshopify.com",
       "province": "Michigan",
       "country": "US",
       "address1": "1658 Hiawatha Dr SE",
@@ -29,10 +29,10 @@
       "country_code": "US",
       "country_name": "United States",
       "currency": "USD",
-      "customer_email": "chad@neatowebsolutions.com",
+      "customer_email": "greatupsells@proxima.ai",
       "timezone": "(GMT-05:00) America/New_York",
       "iana_timezone": "America/New_York",
-      "shop_owner": "neatowebsolutions-chad Admin",
+      "shop_owner": "greatupsells-proxima Admin",
       "money_format": "${{amount}}",
       "money_with_currency_format": "${{amount}} USD",
       "weight_unit": "lb",
@@ -45,7 +45,7 @@
       "plan_name": "affiliate",
       "has_discounts": true,
       "has_gift_cards": false,
-      "myshopify_domain": "neatowebsolutions-chad.myshopify.com",
+      "myshopify_domain": "greatupsells-proxima.myshopify.com",
       "google_apps_domain": null,
       "google_apps_login_enabled": null,
       "money_in_emails_format": "${{amount}}",
@@ -71,7 +71,7 @@
     "metadata": {
       "Content-Type": "application/json",
       "X-Shopify-Topic": "app/uninstalled",
-      "X-Shopify-Shop-Domain": "neatowebsolutions-chad.myshopify.com",
+      "X-Shopify-Shop-Domain": "greatupsells-proxima.myshopify.com",
       "X-Shopify-Hmac-Sha256": "twX8NtWT2+7rY3rAc9+QkhGcS8HVZ7uqCq4522W3z/0=",
       "X-Shopify-Webhook-Id": "af53a3a1-f2c4-42cf-84b4-b4287a776290",
       "X-Shopify-API-Version": "2020-01"

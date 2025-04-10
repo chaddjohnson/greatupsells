@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import { ComponentContext, ThemeContext } from '../../components';
 
 const Header = () => {
-  const { Layout, View, BlockStack, Banner, Text } = useContext(
-    ComponentContext
-  );
+  const { Layout, View, BlockStack, Banner, Text } = useContext(ComponentContext);
   const { bannerTitle, bannerText } = useContext(ThemeContext);
 
   return (
@@ -23,7 +21,7 @@ const Header = () => {
           </Text>
         </BlockStack>
         <View blockPadding="tight" />
-        <Banner status="critical" iconHidden>
+        <Banner tone="critical" hideIcon>
           <BlockStack alignment="center">
             <Text size="large">{bannerText}</Text>
           </BlockStack>

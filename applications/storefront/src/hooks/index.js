@@ -1,9 +1,4 @@
-export {
-  CartProvider,
-  useShopifyCart,
-  useShopifyCartAddListener,
-  useShopifyCartQuantityListener
-} from './shopifyCart';
+export { CartProvider, useShopifyCart, useShopifyCartAddListener, useShopifyCartQuantityListener } from './shopifyCart';
 
 export { default as useOfferAcceptance } from './offerAcceptance';
 export { default as useOfferTracking } from './offerTracking';

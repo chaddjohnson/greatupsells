@@ -9,13 +9,9 @@ const useOffer = (offerId) => {
 
   const [offerLoaded, setOfferLoaded] = useState(false);
 
-  const { data: offer, error: offerError } = useSWR(
-    offerId ? `/offers/${offerId}` : null,
-    httpClient.get.bind(httpClient),
-    {
-      revalidateOnFocus: false
-    }
-  );
+  const { data: offer, error: offerError } = useSWR(offerId ? `/offers/${offerId}` : null, httpClient.get.bind(httpClient), {
+    revalidateOnFocus: false
+  });
   const offerLoading = !offer && !offerError;
 
   const saveOffer = async (data) => {
@@ -58,11 +54,7 @@ const useOffer = (offerId) => {
     };
 
     try {
-      await mutate(
-        url,
-        httpClient.put(url, { ...offer, enabled: true }),
-        options
-      );
+      await mutate(url, httpClient.put(url, { ...offer, enabled: true }), options);
 
       showSuccessToast('Offer enabled.');
     } catch (error) {
@@ -83,11 +75,7 @@ const useOffer = (offerId) => {
     };
 
     try {
-      await mutate(
-        url,
-        httpClient.put(url, { ...offer, enabled: false }),
-        options
-      );
+      await mutate(url, httpClient.put(url, { ...offer, enabled: false }), options);
 
       showSuccessToast('Offer disabled.');
     } catch (error) {

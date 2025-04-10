@@ -15,8 +15,7 @@ const Banner = styled.div({
   fontWeight: 500,
   color: ({ theme }) => theme.bannerTextColor,
   backgroundColor: ({ theme }) => theme.bannerBackgroundColor,
-  borderBottom: ({ theme }) =>
-    `3px solid ${tinycolor(theme.bannerBackgroundColor).darken(1.25)}`,
+  borderBottom: ({ theme }) => `3px solid ${tinycolor(theme.bannerBackgroundColor).darken(1.25)}`,
   marginTop: ['-1.5rem', '-2rem', '-2rem', '-2rem'],
   marginLeft: ['-1.5rem', '-2rem', '-2rem', '-2rem'],
   marginRight: ['-1.5rem', '-2rem', '-2rem', '-2rem'],
@@ -151,13 +150,7 @@ const CancelButton = styled(Button)({
 const Body = styled(({ className }) => {
   const [actionDone, setActionDone] = useState(false);
 
-  const {
-    showBanner,
-    showOriginalPrice,
-    bannerText,
-    actionButtonText,
-    cancelButtonText
-  } = useTheme();
+  const { showBanner, showOriginalPrice, bannerText, actionButtonText, cancelButtonText } = useTheme();
   const {
     strategy,
     enableQuantitySelection,
@@ -171,6 +164,7 @@ const Body = styled(({ className }) => {
     selectedQuantities,
     maxQuantities,
     handleVariantChange,
+    handleQuantityChange,
     handleAddProduct,
     handleReplaceProduct,
     handleClose
@@ -208,37 +202,20 @@ const Body = styled(({ className }) => {
       {showBanner && <Banner>{bannerText}</Banner>}
       <Columns>
         <ImageContainer>
-          <Image
-            src={selectedVariant.thumbnailImage.src}
-            alt={selectedVariant.thumbnailImage.alt}
-          />
+          <Image src={selectedVariant.thumbnailImage.src} alt={selectedVariant.thumbnailImage.alt} />
         </ImageContainer>
         <Details>
           <Title dangerouslySetInnerHTML={{ __html: offeredProduct.title }} />
           <div>
-            {showOriginalPrice && (
-              <Price>{selectedVariant.priceFormatted}</Price>
-            )}
+            {showOriginalPrice && <Price>{selectedVariant.priceFormatted}</Price>}
             <SalePrice>{selectedVariant.salePriceFormatted}</SalePrice>
           </div>
-          {offeredProduct.description && (
-            <Description
-              dangerouslySetInnerHTML={{ __html: offeredProduct.description }}
-            />
-          )}
+          {offeredProduct.description && <Description dangerouslySetInnerHTML={{ __html: offeredProduct.description }} />}
           <FormControls>
             <Label for="variant">Variant</Label>
-            <Select
-              id="variant"
-              value={selectedVariant.id}
-              onChange={(event) => handleVariantChange(0, event.target.value)}
-            >
+            <Select id="variant" value={selectedVariant.id} onChange={(event) => handleVariantChange(0, event.target.value)}>
               {variants.map((variant, index) => (
-                <option
-                  key={index}
-                  value={variant.id}
-                  disabled={!variant.hasInventory}
-                >
+                <option key={index} value={variant.id} disabled={!variant.hasInventory}>
                   {variant.title}
                 </option>
               ))}
@@ -246,14 +223,16 @@ const Body = styled(({ className }) => {
             {enableQuantitySelection && strategy === 'CROSS_SELL' && (
               <>
                 <Label for="quantity">Quantity</Label>
-                <Select id="quantity" value={selectedQuantity}>
-                  {[...Array(Math.min(maxQuantity || 25, 100)).keys()].map(
-                    (index) => (
-                      <option key={index} value={index + 1}>
-                        {index + 1}
-                      </option>
-                    )
-                  )}
+                <Select
+                  id="quantity"
+                  value={selectedQuantity}
+                  onChange={(event) => handleQuantityChange(0, event.target.value)}
+                >
+                  {[...Array(Math.min(maxQuantity || 25, 100)).keys()].map((index) => (
+                    <option key={index} value={index + 1}>
+                      {index + 1}
+                    </option>
+                  ))}
                 </Select>
               </>
             )}
@@ -279,9 +258,7 @@ const Body = styled(({ className }) => {
                 {actionButtonText}
               </ActionButton>
             )}
-            <CancelButton onClick={handleClose}>
-              {cancelButtonText}
-            </CancelButton>
+            <CancelButton onClick={handleClose}>{cancelButtonText}</CancelButton>
           </FormActions>
         </Details>
       </Columns>

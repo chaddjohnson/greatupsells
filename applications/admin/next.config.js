@@ -45,6 +45,7 @@ module.exports = {
   trailingSlash: true,
   webpack5: true,
   crossOrigin: 'anonymous',
+  assetPrefix: dev ? '/admin' : '',
   env: {
     ADMIN_API_URL
   }

@@ -19,13 +19,10 @@ const processor = async (metadata, payload) => {
     let dataIsNewer = false;
 
     try {
-      product = await httpClient.get(
-        `/products/shopify-product-id/${shopifyProductId}`
-      );
+      product = await httpClient.get(`/products/shopify-product-id/${shopifyProductId}`);
       dataIsNewer =
         !product.shopifyProductData ||
-        new Date(shopifyProductData.updated_at) >
-          new Date(product.shopifyProductData.updated_at);
+        new Date(shopifyProductData.updated_at) > new Date(product.shopifyProductData.updated_at);
 
       if (dataIsNewer) {
         product.shopifyProductData = shopifyProductData;

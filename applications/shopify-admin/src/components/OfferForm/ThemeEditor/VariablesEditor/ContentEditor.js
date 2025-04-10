@@ -1,22 +1,20 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, TextField, Text, Stack } from '@shopify/polaris';
+import { Card, FormLayout, TextField, Text, BlockStack } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 
-const ContentEditor = ({ variables, onChange }) => {
-  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
-    variables
-  ]);
+const ContentEditor = ({ variables = [], onChange = () => {} }) => {
+  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [variables]);
   const groupNames = Object.keys(groupedVariables);
 
   return (
-    <Stack vertical>
+    <BlockStack gap="400">
       {groupNames.map((groupName, groupIndex) => (
-        <Stack key={groupIndex} vertical spacing="tight">
-          <Text variant="headingXs" as="h3">
-            <Text color="subdued">{groupName}</Text>
+        <BlockStack key={groupIndex} gap="200">
+          <Text variant="headingXs" as="h3" tone="subdued">
+            {groupName}
           </Text>
-          <Card sectioned>
+          <Card>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (
                 <TextField
@@ -29,20 +27,15 @@ const ContentEditor = ({ variables, onChange }) => {
               ))}
             </FormLayout>
           </Card>
-        </Stack>
+        </BlockStack>
       ))}
-    </Stack>
+    </BlockStack>
   );
 };
 
 ContentEditor.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
-};
-
-ContentEditor.defaultProps = {
-  variables: [],
-  onChange: () => {}
 };
 
 export default ContentEditor;

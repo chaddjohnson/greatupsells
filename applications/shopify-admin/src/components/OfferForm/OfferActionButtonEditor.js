@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, TextField, Checkbox, ChoiceList, Stack } from '@shopify/polaris';
+import { Card, TextField, Checkbox, ChoiceList, BlockStack, Text } from '@shopify/polaris';
 import { asChoiceField } from '@shopify/react-form';
 
 const OfferActionButtonEditor = ({
@@ -9,13 +9,9 @@ const OfferActionButtonEditor = ({
   actionButtonLink,
   actionButtonLinkOpenInNewTab,
   performActionOnAdd,
-  submitted
+  submitted = false
 }) => {
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
 
   const handleActionButtonBehaviorChange = (value) => {
     actionButtonBehavior.onChange(value);
@@ -32,15 +28,14 @@ const OfferActionButtonEditor = ({
   }
 
   return (
-    <Card title="Action button behavior">
-      <Card.Section>
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Action button behavior</Text>
         <ChoiceList
           choices={[
             {
-              label:
-                'Skip the cart and redirect customers to the Checkout page',
-              helpText:
-                'Immediately initiating checkout can increase conversions.',
+              label: 'Skip the cart and redirect customers to the Checkout page',
+              helpText: 'Immediately initiating checkout can increase conversions.',
               value: 'CHECKOUT'
             },
             {
@@ -55,17 +50,10 @@ const OfferActionButtonEditor = ({
               label: 'Open a link',
               renderChildren: (isSelected) =>
                 isSelected && (
-                  <Stack vertical spacing="tight">
-                    <TextField
-                      placeholder="https://"
-                      {...actionButtonLink}
-                      error={submitted && actionButtonLink.error}
-                    />
-                    <Checkbox
-                      label="Open in new browser tab"
-                      {...asChoiceField(actionButtonLinkOpenInNewTab)}
-                    />
-                  </Stack>
+                  <BlockStack gap="200">
+                    <TextField placeholder="https://" {...actionButtonLink} error={submitted && actionButtonLink.error} />
+                    <Checkbox label="Open in new browser tab" {...asChoiceField(actionButtonLinkOpenInNewTab)} />
+                  </BlockStack>
                 ),
               value: 'LINK'
             }
@@ -73,17 +61,16 @@ const OfferActionButtonEditor = ({
           selected={actionButtonBehavior.value}
           onChange={([value]) => handleActionButtonBehaviorChange(value)}
         />
-      </Card.Section>
-      {!offer.enableBundling &&
-        ['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
-          <Card.Section>
-            <Checkbox
-              label="Perform this action immediately after a single offered product is accepted"
-              helpText="This will prevent multiple products from being accepted."
-              {...asChoiceField(performActionOnAdd)}
-            />
-          </Card.Section>
-        )}
+      </BlockStack>
+      {!offer.enableBundling && ['UPSELL', 'CROSS_SELL'].includes(offer.strategy) && (
+        <BlockStack>
+          <Checkbox
+            label="Perform this action immediately after a single offered product is accepted"
+            helpText="This will prevent multiple products from being accepted."
+            {...asChoiceField(performActionOnAdd)}
+          />
+        </BlockStack>
+      )}
     </Card>
   );
 };
@@ -95,10 +82,6 @@ OfferActionButtonEditor.propTypes = {
   actionButtonLinkOpenInNewTab: PropTypes.object.isRequired,
   performActionOnAdd: PropTypes.object.isRequired,
   submitted: PropTypes.bool
-};
-
-OfferActionButtonEditor.defaultProps = {
-  submitted: false
 };
 
 export default OfferActionButtonEditor;

@@ -1,15 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
-import {
-  usePushStateListener,
-  useDocumentVisibility
-} from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { usePushStateListener, useDocumentVisibility } from '@greatupsells/react-hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 let delayTimeout = 0;
 let onPageRequiredSecondsTimeout = 0;
@@ -24,12 +17,12 @@ const LostBrowserFocusOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -50,12 +43,8 @@ const LostBrowserFocusOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -65,14 +54,7 @@ const LostBrowserFocusOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -115,16 +97,7 @@ const LostBrowserFocusOffer = ({
     }
 
     openPopup();
-  }, [
-    offerId,
-    offerViewed,
-    offeredProducts,
-    isVisible,
-    openPopup,
-    viewingOffer,
-    isOnPageRequiredSeconds,
-    delayFinished
-  ]);
+  }, [offerId, offerViewed, offeredProducts, isVisible, openPopup, viewingOffer, isOnPageRequiredSeconds, delayFinished]);
 
   useDocumentVisibility((visible) => {
     if (isVisible !== visible) {
@@ -211,13 +184,6 @@ LostBrowserFocusOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-LostBrowserFocusOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default LostBrowserFocusOffer;

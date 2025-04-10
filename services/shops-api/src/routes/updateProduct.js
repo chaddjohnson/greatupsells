@@ -15,10 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const { productId } = event.pathParameters;
-    const [Product] = await Promise.all([
-      models.get('Product'),
-      models.get('Shop')
-    ]);
+    const [Product] = await Promise.all([models.get('Product'), models.get('Shop')]);
     let product = await Product.findById(productId);
     const { shopifyCollectionIds, title } = product;
     const data = JSON.parse(event.body);
@@ -49,6 +46,8 @@ const handler = async (event, context) => {
 
     // Refresh document, and force middleware to run.
     product = await Product.findById(productId);
+    product.variants = await product.buildVariants(product);
+    product.markModified('variants');
     await product.save();
 
     await product.trackShopifyCollections();

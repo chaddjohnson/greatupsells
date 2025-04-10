@@ -15,10 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const { shopId } = event.pathParameters;
-    const [Shop, Product] = await Promise.all([
-      models.get('Shop'),
-      models.get('Product')
-    ]);
+    const [Shop, Product] = await Promise.all([models.get('Shop'), models.get('Product')]);
     const shop = await Shop.findById(shopId);
     const product = await Product.findOneRandomByShop(shop);
 

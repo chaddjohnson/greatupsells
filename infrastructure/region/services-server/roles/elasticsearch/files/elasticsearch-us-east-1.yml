@@ -72,22 +72,20 @@ http.port: 9200
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-discovery.seed_hosts:
-  [
-    'services.us-east-1.greatupsells.com',
-    'services.eu-west-1.greatupsells.com',
-    'services.ap-northeast-1.greatupsells.com'
+discovery.seed_hosts: [
+    'services.us-east-1.greatupsells.com'
+    # 'services.eu-west-1.greatupsells.com',
+    # 'services.ap-northeast-1.greatupsells.com'
   ]
 
 discovery.zen.minimum_master_nodes: 2
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
-cluster.initial_master_nodes:
-  [
-    'services.us-east-1.greatupsells.com',
-    'services.eu-west-1.greatupsells.com',
+cluster.initial_master_nodes: [
     'services.us-east-1.greatupsells.com'
+    # 'services.eu-west-1.greatupsells.com',
+    # 'services.ap-northeast-1.greatupsells.com'
   ]
 #
 # For more information, consult the discovery and cluster formation module documentation.
@@ -103,11 +101,9 @@ xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate
 xpack.security.transport.ssl.key: /etc/elasticsearch/certs/privkey.pem
 xpack.security.transport.ssl.certificate: /etc/elasticsearch/certs/fullchain.pem
-xpack.security.transport.ssl.certificate_authorities:
-  ['/etc/elasticsearch/certs/fullchain.pem']
+xpack.security.transport.ssl.certificate_authorities: ['/etc/elasticsearch/certs/fullchain.pem']
 xpack.security.http.ssl.enabled: true
 xpack.security.http.ssl.verification_mode: certificate
 xpack.security.http.ssl.key: /etc/elasticsearch/certs/privkey.pem
 xpack.security.http.ssl.certificate: /etc/elasticsearch/certs/fullchain.pem
-xpack.security.http.ssl.certificate_authorities:
-  ['/etc/elasticsearch/certs/fullchain.pem']
+xpack.security.http.ssl.certificate_authorities: ['/etc/elasticsearch/certs/fullchain.pem']

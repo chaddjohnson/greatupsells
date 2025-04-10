@@ -1,23 +1,21 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, Text, Stack } from '@shopify/polaris';
+import { Card, FormLayout, Text, BlockStack } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 import ColorPicker from './ColorPicker';
 
-const ColorEditor = ({ variables, onChange }) => {
-  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
-    variables
-  ]);
+const ColorEditor = ({ variables = [], onChange = () => {} }) => {
+  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [variables]);
   const groupNames = Object.keys(groupedVariables);
 
   return (
-    <Stack vertical>
+    <BlockStack gap="400">
       {groupNames.map((groupName, groupIndex) => (
-        <Stack key={groupIndex} vertical spacing="tight">
-          <Text variant="headingXs" as="h3">
-            <Text color="subdued">{groupName}</Text>
+        <BlockStack key={groupIndex} gap="200">
+          <Text variant="headingXs" as="h3" tone="subdued">
+            {groupName}
           </Text>
-          <Card sectioned>
+          <Card>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (
                 <ColorPicker
@@ -30,20 +28,15 @@ const ColorEditor = ({ variables, onChange }) => {
               ))}
             </FormLayout>
           </Card>
-        </Stack>
+        </BlockStack>
       ))}
-    </Stack>
+    </BlockStack>
   );
 };
 
 ColorEditor.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
-};
-
-ColorEditor.defaultProps = {
-  variables: [],
-  onChange: () => {}
 };
 
 export default ColorEditor;

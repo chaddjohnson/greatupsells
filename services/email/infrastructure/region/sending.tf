@@ -34,7 +34,6 @@ resource "aws_ssm_parameter" "email_sending_queue_arn" {
   name      = "/greatupsells/${terraform.workspace}/queues/email-sending/arn"
   type      = "String"
   value     = aws_sqs_queue.email_sending.arn
-  overwrite = true
   provider  = aws.region
 }
 
@@ -42,6 +41,5 @@ resource "aws_ssm_parameter" "email_sending_queue_url" {
   name      = "/greatupsells/${terraform.workspace}/queues/email-sending/url"
   type      = "String"
   value     = aws_sqs_queue.email_sending.id
-  overwrite = true
   provider  = aws.region
 }

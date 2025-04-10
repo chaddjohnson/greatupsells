@@ -26,10 +26,7 @@ const handler = async (event, context) => {
       };
     }
 
-    const offerRevenueIncreases = await offer.findRevenueIncreases(
-      startAt,
-      endAt
-    );
+    const offerRevenueIncreases = await offer.findRevenueIncreases(startAt, endAt);
 
     return {
       statusCode: StatusCodes.OK,

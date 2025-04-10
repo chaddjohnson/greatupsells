@@ -18,10 +18,7 @@ const handler = async (event, context) => {
     const Shop = await models.get('Shop');
     const shop = await Shop.findById(shopId);
     const shopifyCartItems = JSON.parse(event.body);
-    const draftOrder = await shop.updateShopifyDraftOrderItems(
-      draftOrderId,
-      shopifyCartItems
-    );
+    const draftOrder = await shop.updateShopifyDraftOrderItems(draftOrderId, shopifyCartItems);
 
     return {
       statusCode: StatusCodes.CREATED,

@@ -10,7 +10,7 @@ const calculateShopInstallCount = async (startDate, endDate) => {
     }
   };
 
-  return await Shop.find(criteria).count();
+  return await Shop.find(criteria).countDocuments();
 };
 
 module.exports = calculateShopInstallCount;

@@ -13,7 +13,7 @@ const OfferStatus = ({ offer }) => {
 
   if (offer.endAt && new Date(offer.endAt) < new Date()) {
     return (
-      <Badge status="warning" size="small">
+      <Badge tone="warning" size="small">
         Expired
       </Badge>
     );
@@ -21,7 +21,7 @@ const OfferStatus = ({ offer }) => {
 
   if (new Date(offer.startAt) > new Date()) {
     return (
-      <Badge status="info" size="small">
+      <Badge tone="info" size="small">
         Pending
       </Badge>
     );
@@ -29,7 +29,7 @@ const OfferStatus = ({ offer }) => {
 
   if (offer.enabled) {
     return (
-      <Badge status="success" size="small">
+      <Badge tone="success" size="small">
         Active
       </Badge>
     );

@@ -1,9 +1,4 @@
-import {
-  useField,
-  notEmpty,
-  numericString,
-  positiveNumericString
-} from '@shopify/react-form';
+import { notEmpty, numericString, positiveNumericString, useField } from '@shopify/react-form';
 
 const useFields = (initialOffer, showEndDate) => {
   const name = useField({
@@ -23,13 +18,9 @@ const useFields = (initialOffer, showEndDate) => {
     },
     [actionButtonBehavior.value]
   );
-  const actionButtonLinkOpenInNewTab = useField(
-    initialOffer.actionButtonLinkOpenInNewTab || false
-  );
+  const actionButtonLinkOpenInNewTab = useField(initialOffer.actionButtonLinkOpenInNewTab || false);
   const triggerEvent = useField(initialOffer.triggerEvent);
-  const triggerExternalLinksOnly = useField(
-    initialOffer.triggerExternalLinksOnly
-  );
+  const triggerExternalLinksOnly = useField(initialOffer.triggerExternalLinksOnly);
   const triggerScrollThreshold = useField(
     {
       value: initialOffer.triggerScrollThreshold?.toString(),
@@ -42,38 +33,59 @@ const useFields = (initialOffer, showEndDate) => {
         (value) =>
           triggerEvent.value === 'SCROLL' &&
           value &&
-          numericString('Trigger scroll threshold must be a number')(
-            value?.toString()
-          ),
+          numericString('Trigger scroll threshold must be a number')(value?.toString()),
         (value) =>
           triggerEvent.value === 'SCROLL' &&
           value &&
-          positiveNumericString(
-            'Trigger scroll threshold must be a positive value'
-          )(value?.toString())
+          positiveNumericString('Trigger scroll threshold must be a positive value')(value?.toString())
       ]
     },
     [triggerEvent.value]
   );
   const triggerPage = useField(initialOffer.triggerPage);
-  const triggerPagePath = useField({
-    value: initialOffer.triggerPagePath,
-    validates: [
-      (value) => {
-        if (value && value.match(/^https?:\/\//)) {
-          return "Trigger page path can't contain a protocol or a domain";
+  const triggerPagePath = useField(
+    {
+      value: initialOffer.triggerPagePath,
+      validates: [
+        (value) => {
+          if (triggerPage.value === 'PATTERN' && !value) {
+            return "Trigger page path can't be blank";
+          }
+        },
+        (value) => {
+          if (value && value.match(/^https?:\/\//)) {
+            return "Trigger page path can't contain a protocol or a domain";
+          }
+        },
+        (value) => {
+          if (value && value.match(/\?/)) {
+            return "Trigger page path can't contain a query string";
+          }
         }
-      },
-      (value) => {
-        if (value && value.match(/\?/)) {
-          return "Trigger page path can't contain a query string";
-        }
-      }
-    ]
-  });
+      ]
+    },
+    [triggerPage.value]
+  );
   const viewAllowance = useField(initialOffer.viewAllowance);
   const viewAllowanceDays = useField(
-    initialOffer.viewAllowanceDays?.toString()
+    {
+      value: initialOffer.viewAllowanceDays?.toString(),
+      validates: [
+        (value) => {
+          if (viewAllowance.value === 'DAYS' && !value) {
+            return "Period of days can't be blank";
+          }
+        },
+        (value) =>
+          viewAllowance.value === 'DAYS' && value && numericString('Period of days must be a number')(value?.toString()),
+        (value) => {
+          if (viewAllowance.value === 'DAYS' && value && Number(value) < 1) {
+            return 'Period of days must be greater than 1';
+          }
+        }
+      ]
+    },
+    [viewAllowance.value]
   );
   const triggerProducts = useField(
     {
@@ -99,24 +111,14 @@ const useFields = (initialOffer, showEndDate) => {
             return "Minimum amount can't be blank";
           }
         },
-        (value) =>
-          value &&
-          numericString('Minimum amount must be a number')(value?.toString()),
+        (value) => value && numericString('Minimum amount must be a number')(value?.toString()),
         (value) => {
-          if (
-            value &&
-            Number(value) <= 0 &&
-            minimumRequirement.value === 'AMOUNT'
-          ) {
+          if (value && Number(value) <= 0 && minimumRequirement.value === 'AMOUNT') {
             return 'Minimum amount must be greater than zero';
           }
         },
         (value) => {
-          if (
-            value &&
-            Number(value) < 1 &&
-            minimumRequirement.value === 'QUANTITY'
-          ) {
+          if (value && Number(value) < 1 && minimumRequirement.value === 'QUANTITY') {
             return 'Minimum amount must be greater than 1';
           }
         }
@@ -130,11 +132,7 @@ const useFields = (initialOffer, showEndDate) => {
       value: initialOffer.offeredProducts,
       validates: [
         (value) => {
-          if (
-            strategy.value === 'UPSELL' &&
-            !value?.length &&
-            !offeredCollections.value.length
-          ) {
+          if (strategy.value === 'UPSELL' && !value?.length && !offeredCollections.value.length) {
             return 'One or more offered products or collections are required';
           }
         }
@@ -145,15 +143,8 @@ const useFields = (initialOffer, showEndDate) => {
   const maximumOfferedProductQuantity = useField({
     value: initialOffer.maximumOfferedProductQuantity?.toString(),
     validates: [
-      (value) =>
-        notEmpty("Maximum offered products value can't be blank")(
-          value?.toString()
-        ),
-      (value) =>
-        value &&
-        numericString('Maximum offered products value must be a number')(
-          value?.toString()
-        ),
+      (value) => notEmpty("Maximum offered products value can't be blank")(value?.toString()),
+      (value) => value && numericString('Maximum offered products value must be a number')(value?.toString()),
       (value) => {
         if (value && Number(value) <= 0) {
           return 'Maximum offered products value must be greater than zero';
@@ -161,31 +152,21 @@ const useFields = (initialOffer, showEndDate) => {
       }
     ]
   });
-  const maximumAcceptedProductQuantity = useField(
-    initialOffer.maximumAcceptedProductQuantity?.toString()
-  );
+  const maximumAcceptedProductQuantity = useField(initialOffer.maximumAcceptedProductQuantity?.toString());
   const discountType = useField(initialOffer.discountType);
   const discountValue = useField(
     {
       value: initialOffer.discountValue?.toString(),
       validates: [
-        (value) =>
-          discountType.value !== 'NO_DISCOUNT' &&
-          notEmpty("Discount value can't be blank")(value?.toString()),
-        (value) =>
-          value &&
-          numericString('Discount value must be a number')(value?.toString()),
+        (value) => discountType.value !== 'NO_DISCOUNT' && notEmpty("Discount value can't be blank")(value?.toString()),
+        (value) => value && numericString('Discount value must be a number')(value?.toString()),
         (value) => {
           if (value && Number(value) <= 0) {
             return 'Discount value must be greater than zero';
           }
         },
         (value) => {
-          if (
-            discountType.value === 'PERCENTAGE' &&
-            value &&
-            Number(value) > 1
-          ) {
+          if (discountType.value === 'PERCENTAGE' && value && Number(value) > 1) {
             return 'Discount value must be 100 or less';
           }
         }
@@ -231,12 +212,7 @@ const useFields = (initialOffer, showEndDate) => {
           }
         },
         (value) => {
-          if (
-            showEndDate &&
-            value &&
-            startAt.value &&
-            new Date(value) < new Date(startAt.value)
-          ) {
+          if (showEndDate && value && startAt.value && new Date(value) < new Date(startAt.value)) {
             return 'End date must be on or after start date';
           }
         }
@@ -247,27 +223,15 @@ const useFields = (initialOffer, showEndDate) => {
   const delaySeconds = useField({
     value: initialOffer.delaySeconds?.toString(),
     validates: [
-      (value) =>
-        value &&
-        numericString('Delay seconds must be a number')(value?.toString()),
-      (value) =>
-        value &&
-        positiveNumericString('Delay seconds must be a positive value')(
-          value?.toString()
-        )
+      (value) => value && numericString('Delay seconds must be a number')(value?.toString()),
+      (value) => value && positiveNumericString('Delay seconds must be a positive value')(value?.toString())
     ]
   });
   const onPageRequiredSeconds = useField({
     value: initialOffer.onPageRequiredSeconds?.toString(),
     validates: [
-      (value) =>
-        value &&
-        numericString('Required seconds must be a number')(value?.toString()),
-      (value) =>
-        value &&
-        positiveNumericString('Required seconds must be a positive value')(
-          value?.toString()
-        )
+      (value) => value && numericString('Required seconds must be a number')(value?.toString()),
+      (value) => value && positiveNumericString('Required seconds must be a positive value')(value?.toString())
     ]
   });
   const enableEscClose = useField(initialOffer.enableEscClose);
@@ -275,9 +239,7 @@ const useFields = (initialOffer, showEndDate) => {
   const enableBundling = useField(initialOffer.enableBundling);
   const performActionOnAdd = useField(initialOffer.performActionOnAdd);
   const enableVariantSelection = useField(initialOffer.enableVariantSelection);
-  const enableQuantitySelection = useField(
-    initialOffer.enableQuantitySelection
-  );
+  const enableQuantitySelection = useField(initialOffer.enableQuantitySelection);
   const animation = useField(initialOffer.animation);
 
   return {

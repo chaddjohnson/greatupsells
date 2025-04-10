@@ -1,9 +1,11 @@
 service: greatupsells-email-service
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   timeout: 10
   endpointType: REGIONAL
   stage: ${opt:stage, 'dev'}
@@ -31,7 +33,6 @@ custom:
 
 functions:
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
@@ -40,12 +41,12 @@ functions:
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256
-    reservedConcurrency: 1
     handler: src/workers/sending.handler
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:email-sending-queue-dev'}
           batchSize: 1
+          maximumConcurrency: 3
 
 plugins:
   - serverless-plugin-monorepo
@@ -55,6 +56,4 @@ package:
   patterns:
     - '!infrastructure/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
-    - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

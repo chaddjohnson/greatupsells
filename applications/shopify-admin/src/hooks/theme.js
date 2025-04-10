@@ -1,5 +1,5 @@
-import { useHttpClient } from '@greatupsells/react-hooks';
 import { mutate } from 'swr';
+import { useHttpClient } from '@greatupsells/react-hooks';
 
 const useTheme = () => {
   const { httpClient } = useHttpClient();

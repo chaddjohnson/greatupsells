@@ -15,9 +15,7 @@ const useOfferImpressions = (offerId, startAt, endAt) => {
     error: offerImpressionsError,
     mutate: fetchOfferImpressions
   } = useSWR(
-    offerId
-      ? `/offers/${offerId}/impressions?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    offerId ? `/offers/${offerId}/impressions?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true

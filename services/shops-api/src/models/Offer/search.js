@@ -45,7 +45,7 @@ const search = async ({ shopId, query, status }) => {
     criteria.enabled = false;
   }
 
-  offers = await Offer.find(criteria);
+  offers = await Offer.find(criteria).sort({ createdAt: -1 });
 
   return offers;
 };

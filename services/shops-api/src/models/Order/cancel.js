@@ -20,73 +20,48 @@ const cancel = async (order) => {
   const { shop } = order;
   const offerHits = await OfferHit.findByOrderId(order._id);
 
-  const session = await mongodbClient.connection.startSession();
-  const transactionOptions = { readPreference: 'primary' };
+  // Update stats for the shop. Use $inc and in round trip to prevent conflicts and in case the write is retried.
+  await Shop.findByIdAndUpdate(shop.id, {
+    $inc: {
+      revenueIncrease: order.revenueIncrease * -1,
+      offerConversionCount: offerHits.length * -1
+    },
+    offerConversionRate: (shop.offerConversionCount - 1) / shop.offerImpressionCount
+  });
 
-  // Use a transaction.
-  await session.withTransaction(async () => {
-    // Update stats for the shop. Use $inc and in round trip to prevent conflicts and in case the write is retried.
-    await Shop.findByIdAndUpdate(
-      shop.id,
-      {
-        $inc: {
-          revenueIncrease: order.revenueIncrease * -1,
-          offerConversionCount: offerHits.length * -1
-        },
-        offerConversionRate:
-          (shop.offerConversionCount - 1) / shop.offerImpressionCount
-      },
-      { session }
-    );
+  // Update stats for the order. Use one round trip to prevent write conflicts.
+  await Order.findByIdAndUpdate(order.id, {
+    // Zero out revenue increase for the order.
+    revenueIncrease: 0,
 
-    // Update stats for the order. Use one round trip to prevent write conflicts.
-    await Order.findByIdAndUpdate(
-      order.id,
-      {
-        // Zero out revenue increase for the order.
-        revenueIncrease: 0,
+    // Mark the order as canceled.
+    canceledAt: Date.now()
+  });
 
-        // Mark the order as canceled.
-        canceledAt: Date.now()
-      },
-      { session }
-    );
+  // Update offer hits.
+  await Promise.map(offerHits, async (offerHit) => {
+    await offerHit.execPopulate('offer');
 
-    // Update offer hits.
-    await Promise.map(offerHits, async (offerHit) => {
-      await offerHit.execPopulate('offer');
+    const { offer } = offerHit;
 
-      const { offer } = offerHit;
+    // Update the offer hit. Use one round trip to prevent write conflicts.
+    await OfferHit.findByIdAndUpdate(offerHit.id, {
+      // Retract the conversion.
+      convertedAt: undefined,
 
-      // Update the offer hit. Use one round trip to prevent write conflicts.
-      await OfferHit.findByIdAndUpdate(
-        offerHit.id,
-        {
-          // Retract the conversion.
-          convertedAt: undefined,
-
-          // Zero out revenue increase for the order.
-          revenueIncrease: 0
-        },
-        { session }
-      );
-
-      // Update the offer associated with the offer hit.
-      await Offer.findByIdAndUpdate(
-        offerHit.offer.id,
-        {
-          $inc: {
-            revenueIncrease: offerHit.revenueIncrease * -1,
-            conversionCount: -1
-          },
-          conversionRate: (offer.conversionCount - 1) / offer.impressionCount
-        },
-        { session }
-      );
+      // Zero out revenue increase for the order.
+      revenueIncrease: 0
     });
-  }, transactionOptions);
 
-  session.endSession();
+    // Update the offer associated with the offer hit.
+    await Offer.findByIdAndUpdate(offerHit.offer.id, {
+      $inc: {
+        revenueIncrease: offerHit.revenueIncrease * -1,
+        conversionCount: -1
+      },
+      conversionRate: (offer.conversionCount - 1) / offer.impressionCount
+    });
+  });
 };
 
 module.exports = cancel;

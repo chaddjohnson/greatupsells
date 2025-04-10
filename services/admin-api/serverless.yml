@@ -1,9 +1,11 @@
 service: greatupsells-admin-api
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -32,6 +34,7 @@ custom:
   serverless-offline:
     httpPort: ${env:ADMIN_API_PORT, 4005}
     lambdaPort: 4105
+    prefix: 'admin-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/admin-api/domain, ''}
     basePath: ''
@@ -40,7 +43,7 @@ custom:
     endpointType: regional
     apiType: http
     route53Params:
-      routingPolicy: latency
+      routingPolicy: simple
       setIdentifier: ${self:provider.region}
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
@@ -48,7 +51,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: 1
       prewarm: true
       events:
@@ -56,17 +58,16 @@ custom:
 
 functions:
   # authorizer:
-  #   memorySize: 128
   #   handler: src/authorizer.handler
+  #   provisionedConcurrency: 5
+  #   reservedConcurrency: 10
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
           path: /health
           method: get
   region:
-    memorySize: 128
     handler: src/routes/region.handler
     events:
       - httpApi:
@@ -86,8 +87,8 @@ functions:
           # authorizer:
           #   name: authorizer
           #   type: request
-          #   identitySource: method.request.header.Authorization
-          #   resultTtlInSeconds: 0
+          #   identitySource: method.request.header.authorization
+          #   resultTtlInSeconds: 300 # This enables caching for 5 minutes
   # findShops:
   # findStats:
 plugins:
@@ -100,6 +101,4 @@ package:
   patterns:
     - '!infrastructure/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
-    - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

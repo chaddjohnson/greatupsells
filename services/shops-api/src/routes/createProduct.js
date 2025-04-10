@@ -14,10 +14,7 @@ const handler = async (event, context) => {
   }
 
   try {
-    const [Product] = await Promise.all([
-      models.get('Product'),
-      models.get('Shop')
-    ]);
+    const [Product] = await Promise.all([models.get('Product'), models.get('Shop')]);
     const data = JSON.parse(event.body);
     const product = new Product(data);
 
@@ -31,6 +28,8 @@ const handler = async (event, context) => {
         body: ReasonPhrases.BAD_REQUEST
       };
     }
+
+    product.variants = await product.buildVariants(product);
 
     await product.save();
     await product.trackShopifyCollections();

@@ -41,10 +41,7 @@ const handler = async (event, context) => {
     );
 
     // Dissociate collection from products.
-    await Product.updateMany(
-      {},
-      { $pull: { shopifyCollectionIds: shopifyCollectionId } }
-    );
+    await Product.updateMany({}, { $pull: { shopifyCollectionIds: shopifyCollectionId } });
 
     await logger.info(`Collection deleted (${collection.toString()})`);
 

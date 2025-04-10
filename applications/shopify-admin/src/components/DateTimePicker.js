@@ -1,26 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { FormLayout } from '@shopify/polaris';
 import { useDateTime } from '@greatupsells/react-hooks';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 
-const Wrapper = styled.div`
-  .Polaris-FormLayout__Item:first-child {
-    margin-left: 0;
-  }
-  .Polaris-FormLayout__Item {
-    margin-top: 0;
-  }
-`;
-
 const DateTimePicker = ({
-  value,
-  disableDatesBefore,
+  value = new Date(),
+  disableDatesBefore = new Date(),
   datePickerProps,
   timePickerProps,
-  onChange
+  onChange = () => {}
 }) => {
   const { formatDate, formatDateISO } = useDateTime();
 
@@ -56,7 +46,7 @@ const DateTimePicker = ({
   );
 
   return (
-    <Wrapper>
+    <>
       <FormLayout.Group condensed>
         <DatePicker
           label={datePickerProps.label}
@@ -71,16 +61,13 @@ const DateTimePicker = ({
           onChange={handleTimeChange}
         />
       </FormLayout.Group>
-    </Wrapper>
+    </>
   );
 };
 
 DateTimePicker.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  disableDatesBefore: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Date)
-  ]),
+  disableDatesBefore: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   datePickerProps: PropTypes.shape({
     label: PropTypes.string
   }),
@@ -89,12 +76,6 @@ DateTimePicker.propTypes = {
     placeholder: PropTypes.string
   }),
   onChange: PropTypes.func
-};
-
-DateTimePicker.defaultProps = {
-  value: new Date(), // default to current date and time
-  disableDatesBefore: new Date(),
-  onChange: () => {}
 };
 
 export default DateTimePicker;

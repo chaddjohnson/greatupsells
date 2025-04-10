@@ -1,15 +1,8 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { OfferPopup } from '@greatupsells/react-components';
-import {
-  usePushStateListener,
-  useEventListener
-} from '@greatupsells/react-hooks';
-import {
-  useOfferTracking,
-  useOfferAcceptance,
-  useShopifyCart
-} from '../../hooks';
+import { usePushStateListener, useEventListener } from '@greatupsells/react-hooks';
+import { useOfferTracking, useOfferAcceptance, useShopifyCart } from '../../hooks';
 
 let onPageRequiredSecondsTimeout = 0;
 
@@ -23,12 +16,12 @@ const ExitIntentOffer = ({
   currency,
   triggerProduct,
   offeredProducts,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -46,12 +39,8 @@ const ExitIntentOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -61,14 +50,7 @@ const ExitIntentOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    findTriggerProductShopifyVariantId,
-    offeredProducts,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, findTriggerProductShopifyVariantId, offeredProducts, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -111,10 +93,7 @@ const ExitIntentOffer = ({
       const from = event.relatedTarget || event.toElement;
 
       // Get the current viewport width.
-      const viewportWidth = Math.max(
-        document.documentElement.clientWidth,
-        window.innerWidth || 0
-      );
+      const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
       const inputHasFocus = event.target.tagName.toLowerCase() === 'input';
 
@@ -138,15 +117,7 @@ const ExitIntentOffer = ({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      offer,
-      offerId,
-      offerViewed,
-      openPopup,
-      viewingOffer,
-      offeredProducts,
-      isOnPageRequiredSeconds
-    ]
+    [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts, isOnPageRequiredSeconds]
   );
 
   // Reference: https://stackoverflow.com/a/56858467/83897
@@ -270,13 +241,6 @@ ExitIntentOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ExitIntentOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default ExitIntentOffer;

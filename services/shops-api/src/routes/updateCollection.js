@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
 const mongodbClient = require('../models/mongodbClient');
@@ -16,10 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const { collectionId } = event.pathParameters;
-    const [Collection] = await Promise.all([
-      models.get('Collection'),
-      models.get('Shop')
-    ]);
+    const [Collection] = await Promise.all([models.get('Collection'), models.get('Shop')]);
     let collection = await Collection.findById(collectionId);
     const { shopifyProductIds, title, productCount } = collection;
     const data = JSON.parse(event.body);

@@ -1,22 +1,20 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Card, FormLayout, Checkbox, Text, Stack } from '@shopify/polaris';
+import { Card, FormLayout, Checkbox, Text, BlockStack } from '@shopify/polaris';
 import { groupBy } from 'lodash';
 
-const OptionsEditor = ({ variables, onChange }) => {
-  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [
-    variables
-  ]);
+const OptionsEditor = ({ variables = [], onChange = () => {} }) => {
+  const groupedVariables = useMemo(() => groupBy(variables, 'group'), [variables]);
   const groupNames = Object.keys(groupedVariables);
 
   return (
-    <Stack vertical>
+    <BlockStack gap="400">
       {groupNames.map((groupName, groupIndex) => (
-        <Stack key={groupIndex} vertical spacing="tight">
-          <Text variant="headingXs" as="h3">
-            <Text color="subdued">{groupName}</Text>
+        <BlockStack key={groupIndex} gap="200">
+          <Text variant="headingXs" as="h3" tone="subdued">
+            {groupName}
           </Text>
-          <Card sectioned>
+          <Card>
             <FormLayout>
               {groupedVariables[groupName].map((variable, variableIndex) => (
                 <Checkbox
@@ -29,20 +27,15 @@ const OptionsEditor = ({ variables, onChange }) => {
               ))}
             </FormLayout>
           </Card>
-        </Stack>
+        </BlockStack>
       ))}
-    </Stack>
+    </BlockStack>
   );
 };
 
 OptionsEditor.propTypes = {
   variables: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func
-};
-
-OptionsEditor.defaultProps = {
-  variables: [],
-  onChange: () => {}
 };
 
 export default OptionsEditor;

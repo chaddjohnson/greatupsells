@@ -1,10 +1,7 @@
 const models = require('..');
 
 const findOnePairedProduct = async (shopifyProductId, options = {}) => {
-  const [PairedPurchase, Product] = await Promise.all([
-    models.get('PairedPurchase'),
-    models.get('Product')
-  ]);
+  const [PairedPurchase, Product] = await Promise.all([models.get('PairedPurchase'), models.get('Product')]);
   const { excludedShopifyProductIds = [] } = options;
   const criteria = {
     frequency: { $gt: 0 },
@@ -44,9 +41,7 @@ const findOnePairedProduct = async (shopifyProductId, options = {}) => {
   }
 
   if (pairedPurchaseShopifyProductId) {
-    return await Product.findOneByShopifyProductId(
-      pairedPurchaseShopifyProductId
-    );
+    return await Product.findOneByShopifyProductId(pairedPurchaseShopifyProductId);
   }
 };
 

@@ -60,8 +60,7 @@ const findConversionRatesByOfferId = async (offerId, startAt, endAt) => {
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results =
-    results.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
+  results = results.map(({ date, conversionRate }) => ({ date, conversionRate })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
   results = fillResults(results, 'conversionRate');
 

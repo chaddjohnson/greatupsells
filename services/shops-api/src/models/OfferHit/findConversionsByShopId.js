@@ -46,8 +46,7 @@ const findConversionsByShopId = async (shopId, startAt, endAt) => {
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results =
-    results.map(({ date, conversions }) => ({ date, conversions })) || [];
+  results = results.map(({ date, conversions }) => ({ date, conversions })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
   results = fillResults(results, 'conversions');
 

@@ -12,16 +12,13 @@ const useShopRevenueIncreases = (shopId, startAt, endAt) => {
     error: shopRevenueIncreasesError,
     mutate: fetchShopRevenueIncreases
   } = useSWR(
-    shopId
-      ? `/shop/revenue-increases?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    shopId ? `/shop/revenue-increases?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true
     }
   );
-  const shopRevenueIncreasesLoading =
-    !shopRevenueIncreases && !shopRevenueIncreasesError;
+  const shopRevenueIncreasesLoading = !shopRevenueIncreases && !shopRevenueIncreasesError;
 
   return {
     shopRevenueIncreases,

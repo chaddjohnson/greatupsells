@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "shops-api.tfstate"
     region = "us-east-1"
   }
@@ -9,7 +9,7 @@ terraform {
 data "terraform_remote_state" "greatupsells_infrastructure" {
   backend = "s3"
   config = {
-    bucket = "greatupsells-infrastructure"
+    bucket = "greatupsells-infrastructure2"
     key    = "env:/${terraform.workspace}/infrastructure.tfstate"
     region = "us-east-1"
   }
@@ -19,15 +19,15 @@ provider "aws" {
   region = "us-east-1"
 }
 
-provider "aws" {
-  alias  = "eu-west-1"
-  region = "eu-west-1"
-}
+# provider "aws" {
+#   alias  = "eu-west-1"
+#   region = "eu-west-1"
+# }
 
-provider "aws" {
-  alias  = "ap-northeast-1"
-  region = "ap-northeast-1"
-}
+# provider "aws" {
+#   alias  = "ap-northeast-1"
+#   region = "ap-northeast-1"
+# }
 
 module "us_east_1" {
   source = "./region"
@@ -38,22 +38,22 @@ module "us_east_1" {
   mongodb_app_password = var.mongodb_app_password
 }
 
-module "eu_west_1" {
-  count  = terraform.workspace == "production" ? 1 : 0
-  source = "./region"
-  providers = {
-    aws.region = aws.eu-west-1
-  }
+# module "eu_west_1" {
+#   count  = terraform.workspace == "production" ? 1 : 0
+#   source = "./region"
+#   providers = {
+#     aws.region = aws.eu-west-1
+#   }
 
-  mongodb_app_password = var.mongodb_app_password
-}
+#   mongodb_app_password = var.mongodb_app_password
+# }
 
-module "ap_northeast_1" {
-  count  = terraform.workspace == "production" ? 1 : 0
-  source = "./region"
-  providers = {
-    aws.region = aws.ap-northeast-1
-  }
+# module "ap_northeast_1" {
+#   count  = terraform.workspace == "production" ? 1 : 0
+#   source = "./region"
+#   providers = {
+#     aws.region = aws.ap-northeast-1
+#   }
 
-  mongodb_app_password = var.mongodb_app_password
-}
+#   mongodb_app_password = var.mongodb_app_password
+# }

@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import ReactModal from 'react-modal';
 import clsx from 'clsx';
-import styled, {
-  createGlobalStyle,
-  StyleSheetManager
-} from 'styled-components';
+import styled, { createGlobalStyle, StyleSheetManager } from 'styled-components';
 import OfferTheme from '../OfferTheme';
 import Overlay from './Overlay';
 import Content from './Content';
@@ -15,8 +12,7 @@ import Mask from './Mask';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    overflow: ${(props) =>
-      props.open && !props.designMode ? 'hidden !important' : 'auto'};
+    overflow: ${(props) => (props.open && !props.designMode ? 'hidden !important' : 'auto')};
   }
 `;
 
@@ -29,19 +25,13 @@ const StyledFrame = styled(Frame)`
   right: 0;
   width: ${(props) => (props.designMode ? '100%' : '100vw')};
   height: ${(props) => (props.designMode ? '100%' : '100vh')};
-  max-width: ${(props) =>
-    props.forceDisplayType === 'mobile'
-      ? `${375 * props.designModeZoom}px`
-      : 'none'};
+  max-width: ${(props) => (props.forceDisplayType === 'mobile' ? `${375 * props.designModeZoom}px` : 'none')};
   min-height: ${(props) => (props.designMode ? '1500px' : 0)};
   z-index: ${(props) => (props.designMode ? 1 : 2147483647)};
 
   @media screen and (min-width: 768px) {
     &&& {
-      min-width: ${(props) =>
-        props.designMode && props.forceDisplayType === 'desktop'
-          ? '1200px'
-          : 0};
+      min-width: ${(props) => (props.designMode && props.forceDisplayType === 'desktop' ? '1200px' : 0)};
     }
   }
 `;
@@ -49,9 +39,9 @@ const StyledFrame = styled(Frame)`
 const OfferPopup = ({
   className,
   contextRef,
-  open,
-  designMode,
-  designModeZoom,
+  open = false,
+  designMode = false,
+  designModeZoom = 1,
   forceDisplayType,
   theme,
   ThemeComponent,
@@ -60,15 +50,15 @@ const OfferPopup = ({
   locale,
   countryCode,
   currency,
-  triggerProduct,
-  offeredProducts,
-  shopifyCartItems,
+  triggerProduct = {},
+  offeredProducts = [],
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  onAddProducts,
-  onReplaceProduct,
-  onClose,
-  onClick
+  onAddProducts = () => {},
+  onReplaceProduct = () => {},
+  onClose = () => {},
+  onClick = () => {}
 }) => {
   const [frameRef, setFrameRef] = useState(null);
   const [modalRef, setModalRef] = useState(null);
@@ -79,11 +69,7 @@ const OfferPopup = ({
   const [modalAfterOpen, setModalAfterOpen] = useState(false);
 
   const maskBackgroundColor = useMemo(() => {
-    const defaultMaskBackgroundColor = [
-      'POST_PURCHASE',
-      'THANK_YOU_PAGE',
-      'ORDER_STATUS_PAGE'
-    ].includes(offer.strategy)
+    const defaultMaskBackgroundColor = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy)
       ? '#FFFFFF'
       : 'rgba(0, 0, 0, 0.5)';
 
@@ -120,8 +106,7 @@ const OfferPopup = ({
       return;
     }
 
-    const isCartUpsell =
-      offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
+    const isCartUpsell = offer.strategy === 'UPSELL' && window.location.pathname.includes('/cart');
 
     setModalAfterOpen(false);
 
@@ -178,15 +163,8 @@ const OfferPopup = ({
           <>
             <meta charSet="UTF-8" />
             <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link
-              rel="preconnect"
-              href="https://fonts.gstatic.com"
-              crossOrigin="anonymous"
-            />
-            <link
-              href="https://fonts.googleapis.com/icon?family=Material+Icons"
-              rel="stylesheet"
-            />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
             <style
               dangerouslySetInnerHTML={{
                 __html: `
@@ -231,10 +209,7 @@ const OfferPopup = ({
                     modalAfterOpen && 'open',
                     !!offer.animation && !designMode && offer.animation
                   )}
-                  overlayClassName={clsx(
-                    'overlay',
-                    !!offer.animation && !designMode && 'animated'
-                  )}
+                  overlayClassName={clsx('overlay', !!offer.animation && !designMode && 'animated')}
                   overlayElement={(overlayProps, contentElement) => (
                     <>
                       {contentElement}
@@ -249,6 +224,7 @@ const OfferPopup = ({
                   contentElement={(contentProps, children) => (
                     <Content
                       {...contentProps}
+                      className={clsx(offer.strategy.toLowerCase(), contentProps.className)}
                       style={{
                         zoom: designMode ? designModeZoom : 1
                       }}
@@ -317,18 +293,6 @@ OfferPopup.propTypes = {
   onReplaceProduct: PropTypes.func,
   onClose: PropTypes.func,
   onClick: PropTypes.func
-};
-
-OfferPopup.defaultProps = {
-  open: false,
-  designMode: false,
-  designModeZoom: 1,
-  triggerProduct: {},
-  offeredProducts: [],
-  shopifyCartItems: [],
-  onAddProducts: () => {},
-  onReplaceProduct: () => {},
-  onClose: () => {}
 };
 
 export default OfferPopup;

@@ -46,14 +46,7 @@ const schema = new mongoose.Schema(
       {
         type: String,
         required: true,
-        enum: [
-          'UPSELL',
-          'CROSS_SELL',
-          'POST_PURCHASE',
-          'THANK_YOU_PAGE',
-          'ORDER_STATUS_PAGE',
-          'POPUP'
-        ]
+        enum: ['UPSELL', 'CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE', 'POPUP']
       }
     ],
     thumbnailImageUrl: { type: String, required: true },

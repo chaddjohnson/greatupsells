@@ -26,10 +26,7 @@ const handler = async (event, context) => {
       };
     }
 
-    const offerConversionRates = await offer.findConversionRates(
-      startAt,
-      endAt
-    );
+    const offerConversionRates = await offer.findConversionRates(startAt, endAt);
 
     return {
       statusCode: StatusCodes.OK,

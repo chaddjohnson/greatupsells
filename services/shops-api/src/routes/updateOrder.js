@@ -15,10 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const { orderId } = event.pathParameters;
-    const [Order] = await Promise.all([
-      models.get('Order'),
-      models.get('Shop')
-    ]);
+    const [Order] = await Promise.all([models.get('Order'), models.get('Shop')]);
     let order = await Order.findById(orderId);
     const { revenueIncrease } = order;
     const data = JSON.parse(event.body);

@@ -16,15 +16,38 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Set Environment Variables
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      - name: Install Private Key
         run: |
-          mkdir -p ~/.ssh/greatupsells
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/id_rsa
-          chmod 600 ~/.ssh/greatupsells/id_rsa
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
+      - name: Install Private Key (test)
+        if: ${{ success() && github.ref == 'refs/heads/test' }}
+        run: |
+          mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
+          echo "${{ secrets.PRIVATE_KEY_TEST }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
+          chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
+      - name: Install Private Key (production)
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
+        run: |
+          mkdir -p ~/.ssh/greatupsells/${{ env.BRANCH }}
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
+          chmod 600 ~/.ssh/greatupsells/${{ env.BRANCH }}/id_rsa
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Add Terraform variables
+        uses: actions/checkout@v4
+      - name: Add Terraform variables (test)
+        if: ${{ success() && github.ref == 'refs/heads/test' }}
+        run: |
+          echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER_TEST }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER_TEST }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
+          echo -e "\nmongodb_root_password: \"${{ secrets.MONGODB_ROOT_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_admin_password: \"${{ secrets.MONGODB_ADMIN_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_app_password: \"${{ secrets.MONGODB_APP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nmongodb_backup_password: \"${{ secrets.MONGODB_BACKUP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
+          echo -e "\nelasticsearch_root_password: \"${{ secrets.ELASTICSEARCH_ROOT_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
+          echo -e "\nelasticsearch_app_password: \"${{ secrets.ELASTICSEARCH_APP_PASSWORD_TEST }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
+      - name: Add Terraform variables (production)
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
         run: |
           echo -e "\naws_access_key_id: \"${{ secrets.AWS_ACCESS_KEY_ID_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
           echo -e "\naws_secret_access_key: \"${{ secrets.AWS_SECRET_ACCESS_KEY_SERVER }}\"" >> ./infrastructure/region/services-server/roles/common/vars/main.yml
@@ -34,15 +57,25 @@ jobs:
           echo -e "\nmongodb_backup_password: \"${{ secrets.MONGODB_BACKUP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/mongodb/vars/main.yml
           echo -e "\nelasticsearch_root_password: \"${{ secrets.ELASTICSEARCH_ROOT_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
           echo -e "\nelasticsearch_app_password: \"${{ secrets.ELASTICSEARCH_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/elasticsearch/vars/main.yml
-          echo -e "\nredis_app_password: \"${{ secrets.REDIS_APP_PASSWORD }}\"" >> ./infrastructure/region/services-server/roles/redis/vars/main.yml
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
       - name: Install Ansible
         run: sudo apt-get install ansible
-      - name: Run Terraform
+      - name: Run Terraform (test)
+        if: ${{ success() && github.ref == 'refs/heads/test' }}
         run: ./run.sh
         working-directory: infrastructure
         env:
           STAGE: ${{ env.BRANCH }}
-          REDIS_APP_PASSWORD: ${{ secrets.REDIS_APP_PASSWORD }}
+          TF_VAR_public_key: ${{ secrets.PUBLIC_KEY_TEST }}
+          TF_VAR_shopify_admin_app_api_secret_key: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY_TEST }}
+        timeout-minutes: 45
+      - name: Run Terraform (production)
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
+        run: ./run.sh
+        working-directory: infrastructure
+        env:
+          STAGE: ${{ env.BRANCH }}
+          TF_VAR_public_key: ${{ secrets.PUBLIC_KEY }}
+          TF_VAR_shopify_admin_app_api_secret_key: ${{ secrets.SHOPIFY_ADMIN_APP_API_SECRET_KEY }}
         timeout-minutes: 45

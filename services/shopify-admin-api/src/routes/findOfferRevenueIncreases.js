@@ -1,10 +1,6 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
-const {
-  StatusCodes,
-  ReasonPhrases,
-  getReasonPhrase
-} = require('http-status-codes');
+const { StatusCodes, ReasonPhrases, getReasonPhrase } = require('http-status-codes');
 const qs = require('querystringify');
 const HttpClient = require('@greatupsells/gateway-http-client');
 const logger = require('@greatupsells/logger');
@@ -24,8 +20,7 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
-      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const { offerId } = event.pathParameters;
     const { startAt, endAt } = event.queryStringParameters || {};
     const params = qs.stringify({ startAt, endAt }, true);
@@ -36,11 +31,7 @@ const handler = middy(async (event, context) => {
     const offerShopId = offer && offer.shop;
 
     if (shopId !== offerShopId) {
-      await logger.warn(
-        `Unauthorized access attempt for offer ${offerId} revenue increases`,
-        null,
-        { event }
-      );
+      await logger.warn(`Unauthorized access attempt for offer ${offerId} revenue increases`, null, { event });
 
       return {
         statusCode: StatusCodes.FORBIDDEN,
@@ -56,9 +47,7 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body:
-          JSON.stringify(error.response.data) ||
-          getReasonPhrase(error.response.status)
+        body: JSON.stringify(error.response.data) || getReasonPhrase(error.response.status)
       };
     }
 

@@ -4,10 +4,10 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/applications/storefront#readme",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/applications/storefront#readme",
   "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
     "@greatupsells/react-components": "0.0.0",

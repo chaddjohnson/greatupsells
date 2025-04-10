@@ -5,11 +5,11 @@ import qs from 'querystringify';
 import clsx from 'clsx';
 
 const Link = ({
-  url,
-  external,
-  monochrome,
-  removeUnderline,
-  prefetch,
+  url = '',
+  external = false,
+  monochrome = false,
+  removeUnderline = false,
+  prefetch = false,
   children,
   ...props
 }) => {
@@ -62,14 +62,6 @@ Link.propTypes = {
   removeUnderline: PropTypes.bool,
   prefetch: PropTypes.bool,
   children: PropTypes.node.isRequired
-};
-
-Link.defaultProps = {
-  url: '',
-  external: false,
-  monochrome: false,
-  removeUnderline: false,
-  prefetch: false
 };
 
 export default Link;

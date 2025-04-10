@@ -1,36 +1,40 @@
 const jwt = require('jsonwebtoken');
-const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const logger = require('@greatupsells/logger');
 
 const { JWT_SECRET } = process.env;
 
 // Reference: https://github.com/tmaximini/serverless-jwt-authorizer/blob/master/functions/authorize.js
 
+// 🔥 Create a wildcard ARN like: arn:aws:execute-api:region:account:apiId/stage/*/*/*
+const generateWildcardArn = (methodArn) => {
+  const arnParts = methodArn.split(':');
+  const resourceParts = arnParts[5].split('/');
+  const base = resourceParts[0]; // api-id
+  const stage = resourceParts[1]; // dev, prod, etc.
+
+  // Construct ARN with wildcards for any method + any route
+  arnParts[5] = `${base}/${stage}/*/*`;
+
+  return arnParts.join(':');
+};
+
 const generatePolicyDocument = (effect, arn) => {
   if (!effect || !arn) {
     return null;
   }
 
-  const policyDocument = {
+  // Enable caching cross different Lambdas, even though they use different ARNs.
+  const wildcardArn = generateWildcardArn(arn);
+
+  return {
     Version: '2012-10-17',
     Statement: [
       {
         Action: 'execute-api:Invoke',
         Effect: effect,
-        Resource: arn
+        Resource: wildcardArn
       }
     ]
-  };
-
-  return policyDocument;
-};
-
-const generateAuthResponse = (principalId, effect, arn) => {
-  const policyDocument = generatePolicyDocument(effect, arn);
-
-  return {
-    principalId,
-    policyDocument
   };
 };
 
@@ -42,10 +46,7 @@ const handler = async (event, context) => {
     return 'Lambda is warm!';
   }
 
-  const authorizationHeader =
-    event.authorizationToken ||
-    event.headers.Authorization ||
-    event.headers.authorization;
+  const authorizationHeader = event.authorizationToken || event.headers?.Authorization || event.headers?.authorization;
   const token = authorizationHeader?.replace('Bearer ', '');
   const arn = event.routeArn || event.methodArn;
 
@@ -53,28 +54,30 @@ const handler = async (event, context) => {
     await logger.warn('Unauthorized access attempt', null, { event });
 
     return {
-      statusCode: StatusCodes.UNAUTHORIZED,
-      body: ReasonPhrases.UNAUTHORIZED
+      principalId: 'anonymous',
+      policyDocument: generatePolicyDocument('Deny', arn),
+      context: {}
     };
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    if (decoded) {
-      return {
-        ...generateAuthResponse(decoded.shopId, 'Allow', arn),
-        context: {
-          shopId: decoded.shopId
-        }
-      };
-    } else {
-      throw new Error('Cannot decode JWT');
-    }
+    return {
+      principalId: decoded.sub,
+      policyDocument: generatePolicyDocument('Allow', arn),
+      context: {
+        shopId: decoded.sub
+      }
+    };
   } catch (error) {
-    await logger.warn('Invalid access attempt', null, { event });
+    await logger.warn('Invalid access attempt', error, { event });
 
-    return generateAuthResponse('user', 'Deny', arn);
+    return {
+      principalId: 'unauthorized',
+      policyDocument: generatePolicyDocument('Deny', arn),
+      context: {}
+    };
   }
 };
 

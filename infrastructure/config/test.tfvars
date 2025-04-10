@@ -1,4 +1,3 @@
-public_key    = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDI3+ujzmYvNSO/RBMo4ZUp/ytIOM2wlz7OMVQYjyKvfjT7GIvwiFwL6dR8BhV9tqNIDhivYNFwBciN1xMHOqbLDuQ/jaw9ELRFXZwMTt2p01z5Uwi/igwYi3f185bzSy8cijHo7+3vfMSiBjjXY16apQi6uPEQZR4gfVUoR/KIAoLgGecOy+gzxKScJjIwugYFise/OVBBlSSzOrfQ+DWkIpOi4L+sWgV74Gae/e33cu0+Ka+c85U9X4BSOV5mqt3oeEHdGtE9FPoyaYR9hr4dEn8j7Qo3uDqRwMnlT58QjmQd6UZIy/FRtwYHJWuWjtbLhDbS7N1KfQKbqY4UX+eFkp/DmzonyrvjUAS9y3gnPGqmpDhd7Cz9wqMFptk+Hbw4ijloc9RPjuAtHKIzWHRztbFKuVwTNGHS8AtBYMuGl1jpQ83Ocr1ndyHNZnjPzp309cYiAwKynLgabulzdtIQYPDV1YyjPTmt21Cew1OyUvmZJNbCg5A+u5f4RioC2k8= greatupsells"
 app_name      = "Great Upsells Test"
 app_name_slug = "great-upsells-test"
 base_domain   = "greatupsells.com"
@@ -9,10 +8,8 @@ jwt_secret    = "85576eb20045603e3fac6800d4f0aff35d5a7477397b3a43e14f2f087205f6b
 services_domains = {
   "us-east-1" = "services.test.greatupsells.com"
 }
-assets_domain                    = "assets.test.greatupsells.com"
-shopify_admin_app_api_key        = "2a3a2f40aab400124390d89a7844b93d"
-shopify_admin_app_api_secret_key = "22560c4fd72703f5530503b7c009664f"
-shopify_post_purchase_id         = "8aa3eb0a-f23d-4e3a-b336-f99d87fec220"
-shopify_app_embed_block_id       = "986ff121-e7bc-43eb-a8d8-a99c474cbea0"
-event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/18156060673/greatupsells-webhooks-test"
-health_check_alarm_email         = "chad@neatowebsolutions.com"
+assets_domain                    = "assets2.test.greatupsells.com"
+shopify_admin_app_api_key        = "e2f85781266415a7439d8022e56fb01f"
+shopify_post_purchase_id         = "18d26b0c-11e4-48ad-966b-2ea2c255054d"
+event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/223146770433/greatupsells-webhooks-test"
+health_check_alarm_email         = "chad@proxima.ai"

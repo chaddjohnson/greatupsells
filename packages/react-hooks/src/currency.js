@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 const loadScripts = async () => {
   const scriptUrl = 'https://cdn.shopify.com/s/javascripts/currencies.js';

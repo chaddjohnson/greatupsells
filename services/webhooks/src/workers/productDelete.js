@@ -16,14 +16,9 @@ const processor = async (metadata, payload) => {
     const shopifyProductData = payload;
     const shopifyProductId = shopifyProductData.id;
 
-    product = await httpClient.get(
-      `/products/shopify-product-id/${shopifyProductId}`
-    );
+    product = await httpClient.get(`/products/shopify-product-id/${shopifyProductId}`);
 
-    await logger.info(
-      `Deleting product ${product.title} via ${topic} webhook`,
-      { metadata, payload }
-    );
+    await logger.info(`Deleting product ${product.title} via ${topic} webhook`, { metadata, payload });
 
     await httpClient.delete(`/products/${product._id}`);
   } catch (error) {
@@ -31,11 +26,7 @@ const processor = async (metadata, payload) => {
       return;
     }
 
-    await logger.error(
-      `Error processing product deletion webhook data`,
-      error,
-      { metadata, payload }
-    );
+    await logger.error(`Error processing product deletion webhook data`, error, { metadata, payload });
   }
 };
 

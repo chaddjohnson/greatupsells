@@ -1,9 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import {
-  useCookies,
-  useCurrency,
-  usePushStateListener
-} from '@greatupsells/react-hooks';
+import { useEffect, useMemo, useState } from 'react';
+import { useCookies, useCurrency, usePushStateListener } from '@greatupsells/react-hooks';
 import useDataTranslation from './dataTranslation';
 
 const useOfferThemeState = ({
@@ -21,20 +17,12 @@ const useOfferThemeState = ({
   onReplaceProduct,
   handlers
 }) => {
-  const [addingProduct, setAddingProduct] = useState(
-    Array(offeredProducts.length).fill(false)
-  );
+  const [addingProduct, setAddingProduct] = useState(Array(offeredProducts.length).fill(false));
   const [addingProductBundle, setAddingProductBundle] = useState(false);
   const [productBundleAdded, setProductBundleAdded] = useState(false);
 
   const { getCookie } = useCookies();
-  const {
-    strategy,
-    enableBundling,
-    performActionOnAdd,
-    enableVariantSelection,
-    enableQuantitySelection
-  } = offer;
+  const { strategy, enableBundling, performActionOnAdd, enableVariantSelection, enableQuantitySelection } = offer;
   const { currency: shopCurrency } = shop;
   const { formatCurrency, convertCurrency } = useCurrency({
     locale,
@@ -48,14 +36,15 @@ const useOfferThemeState = ({
         ? `${window.Shopify?.routes?.root}checkout`
         : '/checkout')
   );
-  const [addedQuantities, setAddedQuantities] = useState(
-    [...Array(offeredProducts.length).keys()].map(() => 0)
-  );
+  const [addedQuantities, setAddedQuantities] = useState([...Array(offeredProducts.length).keys()].map(() => 0));
 
-  const {
-    translateProductData,
-    translateTriggerProductData
-  } = useDataTranslation({ shop, offer, locale, countryCode, currency });
+  const { translateProductData, translateTriggerProductData } = useDataTranslation({
+    shop,
+    offer,
+    locale,
+    countryCode,
+    currency
+  });
 
   const translatedTriggerProduct = useMemo(() => {
     if (triggerProduct) {
@@ -71,25 +60,19 @@ const useOfferThemeState = ({
 
   const [selectedVariants, setSelectedVariants] = useState(
     translatedOfferedProducts.map(({ variants }) => {
-      const firstVariantHavingInventory = variants.find(
-        (current) => current.hasInventory
-      );
+      const firstVariantHavingInventory = variants.find((current) => current.hasInventory);
       const firstVariant = variants[0];
 
       return firstVariantHavingInventory || firstVariant;
     })
   );
-  const [selectedQuantities, setSelectedQuantities] = useState(
-    translatedOfferedProducts.map(() => 1)
-  );
+  const [selectedQuantities, setSelectedQuantities] = useState(translatedOfferedProducts.map(() => 1));
 
   const actionButtonUrl = useMemo(() => {
     if (offer.actionButtonBehavior === 'CHECKOUT') {
       return checkoutUrl;
     } else if (offer.actionButtonBehavior === 'CART') {
-      return typeof window !== 'undefined' && window.Shopify?.routes.root
-        ? `${window.Shopify?.routes.root}cart`
-        : '/cart';
+      return typeof window !== 'undefined' && window.Shopify?.routes.root ? `${window.Shopify?.routes.root}cart` : '/cart';
     } else if (offer.actionButtonBehavior === 'PAGE') {
       return handlers.handleClose;
     } else if (offer.actionButtonBehavior === 'LINK') {
@@ -100,9 +83,7 @@ const useOfferThemeState = ({
   }, [offer, checkoutUrl, handlers]);
 
   const actionButtonTarget = useMemo(() => {
-    const openInNewTab =
-      offer.actionButtonBehavior === 'LINK' &&
-      offer.actionButtonLinkOpenInNewTab;
+    const openInNewTab = offer.actionButtonBehavior === 'LINK' && offer.actionButtonLinkOpenInNewTab;
 
     if (openInNewTab) {
       return '_blank';
@@ -122,15 +103,13 @@ const useOfferThemeState = ({
   const maxQuantities = useMemo(() => {
     const { maximumAcceptedProductQuantity } = offer;
     const hasMaxQuantity = typeof maximumAcceptedProductQuantity === 'number';
-    const remainingQuantity =
-      hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
+    const remainingQuantity = hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
 
     return translatedOfferedProducts.map((offeredProduct, index) => {
       const maxInventory = selectedVariants[index]?.maxInventory;
       const hasMaxInventory = typeof maxInventory === 'number';
       const addedVariantQuantity = addedQuantities[index] || 0;
-      const remainingInventory =
-        hasMaxInventory && maxInventory - addedVariantQuantity;
+      const remainingInventory = hasMaxInventory && maxInventory - addedVariantQuantity;
 
       if (hasMaxQuantity && hasMaxInventory) {
         return Math.min(remainingQuantity, remainingInventory);
@@ -144,19 +123,12 @@ const useOfferThemeState = ({
 
       return 1;
     });
-  }, [
-    addedQuantities,
-    addedQuantity,
-    offer,
-    translatedOfferedProducts,
-    selectedVariants
-  ]);
+  }, [addedQuantities, addedQuantity, offer, translatedOfferedProducts, selectedVariants]);
 
   const addingProductEnabled = useMemo(() => {
     const { maximumAcceptedProductQuantity } = offer;
     const hasMaxQuantity = typeof maximumAcceptedProductQuantity === 'number';
-    const remainingQuantity =
-      hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
+    const remainingQuantity = hasMaxQuantity && maximumAcceptedProductQuantity - addedQuantity;
 
     return translatedOfferedProducts.map((offeredProduct, index) => {
       const selectedQuantity = parseInt(selectedQuantities[index]);
@@ -166,10 +138,8 @@ const useOfferThemeState = ({
         selectedQuantity > 0 &&
         selectedQuantity % 1 === 0;
       const selectedQuantityAtOrBelowRemaining =
-        !hasMaxQuantity ||
-        (selectedQuantityValid && selectedQuantity <= remainingQuantity);
-      const addedQuantityBelowMax =
-        !hasMaxQuantity || addedQuantity < maximumAcceptedProductQuantity;
+        !hasMaxQuantity || (selectedQuantityValid && selectedQuantity <= remainingQuantity);
+      const addedQuantityBelowMax = !hasMaxQuantity || addedQuantity < maximumAcceptedProductQuantity;
       const selectedVariantHasInventory = selectedVariants[index]?.hasInventory;
       const atOrBelowMaxInventory = selectedQuantity <= maxQuantities[index];
 
@@ -182,21 +152,12 @@ const useOfferThemeState = ({
         atOrBelowMaxInventory
       );
     });
-  }, [
-    addedQuantity,
-    addingProduct,
-    offer,
-    translatedOfferedProducts,
-    selectedQuantities,
-    selectedVariants,
-    maxQuantities
-  ]);
+  }, [addedQuantity, addingProduct, offer, translatedOfferedProducts, selectedQuantities, selectedVariants, maxQuantities]);
 
   const replacingProductEnabled = useMemo(
     () =>
       translatedOfferedProducts.map((offeredProduct, index) => {
-        const selectedVariantHasInventory =
-          selectedVariants[index]?.hasInventory;
+        const selectedVariantHasInventory = selectedVariants[index]?.hasInventory;
 
         return selectedVariantHasInventory && !addingProduct[index];
       }),
@@ -207,8 +168,7 @@ const useOfferThemeState = ({
     () =>
       selectedQuantities.every((selectedQuantity, index) => {
         const { maximumAcceptedProductQuantity } = offer;
-        const hasMaxQuantity =
-          typeof maximumAcceptedProductQuantity === 'number';
+        const hasMaxQuantity = typeof maximumAcceptedProductQuantity === 'number';
         const selectedQuantityValue = parseInt(selectedQuantities[index]);
         const selectedQuantityValid =
           typeof selectedQuantityValue === 'number' &&
@@ -216,15 +176,9 @@ const useOfferThemeState = ({
           selectedQuantityValue > 0 &&
           selectedQuantityValue % 1 === 0;
         const selectedQuantityAtOrBelowMax =
-          !hasMaxQuantity ||
-          (selectedQuantityValid &&
-            selectedQuantityValue <= maximumAcceptedProductQuantity);
+          !hasMaxQuantity || (selectedQuantityValid && selectedQuantityValue <= maximumAcceptedProductQuantity);
 
-        return (
-          selectedQuantityValid &&
-          selectedQuantityAtOrBelowMax &&
-          !addingProductBundle
-        );
+        return selectedQuantityValid && selectedQuantityAtOrBelowMax && !addingProductBundle;
       }),
     [addingProductBundle, offer, selectedQuantities]
   );
@@ -233,9 +187,7 @@ const useOfferThemeState = ({
     const updatedSelectedVariants = [...selectedVariants];
     const { variants } = translatedOfferedProducts[productIndex];
 
-    updatedSelectedVariants[productIndex] = variants.find(
-      ({ id }) => id === parseInt(variantId)
-    );
+    updatedSelectedVariants[productIndex] = variants.find(({ id }) => id === parseInt(variantId));
 
     setSelectedVariants(updatedSelectedVariants);
   };
@@ -248,10 +200,7 @@ const useOfferThemeState = ({
   };
 
   const shopifyCartTotalFormatted = useMemo(
-    () =>
-      formatCurrency(
-        convertCurrency(shopifyCartTotal || 0, shopCurrency, currency)
-      ),
+    () => formatCurrency(convertCurrency(shopifyCartTotal || 0, shopCurrency, currency)),
     [convertCurrency, currency, formatCurrency, shopCurrency, shopifyCartTotal]
   );
 
@@ -263,41 +212,22 @@ const useOfferThemeState = ({
     }, 0);
 
     return formatCurrency(convertCurrency(subtotal, shopCurrency, currency));
-  }, [
-    convertCurrency,
-    currency,
-    formatCurrency,
-    selectedQuantities,
-    selectedVariants,
-    shopCurrency
-  ]);
+  }, [convertCurrency, currency, formatCurrency, selectedQuantities, selectedVariants, shopCurrency]);
 
   const savingsFormatted = useMemo(() => {
-    const savings = selectedVariants.reduce(
-      (sum, { price, salePrice }, index) => {
-        const quantity = parseInt(selectedQuantities[index]);
+    const savings = selectedVariants.reduce((sum, { price, salePrice }, index) => {
+      const quantity = parseInt(selectedQuantities[index]);
 
-        return sum + (price - salePrice) * quantity;
-      },
-      0
-    );
+      return sum + (price - salePrice) * quantity;
+    }, 0);
 
     return formatCurrency(convertCurrency(savings, shopCurrency, currency));
-  }, [
-    convertCurrency,
-    currency,
-    formatCurrency,
-    selectedQuantities,
-    selectedVariants,
-    shopCurrency
-  ]);
+  }, [convertCurrency, currency, formatCurrency, selectedQuantities, selectedVariants, shopCurrency]);
 
   const handleQuantityAdd = (index, quantity) =>
     setAddedQuantities(
       addedQuantities.map((currentAddedQuantity, currentAddedQuantityIndex) => {
-        return currentAddedQuantityIndex === index
-          ? currentAddedQuantity + quantity
-          : currentAddedQuantity;
+        return currentAddedQuantityIndex === index ? currentAddedQuantity + quantity : currentAddedQuantity;
       })
     );
 
@@ -314,9 +244,7 @@ const useOfferThemeState = ({
     setAddingProduct([...updatedAddingProduct]);
 
     try {
-      await onAddProducts(offerId, [
-        { offerId, shopifyProductId, shopifyVariantId, quantity }
-      ]);
+      await onAddProducts(offerId, [{ offerId, shopifyProductId, shopifyVariantId, quantity }]);
       handleQuantityAdd(productIndex, quantity);
       setCheckoutUrl(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 
@@ -371,10 +299,7 @@ const useOfferThemeState = ({
     }
   };
 
-  const handleReplaceProduct = async (
-    triggerShopifyProductId,
-    productIndex
-  ) => {
+  const handleReplaceProduct = async (triggerShopifyProductId, productIndex) => {
     const offerId = offer._id;
     const shopifyProductId = translatedOfferedProducts[productIndex].id;
     const shopifyVariantId = selectedVariants[productIndex].id;
@@ -386,12 +311,7 @@ const useOfferThemeState = ({
     setAddingProduct([...updatedAddingProduct]);
 
     try {
-      await onReplaceProduct(
-        offerId,
-        triggerShopifyProductId,
-        shopifyProductId,
-        shopifyVariantId
-      );
+      await onReplaceProduct(offerId, triggerShopifyProductId, shopifyProductId, shopifyVariantId);
       handleQuantityAdd(productIndex, 1);
       setCheckoutUrl(getCookie('greatupsellsDraftOrderInvoiceUrl'));
 

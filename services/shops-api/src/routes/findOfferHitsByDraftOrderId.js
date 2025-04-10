@@ -23,11 +23,7 @@ const handler = async (event, context) => {
       body: JSON.stringify(offerHits)
     };
   } catch (error) {
-    await logger.error(
-      `Error retrieving offer hits for Shopify draft order`,
-      error,
-      { event }
-    );
+    await logger.error(`Error retrieving offer hits for Shopify draft order`, error, { event });
 
     return {
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,

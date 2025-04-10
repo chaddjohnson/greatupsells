@@ -40,12 +40,7 @@ const ToastProvider = ({ children }) => {
         TransitionComponent={(props) => <Slide direction="up" {...props} />}
         onClose={handleClose}
       >
-        <Alert
-          elevation={6}
-          variant="filled"
-          onClose={handleClose}
-          severity={type}
-        >
+        <Alert elevation={6} variant="filled" onClose={handleClose} severity={type}>
           {message}
         </Alert>
       </Snackbar>

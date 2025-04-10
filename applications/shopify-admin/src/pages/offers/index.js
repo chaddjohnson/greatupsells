@@ -1,39 +1,21 @@
-import { memo, useState } from 'react';
-import { Loading } from '@shopify/app-bridge-react';
-import {
-  Page,
-  Banner,
-  Layout,
-  Card,
-  SkeletonPage,
-  SkeletonBodyText,
-  EmptyState
-} from '@shopify/polaris';
+import { memo, useState, useEffect } from 'react';
+import { Page, Banner, Layout, Card, BlockStack, SkeletonPage, SkeletonBodyText, EmptyState } from '@shopify/polaris';
 import { Loader } from '@greatupsells/react-components';
 import { useOffers } from '../../hooks';
-import { TitleBar, OfferList } from '../../components';
-
-const PageTitleBar = memo(() => <TitleBar title="Offers" />);
+import { OfferList } from '../../components';
 
 const LoadingComponent = () => (
-  <>
-    <Loading />
-    <SkeletonPage title="Offers" fullWidth>
-      <PageTitleBar />
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <SkeletonBodyText lines={3} />
-          </Card>
-        </Layout.Section>
-      </Layout>
-    </SkeletonPage>
-  </>
+  <SkeletonPage>
+    <BlockStack gap="400" padding="400">
+      <Card>
+        <SkeletonBodyText lines={3} />
+      </Card>
+    </BlockStack>
+  </SkeletonPage>
 );
 
 const EmptyComponent = () => (
   <>
-    <PageTitleBar />
     <EmptyState
       heading="Manage your offers"
       action={{ content: 'Create an offer', url: '/offers/new/' }}
@@ -46,16 +28,22 @@ const EmptyComponent = () => (
 
 const OffersPage = () => {
   const [filters, setFilters] = useState({});
-  const { offers, offersLoaded, offersError } = useOffers(filters);
+  const { offers, offersLoading, offersLoaded, offersError } = useOffers(filters);
+  const [loadedOffers, setLoadedOffers] = useState([]);
 
   const hasFilters = Object.keys(filters).length > 0;
 
+  useEffect(() => {
+    if (offers) {
+      setLoadedOffers(offers);
+    }
+  }, [offers]);
+
   const ErrorComponent = memo(() => (
-    <Page title="Offers" fullWidth>
-      <PageTitleBar />
+    <Page fullWidth>
       <Banner
         title="Unable to load offers"
-        status="critical"
+        tone="critical"
         action={{
           content: 'Try again',
           onAction: () => window.location.reload()
@@ -75,15 +63,10 @@ const OffersPage = () => {
       errorComponent={ErrorComponent}
       emptyStateComponent={EmptyComponent}
     >
-      <Page title="Offers" fullWidth>
-        <PageTitleBar />
+      <Page title="Offers" fullWidth primaryAction={{ content: 'Add offer', url: '/offers/new' }}>
         <Layout>
           <Layout.Section>
-            <OfferList
-              offers={offers}
-              filters={filters}
-              onFilter={setFilters}
-            />
+            <OfferList offers={loadedOffers} loading={offersLoading} filters={filters} onFilter={setFilters} />
           </Layout.Section>
         </Layout>
       </Page>

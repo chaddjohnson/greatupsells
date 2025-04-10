@@ -1,9 +1,11 @@
 service: greatupsells-webhooks-service
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 256
   timeout: 10
   endpointType: REGIONAL
@@ -26,6 +28,7 @@ custom:
   serverless-offline:
     httpPort: ${env:WEBHOOK_PORT, 4008}
     lambdaPort: 4108
+    prefix: 'webhooks-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/webhooks-service/regional-domain, ''}
     basePath: ''
@@ -40,7 +43,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: 1
       prewarm: true
       events:
@@ -48,7 +50,6 @@ custom:
 
 functions:
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
@@ -58,7 +59,6 @@ functions:
       default:
         enabled: false
   appUninstall:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/appUninstall.handler
     events:
@@ -68,7 +68,6 @@ functions:
           path: /shopify/app-uninstall
           method: post
   collection:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/collection.handler
     events:
@@ -78,7 +77,6 @@ functions:
           path: /shopify/collection
           method: post
   collectionDelete:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/collectionDelete.handler
     events:
@@ -88,7 +86,6 @@ functions:
           path: /shopify/collection-deletion
           method: post
   draftOrderUpdate:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/draftOrderUpdate.handler
     events:
@@ -98,7 +95,6 @@ functions:
           path: /shopify/draft-order-update
           method: post
   orderCancel:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderCancel.handler
     events:
@@ -108,7 +104,6 @@ functions:
           path: /shopify/order-cancelation
           method: post
   orderCreate:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderCreate.handler
     events:
@@ -118,7 +113,6 @@ functions:
           path: /shopify/order-create
           method: post
   orderPaid:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderPaid.handler
     events:
@@ -128,7 +122,6 @@ functions:
           path: /shopify/order-paid
           method: post
   orderUpdate:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/orderUpdate.handler
     events:
@@ -138,9 +131,9 @@ functions:
           path: /shopify/order-update
           method: post
   product:
-    reservedConcurrency: 3
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/product.handler
+    timeout: 60
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/product/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:product-queue-dev'}
@@ -150,7 +143,6 @@ functions:
           path: /shopify/product
           method: post
   productDelete:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/productDelete.handler
     events:
@@ -160,7 +152,6 @@ functions:
           path: /shopify/product-deletion
           method: post
   shop:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/shop.handler
     events:
@@ -170,7 +161,6 @@ functions:
           path: /shopify/shop
           method: post
   themePublish:
-    reservedConcurrency: 1
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/themePublish.handler
     events:
@@ -178,6 +168,24 @@ functions:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/theme-publish/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:theme-publish-queue-dev'}
       - httpApi:
           path: /shopify/theme-publish
+          method: post
+  customerDataRequest:
+    handler: src/workers/customerDataRequest.handler
+    events:
+      - httpApi:
+          path: /shopify/customers/data-request
+          method: post
+  customerRedact:
+    handler: src/workers/customerRedact.handler
+    events:
+      - httpApi:
+          path: /shopify/customers/redact
+          method: post
+  shopRedact:
+    handler: src/workers/shopRedact.handler
+    events:
+      - httpApi:
+          path: /shopify/shop/redact
           method: post
 
 plugins:

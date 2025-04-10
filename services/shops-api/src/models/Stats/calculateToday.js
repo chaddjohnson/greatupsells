@@ -8,7 +8,7 @@ const calculateToday = async () => {
   const date = DateTime.utc().endOf('day').toJSDate();
 
   const currentHour = parseInt(
-    DateTime.fromISO(date, {
+    DateTime.fromJSDate(date, {
       zone: 'America/New_York'
     }).toFormat('H')
   );
@@ -18,14 +18,8 @@ const calculateToday = async () => {
     return;
   }
 
-  const startDate = DateTime.fromISO(date, { zone: 'America/New_York' })
-    .minus({ day: 1 })
-    .startOf('day')
-    .toJSDate();
-  const endDate = DateTime.fromISO(date, { zone: 'America/New_York' })
-    .minus({ day: 1 })
-    .endOf('day')
-    .toJSDate();
+  const startDate = DateTime.fromJSDate(date, { zone: 'America/New_York' }).minus({ day: 1 }).startOf('day').toJSDate();
+  const endDate = DateTime.fromJSDate(date, { zone: 'America/New_York' }).minus({ day: 1 }).endOf('day').toJSDate();
   const stats = await Stats.calculate(startDate, endDate);
 
   stats.createdAt = startDate;

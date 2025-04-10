@@ -15,10 +15,7 @@ const handler = async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const [Offer, Theme] = await Promise.all([
-      models.get('Offer'),
-      models.get('Theme')
-    ]);
+    const [Offer, Theme] = await Promise.all([models.get('Offer'), models.get('Theme')]);
     const offer = await Offer.findById(offerId);
 
     if (!offer) {

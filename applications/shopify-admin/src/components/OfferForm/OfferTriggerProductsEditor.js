@@ -5,6 +5,11 @@ import {
   FormLayout,
   TextField,
   ChoiceList,
+  BlockStack,
+  Text,
+  Divider,
+  Bleed,
+  Box,
   InlineError
 } from '@shopify/polaris';
 import styled from 'styled-components';
@@ -45,12 +50,9 @@ const OfferTriggerProductsEditor = ({
   });
   const currencySymbol = getCurrencySymbol();
 
-  const isCrossSellStrategy = [
-    'CROSS_SELL',
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isCrossSellStrategy = ['CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(
+    offer.strategy
+  );
 
   const handleAppliesToChange = (value) => {
     setAppliesTo(value);
@@ -75,18 +77,13 @@ const OfferTriggerProductsEditor = ({
 
   const removeProduct = (shopifyProductId) => {
     triggerProducts.onChange(
-      triggerProducts.value.filter(
-        (offeredProduct) => offeredProduct.shopifyProductId !== shopifyProductId
-      )
+      triggerProducts.value.filter((offeredProduct) => offeredProduct.shopifyProductId !== shopifyProductId)
     );
   };
 
   const removeCollection = (shopifyCollectionId) => {
     triggerCollections.onChange(
-      triggerCollections.value.filter(
-        (triggerCollection) =>
-          triggerCollection.shopifyCollectionId !== shopifyCollectionId
-      )
+      triggerCollections.value.filter((triggerCollection) => triggerCollection.shopifyCollectionId !== shopifyCollectionId)
     );
   };
 
@@ -116,12 +113,9 @@ const OfferTriggerProductsEditor = ({
 
   return (
     <>
-      <Card
-        title={`Cart trigger products${
-          isCrossSellStrategy ? ' and collections' : ''
-        }`}
-      >
-        <Card.Section>
+      <Card>
+        <BlockStack gap="400" padding="400">
+          <Text variant="headingMd">Cart trigger products{isCrossSellStrategy ? ' and collections' : ''}</Text>
           <FormLayout>
             {isCrossSellStrategy && (
               <ChoiceList
@@ -131,20 +125,17 @@ const OfferTriggerProductsEditor = ({
                   {
                     label: 'All products',
                     value: 'ALL',
-                    helpText:
-                      'Offer is shown if any products (including none) are in the cart.'
+                    helpText: 'Offer is shown if any products (including none) are in the cart.'
                   },
                   {
                     label: 'Specific products',
                     value: 'PRODUCTS',
-                    helpText:
-                      'Offer is shown if one or more specific products are in the cart.'
+                    helpText: 'Offer is shown if one or more specific products are in the cart.'
                   },
                   {
                     label: 'Specific collections',
                     value: 'COLLECTIONS',
-                    helpText:
-                      'Offer is shown if one or more products from one or more specific collections are in the cart.'
+                    helpText: 'Offer is shown if one or more products from one or more specific collections are in the cart.'
                   }
                 ]}
                 selected={[appliesTo]}
@@ -152,78 +143,74 @@ const OfferTriggerProductsEditor = ({
               />
             )}
             {appliesTo === 'PRODUCTS' && (
-              <>
-                <ProductResourceList
-                  label="Trigger products"
-                  items={triggerProducts.value}
-                  onChange={handleProductSelection}
-                  onRemoveItem={removeProduct}
-                />
-              </>
-            )}
-            {appliesTo === 'COLLECTIONS' && (
-              <>
-                <CollectionResourceList
-                  label="Trigger collections"
-                  items={triggerCollections.value}
-                  onChange={handleCollectionSelection}
-                  onRemoveItem={removeCollection}
-                />
-              </>
-            )}
-            {submitted && triggerProducts.error && (
-              <InlineError
-                message={triggerProducts.error}
-                fieldID="triggerProducts"
+              <ProductResourceList
+                label="Trigger products"
+                items={triggerProducts.value}
+                onChange={handleProductSelection}
+                onRemoveItem={removeProduct}
               />
             )}
+            {appliesTo === 'COLLECTIONS' && (
+              <CollectionResourceList
+                label="Trigger collections"
+                items={triggerCollections.value}
+                onChange={handleCollectionSelection}
+                onRemoveItem={removeCollection}
+              />
+            )}
+            {submitted && triggerProducts.error && <InlineError message={triggerProducts.error} fieldID="triggerProducts" />}
+            <Bleed marginBlockEnd="400" marginInline="400">
+              <Divider />
+              <Box padding="400" paddingBlockEnd="500">
+                <BlockStack gap="400" padding="400">
+                  <Text variant="headingMd">Minimum cart requirements</Text>
+                  <FormLayout>
+                    <ChoiceList
+                      choices={[
+                        { label: 'None', value: 'NONE' },
+                        {
+                          label: `Minimum purchase amount (${currency})`,
+                          value: 'AMOUNT',
+                          renderChildren: (isSelected) =>
+                            isSelected && (
+                              <MinimumRequiredAmountWrapper>
+                                <TextField
+                                  inputMode="numeric"
+                                  prefix={currencySymbol}
+                                  placeholder="0.00"
+                                  helpText="Amount before taxes and shipping."
+                                  {...minimumRequiredAmount}
+                                  error={submitted && minimumRequiredAmount.error}
+                                />
+                              </MinimumRequiredAmountWrapper>
+                            )
+                        },
+                        {
+                          label: 'Minimum quantity of items',
+                          value: 'QUANTITY',
+                          renderChildren: (isSelected) =>
+                            isSelected && (
+                              <MinimumRequiredAmountWrapper>
+                                <TextField
+                                  type="number"
+                                  inputMode="numeric"
+                                  min={1}
+                                  {...minimumRequiredAmount}
+                                  error={submitted && minimumRequiredAmount.error}
+                                />
+                              </MinimumRequiredAmountWrapper>
+                            )
+                        }
+                      ]}
+                      selected={[minimumRequirement.value]}
+                      onChange={([value]) => handleMinimumRequirementChange(value)}
+                    />
+                  </FormLayout>
+                </BlockStack>
+              </Box>
+            </Bleed>
           </FormLayout>
-        </Card.Section>
-        <Card.Section title="Minimum cart requirements">
-          <FormLayout>
-            <ChoiceList
-              choices={[
-                {
-                  label: 'None',
-                  value: 'NONE'
-                },
-                {
-                  label: `Minimum purchase amount (${currency})`,
-                  value: 'AMOUNT',
-                  renderChildren: (isSelected) =>
-                    isSelected && (
-                      <MinimumRequiredAmountWrapper>
-                        <TextField
-                          inputMode="numeric"
-                          prefix={currencySymbol}
-                          placeholder="0.00"
-                          helpText="Amount before taxes and shipping."
-                          {...minimumRequiredAmount}
-                          error={submitted && minimumRequiredAmount.error}
-                        />
-                      </MinimumRequiredAmountWrapper>
-                    )
-                },
-                {
-                  label: 'Minimum quantity of items',
-                  value: 'QUANTITY',
-                  renderChildren: (isSelected) =>
-                    isSelected && (
-                      <MinimumRequiredAmountWrapper>
-                        <TextField
-                          inputMode="numeric"
-                          {...minimumRequiredAmount}
-                          error={submitted && minimumRequiredAmount.error}
-                        />
-                      </MinimumRequiredAmountWrapper>
-                    )
-                }
-              ]}
-              selected={[minimumRequirement.value]}
-              onChange={([value]) => handleMinimumRequirementChange(value)}
-            />
-          </FormLayout>
-        </Card.Section>
+        </BlockStack>
       </Card>
     </>
   );

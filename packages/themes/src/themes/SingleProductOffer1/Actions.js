@@ -5,25 +5,11 @@ import tinycolor from 'tinycolor2';
 import styled from '@greatupsells/styled-with-facepaint';
 import { StateContext } from '../../components';
 
-const AddButton = styled(
-  ({
-    className,
-    type = 'button',
-    loading = false,
-    disabled = false,
-    children,
-    ...props
-  }) => (
-    <button
-      className={clsx(className, loading && 'loading')}
-      type={type}
-      disabled={loading || disabled}
-      {...props}
-    >
-      <span>{children}</span>
-    </button>
-  )
-)({
+const AddButton = styled(({ className, type = 'button', loading = false, disabled = false, children, ...props }) => (
+  <button className={clsx(className, loading && 'loading')} type={type} disabled={loading || disabled} {...props}>
+    <span>{children}</span>
+  </button>
+))({
   width: '100%',
   height: '39px',
   fontSize: '0.875rem',
@@ -126,12 +112,7 @@ const Actions = styled(({ className }) => {
   return (
     <div className={className}>
       {strategy === 'CROSS_SELL' && (
-        <AddButton
-          type="submit"
-          disabled={!addingProductEnabled[0]}
-          loading={addingProduct[0]}
-          onClick={handleAddButton}
-        >
+        <AddButton type="submit" disabled={!addingProductEnabled[0]} loading={addingProduct[0]} onClick={handleAddButton}>
           {actionButtonText}
         </AddButton>
       )}

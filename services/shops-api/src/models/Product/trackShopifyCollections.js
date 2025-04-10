@@ -15,9 +15,7 @@ const getManualCollectionIds = async (product) => {
     // eslint-disable-next-line no-await-in-loop
     const collects = await shopifyApiClient.collect.list(params);
 
-    manualCollectionIds = manualCollectionIds.concat(
-      collects.map((collect) => collect.collection_id)
-    );
+    manualCollectionIds = manualCollectionIds.concat(collects.map((collect) => collect.collection_id));
     params = collects.nextPageParameters;
   } while (params);
 
@@ -36,13 +34,9 @@ const getSmartCollectionIds = async (product) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const smartCollections = await shopifyApiClient.smartCollection.list(
-      params
-    );
+    const smartCollections = await shopifyApiClient.smartCollection.list(params);
 
-    smartCollectionIds = smartCollectionIds.concat(
-      smartCollections.map(({ id }) => id)
-    );
+    smartCollectionIds = smartCollectionIds.concat(smartCollections.map(({ id }) => id));
     params = smartCollections.nextPageParameters;
   } while (params);
 
@@ -78,11 +72,7 @@ const addProductToCollections = async (product, collections) => {
 };
 
 const trackShopifyCollections = async (product) => {
-  const [Product, Collection] = await Promise.all([
-    models.get('Product'),
-    models.get('Collection'),
-    models.get('Shop')
-  ]);
+  const [Product, Collection] = await Promise.all([models.get('Product'), models.get('Collection'), models.get('Shop')]);
 
   await product.execPopulate('shop');
 

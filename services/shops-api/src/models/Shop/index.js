@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Int32 = require('mongoose-int32');
 const mongodbClient = require('../mongodbClient');
 const getShopifyApiClient = require('./getShopifyApiClient');
+const getGraphqlShopifyApiClient = require('./getGraphqlShopifyApiClient');
 const createOrUpdate = require('./createOrUpdate');
 const createWebhooks = require('./createWebhooks');
 const importOrders = require('./importOrders');
@@ -17,12 +18,13 @@ const changePlan = require('./changePlan');
 const updatePlan = require('./updatePlan');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
+const trackCollectionProducts = require('./trackCollectionProducts');
+const trackProductCollections = require('./trackProductCollections');
 const createDraftOrder = require('./createDraftOrder');
 const addDraftOrderLineItems = require('./addDraftOrderLineItems');
 const updateShopifyDraftOrderItems = require('./updateShopifyDraftOrderItems');
 const checkThemeCompatibility = require('./checkThemeCompatibility');
 const installAppEmbedBlock = require('./installAppEmbedBlock');
-const getAppEmbedBlockIsInstalledAndEnabled = require('./getAppEmbedBlockIsInstalledAndEnabled');
 const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
 const createSampleOffers = require('./createSampleOffers');
 const toString = require('./toString');
@@ -153,6 +155,10 @@ schema.methods.getShopifyApiClient = function () {
   return getShopifyApiClient(this);
 };
 
+schema.methods.getGraphqlShopifyApiClient = function () {
+  return getGraphqlShopifyApiClient(this);
+};
+
 schema.methods.createWebhooks = function () {
   return createWebhooks(this);
 };
@@ -205,6 +211,14 @@ schema.methods.initialize = function () {
   return initialize(this);
 };
 
+schema.methods.trackCollectionProducts = function () {
+  return trackCollectionProducts(this);
+};
+
+schema.methods.trackProductCollections = function () {
+  return trackProductCollections(this);
+};
+
 schema.methods.createDraftOrder = function (data) {
   return createDraftOrder(this, data);
 };
@@ -213,10 +227,7 @@ schema.methods.addDraftOrderLineItems = function (draftOrderId, items) {
   return addDraftOrderLineItems(this, draftOrderId, items);
 };
 
-schema.methods.updateShopifyDraftOrderItems = function (
-  draftOrderId,
-  shopifyCartItems
-) {
+schema.methods.updateShopifyDraftOrderItems = function (draftOrderId, shopifyCartItems) {
   return updateShopifyDraftOrderItems(this, draftOrderId, shopifyCartItems);
 };
 
@@ -226,10 +237,6 @@ schema.methods.checkThemeCompatibility = function () {
 
 schema.methods.installAppEmbedBlock = function (shopifyThemeId) {
   return installAppEmbedBlock(this, shopifyThemeId);
-};
-
-schema.methods.getAppEmbedBlockIsInstalledAndEnabled = function () {
-  return getAppEmbedBlockIsInstalledAndEnabled(this);
 };
 
 schema.methods.calculateMonthUpsellRevenue = function () {

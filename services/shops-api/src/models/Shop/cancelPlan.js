@@ -7,31 +7,18 @@ const cancelPlan = async (shop) => {
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
-  const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(
-    shop.plan.chargeId
-  );
-  const planActive =
-    recurringChargeData &&
-    recurringChargeData.activated_on &&
-    !recurringChargeData.cancelled_on;
+  const recurringChargeData = await shopifyApiClient.recurringApplicationCharge.get(shop.plan.chargeId);
+  const planActive = recurringChargeData && recurringChargeData.activated_on && !recurringChargeData.cancelled_on;
 
   // Cancel the plan if it was activated and not canceled.
   if (planActive) {
     try {
-      await shopifyApiClient.recurringApplicationCharge.delete(
-        shop.plan.chargeId
-      );
+      await shopifyApiClient.recurringApplicationCharge.delete(shop.plan.chargeId);
 
-      await logger.info(
-        `Canceled recurring charge ${
-          shop.plan.chargeId
-        } for shop (${shop.toString()})`
-      );
+      await logger.info(`Canceled recurring charge ${shop.plan.chargeId} for shop (${shop.toString()})`);
     } catch (error) {
       await logger.error(
-        `Error canceling existing recurring charge ${
-          shop.plan.chargeId
-        } for shop (${shop.toString()})`,
+        `Error canceling existing recurring charge ${shop.plan.chargeId} for shop (${shop.toString()})`,
         error
       );
     }

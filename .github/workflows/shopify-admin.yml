@@ -23,7 +23,11 @@ jobs:
       SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}
     steps:
       - name: Set Environment Variables
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: |
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Inject "ASSETS_DOMAIN" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
@@ -44,11 +48,6 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify-admin-api/url'
           env_variable_name: 'SHOPIFY_ADMIN_API_URL'
-      - name: Inject "SHOPIFY_EMBED_BLOCK_ID" SSM Parameter
-        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
-        with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
-          env_variable_name: 'SHOPIFY_EMBED_BLOCK_ID'
       - name: Inject "STOREFRONT_API_URL" SSM Parameter
         uses: 'marvinpinto/action-inject-ssm-secrets@latest'
         with:
@@ -66,18 +65,15 @@ jobs:
         with:
           ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/post-purchase/id'
           env_variable_name: 'SHOPIFY_POST_PURCHASE_UPSELLS_ID'
-      - name: Inject "SHOPIFY_GREAT_UPSELLS_OFFERS_ID" SSM Parameter
-        uses: 'marvinpinto/action-inject-ssm-secrets@latest'
-        with:
-          ssm_parameter: '/greatupsells/${{ env.BRANCH }}/shopify/app-embed-block/id'
-          env_variable_name: 'SHOPIFY_GREAT_UPSELLS_OFFERS_ID'
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.13.0
+          node-version: 20.12.2
           cache: yarn
       - uses: ruby/setup-ruby@v1
         with:
@@ -87,21 +83,21 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Node Modules
+        run: yarn install --immutable
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
-        run: npm install -g serverless
+        run: npm install -g serverless@3.38.0
       - name: Run Terraform
         run: yarn infrastructure
         working-directory: applications/shopify-admin
         env:
           STAGE: ${{ env.BRANCH }}
-      - name: Install Node Modules
-        run: yarn install --immutable
       - name: Build Packages
-        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/shopify-admin . --region us-east-1
+        run: aws s3 sync s3://greatupsells-infrastructure2/serverless/shopify-admin . --region us-east-1
         working-directory: applications/shopify-admin
       - name: Build Next.js Application
         run: NODE_ENV=production yarn build
@@ -113,20 +109,29 @@ jobs:
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: applications/shopify-admin
-      - name: Deploy Serverless Application to eu-west-1
-        run: serverless deploy --stage $BRANCH --region eu-west-1
-        working-directory: applications/shopify-admin
-        if: ${{ github.ref == 'refs/heads/production' }}
-      - name: Deploy Serverless Application to ap-northeast-1
-        run: serverless deploy --stage $BRANCH --region ap-northeast-1
-        working-directory: applications/shopify-admin
-        if: ${{ github.ref == 'refs/heads/production' }}
+      # - name: Deploy Serverless Application to eu-west-1
+      #   run: serverless deploy --stage $BRANCH --region eu-west-1
+      #   working-directory: applications/shopify-admin
+      #   if: ${{ github.ref == 'refs/heads/master' }}
+      # - name: Deploy Serverless Application to ap-northeast-1
+      #   run: serverless deploy --stage $BRANCH --region ap-northeast-1
+      #   working-directory: applications/shopify-admin
+      #   if: ${{ github.ref == 'refs/heads/master' }}
       - name: Sync .serverless directory
-        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/shopify-admin/.serverless
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure2/serverless/shopify-admin/.serverless
         working-directory: applications/shopify-admin
-      - name: Publish Shopify extensions
-        run: env > .env && yarn extensions:deploy
+      - name: Publish Shopify extensions (test)
+        if: ${{ success() && github.ref == 'refs/heads/test' }}
+        run: env > .env && ln -sf shopify.app.test.toml shopify.app.toml && yarn extensions:deploy
         working-directory: applications/shopify-admin
+        env:
+          SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN_TEST }}
+      - name: Publish Shopify extensions (production)
+        if: ${{ success() && github.ref == 'refs/heads/master' }}
+        run: env > .env && ln -sf shopify.app.production.toml shopify.app.toml && yarn extensions:deploy
+        working-directory: applications/shopify-admin
+        env:
+          SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}
       - name: Uninstall Global Packages
         if: always()
         run: npm uninstall -g serverless

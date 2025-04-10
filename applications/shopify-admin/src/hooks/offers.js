@@ -1,6 +1,6 @@
+import qs from 'querystringify';
 import { useState } from 'react';
 import useSWR from 'swr';
-import qs from 'querystringify';
 import { useHttpClient } from '@greatupsells/react-hooks';
 
 const useOffers = (filters) => {

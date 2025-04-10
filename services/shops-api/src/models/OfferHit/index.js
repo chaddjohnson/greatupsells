@@ -34,14 +34,7 @@ const schema = new mongoose.Schema(
     strategy: {
       type: String,
       required: true,
-      enum: [
-        'UPSELL',
-        'CROSS_SELL',
-        'POST_PURCHASE',
-        'THANK_YOU_PAGE',
-        'ORDER_STATUS_PAGE',
-        'POPUP'
-      ]
+      enum: ['UPSELL', 'CROSS_SELL', 'POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE', 'POPUP']
     },
     triggerEvent: {
       type: String,
@@ -104,19 +97,11 @@ schema.statics.findAcceptancesByShopId = function (shopId, startAt, endAt) {
   return findAcceptancesByShopId(shopId, startAt, endAt);
 };
 
-schema.statics.findRevenueIncreasesByOfferId = function (
-  offerId,
-  startAt,
-  endAt
-) {
+schema.statics.findRevenueIncreasesByOfferId = function (offerId, startAt, endAt) {
   return findRevenueIncreasesByOfferId(offerId, startAt, endAt);
 };
 
-schema.statics.findRevenueIncreasesByShopId = function (
-  shopId,
-  startAt,
-  endAt
-) {
+schema.statics.findRevenueIncreasesByShopId = function (shopId, startAt, endAt) {
   return findRevenueIncreasesByShopId(shopId, startAt, endAt);
 };
 
@@ -128,11 +113,7 @@ schema.statics.findConversionsByShopId = function (shopId, startAt, endAt) {
   return findConversionsByShopId(shopId, startAt, endAt);
 };
 
-schema.statics.findConversionRatesByOfferId = function (
-  offerId,
-  startAt,
-  endAt
-) {
+schema.statics.findConversionRatesByOfferId = function (offerId, startAt, endAt) {
   return findConversionRatesByOfferId(offerId, startAt, endAt);
 };
 
@@ -144,20 +125,14 @@ schema.methods.trackOfferedProducts = function (shopifyProductIds) {
   return trackOfferedProducts(this, shopifyProductIds);
 };
 
-schema.methods.trackAcceptance = function (
-  items,
-  { shopifyDraftOrderId, shopifyCheckoutId }
-) {
+schema.methods.trackAcceptance = function (items, { shopifyDraftOrderId, shopifyCheckoutId }) {
   return trackAcceptance(this, items, {
     shopifyDraftOrderId,
     shopifyCheckoutId
   });
 };
 
-schema.methods.trackAcceptedProducts = function (
-  items,
-  { shopifyDraftOrderId, shopifyOrderId }
-) {
+schema.methods.trackAcceptedProducts = function (items, { shopifyDraftOrderId, shopifyOrderId }) {
   return trackAcceptedProducts(this, items, {
     shopifyDraftOrderId,
     shopifyOrderId

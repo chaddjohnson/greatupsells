@@ -1,17 +1,25 @@
 const axios = require('axios');
+const https = require('https');
 const { aws4Interceptor } = require('aws4-axios');
 
-const { AWS_REGION } = process.env;
+const { NODE_ENV, AWS_REGION } = process.env;
+const dev = NODE_ENV !== 'production';
 
 class HttpClient {
   constructor({ baseUrl, ...options }) {
-    const client = axios.create();
+    const client = axios.create({
+      httpsAgent: dev
+        ? new https.Agent({
+            // Allow self-signed certificates.
+            rejectUnauthorized: false
+          })
+        : undefined
+    });
 
     client.defaults.baseURL = baseUrl;
     client.defaults.timeout = 20 * 1000;
     client.defaults.responseType = 'json';
-    client.defaults.headers.common['Content-Type'] =
-      'application/json; charset=utf-8';
+    client.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 
     // Enable this if needing to serialize arrays in query strings.
     // Note that there are difficulties with importing `qs` with webpack 5.

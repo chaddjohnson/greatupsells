@@ -80,29 +80,18 @@ const definitions = [
 
 const createWebhook = async (shop, existingWebhooks, definition) => {
   const shopifyApiClient = shop.getShopifyApiClient();
-  const webhook = existingWebhooks.find(
-    ({ topic }) => topic === definition.topic
-  );
+  const webhook = existingWebhooks.find(({ topic }) => topic === definition.topic);
   const webhookIsCorrect = webhook && webhook.address === definition.address;
 
   // Create the webhook if it does not exist.
   if (!webhook) {
     try {
       await shopifyApiClient.webhook.create(definition);
-      await logger.info(
-        `Created Shopify webhook "${
-          definition.topic
-        }" for shop (${shop.toString()})`,
-        { definition }
-      );
+      await logger.info(`Created Shopify webhook "${definition.topic}" for shop (${shop.toString()})`, { definition });
     } catch (error) {
-      await logger.warn(
-        `Failed to create Shopify webhook "${
-          definition.topic
-        }" for shop (${shop.toString()})`,
-        error,
-        { definition }
-      );
+      await logger.warn(`Failed to create Shopify webhook "${definition.topic}" for shop (${shop.toString()})`, error, {
+        definition
+      });
 
       throw error;
     }
@@ -118,12 +107,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
 
     try {
       await shopifyApiClient.webhook.update(webhook.id, webhook);
-      await logger.info(
-        `Updated Shopify webhook "${
-          definition.topic
-        }" for shop (${shop.toString()})`,
-        { webhook }
-      );
+      await logger.info(`Updated Shopify webhook "${definition.topic}" for shop (${shop.toString()})`, { webhook });
     } catch (error) {
       const ignoredHttpStatuses = [
         StatusCodes.PAYMENT_REQUIRED,
@@ -131,21 +115,15 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
         StatusCodes.FORBIDDEN,
         StatusCodes.LOCKED
       ];
-      const isValidError =
-        !error.response ||
-        !ignoredHttpStatuses.includes(error.response.statusCode);
+      const isValidError = !error.response || !ignoredHttpStatuses.includes(error.response.statusCode);
 
       if (!isValidError) {
         return;
       }
 
-      await logger.warn(
-        `Failed to update Shopify webhook ${
-          definition.topic
-        } for shop ${shop.toString()}`,
-        error,
-        { webhook }
-      );
+      await logger.warn(`Failed to update Shopify webhook ${definition.topic} for shop ${shop.toString()}`, error, {
+        webhook
+      });
 
       throw error;
     }
@@ -154,9 +132,7 @@ const createWebhook = async (shop, existingWebhooks, definition) => {
 
 const createWebhooks = async (shop) => {
   if (!WEBHOOK_ARN && !WEBHOOK_API_URL) {
-    return logger.warn(
-      `Skipping webhook creation for shop as webhook address is not set (${shop.toString()})`
-    );
+    return logger.warn(`Skipping webhook creation for shop as webhook address is not set (${shop.toString()})`);
   }
 
   const shopifyApiClient = shop.getShopifyApiClient();
@@ -167,20 +143,16 @@ const createWebhooks = async (shop) => {
     maxTimeout: 2 * 1000
   };
 
-  await Promise.map(
-    definitions,
-    async (definition) => {
-      // Sometimes webhook creation fails, so try multiple times.
-      await promiseRetry(async (retry) => {
-        try {
-          await createWebhook(shop, webhooks, definition);
-        } catch (error) {
-          return retry(error);
-        }
-      }, retryConfig);
-    },
-    { concurrency: 6 }
-  );
+  await Promise.mapSeries(definitions, async (definition) => {
+    // Sometimes webhook creation fails, so try multiple times.
+    await promiseRetry(async (retry) => {
+      try {
+        await createWebhook(shop, webhooks, definition);
+      } catch (error) {
+        return retry(error);
+      }
+    }, retryConfig);
+  });
 };
 
 module.exports = createWebhooks;

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import noData from 'highcharts/modules/no-data-to-display';
-import { Stack, Text, Icon } from '@shopify/polaris';
-import { ArrowUpMinor, ArrowDownMinor } from '@shopify/polaris-icons';
+import { BlockStack, InlineStack, Text, Icon } from '@shopify/polaris';
+import { ArrowUpIcon, ArrowDownIcon } from '@shopify/polaris-icons';
 
 if (typeof window !== 'undefined') {
   noData(Highcharts);
@@ -15,9 +15,9 @@ const LineChart = ({
   subtitle,
   rangeDescription,
   tooltipText,
-  data,
-  emptyMessage,
-  formatters: { number: formatNumber, percentage: formatPercentage }
+  data = [],
+  emptyMessage = 'No data available.',
+  formatters: { number: formatNumber = (value) => value, percentage: formatPercentage = (value) => `${value}%` }
 }) => {
   const options = useMemo(
     () => ({
@@ -71,8 +71,7 @@ const LineChart = ({
       ],
       chart: {
         style: {
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
+          fontFamily: '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif'
         }
       },
       tooltip: {
@@ -85,8 +84,7 @@ const LineChart = ({
         padding: 12,
         style: {
           color: 'white',
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif',
+          fontFamily: '-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif',
           fontSize: '13px',
           textAlign: 'center'
         },
@@ -97,11 +95,7 @@ const LineChart = ({
 
           return `<div style="font-weight: 500">${month} ${date.getDate()}</div><div style="margin-top: 5px">${formatNumber(
             this.y
-          )} ${(
-            tooltipText ||
-            (typeof title === 'string' && title) ||
-            ''
-          ).toLowerCase()}</div>`;
+          )} ${(tooltipText || (typeof title === 'string' && title) || '').toLowerCase()}</div>`;
         }
       },
       lang: {
@@ -156,8 +150,8 @@ const LineChart = ({
 
   return (
     <>
-      <Stack vertical>
-        <Stack vertical spacing="tight">
+      <BlockStack gap="200">
+        <BlockStack gap="100">
           {typeof title === 'string' ? (
             <Text variant="headingMd" as="h2">
               {title}
@@ -165,42 +159,35 @@ const LineChart = ({
           ) : (
             title
           )}
-          {(typeof changeValue !== 'undefined' ||
-            typeof changePercentage !== 'undefined') && (
-            <Stack alignment="center" spacing="tight">
-              {typeof changeValue !== 'undefined' && (
-                <Text variant="headingLg">{formatNumber(changeValue)}</Text>
-              )}
+          {(typeof changeValue !== 'undefined' || typeof changePercentage !== 'undefined') && (
+            <InlineStack align="start" gap="100">
+              {typeof changeValue !== 'undefined' && <Text variant="headingLg">{formatNumber(changeValue)}</Text>}
               {typeof changePercentage !== 'undefined' && changePercentage > 0 && (
                 <Text variant="headingLg" as="div">
-                  <Stack spacing="none" alignment="center">
-                    <Icon source={ArrowUpMinor} color="success" />
-                    <Text color="success">
-                      {formatPercentage(changePercentage, 0)}
-                    </Text>
-                  </Stack>
+                  <InlineStack gap="50" align="center">
+                    <Icon source={ArrowUpIcon} tone="success" />
+                    <Text tone="success">{formatPercentage(changePercentage, 0)}</Text>
+                  </InlineStack>
                 </Text>
               )}
               {typeof changePercentage !== 'undefined' && changePercentage < 0 && (
                 <Text variant="headingLg" as="div">
-                  <Stack spacing="none" alignment="center">
-                    <Icon source={ArrowDownMinor} color="critical" />
-                    <Text color="critical">
-                      {formatPercentage(changePercentage, 0)}
-                    </Text>
-                  </Stack>
+                  <InlineStack gap="50" align="center">
+                    <Icon source={ArrowDownIcon} tone="critical" />
+                    <Text tone="critical">{formatPercentage(changePercentage, 0)}</Text>
+                  </InlineStack>
                 </Text>
               )}
-            </Stack>
+            </InlineStack>
           )}
-        </Stack>
+        </BlockStack>
         {subtitle && (
           <Text variant="headingXs" as="h3">
-            <Text color="subdued">{subtitle}</Text>
+            <Text tone="subdued">{subtitle}</Text>
           </Text>
         )}
         <HighchartsReact highcharts={Highcharts} options={options} />
-      </Stack>
+      </BlockStack>
     </>
   );
 };
@@ -217,15 +204,6 @@ LineChart.propTypes = {
     number: PropTypes.func,
     percentage: PropTypes.func
   })
-};
-
-LineChart.defaultProps = {
-  data: [],
-  emptyMessage: 'No data available.',
-  formatters: {
-    number: (value) => value,
-    percentage: (value) => `${value}%`
-  }
 };
 
 export default LineChart;

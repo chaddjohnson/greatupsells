@@ -25,12 +25,12 @@ const ProductOffer = ({
   locale,
   countryCode,
   currency,
-  shopifyCartItems,
+  shopifyCartItems = [],
   shopifyCartTotal,
   shopifyCartItemCount,
-  viewingOffer,
-  onOpen,
-  onClose
+  viewingOffer = false,
+  onOpen = () => {},
+  onClose = () => {}
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [offerViewed, setOfferViewed] = useState(false);
@@ -40,10 +40,7 @@ const ProductOffer = ({
   const [shopifyVariantIds, setShopifyVariantIds] = useState([]);
   const [productAdded, setProductAdded] = useState(false);
 
-  const {
-    shopifyCartLoaded,
-    findTriggerProductShopifyVariantId
-  } = useShopifyCart();
+  const { shopifyCartLoaded, findTriggerProductShopifyVariantId } = useShopifyCart();
   const { trackOfferImpression } = useOfferTracking();
   const { offersData: offerData = [] } = useRandomOffers({
     events: [triggerEvent],
@@ -53,16 +50,11 @@ const ProductOffer = ({
     shopifyCartItemCount,
     testToken,
     testOfferId,
-    shouldQuery:
-      productAdded &&
-      !!shopifyProductIds?.length &&
-      !!shopifyVariantIds?.length &&
-      shopifyCartLoaded
+    shouldQuery: productAdded && !!shopifyProductIds?.length && !!shopifyVariantIds?.length && shopifyCartLoaded
   });
   const { addProducts, replaceProduct } = useOfferAcceptance();
 
-  const { offer, theme, triggerProduct, offeredProducts } =
-    offerData?.[0] || {};
+  const { offer, theme, triggerProduct, offeredProducts } = offerData?.[0] || {};
   const offerId = offer?._id;
   const delaySeconds = offer?.delaySeconds || 0;
   const onPageRequiredSeconds = offer?.onPageRequiredSeconds || 0;
@@ -74,12 +66,8 @@ const ProductOffer = ({
     onOpen();
 
     const triggerShopifyProductId = triggerProduct?.shopifyProductId;
-    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(
-      triggerProduct
-    );
-    const offeredShopifyProductIds = offeredProducts.map(
-      ({ shopifyProductData }) => shopifyProductData?.id
-    );
+    const triggerShopifyVariantId = findTriggerProductShopifyVariantId(triggerProduct);
+    const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductData }) => shopifyProductData?.id);
 
     setPopupOpen(true);
 
@@ -89,14 +77,7 @@ const ProductOffer = ({
       triggerShopifyVariantId,
       offeredShopifyProductIds
     });
-  }, [
-    onOpen,
-    triggerProduct,
-    offeredProducts,
-    findTriggerProductShopifyVariantId,
-    trackOfferImpression,
-    offerId
-  ]);
+  }, [onOpen, triggerProduct, offeredProducts, findTriggerProductShopifyVariantId, trackOfferImpression, offerId]);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -159,16 +140,7 @@ const ProductOffer = ({
     }
 
     openPopup();
-  }, [
-    offer,
-    offerId,
-    offerViewed,
-    openPopup,
-    viewingOffer,
-    offeredProducts,
-    isOnPageRequiredSeconds,
-    delayFinished
-  ]);
+  }, [offer, offerId, offerViewed, openPopup, viewingOffer, offeredProducts, isOnPageRequiredSeconds, delayFinished]);
 
   useEffect(() => {
     if (!offerId) {
@@ -188,10 +160,7 @@ const ProductOffer = ({
     }
 
     const secondsSinceLoad = (new Date() - loadedAt) / 1000;
-    const remainingSeconds = Math.max(
-      onPageRequiredSeconds - secondsSinceLoad,
-      0
-    );
+    const remainingSeconds = Math.max(onPageRequiredSeconds - secondsSinceLoad, 0);
 
     // Wait the required number of seconds to show the offer.
     if (!onPageRequiredSecondsTimeout) {
@@ -238,13 +207,6 @@ ProductOffer.propTypes = {
   viewingOffer: PropTypes.bool,
   onOpen: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ProductOffer.defaultProps = {
-  shopifyCartItems: [],
-  viewingOffer: false,
-  onOpen: () => {},
-  onClose: () => {}
 };
 
 export default ProductOffer;

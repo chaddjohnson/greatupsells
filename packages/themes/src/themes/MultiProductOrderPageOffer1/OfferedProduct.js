@@ -165,10 +165,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     <div className={className}>
       <ProductImageContainer>
         <ProductImageContainerInner>
-          <ProductImage
-            src={selectedVariant.thumbnailImage.src}
-            alt={selectedVariant.thumbnailImage.alt}
-          />
+          <ProductImage src={selectedVariant.thumbnailImage.src} alt={selectedVariant.thumbnailImage.alt} />
         </ProductImageContainerInner>
       </ProductImageContainer>
       <OfferedProductDetails>
@@ -181,30 +178,16 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
         />
         {showPrices && (
           <OfferedProductPrices>
-            {showOriginalPrice && (
-              <OfferedProductPrice>
-                {selectedVariant.priceFormatted}
-              </OfferedProductPrice>
-            )}
-            <OfferedProductSalePrice>
-              {selectedVariant.salePriceFormatted}
-            </OfferedProductSalePrice>
+            {showOriginalPrice && <OfferedProductPrice>{selectedVariant.priceFormatted}</OfferedProductPrice>}
+            <OfferedProductSalePrice>{selectedVariant.salePriceFormatted}</OfferedProductSalePrice>
           </OfferedProductPrices>
         )}
         {(enableVariantSelection || enableQuantitySelection) && (
           <OfferedProductInputs>
             {enableVariantSelection && variants.length > 1 && (
-              <Select
-                onChange={(event) =>
-                  handleVariantChange(index, event.target.value)
-                }
-              >
+              <Select onChange={(event) => handleVariantChange(index, event.target.value)}>
                 {variants.map((variant) => (
-                  <option
-                    key={variant.id}
-                    value={variant.id}
-                    disabled={!variant.hasInventory}
-                  >
+                  <option key={variant.id} value={variant.id} disabled={!variant.hasInventory}>
                     {variant.title}
                   </option>
                 ))}
@@ -216,9 +199,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
                 value={selectedQuantity}
                 min={1}
                 max={maxQuantity}
-                onChange={(event) =>
-                  handleQuantityChange(index, event.target.value)
-                }
+                onChange={(event) => handleQuantityChange(index, event.target.value)}
               />
             )}
           </OfferedProductInputs>

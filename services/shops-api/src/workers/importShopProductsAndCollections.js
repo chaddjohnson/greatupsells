@@ -1,5 +1,6 @@
 const logger = require('@greatupsells/logger');
 const models = require('../models');
+const enqueueOrderImport = require('../models/Shop/enqueueOrderImport');
 
 const processRecord = async (record) => {
   const body = JSON.parse(record.body);
@@ -7,7 +8,14 @@ const processRecord = async (record) => {
   const Shop = await models.get('Shop');
   const shop = await Shop.findById(shopId);
 
+  await shop.importCollections();
   await shop.importProducts();
+
+  await shop.trackCollectionProducts();
+  await shop.trackProductCollections();
+
+  // Import orders after importing products as orders depend on products.
+  await enqueueOrderImport(shop);
 };
 
 const handler = async (event, context) => {
@@ -22,7 +30,7 @@ const handler = async (event, context) => {
       throw error;
     }
   } catch (error) {
-    await logger.error(`Job importShopProducts failed`, error, { event });
+    await logger.error(`Job importShopProductsAndCollections failed`, error, { event });
     throw error;
   }
 };

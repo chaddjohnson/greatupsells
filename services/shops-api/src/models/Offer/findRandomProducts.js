@@ -1,11 +1,7 @@
 const { flatten, uniq } = require('lodash');
 const models = require('..');
 
-const findRandomProducts = async (
-  offer,
-  shopifyCartProductIds = [],
-  pagePath = ''
-) => {
+const findRandomProducts = async (offer, triggerShopifyProductId = undefined, shopifyCartProductIds = [], pagePath = '') => {
   const [Product, PairedPurchase] = await Promise.all([
     models.get('Product'),
     models.get('PairedPurchase'),
@@ -16,13 +12,12 @@ const findRandomProducts = async (
 
   const { shop, offeredCollections } = offer;
   const { offeredProducts } = offer;
-  const maximumOfferedProductQuantity =
-    offer.maximumOfferedProductQuantity || 3;
+  const maximumOfferedProductQuantity = offer.maximumOfferedProductQuantity || 3;
   const hasOfferedProducts = offeredProducts.length > 0;
   const hasOfferedCollections = offeredCollections.length > 0;
   const pagePathProductHandle = pagePath.match(/^\/products\/([^$]+)/)?.[1];
   let pageProduct;
-  let excludedShopifyProductIds = [];
+  let excludedShopifyProductIds = [triggerShopifyProductId].filter(Boolean);
 
   // Find the product, if any, associated with the current page.
   if (pagePathProductHandle) {
@@ -46,15 +41,9 @@ const findRandomProducts = async (
     );
   }
 
-  const offeredShopifyProductIds = offeredProducts.map(
-    ({ shopifyProductId }) => shopifyProductId
-  );
-  const offeredShopifyVariantIds = uniq(
-    flatten(offeredProducts.map(({ shopifyVariantIds }) => shopifyVariantIds))
-  );
-  const offeredShopifyCollectionIds = offeredCollections.map(
-    ({ shopifyCollectionId }) => shopifyCollectionId
-  );
+  const offeredShopifyProductIds = offeredProducts.map(({ shopifyProductId }) => shopifyProductId);
+  const offeredShopifyVariantIds = uniq(flatten(offeredProducts.map(({ shopifyVariantIds }) => shopifyVariantIds)));
+  const offeredShopifyCollectionIds = offeredCollections.map(({ shopifyCollectionId }) => shopifyCollectionId);
   const andCriteria = [];
 
   // Filter for offered products.
@@ -69,9 +58,7 @@ const findRandomProducts = async (
   andCriteria.push({
     $or: [
       {
-        'shopifyProductData.variants.inventory_management': {
-          $ne: 'shopify'
-        }
+        'variants.inventoryTracked': false
       },
       {
         'shopifyProductData.variants.inventory_quantity': {
@@ -84,9 +71,7 @@ const findRandomProducts = async (
     ]
   });
 
-  excludedShopifyProductIds = excludedShopifyProductIds.concat(
-    shopifyCartProductIds
-  );
+  excludedShopifyProductIds = excludedShopifyProductIds.concat(shopifyCartProductIds);
 
   const criteria = {
     shop: shop._id,
@@ -107,15 +92,13 @@ const findRandomProducts = async (
   }
 
   // Aggregation only returns JSON, so query for Mongoose documents.
-  randomProducts = await Promise.all(
-    randomProducts.map(async ({ _id }) => Product.findById(_id))
-  );
+  randomProducts = await Promise.all(randomProducts.map(async ({ _id }) => Product.findById(_id)));
 
   // Filter variants for only those offered.
   if (offeredShopifyVariantIds.length > 0 && offeredCollections.length === 0) {
     randomProducts.forEach((randomProduct) => {
-      randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter(
-        (variant) => offeredShopifyVariantIds.includes(variant.id)
+      randomProduct.shopifyProductData.variants = randomProduct.shopifyProductData.variants.filter((variant) =>
+        offeredShopifyVariantIds.includes(variant.id)
       );
     });
   }

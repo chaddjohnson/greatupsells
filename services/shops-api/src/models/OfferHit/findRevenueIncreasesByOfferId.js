@@ -47,9 +47,7 @@ const findRevenueIncreasesByOfferId = async (offerId, startAt, endAt) => {
   let results = [];
 
   results = await OfferHit.aggregate(pipelines);
-  results =
-    results.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) ||
-    [];
+  results = results.map(({ date, revenueIncrease }) => ({ date, revenueIncrease })) || [];
   results = sortBy(results, ({ date }) => new Date(date));
   results = fillResults(results, 'revenueIncrease');
 

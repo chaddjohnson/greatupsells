@@ -1,10 +1,6 @@
 const middy = require('@middy/core');
 const cors = require('@middy/http-cors');
-const {
-  StatusCodes,
-  ReasonPhrases,
-  getReasonPhrase
-} = require('http-status-codes');
+const { StatusCodes, ReasonPhrases, getReasonPhrase } = require('http-status-codes');
 const qs = require('querystringify');
 const HttpClient = require('@greatupsells/gateway-http-client');
 
@@ -23,13 +19,10 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const { shopId } =
-      event.requestContext.authorizer.lambda || event.requestContext.authorizer;
+    const { shopId } = event.requestContext.authorizer.lambda || event.requestContext.authorizer;
     const { startAt, endAt } = event.queryStringParameters || {};
     const params = qs.stringify({ startAt, endAt }, true);
-    const shopConversionRates = await httpClient.get(
-      `/shops/${shopId}/conversion-rates${params}`
-    );
+    const shopConversionRates = await httpClient.get(`/shops/${shopId}/conversion-rates${params}`);
 
     return {
       statusCode: StatusCodes.OK,
@@ -39,9 +32,7 @@ const handler = middy(async (event, context) => {
     if (error.response && error.response.status) {
       return {
         statusCode: error.response.status,
-        body:
-          JSON.stringify(error.response.data) ||
-          getReasonPhrase(error.response.status)
+        body: JSON.stringify(error.response.data) || getReasonPhrase(error.response.status)
       };
     }
 

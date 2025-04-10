@@ -1,22 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Popover,
-  TextField,
-  DatePicker as ShopifyDatePicker,
-  Icon
-} from '@shopify/polaris';
-import { CalendarMajor } from '@shopify/polaris-icons';
+import { Popover, TextField, DatePicker as ShopifyDatePicker, Icon } from '@shopify/polaris';
+import { CalendarIcon } from '@shopify/polaris-icons';
 import { useDateTime } from '@greatupsells/react-hooks';
 
-const DatePicker = ({
-  name,
-  label,
-  selected,
-  disableDatesBefore,
-  error,
-  onChange
-}) => {
+const DatePicker = ({ name, label, selected = new Date(), disableDatesBefore, error = false, onChange = () => {} }) => {
   const { formatDateISO, startOfDay } = useDateTime();
 
   const [text, setText] = useState(formatDateISO(selected));
@@ -31,8 +19,7 @@ const DatePicker = ({
 
   const handleTextChange = useCallback(
     (newText) => {
-      const isValid =
-        newText.match(/^\d{4}-\d{2}-\d{2}$/) && !!new Date(newText).getTime();
+      const isValid = newText.match(/^\d{4}-\d{2}-\d{2}$/) && !!new Date(newText).getTime();
 
       setText(newText);
 
@@ -74,7 +61,7 @@ const DatePicker = ({
           maxLength={10}
           readOnly
           error={error}
-          prefix={<Icon source={CalendarMajor} />}
+          prefix={<Icon source={CalendarIcon} />}
           onChange={handleTextChange}
           onFocus={() => setPopoverShown(true)}
         />
@@ -102,18 +89,9 @@ DatePicker.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string.isRequired,
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  disableDatesBefore: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Date)
-  ]),
+  disableDatesBefore: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   error: PropTypes.bool,
   onChange: PropTypes.func
-};
-
-DatePicker.defaultProps = {
-  selected: new Date(), // default to the current day local time
-  error: false,
-  onChange: () => {}
 };
 
 export default DatePicker;

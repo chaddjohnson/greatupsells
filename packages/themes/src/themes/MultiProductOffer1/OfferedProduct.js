@@ -116,10 +116,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
     <div className={className}>
       <ProductImageContainer>
         <a href={selectedVariant.url} target="_blank" rel="noopener noreferrer">
-          <ProductImage
-            src={selectedVariant.thumbnailImage.src}
-            alt={selectedVariant.thumbnailImage.alt}
-          />
+          <ProductImage src={selectedVariant.thumbnailImage.src} alt={selectedVariant.thumbnailImage.alt} />
         </a>
       </ProductImageContainer>
       <OfferedProductDetails>
@@ -133,29 +130,15 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
         </div>
         {showPrices && (
           <OfferedProductPrices>
-            {showOriginalPrice && (
-              <OfferedProductPrice>
-                {selectedVariant.priceFormatted}
-              </OfferedProductPrice>
-            )}
-            <OfferedProductSalePrice>
-              {selectedVariant.salePriceFormatted}
-            </OfferedProductSalePrice>
+            {showOriginalPrice && <OfferedProductPrice>{selectedVariant.priceFormatted}</OfferedProductPrice>}
+            <OfferedProductSalePrice>{selectedVariant.salePriceFormatted}</OfferedProductSalePrice>
           </OfferedProductPrices>
         )}
         {enableVariantSelection && variants.length > 1 && (
           <div>
-            <Select
-              onChange={(event) =>
-                handleVariantChange(index, event.target.value)
-              }
-            >
+            <Select onChange={(event) => handleVariantChange(index, event.target.value)}>
               {variants.map((variant) => (
-                <option
-                  key={variant.id}
-                  value={variant.id}
-                  disabled={!variant.hasInventory}
-                >
+                <option key={variant.id} value={variant.id} disabled={!variant.hasInventory}>
                   {variant.title}
                 </option>
               ))}
@@ -171,20 +154,14 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
               value={selectedQuantities[index]}
               min={1}
               max={maxQuantities[index]}
-              onChange={(event) =>
-                handleQuantityChange(index, event.target.value)
-              }
+              onChange={(event) => handleQuantityChange(index, event.target.value)}
             />
           </div>
         )}
         {!enableBundling && (
           <>
             {strategy === 'CROSS_SELL' && (
-              <AddButton
-                disabled={!addingProductEnabled[index]}
-                loading={addingProduct[index]}
-                onClick={handleAddButton}
-              >
+              <AddButton disabled={!addingProductEnabled[index]} loading={addingProduct[index]} onClick={handleAddButton}>
                 {addButtonText}
               </AddButton>
             )}
@@ -199,9 +176,7 @@ const OfferedProduct = styled(({ className, offeredProduct, index }) => {
                     {addButtonText}
                   </AddButton>
                 )}
-                {addedQuantities[index] > 0 && (
-                  <AddedProductIcon name="check" />
-                )}
+                {addedQuantities[index] > 0 && <AddedProductIcon name="check" />}
               </>
             )}
           </>

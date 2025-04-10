@@ -42,18 +42,19 @@ export const hexToRgb = (hexValue, alphaValue = undefined) => {
 // Returns value as hex.
 export const normalize = (value) => {
   const isRgb = valueIsRgb(value);
-  const { 0: r, 1: g, 2: b, 3: a } =
-    isRgb &&
-    value
-      .replace(/[^\d*.?\d*,]/g, '')
-      .split(',')
-      .map((color) => parseFloat(color));
+  const {
+    0: r,
+    1: g,
+    2: b,
+    3: a
+  } = isRgb &&
+  value
+    .replace(/[^\d*.?\d*,]/g, '')
+    .split(',')
+    .map((color) => parseFloat(color));
 
   if (isRgb) {
-    return [
-      rgbToHex(r, g, b),
-      typeof a === 'number' ? parseFloat(a) : undefined
-    ];
+    return [rgbToHex(r, g, b), typeof a === 'number' ? parseFloat(a) : undefined];
   }
 
   return [value || '#000000'];

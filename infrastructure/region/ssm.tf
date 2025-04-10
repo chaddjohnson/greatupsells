@@ -94,26 +94,10 @@ resource "aws_ssm_parameter" "shopify_extension_post_purchase_id" {
   provider  = aws.region
 }
 
-resource "aws_ssm_parameter" "shopify_app_embed_block_id" {
-  name      = "/greatupsells/${terraform.workspace}/shopify/app-embed-block/id"
-  type      = "SecureString"
-  value     = var.shopify_app_embed_block_id
-  overwrite = true
-  provider  = aws.region
-}
-
 resource "aws_ssm_parameter" "event_bus_arn" {
   name      = "/greatupsells/${terraform.workspace}/webhooks/arn"
   type      = "String"
   value     = var.event_bus_arn
-  overwrite = true
-  provider  = aws.region
-}
-
-resource "aws_ssm_parameter" "redis_app_database_url" {
-  name      = "/greatupsells/${terraform.workspace}/database/redis-app/url"
-  type      = "SecureString"
-  value     = "rediss://:${var.redis_app_password}@${var.services_domain}:6379/0?ssl=true&sslprotocols=Tls12"
   overwrite = true
   provider  = aws.region
 }

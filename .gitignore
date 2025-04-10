@@ -21,3 +21,9 @@ pm2.json
 .warmup
 **/infrastructure/**/*.zip
 package-lock.json
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.shopify

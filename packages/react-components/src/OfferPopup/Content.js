@@ -7,19 +7,17 @@ const Content = styled.div`
   outline: none;
   z-index: 20;
   visibility: hidden;
-  left: 0;
-  right: 0;
+  left: 50%;
   top: 50%;
   padding: 10px;
-  margin-right: 0;
-  transform: translateY(0%);
+  max-width: 100%;
+  margin: 0 auto;
+  transform: translate(-50%, -50%);
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   backface-visibility: hidden;
 
   @media screen and (min-width: 1024px) {
-    left: 50%;
-    right: auto;
     top: 30%;
     padding: 0;
     transform: translate(-50%, -30%);

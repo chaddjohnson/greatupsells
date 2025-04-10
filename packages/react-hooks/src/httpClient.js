@@ -13,10 +13,7 @@ class HttpClient {
 
   async get(url, options = {}) {
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      this.defaultTimeout || options.timeout
-    );
+    const timeout = setTimeout(() => controller.abort(), this.defaultTimeout || options.timeout);
     const config = await this.requestInterceptor({
       headers: this.defaultHeaders,
       ...options,
@@ -40,10 +37,7 @@ class HttpClient {
 
   async post(url, data = null, options = {}) {
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      this.defaultTimeout || options.timeout
-    );
+    const timeout = setTimeout(() => controller.abort(), this.defaultTimeout || options.timeout);
     const config = await this.requestInterceptor({
       headers: this.defaultHeaders,
       ...options,
@@ -68,10 +62,7 @@ class HttpClient {
 
   async put(url, data, options = {}) {
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      this.defaultTimeout || options.timeout
-    );
+    const timeout = setTimeout(() => controller.abort(), this.defaultTimeout || options.timeout);
     const config = await this.requestInterceptor({
       headers: this.defaultHeaders,
       ...options,
@@ -96,10 +87,7 @@ class HttpClient {
 
   async delete(url, options = {}) {
     const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      this.defaultTimeout || options.timeout
-    );
+    const timeout = setTimeout(() => controller.abort(), this.defaultTimeout || options.timeout);
     const config = await this.requestInterceptor({
       headers: this.defaultHeaders,
       ...options,
@@ -124,24 +112,16 @@ class HttpClient {
 
 const HttpClientContext = createContext(null);
 
-const HttpClientProvider = ({ baseUrl, requestInterceptor, children }) => {
+const HttpClientProvider = ({ baseUrl = '', requestInterceptor, children }) => {
   const httpClient = new HttpClient({ baseUrl, requestInterceptor });
 
-  return (
-    <HttpClientContext.Provider value={{ httpClient }}>
-      {children}
-    </HttpClientContext.Provider>
-  );
+  return <HttpClientContext.Provider value={{ httpClient }}>{children}</HttpClientContext.Provider>;
 };
 
 HttpClientProvider.propTypes = {
   baseUrl: PropTypes.string,
   requestInterceptor: PropTypes.func,
   children: PropTypes.node.isRequired
-};
-
-HttpClientProvider.defaultProps = {
-  baseUrl: ''
 };
 
 const useHttpClient = () => useContext(HttpClientContext);

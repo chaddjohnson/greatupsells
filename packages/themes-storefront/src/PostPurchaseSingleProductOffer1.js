@@ -34,6 +34,4 @@ const components = {
   View
 };
 
-export default (props) => (
-  <PostPurchaseSingleProductOffer1 components={components} {...props} />
-);
+export default (props) => <PostPurchaseSingleProductOffer1 components={components} {...props} />;

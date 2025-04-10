@@ -2,11 +2,7 @@ const Promise = require('bluebird');
 const { flatten } = require('lodash');
 const models = require('..');
 
-const trackPairedPurchase = async (
-  order,
-  shopifyProductId,
-  pairedShopifyProductId
-) => {
+const trackPairedPurchase = async (order, shopifyProductId, pairedShopifyProductId) => {
   const [PairedPurchase, Product] = await Promise.all([
     models.get('PairedPurchase'),
     models.get('Product'),
@@ -91,25 +87,16 @@ const trackPairedPurchases = async (order) => {
 
   const lineItemPairs = flatten(
     lineItems.map((lineItem1, index1) =>
-      lineItems
-        .slice(index1)
-        .map((lineItem2) => [lineItem1.product_id, lineItem2.product_id])
+      lineItems.slice(index1).map((lineItem2) => [lineItem1.product_id, lineItem2.product_id])
     )
   );
 
   // Track line item product pairings.
-  await Promise.mapSeries(
-    lineItemPairs,
-    async ([shopifyProductId, pairedShopifyProductId]) => {
-      if (shopifyProductId && pairedShopifyProductId) {
-        await trackPairedPurchase(
-          order,
-          shopifyProductId,
-          pairedShopifyProductId
-        );
-      }
+  await Promise.mapSeries(lineItemPairs, async ([shopifyProductId, pairedShopifyProductId]) => {
+    if (shopifyProductId && pairedShopifyProductId) {
+      await trackPairedPurchase(order, shopifyProductId, pairedShopifyProductId);
     }
-  );
+  });
 };
 
 module.exports = trackPairedPurchases;

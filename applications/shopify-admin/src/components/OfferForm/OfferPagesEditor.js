@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  FormLayout,
-  TextField,
-  ChoiceList,
-  Popover,
-  Button,
-  Select,
-  Text,
-  TextContainer
-} from '@shopify/polaris';
+import { Card, FormLayout, TextField, ChoiceList, Popover, Button, Select, Text, BlockStack } from '@shopify/polaris';
 import Link from '../Link';
 
 const pageOptions = [
@@ -37,23 +27,18 @@ const pageOptions = [
   {
     value: '*/cart',
     label: 'Cart page'
-  },
-  {
-    value: '*/orders/*',
-    label: 'Order Status page'
-  },
-  {
-    value: '*/checkouts/*/thank_you',
-    label: 'Checkout Thank You page'
   }
+  // {
+  //   value: '*/orders/*',
+  //   label: 'Order Status page'
+  // },
+  // {
+  //   value: '*/checkouts/*/thank_you',
+  //   label: 'Checkout Thank You page'
+  // }
 ];
 
-const OfferPagesEditor = ({
-  offer,
-  triggerPage,
-  triggerPagePath,
-  submitted
-}) => {
+const OfferPagesEditor = ({ offer, triggerPage, triggerPagePath, submitted = false }) => {
   let initialTriggerPageType = 'ANY';
 
   if (triggerPage.value !== 'ANY') {
@@ -64,25 +49,16 @@ const OfferPagesEditor = ({
     }
   }
 
-  const [triggerPageType, setTriggerPageType] = useState(
-    initialTriggerPageType
-  );
+  const [triggerPageType, setTriggerPageType] = useState(initialTriggerPageType);
   const [triggerPageSpecificPath, setTriggerPageSpecificPath] = useState(
     initialTriggerPageType === 'PAGE' && triggerPagePath.value
   );
   const [triggerPagePathPattern, setTriggerPagePathPattern] = useState(
     initialTriggerPageType === 'PATTERN' && triggerPagePath.value
   );
-  const [
-    triggerPagePathPopoverActive,
-    setTriggerPagePathPopoverActive
-  ] = useState(false);
+  const [triggerPagePathPopoverActive, setTriggerPagePathPopoverActive] = useState(false);
 
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
 
   const handleTriggerPageTypeChange = (value) => {
     setTriggerPageType(value);
@@ -99,7 +75,7 @@ const OfferPagesEditor = ({
     }
 
     if (value === 'PATTERN') {
-      triggerPage.onChange('PAGE');
+      triggerPage.onChange('PATTERN');
       triggerPagePath.onChange(undefined);
       setTriggerPagePathPattern(undefined);
     }
@@ -132,118 +108,105 @@ const OfferPagesEditor = ({
   }
 
   return (
-    <Card title="Pages" sectioned>
-      <FormLayout>
-        <ChoiceList
-          choices={[
-            {
-              label: 'Any page',
-              helpText: 'Offer may show on any page.',
-              value: 'ANY'
-            },
-            {
-              label: 'Page',
-              helpText: 'Offer may show only on a specific page.',
-              value: 'PAGE',
-              renderChildren: (isSelected) =>
-                isSelected && (
-                  <Select
-                    label="Page"
-                    labelHidden
-                    options={pageOptions}
-                    value={triggerPageSpecificPath}
-                    onChange={handleTriggerPageSpecificPathChange}
-                  />
-                )
-            },
-            {
-              label: 'URL pattern',
-              helpText:
-                'Offer may show only on one or more pages matching a URL pattern.',
-              value: 'PATTERN',
-              renderChildren: (isSelected) =>
-                isSelected && (
-                  <TextField
-                    value={triggerPagePathPattern}
-                    placeholder="/page-url/here"
-                    helpText={
-                      <>
-                        <Popover
-                          sectioned
-                          active={triggerPagePathPopoverActive}
-                          activator={
-                            <>
-                              Use{' '}
-                              <Button
-                                plain
-                                monochrome
-                                onClick={() =>
-                                  setTriggerPagePathPopoverActive(
-                                    !triggerPagePathPopoverActive
-                                  )
-                                }
-                              >
-                                glob syntax
-                              </Button>
-                              .
-                            </>
-                          }
-                          onClose={() => setTriggerPagePathPopoverActive(false)}
-                        >
-                          <TextContainer spacing="loose">
-                            <Text variant="headingMd" as="h2">
-                              Glob syntax
-                            </Text>
-                            <p>
-                              <code>*/products/*</code>
-                            </p>
-                            <p>will match all product page URLs such as</p>
-                            <p>
-                              <code>/products/fancy-shoes</code>
-                              <br />
-                              <code>/products/silly-socks</code>
-                              <br />
-                              <code>
-                                /collections/shoes/products/fancy-shoes
-                              </code>
-                              <br />
-                              <code>
-                                /collections/shoes/products/silly-socks
-                              </code>
-                            </p>
-                            <hr />
-                            <p>
-                              <code>*/products/fancy-shoes</code>
-                            </p>
-                            <p>will match the product page for Fancy Shoes.</p>
-                            <hr />
-                            <p>
-                              <Link
-                                url="https://en.wikipedia.org/wiki/Glob_(programming)"
-                                external
-                              >
-                                More information
-                              </Link>
-                            </p>
-                            <p>
-                              Please note that extended glob support is enabled,
-                              and globstar support is disabled.
-                            </p>
-                          </TextContainer>
-                        </Popover>
-                      </>
-                    }
-                    onChange={handleTriggerPagePathPatternChange}
-                    error={submitted && triggerPagePath.error}
-                    onBlur={handleTriggerPagePathPatternBlur}
-                  />
-                )
-            }
-          ]}
-          selected={triggerPageType}
-          onChange={([value]) => handleTriggerPageTypeChange(value)}
-        />
-      </FormLayout>
+    <Card>
+      <BlockStack gap="400" padding="400">
+        <Text variant="headingMd">Pages</Text>
+        <FormLayout>
+          <ChoiceList
+            choices={[
+              {
+                label: 'Any page',
+                helpText: 'Offer may show on any page.',
+                value: 'ANY'
+              },
+              {
+                label: 'Page',
+                helpText: 'Offer may show only on a specific page.',
+                value: 'PAGE',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <Select
+                      label="Page"
+                      labelHidden
+                      options={pageOptions}
+                      value={triggerPageSpecificPath}
+                      onChange={handleTriggerPageSpecificPathChange}
+                    />
+                  )
+              },
+              {
+                label: 'URL pattern',
+                helpText: 'Offer may show only on one or more pages matching a URL pattern.',
+                value: 'PATTERN',
+                renderChildren: (isSelected) =>
+                  isSelected && (
+                    <TextField
+                      value={triggerPagePathPattern}
+                      placeholder="/page-url/here"
+                      helpText={
+                        <>
+                          <Popover
+                            sectioned
+                            active={triggerPagePathPopoverActive}
+                            activator={
+                              <>
+                                Use{' '}
+                                <Button
+                                  variant="plain"
+                                  onClick={() => setTriggerPagePathPopoverActive(!triggerPagePathPopoverActive)}
+                                >
+                                  glob syntax
+                                </Button>
+                                .
+                              </>
+                            }
+                            onClose={() => setTriggerPagePathPopoverActive(false)}
+                          >
+                            <BlockStack gap="200">
+                              <Text variant="headingMd" as="h2">
+                                Glob syntax
+                              </Text>
+                              <p>
+                                <code>*/products/*</code>
+                              </p>
+                              <p>will match all product page URLs such as</p>
+                              <p>
+                                <code>/products/fancy-shoes</code>
+                                <br />
+                                <code>/products/silly-socks</code>
+                                <br />
+                                <code>/collections/shoes/products/fancy-shoes</code>
+                                <br />
+                                <code>/collections/shoes/products/silly-socks</code>
+                              </p>
+                              <hr />
+                              <p>
+                                <code>*/products/fancy-shoes</code>
+                              </p>
+                              <p>will match the product page for Fancy Shoes.</p>
+                              <hr />
+                              <p>
+                                <Link url="https://en.wikipedia.org/wiki/Glob_(programming)" external>
+                                  More information
+                                </Link>
+                              </p>
+                              <p>Please note that extended glob support is enabled, and globstar support is disabled.</p>
+                            </BlockStack>
+                          </Popover>
+                        </>
+                      }
+                      onChange={handleTriggerPagePathPatternChange}
+                      error={submitted && triggerPagePath.error}
+                      onBlur={handleTriggerPagePathPatternBlur}
+                    />
+                  )
+              }
+            ]}
+            selected={triggerPageType}
+            onChange={([value]) => handleTriggerPageTypeChange(value)}
+          />
+        </FormLayout>
+      </BlockStack>
     </Card>
   );
 };
@@ -253,10 +216,6 @@ OfferPagesEditor.propTypes = {
   triggerPage: PropTypes.object.isRequired,
   triggerPagePath: PropTypes.object.isRequired,
   submitted: PropTypes.bool
-};
-
-OfferPagesEditor.defaultProps = {
-  submitted: false
 };
 
 export default OfferPagesEditor;

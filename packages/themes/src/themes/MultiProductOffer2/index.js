@@ -16,10 +16,7 @@ const MultiProductOffer2 = ({ context, theme, state }) => {
     <ThemeProvider theme={theme}>
       <StateContext.Provider value={state}>
         <Head context={context}>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
         </Head>
         <Container>
           <Header />
@@ -27,11 +24,7 @@ const MultiProductOffer2 = ({ context, theme, state }) => {
             <TriggerProduct />
             <OfferedProducts>
               {offeredProducts.map((offeredProduct, index) => (
-                <OfferedProduct
-                  key={index}
-                  offeredProduct={offeredProduct}
-                  index={index}
-                />
+                <OfferedProduct key={index} offeredProduct={offeredProduct} index={index} />
               ))}
             </OfferedProducts>
           </Body>

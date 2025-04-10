@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import useSWR from 'swr';
-import {
-  useHttpClient,
-  useCookies,
-  usePushStateListener
-} from '@greatupsells/react-hooks';
+import { useCookies, useHttpClient, usePushStateListener } from '@greatupsells/react-hooks';
 
 const useRandomOffers = ({
   events,
@@ -26,12 +22,8 @@ const useRandomOffers = ({
   }
 
   // Ensure Shopify IDs are numeric.
-  shopifyProductIds = shopifyProductIds.map((shopifyProductId) =>
-    parseInt(shopifyProductId)
-  );
-  shopifyVariantIds = shopifyVariantIds.map((shopifyVariantId) =>
-    parseInt(shopifyVariantId)
-  );
+  shopifyProductIds = shopifyProductIds.map((shopifyProductId) => parseInt(shopifyProductId));
+  shopifyVariantIds = shopifyVariantIds.map((shopifyVariantId) => parseInt(shopifyVariantId));
 
   // Filter out empty values.
   shopifyProductIds = shopifyProductIds.filter(Boolean);
@@ -42,13 +34,9 @@ const useRandomOffers = ({
 
   // Use state so tracking data is not not re-read with every render; otherwise,
   // the API will undesirably be requeried whenever tracking data is updated.
-  const [offerImpressions, setOfferImpressions] = useState(
-    getCookie('greatupsellsOfferImpressions') || []
-  );
+  const [offerImpressions, setOfferImpressions] = useState(getCookie('greatupsellsOfferImpressions') || []);
   const [sessionOfferImpressions, setSessionOfferImpressions] = useState(
-    sessionStorage.greatupsellsSessionOfferImpressions
-      ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions)
-      : []
+    sessionStorage.greatupsellsSessionOfferImpressions ? JSON.parse(sessionStorage.greatupsellsSessionOfferImpressions) : []
   );
   const [pagePath, setPagePath] = useState(window.location.pathname);
 
@@ -56,15 +44,7 @@ const useRandomOffers = ({
   // weirdness and query string length issues.
   const { data: offersData } = useSWR(
     shouldQuery
-      ? JSON.stringify([
-          events,
-          shopifyOrderId,
-          offerImpressions,
-          sessionOfferImpressions,
-          pagePath,
-          testToken,
-          testOfferId
-        ])
+      ? JSON.stringify([events, shopifyOrderId, offerImpressions, sessionOfferImpressions, pagePath, testToken, testOfferId])
       : null,
     () =>
       httpClient.post('/offers/random', {

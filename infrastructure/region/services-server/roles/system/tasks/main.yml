@@ -72,12 +72,15 @@
     value: '10'
     state: present
 
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  changed_when: false
+
 - name: Install packages
   apt:
     pkg:
       - software-properties-common
-      - ntp
-      - python3
       - python3-pip
       - jq
       - unzip
@@ -85,11 +88,13 @@
     update_cache: yes
     cache_valid_time: 3600
 
+# TODO: Do this properly instead of using `--break-system-packages`.
 - name: Install AWS CLI
-  raw: pip3 install -q awscli --upgrade
+  raw: pip3 install -q awscli --upgrade --break-system-packages
 
+# TODO: Do this properly instead of using `--break-system-packages`.
 - name: Install Python packages
-  raw: pip3 install -q pymongo --upgrade
+  raw: pip3 install -q pymongo --upgrade --break-system-packages
 
 - name: Create AWS config directory
   file:

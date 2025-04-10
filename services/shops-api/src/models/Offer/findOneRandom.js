@@ -3,18 +3,13 @@ const geoip = require('geoip-country');
 const globToRegExp = require('glob-to-regexp');
 const models = require('..');
 
-const buildViewAllowanceCriteria = (
-  offerImpressions,
-  sessionOfferImpressions
-) => ({
+const buildViewAllowanceCriteria = (offerImpressions, sessionOfferImpressions) => ({
   $or: [
     // Where customers may view the offer every n days, and the customer
     // has not viewed the offer.
     {
       _id: {
-        $nin: offerImpressions.map(({ offerId }) =>
-          mongoose.Types.ObjectId(offerId)
-        )
+        $nin: offerImpressions.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
       },
       viewAllowance: 'DAYS'
     },
@@ -25,9 +20,7 @@ const buildViewAllowanceCriteria = (
       _id: mongoose.Types.ObjectId(offerId),
       viewAllowance: 'DAYS',
       viewAllowanceDays: {
-        $lte: Math.floor(
-          (new Date() - new Date(viewedAt)) / (1000 * 60 * 60 * 24)
-        )
+        $lte: Math.floor((new Date() - new Date(viewedAt)) / (1000 * 60 * 60 * 24))
       }
     })),
 
@@ -39,9 +32,7 @@ const buildViewAllowanceCriteria = (
     // Where customers may view the offer once per browser tab session.
     {
       _id: {
-        $nin: sessionOfferImpressions.map(({ offerId }) =>
-          mongoose.Types.ObjectId(offerId)
-        )
+        $nin: sessionOfferImpressions.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
       },
       viewAllowance: 'SESSION'
     },
@@ -49,19 +40,14 @@ const buildViewAllowanceCriteria = (
     // Where customers may view the offer only once.
     {
       _id: {
-        $nin: offerImpressions.map(({ offerId }) =>
-          mongoose.Types.ObjectId(offerId)
-        )
+        $nin: offerImpressions.map(({ offerId }) => mongoose.Types.ObjectId(offerId))
       },
       viewAllowance: 'ONCE'
     }
   ]
 });
 
-const buildMinimumRequirementCriteria = (
-  shopifyCartTotal,
-  shopifyCartItemCount
-) => ({
+const buildMinimumRequirementCriteria = (shopifyCartTotal, shopifyCartItemCount) => ({
   $or: [
     { minimumRequirement: 'NONE' },
     {
@@ -95,9 +81,7 @@ const buildProductsCriteria = async (shopifyProductIds, shopifyVariantIds) => {
   const collections = await Collection.find({
     shopifyProductIds: { $in: shopifyProductIds }
   });
-  const shopifyCollectionIds = collections.map(
-    ({ shopifyCollectionId }) => shopifyCollectionId
-  );
+  const shopifyCollectionIds = collections.map(({ shopifyCollectionId }) => shopifyCollectionId);
 
   // An upsell offer requires a specific trigger product.
   const upsellCriteria = {
@@ -131,10 +115,7 @@ const buildProductsCriteria = async (shopifyProductIds, shopifyVariantIds) => {
 };
 
 const buildGeotargetingCriteria = (countryCode) => ({
-  $or: [
-    { geotargetingCountries: { $size: 0 } },
-    { geotargetingCountries: countryCode }
-  ]
+  $or: [{ geotargetingCountries: { $size: 0 } }, { geotargetingCountries: countryCode }]
 });
 
 // This removes leading slashes (and re-adds one), trailing slashes, and query strings.
@@ -148,19 +129,39 @@ const sanitizePagePath = (pagePath) => {
 
 const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
   // Query Shopify for order data because the order may have just been created.
-  const shopifyApiClient = shop.getShopifyApiClient();
-  const shopifyOrderData = await shopifyApiClient.order.get(shopifyOrderId);
-  const {
-    line_items: lineItems = [],
-    subtotal_price: subtotalPrice = 0
-  } = shopifyOrderData;
-  const shopifyProductIds = lineItems.map((item) => item.product_id);
-  const shopifyVariantIds = lineItems.map((item) => item.variant_id);
+  const shopifyApiClient = shop.getGraphqlShopifyApiClient();
+  const query = `
+    query getOrder($id: ID!) {
+      order(id: $id) {
+        lineItems(first: 10) {
+          edges {
+            node {
+              product {
+                id
+              }
+              variant {
+                id
+              }
+              quantity
+            }
+          }
+        }
+        subtotalPriceSet {
+          shopMoney {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  `;
+  const result = await shopifyApiClient.request(query, { variables: { id: shopifyOrderId } });
+  const { lineItems } = result.data.order;
+  const subtotalPrice = parseFloat(result.data.order.subtotalPriceSet.shopMoney.amount) || 0;
+  const shopifyProductIds = lineItems.edges.map((item) => parseInt(item.node.product.id.split('/').pop()));
+  const shopifyVariantIds = lineItems.edges.map((item) => parseInt(item.node.variant.id.split('/').pop()));
   const shopifyCartTotal = parseFloat(subtotalPrice) || 0;
-  const shopifyCartItemCount = lineItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+  const shopifyCartItemCount = lineItems.edges.reduce((sum, item) => sum + item.node.quantity, 0);
 
   return {
     shopifyProductIds,
@@ -184,15 +185,12 @@ const buildCriteria = async (
     sessionOfferImpressions = []
   }
 ) => {
-  const isLocalIpAddress = !!ipAddress && ipAddress === '127.0.0.1';
+  const isLocalIpAddress = !!ipAddress && (ipAddress === '127.0.0.1' || ipAddress === '::1');
   const geoData = !!ipAddress && !isLocalIpAddress && geoip.lookup(ipAddress);
   let shopifyOrderCartData = null;
 
   if (shopifyOrderId) {
-    shopifyOrderCartData = await getShopifyCartDataFromShopifyOrder(
-      shop,
-      shopifyOrderId
-    );
+    shopifyOrderCartData = await getShopifyCartDataFromShopifyOrder(shop, shopifyOrderId);
 
     // Prioritize using order data over provided data.
     shopifyProductIds = shopifyOrderCartData.shopifyProductIds;
@@ -213,16 +211,10 @@ const buildCriteria = async (
   };
 
   // Ensure Shopify IDs are numeric prior to querying.
-  shopifyProductIds = shopifyProductIds?.map((shopifyProductId) =>
-    parseInt(shopifyProductId)
-  );
-  shopifyVariantIds = shopifyVariantIds?.map((shopifyVariantId) =>
-    parseInt(shopifyVariantId)
-  );
+  shopifyProductIds = shopifyProductIds?.map((shopifyProductId) => parseInt(shopifyProductId));
+  shopifyVariantIds = shopifyVariantIds?.map((shopifyVariantId) => parseInt(shopifyVariantId));
 
-  criteria.$and.push(
-    await buildProductsCriteria(shopifyProductIds, shopifyVariantIds)
-  );
+  criteria.$and.push(await buildProductsCriteria(shopifyProductIds, shopifyVariantIds));
 
   // Limit to offers with no geotargeting AND offers targeting the country that
   // the IP address resolves to.
@@ -250,19 +242,15 @@ const findOneRandom = async (
   }
 ) => {
   const shopifyProductIdsRequired = triggerEvent === 'ADD';
-  const shopifyProductIdsMissing =
-    !shopifyProductIds || shopifyProductIds.length === 0;
+  const shopifyProductIdsMissing = !shopifyProductIds || shopifyProductIds.length === 0;
   const monthUpsellRevenueLimitReached =
-    shop.plan.monthUpsellRevenueLimit &&
-    shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit;
+    shop.plan.monthUpsellRevenueLimit && shop.plan.monthUpsellRevenue >= shop.plan.monthUpsellRevenueLimit;
 
   if (!triggerEvent) {
     throw new Error('`triggerEvent` must be provided');
   }
   if (shopifyProductIdsRequired && shopifyProductIdsMissing) {
-    throw new Error(
-      `\`shopifyProductIds\` must be provided with trigger event ${triggerEvent}`
-    );
+    throw new Error(`\`shopifyProductIds\` must be provided with trigger event ${triggerEvent}`);
   }
 
   // Disallow showing offers if the shop is not active.
@@ -280,10 +268,7 @@ const findOneRandom = async (
     return;
   }
 
-  const [Offer] = await Promise.all([
-    models.get('Offer'),
-    models.get('Collection')
-  ]);
+  const [Offer] = await Promise.all([models.get('Offer'), models.get('Collection')]);
   const testCriteria = {
     _id: mongoose.Types.ObjectId(testOfferId),
     shop: shop._id,

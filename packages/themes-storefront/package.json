@@ -3,15 +3,15 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/themes-storefront",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/themes-storefront",
   "license": "UNLICENSED",
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "dependencies": {
-    "@shopify/post-purchase-ui-extensions-react": "^0.13.3",
+    "@shopify/post-purchase-ui-extensions-react": "^0.13.5",
     "@shopify/post-purchase-ui-react": "^0.0.3",
-    "compression-webpack-plugin": "^9.0.0"
+    "compression-webpack-plugin": "^11.1.0"
   },
   "devDependencies": {
     "@greatupsells/themes": "0.0.0"

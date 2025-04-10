@@ -12,21 +12,11 @@ const trackImpression = async (
     isTest = false
   }
 ) => {
-  const [Offer, Shop, OfferHit] = await Promise.all([
-    models.get('Offer'),
-    models.get('Shop'),
-    models.get('OfferHit')
-  ]);
+  const [Offer, Shop, OfferHit] = await Promise.all([models.get('Offer'), models.get('Shop'), models.get('OfferHit')]);
 
   await offer.execPopulate('shop');
 
-  const {
-    shop,
-    shopifyShopId,
-    strategy,
-    triggerEvent,
-    triggerPagePath
-  } = offer;
+  const { shop, shopifyShopId, strategy, triggerEvent, triggerPagePath } = offer;
   const triggerProduct = triggerShopifyProductId &&
     triggerShopifyVariantId && {
       shopifyProductId: triggerShopifyProductId,
@@ -44,54 +34,35 @@ const trackImpression = async (
     isTest
   });
 
-  const session = await mongodbClient.connection.startSession();
-  const transactionOptions = { readPreference: 'primary' };
-
   try {
-    // Use a transaction.
-    await session.withTransaction(async () => {
-      offerHit.$session(session);
+    await offerHit.save();
 
-      await offerHit.save();
+    if (offeredShopifyProductIds.length) {
+      await offerHit.trackOfferedProducts(offeredShopifyProductIds);
+    }
 
-      if (offeredShopifyProductIds.length) {
-        await offerHit.trackOfferedProducts(offeredShopifyProductIds);
-      }
+    if (!isTest) {
+      // Increment offer impression count.
+      await Offer.findByIdAndUpdate(offer.id, {
+        $inc: {
+          impressionCount: 1
+        },
+        conversionRate: offer.conversionCount / (offer.impressionCount + 1)
+      });
 
-      if (!isTest) {
-        // Increment offer impression count.
-        await Offer.findByIdAndUpdate(
-          offer.id,
-          {
-            $inc: {
-              impressionCount: 1
-            },
-            conversionRate: offer.conversionCount / (offer.impressionCount + 1)
-          },
-          { session }
-        );
-
-        // Increment shop offer impression count.
-        await Shop.findByIdAndUpdate(
-          shop.id,
-          {
-            $inc: {
-              offerImpressionCount: 1
-            },
-            offerConversionRate:
-              shop.offerConversionCount / (shop.offerImpressionCount + 1)
-          },
-          { session }
-        );
-      }
-    }, transactionOptions);
+      // Increment shop offer impression count.
+      await Shop.findByIdAndUpdate(shop.id, {
+        $inc: {
+          offerImpressionCount: 1
+        },
+        offerConversionRate: shop.offerConversionCount / (shop.offerImpressionCount + 1)
+      });
+    }
 
     return offerHit;
   } catch (error) {
     await logger.error(
-      `Error tracking offer impression for offer (${
-        offer && offer.toString()
-      }) in shop (${shop && shop.toString()})`,
+      `Error tracking offer impression for offer (${offer && offer.toString()}) in shop (${shop && shop.toString()})`,
       error,
       { offerHit, ipAddress }
     );

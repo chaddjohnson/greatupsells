@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 
 const handleLink = (context, child) => {
   const { rel, href } = child.props;
   let link = null;
-  const documentContext =
-    context?.contentWindow?.document ||
-    context?.contentDocument ||
-    context?.document;
+  const documentContext = context?.contentWindow?.document || context?.contentDocument || context?.document;
 
   if (!documentContext) {
     return;

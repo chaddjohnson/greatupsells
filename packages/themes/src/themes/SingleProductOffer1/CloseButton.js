@@ -11,11 +11,7 @@ const CloseButton = styled(({ className }) => {
   const { handleClose } = useContext(StateContext);
 
   return (
-    <button
-      className={className}
-      aria-label="Close offer"
-      onClick={handleClose}
-    >
+    <button className={className} aria-label="Close offer" onClick={handleClose}>
       <Inner dangerouslySetInnerHTML={{ __html: '&times;' }} />
     </button>
   );

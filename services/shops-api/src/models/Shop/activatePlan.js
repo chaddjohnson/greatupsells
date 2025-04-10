@@ -10,15 +10,11 @@ const activatePlan = async (shop) => {
       );
     }
 
-    const recurringCharge = await shopifyApiClient.recurringApplicationCharge.get(
-      shop.plan.chargeId
-    );
+    const recurringCharge = await shopifyApiClient.recurringApplicationCharge.get(shop.plan.chargeId);
 
     if (recurringCharge.status === 'declined') {
       await logger.info(
-        `Aborting activation for declined recurring charge ${
-          shop.plan.chargeId
-        } for shop (${shop.toString()})`
+        `Aborting activation for declined recurring charge ${shop.plan.chargeId} for shop (${shop.toString()})`
       );
 
       // Mark the shop's plan as downgraded.
@@ -26,9 +22,7 @@ const activatePlan = async (shop) => {
     }
 
     if (recurringCharge.status !== 'active') {
-      throw new Error(
-        `Unhandled recurring charge status "${recurringCharge.status}"`
-      );
+      throw new Error(`Unhandled recurring charge status "${recurringCharge.status}"`);
     }
 
     // Update the shop plan details.
@@ -38,17 +32,9 @@ const activatePlan = async (shop) => {
     shop.plan.active = true;
     await shop.save();
 
-    await logger.info(
-      `Activated recurring charge ${
-        shop.plan.chargeId
-      } for shop (${shop.toString()})`,
-      { recurringCharge }
-    );
+    await logger.info(`Activated recurring charge ${shop.plan.chargeId} for shop (${shop.toString()})`, { recurringCharge });
   } catch (error) {
-    await logger.error(
-      `Error activating recurring charge for shop (${shop.toString()})`,
-      error
-    );
+    await logger.error(`Error activating recurring charge for shop (${shop.toString()})`, error);
 
     throw error;
   }

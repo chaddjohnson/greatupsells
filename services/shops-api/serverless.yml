@@ -1,9 +1,11 @@
 service: greatupsells-shops-api
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -18,6 +20,7 @@ provider:
     APP_NAME: ${env:APP_NAME, ssm:/greatupsells/${self:provider.stage}/app-name}
     APP_NAME_SLUG: ${env:APP_NAME_SLUG, ssm:/greatupsells/${self:provider.stage}/app-name-slug}
     DOMAIN: ${env:DOMAIN, ssm:/greatupsells/${self:provider.stage}/domain}
+    ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
     EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
     LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
     LOG_SOURCE: 'shops-api'
@@ -25,10 +28,8 @@ provider:
     MONGODB_URL_SHOPS: ${env:MONGODB_URL_SHOPS, ssm:/greatupsells/${self:provider.stage}/database/mongodb-shops/url}
     SANDBOX: ${env:SANDBOX, ssm:/greatupsells/${self:provider.stage}/sandbox}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
-    SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
     SHOP_ORDER_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-order-import/url, ''}
-    SHOP_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/url, ''}
-    SHOP_PRODUCT_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/url, ''}
+    SHOP_PRODUCT_AND_COLLECTION_IMPORT_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-and-collection-import/url, ''}
     WEBHOOK_API_URL: ${env:WEBHOOK_API_URL, ''}
     WEBHOOK_ARN: ${ssm:/greatupsells/${self:provider.stage}/webhooks/arn, ''}
 
@@ -37,6 +38,7 @@ custom:
     httpPort: ${env:SHOPS_API_PORT, 4004}
     lambdaPort: 4104
     noAuth: true
+    prefix: 'shops-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shops-api/regional-domain, ''}
     basePath: ''
@@ -54,7 +56,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}, 1}
       prewarm: true
       events:
@@ -124,15 +125,6 @@ functions:
           method: post
           authorizer:
             type: aws_iam
-  consentToDataAccess:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/consentToDataAccess.handler
-    events:
-      - httpApi:
-          path: /shops/{shopId}/data-access-consent
-          method: post
-          authorizer:
-            type: aws_iam
   createCollection:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createCollection.handler
@@ -182,6 +174,7 @@ functions:
   createProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/createProduct.handler
+    timeout: 60
     events:
       - httpApi:
           path: /products
@@ -468,7 +461,6 @@ functions:
           authorizer:
             type: aws_iam
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
@@ -568,6 +560,7 @@ functions:
   updateProduct:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/updateProduct.handler
+    timeout: 60
     events:
       - httpApi:
           path: /products/{productId}
@@ -618,7 +611,6 @@ functions:
         enabled: false
   importShopOrders:
     memorySize: 512
-    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/importShopOrders.handler
     events:
@@ -628,26 +620,13 @@ functions:
     warmup:
       default:
         enabled: false
-  importShopCollections:
+  importShopProductsAndCollections:
     memorySize: 512
-    reservedConcurrency: 2
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopCollections.handler
+    handler: src/workers/importShopProductsAndCollections.handler
     events:
       - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-collection-import-queue-dev'}
-    timeout: 900
-    warmup:
-      default:
-        enabled: false
-  importShopProducts:
-    memorySize: 512
-    reservedConcurrency: 2
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/importShopProducts.handler
-    events:
-      - sqs:
-          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-import-queue-dev'}
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/shop-product-and-collection-import/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:shop-product-and-collection-import-queue-dev'}
     timeout: 900
     warmup:
       default:
@@ -686,6 +665,4 @@ package:
   patterns:
     - '!infrastructure/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
-    - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

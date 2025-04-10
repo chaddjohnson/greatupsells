@@ -1,9 +1,11 @@
 service: greatupsells-logs-service
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -32,6 +34,7 @@ custom:
   serverless-offline:
     httpPort: ${env:LOGS_API_PORT, 4009}
     lambdaPort: 4109
+    prefix: 'logs-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/logs-api/regional-domain, ''}
     basePath: ''
@@ -46,7 +49,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: 3
       prewarm: true
       events:
@@ -60,7 +62,6 @@ functions:
           path: /logs
           method: post
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
@@ -68,12 +69,12 @@ functions:
           method: get
   log:
     memorySize: 256
-    reservedConcurrency: 3
     handler: src/workers/log.handler
     events:
       - sqs:
           arn: ${ssm:/greatupsells/${self:provider.stage}/queues/log/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:log-queue-dev'}
           batchSize: 1
+          maximumConcurrency: 3
   findLogs:
     handler: src/routes/findLogs.handler
     events:
@@ -91,6 +92,4 @@ package:
   patterns:
     - '!infrastructure/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
-    - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

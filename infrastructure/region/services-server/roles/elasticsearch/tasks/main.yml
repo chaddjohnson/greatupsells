@@ -72,27 +72,27 @@
     - stage == "production"
     - region == "us-east-1"
 
-- name: Create Elasticsearch config file (production, eu-west-1)
-  copy:
-    src: elasticsearch-eu-west-1.yml
-    dest: /etc/elasticsearch/elasticsearch.yml
-    owner: root
-    group: root
-    mode: 0644
-  when:
-    - stage == "production"
-    - region == "eu-west-1"
+# - name: Create Elasticsearch config file (production, eu-west-1)
+#   copy:
+#     src: elasticsearch-eu-west-1.yml
+#     dest: /etc/elasticsearch/elasticsearch.yml
+#     owner: root
+#     group: root
+#     mode: 0644
+#   when:
+#     - stage == "production"
+#     - region == "eu-west-1"
 
-- name: Create Elasticsearch config file (production, ap-northeast-1)
-  copy:
-    src: elasticsearch-ap-northeast-1.yml
-    dest: /etc/elasticsearch/elasticsearch.yml
-    owner: root
-    group: root
-    mode: 0644
-  when:
-    - stage == "production"
-    - region == "ap-northeast-1"
+# - name: Create Elasticsearch config file (production, ap-northeast-1)
+#   copy:
+#     src: elasticsearch-ap-northeast-1.yml
+#     dest: /etc/elasticsearch/elasticsearch.yml
+#     owner: root
+#     group: root
+#     mode: 0644
+#   when:
+#     - stage == "production"
+#     - region == "ap-northeast-1"
 
 - name: Ensure Elasticsearch is enabled to start automatically on boot
   systemd:
@@ -122,7 +122,7 @@
 - name: Reload service files
   command: systemctl daemon-reload
 
-- name: Retart Elasticsearch
+- name: Restart Elasticsearch
   service:
     name: elasticsearch
     state: restarted

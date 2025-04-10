@@ -8,7 +8,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "image-id"
-    values = ["ami-083654bd07b5da81d"]
+    values = ["ami-0ff20c640f06d85cf"]
   }
 }
 
@@ -34,14 +34,6 @@ resource "aws_security_group" "services_server" {
   ingress {
     from_port   = 27017
     to_port     = 27017
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Redis
-  ingress {
-    from_port   = 6379
-    to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -112,7 +104,7 @@ resource "null_resource" "ansible_host_config" {
       echo "[all:vars]" >> region/services-server/hosts
       echo "ansible_user=ubuntu" >> region/services-server/hosts
       echo "ansible_port=22" >> region/services-server/hosts
-      echo "ansible_python_interpreter='/usr/bin/env python3'" >> region/services-server/hosts
+      echo "ansible_python_interpreter=/usr/bin/python3" >> region/services-server/hosts
 EOT
   }
 
@@ -128,7 +120,7 @@ EOT
 resource "null_resource" "services_server_setup" {
   provisioner "local-exec" {
     working_dir = "region/services-server"
-    command     = "ansible-playbook --private-key ~/.ssh/greatupsells/id_rsa -b deploy.yml -e 'stage=${terraform.workspace}' -e 'region=${var.region}' -e 'domain=${var.domain}' -e 'services_domain=${var.services_domain}'"
+    command     = "ansible-playbook -b --private-key ~/.ssh/greatupsells/${terraform.workspace}/id_rsa -i hosts deploy.yml -e 'stage=${terraform.workspace}' -e 'region=${var.region}' -e 'domain=${var.domain}' -e 'services_domain=${var.services_domain}'"
   }
 
   # Force this resource to always execute. Uncomment to re-run.

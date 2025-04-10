@@ -1,9 +1,11 @@
 service: greatupsells-shopify-admin
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -18,29 +20,14 @@ provider:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     ASSETS_URL: ${env:ASSETS_URL, ssm:/greatupsells/${self:provider.stage}/assets/url}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
-    REDIS_URL_APP: ${env:REDIS_URL_APP, ssm:/greatupsells/${self:provider.stage}/database/redis-app/url}
     SHOPIFY_ADMIN_API_URL: ${env:SHOPIFY_ADMIN_API_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/url}
     SHOPIFY_ADMIN_APP_API_KEY: ${env:SHOPIFY_ADMIN_APP_API_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-key}
     SHOPIFY_ADMIN_APP_API_SECRET_KEY: ${env:SHOPIFY_ADMIN_APP_API_SECRET_KEY, ssm:/greatupsells/${self:provider.stage}/shopify/api-secret-key}
     SHOPIFY_ADMIN_APP_URL: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
-    SHOPIFY_EMBED_BLOCK_ID: ${env:SHOPIFY_EMBED_BLOCK_ID, ssm:/greatupsells/${self:provider.stage}/shopify/app-embed-block/id}
     SHOPS_API_URL: ${env:SHOPS_API_URL, ssm:/greatupsells/${self:provider.stage}/shops-api/url}
     LOG_SOURCE: 'shopify-admin'
 
 custom:
-  customDomain:
-    domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/latency-domain}
-    basePath: ''
-    certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
-    createRoute53Record: true
-    endpointType: regional
-    apiType: http
-    route53Params:
-      routingPolicy: latency
-      setIdentifier: ${self:provider.region}
-      healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/health-check-id, ''}
-    securityPolicy: tls_1_2
-    autoDomain: true
   warmupConcurrency:
     test: 1
     production: 5
@@ -55,14 +42,12 @@ custom:
 
 functions:
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
           path: /health
           method: get
   region:
-    memorySize: 128
     handler: src/routes/region.handler
     events:
       - httpApi:
@@ -85,14 +70,13 @@ functions:
 
 plugins:
   - serverless-plugin-monorepo
-  - serverless-domain-manager
   - serverless-plugin-warmup
 
 package:
   patterns:
     - '!infrastructure/**'
     - '!.next/cache/webpack/**'
+    - '!.next/static/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
     - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

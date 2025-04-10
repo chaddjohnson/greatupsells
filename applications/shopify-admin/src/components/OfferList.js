@@ -1,30 +1,12 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  IndexTable,
-  Tabs,
-  Text,
-  Stack,
-  Filters,
-  Pagination,
-  EmptyState
-} from '@shopify/polaris';
+import { IndexFilters, IndexTable, Text, BlockStack, useSetIndexFiltersMode, IndexFiltersMode } from '@shopify/polaris';
 import { useNumberFormatter, useCurrency } from '@greatupsells/react-hooks';
 import styled from 'styled-components';
 import { useShop } from '../hooks';
 import OfferStatus from './OfferStatus';
 import OfferStrategy from './OfferStrategy';
 import Link from './Link';
-
-const FiltersWrapper = styled.div`
-  padding: 1.5rem 1.5rem 0 1.5rem;
-`;
-
-const PaginationWrapper = styled.div`
-  padding-top: 1rem;
-  padding-bottom: 2.25rem;
-`;
 
 const OfferLink = styled(Link)`
   color: #202223;
@@ -60,23 +42,21 @@ const OfferListRow = ({ offer }) => {
   return (
     <IndexTable.Row id={offer._id}>
       <IndexTable.Cell>
-        <Stack spacing="extraTight" vertical>
-          <Text fontWeight="bold">
+        <BlockStack gap="200">
+          <Text variant="headingMd" as="h3">
             <OfferLink url={`/offers/${offer._id}`} data-primary-link>
               {offer.name}
             </OfferLink>
           </Text>
           <span>{description}</span>
-        </Stack>
+        </BlockStack>
       </IndexTable.Cell>
       <IndexTable.Cell>
         <OfferStatus offer={offer} />
       </IndexTable.Cell>
       <IndexTable.Cell>{formatNumber(offer.impressionCount)}</IndexTable.Cell>
       <IndexTable.Cell>{formatNumber(offer.acceptanceCount)}</IndexTable.Cell>
-      <IndexTable.Cell>
-        {formatPercentage(offer.conversionRate, 1)}
-      </IndexTable.Cell>
+      <IndexTable.Cell>{formatPercentage(offer.conversionRate, 1)}</IndexTable.Cell>
       <IndexTable.Cell>{formatCurrency(offer.revenueIncrease)}</IndexTable.Cell>
       <IndexTable.Cell>
         <OfferStrategy offer={offer} />
@@ -92,148 +72,128 @@ OfferListRow.propTypes = {
 const tabs = [
   {
     id: 'all',
-    content: 'All',
-    accessibilityLabel: 'All',
-    panelID: 'all'
+    content: 'All'
   },
   {
     id: 'active',
-    content: 'Active',
-    accessibilityLabel: 'Active',
-    panelID: 'active'
+    content: 'Active'
   },
   {
     id: 'pending',
-    content: 'Pending',
-    accessibilityLabel: 'Pending',
-    panelID: 'pending'
+    content: 'Pending'
   },
   {
     id: 'expired',
-    content: 'Expired',
-    accessibilityLabel: 'Expired',
-    panelID: 'expired'
+    content: 'Expired'
   },
   {
     id: 'disabled',
-    content: 'Disabled',
-    accessibilityLabel: 'Disabled',
-    panelID: 'disabled'
+    content: 'Disabled'
   }
 ];
 
-const OfferList = ({ offers, filters, onFilter }) => {
+const OfferList = ({ offers, loading = false, filters = {}, onFilter = () => {} }) => {
+  const filteredTabIndex = tabs.findIndex(({ id }) => id === filters?.status);
+
   const [query, setQuery] = useState(filters.query);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(filteredTabIndex > -1 ? filteredTabIndex : 0);
+  const { mode, setMode } = useSetIndexFiltersMode(IndexFiltersMode.Default);
+
   const debounceChange = useRef();
 
-  const selectedTabIndex = useMemo(() => {
-    const statusIndex = tabs.findIndex(({ id }) => id === filters?.status);
+  const handleTabChange = useCallback(
+    (tabIndex) => {
+      const status = tabs[tabIndex].id;
+      const updatedFilters = { query, status };
 
-    return statusIndex > -1 ? statusIndex : 0;
-  }, [filters]);
+      setSelectedTabIndex(tabIndex);
+      onFilter(updatedFilters);
+    },
+    [query, onFilter]
+  );
 
-  const offerFilterText =
-    selectedTabIndex > 0 ? tabs[selectedTabIndex]?.content.toLowerCase() : '';
+  const handleQueryChange = useCallback(
+    (value) => {
+      const status = tabs[selectedTabIndex].id;
+      const updatedFilters = { query: value, status };
 
-  const handleTabChange = (tabIndex) => {
-    const status = tabs[tabIndex].id;
-    const updatedFilters = { query, status };
+      setQuery(value);
 
-    onFilter(updatedFilters);
-  };
+      if (debounceChange.current) {
+        clearTimeout(debounceChange.current);
+      }
 
-  const handleQueryChange = (value) => {
-    const status = tabs[selectedTabIndex].id;
-    const updatedFilters = { query: value, status };
+      debounceChange.current = setTimeout(() => onFilter(updatedFilters), 500);
+    },
+    [selectedTabIndex, onFilter]
+  );
 
-    setQuery(value);
-
-    if (debounceChange.current) {
-      clearTimeout(debounceChange.current);
-    }
-
-    debounceChange.current = setTimeout(
-      () => onFilter(updatedFilters),
-      0.5 * 1000
-    );
-  };
-
-  const handleQueryClear = () => {
+  const handleQueryClear = useCallback(() => {
     const status = tabs[selectedTabIndex].id;
     const updatedFilters = { query: '', status };
 
     setQuery('');
     onFilter(updatedFilters);
-  };
+  }, [selectedTabIndex, onFilter]);
 
-  const handlePaginatePrevious = () => {
-    //   if () {
-    //     return;
-    //   }
-    //   const status = tabs[selectedTabIndex].id;
-    //   const cursor = offers?.[offers.length - 1]?._id;
-    //   const updatedFilters = { query, status, cursor };
-    //   onFilter(updatedFilters);
-  };
+  const handlePaginatePrevious = useCallback(() => {
+    // Implement pagination logic here
+  }, []);
 
-  const handlePaginateNext = () => {
-    //   if () {
-    //     return;
-    //   }
-  };
+  const handlePaginateNext = useCallback(() => {
+    // Implement pagination logic here
+  }, []);
 
   return (
-    <Card>
-      <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
-        <FiltersWrapper>
-          <Filters
-            queryValue={query}
-            filters={[]}
-            appliedFilters={[]}
-            queryPlaceholder="Search offers"
-            onQueryChange={handleQueryChange}
-            onQueryClear={handleQueryClear}
-          />
-        </FiltersWrapper>
-        {offers?.length > 0 ? (
-          <>
-            <IndexTable
-              resourceName={{
-                singular: 'offer',
-                plural: 'offers'
-              }}
-              itemCount={offers?.length || 0}
-              headings={[
-                { title: 'Name' },
-                { title: 'Status' },
-                { title: 'Offer impressions' },
-                { title: 'Offers accepted' },
-                { title: 'Conversion rate' },
-                { title: 'Revenue increase' },
-                { title: 'Strategy' }
-              ]}
-              selectable={false}
-            >
-              {offers?.map((offer, index) => (
-                <OfferListRow key={index} offer={offer} />
-              ))}
-            </IndexTable>
-            <PaginationWrapper>
-              <Stack distribution="center">
-                <Pagination
-                  hasPrevious={true}
-                  hasNext={true}
-                  onPrevious={handlePaginatePrevious}
-                  onNext={handlePaginateNext}
-                />
-              </Stack>
-            </PaginationWrapper>
-          </>
-        ) : (
-          <EmptyState heading={`No ${offerFilterText} offers found`} />
-        )}
-      </Tabs>
-    </Card>
+    <>
+      <IndexFilters
+        queryValue={query}
+        filters={[]}
+        appliedFilters={[]}
+        queryPlaceholder="Search offers"
+        onQueryChange={handleQueryChange}
+        onQueryClear={handleQueryClear}
+        cancelAction={{
+          onAction: () => {},
+          disabled: false,
+          loading: false
+        }}
+        tabs={tabs}
+        selected={selectedTabIndex}
+        onSelect={handleTabChange}
+        loading={loading}
+        canCreateNewView={false}
+        mode={mode}
+        setMode={setMode}
+      />
+      <IndexTable
+        resourceName={{
+          singular: 'offer',
+          plural: 'offers'
+        }}
+        itemCount={offers?.length || 0}
+        headings={[
+          { title: 'Name' },
+          { title: 'Status' },
+          { title: 'Offer impressions' },
+          { title: 'Offers accepted' },
+          { title: 'Conversion rate' },
+          { title: 'Revenue increase' },
+          { title: 'Strategy' }
+        ]}
+        pagination={{
+          hasPrevious: true,
+          hasNext: true,
+          onPrevious: handlePaginatePrevious,
+          onNext: handlePaginateNext
+        }}
+        selectable={false}
+      >
+        {offers?.map((offer, index) => (
+          <OfferListRow key={index} offer={offer} />
+        ))}
+      </IndexTable>
+    </>
   );
 };
 
@@ -241,11 +201,6 @@ OfferList.propTypes = {
   offers: PropTypes.arrayOf(PropTypes.object),
   filters: PropTypes.object,
   onFilter: PropTypes.func
-};
-
-OfferList.defaultProps = {
-  filters: {},
-  onFilter: () => {}
 };
 
 export default OfferList;

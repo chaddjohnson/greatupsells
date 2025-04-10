@@ -20,11 +20,8 @@ const handler = middy(async (event, context) => {
   }
 
   try {
-    const ipAddress =
-      event.requestContext.http.sourceIp || event.headers['X-Forwarded-For'];
-    const domain = new URL(
-      event.headers.shop || event.headers.origin || event.headers.Origin
-    ).host;
+    const ipAddress = event.requestContext.http.sourceIp || event.headers['X-Forwarded-For'];
+    const domain = new URL(event.headers.shop || event.headers.origin || event.headers.Origin).host;
     const { offerId } = event.pathParameters;
     const [shop, offer] = await Promise.all([
       httpClient.get(`/shops/domain/${domain}`),
@@ -32,20 +29,13 @@ const handler = middy(async (event, context) => {
     ]);
     const shopId = shop._id;
     const offerShopId = offer.shop;
-    const {
-      triggerShopifyProductId,
-      triggerShopifyVariantId,
-      offeredShopifyProductIds,
-      isTest
-    } = JSON.parse(event.body);
+    const { triggerShopifyProductId, triggerShopifyVariantId, offeredShopifyProductIds, isTest } = JSON.parse(event.body);
 
     // Only allow tracking for offers belonging to the requestor domain.
     if (shopId !== offerShopId) {
-      await logger.warn(
-        `Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`,
-        null,
-        { event }
-      );
+      await logger.warn(`Unauthorized impression tracking attempt for offer ${offerId} from domain ${domain}`, null, {
+        event
+      });
 
       return {
         statusCode: StatusCodes.FORBIDDEN,

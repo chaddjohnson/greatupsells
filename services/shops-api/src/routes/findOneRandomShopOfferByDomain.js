@@ -7,9 +7,7 @@ const models = require('../models');
 const findRandomProduct = async (shopifyProductIds = []) => {
   const Product = await models.get('Product');
   const hasTriggerProducts = shopifyProductIds.length > 0;
-  const randomProductIndex = Math.floor(
-    Math.random() * shopifyProductIds.length
-  );
+  const randomProductIndex = Math.floor(Math.random() * shopifyProductIds.length);
   const triggerShopifyProductId = shopifyProductIds[randomProductIndex];
 
   if (!hasTriggerProducts || !triggerShopifyProductId) {
@@ -35,10 +33,7 @@ const findPopupData = async (
     testOfferId
   }
 ) => {
-  const [Offer, Theme] = await Promise.all([
-    models.get('Offer'),
-    models.get('Theme')
-  ]);
+  const [Offer, Theme] = await Promise.all([models.get('Offer'), models.get('Theme')]);
   const offer = await Offer.findOneRandom(shop, {
     triggerEvent,
     shopifyProductIds,
@@ -57,11 +52,13 @@ const findPopupData = async (
     return;
   }
 
+  const triggerProduct = await findRandomProduct(shopifyProductIds);
+  const triggerShopifyProductId = triggerProduct?.shopifyProductId;
+
   // Parallelize to minimize latency.
-  const [theme, triggerProduct, offeredProducts] = await Promise.all([
+  const [theme, offeredProducts] = await Promise.all([
     Theme.findById(offer.theme).lean(),
-    findRandomProduct(shopifyProductIds),
-    offer.findRandomProducts(shopifyProductIds, pagePath)
+    offer.findRandomProducts(triggerShopifyProductId, shopifyProductIds, pagePath)
   ]);
 
   // Reduce payload size.

@@ -1,20 +1,19 @@
 const logger = require('@greatupsells/logger');
 
+const { ASSETS_URL } = process.env;
+
 const addScripts = async (shop) => {
-  // Use proxy URL defined in app settings within Shopify Partners account.
-  const src = `https://${shop.domain}/tools/great-upsells-assets/storefront.js`;
+  const src = `${ASSETS_URL}/storefront.js`;
 
   const shopifyApiClient = shop.getShopifyApiClient();
   const scriptTags = await shopifyApiClient.scriptTag.list();
-  const existingScriptTag = scriptTags.find(
-    (scriptTag) => scriptTag.src === src
-  );
+  const existingScriptTag = scriptTags.find((scriptTag) => scriptTag.src === src);
 
   if (!existingScriptTag) {
     await shopifyApiClient.scriptTag.create({
       event: 'onload',
       src,
-      display_scope: 'order_status', // only load on Order Status and Thank You pages
+      display_scope: 'online_store',
       cache: false
     });
 

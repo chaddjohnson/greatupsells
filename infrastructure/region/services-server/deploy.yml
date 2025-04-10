@@ -5,5 +5,4 @@
     - system
     - accounts
     - mongodb
-    - redis
     - elasticsearch

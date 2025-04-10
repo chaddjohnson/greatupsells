@@ -1,9 +1,11 @@
 service: greatupsells-shopify-admin-api
+frameworkVersion: '^3.38'
 useDotenv: true
-
+configValidationMode: error
 provider:
   name: aws
-  runtime: nodejs16.x
+  architecture: arm64
+  runtime: nodejs20.x
   memorySize: 2048
   timeout: 10
   endpointType: REGIONAL
@@ -19,7 +21,9 @@ provider:
         type: request
         functionName: authorizer
         identitySource: $request.header.authorization
-        resultTtlInSeconds: 0
+        issuerUrl: ${env:SHOPIFY_ADMIN_APP_URL, ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/url}
+        audience: 'shopify-admin-api'
+        resultTtlInSeconds: 300 # This enables caching for 5 minutes
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
     JWT_SECRET: ${env:JWT_SECRET, ssm:/greatupsells/${self:provider.stage}/jwt-secret}
@@ -33,6 +37,7 @@ custom:
     httpPort: ${env:SHOPIFY_ADMIN_API_PORT, 4000}
     lambdaPort: 4100
     ignoreJWTSignature: true
+    prefix: 'shopify-admin-api'
   customDomain:
     domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/domain, ''}
     basePath: ''
@@ -41,7 +46,7 @@ custom:
     endpointType: regional
     apiType: http
     route53Params:
-      routingPolicy: latency
+      routingPolicy: simple
       setIdentifier: ${self:provider.region}
       healthCheckId: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-api/health-check-id, ''}
     securityPolicy: tls_1_2
@@ -52,7 +57,6 @@ custom:
   warmup:
     default:
       enabled: true
-      memorySize: 128
       concurrency: ${self:custom.warmupConcurrency.${opt:stage, self:provider.stage}, 1}
       prewarm: true
       events:
@@ -60,17 +64,16 @@ custom:
 
 functions:
   authorizer:
-    memorySize: 128
     handler: src/authorizer.handler
+    provisionedConcurrency: 5
+    reservedConcurrency: 10
   health:
-    memorySize: 128
     handler: src/routes/health.handler
     events:
       - httpApi:
           path: /health
           method: get
   region:
-    memorySize: 128
     handler: src/routes/region.handler
     events:
       - httpApi:
@@ -103,15 +106,6 @@ functions:
     events:
       - httpApi:
           path: /offers/{offerId}/clone
-          method: post
-          authorizer:
-            name: authorizer
-  consentToDataAccess:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/consentToDataAccess.handler
-    events:
-      - httpApi:
-          path: /shop/data-access-consent
           method: post
           authorizer:
             name: authorizer
@@ -324,6 +318,4 @@ package:
   patterns:
     - '!infrastructure/**'
     - '!node_modules/**/*.map'
-    - '!node_modules/**/aws-sdk'
-    - '!node_modules/aws-sdk'
     - '!node_modules/eslint'

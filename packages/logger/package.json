@@ -5,15 +5,13 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/packages/logger",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/packages/logger",
   "dependencies": {
-    "@greatupsells/gateway-http-client": "0.0.0"
-  },
-  "devDependencies": {
+    "@greatupsells/gateway-http-client": "0.0.0",
     "aws-sdk": "^2.1116.0"
   },
   "scripts": {

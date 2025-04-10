@@ -7,14 +7,14 @@ import {
   Card,
   Tabs,
   Sheet,
-  TextContainer,
   Banner,
   Scrollable,
   PageActions,
   EmptyState,
-  Stack
+  BlockStack,
+  InlineStack
 } from '@shopify/polaris';
-import { MobileCancelMajor } from '@shopify/polaris-icons';
+import { XIcon } from '@shopify/polaris-icons';
 import { sortBy } from 'lodash';
 import styled from 'styled-components';
 
@@ -30,21 +30,17 @@ const InnerWrapper = styled.div`
 `;
 
 const HeaderWrapper = styled.div`
-  align-items: center;
   border-bottom: 1px solid #dfe3e8;
-  display: flex;
-  justify-content: space-between;
-  padding: 1.6rem;
-  width: 100%;
+  padding: 1.25rem 1rem 1rem 1rem;
 `;
 
 const SearchWrapper = styled.div`
-  padding: 1.6rem;
+  padding: 1rem;
 `;
 
 const PageActionsWrapper = styled.div`
   width: 100%;
-  padding: 1.6rem;
+  padding: 1rem;
   padding-bottom: 0;
 `;
 
@@ -54,9 +50,7 @@ const ThemeThumbnailImage = styled.img`
   height: auto;
 `;
 
-const ThemeOption = ({ theme }) => (
-  <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />
-);
+const ThemeOption = ({ theme }) => <ThemeThumbnailImage src={theme.thumbnailImageUrl} alt={theme.name} />;
 
 ThemeOption.propTypes = {
   theme: PropTypes.shape({
@@ -67,7 +61,7 @@ ThemeOption.propTypes = {
 
 const EmptyComponent = () => (
   <EmptyState heading="No themes">
-    <TextContainer>No themes are available.</TextContainer>
+    <Text as="p">No themes are available.</Text>
   </EmptyState>
 );
 
@@ -87,20 +81,18 @@ const tabs = [
 ];
 
 const ThemeSelector = ({
-  open,
+  open = false,
   strategy,
   theme,
   themes,
   offerThemes,
-  onThemeSelect,
-  onOfferThemeSelect,
-  onClose
+  onThemeSelect = () => {},
+  onOfferThemeSelect = () => {},
+  onClose = () => {}
 }) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(theme?._id ? 0 : 1);
   const [selectedTheme, setSelectedTheme] = useState([
-    offerThemes.find(
-      (current) => current.__id_offerForm === theme?.__id_offerForm
-    )?.__id_offerForm
+    offerThemes.find((current) => current.__id_offerForm === theme?.__id_offerForm)?.__id_offerForm
   ]);
   const [offerThemeSelected, setOfferThemeSelected] = useState(true);
 
@@ -132,9 +124,7 @@ const ThemeSelector = ({
     });
 
     // Filter by strategy.
-    sortedOfferThemes = sortedOfferThemes.filter(
-      (current) => current.strategies.indexOf(strategy) > -1
-    );
+    sortedOfferThemes = sortedOfferThemes.filter((current) => current.strategies.indexOf(strategy) > -1);
 
     return sortedOfferThemes.map((offerTheme) => ({
       value: offerTheme.__id_offerForm,
@@ -153,11 +143,7 @@ const ThemeSelector = ({
 
   const handleSave = () => {
     if (offerThemeSelected) {
-      onOfferThemeSelect(
-        offerThemes.find(
-          (current) => current.__id_offerForm === selectedTheme[0]
-        )
-      );
+      onOfferThemeSelect(offerThemes.find((current) => current.__id_offerForm === selectedTheme[0]));
     } else {
       onThemeSelect(themes.find((current) => current._id === selectedTheme[0]));
     }
@@ -166,9 +152,7 @@ const ThemeSelector = ({
   };
 
   const handleEntered = () => {
-    const currentThemeId = offerThemes.find(
-      (current) => current.__id_offerForm === theme?.__id_offerForm
-    )?.__id_offerForm;
+    const currentThemeId = offerThemes.find((current) => current.__id_offerForm === theme?.__id_offerForm)?.__id_offerForm;
 
     if (typeof currentThemeId === 'undefined') {
       return;
@@ -182,70 +166,39 @@ const ThemeSelector = ({
   };
 
   return (
-    <Sheet
-      open={open}
-      onEntered={handleEntered}
-      onExit={handleExit}
-      onClose={onClose}
-      accessibilityLabel="Select theme"
-    >
+    <Sheet open={open} onEntered={handleEntered} onExit={handleExit} onClose={onClose} accessibilityLabel="Select theme">
       <InnerWrapper>
         <HeaderWrapper>
-          <Text variant="headingLg">Select theme</Text>
-          <Button
-            accessibilityLabel="Cancel"
-            icon={MobileCancelMajor}
-            onClick={onClose}
-            plain
-          />
+          <InlineStack align="space-between" gap="200">
+            <Text variant="headingLg">Select theme</Text>
+            <Button variant="plain" accessibilityLabel="Cancel" icon={XIcon} onClick={onClose} />
+          </InlineStack>
         </HeaderWrapper>
         <Scrollable>
-          <Tabs
-            tabs={tabs}
-            selected={selectedTabIndex}
-            onSelect={handleTabChange}
-          >
+          <Tabs tabs={tabs} selected={selectedTabIndex} onSelect={handleTabChange}>
             <SearchWrapper>
               {tabs[selectedTabIndex].id === 'history' && (
-                <Stack vertical>
-                  <TextContainer>
-                    <Banner>
-                      Your customizations for previously selected themes will
-                      remain available here.
-                    </Banner>
-                  </TextContainer>
+                <BlockStack gap="200">
+                  <Banner>Your customizations for previously selected themes will remain available here.</Banner>
                   {offerThemeOptions?.length > 0 && (
                     <Card>
-                      <OptionList
-                        options={offerThemeOptions}
-                        selected={selectedTheme}
-                        onChange={handleThemeSelect}
-                      />
+                      <OptionList options={offerThemeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                     </Card>
                   )}
                   {!offerThemeOptions?.length && <EmptyComponent />}
-                </Stack>
+                </BlockStack>
               )}
               {tabs[selectedTabIndex].id === 'explore' && (
                 <>
                   {themeOptions?.length > 0 && (
-                    <Stack vertical spacing="tight">
+                    <BlockStack gap="200">
                       {(strategy === 'UPSELL' || strategy === 'CROSS_SELL') && (
-                        <TextContainer>
-                          <Banner>
-                            Themes will adapt to work for both cross-selling and
-                            upselling strategies.
-                          </Banner>
-                        </TextContainer>
+                        <Banner>Themes will adapt to work for both cross-selling and upselling strategies.</Banner>
                       )}
                       <Card>
-                        <OptionList
-                          options={themeOptions}
-                          selected={selectedTheme}
-                          onChange={handleThemeSelect}
-                        />
+                        <OptionList options={themeOptions} selected={selectedTheme} onChange={handleThemeSelect} />
                       </Card>
-                    </Stack>
+                    </BlockStack>
                   )}
                   {!themeOptions?.length && <EmptyComponent />}
                 </>
@@ -282,13 +235,6 @@ ThemeSelector.propTypes = {
   onThemeSelect: PropTypes.func,
   onOfferThemeSelect: PropTypes.func,
   onClose: PropTypes.func
-};
-
-ThemeSelector.defaultProps = {
-  open: false,
-  onThemeSelect: () => {},
-  onOfferThemeSelect: () => {},
-  onClose: () => {}
 };
 
 export default ThemeSelector;

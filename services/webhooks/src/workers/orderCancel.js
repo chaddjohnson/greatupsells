@@ -15,9 +15,7 @@ const processor = async (metadata, payload) => {
     const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
     const shopifyOrderData = payload;
 
-    order = await httpClient.get(
-      `/orders/shopify-order-id/${shopifyOrderData.id}`
-    );
+    order = await httpClient.get(`/orders/shopify-order-id/${shopifyOrderData.id}`);
 
     order.shopifyOrderData = shopifyOrderData;
 
@@ -25,10 +23,7 @@ const processor = async (metadata, payload) => {
 
     // Only cancel if the order is not marked as canceled.
     if (order && !order.canceledAt) {
-      await logger.info(
-        `Canceling order ${order.orderNumber} via ${topic} webhook`,
-        { metadata, payload }
-      );
+      await logger.info(`Canceling order ${order.orderNumber} via ${topic} webhook`, { metadata, payload });
 
       await httpClient.post(`/orders/${order._id}/cancelation`);
     }

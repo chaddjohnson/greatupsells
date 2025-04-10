@@ -15,7 +15,6 @@ resource "aws_route53_health_check" "shops_api" {
   resource_path     = "/health"
   failure_threshold = "5"
   request_interval  = "30"
-  regions           = ["us-east-1", "eu-west-1", "ap-northeast-1"]
 
   tags = {
     Name = "shops-api-${terraform.workspace}"
@@ -56,7 +55,7 @@ resource "aws_ssm_parameter" "shops_api_health_check_id" {
 resource "aws_ssm_parameter" "mongodb_shops_database_url" {
   name      = "/greatupsells/${terraform.workspace}/database/mongodb-shops/url"
   type      = "SecureString"
-  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/greatupsells-shops?replicaSet=rs0&readPreference=secondaryPreferred&w=1&wtimeoutMS=5000&ssl=true"
+  value     = "mongodb://app:${var.mongodb_app_password}@${local.mongodb_hosts}/greatupsells-shops?ssl=true"
   overwrite = true
   provider  = aws.region
 }

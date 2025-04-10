@@ -17,47 +17,53 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Set Environment Variables
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: |
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=us-east-1" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.13.0
+          node-version: 20.12.2
           cache: yarn
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Node Modules
+        run: yarn install --immutable
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
       - name: Install Global Packages
-        run: npm install -g serverless
+        run: npm install -g serverless@3.38.0
       - name: Run Terraform
         run: yarn infrastructure
         working-directory: services/admin-api
         env:
           STAGE: ${{ env.BRANCH }}
-      - name: Install Node Modules
-        run: yarn install --immutable
       - name: Build Packages
-        run: lerna bootstrap --force-local && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
+        run: yarn workspaces focus --all && NODE_ENV=production lerna run build --stream --scope=@greatupsells/*
       - name: Download .serverless directory
-        run: aws s3 sync s3://greatupsells-infrastructure/serverless/admin-api . --region us-east-1
+        run: aws s3 sync s3://greatupsells-infrastructure2/serverless/admin-api . --region us-east-1
         working-directory: services/admin-api
       - name: Deploy Serverless Application to us-east-1
         run: serverless deploy --stage $BRANCH --region us-east-1
         working-directory: services/admin-api
-      - name: Deploy Serverless Application to eu-west-1
-        run: serverless deploy --stage $BRANCH --region eu-west-1
-        working-directory: services/admin-api
-        if: ${{ github.ref == 'refs/heads/production' }}
-      - name: Deploy Serverless Application to ap-northeast-1
-        run: serverless deploy --stage $BRANCH --region ap-northeast-1
-        working-directory: services/admin-api
-        if: ${{ github.ref == 'refs/heads/production' }}
+      # - name: Deploy Serverless Application to eu-west-1
+      #   run: serverless deploy --stage $BRANCH --region eu-west-1
+      #   working-directory: services/admin-api
+      #   if: ${{ github.ref == 'refs/heads/master' }}
+      # - name: Deploy Serverless Application to ap-northeast-1
+      #   run: serverless deploy --stage $BRANCH --region ap-northeast-1
+      #   working-directory: services/admin-api
+      #   if: ${{ github.ref == 'refs/heads/master' }}
       - name: Sync .serverless directory
-        run: aws s3 sync .serverless s3://greatupsells-infrastructure/serverless/admin-api/.serverless --region us-east-1
+        run: aws s3 sync .serverless s3://greatupsells-infrastructure2/serverless/admin-api/.serverless --region us-east-1
         working-directory: services/admin-api
       - name: Uninstall Global Packages
         if: always()

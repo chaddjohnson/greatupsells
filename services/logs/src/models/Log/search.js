@@ -29,7 +29,7 @@ const search = async (type, query, page = 0, pageSize = 50) => {
 
   // Filter by type.
   if (type) {
-    conditions.push({ term: { type } });
+    conditions.push({ match: { type } });
   }
 
   // Query the index.

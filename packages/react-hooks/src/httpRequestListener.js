@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import qs from 'querystringify';
+import { useEffect } from 'react';
 
 const XMLHttpRequest = typeof window !== 'undefined' && window.XMLHttpRequest;
 const originalFetch = typeof window !== 'undefined' && window.fetch;
@@ -81,21 +81,17 @@ if (XMLHttpRequest) {
 // Intercept fetch requests.
 if (originalFetch) {
   window.fetch = async function (resource, config) {
-    const url =
-      typeof resource === 'object' ? resource?.url || resource : resource;
+    const url = typeof resource === 'object' ? resource?.url || resource : resource;
     const path = url.match(/^https?:\/\//) ? new URL(url).pathname : url;
     const requestData = dataToJson(config?.body);
     const request = originalFetch.apply(this, [resource, config]);
     const response = await request;
     const clonedResponse = response.clone();
-    const isJson =
-      config?.headers?.['Content-Type']?.toLowerCase() === 'application/json';
+    const isJson = config?.headers?.['Content-Type']?.toLowerCase() === 'application/json';
     let responseData = null;
 
     if (response.status !== 204) {
-      responseData = isJson
-        ? await clonedResponse.json()
-        : await clonedResponse.text();
+      responseData = isJson ? await clonedResponse.json() : await clonedResponse.text();
     }
 
     // Call listeners.
@@ -125,14 +121,9 @@ const useHttpRequestListener = (url, listener) => {
         return;
       }
 
-      const index = listeners[path].findIndex(
-        (current) => current === listener
-      );
+      const index = listeners[path].findIndex((current) => current === listener);
 
-      listeners[path] = [
-        ...listeners[path].slice(0, index),
-        ...listeners[path].slice(index + 1)
-      ];
+      listeners[path] = [...listeners[path].slice(0, index), ...listeners[path].slice(index + 1)];
     };
   }, [url, listener]);
 };

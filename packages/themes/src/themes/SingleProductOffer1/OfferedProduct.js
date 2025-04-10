@@ -50,22 +50,11 @@ const OfferedProduct = styled(({ className }) => {
         rel="noopener noreferrer"
         title="Click to view this product in a new tab"
       >
-        <OfferedProductThumbnail
-          src={selectedVariant.thumbnailImage.src}
-          alt={selectedVariant.thumbnailImage.alt}
-        />
-        <OfferedProductTitle
-          dangerouslySetInnerHTML={{ __html: offeredProduct.title }}
-        />
+        <OfferedProductThumbnail src={selectedVariant.thumbnailImage.src} alt={selectedVariant.thumbnailImage.alt} />
+        <OfferedProductTitle dangerouslySetInnerHTML={{ __html: offeredProduct.title }} />
         <OfferedProductPrices>
-          <OfferedProductSalePrice>
-            {selectedVariant.salePriceFormatted}
-          </OfferedProductSalePrice>
-          {showOriginalPrice && (
-            <OfferedProductPrice>
-              {selectedVariant.priceFormatted}
-            </OfferedProductPrice>
-          )}
+          <OfferedProductSalePrice>{selectedVariant.salePriceFormatted}</OfferedProductSalePrice>
+          {showOriginalPrice && <OfferedProductPrice>{selectedVariant.priceFormatted}</OfferedProductPrice>}
         </OfferedProductPrices>
       </a>
     </figure>

@@ -1,26 +1,27 @@
-import { memo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
+  Bleed,
+  Box,
   Page,
-  Breadcrumbs,
   Layout,
   Card,
   DataTable,
   Text,
   Button,
-  TextContainer,
+  BlockStack,
+  InlineStack,
   Icon,
-  Stack,
   Tooltip
 } from '@shopify/polaris';
-import { TickMinor, InfoMinor } from '@shopify/polaris-icons';
-import { TitleBar } from '../components';
+import { CheckIcon, InfoIcon } from '@shopify/polaris-icons';
 import { useShop } from '../hooks';
 
 const PlanTableContainer = styled.div`
   th {
     text-align: center;
+    font-weight: bold;
   }
   th:first-of-type {
     text-align: left;
@@ -29,8 +30,6 @@ const PlanTableContainer = styled.div`
     text-align: center;
   }
 `;
-
-const PageTitleBar = memo(() => <TitleBar title="Plan" />);
 
 const PlanPage = () => {
   const router = useRouter();
@@ -48,97 +47,76 @@ const PlanPage = () => {
 
   const planData = [
     [
-      <Text key="feature1" fontWeight="bold">
-        One-click upsells and cross-sells
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature1">One-click upsells and cross-sells</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
     [
-      <Text key="feature2" fontWeight="bold">
-        Post-purchase offers
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature2">Post-purchase offers</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
+    ],
+    // [
+    //   <Text key="feature3">Thank You page offers</Text>,
+    //   <Icon key="1" source={CheckIcon} tone="success" />,
+    //   <Icon key="2" source={CheckIcon} tone="success" />,
+    //   <Icon key="3" source={CheckIcon} tone="success" />
+    // ],
+    // [
+    //   <Text key="feature3">Order Status page offers</Text>,
+    //   <Icon key="1" source={CheckIcon} tone="success" />,
+    //   <Icon key="2" source={CheckIcon} tone="success" />,
+    //   <Icon key="3" source={CheckIcon} tone="success" />
+    // ],
+    [
+      <Text key="feature4">Themes</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
     [
-      <Text key="feature3" fontWeight="bold">
-        Thank You page offers
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature5">Analytics</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
     [
-      <Text key="feature3" fontWeight="bold">
-        Order Status page offers
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature6">Unlimited offers</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
     [
-      <Text key="feature4" fontWeight="bold">
-        Themes
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature7">Unlimited offer views</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
     [
-      <Text key="feature5" fontWeight="bold">
-        Analytics
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
+      <Text key="feature8">International currency support</Text>,
+      <Icon key="1" source={CheckIcon} tone="success" />,
+      <Icon key="2" source={CheckIcon} tone="success" />,
+      <Icon key="3" source={CheckIcon} tone="success" />
     ],
+    // [
+    //   <Text key="feature9">Customer support</Text>,
+    //   <Icon key="1" source={CheckIcon} tone="success" />,
+    //   <Icon key="2" source={CheckIcon} tone="success" />,
+    //   <Icon key="3" source={CheckIcon} tone="success" />
+    // ],
     [
-      <Text key="feature6" fontWeight="bold">
-        Unlimited offers
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
-    ],
-    [
-      <Text key="feature7" fontWeight="bold">
-        Unlimited offer views
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
-    ],
-    [
-      <Text key="feature8" fontWeight="bold">
-        International currency support
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
-    ],
-    [
-      <Text key="feature9" fontWeight="bold">
-        Customer support
-      </Text>,
-      <Icon key="1" source={TickMinor} color="success" />,
-      <Icon key="2" source={TickMinor} color="success" />,
-      <Icon key="3" source={TickMinor} color="success" />
-    ],
-    [
-      <Stack key="1">
-        <Text fontWeight="bold">Monthly upsell revenue limit</Text>
-        <Text key="feature10" fontWeight="bold">
-          <Tooltip
-            active
-            content="Analytics are not inflated with original items purchased. Only added items are used to calculate monthly upsell revenue."
-          >
-            <Icon key="1" source={InfoMinor} />
+      <InlineStack key="1">
+        <Text>Monthly upsell revenue limit</Text>
+        <Text key="feature10">
+          <Tooltip content="Analytics are not inflated with original items purchased. Only added items are used to calculate monthly upsell revenue.">
+            <Box paddingInlineStart="100">
+              <Icon key="1" source={InfoIcon} />
+            </Box>
           </Tooltip>
         </Text>
-      </Stack>,
+      </InlineStack>,
       <span key="1">Up to $500 USD</span>,
       <span key="2">Up to $1,500 USD</span>,
       <span key="3">UNLIMITED</span>
@@ -149,40 +127,28 @@ const PlanPage = () => {
         key="action1"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'BASIC' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'BASIC' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('BASIC')}
       >
-        {shop?.plan.level === 'BASIC' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'BASIC' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
       <Button
         key="action2"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'PLUS' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'PLUS' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('PLUS')}
       >
-        {shop?.plan.level === 'PLUS' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'PLUS' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
       <Button
         key="action3"
         primary
         fullWidth
-        disabled={
-          (shop?.plan.level === 'PRO' && shop?.plan.active) || changingPlan
-        }
+        disabled={(shop?.plan.level === 'PRO' && shop?.plan.active) || changingPlan}
         onClick={() => initiatePlanChange('PRO')}
       >
-        {shop?.plan.level === 'PRO' && shop?.plan.active
-          ? 'Current plan'
-          : 'Select'}
+        {shop?.plan.level === 'PRO' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>
     ]
   ];
@@ -199,70 +165,60 @@ const PlanPage = () => {
   }, [chargeId, activatingPlan, activatePlan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Page
-      title={
-        shop?.plan.active ? (
-          <>
-            <Stack alignment="center">
-              <Breadcrumbs breadcrumbs={[{ url: '/' }]} />
-              <span>Plan</span>
-            </Stack>
-          </>
-        ) : undefined
-      }
-    >
-      {shop?.plan.active && <PageTitleBar />}
+    <Page>
       <Layout>
         {!shop?.plan.active && (
           <Layout.Section>
-            <TextContainer>
-              <Stack alignment="center" vertical>
-                <Text variant="heading4xl">Select your plan</Text>
-                <Text color="subdued" variant="headingLg">
-                  Free 7-day trial. Pay nothing today.
-                </Text>
-              </Stack>
-            </TextContainer>
+            <BlockStack gap="200" inlineAlign="center">
+              <Text variant="heading3xl">Select your plan</Text>
+              <Text tone="subdued" variant="headingLg">
+                Free 7-day trial. Pay nothing today.
+              </Text>
+            </BlockStack>
           </Layout.Section>
         )}
         <Layout.Section>
-          <Card sectioned>
-            <PlanTableContainer>
-              <DataTable
-                columnContentTypes={['text', 'text', 'text', 'text']}
-                headings={[
-                  null,
-                  <Text fontWeight="bold" key="basic" as="div">
-                    <Stack vertical spacing="tight">
-                      <Text variant="headingMd" as="h2">
-                        Basic
+          <Card>
+            <Bleed marginBlockStart="200" marginBlockEnd="300">
+              <Box padding="400">
+                <PlanTableContainer>
+                  <DataTable
+                    columnContentTypes={['text', 'text', 'text', 'text']}
+                    headings={[
+                      'Feature',
+                      <Text fontWeight="bold" key="basic" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Basic
+                          </Text>
+                          <Text variant="headingXl">$24/month</Text>
+                        </BlockStack>
+                      </Text>,
+                      <Text fontWeight="bold" key="plus" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Plus
+                          </Text>
+                          <Text variant="headingXl">$49/month</Text>
+                        </BlockStack>
+                      </Text>,
+                      <Text fontWeight="bold" key="pro" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Pro
+                          </Text>
+                          <Text variant="headingXl">$99/month</Text>
+                        </BlockStack>
                       </Text>
-                      <Text variant="heading2xl">$24/month</Text>
-                    </Stack>
-                  </Text>,
-                  <Text fontWeight="bold" key="plus" as="div">
-                    <Stack vertical spacing="tight">
-                      <Text variant="headingMd" as="h2">
-                        Plus
-                      </Text>
-                      <Text variant="heading2xl">$49/month</Text>
-                    </Stack>
-                  </Text>,
-                  <Text fontWeight="bold" key="pro" as="div">
-                    <Stack vertical spacing="tight">
-                      <Text variant="headingMd" as="h2">
-                        Pro
-                      </Text>
-                      <Text variant="heading2xl">$99/month</Text>
-                    </Stack>
-                  </Text>
-                ]}
-                rows={planData}
-                truncate={false}
-                hoverable={false}
-                verticalAlign="bottom"
-              />
-            </PlanTableContainer>
+                    ]}
+                    rows={planData}
+                    truncate={false}
+                    hoverable={false}
+                    verticalAlign="bottom"
+                  />
+                </PlanTableContainer>
+              </Box>
+            </Bleed>
           </Card>
         </Layout.Section>
       </Layout>

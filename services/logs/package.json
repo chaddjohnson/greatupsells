@@ -7,15 +7,15 @@
     "migrate": "migrate-mongo up",
     "infrastructure": "cd infrastructure && ./run.sh",
     "destroy": "cd infrastructure && ./destroy.sh",
-    "start": "nodemon -e js --exec \"serverless offline start --useWorkerThreads --allowCache --noPrependStageInUrl\" --watch src"
+    "start": "nodemon -e js --exec \"NODE_TLS_REJECT_UNAUTHORIZED='0' serverless offline start --reloadHandler --noPrependStageInUrl\" --watch src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neatowebsolutions/greatupsells.git"
+    "url": "git+https://github.com/chaddjohnson/greatupsells.git"
   },
-  "author": "Chad Johnson <chad@neatowebsolutions.com>",
+  "author": "Chad Johnson <chad.d.johnson@gmail.com>",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/neatowebsolutions/greatupsells/tree/master/services/logs",
+  "homepage": "https://github.com/chaddjohnson/greatupsells/tree/master/services/logs",
   "dependencies": {
     "@chaddjohnson/mongodb-client-lambda": "^2.1.0",
     "@elastic/elasticsearch": "~7.10.0",
@@ -23,6 +23,7 @@
     "@greatupsells/logger": "0.0.0",
     "@middy/core": "^1.0.0",
     "@middy/http-cors": "^1.0.0",
+    "aws-sdk": "^2.1116.0",
     "bluebird": "^3.7.2",
     "http-status-codes": "^2.1.4",
     "migrate-mongo": "^8.2.3",
@@ -30,11 +31,9 @@
     "saslprep": "^1.0.3"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1116.0",
-    "nodemon": "^2.0.7",
-    "serverless": "^3.19.0",
+    "serverless": "^3.38.0",
     "serverless-domain-manager": "6.0.3",
-    "serverless-offline": "^8.8.0",
+    "serverless-offline": "^13.5.0",
     "serverless-plugin-monorepo": "^0.11.0",
     "serverless-plugin-warmup": "^8.2.1"
   }

@@ -30,7 +30,7 @@ const processor = async (metadata, payload) => {
       });
     }
   } catch (error) {
-    await logger.error(`Error processing order paid webhook data`, error, {
+    await logger.error(`Error processing order create webhook data`, error, {
       metadata,
       payload
     });

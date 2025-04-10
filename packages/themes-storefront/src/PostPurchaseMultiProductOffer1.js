@@ -36,6 +36,4 @@ const components = {
   View
 };
 
-export default (props) => (
-  <PostPurchaseMultiProductOffer1 components={components} {...props} />
-);
+export default (props) => <PostPurchaseMultiProductOffer1 components={components} {...props} />;

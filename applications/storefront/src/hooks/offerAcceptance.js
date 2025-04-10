@@ -1,21 +1,14 @@
 import { useCookies } from '@greatupsells/react-hooks';
 import useOfferTracking from './offerTracking';
 import { useShopifyCart } from './shopifyCart';
-import useShopifyDraftOrder from './shopifyDraftOrder';
 import useShopifyCustomer from './shopifyCustomer';
+import useShopifyDraftOrder from './shopifyDraftOrder';
 
 const useOfferAcceptance = () => {
   const { getCookie, setCookie } = useCookies();
   const { trackOfferAcceptance } = useOfferTracking();
-  const {
-    shopifyCartItems,
-    addVariantsToShopifyCart,
-    removeVariantFromShopifyCart
-  } = useShopifyCart();
-  const {
-    createShopifyDraftOrder,
-    addVariantsToShopifyDraftOrder
-  } = useShopifyDraftOrder();
+  const { shopifyCartItems, addVariantsToShopifyCart, removeVariantFromShopifyCart } = useShopifyCart();
+  const { createShopifyDraftOrder, addVariantsToShopifyDraftOrder } = useShopifyDraftOrder();
   const { getUrlLocaleAndCountryCode } = useShopifyCustomer();
   const locale = getUrlLocaleAndCountryCode();
 
@@ -25,8 +18,7 @@ const useOfferAcceptance = () => {
 
     // Do not add Shopify cart items to draft order for Order Status or Thank You pages.
     const includeShopifyCartItems =
-      !window.Shopify?.Checkout?.isOrderStatusPage &&
-      window.Shopify?.Checkout?.page !== 'thank_you';
+      !window.Shopify?.Checkout?.isOrderStatusPage && window.Shopify?.Checkout?.page !== 'thank_you';
     const includedCartItems = includeShopifyCartItems
       ? shopifyCartItems.map((item) => ({
           shopifyVariantId: item.variant_id,
@@ -36,10 +28,7 @@ const useOfferAcceptance = () => {
 
     // Add the variant to the existing draft order if one exists.
     if (shopifyDraftOrderId) {
-      draftOrder = await addVariantsToShopifyDraftOrder(
-        shopifyDraftOrderId,
-        items
-      );
+      draftOrder = await addVariantsToShopifyDraftOrder(shopifyDraftOrderId, items);
     }
     // Create a new draft order if one does not exist.
     else {
@@ -65,14 +54,10 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie(
-        'greatupsellsDraftOrderInvoiceUrl',
-        `${draftOrder.invoice_url}?locale=${locale}`,
-        {
-          sameSite: 'Strict',
-          maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
-        }
-      );
+      setCookie('greatupsellsDraftOrderInvoiceUrl', `${draftOrder.invoice_url}?locale=${locale}`, {
+        sameSite: 'Strict',
+        maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
+      });
     }
 
     // Add the accepted variant to the Shopify cart.
@@ -82,17 +67,9 @@ const useOfferAcceptance = () => {
     await trackOfferAcceptance(offerId, items, shopifyDraftOrderId);
   };
 
-  const replaceProduct = async (
-    offerId,
-    triggerShopifyProductId,
-    shopifyProductId,
-    shopifyVariantId
-  ) => {
-    const triggerShopifyCartItemIndex = shopifyCartItems.findIndex(
-      (item) => item.product_id === triggerShopifyProductId
-    );
-    const triggerShopifyCartItem =
-      shopifyCartItems[triggerShopifyCartItemIndex];
+  const replaceProduct = async (offerId, triggerShopifyProductId, shopifyProductId, shopifyVariantId) => {
+    const triggerShopifyCartItemIndex = shopifyCartItems.findIndex((item) => item.product_id === triggerShopifyProductId);
+    const triggerShopifyCartItem = shopifyCartItems[triggerShopifyCartItemIndex];
     const triggerShopifyVariantId = triggerShopifyCartItem?.variant_id;
     const quantity = 1;
     let shopifyDraftOrderId = getCookie('greatupsellsDraftOrderId');
@@ -148,14 +125,10 @@ const useOfferAcceptance = () => {
       });
 
       // Track the draft order checkout URL.
-      setCookie(
-        'greatupsellsDraftOrderInvoiceUrl',
-        `${draftOrder.invoice_url}?locale=${locale}`,
-        {
-          sameSite: 'Strict',
-          maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
-        }
-      );
+      setCookie('greatupsellsDraftOrderInvoiceUrl', `${draftOrder.invoice_url}?locale=${locale}`, {
+        sameSite: 'Strict',
+        maxAge: ((60 * 60 * 24 * 365) / 12) * 3 // 3 months
+      });
     }
 
     // Accept the offer.

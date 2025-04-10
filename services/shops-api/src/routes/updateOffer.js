@@ -15,18 +15,9 @@ const handler = async (event, context) => {
 
   try {
     const { offerId } = event.pathParameters;
-    const [Offer] = await Promise.all([
-      models.get('Offer'),
-      models.get('Shop')
-    ]);
+    const [Offer] = await Promise.all([models.get('Offer'), models.get('Shop')]);
     let offer = await Offer.findById(offerId);
-    const {
-      impressionCount,
-      acceptanceCount,
-      conversionCount,
-      conversionRate,
-      revenueIncrease
-    } = offer;
+    const { impressionCount, acceptanceCount, conversionCount, conversionRate, revenueIncrease } = offer;
     const data = JSON.parse(event.body);
 
     if (!offer) {

@@ -27,19 +27,10 @@ const findDraftOrderLineItem = async (draftOrder, item) => {
       AMOUNT: offer.discountValue,
       SET_PRICE: parseFloat(current.price) - offer.discountValue
     };
-    const discountTypeMatches =
-      current.applied_discount?.value_type ===
-      discountTypeMap[offer.discountType];
-    const discountValueMatches =
-      parseFloat(current.applied_discount?.value) ===
-      discountValueMap[offer.discountType];
+    const discountTypeMatches = current.applied_discount?.value_type === discountTypeMap[offer.discountType];
+    const discountValueMatches = parseFloat(current.applied_discount?.value) === discountValueMap[offer.discountType];
 
-    return (
-      variantMatches &&
-      lineItemHasDiscount &&
-      discountTypeMatches &&
-      discountValueMatches
-    );
+    return variantMatches && lineItemHasDiscount && discountTypeMatches && discountValueMatches;
   });
 
   return lineItem;
@@ -73,10 +64,7 @@ const addDraftOrderLineItems = async (shop, draftOrderId, items) => {
   });
 
   // Save the updated draft order directly with Shopify.
-  draftOrder = await shopifyApiClient.draftOrder.update(
-    draftOrderId,
-    draftOrder
-  );
+  draftOrder = await shopifyApiClient.draftOrder.update(draftOrderId, draftOrder);
 
   return draftOrder;
 };

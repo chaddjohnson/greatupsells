@@ -16,9 +16,7 @@ const handler = async (event, context) => {
   try {
     const { shopifyCollectionId } = event.pathParameters;
     const Collection = await models.get('Collection');
-    const collection = await Collection.findOneByShopifyCollectionId(
-      shopifyCollectionId
-    );
+    const collection = await Collection.findOneByShopifyCollectionId(shopifyCollectionId);
 
     if (!collection) {
       return {

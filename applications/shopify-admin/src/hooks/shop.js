@@ -12,19 +12,14 @@ const ShopProvider = ({ children }) => {
 
   const [shopLoaded, setShopLoaded] = useState(false);
 
-  const { data: shop, error: shopError, mutate: fetchShop } = useSWR(
-    '/shop',
-    httpClient.get.bind(httpClient),
-    {
-      revalidateOnFocus: true
-    }
-  );
+  const {
+    data: shop,
+    error: shopError,
+    mutate: fetchShop
+  } = useSWR('/shop', httpClient.get.bind(httpClient), {
+    revalidateOnFocus: true
+  });
   const shopLoading = !shop && !shopError;
-
-  const consentToDataAccess = async () => {
-    await httpClient.post('/shop/data-access-consent');
-    await fetchShop();
-  };
 
   const changePlan = async (level) => {
     const url = '/plan';
@@ -57,6 +52,10 @@ const ShopProvider = ({ children }) => {
     setShopLoaded(true);
   }
 
+  if (!shopLoaded) {
+    return null;
+  }
+
   return (
     <ShopContext.Provider
       value={{
@@ -65,7 +64,6 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
-        consentToDataAccess,
         changePlan,
         activatePlan
       }}

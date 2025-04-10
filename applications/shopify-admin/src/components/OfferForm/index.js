@@ -1,19 +1,14 @@
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect
-} from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import { Form, Layout, PageActions, Sticky, Banner } from '@shopify/polaris';
+import { useRouter } from 'next/router';
+import { Form, Layout, PageActions, Sticky, Banner, BlockStack, Text } from '@shopify/polaris';
 import { useForm, getValues } from '@shopify/react-form';
-import { ContextualSaveBar } from '@shopify/app-bridge/actions';
-import { useAppBridge } from '@shopify/app-bridge-react';
+import { SaveBar, useAppBridge } from '@shopify/app-bridge-react';
 import styled from 'styled-components';
 import { omit } from 'lodash';
 import { OfferPopup } from '@greatupsells/react-components';
-import { useInterval } from '@greatupsells/react-hooks';
+import { useInterval, useDateTime } from '@greatupsells/react-hooks';
 import { useThemeComponent } from '../../hooks';
 import useFields from './fields';
 import OfferSummary from './OfferSummary';
@@ -61,8 +56,7 @@ const assignIds = (objects) => {
 const PreviewOfferPopupContainer = styled.div`
   display: flex;
   justify-content: center;
-  height: ${(props) =>
-    props.previewContentHeight ? `${props.previewContentHeight}px` : '300px'};
+  height: ${(props) => (props.previewContentHeight ? `${props.previewContentHeight}px` : '300px')};
   overflow: hidden;
 `;
 
@@ -71,12 +65,9 @@ const SmallPreviewOfferPopupContainer = styled.div`
   justify-content: center;
   background-color: white;
   margin-top: 1rem;
-  height: ${(props) =>
-    props.smallPreviewContentHeight
-      ? `${props.smallPreviewContentHeight}px`
-      : '300px'};
+  height: ${(props) => (props.smallPreviewContentHeight ? `${props.smallPreviewContentHeight}px` : '300px')};
   max-height: 350px;
-  overflow-y: auto;
+  overflow-y: hidden;
 
   iframe {
     min-width: 0;
@@ -84,34 +75,28 @@ const SmallPreviewOfferPopupContainer = styled.div`
 `;
 
 const OfferForm = ({
-  initialValues: {
-    offer: initialOffer,
-    theme: initialTheme,
-    offerThemes: initialOfferThemes
-  },
+  initialValues: { offer: initialOffer = {}, theme: initialTheme = {}, offerThemes: initialOfferThemes = [] },
   shop,
   themes,
-  onOfferUpdate,
-  onSubmit,
-  onCancel,
-  onDelete
+  onOfferUpdate = () => {},
+  onSubmit = () => {},
+  onCancel = () => {},
+  onDelete = () => {}
 }) => {
-  let contextualSaveBar = null;
-
-  const app = useAppBridge();
+  const shopify = useAppBridge();
+  const { addTime } = useDateTime();
+  const router = useRouter();
 
   const offerPopupContext = useRef();
 
   const [submitted, setSubmitted] = useState(false);
-  const [showEndDate, setShowEndDate] = useState(false);
+  const [showEndDate, setShowEndDate] = useState(!!initialOffer.endAt);
   const [designMode, setDesignMode] = useState(true);
   const [previewActive, setPreviewActive] = useState(false);
   const [theme, setTheme] = useState(assignId(initialTheme));
   const [offerThemes, setOfferThemes] = useState(assignIds(initialOfferThemes));
   const [themeDirty, setThemeDirty] = useState(false);
-  const [themeDisplayType, setThemeDisplayType] = useState(
-    window.innerWidth >= 768 ? 'desktop' : 'mobile'
-  );
+  const [themeDisplayType, setThemeDisplayType] = useState(window.innerWidth >= 768 ? 'desktop' : 'mobile');
   const [previewContentHeight, setPreviewContentHeight] = useState();
   const [smallPreviewContentHeight, setSmallPreviewContentHeight] = useState();
 
@@ -193,8 +178,6 @@ const OfferForm = ({
     },
     makeCleanAfterSubmit: true,
     onSubmit: async (formValues) => {
-      contextualSaveBar.set({ saveAction: { loading: true } });
-
       try {
         await onSubmit({
           offer: {
@@ -209,40 +192,29 @@ const OfferForm = ({
       }
 
       setThemeDirty(false);
-
-      contextualSaveBar.set({ saveAction: { loading: false } });
-      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
+      shopify.saveBar.hide('save-bar');
 
       return { status: 'success' };
     }
   });
 
-  const handleSubmit = useCallback(() => {
-    setSubmitted(true);
-    submit();
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
 
-    const firstErrorElement = document.querySelector('.Polaris-InlineError');
+      setSubmitted(true);
+      submit();
 
-    if (firstErrorElement) {
-      firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [submit]); // eslint-disable-line react-hooks/exhaustive-deps
+      setTimeout(() => {
+        const firstErrorElement = document.querySelector('.Polaris-InlineError');
 
-  contextualSaveBar = useMemo(
-    () =>
-      ContextualSaveBar.create(app, {
-        saveAction: {
-          disabled: !dirty && !themeDirty,
-          loading: submitting
-        },
-        discardAction: {
-          disabled: false,
-          loading: false,
-          discardConfirmationModal: dirty || themeDirty
+        if (firstErrorElement) {
+          firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }),
-    [app, dirty, themeDirty, submitting]
-  );
+      });
+    },
+    [submit]
+  ); // eslint-disable-line react-hooks/exhaustive-deps
 
   const offer = useMemo(
     () => ({
@@ -261,13 +233,8 @@ const OfferForm = ({
     });
   };
 
-  const dummyData =
-    offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
-  const isInline = [
-    'POST_PURCHASE',
-    'THANK_YOU_PAGE',
-    'ORDER_STATUS_PAGE'
-  ].includes(offer.strategy);
+  const dummyData = offer.strategy === 'UPSELL' ? dummyUpsellData : dummyCrossSellData;
+  const isInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(offer.strategy);
   const zoomByStrategy = {
     CROSS_SELL: {
       designModeZoom: 0.69,
@@ -297,6 +264,8 @@ const OfferForm = ({
   const { designModeZoom } = zoomByStrategy[offer.strategy];
   const { smallDesignModeZoom } = zoomByStrategy[offer.strategy];
 
+  const shopName = sessionStorage.shop?.replace('.myshopify.com', '');
+
   const updatePreviewContentHeight = useCallback(() => {
     const context = offerPopupContext?.current;
     const container = context?.querySelector('.content-container');
@@ -307,27 +276,18 @@ const OfferForm = ({
 
     // Workaround to ensure preview area fits iframe.
     setPreviewContentHeight(container.offsetHeight * designModeZoom + 16);
-    setSmallPreviewContentHeight(
-      container.offsetHeight * smallDesignModeZoom + 8
-    );
+    setSmallPreviewContentHeight(container.offsetHeight * smallDesignModeZoom + 8);
   }, [offerPopupContext, designModeZoom, smallDesignModeZoom]);
 
   const handleStrategyChange = (value) => {
-    const selectedThemeUsesSelectedStrategy =
-      theme?.strategies.indexOf(value) > -1;
-    const firstStrategyTheme = themes.find(
-      (current) => current.strategies.indexOf(value) > -1
-    );
-    const valueIsInline = [
-      'POST_PURCHASE',
-      'THANK_YOU_PAGE',
-      'ORDER_STATUS_PAGE'
-    ].includes(value);
+    const selectedThemeUsesSelectedStrategy = theme?.strategies.indexOf(value) > -1;
+    const firstStrategyTheme = themes.find((current) => current.strategies.indexOf(value) > -1);
+    const valueIsInline = ['POST_PURCHASE', 'THANK_YOU_PAGE', 'ORDER_STATUS_PAGE'].includes(value);
 
     // Determine whether there is a theme already associated with this offer for the selected strategy.
-    let firstStrategyOfferTheme = offerThemes.find(
-      (current) => current.strategies.indexOf(value) > -1
-    );
+    let firstStrategyOfferTheme = offerThemes.find((current) => current.strategies.indexOf(value) > -1);
+    const offeredProductQuantity =
+      firstStrategyOfferTheme?.maximumOfferedProductQuantity || firstStrategyTheme?.maximumOfferedProductQuantity || 3;
 
     strategy.onChange(value);
 
@@ -358,21 +318,20 @@ const OfferForm = ({
     if (valueIsInline) {
       triggerEvent.onChange('LOAD');
     }
+
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleThemeChange = (value) => {
     setTheme(value);
-    setOfferThemes([
-      ...offerThemes.map((current) =>
-        current.__id_offerForm === value.__id_offerForm ? value : current
-      )
-    ]);
+    setOfferThemes([...offerThemes.map((current) => (current.__id_offerForm === value.__id_offerForm ? value : current))]);
     setThemeDirty(true);
     setTimeout(() => updatePreviewContentHeight());
   };
 
   const handleThemeSelect = (value) => {
     const copiedTheme = copyTheme(value);
+    const offeredProductQuantity = value.maximumOfferedProductQuantity || 3;
 
     // Make a copy of the theme and add it as history for the offer, and then
     // copy over changes to the current theme to history.
@@ -382,22 +341,18 @@ const OfferForm = ({
     setTheme(copiedTheme);
 
     setThemeDirty(true);
-
     setTimeout(() => updatePreviewContentHeight());
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleOfferThemeSelect = (value) => {
     setTheme(value);
     setThemeDirty(true);
-
     setTimeout(() => updatePreviewContentHeight());
 
-    const newMaximumOfferedProductQuantity =
-      value.maximumOfferedProductQuantity || 3;
+    const offeredProductQuantity = value.maximumOfferedProductQuantity || 3;
 
-    maximumOfferedProductQuantity.onChange(
-      newMaximumOfferedProductQuantity.toString()
-    );
+    maximumOfferedProductQuantity.onChange(offeredProductQuantity.toString());
   };
 
   const handleThemeDisplayTypeChange = (value) => {
@@ -418,50 +373,33 @@ const OfferForm = ({
     setTimeout(() => updatePreviewContentHeight());
   };
 
-  const handleDiscard = () => {
-    contextualSaveBar.dispatch(ContextualSaveBar.Action.DISCARD);
+  const handleDiscard = (event) => {
+    event.preventDefault();
+
+    shopify.saveBar.hide('save-bar');
+    onCancel();
   };
-
-  // Handle Contextual Save Bar behavior.
-  useEffect(() => {
-    const unsubscribeDiscard = contextualSaveBar.subscribe(
-      ContextualSaveBar.Action.DISCARD,
-      () => {
-        contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
-        onCancel();
-      }
-    );
-
-    const unsubscribeSave = contextualSaveBar.subscribe(
-      ContextualSaveBar.Action.SAVE,
-      handleSubmit
-    );
-
-    return () => {
-      unsubscribeDiscard();
-      unsubscribeSave();
-    };
-  }, [contextualSaveBar, onCancel, handleSubmit]);
 
   useEffect(() => {
     if (dirty || themeDirty) {
-      contextualSaveBar.dispatch(ContextualSaveBar.Action.SHOW);
+      shopify.saveBar.show('save-bar');
     } else {
-      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
+      shopify.saveBar.hide('save-bar');
     }
-  }, [contextualSaveBar, dirty, themeDirty]);
-
-  useEffect(() => {
-    return () => {
-      contextualSaveBar.unsubscribe();
-      contextualSaveBar.dispatch(ContextualSaveBar.Action.HIDE);
-    };
-  }, [contextualSaveBar]);
+  }, [shopify.saveBar, dirty, themeDirty]);
 
   // Set end date to start date when showing end date.
   useEffect(
     () => {
-      endAt.onChange(showEndDate ? startAt.value : undefined);
+      // If showing the date but it has no value, then set an initial end date that is based on the start date.
+      if (showEndDate && !endAt.value) {
+        endAt.onChange(showEndDate ? addTime(startAt.value, 1, 'day') : undefined);
+      }
+
+      // Unset the end date if not showing the end date.
+      if (!showEndDate) {
+        endAt.onChange(undefined);
+      }
     },
     [showEndDate] // eslint-disable-line react-hooks/exhaustive-deps
   );
@@ -478,172 +416,203 @@ const OfferForm = ({
     onOfferUpdate(offer);
   }, [onOfferUpdate, offer]);
 
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Hide Save Bar on route change.
+      shopify.saveBar.hide('save-bar');
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Form noValidate onSubmit={submit}>
+      <SaveBar id="save-bar" discardConfirmation={dirty || themeDirty || false}>
+        <button
+          type="submit"
+          variant="primary"
+          disabled={(!dirty && !themeDirty) || submitting}
+          loading={submitting}
+          onClick={handleSubmit}
+        >
+          Save
+        </button>
+        <button onClick={handleDiscard}>Blah</button>
+      </SaveBar>
       <Layout>
         <Layout.Section>
-          {!dev &&
-            offer.strategy === 'POST_PURCHASE' &&
-            !shop.isPostPurchaseAppInUse && (
-              <Banner
-                title="Great Upsells isn't the selected app on the checkout post-purchase page."
-                status="critical"
-                action={{
-                  content: 'Open checkout settings',
-                  url: `https://${sessionStorage.shop}/admin/settings/checkout`,
-                  external: true
-                }}
-                secondaryAction={{
-                  content: 'Learn more',
-                  url:
-                    'https://help.shopify.com/en/manual/checkout-settings/checkout-style#post-purchase-offers',
-                  external: true
-                }}
-              >
-                <p>
-                  To use it on your store&apos;s post-purchase page, select it
-                  in checkout settings under the &ldquo;Post-purchase page
-                  section&rdquo;.
-                </p>
-              </Banner>
-            )}
+          {!dev && offer.strategy === 'POST_PURCHASE' && !shop.isPostPurchaseAppInUse && (
+            <Banner
+              title="Great Upsells isn't the selected app on the checkout post-purchase page."
+              tone="critical"
+              action={{
+                content: 'Open checkout settings',
+                url: `https://admin.shopify.com/store/${shopName}/settings/checkout#post-purchase-page`,
+                external: true,
+                target: '_blank'
+              }}
+              secondaryAction={{
+                content: 'Learn more',
+                url: 'https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-apps#set-post-purchase-app',
+                external: true,
+                target: '_blank'
+              }}
+            >
+              <Text as="p">
+                To use it on your store&apos;s post-purchase page, select it in checkout settings under the
+                &ldquo;Post-purchase page section&rdquo;.
+              </Text>
+            </Banner>
+          )}
         </Layout.Section>
         <Layout.Section>
-          <OfferStrategyEditor
-            shop={shop}
-            strategy={strategy}
-            onStrategyChange={handleStrategyChange}
-          />
-          <OfferNameEditor name={name} submitted={submitted} />
-          <ThemeEditor
-            strategy={offer.strategy}
-            theme={theme}
-            themes={themes}
-            offerThemes={offerThemes}
-            displayType={themeDisplayType}
-            previewElement={
-              <PreviewOfferPopupContainer
-                previewContentHeight={previewContentHeight}
-              >
-                <OfferPopup
-                  contextRef={offerPopupContext}
-                  open={designMode || previewActive}
-                  designMode={designMode}
-                  designModeZoom={designModeZoom}
-                  forceDisplayType={
-                    !previewActive ? themeDisplayType : undefined
-                  }
-                  shop={shop}
-                  theme={theme}
-                  ThemeComponent={ThemeComponent}
-                  offer={offer}
-                  locale={shop.locale || 'en'}
-                  countryCode={shop.countryCode || 'US'}
-                  currency={shop.currency || 'USD'}
-                  triggerProduct={dummyData.triggerProduct}
-                  offeredProducts={dummyData.offeredProducts}
-                  onClose={handleClosePreview}
-                  onClick={!isInline ? handlePreview : undefined}
-                />
-              </PreviewOfferPopupContainer>
-            }
-            onPreview={!isInline ? handlePreview : undefined}
-            onChange={handleThemeChange}
-            onThemeSelect={handleThemeSelect}
-            onOfferThemeSelect={handleOfferThemeSelect}
-            onDisplayTypeChange={handleThemeDisplayTypeChange}
-          />
-          <OfferTriggerEventEditor
-            offer={offer}
-            triggerEvent={triggerEvent}
-            triggerExternalLinksOnly={triggerExternalLinksOnly}
-            triggerScrollThreshold={triggerScrollThreshold}
-            submitted={submitted}
-          />
-          <OfferPagesEditor
-            offer={offer}
-            triggerPage={triggerPage}
-            triggerPagePath={triggerPagePath}
-            submitted={submitted}
-          />
-          <OfferViewAllowanceEditor
-            offer={offer}
-            viewAllowance={viewAllowance}
-            viewAllowanceDays={viewAllowanceDays}
-            submitted={submitted}
-          />
-          <OfferActionButtonEditor
-            offer={offer}
-            actionButtonBehavior={actionButtonBehavior}
-            actionButtonLink={actionButtonLink}
-            actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
-            performActionOnAdd={performActionOnAdd}
-            submitted={submitted}
-          />
-          <OfferTriggerProductsEditor
-            shop={shop}
-            offer={offer}
-            triggerProducts={triggerProducts}
-            triggerCollections={triggerCollections}
-            minimumRequirement={minimumRequirement}
-            minimumRequiredAmount={minimumRequiredAmount}
-            submitted={submitted}
-          />
-          <OfferOfferedProductsEditor
-            offer={offer}
-            theme={theme}
-            offeredProducts={offeredProducts}
-            offeredCollections={offeredCollections}
-            maximumOfferedProductQuantity={maximumOfferedProductQuantity}
-            maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
-            submitted={submitted}
-          />
-          <OfferDiscountEditor
-            shop={shop}
-            offer={offer}
-            discountType={discountType}
-            discountValue={discountValue}
-            discountTitle={discountTitle}
-            submitted={submitted}
-          />
-          {(!theme.maximumOfferedProductQuantity ||
-            theme.maximumOfferedProductQuantity > 1) && (
-            <OfferBundlingEditor
+          <BlockStack gap="400">
+            <OfferNameEditor name={name} submitted={submitted} />
+            <OfferStrategyEditor shop={shop} strategy={strategy} onStrategyChange={handleStrategyChange} />
+            <ThemeEditor
+              strategy={offer.strategy}
+              theme={theme}
+              themes={themes}
+              offerThemes={offerThemes}
+              displayType={themeDisplayType}
+              previewElement={
+                <PreviewOfferPopupContainer previewContentHeight={previewContentHeight}>
+                  {!previewActive ? (
+                    <OfferPopup
+                      contextRef={offerPopupContext}
+                      open={designMode || previewActive}
+                      designMode={designMode}
+                      designModeZoom={designModeZoom}
+                      forceDisplayType={!previewActive ? themeDisplayType : undefined}
+                      shop={shop}
+                      theme={theme}
+                      ThemeComponent={ThemeComponent}
+                      offer={offer}
+                      locale={shop.locale || 'en'}
+                      countryCode={shop.countryCode || 'US'}
+                      currency={shop.currency || 'USD'}
+                      triggerProduct={dummyData.triggerProduct}
+                      offeredProducts={dummyData.offeredProducts}
+                      onClose={handleClosePreview}
+                      onClick={!isInline ? handlePreview : undefined}
+                    />
+                  ) : (
+                    createPortal(
+                      <OfferPopup
+                        contextRef={offerPopupContext}
+                        open={designMode || previewActive}
+                        designMode={designMode}
+                        designModeZoom={designModeZoom}
+                        forceDisplayType={!previewActive ? themeDisplayType : undefined}
+                        shop={shop}
+                        theme={theme}
+                        ThemeComponent={ThemeComponent}
+                        offer={offer}
+                        locale={shop.locale || 'en'}
+                        countryCode={shop.countryCode || 'US'}
+                        currency={shop.currency || 'USD'}
+                        triggerProduct={dummyData.triggerProduct}
+                        offeredProducts={dummyData.offeredProducts}
+                        onClose={handleClosePreview}
+                        onClick={!isInline ? handlePreview : undefined}
+                      />,
+                      document.body
+                    )
+                  )}
+                </PreviewOfferPopupContainer>
+              }
+              onPreview={!isInline ? handlePreview : undefined}
+              onChange={handleThemeChange}
+              onThemeSelect={handleThemeSelect}
+              onOfferThemeSelect={handleOfferThemeSelect}
+              onDisplayTypeChange={handleThemeDisplayTypeChange}
+            />
+            <OfferTriggerEventEditor
+              offer={offer}
+              triggerEvent={triggerEvent}
+              triggerExternalLinksOnly={triggerExternalLinksOnly}
+              triggerScrollThreshold={triggerScrollThreshold}
+              submitted={submitted}
+            />
+            <OfferPagesEditor
+              offer={offer}
+              triggerPage={triggerPage}
+              triggerPagePath={triggerPagePath}
+              submitted={submitted}
+            />
+            <OfferViewAllowanceEditor
+              offer={offer}
+              viewAllowance={viewAllowance}
+              viewAllowanceDays={viewAllowanceDays}
+              submitted={submitted}
+            />
+            <OfferActionButtonEditor
+              offer={offer}
+              actionButtonBehavior={actionButtonBehavior}
+              actionButtonLink={actionButtonLink}
+              actionButtonLinkOpenInNewTab={actionButtonLinkOpenInNewTab}
+              performActionOnAdd={performActionOnAdd}
+              submitted={submitted}
+            />
+            <OfferTriggerProductsEditor
+              shop={shop}
+              offer={offer}
+              triggerProducts={triggerProducts}
+              triggerCollections={triggerCollections}
+              minimumRequirement={minimumRequirement}
+              minimumRequiredAmount={minimumRequiredAmount}
+              submitted={submitted}
+            />
+            <OfferOfferedProductsEditor
               offer={offer}
               theme={theme}
-              enableBundling={enableBundling}
+              offeredProducts={offeredProducts}
+              offeredCollections={offeredCollections}
+              maximumOfferedProductQuantity={maximumOfferedProductQuantity}
+              maximumAcceptedProductQuantity={maximumAcceptedProductQuantity}
+              submitted={submitted}
             />
-          )}
-          <OfferDatesEditor
-            offer={offer}
-            startAt={startAt}
-            endAt={endAt}
-            showEndDate={showEndDate}
-            onShowEndDateChange={() => setShowEndDate(!showEndDate)}
-          />
-          <OfferGeotargetingEditor
-            geotargetingCountries={geotargetingCountries}
-            submitted={submitted}
-          />
-          <OfferOptionsEditor
-            offer={offer}
-            enableVariantSelection={enableVariantSelection}
-            enableQuantitySelection={enableQuantitySelection}
-            delaySeconds={delaySeconds}
-            onPageRequiredSeconds={onPageRequiredSeconds}
-            enableEscClose={enableEscClose}
-            enableMaskClose={enableMaskClose}
-            animation={animation}
-            submitted={submitted}
-            onPreview={handlePreview}
-          />
+            <OfferDiscountEditor
+              shop={shop}
+              offer={offer}
+              discountType={discountType}
+              discountValue={discountValue}
+              discountTitle={discountTitle}
+              submitted={submitted}
+            />
+            {(!theme.maximumOfferedProductQuantity || theme.maximumOfferedProductQuantity > 1) && (
+              <OfferBundlingEditor offer={offer} theme={theme} enableBundling={enableBundling} />
+            )}
+            <OfferDatesEditor
+              offer={offer}
+              startAt={startAt}
+              endAt={endAt}
+              showEndDate={showEndDate}
+              onShowEndDateChange={() => setShowEndDate(!showEndDate)}
+            />
+            <OfferGeotargetingEditor geotargetingCountries={geotargetingCountries} submitted={submitted} />
+            <OfferOptionsEditor
+              offer={offer}
+              enableVariantSelection={enableVariantSelection}
+              enableQuantitySelection={enableQuantitySelection}
+              delaySeconds={delaySeconds}
+              onPageRequiredSeconds={onPageRequiredSeconds}
+              enableEscClose={enableEscClose}
+              enableMaskClose={enableMaskClose}
+              animation={animation}
+              submitted={submitted}
+              onPreview={handlePreview}
+            />
+          </BlockStack>
         </Layout.Section>
-        <Layout.Section secondary>
+        <Layout.Section variant="oneThird">
           <Sticky offset={16} disableWhenStacked={true}>
             <OfferSummary offer={offer} />
-            <SmallPreviewOfferPopupContainer
-              smallPreviewContentHeight={smallPreviewContentHeight}
-            >
+            <SmallPreviewOfferPopupContainer smallPreviewContentHeight={smallPreviewContentHeight}>
               <OfferPopup
                 open={designMode && !previewActive}
                 designMode={true}
@@ -670,6 +639,7 @@ const OfferForm = ({
               content: 'Save offer',
               disabled: !dirty && !themeDirty,
               loading: submitting,
+              onAction: handleSubmit,
               submit: true
             }}
             secondaryActions={[
@@ -703,18 +673,6 @@ OfferForm.propTypes = {
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   onDelete: PropTypes.func
-};
-
-OfferForm.defaultProps = {
-  initialValues: {
-    offer: {},
-    theme: {},
-    offerThemes: []
-  },
-  onOfferUpdate: () => {},
-  onSubmit: () => {},
-  onCancel: () => {},
-  onDelete: () => {}
 };
 
 export default OfferForm;

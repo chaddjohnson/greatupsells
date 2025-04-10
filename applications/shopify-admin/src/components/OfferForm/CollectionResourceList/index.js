@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { ResourceList, TextField, Icon, Button } from '@shopify/polaris';
-import { ResourcePicker } from '@shopify/app-bridge-react';
-import { SearchMinor } from '@shopify/polaris-icons';
+import { useAppBridge } from '@shopify/app-bridge-react';
+import { SearchIcon } from '@shopify/polaris-icons';
 import styled from 'styled-components';
 import CollectionResourceListItem from './CollectionResourceListItem';
 
@@ -23,8 +23,8 @@ const ResourceListWrapper = styled.div`
   }
 `;
 
-const formatSelectionItems = (value) => {
-  return value.selection.map(({ id, title, handle, image }) => ({
+const formatSelectionItems = (selections) => {
+  return selections.map(({ id, title, handle, image }) => ({
     title,
     handle,
     imageUrl: image?.originalSrc,
@@ -32,21 +32,8 @@ const formatSelectionItems = (value) => {
   }));
 };
 
-const CollectionResourceList = ({ label, items, onChange, onRemoveItem }) => {
-  const [collectionPickerOpen, setCollectionPickerOpen] = useState(false);
-
-  const handleOpenCollectionPicker = () => {
-    setCollectionPickerOpen(true);
-  };
-
-  const handleCloseCollectionPicker = () => {
-    setCollectionPickerOpen(false);
-  };
-
-  const handleChange = (value) => {
-    onChange(formatSelectionItems(value));
-    setCollectionPickerOpen(false);
-  };
+const CollectionResourceList = ({ label, items, onChange = () => {}, onRemoveItem = () => {} }) => {
+  const shopify = useAppBridge();
 
   const initialSelectionIds = useMemo(
     () =>
@@ -56,16 +43,27 @@ const CollectionResourceList = ({ label, items, onChange, onRemoveItem }) => {
     [items]
   );
 
+  const handleOpenCollectionPicker = async () => {
+    const selections = await shopify.resourcePicker({
+      type: 'collection',
+      action: 'select',
+      multiple: true,
+      selectionIds: initialSelectionIds
+    });
+
+    if (selections) {
+      onChange(formatSelectionItems(selections));
+    }
+  };
+
   return (
     <>
       <TextField
         label={label}
         labelHidden
         placeholder="Search collections"
-        prefix={<Icon source={SearchMinor} />}
-        connectedRight={
-          <Button onClick={handleOpenCollectionPicker}>Browse</Button>
-        }
+        prefix={<Icon source={SearchIcon} />}
+        connectedRight={<Button onClick={handleOpenCollectionPicker}>Browse</Button>}
         onChange={handleOpenCollectionPicker}
       />
       <ResourceListWrapper>
@@ -82,15 +80,6 @@ const CollectionResourceList = ({ label, items, onChange, onRemoveItem }) => {
           )}
         />
       </ResourceListWrapper>
-      <ResourcePicker
-        resourceType="Collection"
-        actionVerb="select"
-        allowMultiple={true}
-        open={collectionPickerOpen}
-        initialSelectionIds={initialSelectionIds}
-        onSelection={handleChange}
-        onCancel={handleCloseCollectionPicker}
-      />
     </>
   );
 };
@@ -107,11 +96,6 @@ CollectionResourceList.propTypes = {
   ).isRequired,
   onChange: PropTypes.func,
   onRemoveItem: PropTypes.func
-};
-
-CollectionResourceList.defaultProps = {
-  onChange: () => {},
-  onRemoveItem: () => {}
 };
 
 export default CollectionResourceList;

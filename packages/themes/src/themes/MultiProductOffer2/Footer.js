@@ -77,11 +77,7 @@ const Footer = styled(({ className }) => {
         </Savings>
       </Totals>
       <BundleOptions>
-        <AddBundleButton
-          onClick={handleAddProductBundle}
-          disabled={!addProductBundleEnabled}
-          loading={addingProductBundle}
-        >
+        <AddBundleButton onClick={handleAddProductBundle} disabled={!addProductBundleEnabled} loading={addingProductBundle}>
           {bundleAddButtonText}
         </AddBundleButton>
       </BundleOptions>

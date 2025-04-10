@@ -12,13 +12,13 @@ If you are struggling and need help setting anything up, please ask for help.
 
 ### Node.js
 
-The Node version is specified in the top-level `.node-version` file; please install and use this version on your system. We are currently using Node 12.x, so we cannot use features from higher versions. For example, optional chaining cannot be used in our Node code.
+The Node version is specified in the top-level `.node-version` file; please install and use this version on your system.
 
 [nvm](https://github.com/nvm-sh/nvm) and [avn](https://github.com/wbyoung/avn) are recommended for easily managing and using Node versions.
 
 ### Yarn
 
-Yarn is used as the package manager. Please install this globally.
+Yarn v4 is used as the package manager. Please install this globally.
 
 ### Lerna
 
@@ -26,7 +26,7 @@ Yarn is used as the package manager. Please install this globally.
 
 ### MongoDB
 
-Version 4.2 or higher is required as multi-document transactions on replica sets are used. Please only used features supported by 4.6 and lower.
+Version 4.2 or higher is required as multi-document transactions are used. Please only used features supported by 4.6 and lower.
 
 If upgrading from 3.x to 4.x, it might be easiest to dump your databases one by one, remove your MongoDB data directory, upgrade MongoDB, and then restore your databases.
 
@@ -38,33 +38,27 @@ And to restore a database:
 
     mongorestore --gzip --archive=database-name.gz
 
-During development, a local replica set is required as transactions are used. Please follow [this gist](https://gist.github.com/davisford/bb37079900888c44d2bbcb2c52a5d6e8) for setup instructions. Alternatively, you can use [run-rs](https://www.npmjs.com/package/run-rs).
-
-### Redis
-
-Used to track sessions.
-
 ### ngrok
+
+You could use `nginx` with `hosts` file entries, but this won't work for webhooks. Hence, we use a tool like `ngrok`.
 
 A paid ngrok account is necessary (please bill us, and include your receipt). Alternatively, if you can quickly figure out how to use another local tunneling mechanism, go for it, and please add to this README if you have success.
 
-If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Here is an example of how your `~/.ngrok2/ngrok.yml` file should look:
+If using ngrok, configure ngrok per [the docs](https://ngrok.com/docs). Find your config file's location via `ngrok config check`. Here is an example of how your config file should look:
 
-    authtoken: tokenhere
-    region: us
-    tunnels:
-      greatupsells-shopify-admin:
-         addr: 4001
-         proto: http
-         subdomain: yourname-shopify-admin
-      greatupsells-shopify-extension:
-         addr: 4010
-         proto: http
-         subdomain: yourname-shopify-extension
-      greatupsells-webhooks-service:
-         addr: 4008
-         proto: http
-         subdomain: yourname-webhooks
+```
+version: "3"
+agent:
+   authtoken: 3CNHdUUcGwXeZwQ93k78A_36jBEyt7ueo58s8f14189
+tunnels:
+greatupsells:
+   addr: 80
+   proto: http
+   subdomain: mysubdomain
+extension:
+   addr: 3000
+   proto: http
+```
 
 Please follow instructions [here](https://ngrok.com/download) to install the `ngrok` binary and authorize your machine. Once done, ngrok will start automatically with `yarn start`.
 
@@ -88,7 +82,7 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
    region = us-east-1
    ```
 1. Run `yarn global add lerna`.
-1. Run `yarn start`. This automatically does the following:
+1. Run `yarn start` (please note you might need to set `AWS_PROFILE`; e.g., `AWS_PROFILE=greatupsells yarn start`). This automatically does the following:
    1. Installs dependencies.
    1. Runs Lerna bootstrapping.
    1. Builds packages.
@@ -100,24 +94,35 @@ Please follow instructions [here](https://ngrok.com/download) to install the `ng
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
       ```
-      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/
+      https://mysubdomain.us.ngrok.io/
       ```
    1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
       ```
-      https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth/callback
+      https://mysubdomain.us.ngrok.io/auth/callback
       ```
-1. Install the app by visiting the following URL: https://YOUR-NGROK-SUBDOMAIN.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://chaddjohnson-shopify-admin.ngrok.io/auth?shop=neatowebsolutions-chad.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
+1. Install the app by visiting the following URL: https://mysubdomain.us.ngrok.io/auth?shop=YOUR_SHOPIFY_STORE.myshopify.com (e.g., https://mysubdomain.us.ngrok.io/auth?shop=my-test-store.myshopify.com). Alternatively, use the "Test on development store" option for the app in your Shopify Partners account.
 
-Please use the `master` branch for main development.
+Please use the `develop` branch for main development.
 
 ### Shopify App Extensions
+
+To initially register all the extension for the Shopify at once:
+
+1. Open a terminal, and change the working directory to `applications/shopify-admin`.
+1. Run `yarn shopify app deploy -c dev`.
+1. Follow the prompts.
+1. Verify the extension is now listed under `Extensions` for the app on Shopify Partners.
+
+You will need to run the "deploy" command each time you want to publish a new version of one or more extensions. Further, to publish to different environments (e.g., dev, test, prod), delete the contents of `applications/shopify-admin/shopify.app.toml` locally before running the command.
 
 To run and develop Shopify app extensions locally (such as post-purchase upsells):
 
 1. Run the app with `yarn start` from the top-level project directory.
 1. Open another terminal, and change the working directory to `applications/shopify-admin`.
-1. Run `yarn extensions:start` to start extensions.
+1. Go to your ngrok account, look under Agents, and determine the URL to the randomized tunnel URL. Update `POST_PURCHASE_APP_URL` in `.env` with this URL.
+1. Run `yarn extensions:start --tunnel-url=$POST_PURCHASE_APP_URL` to start extensions.
 1. Follow instructions on screen.
+   1. You'll need to install the suggested Shopify extension. It is blocked by Google, and ChatGPT can help you download, unpack, and install it.
 1. Manually refresh your browser to view updates as there is no fast refresh / live reload available.
 
 ### Troubleshooting
@@ -134,21 +139,15 @@ Occasionally ngrok tunnels will fail to start because ngrok is running in the ba
 
 ### Adding a shared dependency for all projects
 
-To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn add foo`.
+To add a dependency shared by all packages, simply run `yarn add foo -W`. To remove a dependency, run `yarn remove foo -W`.
 
 Note that `lerna add foo` will add `foo` to package.json in all packages and _not_ to the high-level `package.json`.
 
 ### Adding dependencies for packages
 
-To add a dependency for an individual package, use the following command:
+To add a dependency for an individual package/application/service, change to the corresponding directory:
 
-    lerna add foo --scope application-name
-
-For example:
-
-    lerna add http-status-codes --scope greatupsells-shopify-admin
-
-Please find more examples [here](https://github.com/lerna/lerna/tree/master/commands/add#examples).
+    yarn add package-name
 
 ### Removing dependencies for packages
 
@@ -175,59 +174,110 @@ The following are used:
 
 ### Speed Improvement
 
-Loading the Shopify Admin app over ngrok can be slow and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
+Loading the Shopify Admin app over ngrok can be extremely slow (even on a fast connection) and can use a lot of bandwidth as traffic is funneled over ngrok. To speed this up, we can bypass ngrok using a local nginx server as follows:
 
 1. Set up nginx locally.
 1. Create a server configuration for the Shopify Admin app URL; for example:
 
-   ```
-   server {
-       listen 80;
-       listen 443 ssl;
-       server_name yourname-shopify-admin.ngrok.io;
+```
+server {
+   listen 80;
+   listen 443 ssl;
+   server_name localhost mysubdomain.eu.ngrok.io;
 
-       ssl_certificate     /usr/local/etc/ssl/certs/self-signed.crt;
-       ssl_certificate_key /usr/local/etc/ssl/private/self-signed.key;
+   ssl_certificate     /opt/homebrew/etc/ssl/certs/mysubdomain.eu.ngrok.io.crt;
+   ssl_certificate_key /opt/homebrew/etc/ssl/private/mysubdomain.eu.ngrok.io.key;
 
-       ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-       ssl_ciphers         HIGH:!aNULL:!MD5;
-       ssl_dhparam /usr/local/etc/ssl/certs/dehparam.pem;
+   ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+   ssl_ciphers         HIGH:!aNULL:!MD5;
+   ssl_dhparam /opt/homebrew/etc/ssl/certs/dhparam.pem;
 
-       location / {
-           proxy_pass http://127.0.0.1:3000/;
-           proxy_buffering off;
-       }
+   location / {
+      proxy_pass http://localhost:4001/;
+      proxy_buffering off;
    }
-   ```
 
-1. Create a self-signed certificate locally following [this tutorial](https://blog.cpming.top/p/create-self-signed-ssl-certificate-for-nginx).
-   1. Change all instances of "test.cpming.top" to "\*.ngrok.io".
-   1. Use "2048" instead of "128" for the `openssl dhparam` command.
-1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 yourname-shopify-admin.ngrok.io`.
-1. Do the same as the previous two steps but for domains admin-api, shopify-admin-api, and storefront-api (but with no `\*.` prefix).
-1. Add nginx configs for admin-api, shopify-admin-api, and storefront-api:
-
-   ```
-   server {
-     listen 80;
-     listen 443 ssl;
-     server_name admin-api;
-
-     ssl_certificate     /usr/local/etc/ssl/certs/admin-api.crt;
-     ssl_certificate_key /usr/local/etc/ssl/private/admin-api.key;
-
-     ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-     ssl_ciphers         HIGH:!aNULL:!MD5;
-     ssl_dhparam /usr/local/etc/ssl/certs/dhparam.pem;
-
-     location / {
-        proxy_pass http://127.0.0.1:4005/;
-        proxy_buffering off;
-     }
+   location /admin-api {
+      proxy_pass http://localhost:4005;
+      proxy_buffering off;
    }
-   ```
 
-Please note you will need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
+   location /admin {
+      proxy_pass http://localhost:4003;
+      proxy_buffering off;
+   }
+
+   location /admin/ {
+      proxy_pass http://localhost:4003/;
+      proxy_buffering off;
+   }
+
+   location /logs-api {
+      proxy_pass http://localhost:4009;
+      proxy_buffering off;
+   }
+
+   location /shopify-admin-api {
+      proxy_pass http://localhost:4000;
+      proxy_buffering off;
+   }
+
+   location /shops-api {
+      proxy_pass http://localhost:4004;
+      proxy_buffering off;
+   }
+
+   location /storefront-api {
+      proxy_pass http://localhost:4006;
+      proxy_buffering off;
+   }
+
+   location /webhooks-api {
+      proxy_pass http://localhost:4008;
+      proxy_buffering off;
+   }
+}
+```
+
+1. Create a self-signed certificate locally (replace `mysubdomain` with your ngrok subdomain name):
+
+   1. Generate a Private Key: `openssl genrsa -out mysubdomain.us.ngrok.io.key 2048`.
+   1. Create a Certificate Signing Request (CSR): `openssl req -new -key mysubdomain.us.ngrok.io.key -out mysubdomain.us.ngrok.io.csr -subj "/CN=mysubdomain.us.ngrok.io"`.
+   1. Create a configuration file called `mysubdomain.us.ngrok.io.ext` with the following contents:
+
+      ```
+      authorityKeyIdentifier=keyid,issuer
+      basicConstraints=CA:FALSE
+      keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+      subjectAltName = @alt_names
+
+      [alt_names]
+      DNS.1 = mysubdomain.us.ngrok.io
+      ```
+
+   1. Generate the Self-Signed Certificate: `openssl x509 -req -in mysubdomain.us.ngrok.io.csr -signkey mysubdomain.us.ngrok.io.key -out mysubdomain.us.ngrok.io.crt -days 365 -extfile mysubdomain.us.ngrok.io.ext`.
+   1. Install the Self-Signed Certificate in Chrome's Trusted Root CA Store.
+      1. MacOS:
+         1. Open Keychain Access (cmd + space, type Keychain Access).
+         1. Drag and drop mysubdomain.us.ngrok.io.crt into the System keychain (not the login keychain).
+         1. Double-click the certificate and expand Trust.
+         1. Set "When using this certificate" to "Always Trust".
+         1. Restart Chrome.
+      1. Windows:
+         1. Open Certificate Manager (Win + R, then type certmgr.msc).
+         1. Navigate to Trusted Root Certification Authorities → Certificates.
+         1. Right-click Certificates, choose Import, and select mysubdomain.us.ngrok.io.crt.
+         1. Restart Chrome.
+      1. Linux:
+         1. Move the certificate to `/usr/local/share/ca-certificates/`: `sudo cp mysubdomain.us.ngrok.io.crt /usr/local/share/ca-certificates/`.
+         1. Update the certificate store: `sudo update-ca-certificates`.
+         1. Restart Chrome.
+   1. Use the certificate and key files in ngnix for `ssl_certificate` and `ssl_certificate_key`, respectively.
+   1. Restart nginx.
+
+1. Add the tunnel subdomain to `/etc/hosts` pointing it to `127.0.0.1`; for example: `127.0.0.1 mysubdomain.us.ngrok.io`.
+
+Please note you might need to temporarily disable this by commenting out the entry you added in `/etc/hosts` in order to install the app via OAuth with Shopify.
 
 ### Coding Conventions
 
@@ -250,7 +300,7 @@ Code consistency is important. In order to maintain consistency, convention chan
 
 ### Setup
 
-1. Create the `greatupsells-infrastructure` bucket if it does not exist.
+1. Create the `greatupsells-infrastructure2` bucket if it does not exist.
 1. Create a version of the app in the target Shopify Partners account for the target environment.
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
@@ -289,14 +339,13 @@ Code consistency is important. In order to maintain consistency, convention chan
 1. Set the following in `infrastructure/config/[environment].tfvars`, and commit these changes:
    1. `shopify_admin_app_api_key` (get this from the "App Setup" page under "App credentials")
    1. `shopify_admin_app_api_secret_key` (get this from the "App Setup" page under "App credentials")
-   1. `shopify_app_embed_block_id` (you will need to use a dummy value until the app is running, and then update SSM and your Lambdas once activated in the test shop's theme)
    1. `event_bus_arn` (get this in AWS [here](https://console.aws.amazon.com/events/home?region=us-east-1#/partners) under "Partner event source ARN" for region us-east-1)
 1. Update `event_bus_name` in `services/webhooks/infrastructure/config/[environment].tfvars`.
-1. Configure the following secrets [here](https://github.com/neatowebsolutions/upselling/settings/secrets/actions) in GitHub:
+1. Configure the following secrets [here](https://github.com/chaddjohnson/greatupsells/settings/secrets/actions) in GitHub:
    1. `AWS_ACCESS_KEY_ID` (key for an administrator user account used by CI)
-   1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account used by CI)
+   1. `AWS_ACCESS_KEY_ID_SERVER` (key for an administrator IAM account)
    1. `AWS_SECRET_ACCESS_KEY` (key for a server IAM account used by CI)
-   1. `AWS_SECRET_ACCESS_KEY_SERVER` (key for a server IAM account used by CI)
+   1. `AWS_SECRET_ACCESS_KEY_SERVER` (key for a server IAM account)
    1. `MONGODB_ROOT_PASSWORD` (the root MongoDB password)
    1. `MONGODB_ADMIN_PASSWORD` (the main admin account MongoDB password)
    1. `MONGODB_APP_PASSWORD` (the app account MongoDB password)
@@ -305,6 +354,7 @@ Code consistency is important. In order to maintain consistency, convention chan
    1. `ELASTICSEARCH_APP_PASSWORD` (the Elasticsearch "app" user password)
    1. `PRIVATE_KEY` (an SSH private key for a key pair that has access to the EC2 servers)
    1. `SHOPIFY_CLI_PARTNERS_TOKEN` (a CLI token obtained from the Shopify Partners account)
+      1. This should be regenerated every 12 months.
 1. In the AWS Console under SES, request a sending limit increase to get the SES account out of "sandbox" mode.
 1. Trigger deployments in the order shown below.
 1. Add name servers to domain registrar settings once `infrastructure` setup has run.
@@ -321,6 +371,12 @@ GitHub Actions is used for deployment. Deployment is automatic when Git pushes o
 Initial deployments should occur in the following order:
 
 1. `infrastructure`
+   1. For production, you will need to import the following resources:
+      1. `aws_s3_bucket.backups`
+      1. `aws_route53_zone.domain`
+      1. `aws_acm_certificate.domain`
+      1. `module.us_east_1.aws_key_pair.greatupsells`
+      1. `module.us_east_1.aws_security_group.services_server`
 1. `services/logs`
 1. `services/shops-api`
 1. `services/webhooks`
@@ -329,12 +385,81 @@ Initial deployments should occur in the following order:
 1. `services/admin-api`
 1. `services/storefront-api`
 1. `applications/shopify-admin`
+   1. You will need to run this twice. After the first run, update the `shopify_admin_app_gateway_domain` Terraform config variable for the environment. Find this URL by clicking on the API in API Gateway in the AWS Console, then look for the "API: greatupsells-..." section in the left nav. Click that, and use the value under "Invoke URL."
 1. `applications/storefront`
 1. `applications/admin`
+   1. You will need to run this twice. After the first run, update the `admin_app_gateway_domain` Terraform config variable for the environment. Find this URL by clicking on the API in API Gateway in the AWS Console, then look for the "API: greatupsells-..." section in the left nav. Click that, and use the value under "Invoke URL."
+
+The easiest way to accomplish this is to initially run Terraform for each service from your local machine. For each service, from its directory, run the following:
+
+    AWS_PROFILE=greatupsells STAGE=test ./run.sh
+
+Be sure to pass in whatever environment variables are needed by the script.
+
+To run for `infrastructure` locally, you'll need to temporarily plug variables into files in `./infrastructure/region/services-server/roles` similarly to how `workflows/infrastructure.yml` does (note that these files are ignored by Git). You will also need to install the server private and public keys at `~/.ssh/greatupsells/[test|production]/id_rsa` and `~/.ssh/greatupsells/[test|production]/id_rsa.pub`.
+
+Unfortunately you will likely have to fight with the top-level `infrastructure` piece to get Terraform to successfully run.
+
+- One thing you will need to do is disable security before the MongoDB "Create MongoDB root user" task runs by manually editing `/etc/mongod.conf` on the server, then re-run Ansible, then remove this:
+
+  ```
+  security:
+    authorization: "disabled"
+  ```
+
+  Then stop MongoDB and restart without authentication:
+
+  ```
+  sudo systemctl stop mongod
+  sudo mongod --dbpath /var/lib/mongodb --port 27017 --bind_ip 127.0.0.1 --replSet rs0 --noauth
+  ```
+
+  Finally, log in:
+
+  ```
+  mongosh --port 27017
+  ```
+
+  initiate the replicaset:
+
+  ```
+  rs.initiate()
+  ```
+
+  and create the user:
+
+  ```
+  use admin
+  db.createUser({
+    user: "root",
+    pwd: "your_secure_password",
+    roles: [{ role: "root", db: "admin" }]
+  })
+  ```
+
+  Once done, re-enable authorization and restart `mongod`:
+
+  ```
+  sudo systemctl restart mongod
+  ```
+
+  You might also need to fix file ownership:
+
+  ```
+  sudo chown -R mongodb:mongodb /var/lib/mongodb
+  sudo chown -R mongodb:mongodb /var/log/mongodb
+  sudo chmod -R 700 /var/lib/mongodb
+  sudo chmod -R 755 /var/log/mongodb
+  sudo systemctl restart mongod
+  ```
+
+  Then re-run Ansible.
+
+Further, please also note there are some manual "TODO" items for Elasticsearch. See `elasticsearch/tasks/main.yml` in the `infrastructure` project.
 
 ## Destruction
 
-Run the following:
+Run the following from the project root:
 
     AWS_PROFILE=greatupsells STAGE=test yarn destroy
 

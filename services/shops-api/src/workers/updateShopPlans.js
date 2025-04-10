@@ -19,10 +19,7 @@ const handler = async (event, context) => {
         try {
           await shop.updatePlan();
         } catch (error) {
-          await logger.warn(
-            `Error verifying and updating plan statuses for shop (${shop.toString()})`,
-            error
-          );
+          await logger.warn(`Error verifying and updating plan statuses for shop (${shop.toString()})`, error);
         }
       },
       { parallel: 50 }

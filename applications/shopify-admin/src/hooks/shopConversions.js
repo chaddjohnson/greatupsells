@@ -15,9 +15,7 @@ const useShopConversions = (shopId, startAt, endAt) => {
     error: shopConversionsError,
     mutate: fetchShopConversions
   } = useSWR(
-    shopId
-      ? `/shop/conversions?startAt=${startAtDate}&endAt=${endAtDate}`
-      : null,
+    shopId ? `/shop/conversions?startAt=${startAtDate}&endAt=${endAtDate}` : null,
     httpClient.get.bind(httpClient),
     {
       revalidateOnFocus: true

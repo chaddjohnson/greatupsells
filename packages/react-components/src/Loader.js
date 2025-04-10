@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useAppBridge } from '@shopify/app-bridge-react';
 
 const DefaultLoadingComponent = () => <div>Loading...</div>;
 
 const DefaultErrorComponent = () => (
-  <div style={{ color: '#DE3618' }}>
-    An unexpected error occurred. Please try again shortly.
-  </div>
+  <div style={{ color: '#DE3618' }}>An unexpected error occurred. Please try again shortly.</div>
 );
 
 const DefaultEmptyStateComponent = () => <div>No items found.</div>;
@@ -15,11 +14,27 @@ const Loader = ({
   isLoading,
   isError,
   isEmpty,
-  loadingComponent: LoadingComponent,
-  errorComponent: ErrorComponent,
-  emptyStateComponent: EmptyStateComponent,
+  loadingComponent: LoadingComponent = DefaultLoadingComponent,
+  errorComponent: ErrorComponent = DefaultErrorComponent,
+  emptyStateComponent: EmptyStateComponent = DefaultEmptyStateComponent,
   children
 }) => {
+  const shopify = useAppBridge();
+
+  useEffect(() => {
+    if (isLoading) {
+      shopify.loading(true);
+      return;
+    }
+
+    if (isError) {
+      shopify.loading(false);
+      return;
+    }
+
+    shopify.loading(false);
+  }, [shopify, isLoading, isError]);
+
   if (isError) {
     return <ErrorComponent />;
   }
@@ -44,12 +59,6 @@ Loader.propTypes = {
   errorComponent: PropTypes.elementType,
   emptyStateComponent: PropTypes.elementType,
   children: PropTypes.node
-};
-
-Loader.defaultProps = {
-  loadingComponent: DefaultLoadingComponent,
-  errorComponent: DefaultErrorComponent,
-  emptyStateComponent: DefaultEmptyStateComponent
 };
 
 export default Loader;

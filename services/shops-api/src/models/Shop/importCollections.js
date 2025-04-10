@@ -7,9 +7,7 @@ const importCollection = async (shop, shopifyCollectionData) => {
     const Collection = await models.get('Collection');
     const { shopifyShopId } = shop;
     const shopifyCollectionId = shopifyCollectionData.id;
-    let collection = await Collection.findOneByShopifyCollectionId(
-      shopifyCollectionData.id
-    );
+    let collection = await Collection.findOneByShopifyCollectionId(shopifyCollectionData.id);
 
     if (collection) {
       collection.shopifyCollectionData = shopifyCollectionData;
@@ -21,21 +19,12 @@ const importCollection = async (shop, shopifyCollectionData) => {
         shopifyCollectionData
       });
 
-      await logger.info(
-        `Imported collection from Shopify (${collection.toString()})`,
-        { shopifyCollectionData }
-      );
+      await logger.info(`Imported collection from Shopify (${collection.toString()})`, { shopifyCollectionData });
     }
 
     await collection.save();
-    await collection.trackShopifyProducts();
   } catch (error) {
-    await logger.warn(
-      `Error importing Shopify collection ${
-        shopifyCollectionData.id
-      } for shop (${shop.toString()})`,
-      error
-    );
+    await logger.warn(`Error importing Shopify collection ${shopifyCollectionData.id} for shop (${shop.toString()})`, error);
   }
 };
 
@@ -46,12 +35,10 @@ const importCustomCollections = async (shop) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const shopifyCollections = await shopifyApiClient.customCollection.list(
-      params
-    );
+    const shopifyCollections = await shopifyApiClient.customCollection.list(params);
 
     // eslint-disable-next-line no-await-in-loop
-    await Promise.map(
+    await Promise.mapSeries(
       shopifyCollections,
       async (shopifyCollectionData) => {
         await importCollection(shop, shopifyCollectionData);
@@ -70,9 +57,7 @@ const importSmartCollections = async (shop) => {
   // Handle pagination.
   do {
     // eslint-disable-next-line no-await-in-loop
-    const shopifyCollections = await shopifyApiClient.smartCollection.list(
-      params
-    );
+    const shopifyCollections = await shopifyApiClient.smartCollection.list(params);
 
     // eslint-disable-next-line no-await-in-loop
     await Promise.map(
