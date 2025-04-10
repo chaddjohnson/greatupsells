@@ -365,8 +365,8 @@ Simply push to the appropriate branch.
 
 GitHub Actions is used for deployment. Deployment is automatic when Git pushes occur to branches corresponding to environments:
 
-- `test`
-- `production`
+- `test`: Test environment
+- `master`: Production environment
 
 Initial deployments should occur in the following order:
 
