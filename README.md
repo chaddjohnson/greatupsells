@@ -371,6 +371,12 @@ GitHub Actions is used for deployment. Deployment is automatic when Git pushes o
 Initial deployments should occur in the following order:
 
 1. `infrastructure`
+   1. For production, you will need to import the following resources:
+      1. `aws_s3_bucket.backups`
+      1. `aws_route53_zone.domain`
+      1. `aws_acm_certificate.domain`
+      1. `module.us_east_1.aws_key_pair.greatupsells`
+      1. `module.us_east_1.aws_security_group.services_server`
 1. `services/logs`
 1. `services/shops-api`
 1. `services/webhooks`
@@ -412,6 +418,12 @@ Unfortunately you will likely have to fight with the top-level `infrastructure` 
 
   ```
   mongosh --port 27017
+  ```
+
+  initiate the replicaset:
+
+  ```
+  rs.initiate()
   ```
 
   and create the user:
