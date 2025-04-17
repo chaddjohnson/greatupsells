@@ -98,6 +98,8 @@ const createServer = () => {
   }
 
   server.get('/auth', async (request, response) => {
+    console.log('RUNNING /auth')
+
     // The library will automatically redirect the user.
     await shopify.auth.begin({
       shop: shopify.utils.sanitizeShop(request.query.shop, true),
@@ -109,6 +111,8 @@ const createServer = () => {
   });
 
   server.get('/auth/callback', async (request, response) => {
+    console.log('RUNNING /auth/callback')
+
     try {
       // The library will automatically set the appropriate HTTP headers.
       const callbackResponse = await shopify.auth.callback({
@@ -139,6 +143,8 @@ const createServer = () => {
   });
 
   server.get('/authToken', async (request, response) => {
+    console.log('RUNNING /authToken')
+
     try {
       // Get Shopify session token.
       const { shopifySessionToken } = request.query;
@@ -183,12 +189,17 @@ const createServer = () => {
       response.set('Content-Type', 'application/json');
       response.send(JSON.stringify({ authToken }));
     } catch (error) {
+      console.log('ERROR')
+      console.log(error)
+
       console.error(error); // eslint-disable-line no-console
       response.status(StatusCodes.INTERNAL_SERVER_ERROR).send(ReasonPhrases.INTERNAL_SERVER_ERROR);
     }
   });
 
   server.get('/', async (request, response) => {
+    console.log('RUNNING /')
+
     const { shop: shopDomain } = request.query;
 
     try {
@@ -201,6 +212,9 @@ const createServer = () => {
         handleAppRequest(request, response);
       }
     } catch (error) {
+      console.log('ERROR')
+      console.log(error)
+
       response.redirect(`/auth?shop=${shopDomain}`);
     }
   });
@@ -210,6 +224,9 @@ const createServer = () => {
   server.get('/_next/webpack-hmr', handleAppRequest);
   server.get('*', handleAppRequest);
   server.use((error, request, response, nextHandler) => {
+    console.log('ERROR')
+    console.log(error)
+
     if (!error) {
       return nextHandler();
     }
