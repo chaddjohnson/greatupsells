@@ -32,7 +32,7 @@ custom:
     test: 1
     prod: 5
   customDomain:
-    domainName: ${ssm:/greatupsells/${self:provider.stage}//shopify-admin-app/domain, ''}
+    domainName: ${ssm:/greatupsells/${self:provider.stage}/shopify-admin-app/domain, ''}
     basePath: ''
     certificateName: ${ssm:/greatupsells/${self:provider.stage}/certificate-name, ''}
     createRoute53Record: true
