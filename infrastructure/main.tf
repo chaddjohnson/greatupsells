@@ -47,7 +47,7 @@ module "us_east_1" {
 }
 
 # module "eu_west_1" {
-#   count  = terraform.workspace == "production" ? 1 : 0
+#   count  = terraform.workspace == "prod" ? 1 : 0
 #   source = "./region"
 #   providers = {
 #     aws.region = aws.eu-west-1
@@ -74,7 +74,7 @@ module "us_east_1" {
 # }
 
 # module "ap_northeast_1" {
-#   count  = terraform.workspace == "production" ? 1 : 0
+#   count  = terraform.workspace == "prod" ? 1 : 0
 #   source = "./region"
 #   providers = {
 #     aws.region = aws.ap-northeast-1
@@ -125,11 +125,11 @@ output "health_check_alarm_topic_arn_us-east-1" {
 }
 
 # output "health_check_alarm_topic_arn_eu-west-1" {
-#   value = terraform.workspace == "production" ? module.eu_west_1.health_check_alarm_topic_arn : null
+#   value = terraform.workspace == "prod" ? module.eu_west_1.health_check_alarm_topic_arn : null
 # }
 
 # output "health_check_alarm_topic_arn_ap-northeast-1" {
-#   value = terraform.workspace == "production" ? module.ap_northeast_1.health_check_alarm_topic_arn : null
+#   value = terraform.workspace == "prod" ? module.ap_northeast_1.health_check_alarm_topic_arn : null
 # }
 
 output "health_check_alarm_topic_email" {

@@ -69,7 +69,7 @@
     group: root
     mode: 0644
   when:
-    - stage == "production"
+    - stage == "prod"
     - region == "us-east-1"
 
 # - name: Create Elasticsearch config file (production, eu-west-1)
@@ -80,7 +80,7 @@
 #     group: root
 #     mode: 0644
 #   when:
-#     - stage == "production"
+#     - stage == "prod"
 #     - region == "eu-west-1"
 
 # - name: Create Elasticsearch config file (production, ap-northeast-1)
@@ -91,7 +91,7 @@
 #     group: root
 #     mode: 0644
 #   when:
-#     - stage == "production"
+#     - stage == "prod"
 #     - region == "ap-northeast-1"
 
 - name: Ensure Elasticsearch is enabled to start automatically on boot
@@ -117,7 +117,7 @@
     insertbefore: '^EnvironmentFile='
     line: Environment=ES_JAVA_OPTS="-Xms2g -Xmx2g"
   when:
-    - stage == "production"
+    - stage == "prod"
 
 - name: Reload service files
   command: systemctl daemon-reload

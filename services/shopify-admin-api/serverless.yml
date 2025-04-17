@@ -53,7 +53,7 @@ custom:
     autoDomain: true
   warmupConcurrency:
     test: 1
-    production: 5
+    prod: 5
   warmup:
     default:
       enabled: true

@@ -7,7 +7,7 @@ aws s3 sync s3://greatupsells-infrastructure2/serverless/shops-api . --region us
 
 (cd .. && serverless remove --stage $STAGE --region us-east-1) || true
 
-# if [ "$STAGE" = "production" ]; then
+# if [ "$STAGE" = "prod" ]; then
 #   (cd .. serverless remove --stage $STAGE --region eu-west-1) || true
 #   (cd .. serverless remove --stage $STAGE --region ap-northeast-1) || true
 # fi

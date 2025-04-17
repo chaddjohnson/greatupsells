@@ -26,7 +26,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF##*/}"
           if [[ "$BRANCH_NAME" == "master" ]]; then
-            STAGE="production"
+            STAGE="prod"
           else
             STAGE="$BRANCH_NAME"
           fi
@@ -135,7 +135,7 @@ jobs:
           SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN_TEST }}
       - name: Publish Shopify extensions (production)
         if: ${{ success() && github.ref == 'refs/heads/master' }}
-        run: env > .env && ln -sf shopify.app.production.toml shopify.app.toml && yarn extensions:deploy
+        run: env > .env && ln -sf shopify.app.prod.toml shopify.app.toml && yarn extensions:deploy
         working-directory: applications/shopify-admin
         env:
           SHOPIFY_CLI_PARTNERS_TOKEN: ${{ secrets.SHOPIFY_CLI_PARTNERS_TOKEN }}

@@ -13,5 +13,5 @@ services_domains = {
 assets_domain                    = "assets.greatupsells.com"
 shopify_admin_app_api_key        = "33815daf9e7d64650743e8b9b4e793c5"
 shopify_post_purchase_id         = "PLACEHOLDER"
-event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/238899593217/greatupsells-webhooks-production"
+event_bus_arn                    = "arn:aws:events:us-east-1::event-source/aws.partner/shopify.com/238899593217/greatupsells-webhooks-prod"
 health_check_alarm_email         = "greatupsells@proxima.ai"

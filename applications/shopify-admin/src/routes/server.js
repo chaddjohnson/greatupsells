@@ -109,39 +109,30 @@ const createServer = () => {
   });
 
   server.get('/auth/callback', async (request, response) => {
-    console.log('AUTH CALLBACK 1');
-
     try {
       // The library will automatically set the appropriate HTTP headers.
       const callbackResponse = await shopify.auth.callback({
         rawRequest: request,
         rawResponse: response
       });
-      console.log('AUTH CALLBACK 2');
 
       const { session } = callbackResponse;
-      console.log('AUTH CALLBACK 3');
 
       if (!session) {
-        console.log('AUTH CALLBACK 4');
         throw new Error('No valid session returned from Shopify OAuth.');
       }
 
       const { shop: shopDomain, accessToken } = session;
-      console.log('AUTH CALLBACK 5');
       const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
-      console.log('AUTH CALLBACK 6');
       const shopId = shop._id;
 
       // Set up a billing plan immediately.
       const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
         level: 'BASIC'
       });
-      console.log('AUTH CALLBACK 7');
 
       response.redirect(redirectUrl);
     } catch (error) {
-      console.log('AUTH CALLBACK 8');
       console.error('OAuth callback error', error); // eslint-disable-line no-console
       response.status(500).send('Authorization failed. Please try again.');
     }

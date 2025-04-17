@@ -305,11 +305,11 @@ Code consistency is important. In order to maintain consistency, convention chan
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
       ```
-      https://shopify-admin.greatupsells.com/
+      https://app.greatupsells.com/
       ```
    1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
       ```
-      https://shopify-admin.greatupsells.com/auth/callback
+      https://app.greatupsells.com/auth/callback
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
 1. Create a `ci` IAM account with administrator access.

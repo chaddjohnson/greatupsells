@@ -20,7 +20,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF##*/}"
           if [[ "$BRANCH_NAME" == "master" ]]; then
-            STAGE="production"
+            STAGE="prod"
           else
             STAGE="$BRANCH_NAME"
           fi
