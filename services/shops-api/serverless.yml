@@ -474,10 +474,6 @@ functions:
       - httpApi:
           path: /shops/domain/{domain}/initialization
           method: post
-          request:
-            parameters:
-              paths:
-                domain: true
           authorizer:
             type: aws_iam
   installAppEmbedBlock:
