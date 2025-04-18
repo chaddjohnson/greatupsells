@@ -128,6 +128,10 @@ resource "aws_cloudfront_distribution" "assets" {
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
+
+  lifecycle {
+    ignore_changes = [viewer_certificate]
+  }
 }
 
 resource "aws_route53_record" "assets" {
