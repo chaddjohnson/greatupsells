@@ -13637,6 +13637,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     serverless: "npm:^3.38.0"
+    serverless-domain-manager: "npm:6.0.3"
     serverless-http: "npm:^3.1.0"
     serverless-plugin-monorepo: "npm:^0.11.0"
     serverless-plugin-warmup: "npm:^8.2.1"
