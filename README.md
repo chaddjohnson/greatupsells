@@ -375,7 +375,7 @@ Initial deployments should occur in the following order:
       1. `aws_s3_bucket.backups`
       1. `aws_route53_zone.domain`
          1. Comment out `aws_route53_record.domain` and `aws_acm_certificate_validation.domain` in Terraform before importing this, then once imported, you can uncomment them.
-      1. `aws_acm_certificate.domain`
+      1. `module.us_east_1.aws_acm_certificate.domain`
       1. `module.us_east_1.aws_key_pair.greatupsells`
       1. `module.us_east_1.aws_security_group.services_server`
 1. `services/logs`
