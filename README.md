@@ -374,6 +374,7 @@ Initial deployments should occur in the following order:
    1. For production, you will need to import the following resources:
       1. `aws_s3_bucket.backups`
       1. `aws_route53_zone.domain`
+         1. Comment out `aws_route53_record.domain` and `aws_acm_certificate_validation.domain` in Terraform before importing this, then once imported, you can uncomment them.
       1. `aws_acm_certificate.domain`
       1. `module.us_east_1.aws_key_pair.greatupsells`
       1. `module.us_east_1.aws_security_group.services_server`
@@ -399,6 +400,8 @@ Be sure to pass in whatever environment variables are needed by the script.
 To run for `infrastructure` locally, you'll need to temporarily plug variables into files in `./infrastructure/region/services-server/roles` similarly to how `workflows/infrastructure.yml` does (note that these files are ignored by Git). You will also need to install the server private and public keys at `~/.ssh/greatupsells/[test|production]/id_rsa` and `~/.ssh/greatupsells/[test|production]/id_rsa.pub`.
 
 Unfortunately you will likely have to fight with the top-level `infrastructure` piece to get Terraform to successfully run.
+
+Set variables in `main.yml` files for the environment for Ansible (these are in `.gitignore`).
 
 - One thing you will need to do is disable security before the MongoDB "Create MongoDB root user" task runs by manually editing `/etc/mongod.conf` on the server, then re-run Ansible, then remove this:
 
