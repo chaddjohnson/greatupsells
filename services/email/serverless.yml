@@ -17,6 +17,7 @@ provider:
     cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
+    GSUITE_APP_PASSWORD: ${env:GSUITE_APP_PASSWORD, ssm:/greatupsells/${self:provider.stage}/email-service/gsuite-app-password}
 
 custom:
   customDomain:

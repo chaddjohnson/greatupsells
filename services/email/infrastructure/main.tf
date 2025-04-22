@@ -34,6 +34,8 @@ module "us_east_1" {
   providers = {
     aws.region = aws
   }
+
+  gsuite_app_password = var.gsuite_app_password
 }
 
 # module "eu_west_1" {
@@ -42,6 +44,8 @@ module "us_east_1" {
 #   providers = {
 #     aws.region = aws.eu-west-1
 #   }
+#
+#   gsuite_app_password = var.gsuite_app_password
 # }
 
 # module "ap_northeast_1" {
@@ -50,4 +54,6 @@ module "us_east_1" {
 #   providers = {
 #     aws.region = aws.ap-northeast-1
 #   }
+#
+#   gsuite_app_password = var.gsuite_app_password
 # }

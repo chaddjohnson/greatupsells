@@ -37,6 +37,14 @@ resource "aws_ssm_parameter" "email_service_regional_domain" {
   provider  = aws.region
 }
 
+resource "aws_ssm_parameter" "gsuite_app_password" {
+  name      = "/greatupsells/${terraform.workspace}/email-service/gsuite-app-password"
+  type      = "SecureString"
+  value     = var.gsuite_app_password
+  overwrite = true
+  provider  = aws.region
+}
+
 resource "aws_route53_health_check" "email_service" {
   fqdn              = local.domain
   port              = 443
