@@ -7,7 +7,7 @@ const handler = middy(async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   await emailClient.enqueue({
-    to: contactEmail,
+    to: 'chad.d.johnson@gmail.com',
     from: `support@greatupsells.com`,
     subject: 'Test Email',
     body: `
