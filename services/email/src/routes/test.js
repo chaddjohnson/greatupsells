@@ -8,7 +8,7 @@ const handler = middy(async (event, context) => {
 
   await emailClient.enqueue({
     to: 'chad.d.johnson@gmail.com',
-    from: `support@greatupsells.com`,
+    from: `noreply@greatupsells.com`,
     subject: 'Test Email',
     body: `
       <p>This is a test email.</p>
