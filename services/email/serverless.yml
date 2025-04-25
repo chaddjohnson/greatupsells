@@ -45,6 +45,8 @@ functions:
       - httpApi:
           path: /test
           method: get
+    environment:
+      EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256
