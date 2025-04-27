@@ -1,0 +1,35 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "33815daf9e7d64650743e8b9b4e793c5"
+name = "Great Upsells"
+handle = "great-upsells-1"
+application_url = "https://app.greatupsells.com/"
+embedded = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  uri = "https://webhooks-service.us-east-1.greatupsells.com/shopify/customers/data-request"
+  compliance_topics = [ "customers/data_request" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://webhooks-service.us-east-1.greatupsells.com/shopify/customers/redact"
+  compliance_topics = [ "customers/redact" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://webhooks-service.us-east-1.greatupsells.com/shopify/shop/redact"
+  compliance_topics = [ "shop/redact" ]
+
+[auth]
+redirect_urls = [
+  "https://app.greatupsells.com/auth/callback",
+  "https://app.greatupsells.com/auth",
+  "https://app.greatupsells.com/"
+]
+
+[pos]
+embedded = false
+
+[build]
+include_config_on_deploy = true
