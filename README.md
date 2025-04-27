@@ -371,6 +371,7 @@ GitHub Actions is used for deployment. Deployment is automatic when Git pushes o
 Initial deployments should occur in the following order:
 
 1. `infrastructure`
+   1. If running this locally, update values in `main.yml` files in `services-server/roles`. You'll need to do this before running for each environment.
    1. For production, you will need to import the following resources:
       1. `aws_s3_bucket.backups`
       1. `aws_route53_zone.domain`
@@ -380,6 +381,8 @@ Initial deployments should occur in the following order:
       1. `module.us_east_1.aws_security_group.services_server`
 1. `services/logs`
 1. `services/shops-api`
+   1. For Production, you will need to import the following resources:
+      1. `module.us_east_1.aws_iam_policy.services_consumer_role_policy`
 1. `services/webhooks`
 1. `services/email`
 1. `services/shopify-admin-api`
