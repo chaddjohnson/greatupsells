@@ -30,7 +30,7 @@ module "us_east_1" {
 }
 
 # module "eu_west_1" {
-#   count  = terraform.workspace == "production" ? 1 : 0
+#   count  = terraform.workspace == "prod" ? 1 : 0
 #   source = "./region"
 #   providers = {
 #     aws.region = aws.eu-west-1
@@ -40,7 +40,7 @@ module "us_east_1" {
 # }
 
 # module "ap_northeast_1" {
-#   count  = terraform.workspace == "production" ? 1 : 0
+#   count  = terraform.workspace == "prod" ? 1 : 0
 #   source = "./region"
 #   providers = {
 #     aws.region = aws.ap-northeast-1

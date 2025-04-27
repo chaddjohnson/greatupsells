@@ -1,7 +1,9 @@
 const emailClient = require('@greatupsells/email-client');
 const models = require('../models');
 
-const { DOMAIN, LOGS_NOTIFICATION_EMAIL } = process.env;
+const { NODE_ENV, DOMAIN, LOGS_NOTIFICATION_EMAIL } = process.env;
+
+const environment = NODE_ENV === 'production' ? 'prod' : 'test';
 
 const processRecord = async (record) => {
   const Log = await models.get('Log');
@@ -17,7 +19,7 @@ const processRecord = async (record) => {
     await emailClient.enqueue({
       to: LOGS_NOTIFICATION_EMAIL,
       from: `noreply@${DOMAIN}`,
-      subject: `[${type}] - ${message}`,
+      subject: `[${environment}][${type}] - ${message}`,
       body: `
         <pre>
           ${message}\n\n

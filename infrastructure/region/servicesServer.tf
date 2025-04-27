@@ -3,7 +3,6 @@
 
 # Define server specs.
 data "aws_ami" "ubuntu" {
-  most_recent = true
   owners      = ["099720109477"]
 
   filter {
@@ -64,7 +63,7 @@ resource "aws_security_group" "services_server" {
 
 # Commission the server instance.
 resource "aws_instance" "services_server" {
-  ami               = data.aws_ami.ubuntu.id
+  ami               = "ami-0ff20c640f06d85cf"
   instance_type     = var.instance_type
   availability_zone = "us-east-1a"
   monitoring        = true
@@ -81,6 +80,10 @@ resource "aws_instance" "services_server" {
   ebs_optimized           = true
   key_name                = "greatupsells"
   provider                = aws.region
+
+  lifecycle {
+    prevent_destroy = true
+  }
 
   tags = {
     Name = "services-server-${terraform.workspace}"

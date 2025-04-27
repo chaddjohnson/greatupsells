@@ -305,11 +305,11 @@ Code consistency is important. In order to maintain consistency, convention chan
 1. In Shopify under App Setup, configure things as follows:
    1. Set "App URL" to the root of the Shopify Admin application, like so:
       ```
-      https://shopify-admin.greatupsells.com/
+      https://app.greatupsells.com/
       ```
    1. Set "Allowed redirection URL(s)" to include the main Shopify Admin base URL, like so:
       ```
-      https://shopify-admin.greatupsells.com/auth/callback
+      https://app.greatupsells.com/auth/callback
       ```
 1. Follow steps 1 and 2 under "Integrate your app with EventBridge" in [this tutorial](https://shopify.dev/tutorials/manage-webhook-events-with-eventbridge) to set up an event source for the app in Shopify, and then associate the event source with the event bus in the AWS Console. Note that rules will be created automatically via Terraform.
 1. Create a `ci` IAM account with administrator access.
@@ -371,14 +371,18 @@ GitHub Actions is used for deployment. Deployment is automatic when Git pushes o
 Initial deployments should occur in the following order:
 
 1. `infrastructure`
+   1. If running this locally, update values in `main.yml` files in `services-server/roles`. You'll need to do this before running for each environment.
    1. For production, you will need to import the following resources:
       1. `aws_s3_bucket.backups`
       1. `aws_route53_zone.domain`
-      1. `aws_acm_certificate.domain`
+         1. Comment out `aws_route53_record.domain` and `aws_acm_certificate_validation.domain` in Terraform before importing this, then once imported, you can uncomment them.
+      1. `module.us_east_1.aws_acm_certificate.domain`
       1. `module.us_east_1.aws_key_pair.greatupsells`
       1. `module.us_east_1.aws_security_group.services_server`
 1. `services/logs`
 1. `services/shops-api`
+   1. For Production, you will need to import the following resources:
+      1. `module.us_east_1.aws_iam_policy.services_consumer_role_policy`
 1. `services/webhooks`
 1. `services/email`
 1. `services/shopify-admin-api`
@@ -399,6 +403,8 @@ Be sure to pass in whatever environment variables are needed by the script.
 To run for `infrastructure` locally, you'll need to temporarily plug variables into files in `./infrastructure/region/services-server/roles` similarly to how `workflows/infrastructure.yml` does (note that these files are ignored by Git). You will also need to install the server private and public keys at `~/.ssh/greatupsells/[test|production]/id_rsa` and `~/.ssh/greatupsells/[test|production]/id_rsa.pub`.
 
 Unfortunately you will likely have to fight with the top-level `infrastructure` piece to get Terraform to successfully run.
+
+Set variables in `main.yml` files for the environment for Ansible (these are in `.gitignore`).
 
 - One thing you will need to do is disable security before the MongoDB "Create MongoDB root user" task runs by manually editing `/etc/mongod.conf` on the server, then re-run Ansible, then remove this:
 

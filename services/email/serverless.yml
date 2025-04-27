@@ -17,6 +17,8 @@ provider:
     cors: true
   environment:
     NODE_ENV: ${env:NODE_ENV, 'production'}
+    LOG_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/log/url, ''}
+    GSUITE_APP_PASSWORD: ${env:GSUITE_APP_PASSWORD, ssm:/greatupsells/${self:provider.stage}/email-service/gsuite-app-password}
 
 custom:
   customDomain:
@@ -38,6 +40,14 @@ functions:
       - httpApi:
           path: /health
           method: get
+  test:
+    handler: src/routes/test.handler
+    events:
+      - httpApi:
+          path: /test
+          method: get
+    environment:
+      EMAIL_QUEUE_URL: ${ssm:/greatupsells/${self:provider.stage}/queues/email-sending/url, ''}
   sending:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     memorySize: 256

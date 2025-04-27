@@ -1,6 +1,10 @@
 resource "aws_s3_bucket" "backups" {
   bucket           = "greatupsells-backups2"
   force_destroy    = false
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket_ownership_controls" "backups" {

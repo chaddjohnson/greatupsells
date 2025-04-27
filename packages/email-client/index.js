@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
+const nodemailer = require('nodemailer');
 
-const { EMAIL_QUEUE_URL } = process.env;
+const { EMAIL_QUEUE_URL, GSUITE_APP_PASSWORD } = process.env;
 
 const enqueue = async ({ to, from, subject, body }) => {
   if (!EMAIL_QUEUE_URL) {
@@ -28,33 +29,23 @@ const send = async ({ from, to, subject = '', body = '' }) => {
   }
 
   if (!to) {
-    throw new Error('"to" required when sending email');
+    throw new Error('"to" is required');
   }
 
-  // Only us-east-1 is verified for sending emails.
-  const ses = new AWS.SES({ region: 'us-east-1' });
-
-  const params = {
-    Source: from,
-    Destination: {
-      ToAddresses: Array.isArray(to) ? to : [to]
-    },
-    ReplyToAddresses: [],
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: body
-        }
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject
-      }
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: from,
+      pass: GSUITE_APP_PASSWORD // Use an App Password from Google if 2FA is enabled
     }
-  };
+  });
 
-  await ses.sendEmail(params).promise();
+  await transporter.sendMail({
+    from,
+    to: Array.isArray(to) ? to.join(', ') : to,
+    subject,
+    html: body
+  });
 };
 
 module.exports = {

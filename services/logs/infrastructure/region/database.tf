@@ -2,8 +2,8 @@ locals {
   mongodb_hosts = "${join(":27017,", data.terraform_remote_state.greatupsells_infrastructure.outputs.services_domains)}:27017"
 }
 
-resource "aws_ssm_parameter" "elasticsearch_logs_database_url_production" {
-  count     = terraform.workspace == "production" ? 1 : 0
+resource "aws_ssm_parameter" "elasticsearch_logs_database_url_prod" {
+  count     = terraform.workspace == "prod" ? 1 : 0
   name      = "/greatupsells/${terraform.workspace}/database/elasticsearch-logs/url"
   type      = "SecureString"
   value     = "https://app:${var.elasticsearch_app_password}@services.${data.terraform_remote_state.greatupsells_infrastructure.outputs.domain}:9200"
