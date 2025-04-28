@@ -29,6 +29,7 @@ const activatePlan = async (shop) => {
     shop.plan.billingOn = new Date(recurringCharge.billing_on);
     shop.plan.startedAt = Date.now();
     shop.plan.trialStartedAt = shop.plan.trialStartedAt || Date.now();
+    shop.plan.trialDays = shop.plan.trialDays || 7;
     shop.plan.active = true;
     await shop.save();
 

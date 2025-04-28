@@ -23,35 +23,26 @@ const plans = {
 };
 
 const getTrialDays = async (shop) => {
-  const { chargeId, trialStartedAt } = shop.plan;
+  const { chargeId, trialStartedAt, trialDays } = shop.plan;
   let trialStartedDaysAgo;
-  const maxTrialDays = 7;
 
   // Allow a trial period to complete if started; otherwise, disallow a trial period.
   if (trialStartedAt) {
     trialStartedDaysAgo = Math.round((new Date() - trialStartedAt) / 1000 / 24 / 60 / 60);
 
-    if (trialStartedDaysAgo < maxTrialDays) {
-      return maxTrialDays - trialStartedDaysAgo;
+    if (trialStartedDaysAgo < trialDays) {
+      return trialDays - trialStartedDaysAgo;
     }
 
     return 0;
   }
 
   if (!chargeId) {
-    return maxTrialDays;
+    return trialDays;
   }
 
-  const shopifyApiClient = shop.getShopifyApiClient();
-  const existingRecurringCharge = await shopifyApiClient.recurringApplicationCharge.get(chargeId);
-  const trialEndsOn = existingRecurringCharge.trial_ends_on;
-  const remainingDays = Math.round((new Date(trialEndsOn) - new Date()) / 1000 / 24 / 60 / 60);
-
-  if (!remainingDays || remainingDays < 0 || remainingDays > maxTrialDays) {
-    return 0;
-  }
-
-  return remainingDays;
+  // Default
+  return 7;
 };
 
 const createSandboxPlan = async (shop) => {
@@ -86,21 +77,41 @@ const createPlan = async (shop, level) => {
 
   // Create a new recurring application charge which will replace the existing one.
   // See https://shopify.dev/api/admin-rest/2022-01/resources/recurringapplicationcharge.
-  const shopifyApiClient = shop.getShopifyApiClient();
+  const shopifyApiClient = shop.getGraphqlShopifyApiClient();
+  const query = `
+    mutation appSubscriptionCreate($name: String!, $returnUrl: URL!, $lineItems: [AppSubscriptionLineItemInput!]!) {
+      appSubscriptionCreate(name: $name, returnUrl: $returnUrl, lineItems: $lineItems, test: false) {
+        confirmationUrl
+      }
+    }
+  `;
   const trialDays = await getTrialDays(shop);
-  const recurringCharge = await shopifyApiClient.recurringApplicationCharge.create({
+  const variables = {
     name: plan.name,
-    price: plan.price,
-    trial_days: trialDays,
-    return_url: `https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
-    test: false
-  });
+    returnUrl: `https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`,
+    trialDays,
+    lineItems: [
+      {
+        plan: {
+          appRecurringPricingDetails: {
+            price: {
+              amount: plan.price,
+              currencyCode: 'USD'
+            },
+            interval: 'EVERY_30_DAYS'
+          }
+        }
+      }
+    ]
+  };
+  const result = await shopifyApiClient.request(query, { variables });
+  const appSubscription = result.data.appSubscriptionCreate;
 
   // Update the shop plan details.
   shop.plan.name = plan.name;
   shop.plan.level = level;
   shop.plan.price = plan.price;
-  shop.plan.chargeId = recurringCharge.id;
+  shop.plan.chargeId = appSubscription.id;
   shop.plan.billingOn = undefined;
   shop.plan.startedAt = undefined;
   shop.plan.canceledAt = undefined;
@@ -112,12 +123,12 @@ const createPlan = async (shop, level) => {
 
   await logger.info(
     `Successfully changed plan for shop to "${level}" and created new recurring charge ${
-      recurringCharge.id
+      appSubscription.id
     } (${shop.toString()})`,
-    { recurringCharge }
+    { appSubscription }
   );
 
-  const redirectUrl = recurringCharge.confirmation_url;
+  const redirectUrl = appSubscription.confirmationUrl;
 
   return redirectUrl;
 };

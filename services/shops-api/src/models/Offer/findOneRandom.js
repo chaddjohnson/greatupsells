@@ -155,7 +155,8 @@ const getShopifyCartDataFromShopifyOrder = async (shop, shopifyOrderId) => {
       }
     }
   `;
-  const result = await shopifyApiClient.request(query, { variables: { id: shopifyOrderId } });
+  const variables = { id: shopifyOrderId };
+  const result = await shopifyApiClient.request(query, { variables });
   const { lineItems } = result.data.order;
   const subtotalPrice = parseFloat(result.data.order.subtotalPriceSet.shopMoney.amount) || 0;
   const shopifyProductIds = lineItems.edges.map((item) => parseInt(item.node.product.id.split('/').pop()));
