@@ -77,6 +77,7 @@ const schema = new mongoose.Schema(
       startedAt: { type: Date, required: false },
       canceledAt: { type: Date, required: false },
       trialStartedAt: { type: Date, required: false },
+      trialDays: { type: Number, required: false },
       monthUpsellRevenue: { type: Number, required: false },
       monthUpsellRevenueLimit: { type: Number }
     },
