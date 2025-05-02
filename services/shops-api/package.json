@@ -32,6 +32,7 @@
     "migrate-mongo": "^8.2.3",
     "mongoose": "^5.13.9",
     "mongoose-int32": "^0.4.1",
+    "nodemailer": "^6.10.1",
     "promise-retry": "^2.0.1",
     "saslprep": "^1.0.3",
     "shopify-api-node": "^3.6.5"
