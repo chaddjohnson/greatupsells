@@ -8,8 +8,6 @@ const ShopContext = createContext(null);
 
 const ShopProvider = ({ children }) => {
   const { httpClient } = useHttpClient();
-  const { showSuccessToast, showErrorToast } = useToast();
-
   const [shopLoaded, setShopLoaded] = useState(false);
 
   const {
@@ -22,7 +20,7 @@ const ShopProvider = ({ children }) => {
   const shopLoading = !shop && !shopError;
 
   const changePlan = () => {
-    window.top.location.href = `https://apps.shopify.com/great-upsells/plans`;
+    window.top.location.href = `https://apps.shopify.com/great-upsells/plans?shop=${shop?.domain}`;
   };
 
   if (!shopLoaded && !shopLoading) {

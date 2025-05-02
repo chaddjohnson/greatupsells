@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState } from 'react';
 import styled from 'styled-components';
 import {
   Bleed,
@@ -32,11 +31,7 @@ const PlanTableContainer = styled.div`
 `;
 
 const PlanPage = () => {
-  const router = useRouter();
-  const { charge_id: chargeId } = router.query;
-
   const [changingPlan, setChangingPlan] = useState(false);
-
   const { shop, changePlan } = useShop();
 
   const initiatePlanChange = () => {
