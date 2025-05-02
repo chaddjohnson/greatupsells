@@ -36,13 +36,12 @@ const PlanPage = () => {
   const { charge_id: chargeId } = router.query;
 
   const [changingPlan, setChangingPlan] = useState(false);
-  const [activatingPlan, setActivatingPlan] = useState(false);
 
-  const { shop, changePlan, activatePlan } = useShop();
+  const { shop, changePlan } = useShop();
 
-  const initiatePlanChange = async (level) => {
+  const initiatePlanChange = () => {
     setChangingPlan(true);
-    await changePlan(level);
+    changePlan();
   };
 
   const planData = [
@@ -128,7 +127,7 @@ const PlanPage = () => {
         primary
         fullWidth
         disabled={(shop?.plan.level === 'BASIC' && shop?.plan.active) || changingPlan}
-        onClick={() => initiatePlanChange('BASIC')}
+        onClick={() => initiatePlanChange()}
       >
         {shop?.plan.level === 'BASIC' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
@@ -137,7 +136,7 @@ const PlanPage = () => {
         primary
         fullWidth
         disabled={(shop?.plan.level === 'PLUS' && shop?.plan.active) || changingPlan}
-        onClick={() => initiatePlanChange('PLUS')}
+        onClick={() => initiatePlanChange()}
       >
         {shop?.plan.level === 'PLUS' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>,
@@ -146,23 +145,12 @@ const PlanPage = () => {
         primary
         fullWidth
         disabled={(shop?.plan.level === 'PRO' && shop?.plan.active) || changingPlan}
-        onClick={() => initiatePlanChange('PRO')}
+        onClick={() => initiatePlanChange()}
       >
         {shop?.plan.level === 'PRO' && shop?.plan.active ? 'Current plan' : 'Select'}
       </Button>
     ]
   ];
-
-  useEffect(() => {
-    setActivatingPlan(true);
-
-    if (chargeId && !activatingPlan) {
-      (async () => {
-        await activatePlan();
-        router.push('/');
-      })();
-    }
-  }, [chargeId, activatingPlan, activatePlan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Page>

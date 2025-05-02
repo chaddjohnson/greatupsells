@@ -64,7 +64,7 @@ const handler = async (event, context) => {
 
     // Deactivate the shop for our app if the Shopify shop plan is canceled.
     if (!shopifyPlanCanceled && shop.shopifyPlan === 'cancelled') {
-      await shop.cancelPlan();
+      await shop.resetPlan();
       await shop.deactivate();
     }
 

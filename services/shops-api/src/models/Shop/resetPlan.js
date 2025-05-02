@@ -9,8 +9,8 @@ const resetPlan = async (shop) => {
   shop.plan.price = undefined;
   shop.plan.active = false;
   shop.plan.chargeId = undefined;
-  shop.plan.billingOn = undefined;
-  shop.plan.startedAt = undefined;
+  shop.plan.currentPeriodEnd = undefined;
+  shop.plan.createdAt = undefined;
   shop.plan.monthUpsellRevenue = undefined;
   shop.plan.monthUpsellRevenueLimit = undefined;
 

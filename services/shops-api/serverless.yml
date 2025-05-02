@@ -62,15 +62,6 @@ custom:
         - schedule: rate(5 minutes)
 
 functions:
-  activateShopPlan:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/activateShopPlan.handler
-    events:
-      - httpApi:
-          path: /shops/{shopId}/plan/activation
-          method: post
-          authorizer:
-            type: aws_iam
   addDraftOrderLineItems:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/routes/addDraftOrderLineItems.handler
@@ -86,15 +77,6 @@ functions:
     events:
       - httpApi:
           path: /orders/{orderId}/cancelation
-          method: post
-          authorizer:
-            type: aws_iam
-  changeShopPlan:
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/routes/changeShopPlan.handler
-    events:
-      - httpApi:
-          path: /shops/{shopId}/plan
           method: post
           authorizer:
             type: aws_iam
@@ -576,6 +558,15 @@ functions:
           method: put
           authorizer:
             type: aws_iam
+  updateAppSubscription:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/routes/updateAppSubscription.handler
+    events:
+      - httpApi:
+          path: /shops/{shopId}/app-subscription
+          method: put
+          authorizer:
+            type: aws_iam
   calculateShopMonthUpsellRevenue:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
@@ -635,17 +626,6 @@ functions:
     memorySize: 512
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/updateShopActiveStatuses.handler
-    events:
-      - schedule: rate(1 day)
-    timeout: 900
-    enabled: '"${self:provider.region}" == "us-east-1"'
-    warmup:
-      default:
-        enabled: false
-  updateShopPlans:
-    memorySize: 512
-    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
-    handler: src/workers/updateShopPlans.handler
     events:
       - schedule: rate(1 day)
     timeout: 900

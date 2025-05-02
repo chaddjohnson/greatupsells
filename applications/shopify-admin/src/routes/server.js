@@ -123,13 +123,11 @@ const createServer = () => {
       }
 
       const { shop: shopDomain, accessToken } = session;
-      const shop = await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
-      const shopId = shop._id;
+      const shopName = shopDomain.replace(/^([^\.]+).*$/, '$1');
+      const redirectUrl = `https://admin.shopify.com/store/${shopName}/apps/${SHOPIFY_ADMIN_APP_API_KEY}/`;
 
-      // Set up a billing plan immediately.
-      const { redirectUrl } = await shopsServiceHttpClient.post(`/shops/${shopId}/plan`, {
-        level: 'BASIC'
-      });
+      // Initialize the shop on our side.
+      await shopsServiceHttpClient.post(`/shops/domain/${shopDomain}/initialization`, { accessToken });
 
       response.redirect(redirectUrl);
     } catch (error) {

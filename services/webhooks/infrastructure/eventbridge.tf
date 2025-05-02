@@ -219,6 +219,23 @@ resource "aws_cloudwatch_event_rule" "shop_update" {
   })
 }
 
+resource "aws_cloudwatch_event_rule" "app_subscription_update" {
+  name           = "app-subscription-update-webhook"
+  event_bus_name = var.event_bus_name
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "shopifyWebhook"
+    ],
+    "detail" : {
+      "metadata" : {
+        "X-Shopify-Topic" : [
+          "app/uninstalled"
+        ]
+      }
+    }
+  })
+}
+
 resource "aws_cloudwatch_event_rule" "theme_publish" {
   name           = "theme-publish-webhook"
   event_bus_name = var.event_bus_name
@@ -325,6 +342,13 @@ resource "aws_cloudwatch_event_target" "shop_update" {
   event_bus_name = var.event_bus_name
   rule           = aws_cloudwatch_event_rule.shop_update.name
   arn            = aws_sqs_queue.shop_update.arn
+}
+
+resource "aws_cloudwatch_event_target" "app_subscription_update" {
+  target_id      = "app-subscription-update"
+  event_bus_name = var.event_bus_name
+  rule           = aws_cloudwatch_event_rule.app_subscription_update.name
+  arn            = aws_sqs_queue.app_subscription_update.arn
 }
 
 resource "aws_cloudwatch_event_target" "theme_publish" {
