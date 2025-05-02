@@ -21,31 +21,8 @@ const ShopProvider = ({ children }) => {
   });
   const shopLoading = !shop && !shopError;
 
-  const changePlan = async (level) => {
-    const url = '/plan';
-    const data = { level };
-
-    try {
-      const { redirectUrl } = await mutate(url, httpClient.post(url, data));
-
-      window.top.location.href = redirectUrl;
-    } catch (error) {
-      showErrorToast('Error changing plan.');
-      throw error;
-    }
-  };
-
-  const activatePlan = async () => {
-    const url = '/plan/activation';
-
-    try {
-      await mutate(url, httpClient.post(url));
-      await fetchShop();
-      showSuccessToast('Plan activated.');
-    } catch (error) {
-      showErrorToast('Error activating plan.');
-      throw error;
-    }
+  const changePlan = () => {
+    window.top.location.href = `https://apps.shopify.com/great-upsells/plans`;
   };
 
   if (!shopLoaded && !shopLoading) {
@@ -64,8 +41,7 @@ const ShopProvider = ({ children }) => {
         shopLoaded,
         shopError,
         fetchShop,
-        changePlan,
-        activatePlan
+        changePlan
       }}
     >
       {children}

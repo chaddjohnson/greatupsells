@@ -26,7 +26,7 @@ const handler = async (event, context) => {
     }
 
     await shop.deactivate();
-    await shop.cancelPlan();
+    await shop.resetPlan();
 
     return {
       statusCode: StatusCodes.NO_CONTENT

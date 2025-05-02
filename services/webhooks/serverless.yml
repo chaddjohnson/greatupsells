@@ -160,6 +160,15 @@ functions:
       - httpApi:
           path: /shopify/shop
           method: post
+  appSubscriptionUpdate:
+    role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
+    handler: src/workers/appSubscriptionUpdate.handler
+    events:
+      - sqs:
+          arn: ${ssm:/greatupsells/${self:provider.stage}/queues/app-subscription-update/arn, 'arn:aws:sqs:${self:provider.region}:000000000000:app-subscription-update-queue-dev'}
+      - httpApi:
+          path: /shopify/shop/app-subscription-update
+          method: post
   themePublish:
     role: ${env:SERVICES_CONSUMER_ROLE_ARN, ssm:/greatupsells/${self:provider.stage}/roles/services-consumer-arn}
     handler: src/workers/themePublish.handler

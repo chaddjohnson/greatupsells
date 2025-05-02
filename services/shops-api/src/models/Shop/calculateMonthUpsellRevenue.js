@@ -38,7 +38,9 @@ const calculateMonthUpsellRevenue = async (shop) => {
 
   // Calculate month upsell revenue for the shop starting one month prior
   // to the next billing date.
-  const periodStartDate = DateTime.fromISO(new Date(shop.plan.billingOn).toISOString()).minus({ month: 1 }).toJSDate();
+  const periodStartDate = DateTime.fromISO(new Date(shop.plan.currentPeriodEnd).toISOString())
+    .minus({ month: 1 })
+    .toJSDate();
 
   const pipelines = [
     {

@@ -11,11 +11,7 @@ const importProducts = require('./importProducts');
 const getIsPostPurchaseAppInUse = require('./getIsPostPurchaseAppInUse');
 const deactivate = require('./deactivate');
 const updateActiveStatus = require('./updateActiveStatus');
-const activatePlan = require('./activatePlan');
-const cancelPlan = require('./cancelPlan');
 const resetPlan = require('./resetPlan');
-const changePlan = require('./changePlan');
-const updatePlan = require('./updatePlan');
 const searchOffers = require('./searchOffers');
 const initialize = require('./initialize');
 const trackCollectionProducts = require('./trackCollectionProducts');
@@ -27,6 +23,7 @@ const checkThemeCompatibility = require('./checkThemeCompatibility');
 const installAppEmbedBlock = require('./installAppEmbedBlock');
 const calculateMonthUpsellRevenue = require('./calculateMonthUpsellRevenue');
 const createSampleOffers = require('./createSampleOffers');
+const updateAppSubscription = require('./updateAppSubscription');
 const toString = require('./toString');
 const hooks = require('./hooks');
 
@@ -73,11 +70,9 @@ const schema = new mongoose.Schema(
       price: { type: Number, required: false, min: 0 },
       active: { type: Boolean, required: false, default: false },
       chargeId: { type: String, required: false },
-      billingOn: { type: Date, required: false },
-      startedAt: { type: Date, required: false },
+      currentPeriodEnd: { type: Date, required: false },
+      createdAt: { type: Date, required: false },
       canceledAt: { type: Date, required: false },
-      trialStartedAt: { type: Date, required: false },
-      trialDays: { type: Number, required: false },
       monthUpsellRevenue: { type: Number, required: false },
       monthUpsellRevenueLimit: { type: Number }
     },
@@ -188,24 +183,8 @@ schema.methods.updateActiveStatus = function () {
   return updateActiveStatus(this);
 };
 
-schema.methods.activatePlan = function () {
-  return activatePlan(this);
-};
-
-schema.methods.cancelPlan = function () {
-  return cancelPlan(this);
-};
-
 schema.methods.resetPlan = function () {
   return resetPlan(this);
-};
-
-schema.methods.changePlan = function (level) {
-  return changePlan(this, level);
-};
-
-schema.methods.updatePlan = function () {
-  return updatePlan(this);
 };
 
 schema.methods.initialize = function () {
@@ -246,6 +225,10 @@ schema.methods.calculateMonthUpsellRevenue = function () {
 
 schema.methods.createSampleOffers = function () {
   return createSampleOffers(this);
+};
+
+schema.methods.updateAppSubscription = function (update) {
+  return updateAppSubscription(this, update);
 };
 
 schema.methods.toString = function () {

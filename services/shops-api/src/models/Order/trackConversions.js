@@ -6,16 +6,10 @@ const models = require('..');
 const { DOMAIN, APP_NAME, SHOPIFY_ADMIN_APP_API_KEY } = process.env;
 
 const sendUsageNotifications = async (shop, monthUpsellRevenue, originalMonthUpsellRevenue) => {
-  const { monthUpsellRevenueLimit, billingOn } = shop.plan;
-  const monthUpsellReveueLimitNear =
-    monthUpsellRevenueLimit &&
-    originalMonthUpsellRevenue < monthUpsellRevenueLimit * 0.8 &&
-    monthUpsellRevenue >= monthUpsellRevenueLimit * 0.8;
-  const monthUpsellRevenueLimitReached =
-    monthUpsellRevenueLimit &&
-    originalMonthUpsellRevenue < monthUpsellRevenueLimit &&
-    monthUpsellRevenue >= monthUpsellRevenueLimit;
-  const planRenewalDateFormatted = DateTime.fromJSDate(billingOn).toFormat('MMM d, y');
+  const { monthUpsellRevenueLimit, currentPeriodEnd } = shop.plan;
+  const monthUpsellReveueLimitNear = monthUpsellRevenueLimit && originalMonthUpsellRevenue < monthUpsellRevenueLimit * 0.8 && monthUpsellRevenue >= monthUpsellRevenueLimit * 0.8; // prettier-ignore
+  const monthUpsellRevenueLimitReached = monthUpsellRevenueLimit && originalMonthUpsellRevenue < monthUpsellRevenueLimit && monthUpsellRevenue >= monthUpsellRevenueLimit; // prettier-ignore
+  const planRenewalDateFormatted = DateTime.fromJSDate(currentPeriodEnd).toFormat('MMM d, y');
   const { shopName, contactEmail } = shop;
 
   // Send email when 80% of earnings limit has been reached
