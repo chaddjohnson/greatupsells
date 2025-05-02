@@ -1,5 +1,4 @@
 const logger = require('@greatupsells/logger');
-const mongodbClient = require('../mongodbClient');
 const models = require('..');
 
 const trackImpression = async (

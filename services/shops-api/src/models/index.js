@@ -28,13 +28,10 @@ const get = async (modelName) => {
 
   // Load the model.
   if (!modelCache[modelName]) {
-    modelCache[modelName] = require(modelPathsMap[modelName]); // eslint-disable-line import/no-dynamic-require
+    // Register the model schema.
+    modelCache[modelName] = mongodbClient.connection.model(modelName, require(modelPathsMap[modelName]).schema); // eslint-disable-line import/no-dynamic-require
   }
 
-  // Register the model schema.
-  mongodbClient.connection.model(modelName, modelCache[modelName].schema);
-
-  // Return the model.
   return modelCache[modelName];
 };
 
