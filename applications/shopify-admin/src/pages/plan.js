@@ -49,61 +49,71 @@ const PlanPage = () => {
       <Text key="feature1">One-click upsells and cross-sells</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     [
       <Text key="feature2">Post-purchase offers</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     // [
     //   <Text key="feature3">Thank You page offers</Text>,
     //   <Icon key="1" source={CheckIcon} tone="success" />,
     //   <Icon key="2" source={CheckIcon} tone="success" />,
-    //   <Icon key="3" source={CheckIcon} tone="success" />
+    //   <Icon key="3" source={CheckIcon} tone="success" />,
+    //   <Icon key="4" source={CheckIcon} tone="success" />
     // ],
     // [
     //   <Text key="feature3">Order Status page offers</Text>,
     //   <Icon key="1" source={CheckIcon} tone="success" />,
     //   <Icon key="2" source={CheckIcon} tone="success" />,
-    //   <Icon key="3" source={CheckIcon} tone="success" />
+    //   <Icon key="3" source={CheckIcon} tone="success" />,
+    //   <Icon key="4" source={CheckIcon} tone="success" />
     // ],
     [
       <Text key="feature4">Themes</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     [
       <Text key="feature5">Analytics</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     [
       <Text key="feature6">Unlimited offers</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     [
       <Text key="feature7">Unlimited offer views</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     [
       <Text key="feature8">International currency support</Text>,
       <Icon key="1" source={CheckIcon} tone="success" />,
       <Icon key="2" source={CheckIcon} tone="success" />,
-      <Icon key="3" source={CheckIcon} tone="success" />
+      <Icon key="3" source={CheckIcon} tone="success" />,
+      <Icon key="4" source={CheckIcon} tone="success" />
     ],
     // [
     //   <Text key="feature9">Customer support</Text>,
     //   <Icon key="1" source={CheckIcon} tone="success" />,
     //   <Icon key="2" source={CheckIcon} tone="success" />,
-    //   <Icon key="3" source={CheckIcon} tone="success" />
+    //   <Icon key="3" source={CheckIcon} tone="success" />,
+    //   <Icon key="4" source={CheckIcon} tone="success" />
     // ],
     [
       <InlineStack key="1">
@@ -116,12 +126,22 @@ const PlanPage = () => {
           </Tooltip>
         </Text>
       </InlineStack>,
-      <span key="1">Up to $500 USD</span>,
-      <span key="2">Up to $1,500 USD</span>,
-      <span key="3">UNLIMITED</span>
+      <span key="1">Up to $250 USD</span>,
+      <span key="2">Up to $1,000 USD</span>,
+      <span key="3">Up to $2,000 USD</span>,
+      <span key="4">UNLIMITED</span>
     ],
     [
       null,
+      <Button
+        key="action1"
+        primary
+        fullWidth
+        disabled={(shop?.plan.level === 'FREE' && shop?.plan.active) || changingPlan}
+        onClick={() => initiatePlanChange()}
+      >
+        {shop?.plan.level === 'FREE' && shop?.plan.active ? 'Current plan' : 'Select'}
+      </Button>,
       <Button
         key="action1"
         primary
@@ -174,6 +194,14 @@ const PlanPage = () => {
                     columnContentTypes={['text', 'text', 'text', 'text']}
                     headings={[
                       'Feature',
+                      <Text fontWeight="bold" key="free" as="div">
+                        <BlockStack>
+                          <Text variant="headingLg" as="h2">
+                            Free
+                          </Text>
+                          <Text variant="headingXl">$0/month</Text>
+                        </BlockStack>
+                      </Text>,
                       <Text fontWeight="bold" key="basic" as="div">
                         <BlockStack>
                           <Text variant="headingLg" as="h2">
