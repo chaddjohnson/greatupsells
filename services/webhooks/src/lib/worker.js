@@ -1,5 +1,4 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
-const { checkWebhookHmacValidity, createRawBody } = require('shopify-hmac-validation');
 const logger = require('@greatupsells/logger');
 
 const { SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
@@ -9,9 +8,11 @@ const getMetadataValue = (metadata, searchKey) => {
   return metadata[Object.keys(metadata).find((key) => key.toLowerCase() === searchKey.toLowerCase())];
 };
 
-const validate = async (hmac, data) => {
-  const rawBody = createRawBody(data);
-  const hmacValid = checkWebhookHmacValidity(SHOPIFY_ADMIN_APP_API_SECRET_KEY, rawBody, hmac);
+const validate = async (hmac, rawBody) => {
+  const secret = SHOPIFY_ADMIN_APP_API_SECRET_KEY;
+  const buffer = Buffer.from(rawBody).toString('utf8');
+  const hash = crypto.createHmac('SHA256', secret).update(buffer).digest('base64');
+  const hmacValid = crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(hmac));
 
   return hmacValid;
 };
@@ -22,7 +23,7 @@ const processRecord = async (record, processor) => {
   const { metadata, payload, errors } = detail;
   const topic = getMetadataValue(metadata, 'X-Shopify-Topic');
   const hmac = getMetadataValue(metadata, 'X-Shopify-Hmac-SHA256');
-  const hmacValid = validate(hmac, record);
+  const hmacValid = validate(hmac, record.body);
 
   if (!hmacValid) {
     await logger.error(`Invalid HMAC for ${topic} webhook`, null, {

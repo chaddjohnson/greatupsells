@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { ErrorBoundary } from '@greatupsells/react-components';
 import { HttpClientProvider } from '@greatupsells/react-hooks';
 import { ShopProvider } from '../hooks';
-import { Link, RouteGuard } from '../components';
+import { Link } from '../components';
 import '@shopify/polaris/build/esm/styles.css';
 
 const apiKey = process.env.SHOPIFY_ADMIN_APP_API_KEY;
@@ -130,13 +130,11 @@ const App = ({ Component, pageProps, host = getHost(), shop = getShop() }) => {
         <HttpClientProvider baseUrl={process.env.SHOPIFY_ADMIN_API_URL} requestInterceptor={httpRequestInterceptor}>
           {mounted && typeof window !== 'undefined' && window.top !== window.self && (
             <ShopProvider>
-              <RouteGuard>
-                <ErrorBoundary>
-                  <Main>
-                    <Component {...pageProps} />
-                  </Main>
-                </ErrorBoundary>
-              </RouteGuard>
+              <ErrorBoundary>
+                <Main>
+                  <Component {...pageProps} />
+                </Main>
+              </ErrorBoundary>
             </ShopProvider>
           )}
           {mounted && typeof window !== 'undefined' && window.top === window.self && <h1>Loading...</h1>}

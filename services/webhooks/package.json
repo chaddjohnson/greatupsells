@@ -22,8 +22,7 @@
     "@middy/http-cors": "^1.0.0",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
-    "http-status-codes": "^2.1.4",
-    "shopify-hmac-validation": "^1.1.1"
+    "http-status-codes": "^2.1.4"
   },
   "devDependencies": {
     "serverless": "^3.38.0",
