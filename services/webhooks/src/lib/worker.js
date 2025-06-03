@@ -1,4 +1,5 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const crypto = require('crypto');
 const logger = require('@greatupsells/logger');
 
 const { SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
