@@ -9,7 +9,7 @@ const getMetadataValue = (metadata, searchKey) => {
   return metadata[Object.keys(metadata).find((key) => key.toLowerCase() === searchKey.toLowerCase())];
 };
 
-const validate = async (hmac, rawBody) => {
+const validate = (hmac, rawBody) => {
   const secret = SHOPIFY_ADMIN_APP_API_SECRET_KEY;
   const buffer = Buffer.from(rawBody).toString('utf8');
   const hash = crypto.createHmac('SHA256', secret).update(buffer).digest('base64');
@@ -45,10 +45,11 @@ const processRecord = async (record, processor) => {
   await processor(metadata, payload);
 };
 
-const processRequest = async (headers, body, processor) => {
+const processRequest = async (headers, rawBody, processor) => {
   const topic = getMetadataValue(headers, 'X-Shopify-Topic');
   const hmac = getMetadataValue(headers, 'X-Shopify-Hmac-SHA256');
-  const hmacValid = validate(hmac, body);
+  const hmacValid = validate(hmac, rawBody);
+  const body = JSON.parse(rawBody);
 
   if (!hmacValid) {
     await logger.error(`Invalid HMAC for ${topic} webhook`, null, {
@@ -80,10 +81,9 @@ const handle = async (event, context, processor) => {
     }
   } else {
     const { headers } = event;
-    const body = JSON.parse(event.body);
 
     // HTTP (development).
-    await processRequest(headers, body, processor);
+    await processRequest(headers, event.body, processor);
 
     return {
       statusCode: StatusCodes.OK,
