@@ -1,6 +1,7 @@
 const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const crypto = require('crypto');
 const logger = require('@greatupsells/logger');
+const { InvalidHmacError } = require('./errors');
 
 const { SHOPIFY_ADMIN_APP_API_SECRET_KEY } = process.env;
 
@@ -31,7 +32,7 @@ const processRecord = async (record, processor) => {
       metadata,
       body
     });
-    throw new Error(`Invalid HMAC for ${topic} webhook`);
+    throw new InvalidHmacError(`Invalid HMAC for ${topic} webhook`);
   }
 
   if (errors) {
@@ -56,7 +57,7 @@ const processRequest = async (headers, rawBody, processor) => {
       headers,
       body
     });
-    throw new Error(`Invalid HMAC for ${topic} webhook`);
+    throw new InvalidHmacError(`Invalid HMAC for ${topic} webhook`);
   }
 
   await processor(headers, body);
@@ -71,7 +72,7 @@ const handle = async (event, context, processor) => {
   }
 
   if (event.Records) {
-    // SQS (production).
+    // SQS
     const results = await Promise.allSettled(event.Records.map(async (record) => processRecord(record, processor)));
     const anyFailed = results.some(({ status }) => status === 'rejected');
     const error = results.find(({ status }) => status === 'rejected')?.reason;
@@ -82,13 +83,27 @@ const handle = async (event, context, processor) => {
   } else {
     const { headers } = event;
 
-    // HTTP (development).
-    await processRequest(headers, event.body, processor);
+    try {
+      // HTTP
+      await processRequest(headers, event.body, processor);
 
-    return {
-      statusCode: StatusCodes.OK,
-      body: ReasonPhrases.OK
-    };
+      return {
+        statusCode: StatusCodes.OK,
+        body: ReasonPhrases.OK
+      };
+    } catch (error) {
+      if (error instanceof InvalidHmacError) {
+        return {
+          statusCode: StatusCodes.UNAUTHORIZED,
+          body: error.message
+        };
+      }
+
+      return {
+        statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        body: error.message || ReasonPhrases.INTERNAL_SERVER_ERROR
+      };
+    }
   }
 };
 
